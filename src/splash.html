@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>United POS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    .splashScreen {
+      width: 460px;
+      height: 270px;
+      overflow: hidden;
+      background: #2757a0;
+      position: relative;
+    }
+
+    i.close {
+      position: absolute;
+      right: 13px;
+      top: 8px;
+      cursor: pointer;
+      color: #fff;
+      font-family: "Yuanti-SC";
+      font-style: normal;
+      font-size: 1.5em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 1);
+    }
+
+    i.close.show {
+      z-index: 3;
+    }
+
+    span#load {
+      position: absolute;
+      top: 122px;
+      left: 37px;
+      font-size: 0.8em;
+      font-family: "Yuanti-SC";
+      color: #f9f9f9;
+    }
+
+    span.product {
+      font-size: 2.25em;
+      font-family: sans-serif;
+      color: #fcfcfc;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      position: absolute;
+      top: 80px;
+      left: 35px;
+    }
+
+    span.version {
+      font-size: 0.4em;
+      display: inline-block;
+      margin-left: 9px;
+    }
+
+    .triangles {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 150px;
+      height: inherit;
+    }
+
+    .triangles>span {
+      width: 300px;
+      height: 300px;
+      display: block;
+    }
+
+    .triangles>span:nth-child(1) {
+      background: #124188;
+      transform: rotate(-72deg) translateY(65px);
+    }
+
+    .triangles>span:nth-child(2) {
+      background: #103e84;
+      transform: rotate(-155deg) translateX(37px) translateY(233px);
+      position: absolute;
+      top: 0;
+      z-index: 2;
+    }
+
+    .triangles>span:nth-child(3) {
+      background: rgb(35, 73, 132);
+      transform: rotate(-249deg) translateX(37px) translateY(-124px);
+      position: absolute;
+      top: 0;
+      z-index: 3;
+      box-shadow: 0px 0px 1px #607D8B;
+    }
+
+    .triangles>span:nth-child(4) {
+      background: #03A9F4;
+      transform: rotate(-311deg) translateX(-50px) translateY(-154px);
+      position: absolute;
+      top: 0;
+      z-index: 1;
+    }
+
+    .triangles>span:nth-child(5) {
+      background: #2196F3;
+      transform: rotate(-220deg) translateX(70px) translateY(-120px);
+      position: absolute;
+      top: 0;
+    }
+
+    span.copyright {
+      position: absolute;
+      bottom: 5px;
+      left: 8px;
+      color: #f1f1f1;
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="splashScreen">
+    <i class="close" onclick="exit()">&times;</i>
+    <span class="product">United POS
+      <span class="version"></span>
+    </span>
+    <span id="load"></span>
+    <span class="copyright">© 2017-2018 United POS Inc.</span>
+    <div class="triangles">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</body>
+<script>
+  const Electron = require('electron');
+  document.querySelector("span.version").innerHTML = Electron.remote.app.getVersion();
+  Electron.ipcRenderer.on("Processing", (e, m) => {
+    document.getElementById("load").innerHTML = m
+  })
+  setTimeout(() => {
+    let dom = document.querySelector("i.close");
+    dom && dom.classList.add("show");
+    document.getElementById("load").innerHTML = "Application load failed, please try again.";
+  }, 30000);
+  const exit = function () {
+    Electron.ipcRenderer.send("Exit");
+  }
+</script>
+
+</html>

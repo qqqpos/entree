@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Present</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+</head>
+
+<body>
+    <section class="welcome"></section>
+    <section class="order"></section>
+    <section class="list"></section>
+    <section class="pictures"></section>
+    <footer class="right">Copyright © 2017 UnitedPOS Inc. All rights reserved.</footer>
+</body>
+<script>
+    if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+</script>
+
+</html>

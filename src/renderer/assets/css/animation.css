@@ -1,0 +1,152 @@
+.pin-move {
+    transition: all 200ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity .5s;
+    transition-delay: 0.3s;
+}
+
+.fade-leave{
+    display: none;
+}
+
+.fade-leave-active{
+    transition:0;
+}
+
+.fadeIn-enter-active {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter,
+.fadeIn-enter,
+.fadeIn-leave {
+    opacity: 0;
+}
+
+.menu-enter-active,
+.menu-leave-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: all .3s ease;
+}
+
+.menu-enter,
+.menu-leave {
+    opacity: 0;
+    transform: translate3d(0, 3px, 0);
+}
+
+.menu-enter,
+.menu-leave {
+    opacity: 0;
+}
+
+.dropdown-enter-active,
+.drodown-leave-active,
+.popup-enter-active,
+.popup-leave-active {
+    transition: all 0.22s ease-out;
+}
+
+.dropdown-enter,
+.dropdown-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.popup-enter,
+.popup-leave-to{
+    opacity: 0;
+    transform: translateY(5px);
+}
+
+.slideDown-enter-active,
+.slideDown-leave-active,
+.fadeDown-enter-active,
+.fadeDown-leave-active {
+    transition: all .5s ease-in-out;
+}
+
+.slideDown-enter,
+.slideDown-leave-to {
+    opacity: 0;
+    transform: translateY(-35px);
+}
+
+.fadeUp-enter-active,
+.fadeUp-leave-active {
+    transition: all 0.22s ease;
+}
+
+.fadeDown-enter,
+.fadeDown-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.fadeUp-enter,
+.fadeUp-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.fadeUp-enter.active{
+    transition-delay:0.3s;
+}
+
+/* .switch-enter-active {
+    transition-delay: .25s;
+} */
+
+.switch-enter-active,
+.switch-leave-active{
+    opacity: 0;
+    transition: opacity 0.22s ease-in-out;
+}
+
+.slide-enter,
+.slide-leave-to{
+    opacity: 0;
+    transform: translateX(10px);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.22s ease;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0);
+        opacity: 0
+    }
+    70% {
+        transform: scale(1.1);
+        opacity: 1
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1
+    }
+}
+
+.pop-enter-active {
+    animation: pop .3s ease;
+}
+
+.pop-leave-active {
+    animation: pop .3s ease reverse;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

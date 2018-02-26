@@ -1,0 +1,19 @@
+*{
+    margin:0;
+    padding: 0;
+}
+
+body{
+    background: url('../image/symphony.png');
+}
+footer.right{
+    position: fixed;
+    bottom: 3px;
+    text-align: center;
+    left: 0;
+    margin: auto;
+    display: block;
+    width: 100%;
+    color: #616161;
+    font-family: 'Yuanti-SC';
+}
