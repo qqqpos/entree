@@ -779,7 +779,7 @@ export default {
     swipeEmployeeCard: "Please Swipe Employee Card",
     swipeEmployeeCardAgain: "Please Swipe Employee Card Again",
     removeEmployeeCard: "Remove Employee Card",
-    removeEmployeeCardTip: "Are you sure to remove this employee card?",
+    removeEmployeeCardConfirm: "Are you sure to remove this employee card?",
     employeeCardRegisterFailed: "Employee Card Register Failed",
     employeeCardRegistered:
       "This employee card already assign to another employee",

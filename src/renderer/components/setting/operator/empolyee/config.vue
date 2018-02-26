@@ -16,6 +16,8 @@
       <i class="fa fa-eye view" v-if="view === 'password'" @click="view = 'text'"></i>
       <i class="fa fa-eye-slash view" v-else @click="view = 'password'"></i>
     </text-input>
+    <external title="setting.employeeCardRegistration" @open="swipe" v-if="!operator.card"></external>
+    <external title="card.removeEmployeeCard" @open="unregister" v-else></external>
     <text-list v-model="operator.role" title="text.role" :opts="roles" v-show="authorized"></text-list>
     <text-input v-model.number="operator.wage" title="text.salary"></text-input>
     <toggle v-model="operator.timecard" title="text.timecard" tooltip="tip.timecard"></toggle>
@@ -32,6 +34,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import capture from "./capture";
 import toggle from "../../common/toggle";
 import textList from "../../common/textList";
 import external from "../../common/external";
@@ -40,7 +43,7 @@ import dialoger from "../../../common/dialoger";
 
 export default {
   props: ["operator"],
-  components: { toggle, textList, external, textInput, dialoger },
+  components: { capture, toggle, textList, external, textInput, dialoger },
   computed: {
     ...mapGetters(["authorized"])
   },
@@ -106,6 +109,43 @@ export default {
           this.$socket.emit("[OPERATOR] REMOVE", this.operator, () =>
             this.$router.push({ name: "Setting.operator" })
           );
+        })
+        .catch(() => this.$q());
+    },
+    swipe() {
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject };
+        this.component = "capture";
+      })
+        .then(card => {
+          this.$socket.emit("[CHECK] EMPLOYEE_CARD", card, exist => {
+            const prompt = {
+              title: "dialog.employeeCardRegisterFailed",
+              msg: "dialog.employeeCardRegistered",
+              buttons: [{ text: "button.confirm", fn: "resolve" }]
+            };
+
+            exist
+              ? this.$dialog(prompt).then(() => this.$q())
+              : this.register(card);
+          });
+        })
+        .catch(() => this.$q());
+    },
+    register(card) {
+      this.operator = Object.assign({}, this.operator, { card });
+      this.$q();
+    },
+    unregister() {
+      const prompt = {
+        title: "card.removeEmployeeCard",
+        msg: "card.removeEmployeeCardConfirm"
+      };
+
+      this.$dialog()
+        .then(() => {
+          delete this.operator.card;
+          this.$q();
         })
         .catch(() => this.$q());
     },
