@@ -20,21 +20,33 @@
       </transition>
     </template>
     <template v-else>
-
+      <ul class="autoComplete">
+        <li v-for="(profile,index) in list" :key="index" @click="set(profile)">
+          <div class="f1">
+            <h4>{{profile.phone | phone}}</h4>
+            <p class="address">{{profile.address}}</p>
+          </div>
+          <span>{{profile.lastDate | fromNow}}</span>
+        </li>
+      </ul>
     </template>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   props: ["value"],
   data() {
     return {
       logs: [],
+      list: [],
       dropdown: null
     };
+  },
+  computed: {
+    ...mapGetters(["customer"])
   },
   created() {
     this.$socket.emit("[CALL] LAST", logs => {
@@ -44,7 +56,6 @@ export default {
   methods: {
     focus() {
       this.$emit("focus", "phone");
-
       if (!this.value) this.dropdown = "list";
     },
     close() {
@@ -53,9 +64,15 @@ export default {
     get(log) {
       if (log.customer) {
         this.setCustomer(log.customer);
+
         this.dropdown = null;
-      } else {
       }
+    },
+    set(profile) {
+      this.setCustomer(profile);
+      this.$emit("focus", "address");
+      this.list = [];
+      this.dropdown = null;
     },
     ...mapActions(["setCustomer"])
   },
@@ -65,10 +82,20 @@ export default {
 
       if (phone.length === 10) {
         this.$socket.emit("[CUSTOMER] FROM_PHONE", phone, profile => {
-          console.log(profile);
-          this.setCustomer(profile);
-          this.$emit("focus", "address");
+          if (profile) {
+            this.setCustomer(profile);
+            this.$emit("focus", "address");
+            this.list = [];
+            this.dropdown = null;
+          }
         });
+      } else if (phone.length > 3) {
+        this.$socket.emit("[AUTOCOMPLETE] PHONE", phone, results => {
+          this.list = results;
+          this.dropdown = "autocomplete";
+        });
+      } else {
+        this.list = [];
       }
     }
   }
@@ -82,5 +109,10 @@ export default {
 .time {
   float: right;
   color: rgba(0, 0, 0, 0.5);
+}
+
+.autoComplete li {
+  display: flex;
+  align-items: center;
 }
 </style>
