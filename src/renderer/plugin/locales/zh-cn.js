@@ -1148,7 +1148,8 @@ export default {
     setTime: "{i} 分钟后",
     map: "地图",
     stationPrinters: "已使用 {i} 台打印机",
-    invoiceEdit: "被 {i} 修改过"
+    invoiceEdit: "被 {i} 修改过",
+    rightClickPaste: "右键粘贴配菜"
   },
   nav: {
     store: "店面",

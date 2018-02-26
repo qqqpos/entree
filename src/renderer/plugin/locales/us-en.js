@@ -1182,7 +1182,8 @@ export default {
     setTime: "In {i} Min.",
     map: "Map",
     stationPrinters: "{i} printer(s) assigned",
-    invoiceEdit: "Edited by {i}"
+    invoiceEdit: "Edited by {i}",
+    rightClickPaste: "Right Click To Paste Side Option"
   },
   nav: {
     store: "Store",

@@ -301,6 +301,7 @@ export default {
             this.setApp({ newTicket: false });
             this.setCustomer(this.order.customer);
             this.setTicket({ type: ticket.type, number: ticket.number });
+            this.setOrder(ticket);
             this.$router.push({ path: "/main/menu" });
           })
           .catch(this.editFailed);

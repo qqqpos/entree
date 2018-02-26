@@ -4,7 +4,6 @@
       <transition-group tag="section" class="category">
         <div v-for="(category,index) in categories" @click="setCategory(index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
       </transition-group>
-      </section>
     </draggable>
     <div>
       <div v-for="(group,groupIndex) in items" :key="groupIndex">
@@ -18,7 +17,7 @@
     <aside>
       <item-trend @edit="search"></item-trend>
     </aside>
-    <div :is="component" :init="componentData"></div>
+    <div :is="component" :init="componentData" @copy="copy" :transfer="clipboard"></div>
   </div>
 </template>
 
@@ -41,6 +40,7 @@ export default {
       componentData: null,
       component: null,
       categoryIndex: 0,
+      clipboard: null,
       items: []
     };
   },
@@ -207,6 +207,9 @@ export default {
         this.getItems(this.categoryIndex);
         this.$q();
       });
+    },
+    copy(data) {
+      this.clipboard = data;
     }
   },
   watch: {

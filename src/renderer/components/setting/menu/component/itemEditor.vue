@@ -41,7 +41,7 @@
             </div>
             <switches title="text.manualSideOption" v-model="item.manual"></switches>
           </div>
-          <draggable class="side" tag="div" :options="{animation: 300,ghostClass: 'ghost' ,handle:'.drag',draggable:'.draggable'}" v-model="item.option">
+          <draggable class="side" tag="div" :options="{animation: 300,ghostClass: 'ghost' ,handle:'.drag',draggable:'.draggable'}" v-model="item.option" @contextmenu.native="copy">
             <transition-group tag="ul" class="options" name="dropdown">
               <li v-for="(option,index) in item.option" :key="index" class="draggable">
                 <div class="inner">
@@ -57,6 +57,7 @@
               <li @click="addOption" :key="-1" v-if="item.option.length < 11" class="add">
                 <i class="fa fa-plus"></i>
                 <span>{{$t('button.new')}}</span>
+                <span v-show="(transfer && item.option.length ===0)">({{$t('text.rightClickPaste')}})</span>
               </li>
             </transition-group>
           </draggable>
@@ -130,9 +131,8 @@ import checkbox from "../../common/checkbox";
 import switches from "../../common/switches";
 import external from "../../common/external";
 
-
 export default {
-  props: ["init"],
+  props: ["init", "transfer"],
   components: {
     prices,
     editor,
@@ -237,11 +237,13 @@ export default {
       new Promise((resolve, reject) => {
         const { preset = [] } = this.item;
         this.componentData = { resolve, reject, preset };
-        this.component = "presetor"
-      }).then(_preset => {
-        Object.assign(this.item, { preset: _preset })
-        this.$q();
-      }).catch(() => this.$q())
+        this.component = "presetor";
+      })
+        .then(_preset => {
+          Object.assign(this.item, { preset: _preset });
+          this.$q();
+        })
+        .catch(() => this.$q());
     },
     save() {
       this.item.zhCN = this.item.zhCN || this.item.usEN;
@@ -275,6 +277,13 @@ export default {
             value: 0
           }
         });
+      }
+    },
+    copy() {
+      if (this.item.option.length) {
+        this.$emit("copy", this.item.option);
+      } else if (this.transfer) {
+        this.item.option = JSON.parse(JSON.stringify(this.transfer));
       }
     }
   }
