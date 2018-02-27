@@ -110,9 +110,13 @@
             <span class="value">XueWu</span>
           </p>
         </template>
-        <p>
+        <p v-if="!payment.rounding">
           <span class="text">{{$t("text.total")}}:</span>
           <span class="value">{{payment.due | decimal}}</span>
+        </p>
+        <p v-else>
+          <span class="text">{{$t("text.total")}}:</span>
+          <span class="value">{{payment.due + payment.rounding | decimal}}</span>
         </p>
       </div>
     </div>
@@ -466,7 +470,7 @@ export default {
         discount += offer;
       }
 
-      const total = subtotal + toFixed(tax,2);
+      const total = subtotal + toFixed(tax, 2);
       const due = toFixed(Math.max(0, total + delivery - discount), 2);
       const _total = toFixed((due + gratuity) * 100, 2);
 
