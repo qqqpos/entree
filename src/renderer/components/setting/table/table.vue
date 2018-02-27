@@ -149,6 +149,7 @@ export default {
         _id: null,
         contain: [],
         feature: [],
+        invoice: [],
         grid: index,
         name: "",
         shape: "",
@@ -167,7 +168,9 @@ export default {
       this.isSectionSorted = false;
     },
     updateSortedTable() {
-      Object.assign(this.$store.getters.tables[this.sectionIndex], { item: this.tabs });
+      Object.assign(this.$store.getters.tables[this.sectionIndex], {
+        item: this.tabs
+      });
       const tables = this.tabs.map(table => table._id);
       this.$socket.emit("[TABLE] SORT", tables);
       this.isTableSorted = false;

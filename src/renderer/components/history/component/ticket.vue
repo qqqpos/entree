@@ -5,12 +5,12 @@
     </span>
     <span class="type" v-else>{{$t('type.'+invoice.type)}}</span>
     <div class="info customer" v-if="invoice.type ==='DELIVERY'">
-      <span class="address">{{invoice.customer.address}}</span>
+      <span class="data">{{invoice.customer.address}}</span>
       <span>{{invoice.customer.phone | phone}}</span>
     </div>
     <span class="info" v-else-if="invoice.type === 'DINE_IN' || invoice.type === 'HIBACHI'">{{invoice.table}}</span>
     <div class="info" v-else>
-      <span>{{invoice.customer.name}}</span>
+      <span class="data">{{invoice.customer.name}}</span>
       <span>{{invoice.customer.phone | phone}}</span>
     </div>
     <span class="note" v-if="invoice.status === 0">{{$t('reason.'+invoice.void.note)}}</span>
@@ -85,7 +85,7 @@ export default {
   line-height: 14px;
 }
 
-.address {
+.data {
   white-space: nowrap;
   overflow: hidden;
   width: 110px;

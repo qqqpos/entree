@@ -1352,13 +1352,14 @@ export default {
         delivery,
         tip,
         gratuity,
+        rounding,
         type
       } = this.payment;
 
       const total = toFixed(subtotal + tax, 2);
       const due = toFixed(total + delivery - discount, 2);
       const surcharge = toFixed(tip + gratuity, 2);
-      const balance = toFixed(due + surcharge, 2);
+      const balance = toFixed(due + surcharge + rounding, 2);
       const remain = Math.max(0, toFixed(balance - paid, 2));
 
       this.payment = Object.assign({}, this.payment, {

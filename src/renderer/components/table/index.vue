@@ -439,6 +439,7 @@ export default {
       });
     },
     exceptionHandler(error) {
+      console.log(error);
       switch (error) {
         case "UNABLE_VIEW_OTHER_TABLE":
           console.log("trigger");

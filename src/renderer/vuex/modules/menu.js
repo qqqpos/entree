@@ -168,7 +168,7 @@ const mutations = {
           return;
         }
 
-        if (data.function) item.side = {};
+        //if (data.function) item.side = {}; 
 
         const assignSide = !(skip || ignore);
 
