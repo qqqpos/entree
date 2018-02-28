@@ -1,10 +1,10 @@
 <template>
   <div class="popupMask center dark">
-    <div class="window" v-show="!component">
-      <header class="title">
-        <span>{{$t('title.markPaymentType')}}</span>
-        <i class="fa fa-times" @click="init.reject(false)"></i>
+    <div class="editor" v-show="!component">
+      <header>
+        <h3>{{$t('title.markPaymentType')}}</h3>
       </header>
+      <div class="banner"></div>
       <div class="inner">
         <div v-for="(option,index) in options" :key="index">
           <input type="radio" name="type" v-model="type" :value="option" :id="'type'+index">
@@ -202,6 +202,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  background: #fafafa;
 }
 
 .inner > div {
@@ -228,7 +229,7 @@ input:checked + label {
   background: #66bb6a;
   color: #fafafa;
   border: 2px solid #009688;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 3px #333;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 

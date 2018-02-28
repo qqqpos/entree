@@ -10,6 +10,7 @@
                 <inputer title="text.date" v-model="log.date" placeholder="YYYY-MM-DD"></inputer>
                 <inputer title="text.clockIn" v-model="log.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##"></inputer>
                 <inputer title="text.clockOut" v-model="log.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##"></inputer>
+                <inputer title="text.tip" v-model.number="log.tip"></inputer>
                 <inputer title="text.salary" v-model.number="log.wage" :placeholder="init.operator.wage"></inputer>
                 <inputer title="text.note" v-model="log.note" type="textarea"></inputer>
                 <toggle title="button.valid" v-model="log.valid" :defaultStyle="false"></toggle>

@@ -254,6 +254,8 @@ export default {
       });
     },
     viewTicket(table) {
+      !table.hasOwnProperty(invoice) && Object.assign(table, { invoice: [] });
+
       const invoice = this.history.find(i => i._id === table.invoice[0]);
       const prompt = {
         title: "dialog.invoiceNotFound",

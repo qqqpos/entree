@@ -95,6 +95,7 @@ export default {
           this.dropdown = "autocomplete";
         });
       } else {
+        this.dropdown = null;
         this.list = [];
       }
     }

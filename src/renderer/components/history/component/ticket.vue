@@ -68,8 +68,7 @@ export default {
 }
 
 .info {
-  font-size: 13px;
-  font-family: "Microsoft YaHei";
+  font-size: 14px;
   text-align: center;
   color: gray;
   height: 40px;

@@ -49,8 +49,8 @@
                 <span class="value">({{payment.discount | decimal}})</span>
               </div>
               <div class="addition" v-show="payment.tip > 0">
-                <span class="text">{{$t('text.includeTip')}}</span>
-                <span class="value">({{payment.tip | decimal}})</span>
+                <span class="text">{{$t('text.tip')}}</span>
+                <span class="value">{{payment.tip | decimal}}</span>
               </div>
               <div class="addition" v-show="payment.gratuity > 0">
                 <span class="text">{{$t('text.includeGratuity')}}</span>

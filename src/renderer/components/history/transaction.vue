@@ -107,14 +107,10 @@ export default {
       return this.filteredTransactions.length;
     },
     totalTip() {
-      return this.filteredTransactions
-        .map(t => t.tip)
-        .reduce((a, b) => a + b, 0);
+      return this.filteredTransactions.reduce((a, c) => a + c.tip, 0);
     },
     totalAmount() {
-      return this.filteredTransactions
-        .map(t => t.actual)
-        .reduce((a, b) => a + b, 0);
+      return this.filteredTransactions.reduce((a, c) => a + c.actual, 0);
     },
     ...mapGetters(["op"])
   },
@@ -139,7 +135,7 @@ export default {
   created() {
     this.checkPermission()
       .then(this.initialData)
-      //.catch(this.initialFailed);
+      .catch(this.initialFailed);
 
     this.$bus.on("filter", this.applyFilter);
   },
@@ -208,9 +204,9 @@ export default {
         this.component = "tip";
       })
         .then(tip => {
-          let paid = record.actual + tip;
+          const paid = record.actual + tip;
           Object.assign(record, { tip, paid });
-          this.$socket.emit("[UPDATE] TRANSACTION_TIP", record);
+          this.$socket.emit("[TRANSACTION] ADJUST_TIP", record);
           this.$q();
         })
         .catch(() => this.$q());

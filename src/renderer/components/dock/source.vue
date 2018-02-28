@@ -59,7 +59,7 @@ export default {
 .source header {
   background: #fff;
   border-bottom: 1px solid #eee;
-  padding: 25px 0 15px;
+  padding: 20px 0 15px;
   border-radius: 4px 4px 0 0;
 }
 

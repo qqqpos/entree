@@ -906,7 +906,6 @@ export default {
     taxRate: "Tax Rate",
     tip: "Tip",
     gratuity: "Gratuity",
-    includeTip: "Tips",
     includeGratuity: "Fees",
     includeDiscount: "Disc.",
     itemComment: "Customer Comment",

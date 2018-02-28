@@ -163,19 +163,22 @@ export default {
         this.componentData = { resolve, reject, payment: this.order.payment };
         this.component = "tipper";
       })
-        .then(value => {
-          const { tip } = value;
+        .then(tip => {
+          const {
+            gratuity,
+            total,
+            discount,
+            paid,
+            rounding
+          } = this.order.payment;
+          const balance = toFixed(
+            total - discount + tip + gratuity + rounding,
+            2
+          );
 
           this.order.payment.tip = tip;
-
-          const { gratuity, total, discount, paid } = this.order.payment;
-          const surcharge = toFixed(gratuity + tip, 2);
-          const balance = toFixed(total - discount + surcharge, 2);
-
-          this.order.payment.surcharge = surcharge;
           this.order.payment.balance = balance;
           this.order.payment.remain = toFixed(balance - paid, 2);
-
           this.$socket.emit("[UPDATE] INVOICE", this.order, false);
           this.$q();
         })

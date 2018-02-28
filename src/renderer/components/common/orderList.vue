@@ -340,7 +340,6 @@ export default {
           balance: 0, // due + surcharge + rounding
           paid: 0,
           remain: 0, // balance - paid
-          change: 0, // depreciate
           tip: 0,
           gratuity: 0,
           delivery,
