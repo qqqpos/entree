@@ -1559,20 +1559,20 @@ export default {
     replaceItemName: "Will replace item name",
     noReplaceItemName: "Print item name",
     restrictPermission: "Directly deny access",
-    temporaryPermission: "Temporary access via password",
+    temporaryPermission: "Temporary access via pin",
     itemSplit: "How many quantity you want to split?",
-    tipReport: "Tip report when clock out",
+    tipReport: "Report tip when clock out",
     dinein: {
       useTableLayout: "Use table to place order",
       noTableLayout: "Skip table to place order",
       guestCount: "Count guest before place order",
-      manuallyClearTable: "Manually clear table status",
-      autoClearTable: "Auto restore table status after settlement",
+      manuallyClearTable: "Manually reset table status",
+      autoClearTable: "Auto reset table status when settled",
       printReceipt: "Print receipt after Done",
       noReceipt: "Do not print receipt after Done",
       lock: "Lock screen after Done",
-      passwordRequire: "Password required before create a new table.",
-      surcharge: "Set up auto surcharge condition"
+      passwordRequire: "Pin required before create a new table.",
+      surcharge: "Set up auto surcharge"
     },
     terminal: {
       integration: "Semi-integrated terminal configuration"

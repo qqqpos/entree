@@ -1528,7 +1528,7 @@ export default {
     noReplaceItemName: "正常打印",
     restrictPermission: "当权限不足时直接拒绝",
     temporaryPermission: "允许输入密码来临时提升权限",
-    itemSplit: "您想将锁定的物品平摊成几份?",
+    itemSplit: "您想将选择的物品平摊成几份?",
     tipReport: "打卡下班时上报小费信息",
     dinein: {
       useTableLayout: "使用座位下单",
