@@ -43,12 +43,12 @@
           <span></span>
         </label>
       </div>
-      <div class="option">
+      <!-- <div class="option">
         <span class="f1">{{$t('text.deliveryFee')}}</span>
         <label class="external">
           <i class="fa fa-caret-right"></i>
         </label>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

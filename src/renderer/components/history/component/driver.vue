@@ -31,7 +31,6 @@
         <div class="f1">
           <checkbox v-model="loop" title="text.autoNext"></checkbox>
         </div>
-        <div class="btn" @click="setTip">{{$t('button.setTip')}}</div>
         <div class="btn" @click="init.resolve">{{$t('button.done')}}</div>
       </footer>
     </div>
@@ -42,11 +41,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import checkbox from "../../setting/common/checkbox";
-import tipper from "./tipper";
 
 export default {
   props: ["init"],
-  components: { tipper, checkbox },
+  components: { checkbox },
   computed: {
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };
@@ -161,7 +159,7 @@ export default {
     setTip() {
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, payment: this.order.payment };
-        this.component = "tipper";
+        this.component = "tipper"; 
       })
         .then(tip => {
           const {

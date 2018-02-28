@@ -93,7 +93,7 @@
         <template v-if="order.type === 'DELIVERY'">
           <p :class="{hidden:parseFloat(payment.tip) === 0}">
             <span class="text">{{$t("text.tip")}}:</span>
-            <span class="value">{{payment.tip | decimal}}</span>
+            <span class="value">( {{payment.tip | decimal}} )</span>
           </p>
           <p>
             <span class="text">{{$t("text.deliveryFee")}}:</span>

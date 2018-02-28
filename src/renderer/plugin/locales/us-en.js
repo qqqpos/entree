@@ -929,7 +929,6 @@ export default {
     displayCategory: "Display Category",
     displayMenuId: "Display Menu ID",
     autoPrint: "Auto Print",
-    tenMinuteAhead: "Print ticket 10 Min. ahead",
     cash: "Cash",
     creditCard: "Credit Card",
     giftCard: "Gift Card",

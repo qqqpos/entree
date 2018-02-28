@@ -895,7 +895,6 @@ export default {
     displayCategory: "显示类别",
     displayMenuId: "显示菜单ID",
     autoPrint: "自动打印",
-    tenMinuteAhead: "提前10分钟通知",
     cash: "现金",
     creditCard: "信用卡",
     giftCard: "礼物卡",
