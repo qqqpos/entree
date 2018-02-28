@@ -30,7 +30,7 @@
           <div class="wrap" :key="0">
             <div class="statistics">
               <div class="chart">
-                <line-chart :chart-data="collection"></line-chart>
+                <!-- <line-chart :chart-data="collection"></line-chart> -->
               </div>
             </div>
           </div>
@@ -153,11 +153,10 @@
 
 <script>
 import loader from "../common/loader";
-import lineChart from "./component/lineChart";
 
 export default {
   props: ["init"],
-  components: { loader, lineChart },
+  components: { loader },
   data() {
     return {
       language: this.$store.getters.language,

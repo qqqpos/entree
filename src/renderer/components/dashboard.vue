@@ -122,9 +122,10 @@ import collector from "./component/collector";
 import dialoger from "./common/dialoger";
 import toast from "./component/toast";
 import unlock from "./common/unlock";
+import provider from "./dock/source";
 
 export default {
-  components: { dialoger, collector, toast, unlock },
+  components: { dialoger, collector, toast, unlock, provider },
   computed: {
     ...mapGetters([
       "op",
@@ -366,8 +367,23 @@ export default {
             this.$router.push({ path: "/main/menu" });
           }
           break;
-        case "pickupList":
+        case "list":
           this.$router.push({ path: "/main/list" });
+          break;
+        case "thirdParty":
+          new Promise((resolve, reject) => {
+            this.componentData = { resolve, reject };
+            this.component = "provider";
+          })
+            .then(source => {
+              this.setOrder({ source });
+              this.setTicket({ type: "DELIVERY" });
+              this.$router.push({ path: "/main/customer" });
+            })
+            .catch(() => {
+              this.setTicket({ type: "DELIVERY" });
+              this.$router.push({ path: "/main/customer" });
+            });
           break;
         case "history":
           this.$checkPermission("access", route)

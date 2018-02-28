@@ -60,7 +60,7 @@ export default {
             .add(4, "h");
           break;
         case "monthly":
-        from = +moment()
+          from = +moment()
             .subtract(12, "M")
             .startOf("M")
             .hours(4);
@@ -88,7 +88,7 @@ export default {
 ul {
   display: flex;
   background: #fff;
-  border-bottom: 1px solid #bdbdbd;
+  border-bottom: 1px solid #eceff1;
 }
 
 li {

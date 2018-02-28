@@ -65,9 +65,9 @@ export default {
           value: "buffet"
         },
         {
-          label: this.$t("type.HIBACHI"),
+          label: this.$t("button.thirdParty"),
           tooltip: "",
-          value: "hibachi"
+          value: "thirdParty"
         },
         {
           label: this.$t("text.history"),

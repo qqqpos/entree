@@ -1,7 +1,7 @@
 <template>
   <div>
     <range-tab @update="fetchData" initial="currentWeek"></range-tab>
-    <line-chart :chart-data="collection"></line-chart>
+    
     <table>
       <thead>
         <tr>
@@ -27,10 +27,9 @@
 
 <script>
 import rangeTab from "../common/rangeTab";
-import lineChart from "./component/lineChart";
 
 export default {
-  components: { lineChart, rangeTab },
+  components: {  rangeTab },
   data() {
     return {
       collection: null,
