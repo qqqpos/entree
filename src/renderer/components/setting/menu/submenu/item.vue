@@ -50,7 +50,8 @@ export default {
         this.component = "editor";
       })
         .then(_item => {
-          this.items.push(_item);
+          this.items.push(Object.assign({}, _item, { clickable: true }));
+          this.$socket.emit("[SUBMENU] ADD", _item);
           this.$q();
         })
         .catch(() => this.$q());
@@ -64,7 +65,14 @@ export default {
           this.$socket.emit("[SUBMENU] UPDATE", _item);
           this.$q();
         })
-        .catch(() => this.$q());
+        .catch(del => {
+          if (del) {
+            this.$socket.emit("[SUBMENU] REMOVE", item);
+            this.items.splice(index, 1);
+          }
+
+          this.$q();
+        });
     },
     option() {}
   }

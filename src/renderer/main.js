@@ -6,7 +6,6 @@ import VueTouch from "vue-touch";
 import Electron from "vue-electron";
 import VueSocketio from "vue-socket.io";
 import { VueMaskDirective } from "v-mask";
-import Echarts from "vue-echarts/components/ECharts";
 
 import App from "./App";
 import router from "./router";
@@ -23,8 +22,6 @@ Vue.use(Bars);
 Vue.use(VueTouch, { name: "v-touch" });
 Vue.use(util);
 Vue.use(i18n);
-
-Vue.component('chart',Echarts);
 
 Vue.directive("mask", VueMaskDirective);
 Vue.directive("outer-click", {

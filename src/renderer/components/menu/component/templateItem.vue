@@ -8,7 +8,7 @@
       <div class="banner"></div>
       <div class="wrap">
         <ul>
-          <li v-for="(page,i) in template.contain" @click="index = i" class="page">
+          <li v-for="(page,i) in template.contain" @click="index = i" class="page" :key="i">
             <span>{{page.name}}</span>
             <i class="fa fa-caret-right"></i>
           </li>
@@ -124,7 +124,7 @@ export default {
             single: parseFloat(price),
             price: (price * qty).toFixed(2)
           };
-
+          
           this.setChoiceSet(content);
         });
 

@@ -62,6 +62,17 @@ export default {
   },
   mounted() {
     setTimeout(() => {
+      if (
+        Array.isArray(this.template.contain) &&
+        this.template.contain.length === 0
+      )
+        this.template.contain.push({
+          name: "",
+          addition: 0,
+          startAt: 0,
+          max: 0,
+          contain: []
+        });
       !this.template.contain[0].name && this.setOption();
     }, 500);
   },
@@ -93,7 +104,11 @@ export default {
           this.template.contain[this.index].contain.splice(index, 1, _item);
           this.$q();
         })
-        .catch(() => this.$q());
+        .catch(del => {
+          if (del) this.template.contain[this.index].contain.splice(index, 1);
+
+          this.$q();
+        });
     },
     setOption() {
       const { addition, startAt, max, name } = this.template.contain[

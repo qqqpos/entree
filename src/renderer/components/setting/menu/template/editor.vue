@@ -1,5 +1,5 @@
 <template>
-    <div class="popupMask setting dark center" @click.self="init.reject">
+    <div class="popupMask setting dark center" @click.self="init.reject(false)">
         <div class="editor">
             <header>
                 <h5></h5>
@@ -18,7 +18,7 @@
             </div>
             <footer>
                 <div class="opt">
-                    <span class="del">{{$t('button.delete')}}</span>
+                    <span class="del" @click="init.reject(true)">{{$t('button.delete')}}</span>
                 </div>
                 <button class="btn" @click="confirm" :disabled="!item.usEN">{{$t('button.confirm')}}</button>
             </footer>

@@ -68,6 +68,7 @@
         </tfoot>
       </table>
       <footer>
+        <button class="btn" :disabled="reportable">{{$t('button.report')}}</button>
         <div class="f1">
           <pagination :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></pagination>
         </div>
@@ -111,6 +112,9 @@ export default {
     },
     totalAmount() {
       return this.filteredTransactions.reduce((a, c) => a + c.actual, 0);
+    },
+    reportable(){
+      return true//(!this.cashier && !this.server)
     },
     ...mapGetters(["op"])
   },

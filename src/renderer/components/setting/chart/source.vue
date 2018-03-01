@@ -1,7 +1,7 @@
 <template>
   <div>
     <range-tab @update="fetchData" initial="currentMonth"></range-tab>
-    <chart :options="option"></chart>
+    <!-- <chart :options="option"></chart> -->
   </div>
 </template>
 
@@ -41,9 +41,7 @@ export default {
         );
       }
     },
-    initialChartData(result) {
-      const { labels, counts, sales } = result;
-
+    initialChartData({ labels, counts, sales }) {
       const data = labels.map((label, index) => ({
         name: this.$t("type." + label),
         value: counts[index]
@@ -51,7 +49,7 @@ export default {
 
       this.option = {
         backgroundColor: "#f3f3f3",
-
+        color:["#852422","#55302F","#AC2F2B","#C33631","#D76662","#c23531"],
         title: {
           text: "Customized Pie",
           left: "center",
@@ -69,14 +67,14 @@ export default {
         visualMap: {
           show: false,
           min: 1,
-          max: 10,
+          max: 100,
           inRange: {
             colorLightness: [0, 1]
           }
         },
         series: [
           {
-            name: "访问来源",
+            name: this.$t("thead.orderType"),
             type: "pie",
             radius: "55%",
             center: ["50%", "50%"],
@@ -101,7 +99,6 @@ export default {
             },
             itemStyle: {
               normal: {
-                color: "#c23531",
                 shadowBlur: 200,
                 shadowColor: "rgba(0, 0, 0, 0.5)"
               }

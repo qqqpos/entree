@@ -1,7 +1,7 @@
 <template>
   <div>
     <range-tab @update="fetchData" initial="currentWeek"></range-tab>
-    
+    <chart :options="option"></chart>
     <table>
       <thead>
         <tr>
@@ -32,7 +32,7 @@ export default {
   components: {  rangeTab },
   data() {
     return {
-      collection: null,
+      option: {},
       reports: []
     };
   },
@@ -40,26 +40,26 @@ export default {
     this.fetchData();
   },
   methods: {
-    initialChartData(result) {
-      const { labels, data } = result;
-      this.collection = {
-        labels,
-        datasets: [
-          {
-            backgroundColor: "rgba(255, 99, 132, 0.1)",
-            borderColor: "rgb(255, 99, 132)",
-            data,
-            fill: "start",
-            label: this.$t("text.sales"),
-            cubicInterpolationMode: "monotone",
-            borderWidth: 2,
-            borderDash: [3, 3],
-            pointHoverRadius: 10,
-            pointStyle: "circle"
-          }
-        ]
-      };
-      this.analyzeData(result);
+    initialChartData({ labels, data }) {
+      console.log(labels,data);
+      // this.collection = {
+      //   labels,
+      //   datasets: [
+      //     {
+      //       backgroundColor: "rgba(255, 99, 132, 0.1)",
+      //       borderColor: "rgb(255, 99, 132)",
+      //       data,
+      //       fill: "start",
+      //       label: this.$t("text.sales"),
+      //       cubicInterpolationMode: "monotone",
+      //       borderWidth: 2,
+      //       borderDash: [3, 3],
+      //       pointHoverRadius: 10,
+      //       pointStyle: "circle"
+      //     }
+      //   ]
+      // };
+      this.analyzeData({ labels, data });
     },
     fetchData(range) {
       if(!range){
@@ -78,9 +78,7 @@ export default {
         this.$socket.emit("[CHART] RANGE", { from, to }, result =>this.initialChartData(result));
       }
     },
-    analyzeData(result) {
-      const { labels, data } = result;
-
+    analyzeData({ labels, data }) {
       if (data.length === 0) {
         this.reports = [];
         return;

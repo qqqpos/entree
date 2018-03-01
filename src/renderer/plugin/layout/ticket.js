@@ -1,4 +1,4 @@
-const ticket = function(raw, receipt) {
+const ticket = function (raw, receipt) {
   const printers = this.getPrinters();
   const ticket = raw.type;
 
@@ -98,7 +98,7 @@ const ticket = function(raw, receipt) {
   this.reset();
 };
 
-const preview = function(printer, ticket) {
+const preview = function (printer, ticket) {
   printer = printer || "cashier";
 
   const setting = this.setting[printer];
@@ -202,8 +202,8 @@ function createList(printer, setting, invoice, preview) {
       items = !invoice.print
         ? list.filter(item => item.printer[printer])
         : list.filter(
-            item => item.printer[printer] && item.diffs !== "removed"
-          );
+          item => item.printer[printer] && item.diffs !== "removed"
+        );
       break;
     case "difference":
       if (!invoice.print) {
@@ -290,8 +290,8 @@ function createList(printer, setting, invoice, preview) {
       items = !invoice.print
         ? list.filter(item => item.printer[printer])
         : list.filter(
-            item => item.printer[printer] && item.diffs !== "removed"
-          );
+          item => item.printer[printer] && item.diffs !== "removed"
+        );
   }
 
   if (items.length === 0) return [];
@@ -318,7 +318,7 @@ function createList(printer, setting, invoice, preview) {
       if (sorted.hasOwnProperty(category)) {
         content += `<div class="category"><span class="zhCN">${
           categoryMap[category]
-        }</span><span class="usEN">${category}</span></div>`;
+          }</span><span class="usEN">${category}</span></div>`;
         content += sorted[category]
           .map(item => mockup(item, renderQty))
           .join("")
@@ -361,7 +361,7 @@ function createList(printer, setting, invoice, preview) {
       englishSub = "";
 
     item.choiceSet.forEach(set => {
-      if (set.hasOwnProperty(print) && !set.print.includes(printer)) return;
+      if (set.hasOwnProperty('print') && !set.print.includes(printer)) return;
       const _qty = set.qty !== 1 ? set.qty + " x " : "";
       const _price =
         Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
@@ -477,8 +477,8 @@ function createStyle(setting) {
               .store h3{font-size:1.25em;}\
               .store h5{font-size:16px;font-weight:lighter}\
               h1{${
-                title ? "" : "display:none;"
-              }font-size:1.5em;font-family:"${fontFamily}"}\
+    title ? "" : "display:none;"
+    }font-size:1.5em;font-family:"${fontFamily}"}\
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
               footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}\
               .ticketNumber{right:10px;}.table{left:10px;}\
@@ -488,8 +488,8 @@ function createStyle(setting) {
               .server .wrap{display:flex;padding:0 10px;}\
               .server .text{flex:2;}.server .value{flex:3;}\
               .customer {${
-                customer ? "" : "display:none;"
-              }font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
+    customer ? "" : "display:none;"
+    }font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
               .customer p:last-child{border-bottom:1px solid #000;}\
               .tel{letter-spacing:2px;}.ext{margin-left:10px;}\
               .pt{font-size:0.8em;}
@@ -503,10 +503,10 @@ function createStyle(setting) {
               footer{font-family:'Agency FB';}\
               section.column{display:flex;}\
               .payment{min-width:150px;${
-                payment
-                  ? "display:flex;flex-direction:column;"
-                  : "display:none;"
-              }}\
+    payment
+      ? "display:flex;flex-direction:column;"
+      : "display:none;"
+    }}\
               .payment p{display:flex;font-family:'Tensentype RuiHeiJ-W2';width:200px;}\
               .payment .text{flex:1;text-align:right;}\
               .payment .value{min-width:40%;text-align:right;}\
@@ -528,10 +528,10 @@ function createStyle(setting) {
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
               .zhCN{font-family:'${secondary.fontFamily}';font-size:${
     secondary.fontSize
-  }px;}\
+    }px;}\
               .usEN{font-family:'${primary.fontFamily}';font-size:${
     primary.fontSize
-  }px;}\
+    }px;}\
               del{display:block;position:absolute;width:inherit;height:2px;background:#000;top:40%;}\
           </style>`;
 }
@@ -695,8 +695,8 @@ function createFooter(config, setting, printer, ticket) {
       : "";
   const _time = jobTime
     ? `<p class="printTime">${printer} print @ ${moment().format(
-        "hh:mm:ss"
-      )}</p>`
+      "hh:mm:ss"
+    )}</p>`
     : "";
   const _number = ticketNumber
     ? `<div class="ticketNumber">${number}</div>`
