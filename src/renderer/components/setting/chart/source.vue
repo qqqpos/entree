@@ -1,7 +1,7 @@
 <template>
   <div>
     <range-tab @update="fetchData" initial="currentMonth"></range-tab>
-    <!-- <chart :options="option"></chart> -->
+    <div ref="chart" style="width: 100%; height: 697px;"></div>
   </div>
 </template>
 
@@ -39,82 +39,91 @@ export default {
         );
       }
     },
-    initialChartData({ labels, counts, sales }) {
-      const data = labels.map((label, index) => ({
-        name: this.$t("type." + label),
-        value: counts[index]
+    initialChartData(data) {
+      const allCounts = data.reduce((a, c) => a + c.count, 0);
+
+      let types = data.map((each, i) => ({
+        type: this.$t("type." + each._id),
+        percent: each.count,
+        sales: toFixed(each.sales, 2),
+        subs: each.subs.map(sub => ({
+          type: this.$t("type." + sub.type) + " (%)",
+          percent: sub.percent
+        }))
       }));
 
-      this.option = {
-        backgroundColor: "#f3f3f3",
-        color:["#852422","#55302F","#AC2F2B","#C33631","#D76662","#c23531"],
-        title: {
-          text: "Customized Pie",
-          left: "center",
-          top: 20,
-          textStyle: {
-            color: "#3c3c3c"
-          }
-        },
+      let chart;
+      let selected;
 
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-
-        visualMap: {
-          show: false,
-          min: 1,
-          max: 100,
-          inRange: {
-            colorLightness: [0, 1]
+      function generateChartData() {
+        let chartData = [];
+        for (let i = 0; i < types.length; i++) {
+          if (i == selected) {
+            for (let x = 0; x < types[i].subs.length; x++) {
+              chartData.push({
+                type: types[i].subs[x].type,
+                percent: types[i].subs[x].percent,
+                color: types[i].color,
+                pulled: true
+              });
+            }
+          } else {
+            chartData.push({
+              type: types[i].type,
+              percent: types[i].percent,
+              color: types[i].color,
+              id: i
+            });
           }
-        },
-        series: [
+        }
+        return chartData;
+      }
+
+      AmCharts.makeChart(this.$refs.chart, {
+        type: "pie",
+
+        dataProvider: generateChartData(),
+        labelText: "[[title]]: [[value]]",
+        balloonText: "[[title]]: [[value]]",
+        titleField: "type",
+        valueField: "percent",
+        outlineColor: "#FFFFFF",
+        outlineAlpha: 0.8,
+        outlineThickness: 2,
+        colorField: "color",
+        pulledField: "pulled",
+        baseColor:"#3F51B5",
+        brightnessStep:50,
+        titles: [
           {
-            name: this.$t("thead.orderType"),
-            type: "pie",
-            radius: "55%",
-            center: ["50%", "50%"],
-            data: data.sort((a, b) => a.value - b.value),
-            roseType: "radius",
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#3c3c3c"
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                lineStyle: {
-                  color: "#E0E0E0"
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20
-              }
-            },
-            itemStyle: {
-              normal: {
-                shadowBlur: 200,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            },
-            animationType: "scale",
-            animationEasing: "elasticOut",
-            animationDelay: idx => Math.random() * 200
+            text: "Click a slice to see the details"
           }
-        ]
-      };
+        ],
+        fontFamily:"Yuanti-SC",
+        listeners: [
+          {
+            event: "clickSlice",
+            method: function(event) {
+              let chart = event.chart;
+              if (event.dataItem.dataContext.id != undefined) {
+                selected = event.dataItem.dataContext.id;
+              } else {
+                selected = undefined;
+              }
+              chart.dataProvider = generateChartData();
+              chart.validateData();
+            }
+          }
+        ],
+        export: {
+          enabled: true
+        }
+      });
     }
   }
 };
 </script>
 
 <style scoped>
-.echarts {
-  width: 100%;
-  height: 697px;
-}
+
 </style>

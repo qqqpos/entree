@@ -1,7 +1,7 @@
 <template>
   <div>
     <range-tab @update="fetchData" initial="currentWeek"></range-tab>
-    <chart :options="option"></chart>
+    <!-- <chart :options="option"></chart> -->
     <table>
       <thead>
         <tr>

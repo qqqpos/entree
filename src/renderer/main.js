@@ -14,6 +14,9 @@ import util from "./plugin/util";
 import VueBus from "./plugin/bus";
 import Trend from "vuetrend";
 import Bars from "vuebars";
+import AmCharts from 'amcharts3'
+import AmSerial from 'amcharts3/amcharts/serial'
+import AmPie from "amcharts3/amcharts/pie"
 
 Vue.use(Electron);
 Vue.use(VueBus);

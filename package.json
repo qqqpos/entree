@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@tweenjs/tween.js": "^17.2.0",
+    "amcharts3": "github:amcharts/amcharts3",
     "axios": "^0.17.1",
     "diskusage": "^0.2.4",
     "file-saver": "^1.3.3",
