@@ -7,6 +7,7 @@
         <h5>{{customer.address}}
           <span class="city" v-show="customer.city">{{customer.city}}</span>
         </h5>
+        <span class="last">{{customer.lastDate | fromNow}}</span>
       </div>
       <div class="tags">
         <span class="tag" v-for="(tag,index) in customer.tags" :key="index">{{$t('tag.'+tag)}}</span>
@@ -89,6 +90,25 @@ h5 {
   color: #fff;
   text-shadow: 0 1px 1px #333;
   padding: 3px 4px;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.city{
+  margin-left: 3px;
+}
+
+.last {
+  position: absolute;
+  right: 20px;
+  bottom: -14px;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin: 4px 0px 4px 4px;
+  background: #ff9800;
+  color: #fff;
+  text-shadow: 0 1px 1px #333;
+  padding: 3px 10px;
   border-radius: 2px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }

@@ -34,6 +34,7 @@ export default {
     };
   },
   created() {
+    console.log(this.group);
     this.items = this.$store.getters.submenu[this.group] || [];
   },
   methods: {
@@ -42,7 +43,9 @@ export default {
         zhCN: "",
         usEN: "",
         subItem: true,
+        group: this.group,
         price: 0,
+        num: this.items.length,
         print: Object.keys(this.$store.getters.config.printers)
       };
       new Promise((resolve, reject) => {

@@ -46,6 +46,7 @@ import switcher from "./switcher";
 import caller from "./caller";
 import panel from "./panel";
 import disc from "./disc";
+import { setTimeout } from 'timers';
 export default {
   components: { caller, switcher, dialoger, panel, disc, messenger, profiles },
   data() {
@@ -85,6 +86,15 @@ export default {
       "language",
       "currentTable"
     ])
+  },
+  mounted(){
+    this.$p("caller",{
+      customer:{
+        phone:"4843185553",
+        name:"",
+        lastDate:1519713284895
+      }
+    })
   },
   watch: {
     ring(caller) {

@@ -14,7 +14,7 @@
       <div class="pages" v-if="list.length > 12">
         <pagination :of="list" :max="5" :contain="12" @page="setPage" class="f1"></pagination>
       </div>
-      <div :is="component" :init="componentData"></div>
+      <div :is="component" :init="componentData" :group="submenu"></div>
     </div>
   </div>
 </template>

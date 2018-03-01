@@ -7,8 +7,6 @@
 
 <script>
 import rangeTab from "../common/rangeTab";
-import "echarts/lib/chart/pie";
-import "echarts/lib/component/tooltip";
 
 export default {
   components: { rangeTab },
