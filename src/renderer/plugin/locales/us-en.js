@@ -110,7 +110,7 @@ export default {
     hospital: "HOSPITAL"
   },
   reason: {
-    "Customer No-Show": "Customer No-Show",
+    "Customer No-Show": "No-Show",
     "Cancel By Customer": "Cancel By Customer",
     "Cancel By Staff": "Cancel By Staff",
     "Malice Order": "Malice Order",
@@ -1183,7 +1183,9 @@ export default {
     stationPrinters: "{i} printer(s) assigned",
     invoiceEdit: "Edited by {i}",
     rightClickPaste: "Right Click To Paste Side Option",
-    clickViewDetails: "Click to see the details"
+    clickViewDetails: "Click to see the details",
+    beAdvised: "Please Be Advised",
+    times: "{i} time(s)"
   },
   nav: {
     store: "Store",

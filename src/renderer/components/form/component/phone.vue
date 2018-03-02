@@ -82,7 +82,7 @@ export default {
 
       if (phone.length === 10) {
         this.$socket.emit("[CUSTOMER] FROM_PHONE", phone, profile => {
-          if (profile) {
+          if (profile && profile._id !== this.customer._id) {
             this.setCustomer(profile);
             this.$emit("focus", "address");
             this.list = [];

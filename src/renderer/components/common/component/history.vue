@@ -58,7 +58,11 @@ export default {
     copy(invoice) {
       let content = invoice.content.map(item => {
         item.choiceSet.forEach(sub => (sub.unique = String().random()));
-        Object.assign(item, { unique: String().random() });
+        Object.assign(item, {
+          unique: String().random(),
+          pending: false,
+          print: false
+        });
         return item;
       });
 

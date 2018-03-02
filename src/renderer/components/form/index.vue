@@ -6,10 +6,20 @@
       <div>
         <span>{{$t(order.source === 'POS' ? 'title.customerProfile' : 'title.ticketProfile')}}</span>
       </div>
-      <div class="alert f1"></div>
-      <div class="edit" v-show="justOrdered.exist">
-        <button @click="editInvoice" :disabled="!justOrdered.editable">{{$t('button.editInvoice')}}</button>
+      <div class="f1">
+        <div class="flags" v-if="flags.length">
+          <span class="alert">{{$t('text.beAdvised')}}</span>
+        <ul>
+          <li v-for="(flag,index) in flags" :key="index" :title="stringify(flag.logs)">
+            <span>{{$t('reason.'+flag.text)}} {{$t('text.times',flag.count)}}</span>
+          </li>
+        </ul>
+        </div>
       </div>
+      <div class="edit" v-show="checkOrder.exist">
+        <button @click="editInvoice" :disabled="!checkOrder.editable">{{$t('button.editInvoice')}}</button>
+      </div>
+      <i class="fa fa-times cancel" @click="cancel"></i>
     </header>
     <router-view @focus="setFocus" @query="search"></router-view>
     <page-tab></page-tab>
@@ -29,8 +39,12 @@ import switchType from "./component/switchType";
 export default {
   components: { switchType, keyboard, dialoger, pageTab, unlock },
   computed: {
-    justOrdered() {
+    checkOrder() {
       if (this.customer._id) {
+        this.$socket.emit("[CUSTOMER] INTEGRITY", this.customer._id, flags => {
+          this.flags = flags;
+        });
+
         const ticket = this.history.find(
           t => t.customer._id === this.customer._id
         );
@@ -38,9 +52,11 @@ export default {
         if (ticket) {
           return {
             exist: true,
-            editable: !ticket.settled
+            editable: !ticket.settled && ticket.status === 1
           };
         }
+      } else {
+        this.flags = [];
       }
 
       return {
@@ -64,6 +80,7 @@ export default {
       caret: 0,
       entry: "phone",
       keyboard: true,
+      flags: [],
       componentData: null,
       component: null
     };
@@ -318,6 +335,16 @@ export default {
       }
     },
     editFailed() {},
+    stringify(logs) {
+      return logs
+        .map(
+          log =>
+            moment(log.time).format("MM-DD HH:mm") +
+            " " +
+            this.$t("type." + log.type)
+        )
+        .join("\n");
+    },
     ...mapActions([
       "setApp",
       "setTicket",
@@ -350,7 +377,7 @@ header {
   height: 45px;
   display: flex;
   align-items: center;
-  padding-left: 85px;
+  padding: 0 0 0 85px;
   border-bottom: 1px solid #eee;
   background: #607d8b;
   color: #fff;
@@ -377,7 +404,34 @@ i.avatar {
   border-radius: 2px;
   font-family: "Yuanti-SC";
   color: #3c3c3c;
-  margin-right: 5px;
   cursor: pointer;
+}
+
+.cancel {
+  padding: 15px 23px;
+  cursor: pointer;
+}
+
+.flags {
+  display: flex;
+  justify-content: center;
+}
+
+.alert {
+  position: absolute;
+  bottom: -10px;
+  left: 65px;
+  background: #ff9800;
+  padding: 0 7px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(51, 51, 51, 0.64);
+}
+
+ul {
+  display: flex;
+}
+
+li {
+  padding: 0 5px;
 }
 </style>

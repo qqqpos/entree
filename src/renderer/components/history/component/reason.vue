@@ -8,13 +8,13 @@
       <div class="banner"></div>
       <ul>
         <li v-for="(reason,index) in reasons" :key="index">
-          <input type="radio" v-model="note" :value="reason.text" :id="'reason'+index">
+          <input type="radio" v-model="note" :value="reason" :id="'reason'+index">
           <label :for="'reason'+index">{{$t('reason.'+reason.text)}}
             <i class="fa fa-flag" v-if="reason.flag"></i>
           </label>
         </li>
         <li v-show="isManager" class="manager">
-          <input type="radio" v-model="note" value="Manager Redemption" id="redemption">
+          <input type="radio" v-model="note" :value="redemption" id="redemption">
           <label for="redemption">{{$t('reason.Manager Redemption')}}</label>
         </li>
       </ul>
@@ -40,6 +40,10 @@ export default {
         { text: "Payment Issue", flag: false },
         { text: "Malice Order", flag: true }
       ],
+      redemption: {
+        text: "Manager Redemption",
+        flag: false
+      },
       note: null,
       isManager: false
     };
@@ -57,7 +61,8 @@ export default {
         void: {
           by: this.op.name,
           time: +new Date(),
-          note: this.note
+          note: this.note.text,
+          flag: this.note.flag
         }
       });
 
