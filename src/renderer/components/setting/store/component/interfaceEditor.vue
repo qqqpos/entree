@@ -139,6 +139,12 @@ export default {
           value: "fa-cog"
         },
         {
+          label: "Internet",
+          tooltip:"",
+          plainText:true,
+          value:"fa-globe"
+        },
+        {
           label: "Lock",
           tooltip: "",
           plainText: true,

@@ -1181,7 +1181,8 @@ export default {
     map: "Map",
     stationPrinters: "{i} printer(s) assigned",
     invoiceEdit: "Edited by {i}",
-    rightClickPaste: "Right Click To Paste Side Option"
+    rightClickPaste: "Right Click To Paste Side Option",
+    clickViewDetails: "Click to see the details"
   },
   nav: {
     store: "Store",

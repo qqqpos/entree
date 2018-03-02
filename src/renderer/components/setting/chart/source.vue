@@ -10,11 +10,6 @@ import rangeTab from "../common/rangeTab";
 
 export default {
   components: { rangeTab },
-  data() {
-    return {
-      option: {}
-    };
-  },
   created() {
     this.fetchData();
   },
@@ -40,9 +35,7 @@ export default {
       }
     },
     initialChartData(data) {
-      const allCounts = data.reduce((a, c) => a + c.count, 0);
-
-      let types = data.map((each, i) => ({
+      const types = data.map((each, i) => ({
         type: this.$t("type." + each._id),
         percent: each.count,
         sales: toFixed(each.sales, 2),
@@ -92,14 +85,18 @@ export default {
         outlineThickness: 2,
         colorField: "color",
         pulledField: "pulled",
-        baseColor:"#3F51B5",
-        brightnessStep:50,
+        baseColor: "#3F51B5",
+        brightnessStep: 50,
+        // innerRadius:"15%",
+        legend:{
+          position:"right"
+        },
         titles: [
           {
-            text: "Click a slice to see the details"
+            text: this.$t("text.clickViewDetails")
           }
         ],
-        fontFamily:"Yuanti-SC",
+        fontFamily: "Yuanti-SC",
         listeners: [
           {
             event: "clickSlice",
@@ -123,7 +120,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-
-</style>

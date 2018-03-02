@@ -1147,7 +1147,8 @@ export default {
     map: "地图",
     stationPrinters: "已使用 {i} 台打印机",
     invoiceEdit: "被 {i} 修改过",
-    rightClickPaste: "右键粘贴配菜"
+    rightClickPaste: "右键粘贴配菜",
+    clickViewDetails: "点击查看细节"
   },
   nav: {
     store: "店面",

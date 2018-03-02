@@ -28,12 +28,12 @@ Vue.use(i18n);
 
 Vue.directive("mask", VueMaskDirective);
 Vue.directive("outer-click", {
-  bind: function(el, binding, vNode) {
+  bind: function (el, binding, vNode) {
     if (typeof binding.value !== "function") {
       const component = vNode.context.name;
       let warn = `[Vue-outer-click:] provided expression '${
         binding.expression
-      }' is not a function.`;
+        }' is not a function.`;
       if (component) {
         warn += `Found in component '${component}'`;
       }
@@ -49,7 +49,7 @@ Vue.directive("outer-click", {
     document.addEventListener("click", handler);
   },
 
-  unbind: function(el, binding) {
+  unbind: function (el, binding) {
     document.removeEventListener("click", el.__vueOuterClick__);
     el.__vueOuterClick__ = null;
   }
@@ -103,12 +103,11 @@ new Promise((resolve, reject) => {
     return;
   }
 
-  let start = 0,
-    end = 255;
+  let start = 0;
 
-  while (start <= end) {
+  while (start <= 255) {
     let target = ip + start;
-    (function(target) {
+    (function (target) {
       let scanner = Net.connect(
         {
           host: target,
@@ -138,14 +137,9 @@ new Promise((resolve, reject) => {
     document.documentElement;
   head.insertBefore(printScript, head.firstChild);
 
-  Vue.filter(
-    "moment",
-    (time, regEx) => (time ? moment(Number(time)).format(regEx) : "")
-  );
-  Vue.filter(
-    "decimal",
-    value => (isNumber(value) ? parseFloat(value).toFixed(2) : value)
-  );
+  Vue.filter("moment", (time, regEx) => (time ? moment(Number(time)).format(regEx) : ""));
+  Vue.filter("decimal", value => (isNumber(value) ? parseFloat(value).toFixed(2) : value));
+  Vue.filter("fromNow", (time, pass) => (time ? moment(Number(time)).fromNow(pass) : ""));
   Vue.filter(
     "phone",
     number =>
@@ -158,15 +152,12 @@ new Promise((resolve, reject) => {
     number =>
       number
         ? number.replace(
-            /^\D?(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})/,
-            "$1 $2 $3 $4"
-          )
+          /^\D?(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})/,
+          "$1 $2 $3 $4"
+        )
         : number
   );
-  Vue.filter(
-    "fromNow",
-    (time, pass) => (time ? moment(Number(time)).fromNow(pass) : "")
-  );
+
   Vue.filter("tel", phone => {
     if (!phone) return "";
 

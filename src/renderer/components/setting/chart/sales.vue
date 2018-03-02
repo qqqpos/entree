@@ -1,8 +1,8 @@
 <template>
   <div>
-    <range-tab @update="fetchData" initial="currentWeek"></range-tab>
-    <!-- <chart :options="option"></chart> -->
-    <table>
+    <range-tab @update="fetchData" initial="lastQuarter"></range-tab>
+    <div class="chart" ref="chart" style="width: 100%; height: 500px;"></div>
+    <!-- <table>
       <thead>
         <tr>
           <th></th>
@@ -21,7 +21,7 @@
           <td>{{report.note}}</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
 </template>
 
@@ -29,7 +29,7 @@
 import rangeTab from "../common/rangeTab";
 
 export default {
-  components: {  rangeTab },
+  components: { rangeTab },
   data() {
     return {
       option: {},
@@ -40,43 +40,111 @@ export default {
     this.fetchData();
   },
   methods: {
-    initialChartData({ labels, data }) {
-      console.log(labels,data);
-      // this.collection = {
-      //   labels,
-      //   datasets: [
-      //     {
-      //       backgroundColor: "rgba(255, 99, 132, 0.1)",
-      //       borderColor: "rgb(255, 99, 132)",
-      //       data,
-      //       fill: "start",
-      //       label: this.$t("text.sales"),
-      //       cubicInterpolationMode: "monotone",
-      //       borderWidth: 2,
-      //       borderDash: [3, 3],
-      //       pointHoverRadius: 10,
-      //       pointStyle: "circle"
-      //     }
-      //   ]
-      // };
-      this.analyzeData({ labels, data });
-    },
     fetchData(range) {
-      if(!range){
-        const from = +moment().startOf("w").hours(4);
-        const to = +moment().endOf("w").add(4, "h");
+      if (!range) {
+        const from = +moment()
+          .subtract(1, "quarter")
+          .startOf("quarter")
+          .hours(4);
+        const to = +moment()
+          .subtract(1, "quarter")
+          .endOf("quarter")
+          .add(4, "h");
 
-        this.$socket.emit("[CHART] RANGE", { from, to }, result =>this.initialChartData(result));
-      }
-      else if(range.select === 'monthly'){
-        const {from,to} = range;
-        
-        this.$socket.emit("[CHART] MONTHLY", { from, to }, result =>this.initialChartData(result));
-      }else{
-        const {from,to} = range;
+        this.$socket.emit("[CHART] RANGE", { from, to }, result =>
+          this.initialChartData(result)
+        );
+      } else {
+        const { from, to } = range;
 
-        this.$socket.emit("[CHART] RANGE", { from, to }, result =>this.initialChartData(result));
+        this.$socket.emit("[CHART] RANGE", { from, to }, result =>
+          this.initialChartData(result)
+        );
       }
+    },
+    initialChartData(dataProvider) {
+      const chart = AmCharts.makeChart(this.$refs.chart, {
+        path: "dist/electron/amcharts/",
+        type: "serial",
+        marginRight: 40,
+        marginLeft: 40,
+        autoMarginOffset: 20,
+        mouseWheelZoomEnabled: true,
+        dataDateFormat: "YYYY-MM-DD",
+        valueAxes: [
+          {
+            id: "v1",
+            axisAlpha: 0,
+            position: "left",
+            ignoreAxisWidth: true
+          }
+        ],
+        balloon: {
+          borderThickness: 1,
+          shadowAlpha: 0
+        },
+        graphs: [
+          {
+            id: "g1",
+            balloon: {
+              drop: true,
+              adjustBorderColor: false,
+              color: "#ffffff"
+            },
+            bullet: "round",
+            bulletBorderAlpha: 1,
+            bulletColor: "#FFFFFF",
+            bulletSize: 4,
+            hideBulletsCount: 50,
+            lineThickness: 2,
+            title: "red line",
+            useLineColorForBulletBorder: true,
+            valueField: "value",
+            balloonText: "<span style='font-size:18px;'>[[value]]</span>"
+          }
+        ],
+        chartScrollbar: {
+          graph: "g1",
+          oppositeAxis: false,
+          offset: 30,
+          scrollbarHeight: 80,
+          backgroundAlpha: 0,
+          selectedBackgroundAlpha: 0.1,
+          selectedBackgroundColor: "#888888",
+          graphFillAlpha: 0,
+          graphLineAlpha: 0.5,
+          selectedGraphFillAlpha: 0,
+          selectedGraphLineAlpha: 1,
+          autoGridCount: true,
+          color: "#AAAAAA"
+        },
+        chartCursor: {
+          pan: true,
+          valueLineEnabled: true,
+          valueLineBalloonEnabled: true,
+          cursorAlpha: 1,
+          cursorColor: "#258cbb",
+          limitToGraph: "g1",
+          valueLineAlpha: 0.2,
+          valueZoomable: true
+        },
+        valueScrollbar: {
+          oppositeAxis: false,
+          offset: 50,
+          scrollbarHeight: 10
+        },
+        categoryField: "date",
+        categoryAxis: {
+          parseDates: true,
+          dashLength: 1,
+          minorGridEnabled: true
+        },
+        export: {
+          enabled: true
+        },
+        dataProvider
+      });
+      //this.analyzeData({ labels, data });
     },
     analyzeData({ labels, data }) {
       if (data.length === 0) {
@@ -132,6 +200,9 @@ export default {
 </script>
 
 <style scoped>
+.chart {
+  background: #fff;
+}
 thead th {
   background: #607d8b;
   color: #fff;
