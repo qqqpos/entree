@@ -110,8 +110,15 @@ export default {
     },
     applyPrice(type) {
       const content = this.order.content.map(item => {
-        if (item.hasOwnProperty("prices") && item.prices[type])
-          item.price = item.prices[type];
+        if (item.hasOwnProperty("prices") && item.prices.hasOwnProperty(type)) {
+          item.price = item.prices[type].split(",");
+        } else if (
+          item.hasOwnProperty("prices") &&
+          item.prices.hasOwnProperty("DEFAULT")
+        ) {
+          item.price = item.prices["DEFAULT"].split(",");
+        }
+
         return item;
       });
       this.setOrder({ content });

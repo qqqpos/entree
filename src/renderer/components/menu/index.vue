@@ -278,6 +278,7 @@ export default {
       this.checkItemAvailable(item)
         .then(this.checkOption)
         .then(this.checkItemType)
+        .then(this.conditionPrice)
         .then(this.addToOrder)
         .catch(this.specialItemHandler.bind(null, item));
     },
@@ -354,6 +355,17 @@ export default {
           }));
         }
 
+        next(item);
+      });
+    },
+    conditionPrice(item) {
+      return new Promise((next, stop) => {
+        const type = this.order.type || this.ticket.type;
+        if (item.prices && item.prices.hasOwnProperty(type)) {
+          Object.assign(item, {
+            price: item.prices[type].split(",")
+          });
+        }
         next(item);
       });
     },

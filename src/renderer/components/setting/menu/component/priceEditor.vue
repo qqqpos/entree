@@ -45,8 +45,6 @@ export default {
     };
   },
   created() {
-    delete this.init.prices.DEFAULT;
-    
     Object.keys(this.init.prices).forEach(type => {
       this.prices[type] = this.init.prices[type];
     });
@@ -66,14 +64,18 @@ export default {
       };
     },
     confirm() {
+      let prices = {};
+
       Object.keys(this.prices).forEach(type => {
-        if (!isNumber(this.prices[type])) {
-          delete this.prices[type];
-        } else {
-          this.prices[type] = this.prices[type].split(",");
+        const priceArray = this.prices[type].split(",");
+
+        if (priceArray.every(price => isNumber(price))) {
+          prices[type] = priceArray.join(",");
         }
       });
-      this.init.resolve(this.prices);
+
+      prices["DEFAULT"] = this.init.price.join(",");
+      this.init.resolve(prices);
     }
   }
 };

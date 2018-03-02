@@ -143,7 +143,11 @@
                   <span class="text">{{$t('text.paid')}}</span>
                   <span class="value">{{paid}}</span>
                 </div>
-                <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money">
+                <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money" v-if="!isThirdPartyPayment">
+                  <span class="text">{{$t('text.tip')}}</span>
+                  <span class="value">{{tip}}</span>
+                </div>
+                <div class="input disabled" v-else>
                   <span class="text">{{$t('text.tip')}}</span>
                   <span class="value">{{tip}}</span>
                 </div>

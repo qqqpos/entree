@@ -368,13 +368,14 @@ export default {
       prompt && this.$dialog(prompt).then(() => this.$q());
     },
     option(table, index) {
-      table._id && !table.temporary
-        ? this.resetTable(table)
+      (table._id && !table.temporary)
+        ? this.resetTableDialog(table)
         : table.temporary
           ? this.collapseTable(table, index)
           : this.temporaryTable(table, index);
     },
-    resetTable({ server, name, _id }, index) {
+    resetTableDialog(table,index) {
+      const { server, name, _id } = table;
       const { role } = this.op;
 
       let prompt = {
