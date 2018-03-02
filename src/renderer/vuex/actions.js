@@ -89,6 +89,7 @@ export const resetAll = ({ commit }) => {
   commit(types.RESET_MENU);
   commit(types.RESET_TABLE);
   commit(types.RESET_CUSTOMER);
+  commit(types.EMPTY_ARCHIVE_ORDER);
   commit(types.SET_TICKET, { type: "" });
   commit(types.SET_APP, { newTicket: true });
 };
