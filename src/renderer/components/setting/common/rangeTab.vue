@@ -17,7 +17,7 @@ export default {
         "lastWeek",
         "currentMonth",
         "lastMonth",
-        "lastQuarter",
+        "currentQuarter",
         "firstHalf"
       ],
       select: "currentMonth"
@@ -59,13 +59,11 @@ export default {
             .endOf("M")
             .add(4, "h");
           break;
-        case "lastQuarter":
+        case "currentQuarter":
           from = +moment()
-            .subtract(1, "quarter")
             .startOf("quarter")
             .hours(4);
           to = +moment()
-            .subtract(1, "quarter")
             .endOf("quarter")
             .add(4, "h");
           break;

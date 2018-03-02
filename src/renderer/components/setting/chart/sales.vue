@@ -1,7 +1,7 @@
 <template>
   <div>
-    <range-tab @update="fetchData" initial="lastQuarter"></range-tab>
-    <div class="chart" ref="chart" style="width: 100%; height: 500px;"></div>
+    <range-tab @update="fetchData" initial="currentQuarter"></range-tab>
+    <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
     <!-- <table>
       <thead>
         <tr>
@@ -71,6 +71,7 @@ export default {
         autoMarginOffset: 20,
         mouseWheelZoomEnabled: true,
         dataDateFormat: "YYYY-MM-DD",
+        fontFamily: "Yuanti-SC",
         valueAxes: [
           {
             id: "v1",
@@ -83,6 +84,8 @@ export default {
           borderThickness: 1,
           shadowAlpha: 0
         },
+        startEffect: "elastic",
+        startDuration: 0.5,
         graphs: [
           {
             id: "g1",
@@ -146,6 +149,7 @@ export default {
       });
       //this.analyzeData({ labels, data });
     },
+
     analyzeData({ labels, data }) {
       if (data.length === 0) {
         this.reports = [];
@@ -203,6 +207,7 @@ export default {
 .chart {
   background: #fff;
 }
+
 thead th {
   background: #607d8b;
   color: #fff;
