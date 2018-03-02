@@ -62,11 +62,11 @@ export default {
       this.dropdown = null;
     },
     get(log) {
-      if (log.customer) {
-        this.setCustomer(log.customer);
+      log.customer
+        ? this.setCustomer(log.customer)
+        : this.$emit("input", log.phone);
 
-        this.dropdown = null;
-      }
+      this.dropdown = null;
     },
     set(profile) {
       this.setCustomer(profile);

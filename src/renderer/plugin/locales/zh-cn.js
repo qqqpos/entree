@@ -316,6 +316,7 @@ export default {
     departments: "部门分类",
     hibachiTable: "铁板座位",
     customerProfile: "客户信息",
+    ticketProfile: "订单信息",
     reportTip: "上报本次小费",
     giftcardStats: "礼物卡数据"
   },

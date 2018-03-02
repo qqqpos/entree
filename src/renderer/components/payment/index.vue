@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="fn">
-            <button class="btn" :disabled="true">{{$t('button.setTip')}}</button>
+            <button class="btn" :disabled="!isThirdPartyPayment" @click="setTip">{{$t('button.setTip')}}</button>
             <button class="btn" @click="setDiscount" :disabled="!discountable || this.order.split">{{$t('button.setDiscount')}}</button>
             <button class="btn" @click="save">{{$t('button.save')}}</button>
           </div>
@@ -233,11 +233,12 @@ import ticket from "../common/ticket";
 import creditCard from "./creditCard";
 import discount from "./discount";
 import thirdParty from "./mark";
-import { parse } from "path";
+import tiper from "./tiper";
 
 export default {
   props: ["init"],
   components: {
+    tiper,
     ticket,
     capture,
     dialoger,
@@ -343,7 +344,7 @@ export default {
             .toPrecision(12)
             .toFloat();
 
-          this.tip = "0.00";
+          this.tip = this.payment.tip.toFixed(2) || "0.00";
 
           next();
         });
@@ -1352,14 +1353,13 @@ export default {
         delivery,
         tip,
         gratuity,
-        rounding,
-        type
+        rounding
       } = this.payment;
 
       const total = toFixed(subtotal + tax, 2);
       const due = toFixed(total + delivery - discount, 2);
       const surcharge = toFixed(tip + gratuity, 2);
-      const balance = toFixed(due + surcharge + rounding, 2);
+      const balance = toFixed(due + gratuity + rounding, 2);
       const remain = Math.max(0, toFixed(balance - paid, 2));
 
       this.payment = Object.assign({}, this.payment, {
@@ -1399,6 +1399,19 @@ export default {
         this.$socket.emit("[UPDATE] INVOICE", order, false);
         this.exit();
       }
+    },
+    setTip() {
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject };
+        this.component = "tiper";
+      })
+        .then(tip => {
+          this.tip = tip.toFixed(2);
+          Object.assign(this.payment, { tip });
+          this.setOrder(Object.assign(this.order, { payment: this.payment }));
+          this.$q();
+        })
+        .catch(() => this.$q());
     },
     exit() {
       this.init.reject();

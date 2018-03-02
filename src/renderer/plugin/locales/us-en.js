@@ -408,6 +408,7 @@ export default {
     department: "Department",
     hibachiTable: "Hibachi Table",
     customerProfile: "Customer Info",
+    ticketProfile: "Ticket Info",
     reportTip: "Report Tips",
     giftcardStats: "Gift Card Stats"
   },

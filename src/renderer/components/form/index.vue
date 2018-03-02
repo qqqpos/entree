@@ -4,11 +4,11 @@
     <header>
       <i class="fa fa-user-circle avatar"></i>
       <div>
-        <span>{{$t('title.customerProfile')}}</span>
+        <span>{{$t(order.source === 'POS' ? 'title.customerProfile' : 'title.ticketProfile')}}</span>
       </div>
       <div class="alert f1"></div>
-      <div class="edit" v-show="justOrdered">
-        <button @click="editInvoice">{{$t('button.editInvoice')}}</button>
+      <div class="edit" v-show="justOrdered.exist">
+        <button @click="editInvoice" :disabled="!justOrdered.editable">{{$t('button.editInvoice')}}</button>
       </div>
     </header>
     <router-view @focus="setFocus" @query="search"></router-view>
@@ -31,12 +31,22 @@ export default {
   computed: {
     justOrdered() {
       if (this.customer._id) {
-        const exist = this.history.findIndex(
+        const ticket = this.history.find(
           t => t.customer._id === this.customer._id
         );
 
-        return exist !== -1;
+        if (ticket) {
+          return {
+            exist: true,
+            editable: !ticket.settled
+          };
+        }
       }
+
+      return {
+        exist: false,
+        editable: false
+      };
     },
     ...mapGetters([
       "op",

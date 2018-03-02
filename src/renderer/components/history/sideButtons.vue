@@ -54,7 +54,7 @@ import { mapGetters, mapActions } from "vuex";
 import Calendar from "./component/calendar";
 import paymentMark from "../payment/mark";
 import Dialoger from "../common/dialoger";
-import remover from "../payment/remover";
+import loger from "../payment/loger";
 import transaction from "./transaction";
 import Reason from "./component/reason";
 import Payment from "../payment/index";
@@ -76,7 +76,7 @@ export default {
     unlock,
     Reason,
     reporter,
-    remover
+    loger
   },
   data() {
     return {
@@ -212,9 +212,12 @@ export default {
           const { number } = this.order;
 
           this.componentData = { resolve, reject, number, logs };
-          this.component = "remover";
+          this.component = "loger";
         });
-      }).then(() => this.$q());
+      }).then(() => {
+        this.$q();
+        this.$socket.emit("[UPDATE] INVOICE", this.order);
+      });
     },
     reOpenOrder() {
       if (this.isEmptyTicket) return;
@@ -384,10 +387,14 @@ export default {
       this.$socket.emit("[PAYMENT] VIEW_TRANSACTIONS", date, transactions => {
         this.$open("transaction", {
           data: transactions.sort((a, b) =>
-            String(b.ticket ? b.ticket.number : -1).localeCompare((a.ticket ? a.ticket.number : -1), undefined, {
-              numeric: true,
-              sensitivity: "base"
-            })
+            String(b.ticket ? b.ticket.number : -1).localeCompare(
+              a.ticket ? a.ticket.number : -1,
+              undefined,
+              {
+                numeric: true,
+                sensitivity: "base"
+              }
+            )
           )
         });
       });

@@ -93,7 +93,7 @@
         <template v-if="order.type === 'DELIVERY'">
           <p :class="{hidden:parseFloat(payment.tip) === 0}">
             <span class="text">{{$t("text.tip")}}:</span>
-            <span class="value">( {{payment.tip | decimal}} )</span>
+            <span class="value">{{payment.tip | decimal}}</span>
           </p>
           <p>
             <span class="text">{{$t("text.deliveryFee")}}:</span>
@@ -110,13 +110,9 @@
             <span class="value">XueWu</span>
           </p>
         </template>
-        <p v-if="!payment.rounding">
+        <p>
           <span class="text">{{$t("text.total")}}:</span>
-          <span class="value">{{payment.due | decimal}}</span>
-        </p>
-        <p v-else>
-          <span class="text">{{$t("text.total")}}:</span>
-          <span class="value">{{payment.due + payment.rounding | decimal}}</span>
+          <span class="value">{{payment.due + (payment.rounding || 0) + (payment.tip || 0) | decimal}}</span>
         </p>
       </div>
     </div>
@@ -367,7 +363,12 @@ export default {
         }
       }
 
-      let { tip, gratuity, paid, rounding = 0 } = this.order.payment;
+      let {
+        tip = 0,
+        gratuity = 0,
+        paid = 0,
+        rounding = 0
+      } = this.order.payment;
       let subtotal = 0,
         tax = 0,
         discount = 0;
