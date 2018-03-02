@@ -42,8 +42,11 @@
           <div class="balanceDue" @dblclick="roundUp">
             <span class="for">{{$t('text.balanceDue')}}:</span>
             <div class="inner">
-              <span class="due">
-                <span class="symbol">$</span>{{payment.remain | decimal}}</span>
+              <div class="due">
+                <span class="symbol">$</span>
+                <span v-if="!isThirdPartyPayment">{{payment.remain | decimal}}</span>
+                <span v-else>{{payment.remain + payment.tip | decimal}}</span>
+              </div>
               <div class="addition" v-show="payment.discount > 0">
                 <span class="text">{{$t('text.includeDiscount')}}</span>
                 <span class="value">({{payment.discount | decimal}})</span>

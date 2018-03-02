@@ -62,7 +62,7 @@ export default {
     },
     initialChartData(dataProvider) {
       const chart = AmCharts.makeChart(this.$refs.chart, {
-        path: "dist/electron/amcharts/",
+        //path: "dist/electron/amcharts/",
         type: "serial",
         marginRight: 40,
         marginLeft: 40,
