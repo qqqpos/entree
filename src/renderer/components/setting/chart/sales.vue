@@ -43,11 +43,9 @@ export default {
     fetchData(range) {
       if (!range) {
         const from = +moment()
-          .subtract(1, "quarter")
           .startOf("quarter")
           .hours(4);
         const to = +moment()
-          .subtract(1, "quarter")
           .endOf("quarter")
           .add(4, "h");
 
