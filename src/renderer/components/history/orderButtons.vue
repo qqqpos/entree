@@ -59,8 +59,10 @@ export default {
         this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject, splits };
-            this.component = "viewer"
-          }).then(order => this.$open("thirdPartyPayment", { order })).catch(() => this.$q())
+            this.component = "viewer";
+          })
+            .then(order => this.$open("thirdPartyPayment", { order }))
+            .catch(() => this.$q());
         });
       } else {
         this.$open("thirdPartyPayment");
@@ -69,9 +71,7 @@ export default {
     split() {
       this.$open("split");
     },
-    combine() { 
-      
-    },
+    combine() {},
     discount() {
       this.$socket.emit("[COUPON] LIST", coupons => {
         new Promise((resolve, reject) => {
@@ -84,17 +84,30 @@ export default {
       });
     },
     updatePayment({ discount, coupon }) {
-      let coupons = this.order.coupons.filter(coupon => coupon.code !== 'UnitedPOS Inc');
+      let coupons = this.order.coupons.filter(
+        coupon => coupon.code !== "UnitedPOS Inc"
+      );
 
       discount > 0 && coupons.push(coupon);
       this.order.coupons = coupons;
 
-      this.$calculatePayment(this.order.content)
+      this.$calculatePayment(this.order.content);
       this.$socket.emit("[UPDATE] INVOICE", this.order);
       this.$q();
     },
     driver() {
-      this.$open("driver", { ticket: this.order.number });
+      const date = document.querySelector("#calendar .text").innerText;
+      if (date !== this.today) {
+        this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, data => {
+          const invoices = data.filter(invoice => invoice.type === "DELIVERY");
+          this.$open("driver", { invoices });
+        });
+      } else {
+        const invoices = this.history.filter(
+          invoice => invoice.type === "DELIVERY"
+        );
+        this.$open("driver", { ticket: this.order.number, invoices });
+      }
     },
     exit() {
       this.resetMenu();
@@ -110,7 +123,16 @@ export default {
         this.order.status === 0
       );
     },
-    ...mapGetters(["op", "tax", "order", "store", "ticket", "dinein", "isEmptyTicket"])
+    ...mapGetters([
+      "op",
+      "tax",
+      "order",
+      "store",
+      "ticket",
+      "dinein",
+      "history",
+      "isEmptyTicket"
+    ])
   }
 };
 </script>

@@ -1183,7 +1183,7 @@ export default {
     stationPrinters: "{i} printer(s) assigned",
     invoiceEdit: "Edited by {i}",
     rightClickPaste: "Right Click To Paste Side Option",
-    clickViewDetails: "Click to see the details",
+    ticketTypeFromDateRange: "Ticket Type Ratio from {i} to {i}",
     beAdvised: "Please Be Advised",
     times: "{i} time(s)"
   },
@@ -1239,7 +1239,9 @@ export default {
     revenue: "Revenue",
     payout: "Payout",
     hibachi: "Hibachi",
-    item: "Item"
+    item: "Item",
+    daily: "Daily",
+    compare: "Compare"
   },
   setting: {
     softwareSetting: "UnitedPOS Setting",

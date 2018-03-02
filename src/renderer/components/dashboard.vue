@@ -376,7 +376,7 @@ export default {
             this.component = "provider";
           })
             .then(source => {
-              this.setOrder({ source });
+              this.setOrder({ source, tradeMark: source });
               this.setTicket({ type: "DELIVERY" });
               this.$router.push({ path: "/main/customer" });
             })

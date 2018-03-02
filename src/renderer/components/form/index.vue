@@ -340,8 +340,9 @@ export default {
         .map(
           log =>
             moment(log.time).format("MM-DD HH:mm") +
-            " " +
-            this.$t("type." + log.type)
+            ` (${moment(log.time).fromNow()}) ` +
+            this.$t("type." + log.type) + " " +
+            log.amount
         )
         .join("\n");
     },

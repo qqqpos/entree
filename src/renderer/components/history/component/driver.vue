@@ -49,7 +49,7 @@ export default {
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };
     },
-    ...mapGetters(["op", "history"])
+    ...mapGetters(["op"])
   },
   data() {
     return {
@@ -99,7 +99,7 @@ export default {
   methods: {
     initialData() {
       let viewable = this.approval(this.op.view, "invoices");
-      this.orders = this.history.filter(invoice => invoice.type === "DELIVERY");
+      this.orders = this.init.invoices;
 
       !viewable &&
         (this.orders = orders.filter(
@@ -159,7 +159,7 @@ export default {
     setTip() {
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, payment: this.order.payment };
-        this.component = "tipper"; 
+        this.component = "tipper";
       })
         .then(tip => {
           const {

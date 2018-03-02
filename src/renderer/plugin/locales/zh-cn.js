@@ -1149,9 +1149,9 @@ export default {
     stationPrinters: "已使用 {i} 台打印机",
     invoiceEdit: "被 {i} 修改过",
     rightClickPaste: "右键粘贴配菜",
-    clickViewDetails: "点击查看细节",
+    ticketTypeFromDateRange: "从 {i} 到 {i} 订单类型比例",
     beAdvised: "请注意此客人",
-    times:"{i} 次"
+    times: "{i} 次"
   },
   nav: {
     store: "店面",
@@ -1205,7 +1205,9 @@ export default {
     revenue: "营收",
     payout: "支出",
     hibachi: "铁板",
-    item: "物品"
+    item: "物品",
+    daily: "每日",
+    compare:"对比"
   },
   setting: {
     softwareSetting: "UnitedPOS 后台设置",

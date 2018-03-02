@@ -15,6 +15,8 @@ import VueBus from "./plugin/bus";
 import Trend from "vuetrend";
 import Bars from "vuebars";
 import AmCharts from 'amcharts3'
+import AmExport from "amcharts3/amcharts/plugins/export"
+import "amcharts3/amcharts/plugins/export/export.css"
 import AmSerial from 'amcharts3/amcharts/serial'
 import AmPie from "amcharts3/amcharts/pie"
 

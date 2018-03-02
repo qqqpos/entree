@@ -67,6 +67,8 @@ export default {
       let prices = {};
 
       Object.keys(this.prices).forEach(type => {
+        if (!this.prices[type] || type === 'DEFAULT') return;
+
         const priceArray = this.prices[type].split(",");
 
         if (priceArray.every(price => isNumber(price))) {

@@ -2,7 +2,7 @@
   <div>
     <range-tab @update="fetchData" initial="currentQuarter"></range-tab>
     <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
-    <!-- <table>
+    <table>
       <thead>
         <tr>
           <th></th>
@@ -21,7 +21,7 @@
           <td>{{report.note}}</td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
   </div>
 </template>
 
@@ -61,90 +61,94 @@ export default {
       }
     },
     initialChartData(dataProvider) {
+      const average = parseInt(
+        dataProvider.reduce((a, c) => a + c.value, 0) / dataProvider.length
+      );
       const chart = AmCharts.makeChart(this.$refs.chart, {
-        //path: "dist/electron/amcharts/",
+        path:
+          process.env.NODE_ENV === "development"
+            ? "dist/electron/amcharts/"
+            : undefined,
         type: "serial",
-        marginRight: 40,
-        marginLeft: 40,
+        marginRight: 80,
         autoMarginOffset: 20,
-        mouseWheelZoomEnabled: true,
+        marginTop: 7,
         dataDateFormat: "YYYY-MM-DD",
         fontFamily: "Yuanti-SC",
-        valueAxes: [
-          {
-            id: "v1",
-            axisAlpha: 0,
-            position: "left",
-            ignoreAxisWidth: true
-          }
-        ],
-        balloon: {
-          borderThickness: 1,
-          shadowAlpha: 0
-        },
+        mouseWheelZoomEnabled: true,
         startEffect: "elastic",
         startDuration: 0.5,
+        valueAxes: [
+          {
+            axisAlpha: 0.2,
+            dashLength: 1,
+            position: "left"
+          }
+        ],
+        mouseWheelZoomEnabled: true,
+        valueAxes: [
+          {
+            logarithmic: true,
+            dashLength: 1,
+            guides: [
+              {
+                dashLength: 10,
+                inside: true,
+                label:
+                  this.$t("report.averageSales") + ` $ ${average.toFixed(2)}`,
+                lineAlpha: 1,
+                fontSize:"18",
+                value: average
+              }
+            ],
+            position: "left"
+          }
+        ],
         graphs: [
           {
             id: "g1",
-            balloon: {
-              drop: true,
-              adjustBorderColor: false,
-              color: "#ffffff"
-            },
+            balloonText: "[[value]]",
             bullet: "round",
             bulletBorderAlpha: 1,
             bulletColor: "#FFFFFF",
-            bulletSize: 4,
             hideBulletsCount: 50,
-            lineThickness: 2,
             title: "red line",
-            useLineColorForBulletBorder: true,
             valueField: "value",
-            balloonText: "<span style='font-size:18px;'>[[value]]</span>"
+            useLineColorForBulletBorder: true,
+            dashLength: 3,
+            balloon: {
+              drop: true,
+              shadowAlpha: 0,
+              borderThickness: 1
+            }
           }
         ],
         chartScrollbar: {
-          graph: "g1",
-          oppositeAxis: false,
-          offset: 30,
-          scrollbarHeight: 80,
-          backgroundAlpha: 0,
-          selectedBackgroundAlpha: 0.1,
-          selectedBackgroundColor: "#888888",
-          graphFillAlpha: 0,
-          graphLineAlpha: 0.5,
-          selectedGraphFillAlpha: 0,
-          selectedGraphLineAlpha: 1,
           autoGridCount: true,
-          color: "#AAAAAA"
+          graph: "g1",
+          scrollbarHeight: 40
         },
         chartCursor: {
-          pan: true,
-          valueLineEnabled: true,
-          valueLineBalloonEnabled: true,
-          cursorAlpha: 1,
-          cursorColor: "#258cbb",
-          limitToGraph: "g1",
-          valueLineAlpha: 0.2,
-          valueZoomable: true
-        },
-        valueScrollbar: {
-          oppositeAxis: false,
-          offset: 50,
-          scrollbarHeight: 10
+          limitToGraph: "g1"
         },
         categoryField: "date",
         categoryAxis: {
           parseDates: true,
+          axisColor: "#DADADA",
           dashLength: 1,
           minorGridEnabled: true
         },
         export: {
-          enabled: true
+          enabled: true,
+          menuReviver: function(item, li) {
+            if (item.format === "XLSX" || item.format === "PDF")
+              li.style.display = "none";
+            return li;
+          }
         },
         dataProvider
       });
+
       //this.analyzeData({ labels, data });
     },
 

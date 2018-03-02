@@ -13,6 +13,11 @@ export default {
   created() {
     this.fetchData();
   },
+  data() {
+    return {
+      range: {}
+    };
+  },
   methods: {
     fetchData(range) {
       if (!range) {
@@ -22,6 +27,8 @@ export default {
         const to = +moment()
           .endOf("M")
           .add(4, "h");
+
+        range = { from, to };
 
         this.$socket.emit("[CHART] SOURCE", { from, to }, result =>
           this.initialChartData(result)
@@ -33,6 +40,8 @@ export default {
           this.initialChartData(result)
         );
       }
+
+      this.range = range;
     },
     initialChartData(data) {
       const types = data.map((each, i) => ({
@@ -40,8 +49,12 @@ export default {
         percent: each.count,
         sales: toFixed(each.sales, 2),
         subs: each.subs.map(sub => ({
-          type: this.$t("type." + sub.type) + " (%)",
-          percent: sub.percent
+          type:
+            this.$t("type." + sub.type) +
+            " " +
+            this.$t("type." + sub.payment) +
+            ` (${sub.percent} %)`,
+          percent: sub.count
         }))
       }));
 
@@ -88,12 +101,16 @@ export default {
         baseColor: "#3F51B5",
         brightnessStep: 50,
         // innerRadius:"15%",
-        legend:{
-          position:"right"
+        legend: {
+          position: "right"
         },
         titles: [
           {
-            text: this.$t("text.clickViewDetails")
+            text: this.$t(
+              "text.ticketTypeFromDateRange",
+              moment(this.range.from).format("YYYY-MM-DD"),
+              moment(this.range.to).format("YYYY-MM-DD")
+            )
           }
         ],
         fontFamily: "Yuanti-SC",
@@ -113,7 +130,11 @@ export default {
           }
         ],
         export: {
-          enabled: true
+          enabled: true,
+          menuReviver: function(item, li) {
+            if (item.format === "XLSX" || item.format === "PDF") li.style.display = "none";
+            return li;
+          }
         }
       });
     }

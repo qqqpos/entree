@@ -129,8 +129,8 @@ export default {
         this.componentData = { resolve, reject, source };
         this.component = "tpp";
       })
-        .then(type => {
-          this.setOrder({ source: type, tradeMark: type });
+        .then(source => {
+          this.setOrder({ source, tradeMark: source });
           this.init.resolve();
         })
         .catch(() => this.$q());

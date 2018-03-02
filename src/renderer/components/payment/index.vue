@@ -143,11 +143,7 @@
                   <span class="text">{{$t('text.paid')}}</span>
                   <span class="value">{{paid}}</span>
                 </div>
-                <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money" v-if="!isThirdPartyPayment">
-                  <span class="text">{{$t('text.tip')}}</span>
-                  <span class="value">{{tip}}</span>
-                </div>
-                <div class="input disabled" v-else>
+                <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money">
                   <span class="text">{{$t('text.tip')}}</span>
                   <span class="value">{{tip}}</span>
                 </div>
@@ -1216,6 +1212,11 @@ export default {
         case "money":
           value = this.reset ? val : (value * 100).toFixed(0) + val;
           this[anchor] = (value / 100).toFixed(2);
+
+          if (this.isThirdPartyPayment && anchor === "tip") {
+            Object.assign(this.payment, { tip: (value / 100).toFixed(2) });
+            this.setOrder(Object.assign(this.order, { payment: this.payment }));
+          }
           break;
         case "number":
           value = this.reset ? val : value + val;
