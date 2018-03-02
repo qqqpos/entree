@@ -91,6 +91,7 @@ export default {
           this.$router.push({ name: "Information" });
           break;
         case "DINE_IN":
+          this.archiveOrder(this.order.content);
           this.$router.push({ name: "Table" });
           break;
       }
@@ -109,19 +110,26 @@ export default {
         .catch(() => this.$q());
     },
     applyPrice(type) {
-      const content = this.order.content.map(item => {
-        if (item.hasOwnProperty("prices") && item.prices.hasOwnProperty(type)) {
-          item.price = item.prices[type].split(",");
-        } else if (
-          item.hasOwnProperty("prices") &&
-          item.prices.hasOwnProperty("DEFAULT")
-        ) {
-          item.price = item.prices["DEFAULT"].split(",");
-        }
+      try {
+        const content = this.order.content.map(item => {
+          if (
+            item.hasOwnProperty("prices") &&
+            item.prices.hasOwnProperty(type)
+          ) {
+            item.price = item.prices[type].split(",");
+          } else if (
+            item.hasOwnProperty("prices") &&
+            item.prices.hasOwnProperty("DEFAULT")
+          ) {
+            item.price = item.prices["DEFAULT"].split(",");
+          }
 
-        return item;
-      });
-      this.setOrder({ content });
+          return item;
+        });
+        this.setOrder({ content });
+      } catch (e) {
+        console.log(e);
+      }
     },
     thirdParty() {
       new Promise((resolve, reject) => {
@@ -135,7 +143,7 @@ export default {
         })
         .catch(() => this.$q());
     },
-    ...mapActions(["setOrder", "setTicket"])
+    ...mapActions(["archiveOrder", "setOrder", "setTicket"])
   }
 };
 </script>

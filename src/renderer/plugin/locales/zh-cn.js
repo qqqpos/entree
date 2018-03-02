@@ -620,7 +620,7 @@ export default {
       commError: "在与信用卡伺服器的通信发生错误",
       duplicated: "重复的过账信息",
       noFound: "没有需要过账的交易",
-      error: "过账的过程中发生一个错误",
+      error: "过账失败,错误代码 {i}",
       unknown: "过账的过程中发生一个未知的错误",
       inuse: "刷卡机被占用中",
       ready: "准备就绪",

@@ -135,12 +135,12 @@ export const alterItem = ({ commit }, item) => commit(types.ALTER_ITEM, item);
 export const alterItemOption = ({ commit }, data) => {
   data.side.sub
     ? commit(types.SET_CHOICE_SET, {
-        qty: 1,
-        single: data.side.price || 0,
-        price: data.side.price || 0,
-        usEN: data.side.usEN,
-        zhCN: data.side.zhCN
-      })
+      qty: 1,
+      single: data.side.price || 0,
+      price: data.side.price || 0,
+      usEN: data.side.usEN,
+      zhCN: data.side.zhCN
+    })
     : commit(types.ALTER_ITEM_OPTION, data);
 };
 export const setChoiceSet = ({ commit }, set) =>
@@ -229,6 +229,8 @@ export const saveForDiffs = ({ commit }, data) =>
 
 export const archiveOrder = ({ commit }, data) =>
   commit(types.ARCHIVE_ORDER, data);
+
+export const emptyArchiveOrder = ({ commit }) => commit(types.EMPTY_ARCHIVE_ORDER);
 
 export const emptyCustomerInfo = ({ commit }, data) =>
   commit(types.EMPTY_CUSTOMER_INFO, data);

@@ -24,7 +24,7 @@
             <td>{{$t('text.records',task.count)}}</td>
             <td>{{task.total | decimal}}</td>
             <td>({{task.tip | decimal}})</td>
-            <td class="status">{{status(task.status)}}</td>
+            <td class="status">{{status(task.status,index)}}</td>
             <td v-if="task.status === 5" class="action">
               <span class="print" @click="reprint(index)">{{$t('button.print')}}</span>
             </td>
@@ -57,7 +57,8 @@ export default {
       componentData: null,
       component: null,
       detail: false,
-      tasks: []
+      tasks: [],
+      error: null
     };
   },
   created() {
@@ -66,7 +67,7 @@ export default {
       .then(this.finalizing);
   },
   methods: {
-    status(code) {
+    status(code, index) {
       /* device status code
         -1 : error
         0  : occupy
@@ -78,7 +79,7 @@ export default {
 */
       switch (code) {
         case -1:
-          return this.$t("terminal.batch.error");
+          return this.$t("terminal.batch.error", this.tasks[index].error);
         case 0:
           return this.$t("terminal.batch.inuse");
         case 1:
@@ -140,26 +141,29 @@ export default {
         });
       });
     },
-    finalizing() { },
+    finalizing() {},
 
-    next() { },
+    next() {},
     beforeBatch(device, index) {
       if (device.tip === 0) {
         const prompt = {
           title: "dialog.NoTip",
           msg: "dialog.transactionNoTip"
-        }
-        this.$dialog(prompt).then(() => this.startBatch(device, index)).catch(() => this.$q());
+        };
+        this.$dialog(prompt)
+          .then(() => this.startBatch(device, index))
+          .catch(() => this.$q());
       } else {
         this.startBatch(device, index);
       }
     },
     startBatch(device, index) {
+      this.$q();
       this.batch(device).then(response => {
         const result = device.terminal.explainBatch(response.data);
+        this.tasks[index].error = result.code;
         if (result.code === "000000") {
           device.status = 5;
-          console.log(this.tasks[index]);
           this.print(result, index);
 
           this.tasks[index].report = result;
@@ -182,13 +186,12 @@ export default {
     print(report, index) {
       if (this.detail) {
         console.log(this.init.transactions);
-        const transactions = this.init.transaction.filter(t => !t.close)
+        const transactions = this.init.transaction.filter(t => !t.close);
         let detail = false;
         Printer.printBatchReport(report, detail);
       } else {
         Printer.printBatchReport(report, false);
       }
-
     },
     getParser(model) {
       switch (model) {

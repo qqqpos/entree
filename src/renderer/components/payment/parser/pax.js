@@ -34,6 +34,9 @@ const Pax = function () {
       baseURL: `http://${ip}:${port}`
     });
 
+    window._request = request;
+    window._encode = Encode
+
     const command = Encode("A00_1.38");
     return request.get(command);
   };
@@ -323,6 +326,11 @@ const Pax = function () {
     //Encode(`A14_1.38`);
 
   }
+  this.retrieveTransactionDetail = function () {
+    const command = Encode("R02_1.38_01____0__");
+    return request.get(command);
+  }
+
   this.drawSignature = function (data) {
     Draw(data);
   }
@@ -389,6 +397,6 @@ const Draw = function (path) {
   }
 };
 
-export default function(){
+export default function () {
   return new Pax();
 }

@@ -78,7 +78,8 @@ export default {
       "language",
       "customer",
       "favorites",
-      "currentTable"
+      "currentTable",
+      "archivedOrder"
     ])
   },
   data() {
@@ -124,6 +125,10 @@ export default {
   },
   mounted() {
     toggleClass(".category div", "active");
+    if (this.archivedOrder) {
+      this.setOrder({ content: this.archivedOrder });
+      //this.emptyArchive();
+    }
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.entry, false);
@@ -505,15 +510,16 @@ export default {
       }
     },
     ...mapActions([
-      "setOrder",
-      "setTicket",
-      "setSides",
       "lessQty",
       "moreQty",
+      "setOrder",
+      "setSides",
+      "setTicket",
       "addToOrder",
       "resetPointer",
       "setChoiceSet",
       "saveForDiffs",
+      "archiveOrder",
       "alertChoiceSet",
       "alterItemOption"
     ])

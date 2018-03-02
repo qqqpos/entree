@@ -5,7 +5,7 @@
     <toggle title="setting.guestCount" v-model="dinein.guestCount" @update="updateGuestCount"></toggle>
     <toggle title="setting.seatOrder" v-model="dinein.seatOrder" @update="updateSeatOrder" :disabled="!dinein.guestCount"></toggle>
     <toggle title="setting.printOnDone" true-tooltip="tip.dinein.printReceipt" false-tooltip="tip.dinein.noReceipt" v-model="dinein.printOnDone" :conditionalTooltip="true" @update="updatePrint"></toggle>
-    <toggle title="setting.lockOnDone" tooltip="tip.dinein.lock" v-model="dinein.LockOnDone" @update="updateDone"></toggle>
+    <toggle title="setting.lockOnDone" tooltip="tip.dinein.lock" v-model="dinein.lockOnDone" @update="updateDone"></toggle>
     <toggle title="setting.autoClear" true-tooltip="tip.dinein.autoClearTable" false-tooltip="tip.dinein.manuallyClearTable" v-model="dinein.autoClear" :conditionalTooltip="true" @update="updateAutoClear"></toggle>
     <external title="setting.surcharge" tooltip="tip.dinein.surcharge" @open="$router.push({name:'Setting.store.surcharge'})"></external>
   </div>

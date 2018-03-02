@@ -503,6 +503,11 @@ export default {
       switch (format) {
         case "money":
           this[anchor] = (val.slice(0, -1) / 10).toFixed(2);
+
+          if (anchor === "tip" && this.isThirdPartyPayment) {
+            Object.assign(this.payment, { tip: (val.slice(0, -1) / 10).toFixed(2).toFloat() });
+            this.setOrder(Object.assign(this.order, { payment: this.payment }));
+          }
           break;
         case "number":
           this[anchor] = val.length > 0 ? val.slice(0, -1) : val;
@@ -518,6 +523,11 @@ export default {
       switch (format) {
         case "money":
           this[anchor] = "0.00";
+
+          if (anchor === "tip" && this.isThirdPartyPayment) {
+            Object.assign(this.payment, { tip: 0 });
+            this.setOrder(Object.assign(this.order, { payment: this.payment }));
+          }
           break;
         case "number":
           this[anchor] = "";
@@ -1214,7 +1224,9 @@ export default {
           this[anchor] = (value / 100).toFixed(2);
 
           if (this.isThirdPartyPayment && anchor === "tip") {
-            Object.assign(this.payment, { tip: (value / 100).toFixed(2) });
+            Object.assign(this.payment, {
+              tip: (value / 100).toPrecision(12).toFloat()
+            });
             this.setOrder(Object.assign(this.order, { payment: this.payment }));
           }
           break;

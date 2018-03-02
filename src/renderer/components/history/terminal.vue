@@ -33,7 +33,7 @@
         </thead>
         <tbody>
           <tr v-for="(record,index) in records" :key="index" :class="{voided:record.status === 0}">
-            <td class="index">{{record.index}}</td>
+            <td class="index" :title="'Ref #'+record.trace.trans">{{record.index}}</td>
             <td>{{record.transType}}</td>
             <td>{{record.time | moment("HH:mm:ss")}}</td>
             <td>{{record.station}}</td>

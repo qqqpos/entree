@@ -737,7 +737,7 @@ export default {
       commError: "Batch Communication Error",
       duplicated: "Batch Duplicated",
       noFound: "No Transaction Was Found",
-      error: "An Error Occurred During Batch",
+      error: "Batch Failed. Error {i}",
       unknown: "An Unknown Error Occurred During Batch",
       inuse: "Terminal is in use",
       ready: "Ready",
