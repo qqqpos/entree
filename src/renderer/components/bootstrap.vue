@@ -9,6 +9,7 @@ import Print from "../plugin/print";
 import Magic from "wake_on_lan";
 import Mac from "getmac";
 import os from "os";
+import { setInterval } from "timers";
 
 export default {
   data() {
@@ -61,13 +62,10 @@ export default {
           .then(this.initialized)
           .catch(this.registration);
       } catch (error) {
-        this.$socket.emit("[SYS] LOG", {
+        this.$log({
           eventID: 9000,
           type: "failure",
-          source: this.$options.name,
-          cause: error,
-          note:
-            "Application was unable to start. It's probably because the database wasn't correctly setup."
+          note: `Application was unable to start. It's probably because the database wasn't correctly setup. \n\nError Message:\n${error.toString()}`
         });
       }
     },
@@ -100,12 +98,12 @@ export default {
       this.setStation(data);
       this.awakeStation();
       this.initialDevice();
-      this.initialPrinter();
-
-      const { alias, mac } = data;
-      this.$socket.emit("[STATION] CONNECTED", { alias, mac });
-      ipcRenderer.send("Initialized");
-      this.$router.push("Login");
+      this.initialPrinter().then(() => {
+        const { alias, mac } = data;
+        this.$socket.emit("[STATION] CONNECTED", { alias, mac });
+        ipcRenderer.send("Initialized");
+        this.$router.push("Login");
+      });
     },
     registration(data) {
       ipcRenderer.send("Initialized");
@@ -205,19 +203,26 @@ export default {
       // parser.on('data', console.log);
     },
     initialPrinter() {
+      ipcRenderer.send("Loading", this.$t("initial.connectPrinter"));
       const config = this.config;
       const station = this.station;
-      CLODOP
-        ? (window.Printer = new Print(CLODOP, config, station))
-        : setTimeout(
-            function() {
+
+      return new Promise((next, stop) => {
+        let interval = null;
+
+        if (window.CLODOP) {
+          window.Printer = new Print(CLODOP, config, station);
+          next();
+        } else {
+          interval = setInterval(() => {
+            if (window.CLODOP) {
               window.Printer = new Print(CLODOP, config, station);
-            },
-            20000,
-            CLODOP,
-            config,
-            station
-          );
+              clearInterval(interval);
+              next();
+            }
+          }, 5000);
+        }
+      });
     },
     ...mapActions([
       "setApp",

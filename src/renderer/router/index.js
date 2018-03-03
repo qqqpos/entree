@@ -137,6 +137,11 @@ export default new Router({
                       path: "department",
                       name: "Setting.store.department",
                       component: require("../components/setting/store/department")
+                    },
+                    {
+                      path: "timecard",
+                      name: "Setting.store.timecard",
+                      component: require("../components/setting/store/sub/timecard")
                     }
                   ]
                 },

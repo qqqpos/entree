@@ -11,6 +11,7 @@ export default {
     initialApplication: "Initializing Application...",
     loadConfiguration: "Loading Configuration...",
     applyConfiguration: "Setting Runtime Environment...",
+    connectPrinter: "Checking Network Printer...",
     awakeClients: "Awaking Other Work Station...",
     hardwareIssue: "Critical Error: Hardware Malfunction"
   },
@@ -953,7 +954,10 @@ export default {
     disallow: "Disallow",
     api: "API",
     coordinate: "Coordinate",
-    timecard: "Timecard",
+    timecard: {
+      tipReport:"Report Tips",
+      excludeBreak:"Exclude Break Time"
+    },
     password: "Password",
     email: "Email",
     area: "Area",
@@ -1177,7 +1181,6 @@ export default {
     rename: "Rename",
     itemTrend: "Item Trend",
     withInMile: "Within {i} miles",
-    tipReport: "Tip Report",
     setTime: "In {i} Min.",
     map: "Map",
     stationPrinters: "{i} printer(s) assigned",

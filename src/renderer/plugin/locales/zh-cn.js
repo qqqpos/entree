@@ -5,6 +5,7 @@ export default {
     initialApplication: "正在初始化软件...",
     loadConfiguration: "正在加载配置...",
     applyConfiguration: "应用程序设置...",
+    connectPrinter: "正在检测打印机...",
     awakeClients: "正在启动其它工作站...",
     hardwareIssue: "硬件发生错误"
   },
@@ -1143,7 +1144,6 @@ export default {
     rename: "重命名",
     itemTrend: "物品热度",
     withInMile: "{i} 哩航程内",
-    tipReport: "上报小费",
     setTime: "{i} 分钟后",
     map: "地图",
     stationPrinters: "已使用 {i} 台打印机",
@@ -1271,7 +1271,10 @@ export default {
     cashFlowRecord: "记录现金流",
     animation: "动画效果",
     saveLog: "保存记录",
-    timecard: "打卡",
+    timecard: {
+      tipReport:"上报小费",
+      excludeBreak:"休息不计时"
+    },
     basic: "基本设置",
     style: "样式设置",
     other: "其它设置",

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <toggle title="text.timecard" tooltip="tip.timecard" v-model="store.timecard" @update="updateTimecard"></toggle>
-        <toggle title="text.tipReport" tooltip="tip.tipReport" v-model="store.tipReport" @update="updateTipReport" :disabled="!store.timecard"></toggle>
+    <external title="text.timecard" @open="$router.push({name:'Setting.store.timecard'})"></external>
     <toggle title="setting.googleMatrix" true-tooltip="tip.matrixService" false-tooltip="tip.disableMatrix" v-model="store.matrix.enable" :conditionalTooltip="true" @update="updateMatrix">
       <transition name="dropdown">
         <div v-if="store.matrix.enable" class="opt">
@@ -33,8 +32,10 @@
 import toggle from "../common/toggle";
 import inputer from "../common/inputer";
 import switches from "../common/switches";
+import external from "../common/external";
+
 export default {
-  components: { toggle, switches, inputer },
+  components: { toggle, switches, inputer, external },
   data() {
     return {
       store: JSON.parse(JSON.stringify(this.$store.getters.store)),
@@ -105,18 +106,6 @@ export default {
     updateStoreCoordinate(value) {
       this.update({
         key: "store.matrix.coordinate",
-        value
-      });
-    },
-    updateTimecard(value) {
-      this.update({
-        key: "store.timecard",
-        value
-      });
-    },
-    updateTipReport(value) {
-      this.update({
-        key: "store.tipReport",
         value
       });
     }

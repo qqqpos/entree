@@ -28,7 +28,7 @@
           <td>{{log.clockOut | moment('HH:mm:ss')}}</td>
           <td class="hours">{{calculate(log.clockIn,log.clockOut)}}</td>
           <td class="break">{{log.break && log.break.length}}</td>
-          <td>{{log.tip | decimal}}</td>
+          <td class="decimal">$ {{log.tip | decimal}}</td>
           <td v-if="log.valid" :title="log.note" class="wage decimal">$ {{log.wage | decimal}}
             <i class="fa fa-exclamation-circle" v-if="log.note"></i>
           </td>
@@ -50,13 +50,16 @@
                 <p class="date">{{dateRange}}</p>
                 <p class="compensation">
                   <span class="text">{{$t('text.validRecord')}}
-                    <span class="value">{{validSession}}</span>
+                    <span class="value">{{validSession.length}}</span>
                   </span>
                   <span class="text">{{$t("text.workHour")}}
                     <span class="value">{{totalHours}}</span>
                   </span>
                   <span class="text">{{$t("text.workSalary")}}
                     <span class="value">$ {{totalSalary.toFixed(2)}}</span>
+                  </span>
+                  <span class="text">{{$t("text.tip")}}
+                    <span class="value">$ {{totalTip.toFixed(2)}}</span>
                   </span>
                 </p>
               </div>
@@ -84,20 +87,23 @@ export default {
   components: { editor, dropdown, dialoger, calendar },
   computed: {
     validSession() {
-      return this.logs.filter(log => log.valid).length;
+      return this.logs.filter(log => log.valid);
     },
     totalHours() {
-      const total = this.logs
-        .filter(log => log.valid)
-        .map(log => log.clockOut - log.clockIn)
-        .reduce((a, b) => a + b, 0);
+      const total = this.validSession.reduce(
+        (a, c) => a + (c.clockOut - c.clockIn),
+        0
+      );
       return this.calculate(0, total);
     },
     totalSalary() {
-      return this.logs
-        .filter(log => log.valid)
-        .map(log => this.salary(log).toFloat())
-        .reduce((a, b) => a + b, 0);
+      return this.validSession.reduce(
+        (a, c) => a + this.salary(c).toFloat(),
+        0
+      );
+    },
+    totalTip() {
+      return this.validSession.reduce((a, c) => a + (c.tip || 0), 0);
     },
     dateRange() {
       if (this.logs.length === 0) {
@@ -292,8 +298,8 @@ export default {
       isNumber(this.operator.wage)
         ? this.execute()
         : this.$dialog(prompt)
-          .then(this.execute)
-          .catch(() => this.$q());
+            .then(this.execute)
+            .catch(() => this.$q());
     },
     execute() {
       this.$q();
@@ -348,7 +354,7 @@ p.date {
 
 .compensation span {
   flex: 1;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 p.value {

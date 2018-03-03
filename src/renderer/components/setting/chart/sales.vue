@@ -78,27 +78,23 @@ export default {
         mouseWheelZoomEnabled: true,
         startEffect: "elastic",
         startDuration: 0.5,
-        valueAxes: [
-          {
-            axisAlpha: 0.2,
-            dashLength: 1,
-            position: "left"
-          }
-        ],
         mouseWheelZoomEnabled: true,
         valueAxes: [
           {
             logarithmic: true,
             dashLength: 1,
+            axisAlpha: 0.1,
+            position: "left",
             guides: [
               {
-                dashLength: 10,
+                dashLength: 5,
                 inside: true,
                 label:
                   this.$t("report.averageSales") + ` $ ${average.toFixed(2)}`,
                 lineAlpha: 1,
-                fontSize:"18",
-                value: average
+                fontSize: "18",
+                value: average,
+                lineColor: "#FF5722",
               }
             ],
             position: "left"
@@ -112,10 +108,14 @@ export default {
             bulletBorderAlpha: 1,
             bulletColor: "#FFFFFF",
             hideBulletsCount: 50,
+            bulletSize: 5,
             title: "red line",
             valueField: "value",
+            lineThickness: 1,
+            lineColor: "#20acd4",
+            type: "smoothedLine",
             useLineColorForBulletBorder: true,
-            dashLength: 3,
+            dashLength: 5,
             balloon: {
               drop: true,
               shadowAlpha: 0,
