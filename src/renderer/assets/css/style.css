@@ -141,7 +141,7 @@ input[type="radio"] {
 }
 
 .popupMask.dark {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .popupMask.darker {

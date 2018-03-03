@@ -163,14 +163,14 @@ export default {
       this.batch(device).then(response => {
         const result = device.terminal.explainBatch(response.data);
         this.tasks[index].error = result.code;
+
         if (result.code === "000000") {
           device.status = 5;
-          this.print(result, index);
-
           this.tasks[index].report = result;
-          this.$socket.emit("[TERMINAL] CLOSED", result, done =>
-            this.$emit("refresh")
-          );
+          this.$socket.emit("[TERMINAL] CLOSED", result, () => {
+            this.print(result, device);
+            this.$emit("refresh");
+          });
         } else {
           device.status = -1;
         }
@@ -182,14 +182,35 @@ export default {
     },
     reprint(index) {
       const { report } = this.tasks[index];
-      this.print(report);
+      this.print(report,this.tasks[index]);
     },
-    print(report, index) {
+    print(report, device) {
       if (this.detail) {
-        console.log(this.init.transactions);
-        const transactions = this.init.transaction.filter(t => !t.close);
-        let detail = false;
-        Printer.printBatchReport(report, detail);
+        const terminal = device.alias;
+        const transactions = this.init.transactions.filter(
+          t => !t.close && t.terminal === terminal && t.transType === "SALE"
+        );
+
+        let detail = {};
+
+        transactions.forEach(transaction => {
+          const { type } = transaction.account;
+          const { approve, tip } = transaction.amount;
+
+          if (detail.hasOwnProperty(type)) {
+            detail[type].count++;
+            detail[type].approve += parseFloat(approve);
+            detail[type].tip += parseFloat(tip);
+          } else {
+            detail[type] = {
+              type,
+              count: 1,
+              approve: parseFloat(approve),
+              tip: parseFloat(tip)
+            };
+          }
+        });
+        Printer.printBatchReport(report, Object.values(detail));
       } else {
         Printer.printBatchReport(report, false);
       }

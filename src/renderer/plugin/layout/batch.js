@@ -1,4 +1,4 @@
-const batch = function(data, detail) {
+const batch = function (data, detail) {
   const store = this.config;
   const batchTime = moment(Number(data.time), "YYYYMMDDHHmmss");
   const date = batchTime.format("MM/DD/YYYY");
@@ -12,16 +12,20 @@ const batch = function(data, detail) {
   const category = detail
     ? `
     <section class="data">
-      <h3>Transaction</h3>
+      <h3>Details</h3>
+      <p>
+        <span class="text">Card Type</span>
+        <span class="value">Tip<span class="extra">Amount</span></span>
+      </p>
       ${detail
-        .map(
-          each => `<p>\
-                    <span class="text">${each.type}</span>\
-                    <span class="value">${each.amount}</span>\
+      .map(
+        each => `<p>\
+                    <span class="text">${each.type}<span> ( ${each.count} )</span></span>\
+                    <span class="value">$ ${each.tip.toFixed(2)}<span class="extra">$ ${(each.approve - each.tip).toFixed(2)}</span></span>\
                   </p>`
-        )
-        .join("")
-        .toString()}
+      )
+      .join("")
+      .toString()}
     </section>
   `
     : "";
@@ -78,6 +82,7 @@ const batch = function(data, detail) {
               article p{display:flex;}
               article .text{flex:2;}
               article .value{flex:4;text-align:right}
+              .extra{ display:inline-block;width:100px;}
               section.data{margin:15px 0;}
               .data h3{border-bottom:1px dashed #000;text-align:center;}
               footer{text-align:center;}`;
