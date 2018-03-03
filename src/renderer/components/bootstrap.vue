@@ -9,7 +9,6 @@ import Print from "../plugin/print";
 import Magic from "wake_on_lan";
 import Mac from "getmac";
 import os from "os";
-import { setInterval } from "timers";
 
 export default {
   data() {
@@ -98,12 +97,16 @@ export default {
       this.setStation(data);
       this.awakeStation();
       this.initialDevice();
-      this.initialPrinter().then(() => {
-        const { alias, mac } = data;
-        this.$socket.emit("[STATION] CONNECTED", { alias, mac });
-        ipcRenderer.send("Initialized");
-        this.$router.push("Login");
-      });
+      this.initialPrinter()
+        .then(() => {
+          const { alias, mac } = data;
+          this.$socket.emit("[STATION] CONNECTED", { alias, mac });
+          ipcRenderer.send("Initialized");
+          this.$router.push("Login");
+        })
+        .catch(() => {
+          ipcRenderer.send("Loading", this.$t("initial.printerServerError"));
+        });
     },
     registration(data) {
       ipcRenderer.send("Initialized");

@@ -7,7 +7,8 @@ export default {
     applyConfiguration: "应用程序设置...",
     connectPrinter: "正在检测打印机...",
     awakeClients: "正在启动其它工作站...",
-    hardwareIssue: "硬件发生错误"
+    hardwareIssue: "硬件发生错误",
+    printerServerError: "打印机服务错误"
   },
   login: {
     massiveShutdown: "集体关机",
@@ -1207,7 +1208,7 @@ export default {
     hibachi: "铁板",
     item: "物品",
     daily: "每日",
-    compare:"对比"
+    compare: "对比"
   },
   setting: {
     softwareSetting: "UnitedPOS 后台设置",
@@ -1272,8 +1273,8 @@ export default {
     animation: "动画效果",
     saveLog: "保存记录",
     timecard: {
-      tipReport:"上报小费",
-      excludeBreak:"休息不计时"
+      tipReport: "上报小费",
+      excludeBreak: "休息不计时"
     },
     basic: "基本设置",
     style: "样式设置",

@@ -13,7 +13,8 @@ export default {
     applyConfiguration: "Setting Runtime Environment...",
     connectPrinter: "Checking Network Printer...",
     awakeClients: "Awaking Other Work Station...",
-    hardwareIssue: "Critical Error: Hardware Malfunction"
+    hardwareIssue: "Critical Error: Hardware Malfunction",
+    printerServerError: "Printer Server Error"
   },
   login: {
     massiveShutdown: "SHDN All",
@@ -955,8 +956,8 @@ export default {
     api: "API",
     coordinate: "Coordinate",
     timecard: {
-      tipReport:"Report Tips",
-      excludeBreak:"Exclude Break Time"
+      tipReport: "Report Tips",
+      excludeBreak: "Exclude Break Time"
     },
     password: "Password",
     email: "Email",
