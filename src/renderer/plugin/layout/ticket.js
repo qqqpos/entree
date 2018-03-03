@@ -467,8 +467,9 @@ function createStyle(setting) {
   const { contact, title, customer, payment, languages } = setting.layout;
   const primary = languages.find(t => t.ref === "usEN");
   const secondary = languages.find(t => t.ref === "zhCN");
-  const fontFamily =
-    navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
+  const fontFamily = navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
+  const zhCN = `.zhCN{font-family:'${secondary.fontFamily}';font-size:${secondary.fontSize}px;line-height:${secondary.lineHeight}}`;
+  const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${primary.fontSize}px;line-height:${primary.lineHeight}}`
 
   return `<style>\
               *{margin:0;padding:0}\
@@ -476,9 +477,7 @@ function createStyle(setting) {
               div.store{margin-bottom:10px;${contact ? "" : "display:none;"}}\
               .store h3{font-size:1.25em;}\
               .store h5{font-size:16px;font-weight:lighter}\
-              h1{${
-    title ? "" : "display:none;"
-    }font-size:1.5em;font-family:"${fontFamily}"}\
+              h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${fontFamily}"}\
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
               footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}\
               .ticketNumber{right:10px;}.table{left:10px;}\
@@ -487,9 +486,7 @@ function createStyle(setting) {
               .server{border-bottom:1px solid #000;padding-bottom:1px;text-align:left;}\
               .server .wrap{display:flex;padding:0 10px;}\
               .server .text{flex:2;}.server .value{flex:3;}\
-              .customer {${
-    customer ? "" : "display:none;"
-    }font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
+              .customer {${customer ? "" : "display:none;"}font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
               .customer p:last-child{border-bottom:1px solid #000;}\
               .tel{letter-spacing:2px;}.ext{margin-left:10px;}\
               .pt{font-size:0.8em;}
@@ -502,11 +499,7 @@ function createStyle(setting) {
               .qty{min-width:15px;margin-right:5px;}\     
               footer{font-family:'Agency FB';}\
               section.column{display:flex;}\
-              .payment{min-width:150px;${
-    payment
-      ? "display:flex;flex-direction:column;"
-      : "display:none;"
-    }}\
+              .payment{min-width:150px;${payment ? "display:flex;flex-direction:column;" : "display:none;"}}\
               .payment p{display:flex;font-family:'Tensentype RuiHeiJ-W2';width:200px;}\
               .payment .text{flex:1;text-align:right;}\
               .payment .value{min-width:40%;text-align:right;}\
@@ -526,12 +519,7 @@ function createStyle(setting) {
               footer p,.geo h1{text-align:center;}\
               .slogan{font-weight:lighter;margin-top:10px;border-top:1px solid #000;position:relative;}\
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
-              .zhCN{font-family:'${secondary.fontFamily}';font-size:${
-    secondary.fontSize
-    }px;}\
-              .usEN{font-family:'${primary.fontFamily}';font-size:${
-    primary.fontSize
-    }px;}\
+              ${zhCN}${usEN}
               del{display:block;position:absolute;width:inherit;height:2px;background:#000;top:40%;}\
           </style>`;
 }

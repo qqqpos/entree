@@ -1189,7 +1189,8 @@ export default {
     rightClickPaste: "Right Click To Paste Side Option",
     ticketTypeFromDateRange: "Ticket Type Ratio from {i} to {i}",
     beAdvised: "Please Be Advised",
-    times: "{i} time(s)"
+    times: "{i} time(s)",
+    moreOption: "More Option"
   },
   nav: {
     store: "Store",
@@ -1477,6 +1478,7 @@ export default {
     secondary: "Secondary",
     fontFamily: "Font Family",
     fontSize: "Font Size",
+    lineHeight: "Line Height",
     itemPrice: "Item Price",
     storeContact: "Store Contact",
     customer: "Customer Information",

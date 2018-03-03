@@ -34,15 +34,14 @@ export default {
 }
 
 label {
-  text-align: right;
-  margin-right: 20px;
-  min-width: 50px;
+  text-align: left;
+  min-width: 85px;
 }
 
 span {
   text-align: center;
   padding: 5px;
-  margin-left: 20px;
+  margin-left: 10px;
   background: #fff;
   color: #333;
   width: 50px;

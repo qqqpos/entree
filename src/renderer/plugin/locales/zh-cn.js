@@ -1152,7 +1152,8 @@ export default {
     rightClickPaste: "右键粘贴配菜",
     ticketTypeFromDateRange: "从 {i} 到 {i} 订单类型比例",
     beAdvised: "请注意此客人",
-    times: "{i} 次"
+    times: "{i} 次",
+    moreOption: "更多选项"
   },
   nav: {
     store: "店面",
@@ -1446,6 +1447,7 @@ export default {
     secondary: "第二语言",
     fontFamily: "字体",
     fontSize: "字体大小",
+    lineHeight: "字间行距",
     itemPrice: "打印价格",
     storeContact: "店面信息",
     customer: "客人资料",

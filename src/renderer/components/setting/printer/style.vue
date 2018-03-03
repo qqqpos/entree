@@ -24,17 +24,18 @@
               <span class="gray">{{getLanguage(language.ref)}}</span>
             </div>
             <i class="fa fa-bars drag"></i>
-            <switches title="text.enable" v-model="language.enable" @update="doubleCheck(index)"></switches>
+            <external title="text.moreOption" :defaultStyle="false" @open="edit(language,index)"></external>
           </div>
           <div>
             <selector title="print.fontFamily" v-model="language.fontFamily" :opts="fonts"></selector>
             <range title="print.fontSize" :min="0" :max="40" :step="1" v-model="language.fontSize"></range>
+            <switches title="button.print" v-model="language.enable" @update="doubleCheck(index)"></switches>
             <switches title="print.itemPrice" v-model="language.price"></switches>
-            <switches title="print.menuID" v-model="language.id"></switches>
           </div>
         </div>
       </transition-group>
     </draggable>
+    <div :is="component" :init="componentData"></div>
   </div>
 </template>
 
@@ -44,13 +45,25 @@ import draggable from "vuedraggable";
 import toggle from "../common/toggle";
 import selector from "../common/selector";
 import switches from "../common/switches";
+import external from "../common/external";
+import editor from "./component/lineEditor";
 
 export default {
   props: ["printer"],
-  components: { range, switches, selector, toggle, draggable },
+  components: {
+    range,
+    toggle,
+    editor,
+    switches,
+    selector,
+    draggable,
+    external
+  },
   data() {
     return {
       layout: {},
+      component: null,
+      componentData: null,
       languages: [this.$t("print.firstLine"), this.$t("print.secondLine")],
       fonts: [
         {
@@ -151,6 +164,17 @@ export default {
       const status = this.layout.languages.some(language => language.enable);
 
       if (!status) this.layout.languages[index === 0 ? 1 : 0].enable = true;
+    },
+    edit(language, index) {
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, language, fonts: this.fonts };
+        this.component = "editor";
+      })
+        .then(_language => {
+          this.layout.languages.splice(index, 1, _language);
+          this.$q();
+        })
+        .catch(() => this.$q());
     }
   }
 };
