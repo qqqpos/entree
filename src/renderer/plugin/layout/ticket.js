@@ -560,10 +560,10 @@ function createFooter(config, setting, printer, ticket) {
       .toString();
 
     suggestions = `<section class="suggestion">\
-                            <h5>Tips Suggestion</h5>\
-                            <i>These tip amounts are provided for your convenience.</i>\
-                            ${data}\
-                        </section>`;
+                      <h5>Tips Suggestion</h5>\
+                      <i>These tip amounts are provided for your convenience.</i>\
+                      ${data}\
+                  </section>`;
   }
 
   const slogan = content
@@ -666,7 +666,7 @@ function createFooter(config, setting, printer, ticket) {
           text = "Service Fee";
           break;
         case "total":
-          value = payment.balance.toFixed(2);
+          value = (payment.balance + payment.tip).toFixed(2);
           style = "bold";
           break;
       }
