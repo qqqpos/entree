@@ -1565,13 +1565,16 @@ export default {
     disableCashdrawer: "Disable cash drawer in this station",
     poleDisplayAnimation: "Display animation when POS idle",
     saveCallLog: "Save call log",
-    timecard: "Record employee clock in/out",
     replaceItemName: "Will replace item name",
     noReplaceItemName: "Print item name",
     restrictPermission: "Directly deny access",
     temporaryPermission: "Temporary access via pin",
     itemSplit: "How many quantity you want to split?",
-    tipReport: "Report tip when clock out",
+    timecard: {
+      forOne: "Enable Clock in/out",
+      forAll: "All employees clock in/out",
+      tipReport: "Report tip when clock out"
+    },
     dinein: {
       useTableLayout: "Use table to place order",
       noTableLayout: "Skip table to place order",

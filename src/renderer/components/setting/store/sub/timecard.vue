@@ -1,7 +1,7 @@
 <template>
     <div>
-        <toggle title="text.enable" tooltip="tip.timecard" v-model="store.timecard.enable" @update="updateTimecard"></toggle>
-        <toggle title="setting.timecard.tipReport" tooltip="tip.tipReport" v-model="store.timecard.tipReport" @update="updateTipReport" :disabled="!store.timecard"></toggle>
+        <toggle title="text.enable" tooltip="tip.timecard.forAll" v-model="store.timecard.enable" @update="updateTimecard"></toggle>
+        <toggle title="setting.timecard.tipReport" tooltip="tip.timecard.tipReport" v-model="store.timecard.tipReport" @update="updateTipReport" :disabled="!store.timecard"></toggle>
         <toggle title="setting.timecard.excludeBreak" v-model="store.timecard.excludeBreak" @update="updateBreak"></toggle>
     </div>
 </template>

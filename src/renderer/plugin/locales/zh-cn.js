@@ -1533,13 +1533,16 @@ export default {
     disableCashdrawer: "禁止在此工作站使用钱箱",
     poleDisplayAnimation: "在空闲时候开启跑马灯动画效果",
     saveCallLog: "保存来电显示记录",
-    timecard: "记录员工上下班时间",
     replaceItemName: "替换物品名字",
     noReplaceItemName: "正常打印",
     restrictPermission: "当权限不足时直接拒绝",
     temporaryPermission: "允许输入密码来临时提升权限",
     itemSplit: "您想将选择的物品平摊成几份?",
-    tipReport: "打卡下班时上报小费信息",
+    timecard: {
+      forOne: "记录上下班打卡情况",
+      forAll: "全体员工打卡上下班",
+      tipReport: "打卡下班时上报小费信息"
+    },
     dinein: {
       useTableLayout: "使用座位下单",
       noTableLayout: "跳过座位直接下单",

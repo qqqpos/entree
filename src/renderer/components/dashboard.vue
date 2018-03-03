@@ -168,7 +168,7 @@ export default {
         if (this.authorized) {
           next();
         } else if (
-          (this.store.timecard || this.op.timecard) &&
+          (this.store.timecard.enable || this.op.timecard) &&
           !this.op.clockIn
         ) {
           const prompt = {

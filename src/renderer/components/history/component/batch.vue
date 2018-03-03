@@ -159,6 +159,7 @@ export default {
     },
     startBatch(device, index) {
       this.$q();
+      if (device.status === 4) return;
       this.batch(device).then(response => {
         const result = device.terminal.explainBatch(response.data);
         this.tasks[index].error = result.code;
