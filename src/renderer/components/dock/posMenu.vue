@@ -31,14 +31,14 @@
             </div>
           </li>
         </div>
-        <li @click="getTerminal" v-show="station.terminal.enable">
+        <li @click="$open('terminal')" v-show="station.terminal.enable">
           <i class="fa fa-2x fa-credit-card"></i>
           <div>
             <h3>{{$t('dock.terminal')}}</h3>
             <h5>{{$t('dock.terminalTip')}}</h5>
           </div>
         </li>
-        <li @click="giftCardPanel">
+        <li @click="$open('giftcard')">
           <i class="fa fa-2x fa-gift"></i>
           <div>
             <h3>{{$t('dock.giftCard')}}</h3>
@@ -52,7 +52,7 @@
             <h5>{{$t('dock.payoutTip')}}</h5>
           </div>
         </li>
-        <li @click="setting" v-show="authorized || op.role === 'Manager'">
+        <li @click="openSetting" v-show="authorized || op.role === 'Manager'">
           <i class="fa fa-2x fa-cog"></i>
           <div>
             <h3>{{$t('dock.setting')}}</h3>
@@ -64,6 +64,13 @@
           <div>
             <h3>{{$t('dock.language')}}</h3>
             <h5>{{$t('dock.languageTip')}}</h5>
+          </div>
+        </li>
+        <li @click="askCashIn">
+          <i class="fa fa-2x fa-money"></i>
+          <div>
+            <h3>{{$t('dock.cashIn')}}</h3>
+            <h5>{{$t('dock.cashInTip')}}</h5>
           </div>
         </li>
         <li @click="askCashOut">
@@ -80,9 +87,9 @@
             <h5>{{$t('dock.logoutTip')}}</h5>
           </div>
         </li>
-        <div :is="component" :init="componentData"></div>
       </ul>
     </transition>
+    <div :is="component" :init="componentData"></div>
   </div>
 </template>
 
@@ -98,24 +105,57 @@ import payout from "./payout";
 export default {
   props: ["init"],
   components: { dialoger, terminal, giftcard, payout, unlock, inputer },
+  computed: {
+    ...mapGetters([
+      "op",
+      "app",
+      "time",
+      "store",
+      "station",
+      "history",
+      "authorized"
+    ])
+  },
   data() {
     return {
       componentData: null,
       component: null
     };
   },
-  computed: {
-    ...mapGetters([
-      "op",
-      "app",
-      "config",
-      "time",
-      "store",
-      "station",
-      "authorized"
-    ])
+  created() {
+    this.initialCashManagement();
   },
   methods: {
+    initialCashManagement() {},
+    changeLanguage() {
+      const language = this.app.language === "usEN" ? "zhCN" : "usEN";
+      this.$setLanguage(language);
+      this.setApp({ language });
+      moment.locale(language === "usEN" ? "en" : "zh-cn");
+      this.$forceUpdate();
+    },
+    openPayout() {
+      this.$checkPermission("permission", "payout")
+        .then(() => this.$open("payout"))
+        .catch(() =>
+          this.$log({
+            eventID: 9100,
+            note: `${this.op.name} was attempt to access payout.`
+          })
+        );
+    },
+    openSetting() {
+      this.$checkPermission("permission", "payout")
+        .then(() => this.$open("payout"))
+        .catch(() =>
+          this.$log({
+            eventID: 9100,
+            note: `${this.op.name} was attempt to access back office setting.`
+          })
+        );
+    },
+    logout() {},
+    exit() {},
     askClockIn() {
       const prompt = {
         type: "question",
@@ -178,113 +218,28 @@ export default {
       this.$router.push({ path: "/main/lock" });
       this.init.resolve();
     },
-    logout() {
-      switch (this.op.cashCtrl) {
-        case "enable":
-          this.checkCashOut(this.station.cashDrawer.name, false);
-          break;
-        case "staffBank":
-          this.checkCashOut(this.op.name, true);
-          break;
-        default:
-          this.exit();
-      }
-    },
-    checkCashOut(cashDrawer, staffBank) {
-      this.$socket.emit(
-        "[CASHFLOW] CHECK",
-        { date: today(), cashDrawer, close: false },
-        data => {
-          let { name, initial } = data;
-          initial
-            ? this.exit()
-            : staffBank ? this.staffCashOut(name) : this.regularCashOut(name);
-        }
-      );
-    },
-    staffCashOut(name) {
-      const prompt = {
-        type: "question",
-        title: "dialog.staffCashOut",
-        msg: "dialog.staffCashOutTip"
-      };
+    checkOpenTicket() {
+      return new Promise((next, stop) => {
+        const server = this.op.name;
+        const doneJob = this.history
+          .filter(invoice => invoice.server === server)
+          .every(ticket => ticket.settled);
 
-      this.$dialog(prompt)
-        .then(() => this.cashOut(name))
-        .catch(() => this.exit());
-    },
-    regularCashOut(name) {
-      const prompt = {
-        type: "question",
-        title: "dialog.cashOut",
-        msg: ["dialog.cashOutTip", name]
-      };
+        const prompt = {
+          title: "dialog.cantExecute",
+          msg: "dialog.ticketUnsettleAlert",
+          buttons: [
+            { text: "button.confirm", fn: "reject" },
+            { text: "button.processAnyway", fn: "resolve" }
+          ]
+        };
 
-      this.$dialog(prompt)
-        .then(() => this.cashOut(name))
-        .catch(() => this.exit());
-    },
-    cashOut(cashDrawer) {
-      this.$q();
-      this.$socket.emit("[CASHFLOW] SETTLE", cashDrawer, cashFlow =>
-        this.reconciliation(cashFlow)
-      );
-    },
-    reconciliation(cashflow) {
-      this.recordCashDrawerAction();
-      const diff = (
-        parseFloat(cashflow.end) - parseFloat(cashflow.begin)
-      ).toFixed(2);
-
-      cashflow.activity = cashflow.activity.filter(
-        log =>
-          log.type === "START" ||
-          log.type === "CASHFLOW" ||
-          log.type === "PAYOUT"
-      );
-
-      const prompt = {
-        type: "question",
-        title: ["dialog.cashOutSettle", cashflow.end],
-        msg: ["dialog.cashOutSettleTip", cashflow.begin, diff, cashflow.end],
-        buttons: [
-          { text: "button.printDetail", fn: "reject" },
-          { text: "button.print", fn: "resolve" }
-        ]
-      };
-
-      this.$dialog(prompt)
-        .then(() => {
-          Printer.printCashOutReport(cashflow, false);
-          this.exit();
-        })
-        .catch(() => {
-          Printer.printCashOutReport(cashflow, true);
-          this.exit();
-        });
-    },
-    recordCashDrawerAction() {
-      this.op.cashCtrl === "enable" && Printer.openCashDrawer();
-      const cashDrawer =
-        this.op.cashCtrl === "enable"
-          ? this.station.cashDrawer.name
-          : this.op.name;
-      const activity = {
-        type: "END",
-        inflow: 0,
-        outflow: 0,
-        time: +new Date(),
-        ticket: null,
-        operator: this.op.name
-      };
-
-      this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });
-    },
-    getTerminal() {
-      this.$open("terminal");
-    },
-    giftCardPanel() {
-      this.$open("giftcard");
+        doneJob
+          ? next()
+          : this.$dialog(prompt)
+              .then(() => next())
+              .catch(() => stop());
+      });
     },
     startBreakTime() {
       const prompt = {
@@ -321,41 +276,13 @@ export default {
         })
         .catch(() => this.$q());
     },
-    openPayout() {
-      this.$checkPermission("permission", "payout")
-        .then(() => this.$p("payout"))
-        .catch(() =>
-          this.$log({
-            eventID: 9100,
-            note: `Access Denied when attempt access payout.`
-          })
-        );
-    },
+    askCashIn() {},
     askCashOut() {},
-    changeLanguage() {
-      const language = this.app.language === "usEN" ? "zhCN" : "usEN";
-      this.$setLanguage(language);
-      this.setApp({ language });
-      moment.locale(language === "usEN" ? "en" : "zh-cn");
-      this.$forceUpdate();
-    },
-    setting() {
-      this.$checkPermission("access", "setting")
-        .then(() => {
-          this.init.resolve();
-          this.$router.push({ path: "/main/setting" });
-        })
-        .catch(() =>
-          this.$log({
-            eventID: 9100,
-            note: `Access Denied when attempt access back office setting.`
-          })
-        );
-    },
+    logout() {},
     exit() {
       this.$router.push({ name: "Login" });
     },
-    ...mapActions(["setOp", "setApp"])
+    ...mapActions(["setApp", "setOp"])
   }
 };
 </script>

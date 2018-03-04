@@ -132,14 +132,20 @@ export default {
     terminalTip: "View All Transaction",
     station: "Station",
     stationTip: "View Station Setting",
-    payout: "Paid Out",
-    payoutTip: "Record for cash pays out",
+    payout: "Payout",
+    payoutTip: "Record Cash Payout",
     language: "Language",
     languageTip: "Switch UI Language",
+    staffCashOut: "Staff Cash Out",
+    cashDrawerCashOut: "Cash Drawer Cash Out",
+    cashOutTip: "Cash Settle & Print Report",
+    staffCashIn: "Staff Cash In",
+    cashDrawerCashIn: "Cash Drawer Cash In",
+    cashInTip: "Record Deposit Cash Amount",
     logout: "Logout",
-    logoutTip: "Settle & Logout POS",
+    logoutTip: "Exit Program & Shutdown",
     setting: "Setting",
-    settingTip: "Software setting"
+    settingTip: "Software Setting"
   },
   button: {
     new: "New",
@@ -691,8 +697,9 @@ export default {
     NoTip: "No Tip Entered",
     transactionNoTip:
       "There is no tips on any transactions. Are you wish to continue?",
-    tipReport: "Tips Confrim",
-    tipReportConfirm: "Are you sure to report ${i} as tips?"
+    tipReport: "Tips Confirm",
+    tipReportConfirm: "Are you sure to report ${i} as tips?",
+    ticketUnsettleAlert: "You still have ticket unsettled. Please close them first."
   },
   terminal: {
     initial: "Initializing terminal {i}...",

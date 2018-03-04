@@ -129,8 +129,14 @@ export default {
     payoutTip: "员工采购记录",
     language: "语言",
     languageTip: "切换界面语言",
+    stuffCashOut: "企台结算",
+    cashDrawerCashOut: "钱箱结算",
+    cashOutTip: "结算现金并打印报表",
+    stuffCashIn: "企台押金",
+    cashDrawerCashIn: "钱箱押金",
+    cashInTip: "记录起始现金",
     logout: "登出",
-    logoutTip: "结算并登出系统",
+    logoutTip: "登出软件 · 关机",
     setting: "设置",
     settingTip: "软件后台设置"
   },
@@ -576,7 +582,8 @@ export default {
     NoTip: "没有小费",
     transactionNoTip: "即将过账的交易中没有输入任何小费, 您确定要继续?",
     tipReport: "确定小费",
-    tipReportConfirm: "请再次确定您本次上报的小费为 {i} ?"
+    tipReportConfirm: "请再次确定您本次上报的小费为 {i} ?",
+    ticketUnsettleAlert: "您还有订单尚未结账，请先处理订单"
   },
   terminal: {
     initial: "正在初始化 {i}...",

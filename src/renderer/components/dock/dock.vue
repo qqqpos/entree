@@ -44,11 +44,10 @@ import messenger from "./messenger";
 import profiles from "./profiles";
 import switcher from "./switcher";
 import caller from "./caller";
-import panel from "./panel";
 import disc from "./disc";
-import { setTimeout } from "timers";
+
 export default {
-  components: { caller, switcher, dialoger, panel, disc, messenger, profiles },
+  components: { caller, switcher, dialoger, disc, messenger, profiles },
   data() {
     return {
       componentData: null,
@@ -107,13 +106,15 @@ export default {
   },
   methods: {
     openPanel() {
-      this.$route.name === "Dashboard" && this.$p("panel");
+      if (this.$route.name === "Dashboard") {
+        this.$bus.emit("__THREAD__OPEN", { component: "dockMenu" });
+      }
     },
     messageCenter(view) {
-      this.$route.name === "Dashboard" && this.$p("messenger", { view });
+      this.$route.name === "Dashboard" && this.$open("messenger", { view });
     },
     changeType() {
-      this.$route.name === "Menu" && this.$p("switcher");
+      this.$route.name === "Menu" && this.$open("switcher");
     },
     sessionTimeout(current) {
       const { enable, timeout } = this.station.autoLock;
