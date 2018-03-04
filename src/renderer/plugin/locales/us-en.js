@@ -27,6 +27,7 @@ export default {
     PICK_UP: "Pick Up",
     DELIVERY: "Delivery",
     DINE_IN: "Dine In",
+    NO_SALES: "No Sales",
     BAR: "Bar",
     BUFFET: "Buffet",
     HIBACHI: "Hibachi",
@@ -1190,7 +1191,9 @@ export default {
     ticketTypeFromDateRange: "Ticket Type Ratio from {i} to {i}",
     beAdvised: "Please Be Advised",
     times: "{i} time(s)",
-    moreOption: "More Option"
+    moreOption: "More Option",
+    historyInvoice: "History Invoice",
+    pickupList: "Pick Up List"
   },
   nav: {
     store: "Store",

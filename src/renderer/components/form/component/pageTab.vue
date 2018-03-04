@@ -4,7 +4,7 @@
         <ul class="tab">
             <li @click="move('Information',0)">{{$t('text.contactInfo')}}</li>
             <li @click="move('Map',1)">{{$t('text.map')}}</li>
-            <li @click="move('History',2)">{{$t('text.history')}}</li>
+            <li @click="move('Tag',2)">{{$t('text.tag')}}</li>
         </ul>
     </div>
 </template>

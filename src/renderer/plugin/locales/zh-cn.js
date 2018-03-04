@@ -21,6 +21,7 @@ export default {
     PICK_UP: "来取",
     DELIVERY: "送餐",
     DINE_IN: "堂吃",
+    NO_SALES: "直接付款",
     BAR: "酒吧",
     BUFFET: "自助餐",
     HIBACHI: "铁板",
@@ -1153,7 +1154,9 @@ export default {
     ticketTypeFromDateRange: "从 {i} 到 {i} 订单类型比例",
     beAdvised: "请注意此客人",
     times: "{i} 次",
-    moreOption: "更多选项"
+    moreOption: "更多选项",
+    historyInvoice: "历史订单",
+    pickupList: "来取列表"
   },
   nav: {
     store: "店面",

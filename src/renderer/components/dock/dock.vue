@@ -253,9 +253,10 @@ export default {
       this.insertOrder(data);
     },
     UPDATE_ORDER(data) {
-      console.log(data);
-      data.refresh = this.$route.name !== "Menu";
-      this.updateOrder(data);
+      if (data.order.date === today()) {
+        data.refresh = this.$route.name !== "Menu";
+        this.updateOrder(data);
+      }
     },
     SYNC_ORDERS(data) {
       this.setTodayOrder(data);

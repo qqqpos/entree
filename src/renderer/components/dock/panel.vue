@@ -144,7 +144,7 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.store.tipReport ? this.reportTip() : this.clockOut();
+          this.store.timecard.tipReport ? this.reportTip() : this.clockOut();
         })
         .catch(() => this.$q());
     },

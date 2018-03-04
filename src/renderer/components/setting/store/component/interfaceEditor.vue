@@ -35,7 +35,7 @@ export default {
       grid: JSON.parse(JSON.stringify(this.init.grid)),
       routers: [
         {
-          label: this.$t("type.sales"),
+          label: this.$t("type.SALES"),
           tooltip: "",
           value: "sale"
         },
@@ -70,7 +70,7 @@ export default {
           value: "thirdParty"
         },
         {
-          label: this.$t("text.history"),
+          label: this.$t("text.historyInvoice"),
           tooltip: "",
           value: "history"
         },
@@ -88,6 +88,11 @@ export default {
           label: this.$t("text.cashDrawer"),
           tooltip: "",
           value: "cashDrawer"
+        },
+        {
+          label: this.$t("type.NO_SALES"),
+          tooltip: "",
+          value: "noSales"
         },
         {
           label: this.$t("text.lock"),
@@ -140,15 +145,21 @@ export default {
         },
         {
           label: "Internet",
-          tooltip:"",
-          plainText:true,
-          value:"fa-globe"
+          tooltip: "",
+          plainText: true,
+          value: "fa-globe"
         },
         {
           label: "Lock",
           tooltip: "",
           plainText: true,
           value: "fa-lock"
+        },
+        {
+          label: "Cash",
+          tooltip: "",
+          plainText: true,
+          value: "fa-money"
         }
       ]
     };

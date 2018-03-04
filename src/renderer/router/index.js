@@ -45,9 +45,9 @@ export default new Router({
               component: require("../components/form/map")
             },
             {
-              path: "profile",
-              name: "profile",
-              component: require("../components/form/profile")
+              path: "tag",
+              name: "Tag",
+              component: require("../components/form/tag")
             }
           ]
         },

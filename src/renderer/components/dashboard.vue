@@ -123,9 +123,10 @@ import dialoger from "./common/dialoger";
 import toast from "./component/toast";
 import unlock from "./common/unlock";
 import provider from "./dock/source";
+import noSales from "./component/noSale";
 
 export default {
-  components: { dialoger, collector, toast, unlock, provider },
+  components: { dialoger, collector, toast, unlock, provider, noSales },
   computed: {
     ...mapGetters([
       "op",
@@ -413,6 +414,9 @@ export default {
           this.station.cashDrawer.enable
             ? this.cashDrawerAvailable()
             : this.cashDrawerUnavailable();
+          break;
+        case "noSales":
+          this.$open("noSales");
           break;
         case "lock":
           this.resetAll();

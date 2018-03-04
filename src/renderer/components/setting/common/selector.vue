@@ -48,9 +48,7 @@ export default {
     return {
       isDisplay: false,
       label: "",
-      id: Math.random()
-        .toString(36)
-        .substring(3, 6)
+      id: String().random()
     };
   },
   created() {
@@ -141,6 +139,8 @@ ul {
   z-index: 2;
   width: calc(100% - 2px);
   box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.5);
+  max-height: 250px;
+  overflow: auto;
 }
 
 li {

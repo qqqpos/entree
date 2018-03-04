@@ -40,7 +40,7 @@
             <td>{{$t('type.'+record.for)}}</td>
             <td v-if="record.for === 'Order'" class="ticket">
               <span class="type">{{$t('type.'+record.order.type)}}</span>
-              <span class="number">#{{record.order.number}}</span>
+              <span class="number" v-show="record.order.number">(#{{record.order.number}})</span>
             </td>
             <td v-else class="ticket"></td>
             <td class="card">
