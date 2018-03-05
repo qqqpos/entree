@@ -12,6 +12,7 @@
                 <switches title="print.tableName" v-model="footer.tableName"></switches>
                 <switches title="print.tradeMark" v-model="footer.tradeMark"></switches>
                 <switches title="print.jobTime" v-model="footer.jobTime"></switches>
+                <switches title="setting.tipSuggestion" v-model="footer.tipSuggestion"></switches>
             </div>
             <footer>
                 <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>

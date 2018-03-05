@@ -513,9 +513,10 @@ function createStyle(setting) {
               .suggestion{border:1px dashed #000;padding:5px;display:flex;flex-direction:column;text-align:center;}\
               .suggestion h5{font-size:22px;}\
               .suggestion i{font-style: italic;font-size:14px;}\
-              .suggestion div{display:flex;justify-content: center;width:75%;margin:auto;}\
-              .dash{margin: 0 5px;}\
-              .tips{margin-left:15px;}\
+              .suggestion .tips{display:flex;justify-content: center;width:80%;margin:auto;}\
+              .tips .pct {width: 50px;text-align: right; padding: 0 20px 0 10px;}\
+              .tips .tip {flex: 1;text-align: left;text-indent: 10px;}\
+              .tips .val {min-width: 40px;text-align: left;}\
               footer p,.geo h1{text-align:center;}\
               .slogan{font-weight:lighter;margin-top:10px;border-top:1px solid #000;position:relative;}\
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
@@ -528,6 +529,7 @@ function createFooter(config, setting, printer, ticket) {
   if (!ticket.hasOwnProperty("payment")) return "";
 
   const {
+    tipSuggestion,
     ticketNumber,
     tableName,
     jobTime,
@@ -540,7 +542,7 @@ function createFooter(config, setting, printer, ticket) {
 
   let suggestions = "";
 
-  if (enable && type === "PRE_PAYMENT") {
+  if ((enable && type === "PRE_PAYMENT") || tipSuggestion) {
     const { balance } = payment;
     const data = percentages
       .split(",")
@@ -551,19 +553,20 @@ function createFooter(config, setting, printer, ticket) {
       }))
       .map(
         tip =>
-          `<div class="outer">\
-                <span>${tip.pct}%<span class="dash">-</span>$ ${tip.val}</span>\
-                <span class="tips">( $ ${tip.tip} )</span>\
-            </div>`
+          `<div class="tips">\
+            <span class="pct">${tip.pct} %</span>\
+            <span class="val">$ ${tip.val}</span>\
+            <span class="tip">( $ ${tip.tip} )</span>\
+          </div>`
       )
       .join("")
       .toString();
 
     suggestions = `<section class="suggestion">\
-                      <h5>Tips Suggestion</h5>\
-                      <i>These tip amounts are provided for your convenience.</i>\
-                      ${data}\
-                  </section>`;
+                    <h5>Tips Suggestion</h5>\
+                    <i>These tip amounts are provided for your convenience.</i>\
+                    ${data}\
+                </section>`;
   }
 
   const slogan = content
