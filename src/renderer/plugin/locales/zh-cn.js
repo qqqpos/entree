@@ -360,7 +360,7 @@ export default {
     clockOutTip: "您打卡于 {i}, 本次总工作时长: {i}",
     cashIn: "首次开启钱箱",
     cashInTip: "首次开启后需要记录钱箱的初始现金",
-    selfCashIn: "注册虚拟钱箱",
+    selfCashIn: "企台押金",
     selfCashInTip: "在虚拟钱箱模式下，系统会自动记录每笔交易记录",
     cashInConfirm: "现金确认",
     cashInConfirmTip: "请确认钱箱内有现金 $ {i}",

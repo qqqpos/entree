@@ -52,13 +52,6 @@
             <h5>{{$t('dock.payoutTip')}}</h5>
           </div>
         </li>
-        <li @click="openSetting" v-show="authorized || op.role === 'Manager'">
-          <i class="fa fa-2x fa-cog"></i>
-          <div>
-            <h3>{{$t('dock.setting')}}</h3>
-            <h5>{{$t('dock.settingTip')}}</h5>
-          </div>
-        </li>
         <template v-if="isShow.cashCtrl">
           <template v-if="isShow.staffBank">
             <li @click="askStaffCashIn" v-if="!isShow.deposit">
@@ -93,6 +86,13 @@
               </li>
           </template>
         </template>
+        <li @click="openSetting" v-show="authorized || op.role === 'Manager'">
+          <i class="fa fa-2x fa-cog"></i>
+          <div>
+            <h3>{{$t('dock.setting')}}</h3>
+            <h5>{{$t('dock.settingTip')}}</h5>
+          </div>
+        </li>
         <li @click="changeLanguage">
           <i class="fa fa-2x fa-language"></i>
           <div>
@@ -115,6 +115,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import collector from "../component/collector";
 import inputer from "../component/inputer";
 import terminal from "../history/terminal";
 import dialoger from "../common/dialoger";
@@ -124,7 +125,15 @@ import payout from "./payout";
 
 export default {
   props: ["init"],
-  components: { dialoger, terminal, giftcard, payout, unlock, inputer },
+  components: {
+    dialoger,
+    terminal,
+    giftcard,
+    payout,
+    unlock,
+    inputer,
+    collector
+  },
   computed: {
     ...mapGetters([
       "op",
@@ -173,8 +182,6 @@ export default {
           })
         );
     },
-    logout() {},
-    exit() {},
     askClockIn() {
       const prompt = {
         type: "question",
@@ -295,10 +302,171 @@ export default {
         })
         .catch(() => this.$q());
     },
-    askCashDrawerCashIn() {},
-    askCashDrawerCashOut() {},
-    askStaffCashIn() {},
-    askStaffCashOut() {},
+    askCashDrawerCashIn() {
+      const amount = this.station.cashDrawer.initialAmount;
+      const prompt = { title: "dialog.cashIn", msg: "dialog.cashInTip" };
+
+      this.$dialog(prompt)
+        .then(this.countInitialCash)
+        .catch(() => this.$q());
+    },
+    askCashDrawerCashOut() {
+      const { name } = this.station.cashDrawer;
+      const prompt = {
+        type: "question",
+        title: "dialog.cashOut",
+        msg: ["dialog.cashOutTip", name]
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.cashOut(name))
+        .catch(this.exit);
+    },
+    askStaffCashIn() {
+      this.$dialog({ title: "dialog.selfCashIn", msg: "dialog.selfCashInTip" })
+        .then(this.countSelfCash)
+        .catch(() => this.$q());
+    },
+    askStaffCashOut() {
+      const { name } = this.op;
+      const prompt = {
+        type: "question",
+        title: "dialog.staffCashOut",
+        msg: "dialog.staffCashOutTip"
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.cashOut(name))
+        .catch(this.exit);
+    },
+    countSelfCash(amount) {
+      if (isNumber(amount)) {
+        this.$dialog({
+          title: "dialog.selfCashInConfirm",
+          msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
+        })
+          .then(()=>this.acceptCashIn(amount))
+          .catch(this.countSelfCash);
+      } else {
+        new Promise((resolve, reject) => {
+          this.componentData = { resolve, reject };
+          this.component = "collector";
+        })
+          .then(this.countSelfCash)
+          .catch(() => this.$q());
+      }
+    },
+    countInitialCash(amount) {
+      if (isNumber(amount)) {
+        const prompt = {
+          title: "dialog.cashInConfirm",
+          msg: ["dialog.cashInConfirmTip", amount.toFixed(2)],
+          buttons: [
+            { text: "button.modify", fn: "reject" },
+            { text: "button.confirm", fn: "resolve" }
+          ]
+        };
+        Printer.openCashDrawer();
+        this.$dialog(prompt)
+          .then(() => this.acceptCashIn(amount))
+          .catch(this.countInitialCash);
+      } else {
+        new Promise((resolve, reject) => {
+          this.componentData = { resolve, reject };
+          this.component = "collector";
+        })
+          .then(this.countInitialCash)
+          .catch(() => this.$q());
+      }
+    },
+    acceptCashIn(amount) {
+      const cashDrawer =
+        this.op.cashCtrl === "enable"
+          ? this.station.cashDrawer.name
+          : this.op.name;
+      const record = {
+        date: today(),
+        cashDrawer,
+        operator: this.op.name,
+        begin: amount.toFixed(2),
+        beginTime: +new Date(),
+        end: null,
+        endTime: null,
+        close: false,
+        activity: [
+          {
+            type: "START",
+            inflow: parseFloat(amount),
+            outflow: 0,
+            time: +new Date(),
+            ticket: null,
+            operator: this.op.name
+          }
+        ]
+      };
+
+      this.$socket.emit("[CASHFLOW] DEPOSIT", record);
+      Printer.printCashInReport(record);
+      this.isShow.deposit = true;
+      this.$q();
+    },
+    cashOut(cashDrawer) {
+      this.$q();
+      this.$socket.emit("[CASHFLOW] SETTLE", cashDrawer, cashFlow =>
+        this.reconciliation(cashFlow)
+      );
+    },
+    reconciliation(cashflow) {
+      this.recordCashDrawerAction();
+      const diff = (
+        parseFloat(cashflow.end) - parseFloat(cashflow.begin)
+      ).toFixed(2);
+
+      cashflow.activity = cashflow.activity.filter(
+        log =>
+          log.type === "START" ||
+          log.type === "CASHFLOW" ||
+          log.type === "PAYOUT"
+      );
+
+      const prompt = {
+        type: "question",
+        title: ["dialog.cashOutSettle", cashflow.end],
+        msg: ["dialog.cashOutSettleTip", cashflow.begin, diff, cashflow.end],
+        buttons: [
+          { text: "button.printDetail", fn: "reject" },
+          { text: "button.print", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          Printer.printCashOutReport(cashflow, false);
+          this.exit();
+        })
+        .catch(() => {
+          Printer.printCashOutReport(cashflow, true);
+          this.exit();
+        });
+    },
+    recordCashDrawerAction() {
+      this.op.cashCtrl === "enable" && Printer.openCashDrawer();
+
+      const cashDrawer =
+        this.op.cashCtrl === "enable"
+          ? this.station.cashDrawer.name
+          : this.op.name;
+      const activity = {
+        type: "END",
+        inflow: 0,
+        outflow: 0,
+        time: +new Date(),
+        ticket: null,
+        operator: this.op.name
+      };
+
+      this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });
+    },
     logout() {
       this.checkOpenTicket()
         .then(this.askReport)
