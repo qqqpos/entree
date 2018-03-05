@@ -320,32 +320,33 @@ export default {
             { text: "button.print", fn: "resolve" }
           ]
         };
+        this.op.sessionReport
+          ? this.$dialog(prompt)
+              .then(() => {
+                const date = today();
 
-        this.$dialog(prompt)
-          .then(() => {
-            const date = today();
-
-            this.$socket.emit(
-              "[PAYMENT] VIEW_TRANSACTIONS",
-              date,
-              transactions => {
-                this.printReport(
-                  transactions.sort((a, b) =>
-                    String(b.ticket ? b.ticket.number : -1).localeCompare(
-                      a.ticket ? a.ticket.number : -1,
-                      undefined,
-                      {
-                        numeric: true,
-                        sensitivity: "base"
-                      }
-                    )
-                  )
+                this.$socket.emit(
+                  "[PAYMENT] VIEW_TRANSACTIONS",
+                  date,
+                  transactions => {
+                    this.printReport(
+                      transactions.sort((a, b) =>
+                        String(b.ticket ? b.ticket.number : -1).localeCompare(
+                          a.ticket ? a.ticket.number : -1,
+                          undefined,
+                          {
+                            numeric: true,
+                            sensitivity: "base"
+                          }
+                        )
+                      )
+                    );
+                    next();
+                  }
                 );
-                next();
-              }
-            );
-          })
-          .catch(() => next());
+              })
+              .catch(() => next())
+          : next();
       });
     },
     printReport(transactions) {
@@ -392,6 +393,9 @@ export default {
       const tip = invoices.reduce((a, c) => a + c.tip, 0);
       const grandTotal = toFixed(total + tip, 2);
       const settled = invoices.reduce((a, c) => a + c.actual, 0);
+      const cash = invoices
+        .filter(t => t.type === "CASH" || t.subType === "CASH")
+        .reduce((a, c) => a + c.actual, 0);
       const settledCount = invoices.length;
       const unsettled = tickets
         .filter(t => !t.settled)
@@ -401,6 +405,7 @@ export default {
       const report = {
         title: role + " Report",
         for: name,
+        date: moment().format("YYYY-MM-DD HH:mm:ss"),
         payments,
         guest,
         subtotal,
@@ -413,6 +418,7 @@ export default {
         settled,
         unsettled,
         settledCount,
+        cash,
         unsettledCount
       };
 

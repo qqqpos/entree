@@ -107,10 +107,17 @@ export default {
     black: "Black",
     mexican: "Mexican",
     asian: "Asian",
-    bar: "BAR",
-    hotel: "HOTEL",
-    company: "COMPANY",
-    hospital: "HOSPITAL"
+    bar: "Bar",
+    hotel: "Hotel",
+    company: "Company",
+    hospital: "Hospital",
+    apartment: "Apartment",
+    ad: "Ads.",
+    school: "School",
+    opinion: "Opinion",
+    place: "Place",
+    other: "Other",
+    class: "Class"
   },
   reason: {
     "Customer No-Show": "No-Show",
@@ -890,7 +897,7 @@ export default {
     averageDetail:
       "There are {i} days above average and {i} days below average.",
     giftcard: {
-      activation: "Gift Card Actvation",
+      activation: "Gift Card Activation",
       reload: "Gift Card Reload",
       spends: "Gift Card Spends",
       purchase: "Purchase Gift Card",
@@ -898,6 +905,7 @@ export default {
     }
   },
   text: {
+    tag: "Tag",
     starter: "Starter",
     appetizer: "Appetizer",
     entree: "Entree",
@@ -1585,6 +1593,7 @@ export default {
     restrictPermission: "Directly deny access",
     temporaryPermission: "Temporary access via pin",
     itemSplit: "How many quantity you want to split?",
+    sessionReport: "Prompt session report dialog when logout",
     timecard: {
       forOne: "Enable Clock in/out",
       forAll: "All employees clock in/out",

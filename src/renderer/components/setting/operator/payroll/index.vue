@@ -52,6 +52,7 @@ export default {
           "ThirdParty"
         ];
         vm.operators = data
+          .filter(d => d.role !== "Owner")
           .sort(
             (a, b) => (sort.indexOf(a.role) > sort.indexOf(b.role) ? 1 : -1)
           )

@@ -103,7 +103,14 @@ export default {
     bar: "酒吧",
     hotel: "旅馆",
     company: "公司",
-    hospital: "医院"
+    hospital: "医院",
+    apartment: "公寓",
+    ad: "广告电话",
+    school: "学校",
+    opinion: "评价",
+    place: "位置",
+    other: "其它",
+    class: "类"
   },
   reason: {
     "Customer No-Show": "客人没来",
@@ -864,6 +871,7 @@ export default {
     REFUND: "退款"
   },
   text: {
+    tag: "标签",
     starter: "起始",
     appetizer: "头台",
     entree: "正餐",
@@ -1553,6 +1561,7 @@ export default {
     restrictPermission: "当权限不足时直接拒绝",
     temporaryPermission: "允许输入密码来临时提升权限",
     itemSplit: "您想将选择的物品平摊成几份?",
+    sessionReport: "登出时候提示打印时段报表",
     timecard: {
       forOne: "记录上下班打卡情况",
       forAll: "全体员工打卡上下班",

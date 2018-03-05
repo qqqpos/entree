@@ -996,11 +996,10 @@ export default {
           value: "- " + accountsPayable.toFixed(2)
         });
 
-        const expectTotal = Math.max(0, unsettled - accountsPayable);
         report.push({
           text: this.$t("report.expectTotal"),
           style: "total bold",
-          value: "$ " + expectTotal.toFixed(2)
+          value: "$ " + (unsettled - accountsPayable).toFixed(2)
         });
       });
 
