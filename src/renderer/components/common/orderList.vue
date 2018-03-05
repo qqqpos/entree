@@ -112,7 +112,7 @@
         </template>
         <p>
           <span class="text">{{$t("text.total")}}:</span>
-          <span class="value">{{payment.due + (payment.rounding || 0) + (payment.tip || 0) | decimal}}</span>
+          <span class="value">{{(payment.due + (payment.rounding || 0) + (payment.tip || 0) + payment.gratuity) | decimal}}</span>
         </p>
       </div>
     </div>

@@ -1331,7 +1331,10 @@ export default {
     cashFlowRecord: "Record Cash Flow",
     animation: "Animation Effect",
     saveLog: "Save Log",
-    timecard: "Timecard",
+    timecard: {
+      tipReport: "Tip Report",
+      excludeBreak: "Exclude Break Time"
+    },
     basic: "Basic",
     style: "Style",
     other: "Other",

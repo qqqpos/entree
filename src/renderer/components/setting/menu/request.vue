@@ -20,11 +20,6 @@
       </div>
     </div>
     <aside>
-      <!-- <div>
-        <div class="btn" @click="updateItemSort" v-if="isItemSorted">{{$t('button.update')}}</div>
-        <div class="btn" @click="updateActionSort" v-if="isActionSorted">{{$t('button.update')}}</div>
-        <div class="btn" @click="updateCategorySort" v-if="isCategorySorted">{{$t('button.update')}}</div>
-      </div> -->
     </aside>
     <div :is="component" :init="componentData"></div>
   </div>
@@ -137,7 +132,7 @@ export default {
       this.isItemSorted = false;
     },
     updateSortedAction() {
-      this.$socket.emit("[REQUEST] SORT_ACTION", this.action);
+      this.$socket.emit("[REQUEST] SORT_ACTION", this.actions);
       this.isActionSorted = false;
     },
     updateSortedCategory() {
