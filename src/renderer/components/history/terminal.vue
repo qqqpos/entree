@@ -208,10 +208,10 @@ export default {
     },
     initializing(transaction) {
       let stations = new Set();
-      transaction.map(t => t.station).forEach(name => stations.add(name));
-      this.stations = Array.from(stations).map(n => ({ text: n, value: n }));
-      let status = new Set();
+      let cashiers = new Set();
 
+      transaction.forEach(t => stations.add(t.station));
+      this.stations = Array.from(stations).map(t => ({ text: t, value: t }));
       this.transactions = transaction;
     },
     getParser(model) {

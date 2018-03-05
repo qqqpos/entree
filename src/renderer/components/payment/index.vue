@@ -63,7 +63,7 @@
           </div>
           <div class="fn">
             <button class="btn" :disabled="!isThirdPartyPayment" @click="setTip">{{$t('button.setTip')}}</button>
-            <button class="btn" @click="setDiscount" :disabled="!discountable || this.order.split">{{$t('button.setDiscount')}}</button>
+            <button class="btn" @click="openDiscount" :disabled="!discountable || this.order.split">{{$t('button.setDiscount')}}</button>
             <button class="btn" @click="save">{{$t('button.save')}}</button>
           </div>
         </nav>
@@ -232,6 +232,7 @@ import { mapGetters, mapActions } from "vuex";
 import checkbox from "../setting/common/checkbox";
 import dialoger from "../common/dialoger";
 import capture from "../giftcard/capture";
+import unlock from "../common/unlock";
 import ticket from "../common/ticket";
 import creditCard from "./creditCard";
 import discount from "./discount";
@@ -243,6 +244,7 @@ export default {
   components: {
     tiper,
     ticket,
+    unlock,
     capture,
     dialoger,
     discount,
@@ -375,7 +377,10 @@ export default {
     },
     checkPermission() {
       return new Promise((next, stop) => {
-        this.discountable = this.approval(this.op.modify, "discount");
+        this.discountable = this.approval(this.op.modify, "discount")
+          ? true
+          : this.op.restrict ? false : true;
+
         this.op.cashCtrl === "disable"
           ? stop({ error: "permissionDenied" })
           : next();
@@ -1237,6 +1242,16 @@ export default {
       }
 
       this.reset = false;
+    },
+    openDiscount() {
+      this.$checkPermission("modify", "discount")
+        .then(this.setDiscount)
+        .catch(() =>
+          this.$log({
+            eventID: 9100,
+            note: `${this.op.name} attempt to set discount.`
+          })
+        );
     },
     setDiscount() {
       new Promise((resolve, reject) => {
