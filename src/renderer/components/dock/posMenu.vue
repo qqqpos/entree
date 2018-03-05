@@ -59,25 +59,45 @@
             <h5>{{$t('dock.settingTip')}}</h5>
           </div>
         </li>
+        <template v-if="isShow.cashCtrl">
+          <template v-if="isShow.staffBank">
+            <li @click="askStaffCashIn" v-if="!isShow.deposit">
+              <i class="fa fa-2x fa-money"></i>
+              <div>
+                <h3>{{$t('dock.staffCashIn')}}</h3>
+                <h5>{{$t('dock.cashInTip')}}</h5>
+              </div>
+          </li>
+          <li @click="askStaffCashOut" v-else>
+            <i class="fa fa-2x fa-money"></i>
+            <div>
+              <h3>{{$t('dock.staffCashOut')}}</h3>
+              <h5>{{$t('dock.cashOutTip')}}</h5>
+            </div>
+          </li>
+          </template>
+          <template v-else>
+             <li @click="askCashDrawerCashIn" v-if="!isShow.deposit">
+              <i class="fa fa-2x fa-money"></i>
+              <div>
+                <h3>{{$t('dock.cashDrawerCashIn')}}</h3>
+                <h5>{{$t('dock.cashInTip')}}</h5>
+              </div>
+              </li>
+              <li @click="askCashDrawerCashOut" v-else>
+                <i class="fa fa-2x fa-money"></i>
+                <div>
+                  <h3>{{$t('dock.cashDrawerCashOut')}}</h3>
+                  <h5>{{$t('dock.cashOutTip')}}</h5>
+                </div>
+              </li>
+          </template>
+        </template>
         <li @click="changeLanguage">
           <i class="fa fa-2x fa-language"></i>
           <div>
             <h3>{{$t('dock.language')}}</h3>
             <h5>{{$t('dock.languageTip')}}</h5>
-          </div>
-        </li>
-        <li @click="askCashIn">
-          <i class="fa fa-2x fa-money"></i>
-          <div>
-            <h3>{{$t('dock.cashIn')}}</h3>
-            <h5>{{$t('dock.cashInTip')}}</h5>
-          </div>
-        </li>
-        <li @click="askCashOut">
-          <i class="fa fa-2x fa-money"></i>
-          <div>
-            <h3>{{$t('dock.cashOut')}}</h3>
-            <h5>{{$t('dock.cashOutTip')}}</h5>
           </div>
         </li>
         <li @click="logout">
@@ -113,20 +133,19 @@ export default {
       "store",
       "station",
       "history",
-      "authorized"
+      "language",
+      "authorized",
+      "departments"
     ])
   },
   data() {
     return {
       componentData: null,
-      component: null
+      component: null,
+      isShow: this.init.args
     };
   },
-  created() {
-    this.initialCashManagement();
-  },
   methods: {
-    initialCashManagement() {},
     changeLanguage() {
       const language = this.app.language === "usEN" ? "zhCN" : "usEN";
       this.$setLanguage(language);
@@ -229,7 +248,7 @@ export default {
           title: "dialog.cantExecute",
           msg: "dialog.ticketUnsettleAlert",
           buttons: [
-            { text: "button.confirm", fn: "reject" },
+            { text: "button.cancel", fn: "reject" },
             { text: "button.processAnyway", fn: "resolve" }
           ]
         };
@@ -276,11 +295,128 @@ export default {
         })
         .catch(() => this.$q());
     },
-    askCashIn() {},
-    askCashOut() {},
-    logout() {},
+    askCashDrawerCashIn() {},
+    askCashDrawerCashOut() {},
+    askStaffCashIn() {},
+    askStaffCashOut() {},
+    logout() {
+      this.checkOpenTicket()
+        .then(this.askReport)
+        .then(this.exit)
+        .catch(() => this.$q());
+    },
     exit() {
+      this.$q();
       this.$router.push({ name: "Login" });
+    },
+    askReport() {
+      return new Promise(next => {
+        const prompt = {
+          type: "question",
+          title: "dialog.printReport",
+          msg: ["dialog.printSessionReport", this.$t("type." + this.op.role)],
+          buttons: [
+            { text: "button.exit", fn: "reject" },
+            { text: "button.print", fn: "resolve" }
+          ]
+        };
+
+        this.$dialog(prompt)
+          .then(() => {
+            const date = today();
+
+            this.$socket.emit(
+              "[PAYMENT] VIEW_TRANSACTIONS",
+              date,
+              transactions => {
+                this.printReport(
+                  transactions.sort((a, b) =>
+                    String(b.ticket ? b.ticket.number : -1).localeCompare(
+                      a.ticket ? a.ticket.number : -1,
+                      undefined,
+                      {
+                        numeric: true,
+                        sensitivity: "base"
+                      }
+                    )
+                  )
+                );
+                next();
+              }
+            );
+          })
+          .catch(() => next());
+      });
+    },
+    printReport(transactions) {
+      const { role, name } = this.op;
+      let invoices = [];
+      let tickets = [];
+
+      switch (role) {
+        case "Manager":
+          invoices = transactions.slice();
+          tickets = this.history.filter(ticket => ticket.status === 1);
+          break;
+        case "Cashier":
+          invoices = transactions.filter(payment => payment.cashier === name);
+          tickets = this.history.filter(
+            ticket => ticket.cashier === name && ticket.status === 1
+          );
+
+          break;
+        case "Waitstaff":
+          invoices = transactions.filter(payment => payment.server === name);
+          tickets = this.history.filter(
+            ticket => ticket.server === name && ticket.status === 1
+          );
+      }
+
+      const payments = invoices.map(i => ({
+        number: isObject(i.ticket) ? i.ticket.number : "",
+        ticket: isObject(i.ticket) ? this.$t("type." + i.ticket.type) : "",
+        tip: i.tip,
+        amount: i.actual,
+        payment:
+          i.type === "THIRD" || i.type === "CREDIT"
+            ? i.subType
+            : this.$t("type." + i.type)
+      }));
+
+      const guest = tickets.reduce((a, c) => a + (c.guest || 0), 0);
+      const subtotal = tickets.reduce((a, c) => a + c.payment.subtotal, 0);
+      const tax = tickets.reduce((a, c) => a + c.payment.tax, 0);
+      const discount = tickets.reduce((a, c) => a + c.payment.discount, 0);
+      const rounding = tickets.reduce((a, c) => a + c.payment.rounding, 0);
+      const total = toFixed(subtotal + tax - discount + rounding, 2);
+      const tip = invoices.reduce((a, c) => a + c.tip, 0);
+      const grandTotal = toFixed(total + tip, 2);
+      const settled = invoices.reduce((a, c) => a + c.actual, 0);
+      const settledCount = invoices.length;
+      const unsettled = tickets
+        .filter(t => !t.settled)
+        .reduce((a, c) => a + c.payment.balance, 0);
+      const unsettledCount = tickets.filter(t => !t.settled).length;
+
+      const report = {
+        title: role + " Report",
+        for: name,
+        payments,
+        guest,
+        subtotal,
+        tax,
+        total,
+        tip,
+        discount,
+        rounding,
+        grandTotal,
+        settled,
+        unsettled,
+        settledCount,
+        unsettledCount
+      };
+
+      Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOp"])
   }

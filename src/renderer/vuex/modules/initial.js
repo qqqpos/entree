@@ -260,7 +260,7 @@ function flatten(layout, data, page, sort) {
             let items = group[item] || [];
 
             if (sort && items.length > 0) {
-                let hanz = !!items[0].zhCN.match(/[\u3400-\u9FBF]/);
+                const hanz = !!items[0].zhCN.match(/[\u3400-\u9FBF]/);
 
                 hanz ?
                     items.sort((a, b) => a.zhCN.localeCompare(b.zhCN, 'zh-Hans-CN', {

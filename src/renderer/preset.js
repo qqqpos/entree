@@ -139,6 +139,7 @@ var Preset = function () {
           enable: true,
           fontFamily: "QingYuan",
           fontSize: "21",
+          lineHeight:1,
           price: true,
           id: false
         }, {
@@ -146,6 +147,7 @@ var Preset = function () {
           enable: true,
           fontFamily: "Roboto Condensed",
           fontSize: "21",
+          lineHeight:1,
           price: true,
           id: false
         }]

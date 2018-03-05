@@ -20,7 +20,7 @@
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
-    <button class="btn" @click="print">
+    <button class="btn" @click="print" @contextmenu="rePrint">
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.print')}}</span>
     </button>
@@ -298,6 +298,30 @@ export default {
 
       const order = JSON.parse(JSON.stringify(this.order));
       order.split ? this.askSplitPrint(order) : this.printTicket(order);
+    },
+    rePrint() {
+      if (this.isEmptyTicket) return;
+      const order = JSON.parse(JSON.stringify(this.order));
+
+      Object.assign(order, {
+        content: order.content.map(item => {
+          item.print = false;
+          item.pending = false;
+          return item;
+        }),
+        print: false
+      });
+
+      const prompt = {
+        title: "dialog.reprintConfirm",
+        msg: "dialog.reprintTicketAgain"
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          order.split ? this.askSplitPrint(order) : this.printTicket(order);
+        })
+        .catch(() => this.$q());
     },
     receipt() {
       if (this.isEmptyTicket) return;

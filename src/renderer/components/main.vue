@@ -70,7 +70,7 @@ export default {
           });
           break;
         case "dockMenu":
-          this.$open("posMenu");
+          this.$open("posMenu", { args });
           break;
       }
     }

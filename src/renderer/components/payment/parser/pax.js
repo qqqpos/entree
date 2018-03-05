@@ -30,12 +30,16 @@ const Pax = function () {
 
     station = stationAlias || '';
     terminal = terminalAlias || '';
+
     request = axios.create({
       baseURL: `http://${ip}:${port}`
     });
 
-    window._request = request;
-    window._encode = Encode
+    request.interceptors.response.use((response) => {
+      return response;
+    }, (error) => {
+      return Promise.reject(error);
+    });
 
     const command = Encode("A00_1.38");
     return request.get(command);

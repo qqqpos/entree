@@ -33,6 +33,6 @@ export const request = s => s.initial.config.layout.request;
 export const isEmptyTicket = s => s.menu.order.content.length === 0;
 export const currentTable = s => s.table.currentTable;
 export const tables = s => s.initial.config.layout.table;
-
+export const departments = s => s.initial.config.departments || [];
 export const authorized = s =>
   s.login.op.role === "Developer" || s.login.op.role === "Owner";

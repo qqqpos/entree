@@ -333,7 +333,7 @@ export default {
           total: 0, // subtotal + tax
           discount: 0,
           due: 0, // total + delivery - discount
-          balance: 0, // due + surcharge + rounding
+          balance: 0, // due + gratuity + rounding
           paid: 0,
           remain: 0, // balance - paid
           tip: 0,

@@ -13,7 +13,7 @@
           <span v-show="customer.name">{{customer.name}}</span>
         </div>
       </div>
-      <div class="op" @click="openPanel" v-show="op._id">
+      <div class="op" @click="initialPanel" v-show="op._id">
         <i class="fa fa-user-circle"></i>
         <span>{{op.name}}</span>
       </div>
@@ -105,10 +105,42 @@ export default {
     }
   },
   methods: {
-    openPanel() {
+    initialPanel() {
       if (this.$route.name === "Dashboard") {
-        this.$bus.emit("__THREAD__OPEN", { component: "dockMenu" });
+        switch (this.op.cashCtrl) {
+          case "enable":
+            this.station.cashDrawer.enable
+              ? this.checkCashIn(this.station.cashDrawer.name).then(deposit =>
+                  this.openPanel({ cashCtrl: true, staffBank: false, deposit })
+                )
+              : this.openPanel({
+                  cashCtrl: true,
+                  staffBank: false,
+                  deposit: false
+                });
+
+            break;
+          case "staffBank":
+            this.checkCashIn(this.op.name).then(deposit =>
+              this.openPanel({ cashCtrl: true, staffBank: true, deposit })
+            );
+            break;
+          case "disable":
+            this.openPanel({ cashCtrl: false });
+        }
       }
+    },
+    checkCashIn(cashDrawer) {
+      return new Promise(resolve => {
+        this.$socket.emit(
+          "[CASHFLOW] CHECK",
+          { date: today(), cashDrawer, close: false },
+          ({ name, deposit }) => resolve(deposit)
+        );
+      });
+    },
+    openPanel(args) {
+      this.$bus.emit("__THREAD__OPEN", { component: "dockMenu", args });
     },
     messageCenter(view) {
       this.$route.name === "Dashboard" && this.$open("messenger", { view });

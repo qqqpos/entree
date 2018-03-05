@@ -141,7 +141,7 @@ export default {
     cashOutTip: "Cash Settle & Print Report",
     staffCashIn: "Staff Cash In",
     cashDrawerCashIn: "Cash Drawer Cash In",
-    cashInTip: "Record Deposit Cash Amount",
+    cashInTip: "Initial Deposit Cash",
     logout: "Logout",
     logoutTip: "Exit Program & Shutdown",
     setting: "Setting",
@@ -588,8 +588,9 @@ export default {
     switchCurrentOperator: "Are you sure to switch staff from {i} to {i}?",
     tableCreateFailed: "Table Create Failed",
     tableCreateFailedTip: "The pin you have entered does not match any record",
-    reprintBatchReport: "Reprint Batch Report",
-    reprintBatchReportTip: "Do you want to reprint this batch report?",
+    reprintConfirm: "Reprint Confirm",
+    reprintTicketAgain: "Are you sure to reprint this ticket to all printers?",
+    reprintBatchReport: "Do you want to reprint this batch report?",
     pending: "Access Denied",
     pendingOrderAccessDenied: "Other cashier is processing...",
     tipAdjusted: "Tip Adjusted",
@@ -699,7 +700,9 @@ export default {
       "There is no tips on any transactions. Are you wish to continue?",
     tipReport: "Tips Confirm",
     tipReportConfirm: "Are you sure to report ${i} as tips?",
-    ticketUnsettleAlert: "You still have ticket unsettled. Please close them first."
+    ticketUnsettleAlert: "You still have ticket unsettled. Please close them first.",
+    printReport: "Print Report",
+    printSessionReport: "Would you like to print a {i} session report? "
   },
   terminal: {
     initial: "Initializing terminal {i}...",

@@ -55,7 +55,7 @@ export default {
       });
     },
     initTerminal() {
-      return new Promise(next => {
+      return new Promise((next, stop) => {
         let { ip, port, sn, model } = this.config;
 
         this.msg = this.$t("terminal.initial", model);
@@ -63,8 +63,8 @@ export default {
         this.terminal
           .initial(ip, port, sn, this.station, this.attached)
           .then(response => next(response.data))
-          .catch(e => {
-            throw new Error({ error: "TERMINAL_RETURN_ERROR" });
+          .catch(error => {
+            stop({ error: "TERMINAL_RETURN_ERROR" });
           });
       });
     },
@@ -80,13 +80,13 @@ export default {
           this.msg =
             creditCard.number && creditCard.date
               ? this.$t(
-                "terminal.transacting",
-                this.device.model || this.config.model
-              )
+                  "terminal.transacting",
+                  this.device.model || this.config.model
+                )
               : this.$t(
-                "terminal.ready",
-                this.device.model || this.config.model
-              );
+                  "terminal.ready",
+                  this.device.model || this.config.model
+                );
 
           this.terminal.charge(this.init.card).then(response => {
             next(response.data);
@@ -122,10 +122,10 @@ export default {
       this.cancelable = true;
       switch (error) {
         case "CONFIG_FILE_NO_FOUND":
-          this.msg = this.$t("terminal.configInvalid")
+          this.msg = this.$t("terminal.configInvalid");
           break;
         case "TERMINAL_RETURN_ERROR":
-          this.msg = this.$t("terminal.terminalError")
+          this.msg = this.$t("terminal.terminalError");
           break;
         case "DEVICE_RETURN_ERROR":
           this.msg = this.$t("terminal.removeTryAgain");
