@@ -168,9 +168,7 @@ export default {
             this.$socket.emit(
               "[TERMINAL] CONFIG",
               this.station.terminal,
-              config => {
-                config.print && Printer.printCreditCard(content);
-              }
+              config => Printer.printCreditCard(content, {})
             )
           );
 

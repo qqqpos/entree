@@ -505,7 +505,9 @@ export default {
           this[anchor] = (val.slice(0, -1) / 10).toFixed(2);
 
           if (anchor === "tip" && this.isThirdPartyPayment) {
-            Object.assign(this.payment, { tip: (val.slice(0, -1) / 10).toFixed(2).toFloat() });
+            Object.assign(this.payment, {
+              tip: (val.slice(0, -1) / 10).toFixed(2).toFloat()
+            });
             this.setOrder(Object.assign(this.order, { payment: this.payment }));
           }
           break;
@@ -908,9 +910,7 @@ export default {
               this.$socket.emit(
                 "[TERMINAL] CONFIG",
                 this.station.terminal,
-                config => {
-                  config.print && Printer.printCreditCard(content);
-                }
+                config => Printer.printCreditCard(content, config)
               )
             );
 

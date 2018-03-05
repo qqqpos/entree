@@ -101,7 +101,7 @@ const Printer = function (plugin, config, station) {
   this.printReport = data => Report.bind(this)(data);
   this.printHibachi = (printer, order, items) => Hibachi.bind(this)(printer, order, items);
   this.printGiftCard = (title, card, bonus) => Giftcard.bind(this)(title, card, bonus);
-  this.printCreditCard = (trans, reprint) => Creditcard.bind(this)(trans, reprint);
+  this.printCreditCard = (trans, config, reprint) => Creditcard.bind(this)(trans, config, reprint);
   this.printBatchReport = (data, detail) => BatchReport.bind(this)(data, detail);
   this.printTimeCardReport = data => Timecard.bind(this)(data);
   this.printCashInReport = data => CashIn.bind(this)(data);

@@ -20,7 +20,7 @@
                 <div class="opt">
                     <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
                 </div>
-                <button class="btn" @click="confirm">{{$t( init.edit ? 'button.save':'button.create')}}</button>
+                <button class="btn" @click="confirm" :disabled="department.contain.length === 0">{{$t( init.edit ? 'button.save':'button.create')}}</button>
             </footer>
         </div>
     </div>

@@ -1,4 +1,4 @@
-# Entrée Point Of Sales - Open Source
+# Entrée Point Of Sales - A Open Source with Restaurant Users Feedback Driven POS
 
 Entrée is a free & easy to use POS system.
 
@@ -17,8 +17,9 @@ The [`Entrée`](https://github.com/huangxuewu/entree) has many build in feature,
 ## Contributing
 
 If you are interested in fixing issues and contributing directly to the code base,
-please contact me via huangxuewu@gmail.com
+please contact me first via huangxuewu@gmail.com
 
+All Restaurant Owner, Manager suggestions are welcome.
 ## Feedback
 Feel free to open issue ticket if you found any bug.
 

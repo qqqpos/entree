@@ -357,7 +357,7 @@ export default {
             _id: ObjectId()
           });
 
-          Printer.printCreditCard(data);
+          Printer.printCreditCard(data,{});
 
           const transaction = {
             _id: ObjectId(),

@@ -250,7 +250,7 @@ export default {
       this.$nextTick(() => this.$bus.emit("applied"));
     },
     print(record) {
-      Printer.printCreditCard(record, true);
+      Printer.printCreditCard(record, {}, true);
     },
     voidSale(record) {
       const msg =
@@ -381,7 +381,7 @@ export default {
         delete voidSale.order;
 
         if (voidSale.code === "000000") {
-          this.printTicket && Printer.printCreditCard(voidSale);
+          this.printTicket && Printer.printCreditCard(voidSale, {});
           Object.assign(record, voidSale, { status: 0 });
           this.$socket.emit("[TERMINAL] VOID", record);
           this.$socket.emit("[TRANSACTION] FIND", record._id, payment => {
