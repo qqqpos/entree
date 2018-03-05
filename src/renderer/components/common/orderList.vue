@@ -428,9 +428,9 @@ export default {
             .find(r => guest >= r.guest);
           gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
         } catch (e) {}
+      } else {
+        gratuity = 0;
       }
-
-      gratuity = toFixed(gratuity, 2);
 
       if (coupons && coupons.length > 0) {
         let offer = 0;
