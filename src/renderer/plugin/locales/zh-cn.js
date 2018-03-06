@@ -1383,7 +1383,8 @@ export default {
       table: "修改座位",
       tip: "修改小费",
       driver: "修改订单的派送司机",
-      transaction: "修改信用卡交易"
+      transaction: "修改信用卡交易",
+      server: "更改服务员"
     },
     view: {
       summary: "允许查看当前销售总金额",

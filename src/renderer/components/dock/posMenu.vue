@@ -213,9 +213,15 @@ export default {
         ]
       };
 
-      this.$dialog(prompt)
+      this.checkOpenTicket()
         .then(() => {
-          this.store.timecard.tipReport ? this.reportTip() : this.clockOut();
+          this.$dialog(prompt)
+            .then(() => {
+              this.store.timecard.tipReport
+                ? this.reportTip()
+                : this.clockOut();
+            })
+            .catch(() => this.$q());
         })
         .catch(() => this.$q());
     },

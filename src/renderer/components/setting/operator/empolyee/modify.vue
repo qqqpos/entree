@@ -16,9 +16,10 @@
         <checkbox title="setting.modify.order" v-model="operator.modify" val="order" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.void" v-model="operator.modify" val="void" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.table" v-model="operator.modify" val="table" :multiple="true" class="list"></checkbox>
-        <checkbox title="setting.modify.driver" v-model="operator.modify" val="driver" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.modify.server" v-model="operator.modify" val="server" :mulitple="true" class="list"></checkbox>
         <checkbox title="setting.modify.tip" v-model="operator.modify" val="tip" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.transaction" v-model="operator.modify" val="transaction" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.modify.driver" v-model="operator.modify" val="driver" :multiple="true" class="list"></checkbox>
     </div>
 </template>
 

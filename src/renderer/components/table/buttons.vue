@@ -254,9 +254,13 @@ export default {
     },
     switchStaff() {
       if (this.isEmptyTicket) return;
-      this.$socket.emit("[OPERATOR] LIST", operators =>
-        this.$open("staff", { operators })
-      );
+      this.$checkPermission("modify", "server")
+        .then(() => {
+          this.$socket.emit("[OPERATOR] LIST", operators =>
+            this.$open("staff", { operators })
+          );
+        })
+        .catch(() => {});
     },
     split() {
       if (this.isEmptyTicket) return;

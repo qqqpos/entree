@@ -1413,8 +1413,9 @@ export default {
       void: "Allow to Void / Reopen Ticket",
       table: "Modify Table Ticket",
       tip: "Adjust Tips",
-      driver: "Assign Driver To Ticket ",
-      transaction: "Modify Credit Card Transaction"
+      driver: "Assign Driver To Ticket",
+      transaction: "Modify Credit Card Transaction",
+      server: "Reassign Server"
     },
     view: {
       summary: "Allow To View All Sales Total",
