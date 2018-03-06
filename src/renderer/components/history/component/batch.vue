@@ -36,7 +36,7 @@
       </table>
       <footer>
         <div class="opt">
-          <checkbox title="button.printDetail" v-model="detail"></checkbox>
+          <checkbox title="report.tipsDetail" v-model="detail"></checkbox>
         </div>
         <button class="btn" @click="init.resolve">{{$t('button.done')}}</button>
       </footer>

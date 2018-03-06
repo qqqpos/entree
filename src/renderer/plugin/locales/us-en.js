@@ -1208,7 +1208,8 @@ export default {
     times: "{i} time(s)",
     moreOption: "More Option",
     historyInvoice: "History Invoice",
-    pickupList: "Pick Up List"
+    pickupList: "Pick Up List",
+    portionDisplay: "Only display limited Data"
   },
   nav: {
     store: "Store",

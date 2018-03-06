@@ -89,7 +89,7 @@ export default {
             this.dropdown = null;
           }
         });
-      } else if (phone.length > 3) {
+      } else if (phone.length > 1) {
         this.$socket.emit("[AUTOCOMPLETE] PHONE", phone, results => {
           this.list = results;
           this.dropdown = "autocomplete";

@@ -4,7 +4,9 @@
       <header>
         <div class="title">
           <h3>{{$t('title.terminalRecords')}}</h3>
-          <h5>{{$t('tip.foundRecords',filteredTransactions.length)}}</h5>
+          <h5>{{$t('tip.foundRecords',filteredTransactions.length)}}
+            <i class="fa fa-eye-slash" :title="$t('text.portionDisplay')" v-if="portionDisplay"></i>
+          </h5>
         </div>
         <nav class="filter">
           <div class="picker">
@@ -138,6 +140,7 @@ export default {
       componentData: null,
       component: null,
       adjustable: false,
+      portionDisplay: false,
       filterStation: null,
       stations: [],
       devices: [],
@@ -208,11 +211,24 @@ export default {
     },
     initializing(transaction) {
       let stations = new Set();
-      let cashiers = new Set();
 
       transaction.forEach(t => stations.add(t.station));
       this.stations = Array.from(stations).map(t => ({ text: t, value: t }));
-      this.transactions = transaction;
+
+      if (this.approval(this.op.view, "invoices")) {
+        this.transactions = transaction;
+        this.portionDisplay = false;
+      } else {
+        this.portionDisplay = true;
+
+        const { name } = this.op;
+
+        this.transactions = transaction.filter(
+          t =>
+            isObject(t.order) &&
+            (t.order.cashier === name || t.order.server === name)
+        );
+      }
     },
     getParser(model) {
       switch (model) {
@@ -663,5 +679,10 @@ tbody tr.voided {
 .picker i {
   padding: 10px 30px;
   cursor: pointer;
+}
+
+.fa-eye-slash {
+  color: #e6190a;
+  margin-left: 10px;
 }
 </style>

@@ -345,11 +345,12 @@ export default {
           title: "dialog.selfCashInConfirm",
           msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
         })
-          .then(()=>this.acceptCashIn(amount))
+          .then(() => this.acceptCashIn(amount))
           .catch(this.countSelfCash);
       } else {
         new Promise((resolve, reject) => {
-          this.componentData = { resolve, reject };
+          const cashDrawer = this.op.name;
+          this.componentData = { resolve, reject, cashDrawer };
           this.component = "collector";
         })
           .then(this.countSelfCash)
@@ -372,7 +373,8 @@ export default {
           .catch(this.countInitialCash);
       } else {
         new Promise((resolve, reject) => {
-          this.componentData = { resolve, reject };
+          const cashDrawer = this.station.cashDrawer.name;
+          this.componentData = { resolve, reject, cashDrawer };
           this.component = "collector";
         })
           .then(this.countInitialCash)

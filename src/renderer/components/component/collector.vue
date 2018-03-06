@@ -76,7 +76,7 @@ export default {
   components: { numPad, checkbox },
   data() {
     return {
-      cashDrawer: this.$store.getters.station.cashDrawer.name,
+      cashDrawer: this.init.cashDrawer,
       hundred: 0,
       fifty: 0,
       twenty: 0,

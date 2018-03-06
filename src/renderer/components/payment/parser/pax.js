@@ -244,7 +244,7 @@ const Pax = function () {
             debit: (amount[1] / 100).toFixed(2),
             ebt: (amount[2] / 100).toFixed(2)
           },
-          result: host[0],
+          result: host[0], 
           number: host[5],
           status: hostResponse,
           batch

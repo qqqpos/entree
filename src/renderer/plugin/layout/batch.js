@@ -12,7 +12,7 @@ const batch = function (data, detail) {
   const category = detail
     ? `
     <section class="data">
-      <h3>Details</h3>
+      <h3>Tip Details</h3>
       <p>
         <span class="text">Card Type</span>
         <span class="value">Tip<span class="extra">Amount</span></span>
@@ -49,7 +49,7 @@ const batch = function (data, detail) {
                   </p>\
                   <p>\
                     <span class="text">Batch #</span>\
-                    <span class="value">${data.batchNumber}</span>\
+                    <span class="value">${data.number}</span>\
                   </p>\
                   <p>\
                     <span class="text">Result</span>\
@@ -62,7 +62,7 @@ const batch = function (data, detail) {
                 </section>\
                 ${category}
                 <section class="data">\
-                  <h3>Overview</h3>\
+                  <h3>Overall</h3>\
                   <p>\
                     <span class="text">Credit ( ${data.count.credit} )</span>\
                     <span class="value">$ ${data.amount.credit}</span>\
