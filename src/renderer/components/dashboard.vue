@@ -377,8 +377,8 @@ export default {
             this.component = "provider";
           })
             .then(source => {
-              this.setOrder({ source, tradeMark: source });
               this.setTicket({ type: "DELIVERY" });
+              this.setOrder({ source, tradeMark: source });
               this.$router.push({ path: "/main/customer" });
             })
             .catch(() => {
@@ -393,7 +393,6 @@ export default {
               this.$log({
                 eventID: 9100,
                 type: "failure",
-                source: "dashboard",
                 note: "Access Denied when attempt access history."
               })
             );
@@ -405,7 +404,6 @@ export default {
               this.$log({
                 eventID: 9100,
                 type: "failure",
-                source: "dashboard",
                 note: "Access Denied when attempt access back office setting."
               })
             );

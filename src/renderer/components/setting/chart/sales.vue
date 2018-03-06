@@ -140,6 +140,8 @@ export default {
         },
         export: {
           enabled: true,
+          pageOrigin:false,
+          fileName: "Daily Sales Report",
           menuReviver: function(item, li) {
             if (item.format === "XLSX" || item.format === "PDF")
               li.style.display = "none";

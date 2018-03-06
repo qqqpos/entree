@@ -173,8 +173,11 @@ export default {
         );
     },
     openSetting() {
-      this.$checkPermission("permission", "payout")
-        .then(() => this.$open("payout"))
+      this.$checkPermission("access", "setting")
+        .then(() => {
+          this.init.resolve();
+          this.$router.push({ path: "/main/setting" });
+        })
         .catch(() =>
           this.$log({
             eventID: 9100,
