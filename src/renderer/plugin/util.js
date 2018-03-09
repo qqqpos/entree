@@ -153,6 +153,33 @@ export default {
       this.componentData = null;
     };
 
+    Vue.prototype.$minifyCustomer = ({
+      _id = undefined,
+      phone,
+      extension,
+      address,
+      city,
+      name,
+      note,
+      duration,
+      distance,
+      direction,
+      coordinate,
+      zipCode }) => ({
+        _id,
+        phone,
+        extension,
+        address,
+        city,
+        name,
+        note,
+        duration,
+        distance,
+        direction,
+        coordinate,
+        zipCode
+      });
+
     // Vue.prototype.syncChange = function (object, onChange) {
     //     const handler = {
     //         get(target, property, receiver) {
@@ -254,7 +281,7 @@ export default {
             .find(r => guest >= r.guest);
           gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
         } catch (e) { }
-      }else{
+      } else {
         gratuity = 0;
       }
 

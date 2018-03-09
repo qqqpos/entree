@@ -106,7 +106,7 @@ export default {
         const invoices = this.history.filter(
           invoice => invoice.type === "DELIVERY"
         );
-        this.$open("driver", { ticket: this.order.number, invoices });
+        this.$open("driver", { ticket: this.order.number, invoices, date });
       }
     },
     exit() {

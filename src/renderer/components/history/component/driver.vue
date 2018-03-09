@@ -28,9 +28,7 @@
         </ul>
       </div>
       <footer>
-        <div class="f1">
-          <checkbox v-model="loop" title="text.autoNext"></checkbox>
-        </div>
+        <div class="btn" @click="settle" v-show="assigned">{{$t('button.settle')}}</div>
         <div class="btn" @click="init.resolve">{{$t('button.done')}}</div>
       </footer>
     </div>
@@ -40,14 +38,17 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import checkbox from "../../setting/common/checkbox";
+import dialoger from "../../common/dialoger";
 
 export default {
   props: ["init"],
-  components: { checkbox },
+  components: { dialoger },
   computed: {
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };
+    },
+    assigned() {
+      return this.init.invoices.every(ticket => !!ticket.driver);
     },
     ...mapGetters(["op"])
   },
@@ -199,6 +200,16 @@ export default {
           });
         }
       }
+    },
+    settle() {
+      const prompt = {
+        title: "dialog.settleConfirm",
+        msg: "dialog.settleDeliveryCashTicket"
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.$socket.emit("[DRIVER] SETTLE", this.init.date, () => this.$q()))
+        .catch(() => this.$q());
     }
   },
   watch: {

@@ -130,8 +130,22 @@ export default {
 
       this.op.cashCtrl === "enable" && Printer.openCashDrawer();
 
-      this.$socket.emit("[TRANSACTION] SAVE", transaction);
-      this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });
+      if (parseFloat(this.amount) > 0) {
+        this.$socket.emit("[TRANSACTION] SAVE", transaction);
+        this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });
+      } else {
+        this.$socket.emit("[CASHFLOW] ACTIVITY", {
+          cashDrawer,
+          activity: {
+            type: "OPEN",
+            inflow: 0,
+            outflow: 0,
+            time: +new Date(),
+            ticket: null,
+            operator: this.op.name
+          }
+        });
+      }
     },
     chargeCreditCard() {
       const card = {

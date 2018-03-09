@@ -78,9 +78,9 @@ export default {
     return {
       type: null,
       caret: 0,
+      flags: [],
       entry: "phone",
       keyboard: true,
-      flags: [],
       componentData: null,
       component: null
     };

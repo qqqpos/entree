@@ -86,6 +86,7 @@ export default {
 
       this.setCustomer({ address, city });
       this.$emit("query");
+      this.$emit("focus", "address");
     },
     autoComplete(n) {
       const street = n

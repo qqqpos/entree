@@ -34,31 +34,27 @@ export const setReservation = ({ commit }, data) => {
   commit(types.SET_RESERVATION, reservations);
   commit(types.SET_LASTSYNC, sync);
 };
-export const setLastSync = ({ commit }, time) =>
-  commit(types.SET_LASTSYNC, time);
+export const setLastSync = ({ commit }, time) => commit(types.SET_LASTSYNC, time);
 
 export const setMenu = ({ commit }, menu) => commit(types.SET_MENU, menu);
 
-export const setSubmenu = ({ commit }, submenu) =>
-  commit(types.SET_SUBMENU, submenu);
+export const setSubmenu = ({ commit }, submenu) => commit(types.SET_SUBMENU, submenu);
 
 export const setTable = ({ commit }, tables) => commit(types.SET_TABLE, tables);
 
-export const setTemporaryTable = ({ commit }, table) =>
-  commit(types.SET_TEMPORARY_TABLE, table);
+export const setTemporaryTable = ({ commit }, table) => commit(types.SET_TEMPORARY_TABLE, table);
 
-export const setRequest = ({ commit }, request) =>
-  commit(types.SET_REQUEST, request);
+export const setRequest = ({ commit }, request) => commit(types.SET_REQUEST, request);
 
 export const setOp = ({ commit }, op) => commit(types.SET_OP, op);
 
 export const setTicket = ({ commit }, data) => commit(types.SET_TICKET, data);
 
-export const setCustomer = ({ commit }, data) =>
-  commit(types.SET_CUSTOMER, data);
+export const setCustomer = ({ commit }, data) => commit(types.SET_CUSTOMER, data);
 
-export const setFavorites = ({ commit }, data) =>
-  commit(types.SET_FAVORITES, data);
+export const resetCustomer = ({ commit }) => commit(types.RESET_CUSTOMER);
+
+export const setFavorites = ({ commit }, data) => commit(types.SET_FAVORITES, data);
 
 export const setPin = ({ commit }, pin) => commit(types.SET_PIN, pin);
 
@@ -66,20 +62,15 @@ export const setOrder = ({ commit }, data) => commit(types.SET_ORDER, data);
 
 export const setSides = ({ commit }, sides) => commit(types.SET_SIDES, sides);
 
-export const setCurrentTable = ({ commit }, info) =>
-  commit(types.SET_CURRENT_TABLE, info);
+export const setCurrentTable = ({ commit }, info) => commit(types.SET_CURRENT_TABLE, info);
 
-export const resetCurrentTable = ({ commit }) =>
-  commit(types.RESET_CURRENT_TABLE);
+export const resetCurrentTable = ({ commit }) => commit(types.RESET_CURRENT_TABLE);
 
-export const setViewOrder = ({ commit }, order) =>
-  commit(types.SET_VIEW_ORDER, JSON.parse(JSON.stringify(order)));
+export const setViewOrder = ({ commit }, order) => commit(types.SET_VIEW_ORDER, JSON.parse(JSON.stringify(order)));
 
 export const setDevice = ({ commit }, data) => commit(types.SET_DEVICE, data);
 
 export const phoneRing = ({ commit }, data) => commit(types.PHONE_RING, data);
-
-export const resetCustomer = ({ commit }) => commit(types.RESET_CUSTOMER);
 
 export const resetTable = ({ commit }) => commit(types.RESET_TABLE);
 

@@ -93,7 +93,7 @@ export default {
     badCustomer: "坏客人",
     farAway: "距离远",
     lousyCustomer: "麻烦客人",
-    fraud: "诈骗",
+    fraud: "信用卡赖账",
     noService: "黑名单",
     impoliteCustomer: "没礼貌",
     white: "白人",
@@ -260,7 +260,8 @@ export default {
     ledger: "轧账",
     allValid: "设全部有效",
     processAnyway: "依然执行",
-    editInvoice: "修改订单"
+    editInvoice: "修改订单",
+    settle: "结账"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -593,7 +594,9 @@ export default {
     tipReportConfirm: "请再次确定您本次上报的小费为 {i} ?",
     ticketUnsettleAlert: "您还有订单尚未结账，请先处理订单",
     printReport: "打印报表",
-    printSessionReport: "您需要打印一份从开始到当前时段的{i}报表吗？"
+    printSessionReport: "您需要打印一份从开始到当前时段的{i}报表吗？",
+    settleConfirm: "确认结账",
+    settleDeliveryCashTicket: "请确定您已经收到送餐订单的尾款"
   },
   terminal: {
     initial: "正在初始化 {i}...",

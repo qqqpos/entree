@@ -100,8 +100,8 @@ export default {
     badCustomer: "Bad",
     farAway: "Far Away",
     lousyCustomer: "Lousy",
-    fraud: "Fraud",
-    noService: "BlackList",
+    fraud: "Charge Back",
+    noService: "Black List",
     impoliteCustomer: "Impolite",
     white: "White",
     black: "Black",
@@ -267,7 +267,8 @@ export default {
     ledger: "Ledger",
     allValid: "Set All Valid",
     processAnyway: "Process Anyway",
-    editInvoice: "Edit Order"
+    editInvoice: "Edit Order",
+    settle: "Settle"
   },
   thead: {
     orderType: "Order Type",
@@ -709,7 +710,9 @@ export default {
     tipReportConfirm: "Are you sure to report ${i} as tips?",
     ticketUnsettleAlert: "You still have ticket unsettled. Please close them first.",
     printReport: "Print Report",
-    printSessionReport: "Would you like to print a {i} session report? "
+    printSessionReport: "Would you like to print a {i} session report? ",
+    settleConfirm: "Settle Confirm",
+    settleDeliveryCashTicket: "Please make sure that you have received the correct amount of cash from the drivers."
   },
   terminal: {
     initial: "Initializing terminal {i}...",
