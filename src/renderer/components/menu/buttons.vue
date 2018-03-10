@@ -477,8 +477,7 @@ export default {
       return Object.assign({}, order, extra);
     },
     analyzeDiffs(current) {
-      //current = JSON.parse(JSON.stringify(current));
-      current = clone(current);
+      current = JSON.parse(JSON.stringify(current));
       current.print = true;
 
       let items = [];
@@ -558,7 +557,7 @@ export default {
           return item;
         })
       );
-
+console.log(items);
       return Object.assign(current, { content: items });
     },
     createTogo() {

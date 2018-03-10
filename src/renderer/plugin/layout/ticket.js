@@ -225,10 +225,12 @@ function createList(printer, setting, invoice, preview) {
             case "removed":
               break;
             case "inserted":
-              item.choiceSet.forEach(set => {
-                set.zhCN = "★" + set.zhCN;
-                set.usEN = "★" + set.usEN;
-              });
+              item.choiceSet = item.choiceSet.map(item=>{
+                item.zhCN = "★" + item.zhCN;
+                item.usEN = "★" + item.usEN;
+                return item
+              })
+              console.log(item.choiceSet);
               break;
           }
         });
@@ -361,7 +363,7 @@ function createList(printer, setting, invoice, preview) {
       englishSub = "";
 
     item.choiceSet.forEach(set => {
-      if (set.hasOwnProperty('print') && !set.print.includes(printer)) return;
+      if (set.hasOwnProperty('print') && Array.isArray(set.print) && set.print.length > 0 && !set.print.includes(printer)) return;
       const _qty = set.qty !== 1 ? set.qty + " x " : "";
       const _price =
         Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
