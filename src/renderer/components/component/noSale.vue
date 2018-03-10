@@ -146,6 +146,7 @@ export default {
           }
         });
       }
+      this.init.resolve();
     },
     chargeCreditCard() {
       const card = {
@@ -218,6 +219,8 @@ export default {
           console.log(error);
           this.$q();
         });
+
+        this.init.resovle();
     }
   }
 };

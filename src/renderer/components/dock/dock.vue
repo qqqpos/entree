@@ -100,7 +100,7 @@ export default {
         this.$route.name !== "Lock" &&
         this.sessionTimeout(tick);
       this.spooler.length > 0 &&
-        tick > this.spooler[0].delay &&
+        tick > this.spooler[0].schedule &&
         this.printFromSpooler(0);
     }
   },
@@ -194,6 +194,7 @@ export default {
       this.spooler[i].content.forEach(item => {
         items.push(item.unique);
       });
+      console.log(this.spooler[0])
       Printer.setTarget("Order").print(this.spooler[0]);
       this.removeSpooler(i);
       let index = this.history.findIndex(order => order._id === _id);

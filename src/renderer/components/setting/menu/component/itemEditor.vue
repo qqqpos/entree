@@ -64,15 +64,15 @@
         </div>
       </template>
       <template v-else-if="mode=== 'print'">
-        <div class="wrap column">
-          <toggle :title="name" true-tooltip="tip.replaceItemName" false-tooltip="tip.noReplaceItemName" :conditionalTooltip="true" v-for="(printer,name,index) in item.printer" :key="index" v-model="printer.replace" v-show="isShowPrinter(name)" @update="render">
-            <transition name="dropdown">
-              <div class="opt" v-if="printer.replace">
-                <inputer title="text.primary" v-model="printer.usEN"></inputer>
-                <inputer title="text.secondary" v-model="printer.zhCN"></inputer>
-              </div>
-            </transition>
-          </toggle>
+        <div class="wrap column print">
+          <div class="config" v-for="(printer,name,index) in item.printer" v-show="isShowPrinter(name)" :key="index">
+            <h3>{{name}}</h3>
+            <div class="opt">
+              <input :placeholder="$t('text.primary')" v-model="printer.usEN" :disabled="!printer.replace">
+              <input :placeholder="$t('text.secondary')" v-model="printer.zhCN" :disabled="!printer.replace">
+              <checkbox title="tip.replaceItemName" v-model="printer.replace"></checkbox>
+            </div>
+          </div>
         </div>
       </template>
       <template v-else-if="mode ==='advance'">
@@ -422,5 +422,32 @@ i.price {
   color: #656565;
   cursor: pointer;
   padding: 5px 9px;
+}
+
+.config .opt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrap.print {
+  width: 550px;
+}
+
+.config input {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: 30px;
+  border-radius: 4px;
+  border: none;
+  margin: 0 5px;
+  padding: 0 5px;
+}
+
+.config {
+  margin-bottom: 5px;
+}
+
+.config h3 {
+  margin-bottom: 5px;
 }
 </style>

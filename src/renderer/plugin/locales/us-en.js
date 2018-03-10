@@ -149,6 +149,8 @@ export default {
     staffCashIn: "Staff Deposit",
     cashDrawerCashIn: "Cash Drawer Deposit",
     cashInTip: "For Initial Cash In",
+    report: "Session Report",
+    reportTip: "Print Personal Session Report",
     logout: "Logout",
     logoutTip: "Exit Program & Shutdown",
     setting: "Setting",

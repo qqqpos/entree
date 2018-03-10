@@ -142,6 +142,8 @@ export default {
     staffCashIn: "企台押金",
     cashDrawerCashIn: "钱箱押金",
     cashInTip: "记录起始现金",
+    report: "时段报表",
+    reportTip: "打印本时段的个人报表",
     logout: "登出",
     logoutTip: "退出软件 · 关机",
     setting: "设置",

@@ -86,6 +86,13 @@
               </li>
           </template>
         </template>
+        <li @click="report" v-show="op.sessionReport">
+          <i class="fa fa-2x fa-print"></i>
+          <div>
+            <h3>{{$t('dock.report')}}</h3>
+            <h5>{{$t('dock.reportTip')}}</h5>
+          </div>
+        </li>
         <li @click="openSetting" v-show="authorized || op.role === 'Manager'">
           <i class="fa fa-2x fa-cog"></i>
           <div>
@@ -257,7 +264,7 @@ export default {
       return new Promise((next, stop) => {
         const server = this.op.name;
         const doneJob = this.history
-          .filter(invoice => invoice.server === server)
+          .filter(invoice => invoice.server === server && invoice.status === 1)
           .every(ticket => ticket.settled);
 
         const prompt = {
@@ -480,13 +487,18 @@ export default {
     },
     logout() {
       this.checkOpenTicket()
-        .then(this.askReport)
         .then(this.exit)
         .catch(() => this.$q());
     },
     exit() {
       this.$q();
       this.$router.push({ name: "Login" });
+    },
+    report() {
+      this.checkOpenTicket()
+        .then(this.askReport)
+        .then(() => this.$q())
+        .catch(() => this.$q());
     },
     askReport() {
       return new Promise(next => {
