@@ -888,7 +888,7 @@ export default {
     adjustTip: "调整小费",
     edit: "修改",
     single: "单价",
-    qty: "数量",
+    qty: "量",
     item: "物品",
     price: "价格",
     discount: "折扣",

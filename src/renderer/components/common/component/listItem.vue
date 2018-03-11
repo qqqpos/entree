@@ -83,7 +83,7 @@ li {
   justify-content: center;
   border-bottom: 1px solid #ddd;
   background: #fff;
-  padding: 10px 5px;
+  padding: 10px 5px 10px 0;
 }
 
 .main,
@@ -93,7 +93,7 @@ li {
 }
 
 .qty {
-  width: 30px;
+  width: 35px;
   text-align: center;
 }
 

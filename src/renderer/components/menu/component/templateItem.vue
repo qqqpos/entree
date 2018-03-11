@@ -9,7 +9,7 @@
       <div class="wrap">
         <ul>
           <li v-for="(page,i) in template.contain" @click="index = i" class="page" :key="i">
-            <span>{{page.name}}</span>
+            <span class="page">{{page.name}}<span class="count" v-show="itemCount[i] > 0">{{itemCount[i]}}</span></span>
             <i class="fa fa-caret-right"></i>
           </li>
         </ul>
@@ -46,6 +46,7 @@ export default {
       saved: [],
       items: [],
       index: 0,
+      itemCount: [],
       insert: false,
       max: Infinity
     };
@@ -54,6 +55,7 @@ export default {
     const { template, max } = this.init.side;
     this.template = this.templates.find(t => t.name === template);
     this.insert = this.template.insert;
+    this.itemCount = Array(this.template.contain.length).fill(0);
     this.initialItems();
   },
   methods: {
@@ -68,7 +70,7 @@ export default {
           return Object.assign({}, item, { qty: 0 });
         }
       });
-      
+
       this.max =
         index === 0
           ? this.init.side.max || this.template.contain[index].max || Infinity
@@ -86,11 +88,14 @@ export default {
     },
     moreQty(item) {
       const { autoJump } = this.template;
-      let qty = this.items.map(i => i.qty).reduce((a, b) => a + b, 0);
+      let qty = this.items.reduce((a, c) => a + c.qty, 0);
 
-      if (qty < this.max) item.qty++;
+      if (qty < this.max) {
+        item.qty++;
+        this.itemCount[this.index]++;
+      }
 
-      qty = this.items.map(i => i.qty).reduce((a, b) => a + b, 0);
+      qty = this.items.reduce((a, c) => a + c.qty, 0);
 
       if (autoJump && qty === this.max) {
         const maxPage = this.template.contain.length - 1;
@@ -99,6 +104,7 @@ export default {
     },
     resetQty(item, index) {
       item.qty = 0;
+      this.itemCount[this.index] = this.items.reduce((a, c) => a + c.qty, 0);
       this.items.splice(index, 1, item);
     },
     confirm() {
@@ -125,7 +131,7 @@ export default {
             single: parseFloat(price),
             price: (price * qty).toFixed(2)
           };
-          
+
           this.setChoiceSet(content);
         });
 
@@ -200,10 +206,10 @@ li {
   color: #656565;
   cursor: pointer;
   border-bottom: 1px solid #eee;
-  padding: 15px 20px 15px 15px;
+  padding: 15px 10px;
 }
 
-li span {
+.page {
   flex: 1;
 }
 
@@ -219,5 +225,11 @@ li.current {
 
 .current i {
   opacity: 1;
+}
+
+.count {
+  margin-right: 5px;
+  color: #009688;
+  float: right;
 }
 </style>
