@@ -337,6 +337,7 @@ div.options .inner {
   background: #fff;
   border-radius: 2px;
   padding: 5px 0px;
+  overflow-y: auto;
 }
 
 ul.options li {
@@ -414,14 +415,6 @@ p {
 p i {
   color: #ff9800;
   margin-right: 5px;
-}
-
-i.price {
-  position: absolute;
-  right: 0;
-  color: #656565;
-  cursor: pointer;
-  padding: 5px 9px;
 }
 
 .config .opt {

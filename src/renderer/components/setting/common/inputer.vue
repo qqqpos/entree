@@ -21,7 +21,7 @@ export default {
     },
     title: String,
     value: [String, Number, Array, Object],
-    length: [String, Number],
+    length: Number,
     disabled: {
       type: Boolean,
       default: false
@@ -37,7 +37,9 @@ export default {
     mask: String,
     model: {
       type: String,
-      default: Math.random().toString(36).substring(3,7)
+      default: Math.random()
+        .toString(36)
+        .substring(3, 7)
     },
     placeholder: [String, Number]
   },
@@ -77,5 +79,13 @@ textarea {
 
 textarea.center {
   text-align: center;
+}
+
+i {
+  position: absolute;
+  right: 0;
+  padding: 5px 10px;
+  color: #424242;
+  cursor: pointer;
 }
 </style>

@@ -44,8 +44,7 @@
             <div class="inner">
               <div class="due">
                 <span class="symbol">$</span>
-                <span v-if="!isThirdPartyPayment">{{payment.remain | decimal}}</span>
-                <span v-else>{{payment.remain + payment.tip | decimal}}</span>
+                <span>{{payment.remain + payment.tip | decimal}}</span>
               </div>
               <div class="addition" v-show="payment.discount > 0">
                 <span class="text">{{$t('text.includeDiscount')}}</span>
@@ -53,7 +52,7 @@
               </div>
               <div class="addition" v-show="payment.tip > 0">
                 <span class="text">{{$t('text.tip')}}</span>
-                <span class="value">{{payment.tip | decimal}}</span>
+                <span class="value">({{payment.tip | decimal}})</span>
               </div>
               <div class="addition" v-show="payment.gratuity > 0">
                 <span class="text">{{$t('text.includeGratuity')}}</span>
@@ -62,7 +61,7 @@
             </div>
           </div>
           <div class="fn">
-            <button class="btn" :disabled="!isThirdPartyPayment" @click="setTip">{{$t('button.setTip')}}</button>
+            <button class="btn" @click="setTip">{{$t('button.setTip')}}</button>
             <button class="btn" @click="openDiscount" :disabled="!discountable || this.order.split">{{$t('button.setDiscount')}}</button>
             <button class="btn" @click="save">{{$t('button.save')}}</button>
           </div>
@@ -265,7 +264,7 @@ export default {
       return (
         this.payment.remain <= 0 ||
         this.paidTotal === 0 ||
-        (this.total > 0 && this.total < this.tip)
+        (parseFloat(this.total) > 0 && parseFloat(this.total) < parseFloat(this.tip))
       );
     },
     ...mapGetters([
@@ -505,6 +504,8 @@ export default {
           .querySelector(`[data-anchor="${target}"]`)
           .classList.add("active");
       }
+
+      if(this.anchor === "paid") this.total = "0.00";
 
       this.reset = true;
     },
@@ -1265,7 +1266,7 @@ export default {
         if (this.total > this.tip) {
           this.paid = (this.total - this.tip).toFixed(2);
         } else {
-          this.paid = "0.00";
+          this.paid = this.total - this.tip > 0 ? (this.total - this.tip).toFixed(2) : "0.00";
         }
       }
 
@@ -1471,8 +1472,9 @@ export default {
       }
     },
     setTip() {
+      const { subtotal } = this.payment;
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject };
+        this.componentData = { resolve, reject, subtotal };
         this.component = "tiper";
       })
         .then(tip => {

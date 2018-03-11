@@ -1133,7 +1133,7 @@ export default {
     chinese: "中文",
     restrict: "严格模式",
     accessPin: "登陆密码",
-    hhmmss: "{i} 小时 {i} 分 {i} 秒",
+    hhmmss: "{i} 时 {i} 分 {i} 秒",
     salary: "时薪",
     workHour: "总工时",
     workSalary: "薪水",

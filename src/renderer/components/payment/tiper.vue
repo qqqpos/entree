@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import numPad from "../common/numpad"
+import numPad from "../common/numpad";
 export default {
   props: ["init"],
   components: { numPad },
@@ -29,10 +29,9 @@ export default {
   },
   methods: {
     confirm() {
-      let tip = this.tip.toFloat();
+      let tip = parseFloat(this.tip);
 
-      if (this.unit === "%")
-        tip = toFixed(this.init.payment.subtotal * tip / 100, 2);
+      if (this.unit === "%") tip = toFixed(this.init.subtotal * tip / 100, 2);
 
       this.init.resolve(tip);
     }

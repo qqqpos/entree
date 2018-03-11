@@ -1,6 +1,6 @@
 <template>
     <div class="popupMask setting dark center" @click.self="init.reject">
-        <div class="editor">
+        <div class="editor" v-show="!component">
             <header>
                 <h5>{{$t('title.edit')}}</h5>
                 <h3>{{$t('title.timecard')}}</h3>
@@ -8,8 +8,12 @@
             <div class="banner"></div>
             <div class="wrap">
                 <inputer title="text.date" v-model="log.date" placeholder="YYYY-MM-DD"></inputer>
-                <inputer title="text.clockIn" v-model="log.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##"></inputer>
-                <inputer title="text.clockOut" v-model="log.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##"></inputer>
+                <inputer title="text.clockIn" v-model="log.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
+                  <i class="fa fa-pencil-square" @click="edit('clockIn',log.clockIn)"></i>
+                </inputer>
+                <inputer title="text.clockOut" v-model="log.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
+                  <i class="fa fa-pencil-square" @click="edit('clockOut',log.clockOut)"></i>
+                </inputer>
                 <inputer title="text.tip" v-model.number="log.tip"></inputer>
                 <inputer title="text.salary" v-model.number="log.wage" :placeholder="init.operator.wage"></inputer>
                 <inputer title="text.note" v-model="log.note" type="textarea"></inputer>
@@ -22,17 +26,19 @@
                 <button class="btn" @click="confirm" :disabled="!valid">{{$t('button.confirm')}}</button>
             </footer>
         </div>
+        <div :is="component" :init="componentData"></div>
     </div>
 </template>
 
 <script>
+import picker from "./picker"
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 import checkbox from "../../common/checkbox";
 
 export default {
   props: ["init"],
-  components: { toggle, inputer, checkbox },
+  components: { picker,toggle, inputer, checkbox },
   computed: {
     valid() {
       const { wage, date, clockIn, clockOut } = this.log;
@@ -49,6 +55,8 @@ export default {
   },
   data() {
     return {
+      compoenntData: null,
+      component: null,
       log: Object.assign({}, this.init.log),
       op: this.$store.getters.op,
       lock: false
@@ -67,6 +75,17 @@ export default {
       });
   },
   methods: {
+    edit(target, value) {
+      value = value || moment().format("YYYY-MM-DD HH:mm:ss");
+      console.log(target, value);
+
+      new Promise((resolve,reject)=>{
+        this.componentData = {resolve,reject};
+        this.component = "picker";
+      }).then(()=>{
+        
+      }).catch(()=>this.$q())
+    },
     confirm() {
       Object.assign(this.log, {
         lock: this.lock,

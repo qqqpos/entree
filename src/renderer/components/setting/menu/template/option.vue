@@ -7,7 +7,7 @@
                 <h3>{{$t('button.option')}}</h3>
             </header>
             <div class="wrap">
-                <inputer title="text.alias" v-model="option.name" :autoFocus="true"></inputer>
+                <inputer title="text.alias" v-model="option.name" :autoFocus="true" :test="10"></inputer>
                 <inputer title="text.maxItem" v-model.number="option.max"></inputer>
                 <inputer title="text.startAt" v-model="option.startAt"></inputer>
                 <inputer title="text.overCharge" v-model="option.addition"></inputer>
@@ -25,18 +25,17 @@
 <script>
 import inputer from "../../common/inputer";
 export default {
-    props: ["init"],
-    components: { inputer },
-    data() {
-        return {
-            option: JSON.parse(JSON.stringify(this.init.option))
-        }
-    },
-    methods: {
-        confirm() {
-
-            this.init.resolve(this.option)
-        }
+  props: ["init"],
+  components: { inputer },
+  data() {
+    return {
+      option: JSON.parse(JSON.stringify(this.init.option))
+    };
+  },
+  methods: {
+    confirm() {
+      this.init.resolve(this.option);
     }
-}
+  }
+};
 </script>

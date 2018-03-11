@@ -34,8 +34,8 @@ export default {
 <style scoped>
 .option {
   position: absolute;
-  left: 5px;
-  bottom: 47px;
+  left: 0;
+  bottom: 41px;
   background: #fff;
   width: 220px;
   height: 448px;
