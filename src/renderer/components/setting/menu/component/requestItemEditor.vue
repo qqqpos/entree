@@ -15,7 +15,7 @@
       </div>
       <footer>
         <div class="opt">
-          <span class="del" @click="init.reject(true)" v-show="init.item._id">{{$t('button.delete')}}</span>
+          <span class="del" @click="remove" v-show="init.item._id">{{$t('button.delete')}}</span>
         </div>
         <button class="btn" @click="confirm">{{$t('button.done')}}</button>
       </footer>
@@ -54,6 +54,18 @@ export default {
     });
   },
   methods: {
+    remove() {
+      this.$socket.emit(
+        "[REQUEST] REMOVE_ITEM",
+        {
+          item: this.item,
+          categoryIndex: this.init.categoryIndex,
+          groupIndex: this.init.groupIndex,
+          index: this.init.index
+        },
+        () => this.init.resolve()
+      );
+    },
     confirm() {
       this.$socket.emit(
         "[REQUEST] UPDATE_ITEM",

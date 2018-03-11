@@ -119,7 +119,7 @@ export default {
         this.component = "itemEditor";
       })
         .then(this.refreshData)
-        .catch(del => this.$q());
+        .catch(() => this.$q());
     },
     updateSortedItem() {
       const items = [];

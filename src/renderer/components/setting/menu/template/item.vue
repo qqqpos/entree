@@ -106,7 +106,6 @@ export default {
         })
         .catch(del => {
           if (del) this.template.contain[this.index].contain.splice(index, 1);
-
           this.$q();
         });
     },
