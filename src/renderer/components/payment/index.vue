@@ -92,9 +92,10 @@
                   <span class="text">{{$t('text.tip')}}</span>
                   <span class="value">{{tip}}</span>
                 </div>
-                <div class="input">
+                <div class="input" @click="setAnchor($event)" data-anchor="total" data-format="money">
                   <span class="text">{{$t('text.total')}}</span>
-                  <span class="value">$ {{paidTotal | decimal}}</span>
+                  <span class="value paid">$ {{paidTotal | decimal}}</span>
+                  <span class="value total">$ {{total | decimal}}</span>
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="evenly" data-format="number">
                   <span class="text">{{$t('text.separate')}}
@@ -106,7 +107,7 @@
               <aside class="padCtrl">
                 <div @click="del">&#8592;</div>
                 <div @click="clear">C</div>
-                <div @click="charge" :class="{disabled:payment.remain <= 0 || paidTotal === 0}">&#8626;</div>
+                <div @click="charge" :class="{disabled:disableCashCharge}">&#8626;</div>
               </aside>
             </template>
             <template v-else-if="paymentType === 'CREDIT'">
@@ -260,6 +261,13 @@ export default {
       const total = parseFloat(this.paid) + parseFloat(this.tip);
       return isNumber(total) ? total : 0;
     },
+    disableCashCharge() {
+      return (
+        this.payment.remain <= 0 ||
+        this.paidTotal === 0 ||
+        (this.total > 0 && this.total < this.tip)
+      );
+    },
     ...mapGetters([
       "op",
       "app",
@@ -293,7 +301,8 @@ export default {
       current: 0,
       reset: true,
       paid: "0.00",
-      tip: "0.00"
+      tip: "0.00",
+      total: "0.00"
     };
   },
   created() {
@@ -520,12 +529,23 @@ export default {
           this[anchor] = val.length > 0 ? val.slice(0, -1) : val;
           break;
       }
+
+      if (anchor === "total") {
+        if (this.total > this.tip) {
+          this.paid = (this.total - this.tip).toFixed(2);
+        } else {
+          this.paid = "0.00";
+        }
+      }
+
       this.reset = false;
     },
     clear() {
       const { anchor, format } = document.querySelector(
         ".input.active"
       ).dataset;
+
+      if (this.anchor === "total") this.paid = "0.00";
 
       switch (format) {
         case "money":
@@ -1241,6 +1261,14 @@ export default {
           break;
       }
 
+      if (anchor === "total") {
+        if (this.total > this.tip) {
+          this.paid = (this.total - this.tip).toFixed(2);
+        } else {
+          this.paid = "0.00";
+        }
+      }
+
       this.reset = false;
     },
     openDiscount() {
@@ -1301,14 +1329,21 @@ export default {
     setQuickInput(val) {
       const { anchor } = document.querySelector(".input.active").dataset;
 
-      if (anchor === "tip") {
-        this.setAnchor("paid");
-        this.paid = "0.00";
-        this.tip = val.toFixed(2);
-        this.getQuickInput(this.payment.remain);
-      } else {
-        this.paid = val.toFixed(2);
+      switch (anchor) {
+        case "tip":
+          this.setAnchor("total");
+          this.paid = "0.00";
+          this.tip = val.toFixed(2);
+          this.getQuickInput(this.payment.remain + parseFloat(val));
+          break;
+        case "total":
+          this.total = val.toFixed(2);
+          this.paid = (val - this.tip).toFixed(2);
+          break;
+        default:
+          this.paid = val.toFixed(2);
       }
+
       this.reset = true;
     },
     getQuickInput(amount) {
@@ -1808,6 +1843,22 @@ section.quickInput {
 .disabled {
   opacity: 0.5;
   pointer-events: none;
+}
+
+.input.active .paid {
+  display: none;
+}
+
+.input.active .value.total {
+  display: inherit;
+}
+
+value.total {
+  display: none;
+}
+
+.input .value.total {
+  display: none;
 }
 
 @keyframes preview {

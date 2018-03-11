@@ -1,12 +1,8 @@
 <template>
   <div class="external" :class="{style:defaultStyle,disabled}">
-    <div class="inner" v-if="translate">
-      <span>{{$t(title)}}</span>
+    <div class="inner">
+      <span>{{translate ? $t(title) : title}}</span>
       <span class="tooltip">{{$t(tooltip)}}</span>
-    </div>
-    <div class="inner" v-else>
-      <span>{{title}}</span>
-      <span class="tooltip">{{tooltip}}</span>
     </div>
     <slot>
       <div class="icon" @click="$emit('open')">

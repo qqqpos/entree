@@ -41,7 +41,10 @@ export default {
       const dom = document.querySelector(".wrap.active");
       dom && dom.classList.remove("active");
 
-      document.querySelector(`#${target}`).classList.add("active");
+      this.$nextTick(() => {
+        document.querySelector(`#${target} input`).focus();
+        document.querySelector(`#${target}`).classList.add("active");
+      });
     }
   }
 };

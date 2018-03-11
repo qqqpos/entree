@@ -106,7 +106,12 @@ li {
 
 .sub .item {
   color: #666;
-  text-indent: 8px;
+}
+
+.sub .item:before {
+    content: "·";
+    color: rgba(154, 154, 154, 0.5);
+    padding: 0 2px;
 }
 
 .sub.target {
@@ -175,6 +180,10 @@ li {
 
 .hide {
   visibility: hidden;
+}
+
+.price.hide{
+  display: none;
 }
 
 .todo {

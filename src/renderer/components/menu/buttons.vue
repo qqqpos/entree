@@ -557,7 +557,7 @@ export default {
           return item;
         })
       );
-console.log(items);
+      
       return Object.assign(current, { content: items });
     },
     createTogo() {

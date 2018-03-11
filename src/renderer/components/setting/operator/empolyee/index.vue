@@ -9,7 +9,7 @@
         <span class="add" @click="create">{{$t('button.new')}}</span>
       </nav>
     </header>
-    <external :title="op.name" :tooltip="'type.'+op.role" v-for="(op,index) in operators" :key="index" @open="$emit('set',op)" :disabled="op.role === 'Owner' && !authorized"></external>
+    <external :title="op.name" :tooltip="'type.'+op.role" v-for="(op,index) in operators" :key="index" @open="$emit('set',op)" :disabled="op.role === 'Owner' && !authorized" :translate="false"></external>
     <div class="pages" v-if="list.length > 12">
       <pagination :of="list" :max="5" :contain="12" @page="setPage" class="f1"></pagination>
     </div>

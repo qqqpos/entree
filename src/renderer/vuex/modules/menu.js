@@ -173,7 +173,9 @@ const mutations = {
 
         if (assignSide) item.side = { zhCN: _zhCN, usEN: _usEN };
       }
-    } else {
+    } else if(ignore){
+      
+    }else{
       if (item.side.zhCN === _zhCN && item.side.usEN === _usEN) {
         item.total = data.function
           ? (item.qty * item.single).toFixed(2)

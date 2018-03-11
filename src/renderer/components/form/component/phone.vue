@@ -3,7 +3,7 @@
     <h4>{{$t('text.phone')}}</h4>
     <div class="wrap" id="phone">
       <i class="fa fa-phone icon"></i>
-      <input type="text" :value="value" @click="focus" @input="$emit('input',$event.target.value)">
+      <input type="text" :value="value" @click="focus" @input="$emit('input',$event.target.value)" maxlength="10">
     </div>
     <template v-if="dropdown === 'list'">
       <transition name="menu" appear>

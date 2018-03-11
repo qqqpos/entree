@@ -96,11 +96,9 @@ export default {
     setFocus(entry) {
       this.entry = entry;
 
-      this.$nextTick(() => {
-        this.caret = document.querySelector(
-          ".wrap.active input"
-        ).selectionStart;
-      });
+      setTimeout(()=>{
+        this.caret = document.querySelector(".wrap.active input").selectionStart;
+      })
     },
     input(char) {
       const value = this.customer[this.entry];

@@ -342,11 +342,9 @@ export default {
           this.addSubMenuItem(item);
           stop();
         }
-
         if (!manual && option[0]) {
-          option[0].template && this.config.display.autoTemplate
-            ? stop("template")
-            : next(item);
+          option[0].template ? stop("template"): next(item);
+          
           if (option[0].subMenu) stop("subMenu");
         }
 

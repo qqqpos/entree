@@ -68,6 +68,7 @@ export default {
           return Object.assign({}, item, { qty: 0 });
         }
       });
+      
       this.max =
         index === 0
           ? this.init.side.max || this.template.contain[index].max || Infinity

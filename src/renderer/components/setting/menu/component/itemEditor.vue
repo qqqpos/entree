@@ -435,12 +435,10 @@ i.price {
 }
 
 .config input {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  height: 30px;
-  border-radius: 4px;
-  border: none;
-  margin: 0 5px;
-  padding: 0 5px;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  padding: 5px;
+  margin:0 5px;
 }
 
 .config {

@@ -13,7 +13,7 @@
                     <i class="fa fa-percent icon"></i>
                 </inputer>
                 <div class="checkboxes">
-                    <checkbox v-model="department.contain" v-for="(category,index) in categories" :title="category" :key="index" :val="category" :multiple="true"></checkbox>
+                    <checkbox v-model="department.contain" v-for="(category,index) in categories" :title="category" :key="index" :val="category" :multiple="true" :translate="false"></checkbox>
                 </div>
             </div>
             <footer>
