@@ -1,5 +1,5 @@
 <template>
-    <div class="popupMask dark center setting">
+    <div class="popupMask dark center setting" @click.self="init.reject">
         <div class="editor">
             <header>
                 <h5></h5>

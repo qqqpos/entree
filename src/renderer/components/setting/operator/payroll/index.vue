@@ -11,6 +11,7 @@
             </div>
         </div>
         <external title="text.generatePayroll" @open="generate" v-show="valid"></external>
+        <external title="button.print" @open="print" v-show="payrolls"></external>
         <div :is="component" :init="componentData"></div>
     </div>
 </template>
@@ -19,10 +20,11 @@
 import calendar from "../../common/calendar";
 import checkbox from "../../common/checkbox";
 import external from "../../common/external";
+import dialoger from "../../../common/dialoger";
 
 export default {
-  props: ["config"],
-  components: { checkbox, external, calendar },
+  props: ["config", "payrolls"],
+  components: { checkbox, external, calendar, dialoger },
   computed: {
     valid() {
       return this.from && this.to && this.target.length > 0;
@@ -48,8 +50,7 @@ export default {
           "Cashier",
           "Waitstaff",
           "Bartender",
-          "Worker",
-          "ThirdParty"
+          "Worker"
         ];
         vm.operators = data
           .filter(d => d.role !== "Owner")
@@ -120,6 +121,35 @@ export default {
         to,
         target: this.target
       });
+    },
+    print() {
+      if (this.payrolls.length > 1) {
+        const prompt = {
+          title: "dialog.printPreference",
+          msg: "dialog.timecardReportSingletonMode",
+          buttons: [
+            { text: "button.separete", fn: "reject" },
+            { text: "button.unified", fn: "resolve" }
+          ]
+        };
+
+        this.$dialog(prompt)
+          .then(() => {
+            Printer.printTimecardReport(this.payrolls);
+            this.$q();
+          })
+          .catch(() => {
+            this.payrolls.forEach(
+              payroll =>
+                payroll.validSession.length > 0 &&
+                Printer.printTimecardReport([payroll])
+            );
+            this.$q();
+          });
+      } else {
+        Printer.printTimecardReport(this.payrolls);
+      }
+      console.log(this.payrolls);
     }
   }
 };

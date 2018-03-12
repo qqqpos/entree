@@ -103,7 +103,7 @@ const Printer = function (plugin, config, station) {
   this.printGiftCard = (title, card, bonus) => Giftcard.bind(this)(title, card, bonus);
   this.printCreditCard = (trans, config, reprint) => Creditcard.bind(this)(trans, config, reprint);
   this.printBatchReport = (data, detail) => BatchReport.bind(this)(data, detail);
-  this.printTimeCardReport = data => Timecard.bind(this)(data);
+  this.printTimecardReport = (data) => Timecard.bind(this)(data);
   this.printCashInReport = data => CashIn.bind(this)(data);
   this.printCashOutReport = (data, detail) => CashOut.bind(this)(data, detail);
   this.printSessionReport = data => Session.bind(this)(data);

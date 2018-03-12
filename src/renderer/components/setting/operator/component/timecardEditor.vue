@@ -31,14 +31,14 @@
 </template>
 
 <script>
-import picker from "./picker"
+import picker from "./picker";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 import checkbox from "../../common/checkbox";
 
 export default {
   props: ["init"],
-  components: { picker,toggle, inputer, checkbox },
+  components: { picker, toggle, inputer, checkbox },
   computed: {
     valid() {
       const { wage, date, clockIn, clockOut } = this.log;
@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      compoenntData: null,
+      componentData: null,
       component: null,
       log: Object.assign({}, this.init.log),
       op: this.$store.getters.op,
@@ -75,16 +75,18 @@ export default {
       });
   },
   methods: {
-    edit(target, value) {
-      value = value || moment().format("YYYY-MM-DD HH:mm:ss");
-      console.log(target, value);
+    edit(target, time) {
+      time = value || moment().format("YYYY-MM-DD HH:mm:ss");
 
-      new Promise((resolve,reject)=>{
-        this.componentData = {resolve,reject};
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, time };
         this.component = "picker";
-      }).then(()=>{
-        
-      }).catch(()=>this.$q())
+      })
+        .then(() => {
+
+          this.$q();
+        })
+        .catch(() => this.$q());
     },
     confirm() {
       Object.assign(this.log, {

@@ -11,7 +11,7 @@ const session = function (data) {
     function createReport() {
         const payment = `
         <section>\
-            <h4>Payments</h4>\
+            <h4>Payments Handled By ${data.for}</h4>\
             <table>\
                 <thead>\
                     <tr>\
@@ -63,13 +63,13 @@ const session = function (data) {
                 </div>\
                 <div class="type">\
                   <h3>${data.title}</h3>\
-                  <h5>${data.for}</h5>\
-                  <p>${data.date}</p>
+                  <h5>${data.date}</h5>\
                 </div>\
             </section>\
             ${payment + summary + departments}
             <footer>\
               <p>Thanks For Your Hard Work</p>\
+              <p>Print @ ${moment().format("YY-MM-DD HH:mm:ss")}</p>\
             </footer>`;
     }
 

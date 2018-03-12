@@ -1061,6 +1061,7 @@ export default {
     setting: "Setting",
     cashDrawer: "Cash Drawer",
     report: "Report",
+    sessionReport: "Session Report",
     order: "Order",
     insert: "Insert",
     items: "{i} Items",
@@ -1600,7 +1601,7 @@ export default {
     restrictPermission: "Directly deny access",
     temporaryPermission: "Temporary access via pin",
     itemSplit: "How many quantity you want to split?",
-    sessionReport: "Prompt session report dialog when logout",
+    sessionReport: "Allow to print personal session report",
     timecard: {
       forOne: "Enable Clock in/out",
       forAll: "All employees clock in/out",

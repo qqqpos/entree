@@ -337,7 +337,7 @@ tfoot tr {
   margin: 5px;
   background: #3f51b5;
   color: #fff;
-  padding: 0px 20px;
+  padding: 0px 15px;
   border-radius: 2px;
   display: flex;
   height: 58px;

@@ -46,7 +46,7 @@
           </div>
         </li>
         <li @click="openPayout" v-if="station.cashDrawer.enable">
-          <i class="fa fa-2x fa-money"></i>
+          <i class="fa fa-2x fa fa-hdd-o"></i>
           <div>
             <h3>{{$t('dock.payout')}}</h3>
             <h5>{{$t('dock.payoutTip')}}</h5>
@@ -596,7 +596,7 @@ export default {
       const report = {
         title: role + " Report",
         for: name,
-        date: moment().format("YYYY-MM-DD HH:mm:ss"),
+        date: today(),
         payments,
         guest,
         subtotal,

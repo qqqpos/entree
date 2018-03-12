@@ -11,6 +11,7 @@
                     <th class="time">{{$t('thead.totalWorkTime')}}</th>
                     <th class="time">{{$t('thead.validWorkTime')}}</th>
                     <th>{{$t('thead.salary')}}</th>
+                    <th>{{$t('thead.tip')}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                     <td class="time">{{format(payroll.totalTime)}}</td>
                     <td class="time">{{format(payroll.validTime)}}</td>
                     <td>$ {{payroll.salary | decimal}}</td>
+                    <td>{{payroll.tipTotal | decimal}}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -53,6 +55,6 @@ export default {
 
 <style scoped>
 .time {
-  width: 200px;
+  width: 185px;
 }
 </style>

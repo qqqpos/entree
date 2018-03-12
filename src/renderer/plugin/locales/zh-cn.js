@@ -1026,6 +1026,7 @@ export default {
     setting: "设定",
     cashDrawer: "钱箱",
     report: "报表",
+    sessionReport: "时段报表",
     order: "订单",
     insert: "插入",
     items: "{i} 个物品",
@@ -1568,7 +1569,7 @@ export default {
     restrictPermission: "当权限不足时直接拒绝",
     temporaryPermission: "允许输入密码来临时提升权限",
     itemSplit: "您想将选择的物品平摊成几份?",
-    sessionReport: "登出时候提示打印时段报表",
+    sessionReport: "允许打印个人时段报表",
     timecard: {
       forOne: "记录上下班打卡情况",
       forAll: "全体员工打卡上下班",
