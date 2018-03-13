@@ -544,23 +544,27 @@ export default {
       const { role, name } = this.op;
       let invoices = [];
       let tickets = [];
+      let title = role + " Report";
+      let subtitle = "Payments";
 
       switch (role) {
         case "Manager":
+          subTitle = "All Payments";
           invoices = transactions.slice();
-          tickets = this.history.filter(ticket => ticket.status === 1);
+          tickets = this.history.filter(t => t.status === 1);
           break;
         case "Cashier":
-          invoices = transactions.filter(payment => payment.cashier === name);
+          subTitle = "Payment Handled By " + name;
+          invoices = transactions.filter(p => p.cashier === name);
           tickets = this.history.filter(
-            ticket => ticket.cashier === name && ticket.status === 1
+            t => t.cashier === name && t.status === 1
           );
-
           break;
         case "Waitstaff":
-          invoices = transactions.filter(payment => payment.server === name);
+          subTitle = "Payment Handled By " + name;
+          invoices = transactions.filter(p => p.server === name);
           tickets = this.history.filter(
-            ticket => ticket.server === name && ticket.status === 1
+            t => t.server === name && t.status === 1
           );
       }
 
@@ -582,7 +586,8 @@ export default {
       const rounding = tickets.reduce((a, c) => a + c.payment.rounding, 0);
       const total = toFixed(subtotal + tax - discount + rounding, 2);
       const tip = invoices.reduce((a, c) => a + c.tip, 0);
-      const grandTotal = toFixed(total + tip, 2);
+      const gratuity = tickets.reduce((a, c) => a + c.payment.gratuity, 0);
+      const grandTotal = toFixed(total + tip + gratuity, 2);
       const settled = invoices.reduce((a, c) => a + c.actual, 0);
       const cash = invoices
         .filter(t => t.type === "CASH" || t.subType === "CASH")
@@ -593,16 +598,36 @@ export default {
         .reduce((a, c) => a + c.payment.balance, 0);
       const unsettledCount = tickets.filter(t => !t.settled).length;
 
+      const group = {};
+
+      payments.forEach(({ ticket, tip, amount }) => {
+        if (group.hasOwnProperty(ticket)) {
+          group[ticket].count++;
+          group[ticket].tip += tip;
+          group[ticket].amount += amount;
+        } else {
+          group[ticket] = {
+            type: ticket,
+            count: 1,
+            tip,
+            amount
+          };
+        }
+      });
+
       const report = {
-        title: role + " Report",
+        title,
+        subtitle,
         for: name,
         date: today(),
         payments,
+        group: Object.values(group).sort((a, b) => a.amount < b.amount),
         guest,
         subtotal,
         tax,
         total,
         tip,
+        gratuity,
         discount,
         rounding,
         grandTotal,
