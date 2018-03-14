@@ -42,6 +42,11 @@
         <figcaption>{{$t('setting.chart')}}</figcaption>
         <p>{{$t('setting.chartTip')}}</p>
       </router-link>
+      <router-link tag="figure" :to="{name:'Setting.debug'}">
+        <i class="fa fa-2x fa-bug"></i>
+        <figcaption>{{$t('setting.tool')}}</figcaption>
+        <p>{{$t('setting.troubleshooting')}}</p>
+      </router-link>
       <router-link tag="figure" :to="{name:'Dashboard'}">
         <i class="fa fa-2x fa-external-link"></i>
         <figcaption>{{$t('setting.exit')}}</figcaption>

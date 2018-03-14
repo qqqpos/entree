@@ -4,12 +4,12 @@
     <text-input title="text.mac" v-model="station.mac" :disabled="true"></text-input>
     <text-input title="text.username" v-model="station.username" :disabled="true"></text-input>
     <toggle title="text.autoAwake" v-model="station.wol" @update="updateAwake"></toggle>
-    <external title="setting.cashDrawer" @open="$router.push({ name: 'Setting.station.cashdrawer'})"></external>
+    <external title="setting.cashDrawer" @open="$router.push({ name: 'Setting.station.cashdrawer'})" :tooltip="station.cashDrawer.enable ? 'text.enable':'text.disable'"></external>
     <text-list title="setting.receiptPrinter" v-model="station.receipt" :opts="printers" @update="updateReceipt"></text-list>
     <external title="setting.printerGroup" @open="$router.push({name:'Setting.station.printers'})" :tooltip="$t('text.stationPrinters',station.printers.length)"></external>
     <text-list title="setting.terminal" v-model="station.terminal" :opts="terminals" @update="updateTerminal"></text-list>
-    <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})"></external>
-    <external title="setting.poleDisplay" tooltip="tip.poleDisplay" @open="$router.push({name:'Setting.station.poleDisplay'})"></external>
+    <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callid.enable ? 'text.enable':'text.disable'"></external>
+    <external title="setting.poleDisplay" :tooltip="station.cashDrawer.enable ? 'text.enable':'text.disable'" @open="$router.push({name:'Setting.station.poleDisplay'})"></external>
     <external title="setting.weightScale" @open="editScale"></external>
     <toggle title="setting.autoLock" tooltip="tip.autoLock" v-model="station.autoLock.enable" @update="updateAutoLock">
       <transition name="dropdown">

@@ -2,7 +2,7 @@
   <div>
     <range-tab @update="fetchData" initial="currentQuarter"></range-tab>
     <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
-    <table>
+    <!-- <table>
       <thead>
         <tr>
           <th></th>
@@ -21,7 +21,7 @@
           <td>{{report.note}}</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
 </template>
 

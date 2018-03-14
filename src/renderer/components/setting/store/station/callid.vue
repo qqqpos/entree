@@ -9,7 +9,6 @@
         <toggle title="setting.callerId" v-model="callid.enable"></toggle>
         <text-list title="text.port" v-model="callid.port" :opts="ports"></text-list>
         <text-list title="text.command" v-model="callid.command" :opts="commands"></text-list>
-        <toggle title="setting.saveLog" tooltip="tip.saveCallLog" v-model="callid.save"></toggle>
       </div>
 </template>
 

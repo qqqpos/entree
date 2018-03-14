@@ -61,7 +61,7 @@ header {
 }
 
 label {
-  border: 2px solid #eee;
+  border: 2px solid transparent;
   padding: 5px 10px 5px 40px;
   width: 250px;
   margin: 5px 20px 0 0;
@@ -70,6 +70,7 @@ label {
   flex-direction: column;
   position: relative;
   background: #fff;
+  box-shadow: 0 1px 2px rgba(181, 156, 156, 0.5);
 }
 
 label:before {

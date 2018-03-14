@@ -1,5 +1,5 @@
 <template>
-    <div class="popupMask center dark" @click.self="init.reject">
+    <div class="popupMask center dark setting" @click.self="init.reject">
         <div class="capture">
             <i class="fa info loader"></i>
             <h3>{{message}}</h3>

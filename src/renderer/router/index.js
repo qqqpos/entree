@@ -528,6 +528,16 @@ export default new Router({
                   component: require("../components/setting/chart/compare")
                 }
               ]
+            }, {
+              path: 'debug',
+              component: require("../components/setting/debug/nav"),
+              children: [
+                {
+                  path: "/",
+                  name: "Setting.debug",
+                  component: require("../components/setting/debug/index")
+                }
+              ]
             }
           ]
         }
