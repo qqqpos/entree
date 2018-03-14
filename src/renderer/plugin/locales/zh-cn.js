@@ -1240,7 +1240,7 @@ export default {
     compare: "对比"
   },
   setting: {
-    softwareSetting: "UnitedPOS 后台设置",
+    softwareSetting: "后台设置",
     store: "店面",
     storeTip: "资料 · 税率 · 工作站 · 座位",
     menu: "菜单",

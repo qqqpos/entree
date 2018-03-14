@@ -6,7 +6,7 @@
         <div v-if="store.matrix.enable" class="opt">
           <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect"></switches>
           <inputer title="text.coordinate" v-model="store.matrix.coordinate" @update="updateStoreCoordinate"></inputer>
-          <inputer title="text.api" v-model="store.matrix.api" @blur="updateAPI"></inputer>
+          <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI"></inputer>
         </div>
       </transition>
     </toggle>
@@ -52,8 +52,7 @@ export default {
         value
       });
     },
-    updateAPI() {
-      let value = this.store.matrix.api;
+    updateAPI(value) {
       this.update({
         key: "store.matrix.api",
         value

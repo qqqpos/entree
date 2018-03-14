@@ -236,7 +236,7 @@ export default {
 h5 {
   color: #666;
   font-weight: normal;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 nav.filter {

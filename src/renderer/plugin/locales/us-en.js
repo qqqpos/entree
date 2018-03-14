@@ -429,7 +429,8 @@ export default {
     customerProfile: "Customer Info",
     ticketProfile: "Ticket Info",
     reportTip: "Report Tips",
-    giftcardStats: "Gift Card Stats"
+    giftcardStats: "Gift Card Stats",
+    departments: "Departments"
   },
   dialog: {
     maintenance: "Maintenance",
@@ -1274,7 +1275,7 @@ export default {
     compare: "Compare"
   },
   setting: {
-    softwareSetting: "UnitedPOS Setting",
+    softwareSetting: "POS Setting",
     store: "Store",
     storeTip: "Info · Tax · Station · Table",
     menu: "Menu",
@@ -1569,7 +1570,7 @@ export default {
     taxOnDeliveryCharge: "Tax on delivery charge",
     thirdPartyProvider: "Select your third party service provider",
     paidRecords: "#{i} ticket has {i} payment records",
-    foundRecords: "Found {i} transactions",
+    foundRecords: "Found {i} records",
     forGiftCard: "Gift Card ( {i} )",
     payout: "Detail note on purchasing",
     receiptDefaultAction:

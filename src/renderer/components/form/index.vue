@@ -168,7 +168,10 @@ export default {
       const zipCode = this.customer.zipCode || this.store.zipCode;
       const { enable, api, coordinate } = this.store.matrix;
 
-      if (!enable || !api || !address) return;
+      if (!enable || !api || !address) {
+        this.$bus.emit("GOOGLE_ADDRESS_QUERY", false);
+        return
+      };
 
       try {
         await this.calculateDistance({ address, city, zipCode });
@@ -204,7 +207,7 @@ export default {
 
         this.$socket.emit("[GOOGLE] ADDRESS", url, raw => {
           const result = JSON.parse(raw);
-
+          
           if (result.status === "OK") {
             let addresses = result.destination_addresses;
 
@@ -230,7 +233,7 @@ export default {
               const distance = matrix.distance.text;
               const duration = matrix.duration.text;
 
-              if (address.indexOf(this.customer.address.trim() !== -1)) {
+              if (address.indexOf(this.customer.address.trim()) !== -1) {
                 this.setCustomer({
                   address,
                   city,
