@@ -264,7 +264,8 @@ export default {
       return (
         this.payment.remain <= 0 ||
         this.paidTotal === 0 ||
-        (parseFloat(this.total) > 0 && parseFloat(this.total) < parseFloat(this.tip))
+        (parseFloat(this.total) > 0 &&
+          parseFloat(this.total) < parseFloat(this.tip))
       );
     },
     ...mapGetters([
@@ -505,7 +506,7 @@ export default {
           .classList.add("active");
       }
 
-      if(this.anchor === "paid") this.total = "0.00";
+      if (this.anchor === "paid") this.total = "0.00";
 
       this.reset = true;
     },
@@ -1266,7 +1267,10 @@ export default {
         if (this.total > this.tip) {
           this.paid = (this.total - this.tip).toFixed(2);
         } else {
-          this.paid = this.total - this.tip > 0 ? (this.total - this.tip).toFixed(2) : "0.00";
+          this.paid =
+            this.total - this.tip > 0
+              ? (this.total - this.tip).toFixed(2)
+              : "0.00";
         }
       }
 
@@ -1494,6 +1498,7 @@ export default {
           const { done } = this.station.autoLock;
           if (this.ticket.type === "BUFFET") {
             this.resetMenu();
+            this.setOrder({ type: "BUFFET" });
             this.exit();
           } else {
             if (done) {

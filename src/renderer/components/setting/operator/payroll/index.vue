@@ -3,10 +3,13 @@
         <external title="text.from" @open="setFromDate" :tooltip="format(from)"></external>
         <external title="text.to" @open="setToDate" :tooltip="format(to)"></external>
         <div>
-            <p>{{$t('text.selectEmployee')}}</p>
+            <div class="text">
+              <span class="f1" @dblclick="selectAll">{{$t('text.selectEmployee')}}</span>
+              <i class="fa fa-sort-alpha-asc" @click="resort()"></i>
+            </div>
             <div class="employee">
                 <checkbox v-for="(operator,index) in operators" :key="index" :title="operator.name" :val="operator._id" v-model="target" :multiple="true">
-                    <span class="role">({{operator.role}})</span>
+                    <span class="role">({{$t('type.'+operator.role)}})</span>
                 </checkbox>
             </div>
         </div>
@@ -38,7 +41,8 @@ export default {
       range: "week",
       from: "",
       to: "",
-      target: []
+      target: [],
+      alphabet: false
     };
   },
   beforeRouteEnter: (to, from, next) => {
@@ -60,7 +64,7 @@ export default {
           .map(op => ({
             _id: op._id,
             name: op.name,
-            role: vm.$t("type." + op.role)
+            role: op.role
           }));
       });
     });
@@ -110,6 +114,30 @@ export default {
         })
         .catch(() => this.$q());
     },
+    selectAll() {
+      this.target =
+        this.target.length === 0 ? this.operators.map(e => e._id) : [];
+    },
+    resort() {
+      this.alphabet = !this.alphabet;
+
+      if (this.alphabet) {
+        this.operators.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        const sort = [
+          "Owner",
+          "Manager",
+          "Cashier",
+          "Waitstaff",
+          "Bartender",
+          "Worker"
+        ];
+
+        this.operators.sort(
+          (a, b) => (sort.indexOf(a.role) > sort.indexOf(b.role) ? 1 : -1)
+        );
+      }
+    },
     generate() {
       const from = this.from
         .hours(4)
@@ -149,7 +177,6 @@ export default {
       } else {
         Printer.printTimecardReport(this.payrolls);
       }
-      console.log(this.payrolls);
     }
   }
 };
@@ -160,8 +187,15 @@ export default {
   color: rgba(0, 0, 0, 0.75);
 }
 
-p {
+.text {
   padding: 15px 20px;
+  display: flex;
+}
+
+.text i {
+  padding: 0 12px;
+  color: #555555;
+  cursor: pointer;
 }
 
 .employee {
