@@ -1181,7 +1181,8 @@ export default {
     moreOption: "更多选项",
     historyInvoice: "历史订单",
     pickupList: "来取列表",
-    portionDisplay: "只显示部分的数据"
+    portionDisplay: "只显示部分的数据",
+    groupByDepartments: "按部门分类物品"
   },
   nav: {
     store: "店面",

@@ -1216,7 +1216,8 @@ export default {
     moreOption: "More Option",
     historyInvoice: "History Invoice",
     pickupList: "Pick Up List",
-    portionDisplay: "Only display limited Data"
+    portionDisplay: "Only display limited Data",
+    groupByDepartments: "Group By Departments"
   },
   nav: {
     store: "Store",

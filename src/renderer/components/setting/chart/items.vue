@@ -2,6 +2,9 @@
     <div>
         <range-tab @update="fetchData" initial="currentMonth"></range-tab>
         <div ref="chart" style="width: 100%; height: 697px;"></div>
+        <div id="toggle">
+          <switches title="text.groupByDepartments" v-model="department" @input="toggleGroup"></switches>
+        </div>
     </div>
 </template>
 
@@ -15,10 +18,12 @@ export default {
   data() {
     return {
       range: {},
-      department: false
+      department: false,
+      departments: []
     };
   },
   created() {
+    this.departments = this.$store.getters.departments;
     this.fetchData();
   },
   methods: {
@@ -33,60 +38,93 @@ export default {
 
         range = { from, to };
 
-        this.$socket.emit("[CHART] ITEMS", { from, to }, result =>
-          this.group(result)
+        this.$socket.emit(
+          "[CHART] ITEMS",
+          { from, to },
+          result =>
+            this.department
+              ? this.groupByDepartment(result)
+              : this.groupByCategory(result)
         );
       } else {
         const { from, to } = range;
 
-        this.$socket.emit("[CHART] ITEMS", { from, to }, result =>
-          this.group(result)
+        this.$socket.emit(
+          "[CHART] ITEMS",
+          { from, to },
+          result =>
+            this.department
+              ? this.groupByDepartment(result)
+              : this.groupByCategory(result)
         );
       }
 
       this.range = range;
     },
-    group(data) {
+    toggleGroup(){
+      this.fetchData(this.range);
+    },
+    groupByCategory(data) {
       let grouped = {};
 
-      if (this.department) {
-      } else {
-        data.forEach(({ category, count, total, usEN, zhCN }) => {
-          if (grouped.hasOwnProperty(category)) {
-            grouped[category].count += count;
-            grouped[category].total += count;
-            grouped[category].items.push({
-              usEN,
-              zhCN,
-              count,
-              total
-            });
-          } else {
-            grouped[category] = {
-              color: randomColor({
-                luminosity: "monochrome",
-                hue: "random"
-              }),
-              category,
-              count,
-              total,
-              items: [
-                {
-                  usEN,
-                  zhCN,
-                  count,
-                  total
-                }
-              ]
-            };
-          }
-        });
-      }
+      data.forEach(({ category, count, total, usEN, zhCN }) => {
+        if (grouped.hasOwnProperty(category)) {
+          grouped[category].count += count;
+          grouped[category].total += total;
+          grouped[category].items.push({
+            usEN,
+            zhCN,
+            count,
+            total
+          });
+        } else {
+          grouped[category] = {
+            color: randomColor({
+              luminosity: "monochrome",
+              hue: "random"
+            }),
+            category,
+            count,
+            total,
+            items: [
+              {
+                usEN,
+                zhCN,
+                count,
+                total
+              }
+            ]
+          };
+        }
+      });
 
       this.initialChartData(
         Object.values(grouped).map(g =>
           Object.assign(g, { total: toFixed(g.total, 2) })
         )
+      );
+    },
+    groupByDepartment(data) {
+      const departments = this.departments.map(dep =>
+        Object.assign({}, dep, {
+          count: 0,
+          total: 0,
+          color: randomColor(),
+          category: dep.usEN
+        })
+      );
+
+      data.forEach(({ category, count, total, usEN, zhCN }) => {
+        departments.forEach(dep => {
+          if (dep.contain.includes(category)) {
+            dep.count += count;
+            dep.total += total;
+          }
+        });
+      });
+
+      this.initialChartData(
+        departments.map(g => Object.assign(g, { total: toFixed(g.total, 2) }))
       );
     },
     initialChartData(dataProvider) {
@@ -154,3 +192,15 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#toggle {
+  position: absolute;
+  width: 250px;
+  top: 73px;
+  left: 78px;
+  padding: 0 15px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+</style>
