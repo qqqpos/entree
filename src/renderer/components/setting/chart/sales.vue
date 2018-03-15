@@ -36,7 +36,7 @@ export default {
       reports: []
     };
   },
-  mounted() {
+  created() {
     this.fetchData();
   },
   methods: {

@@ -523,9 +523,9 @@ export default new Router({
                   component: require("../components/setting/chart/source")
                 },
                 {
-                  path: "compare",
-                  name: "Setting.chart.compare",
-                  component: require("../components/setting/chart/compare")
+                  path: "items",
+                  name: "Setting.chart.items",
+                  component: require("../components/setting/chart/items")
                 }
               ]
             }, {
