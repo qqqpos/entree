@@ -94,7 +94,7 @@ export default {
                 lineAlpha: 1,
                 fontSize: "18",
                 value: average,
-                lineColor: "#FF5722",
+                lineColor: "#FF5722"
               }
             ],
             position: "left"
@@ -113,6 +113,8 @@ export default {
             valueField: "value",
             lineThickness: 1,
             lineColor: "#20acd4",
+            fillAlphas: 0.1,
+            fillColorsField: "lineColor",
             type: "smoothedLine",
             useLineColorForBulletBorder: true,
             dashLength: 5,
@@ -140,7 +142,7 @@ export default {
         },
         export: {
           enabled: true,
-          pageOrigin:false,
+          pageOrigin: false,
           fileName: "Daily Sales Report",
           menuReviver: function(item, li) {
             if (item.format === "XLSX" || item.format === "PDF")

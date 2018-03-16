@@ -2,7 +2,7 @@
     <div>
         <range-tab @update="fetchData" initial="currentMonth"></range-tab>
         <div ref="chart" style="width: 100%; height: 697px;"></div>
-        <div id="toggle">
+        <div id="toggle" v-show="departments.length">
           <switches title="text.groupByDepartments" v-model="department" @input="toggleGroup"></switches>
         </div>
     </div>
@@ -61,7 +61,7 @@ export default {
 
       this.range = range;
     },
-    toggleGroup(){
+    toggleGroup() {
       this.fetchData(this.range);
     },
     groupByCategory(data) {
@@ -128,14 +128,16 @@ export default {
       );
     },
     initialChartData(dataProvider) {
+      dataProvider.sort((a, b) => (a.total > b.total ? -1 : 1));
+
       const chart = AmCharts.makeChart(this.$refs.chart, {
         type: "pie",
         startDuration: 0,
         theme: "light",
+        marginTop: "100",
         addClassNames: true,
         legend: {
-          position: "right",
-          marginRight: 100,
+          position: "bottom",
           autoMargins: false
         },
         innerRadius: "30%",
@@ -169,8 +171,22 @@ export default {
         titleField: "category",
         colorField: "color",
         labelColorField: "color",
+        titles: [
+          {
+            text: this.$t(
+              "text.categorySalesFromDateRange",
+              moment(this.range.from).format("YYYY-MM-DD"),
+              moment(this.range.to).format("YYYY-MM-DD")
+            )
+          }
+        ],
         export: {
-          enabled: true
+          enabled: true,
+          fileName: this.$t(
+            "text.categorySalesFromDateRange",
+            moment(this.range.from).format("YY-MM-DD"),
+            moment(this.range.to).format("YY-MM-DD")
+          )
         }
       });
 
@@ -200,7 +216,5 @@ export default {
   top: 73px;
   left: 78px;
   padding: 0 15px;
-  border-radius: 4px;
-  border: 1px solid #e0e0e0;
 }
 </style>

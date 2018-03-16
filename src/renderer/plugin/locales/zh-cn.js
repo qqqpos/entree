@@ -1176,6 +1176,7 @@ export default {
     invoiceEdit: "被 {i} 修改过",
     rightClickPaste: "右键粘贴配菜",
     ticketTypeFromDateRange: "从 {i} 到 {i} 订单类型比例",
+    categorySalesFromDateRange: "从 {i} 到 {i} 菜单类别销售比例",
     beAdvised: "请注意此客人",
     times: "{i} 次",
     moreOption: "更多选项",

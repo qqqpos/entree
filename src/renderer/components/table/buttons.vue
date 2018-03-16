@@ -16,21 +16,21 @@
       <i class="fa fa-link"></i>
       <span class="text">{{$t('button.combineTicket')}}</span>
     </button>
+    <button class="btn" @click="settle" :disabled="!currentTable">
+      <i class="fa fa-money"></i>
+      <span class="text">{{$t('button.payment')}}</span>
+    </button>   
+    <button class="btn" @click="split">
+      <i class="fa fa-clone"></i>
+      <span class="text">{{$t('button.split')}}</span>
+    </button> 
     <button class="btn" @click="prePayment">
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
-    <button class="btn" @click="settle">
-      <i class="fa fa-money"></i>
-      <span class="text">{{$t('button.payment')}}</span>
-    </button>
     <button class="btn" @click="switchStaff">
       <i class="fa fa-user-times"></i>
       <span class="text">{{$t('button.switch')}}</span>
-    </button>
-    <button class="btn" @click="split">
-      <i class="fa fa-clone"></i>
-      <span class="text">{{$t('button.split')}}</span>
     </button>
     <button class="btn" @click="exit">
       <i class="fa fa-times"></i>

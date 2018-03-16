@@ -12,15 +12,15 @@
       <i class="fa fa-ban"></i>
       <span class="text">{{$t('button.void')}}</span>
     </button>
-    <button class="btn" @click="isSettled" :disabled="order.settled">
-      <i class="fa fa-money"></i>
-      <span class="text">{{$t('button.payment')}}</span>
+    <button class="btn" @click="combine" :disabled="true">
+      <i class="fa fa-link"></i>
+      <span class="text">{{$t('button.combine')}}</span>
     </button>
     <button class="btn" @click="receipt">
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
-    <button class="btn" @click="print" @contextmenu="rePrint">
+    <button class="btn" @click="print">
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.print')}}</span>
     </button>
@@ -52,27 +52,23 @@
 import { mapGetters, mapActions } from "vuex";
 
 import Calendar from "./component/calendar";
-import paymentMark from "../payment/mark";
 import Dialoger from "../common/dialoger";
-import loger from "../payment/loger";
 import transaction from "./transaction";
 import Reason from "./component/reason";
-import Payment from "../payment/index";
 import reporter from "../report/index";
 import unlock from "../common/unlock";
 import ledger from "../ledger/index";
+import loger from "../payment/loger";
 import Terminal from "./terminal";
 
 export default {
   props: ["date"],
   components: {
-    paymentMark,
     transaction,
     ledger,
     Calendar,
     Dialoger,
     Terminal,
-    Payment,
     unlock,
     Reason,
     reporter,
@@ -257,50 +253,18 @@ export default {
         })
         .catch(() => this.$q());
     },
-    isSettled() {
-      if (this.isEmptyTicket) return;
-      if (this.order.status === 0) {
-        this.$dialog({
-          title: "dialog.orderVoided",
-          msg: "dialog.settleVoidedOrder",
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
-        }).then(() => this.$q());
-        return;
-      }
-      this.order.settled
-        ? this.handleSettledInvoice()
-        : this.order.source === "POS"
-          ? this.$p("Payment")
-          : this.askSettleType();
-    },
-    handleSettledInvoice() {
-      this.$dialog({
-        title: "dialog.orderSettled",
-        msg: "dialog.orderSettledTip",
-        buttons: [{ text: "button.confirm", fn: "resolve" }]
-      }).then(() => this.$q());
-    },
-    askSettleType() {
-      this.$dialog({
-        type: "question",
-        title: "dialog.thirdPartyInvoice",
-        msg: "dialog.thirdPartyInvoiceTip",
-        buttons: [
-          { text: "button.pay", fn: "reject" },
-          { text: "button.markAsPaid", fn: "resolve" }
-        ]
-      })
-        .then(() => this.$p("paymentMark"))
-        .catch(() => this.$p("Payment", { regular: true }));
-    },
+    combine() {},
     print() {
       if (this.isEmptyTicket) return;
 
-      const order = JSON.parse(JSON.stringify(this.order));
-      order.split ? this.askSplitPrint(order) : this.printTicket(order);
+      if (this.order.print) {
+        this.rePrint();
+      } else {
+        const order = JSON.parse(JSON.stringify(this.order));
+        order.split ? this.askSplitPrint(order) : this.printTicket(order);
+      }
     },
     rePrint() {
-      if (this.isEmptyTicket) return;
       const order = JSON.parse(JSON.stringify(this.order));
 
       Object.assign(order, {
@@ -318,9 +282,10 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() => {
-          order.split ? this.askSplitPrint(order) : this.printTicket(order);
-        })
+        .then(
+          () =>
+            order.split ? this.askSplitPrint(order) : this.printTicket(order)
+        )
         .catch(() => this.$q());
     },
     receipt() {

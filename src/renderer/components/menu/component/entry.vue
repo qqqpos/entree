@@ -9,7 +9,7 @@
                     <i class="fa fa-angle-double-up fa-2x" @click="closeDropDown" v-else></i>
                     <transition name="fadeDown">
                         <div v-show="option" class="dropDown">
-                            <checkbox v-model="devices" :val="printer" :multiple="true" :title="printer" class="printer" v-for="(printer,index) in printers" :key="printer" @input="check"></checkbox>
+                            <checkbox v-model="devices" :val="printer" :multiple="true" :title="printer" class="printer" v-for="printer in printers" :key="printer" @input="check"></checkbox>
                             <checkbox v-model="toggle" title="button.selectAll" @input="selectAll"></checkbox>
                         </div>
                     </transition>
@@ -55,6 +55,7 @@ export default {
     this.$bus.on("clear", this.clear);
 
     this.printers = Object.keys(this.config.printers);
+    this.devices = this.printers.slice();
   },
   mounted() {
     this.$refs.item.focus();

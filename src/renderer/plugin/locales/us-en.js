@@ -1211,6 +1211,7 @@ export default {
     invoiceEdit: "Edited by {i}",
     rightClickPaste: "Right Click To Paste Side Option",
     ticketTypeFromDateRange: "Ticket Type Ratio from {i} to {i}",
+    categorySalesFromDateRange: "Category Sales Ratio from {i} to {i}",
     beAdvised: "Please Be Advised",
     times: "{i} time(s)",
     moreOption: "More Option",

@@ -1,16 +1,16 @@
 <template>
   <div>
-    <button class="btn" @click="thirdParty" :disabled="disable">
-      <i class="fa fa-google-wallet"></i>
-      <span class="text">{{$t('button.thirdParty')}}</span>
+    <button class="btn" @click="isSettled" :disabled="order.settled">
+      <i class="fa fa-money"></i>
+      <span class="text">{{$t('button.payment')}}</span>
     </button>
     <button class="btn" @click="split" :disabled="disable">
       <i class="fa fa-clone"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
-    <button class="btn" @click="combine" :disabled="true">
-      <i class="fa fa-link"></i>
-      <span class="text">{{$t('button.combine')}}</span>
+    <button class="btn" @click="thirdParty" :disabled="disable">
+      <i class="fa fa-google-wallet"></i>
+      <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
     <button class="btn" @click="discount" :disabled="disable || !discountable">
       <i class="fa fa-tag"></i>
@@ -20,7 +20,7 @@
       <i class="fa fa-times"></i>
       <span class="text">{{$t('button.exit')}}</span>
     </button>
-    <button class="btn" @click="driver" :disabled="order.type !== 'DELIVERY' || !assignable">
+    <button class="btn" @click="driver" :disabled="!assignable">
       <i class="fa fa-id-card-o"></i>
       <span class="text">{{$t('button.driver')}}</span>
     </button>
@@ -30,16 +30,25 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import thirdPartyPayment from "../payment/mark";
+import paymentMarker from "../payment/mark";
 import discount from "../payment/discount";
 import dialoger from "../common/dialoger";
 import driver from "./component/driver";
+import payment from "../payment/index";
 import viewer from "../split/viewer";
 import split from "../split/index";
 
 export default {
   props: ["date"],
-  components: { driver, dialoger, split, discount, viewer, thirdPartyPayment },
+  components: {
+    split,
+    driver,
+    viewer,
+    payment,
+    dialoger,
+    discount,
+    paymentMarker
+  },
   data() {
     return {
       componentData: null,
@@ -61,17 +70,59 @@ export default {
             this.componentData = { resolve, reject, splits };
             this.component = "viewer";
           })
-            .then(order => this.$open("thirdPartyPayment", { order }))
+            .then(order => this.$open("paymentMarker", { order }))
             .catch(() => this.$q());
         });
       } else {
-        this.$open("thirdPartyPayment");
+        this.$open("paymentMarker");
       }
     },
     split() {
       this.$open("split");
     },
-    combine() {},
+    isSettled() {
+      if (this.isEmptyTicket) return;
+
+      if (this.order.status === 0) {
+        const prompt = {
+          title: "dialog.orderVoided",
+          msg: "dialog.settleVoidedOrder",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+
+        this.$dialog(prompt).then(() => this.$q());
+        return;
+      }
+      this.order.settled
+        ? this.handleSettledInvoice()
+        : this.order.source === "POS"
+          ? this.$p("payment")
+          : this.askSettleType();
+    },
+    handleSettledInvoice() {
+      const prompt = {
+        title: "dialog.orderSettled",
+        msg: "dialog.orderSettledTip",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+
+      this.$dialog(prompt).then(() => this.$q());
+    },
+    askSettleType() {
+      const prompt = {
+        type: "question",
+        title: "dialog.thirdPartyInvoice",
+        msg: "dialog.thirdPartyInvoiceTip",
+        buttons: [
+          { text: "button.pay", fn: "reject" },
+          { text: "button.markAsPaid", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.$p("paymentMarker"))
+        .catch(() => this.$p("payment", { regular: true }));
+    },
     discount() {
       this.$socket.emit("[COUPON] LIST", coupons => {
         new Promise((resolve, reject) => {

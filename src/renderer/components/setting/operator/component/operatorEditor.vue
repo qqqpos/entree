@@ -7,7 +7,7 @@
             </header>
             <div class="banner"></div>
             <div class="wrap">
-                <inputer title="text.name" v-model.trim="name" :autoFocus="true"></inputer>
+                <inputer title="text.name" v-model.trim="name" :autoFocus="true" length="15"></inputer>
                 <inputer title="text.accessPin" v-model.trim="pin"></inputer>
                 <inputer title="text.salary" v-model.number="wage"></inputer>
                 <selector title="text.role" v-model="role" :opts="roles"></selector>

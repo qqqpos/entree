@@ -104,10 +104,10 @@
       <i class="fa fa-commenting-o"></i>
       <span class="text">{{$t('button.request')}}</span>
     </div>
-    <button class="btn" @click="settle" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
-      <i class="fa fa-money"></i>
-      <span class="text">{{$t('button.payment')}}</span>
-    </button>
+    <div class="btn" @click="promotion">
+      <i class="fa fa-tags"></i>
+      <span class="text">{{$t("button.coupon")}}</span>
+    </div>
     <div class="btn" @click="openTimer">
       <i class="fa fa-clock-o"></i>
       <span class="text">{{$t('button.timer')}}</span>
@@ -116,10 +116,10 @@
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.print')}}</span>
     </button>
-    <div class="btn" @click="promotion">
-      <i class="fa fa-tags"></i>
-      <span class="text">{{$t("button.coupon")}}</span>
-    </div>
+    <button class="btn" @click="settle" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
+      <i class="fa fa-money"></i>
+      <span class="text">{{$t('button.payment')}}</span>
+    </button>
     <div class="btn" @click="openSplit">
       <i class="fa fa-columns"></i>
       <span class="text">{{$t("button.split")}}</span>
