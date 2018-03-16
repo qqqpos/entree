@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="column" @click="setPointer('qty',$event)" ref="qty">
-          <h5>{{$t("text.qty")}}</h5>
+          <h5>{{$t("text.qtys")}}</h5>
           <div>
             <span class="value">{{item.qty}}</span>
           </div>

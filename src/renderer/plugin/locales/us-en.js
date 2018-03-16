@@ -924,6 +924,7 @@ export default {
     edit: "Edit",
     single: "Single",
     qty: "Qty",
+    qtys: "Qty",
     item: "Item",
     price: "Price",
     discount: "Discount",

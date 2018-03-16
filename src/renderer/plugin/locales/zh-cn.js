@@ -889,6 +889,7 @@ export default {
     edit: "修改",
     single: "单价",
     qty: "量",
+    qtys: "数量",
     item: "物品",
     price: "价格",
     discount: "折扣",
