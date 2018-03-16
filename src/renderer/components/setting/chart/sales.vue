@@ -1,6 +1,6 @@
 <template>
   <div>
-    <range-tab @update="fetchData" initial="currentQuarter"></range-tab>
+    <range-tab @update="fetchData" initial="currentMonth"></range-tab>
     <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
     <!-- <table>
       <thead>
@@ -43,10 +43,10 @@ export default {
     fetchData(range) {
       if (!range) {
         const from = +moment()
-          .startOf("quarter")
+          .startOf("M")
           .hours(4);
         const to = +moment()
-          .endOf("quarter")
+          .endOf("M")
           .add(4, "h");
 
         this.$socket.emit("[CHART] RANGE", { from, to }, result =>
@@ -113,8 +113,8 @@ export default {
             valueField: "value",
             lineThickness: 1,
             lineColor: "#20acd4",
-            fillAlphas: 0.1,
-            fillColorsField: "lineColor",
+            fillAlphas: 0.5,
+            fillColors: ["#cbeaf7", "#fff"],
             type: "smoothedLine",
             useLineColorForBulletBorder: true,
             dashLength: 5,

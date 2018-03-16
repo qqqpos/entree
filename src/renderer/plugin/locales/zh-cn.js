@@ -1307,7 +1307,8 @@ export default {
     saveLog: "保存记录",
     timecard: {
       tipReport: "上报小费",
-      excludeBreak: "休息不计时"
+      excludeBreak: "休息不计时",
+      valid: "默认有效"
     },
     basic: "基本设置",
     style: "样式设置",

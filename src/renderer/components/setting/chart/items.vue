@@ -79,10 +79,7 @@ export default {
           });
         } else {
           grouped[category] = {
-            color: randomColor({
-              luminosity: "monochrome",
-              hue: "random"
-            }),
+            color: randomColor(),
             category,
             count,
             total,
@@ -176,16 +173,19 @@ export default {
             text: this.$t(
               "text.categorySalesFromDateRange",
               moment(this.range.from).format("YYYY-MM-DD"),
-              moment(this.range.to).format("YYYY-MM-DD")
+              moment(this.range.to).subtract(1,'d').format("YYYY-MM-DD")
             )
           }
         ],
+        fontFamily: "Yuanti-SC",
+        startEffect: "easeOutSine",
+        startDuration: 1,
         export: {
           enabled: true,
           fileName: this.$t(
             "text.categorySalesFromDateRange",
             moment(this.range.from).format("YY-MM-DD"),
-            moment(this.range.to).format("YY-MM-DD")
+            moment(this.range.to).subtract(1,'d').format("YY-MM-DD")
           )
         }
       });

@@ -1,8 +1,9 @@
 <template>
     <div>
-        <toggle title="text.enable" tooltip="tip.timecard.forAll" v-model="store.timecard.enable" @update="updateTimecard"></toggle>
-        <toggle title="setting.timecard.tipReport" tooltip="tip.timecard.tipReport" v-model="store.timecard.tipReport" @update="updateTipReport" :disabled="!store.timecard"></toggle>
-        <toggle title="setting.timecard.excludeBreak" v-model="store.timecard.excludeBreak" @update="updateBreak"></toggle>
+        <toggle title="text.enable" tooltip="tip.timecard.forAll" v-model="timecard.enable"></toggle>
+        <toggle title="setting.timecard.tipReport" tooltip="tip.timecard.tipReport" v-model="timecard.tipReport" :disabled="!timecard.enable"></toggle>
+        <toggle title="setting.timecard.excludeBreak" v-model="timecard.excludeBreak"></toggle>
+        <toggle title="setting.timecard.valid" v-model="timecard.valid"></toggle>
     </div>
 </template>
 
@@ -13,31 +14,14 @@ export default {
   components: { toggle },
   data() {
     return {
-      store: JSON.parse(JSON.stringify(this.$store.getters.store))
+      timecard: JSON.parse(JSON.stringify(this.$store.getters.store.timecard))
     };
   },
-  methods: {
-    update(data) {
-      this.$socket.emit("[CONFIG] UPDATE", data);
-    },
-    updateTimecard(value) {
-      this.update({
-        key: "store.timecard.enable",
-        value
-      });
-    },
-    updateTipReport(value) {
-      this.update({
-        key: "store.timecard.tipReport",
-        value
-      });
-    },
-    updateBreak(value) {
-      this.update({
-        key: "store.timecard.excludeBreak",
-        value
-      });
-    }
+  beforeDestroy() {
+    this.$socket.emit("[CONFIG] UPDATE", {
+      key: "store.timecard",
+      value: this.timecard
+    });
   }
 };
 </script>

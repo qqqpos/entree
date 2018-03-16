@@ -1342,7 +1342,8 @@ export default {
     saveLog: "Save Log",
     timecard: {
       tipReport: "Tip Report",
-      excludeBreak: "Exclude Break Time"
+      excludeBreak: "Exclude Break Time",
+      valid: "Auto Validation"
     },
     basic: "Basic",
     style: "Style",

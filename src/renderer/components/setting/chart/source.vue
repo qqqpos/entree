@@ -87,7 +87,6 @@ export default {
 
       AmCharts.makeChart(this.$refs.chart, {
         type: "pie",
-
         dataProvider: generateChartData(),
         labelText: "[[title]]: [[value]]",
         balloonText: "[[title]]: [[value]]",
@@ -109,7 +108,7 @@ export default {
             text: this.$t(
               "text.ticketTypeFromDateRange",
               moment(this.range.from).format("YYYY-MM-DD"),
-              moment(this.range.to).format("YYYY-MM-DD")
+              moment(this.range.to).subtract(1,'d').format("YYYY-MM-DD")
             )
           }
         ],
@@ -134,7 +133,7 @@ export default {
           fileName: this.$t(
               "text.ticketTypeFromDateRange",
               moment(this.range.from).format("YY-MM-DD"),
-              moment(this.range.to).format("YY-MM-DD")
+              moment(this.range.to).subtract(1,'d').format("YY-MM-DD")
             ),
           menuReviver: function(item, li) {
             if (item.format === "XLSX" || item.format === "PDF") li.style.display = "none";

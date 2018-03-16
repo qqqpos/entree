@@ -7,7 +7,7 @@
                     <tr>
                         <th class="icon">{{$t('thead.status')}}</th>
                         <th class="date">{{$t('thead.date')}}</th>
-                        <th>{{$t('thead.station')}}</th>
+                        <th>{{$t('thead.terminal')}}</th>
                         <th>{{$t('thead.credit')}}</th>
                         <th>{{$t('thead.creditCount')}}</th>
                         <th>{{$t('thead.debit')}}</th>
@@ -23,7 +23,7 @@
                             <i class="fa fa-check-circle-o" v-else></i>
                         </td>
                         <td class="date">{{report.date}}</td>
-                        <td>{{report.station}}</td>
+                        <td>{{report.terminal}}</td>
                         <td>{{report.amount.credit}}</td>
                         <td>{{report.count.credit}}</td>
                         <td>{{report.amount.debit}}</td>
