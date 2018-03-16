@@ -178,7 +178,7 @@ export default {
           let voidSale = this.terminal.explainTransaction(response.data);
 
           if (voidSale.code === "000000") {
-            this.printTicket && Printer.printCreditCard(voidSale);
+            this.printTicket && Printer.printCreditCard(voidSale,{});
             Object.assign(record, voidSale, { status: 0 });
             this.$socket.emit("[TERMINAL] VOID", record);
             next();
