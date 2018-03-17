@@ -9,25 +9,39 @@
 
 <script>
 import rangeTab from "../common/rangeTab";
-export default{
-    components:{ rangeTab },
-    data(){
-        return{
+export default {
+  components: { rangeTab },
+  data() {
+    return {
+      range: {}
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData(range) {
+      if (!range) {
+        const from = +moment()
+          .startOf("w")
+          .hours(4);
+        const to = +moment()
+          .endOf("w")
+          .add(4, "h");
 
-        }
-    },
-    created(){
-        this.fetchData()
-    },
-    methods:{
-        fetchData(range){
-            if(!range){
+        this.$socket.emit("[PAYOUT] LIST", { from, to }, result =>
+          console.log(result)
+        );
+        range = { from, to };
+      } else {
+        const { from, to } = range;
+        this.$socket.emit("[PAYOUT] LIST", { from, to }, result =>
+          console.log(result)
+        );
+      }
 
-            }else{
-                
-            }
-        }
+      this.range = range;
     }
-    
-}
+  }
+};
 </script>
