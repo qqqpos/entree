@@ -108,8 +108,39 @@ export default {
   },
   created() {
     this.getRange(this.range);
+    this.getPreferences();
+  },
+  beforeDestroy() {
+    this.savePreferences();
   },
   methods: {
+    getPreferences() {
+      const saved = localStorage.getItem("reportPreferences");
+
+      if (saved) {
+        const preferences = JSON.parse(saved);
+
+        Object.keys(preferences).forEach(key => {
+          this[key] = preferences[key];
+        });
+      }
+    },
+    savePreferences() {
+      const preferences = {
+        reportDetail: this.reportDetail,
+        detailPayment: this.detailPayment,
+        cashier: this.cashier,
+        waitStaff: this.waitStaff,
+        driver: this.driver,
+        thirdParty: this.thirdParty,
+        daily: this.daily,
+        hourly: this.hourly,
+        itemSales: this.itemSales,
+        categorySales: this.categorySales,
+        managerWaive: this.managerWaive
+      };
+      localStorage.setItem("reportPreferences", JSON.stringify(preferences));
+    },
     getRange(type) {
       let from, to;
       switch (type) {

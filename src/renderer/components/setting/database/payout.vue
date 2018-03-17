@@ -16,9 +16,16 @@ export default{
 
         }
     },
+    created(){
+        this.fetchData()
+    },
     methods:{
-        fetchData(){
+        fetchData(range){
+            if(!range){
 
+            }else{
+                
+            }
         }
     }
     

@@ -108,7 +108,9 @@ export default {
             text: this.$t(
               "text.ticketTypeFromDateRange",
               moment(this.range.from).format("YYYY-MM-DD"),
-              moment(this.range.to).subtract(1,'d').format("YYYY-MM-DD")
+              moment(this.range.to)
+                .subtract(1, "d")
+                .format("YYYY-MM-DD")
             )
           }
         ],
@@ -118,11 +120,12 @@ export default {
             event: "clickSlice",
             method: function(event) {
               let chart = event.chart;
-              if (event.dataItem.dataContext.id != undefined) {
-                selected = event.dataItem.dataContext.id;
-              } else {
-                selected = undefined;
-              }
+
+              selected =
+                event.dataItem.dataContext.id != undefined
+                  ? event.dataItem.dataContext.id
+                  : undefined;
+                  
               chart.dataProvider = generateChartData();
               chart.validateData();
             }
@@ -131,12 +134,15 @@ export default {
         export: {
           enabled: true,
           fileName: this.$t(
-              "text.ticketTypeFromDateRange",
-              moment(this.range.from).format("YY-MM-DD"),
-              moment(this.range.to).subtract(1,'d').format("YY-MM-DD")
-            ),
+            "text.ticketTypeFromDateRange",
+            moment(this.range.from).format("YY-MM-DD"),
+            moment(this.range.to)
+              .subtract(1, "d")
+              .format("YY-MM-DD")
+          ),
           menuReviver: function(item, li) {
-            if (item.format === "XLSX" || item.format === "PDF") li.style.display = "none";
+            if (item.format === "XLSX" || item.format === "PDF")
+              li.style.display = "none";
             return li;
           }
         }

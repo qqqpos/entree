@@ -42,6 +42,7 @@ export default {
     other: "Other",
     all: "All",
     THIRD: "Third Party",
+    Payout: "Payout",
     allInvoice: "All Invoices",
     walkInInvoice: "WalkIn Inv.",
     pickUpInvoice: "PickUp Inv.",

@@ -135,7 +135,8 @@ export default {
         addClassNames: true,
         legend: {
           position: "bottom",
-          autoMargins: false
+          autoMargins: false,
+          align: "center"
         },
         innerRadius: "30%",
         defs: {
@@ -173,37 +174,52 @@ export default {
             text: this.$t(
               "text.categorySalesFromDateRange",
               moment(this.range.from).format("YYYY-MM-DD"),
-              moment(this.range.to).subtract(1,'d').format("YYYY-MM-DD")
+              moment(this.range.to)
+                .subtract(1, "d")
+                .format("YYYY-MM-DD")
             )
           }
         ],
         fontFamily: "Yuanti-SC",
         startEffect: "easeOutSine",
         startDuration: 1,
+        listeners: [
+          {
+            event: "clickSlice",
+            method: function(event) {
+              let chart = event.chart;
+              //console.log(event.dataItem.dataContext);
+              // chart.dataProvider = generateChartData();
+              // chart.validateData();
+            }
+          }
+        ],
         export: {
           enabled: true,
           fileName: this.$t(
             "text.categorySalesFromDateRange",
             moment(this.range.from).format("YY-MM-DD"),
-            moment(this.range.to).subtract(1,'d').format("YY-MM-DD")
+            moment(this.range.to)
+              .subtract(1, "d")
+              .format("YY-MM-DD")
           )
         }
       });
 
-      chart.addListener("init", handleInit);
+      // chart.addListener("init", handleInit);
 
-      chart.addListener("rollOverSlice", function(e) {
-        handleRollOver(e);
-      });
+      // chart.addListener("rollOverSlice", function(e) {
+      //   handleRollOver(e);
+      // });
 
-      function handleInit() {
-        chart.legend.addListener("rollOverItem", handleRollOver);
-      }
+      // function handleInit() {
+      //   chart.legend.addListener("rollOverItem", handleRollOver);
+      // }
 
-      function handleRollOver(e) {
-        var wedge = e.dataItem.wedge.node;
-        wedge.parentNode.appendChild(wedge);
-      }
+      // function handleRollOver(e) {
+      //   var wedge = e.dataItem.wedge.node;
+      //   wedge.parentNode.appendChild(wedge);
+      // }
     }
   }
 };

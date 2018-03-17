@@ -36,6 +36,7 @@ export default {
     other: "其它",
     all: "所有",
     THIRD: "第三方",
+    Payout: "支出",
     allInvoice: "所有订单",
     walkInInvoice: "外等订单",
     pickUpInvoice: "来取订单",

@@ -116,37 +116,25 @@ export default {
       });
     },
     payoutFailed(error) {
-      console.log(error);
-      let data;
+      let prompt = {
+        title: "dialog.payoutFailed",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+
       switch (error) {
         case "receiver":
-          this.$dialog({
-            title: "dialog.payoutFailed",
-            msg: "dialog.payoutReceiverRequired",
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => {
-            this.$q();
-          });
+          prompt.msg = "dialog.payoutReceiverRequired";
+          this.$dialog(prompt).then(() => this.$q());
           break;
         case "amount":
-          this.$dialog({
-            type: "question",
-            title: "dialog.payoutFailed",
-            msg: "dialog.payoutAmountIncorrect",
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => {
-            this.$q();
-          });
+          prompt.type = "question";
+          prompt.msg = "dialog.payoutAmountIncorrect";
+          this.$dialog(prompt).then(() => this.$q());
           break;
         case "signature":
-          this.$dialog({
-            type: "alert",
-            title: "dialog.payoutFailed",
-            msg: "dialog.payoutSignatureRequired",
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => {
-            this.$q();
-          });
+          prompt.type = "alert";
+          prompt.msg = "dialog.payoutSignatureRequired";
+          this.$dialog(prompt).then(() => this.$q());
           break;
         default:
           this.$q();
