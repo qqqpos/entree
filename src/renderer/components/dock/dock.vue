@@ -6,8 +6,8 @@
       <span class="waterMark" v-show="$route.name === 'Menu' && order.source !== 'POS'">{{order.source}}</span>
       <span class="waterMark" v-show="$route.name === 'Menu' && order.hasOwnProperty('__vip__')">VIP</span>
       <div class="reward" v-if="config.store.reward"></div>
-      <div class="info">
-        <div class="customer" v-if="$route.name === 'Menu'" @click="editProfile">
+      <div class="infoWrap" @click="editProfile">
+        <div class="customer" v-if="$route.name === 'Menu'">
           <span v-show="customer.phone">{{customer.phone | phone}}</span>
           <span v-show="customer.address">{{customer.address}}</span>
           <span v-show="customer.name">{{customer.name}}</span>
@@ -22,7 +22,7 @@
           <i class="fa fa-phone-square" :class="{na:!device.callid}"></i>
           <i class="fa fa-credit-card" :class="{na:!device.terminal}"></i>
           <i class="fa fa-desktop" :class="{na:!device.poleDisplay}"></i>
-          <i class="fa fa-print spooler" v-show="spooler.length > 0" @click="messageCenter(true)"></i>
+          <!-- <i class="fa fa-print spooler" v-show="spooler.length > 0" @click="messageCenter(true)"></i> -->
           <i class="fa fa-globe" :class="{na:!device.online}"></i>
           <i class="fa fa-sitemap" :class="{na:!app.database}"></i>
         </div>
@@ -40,14 +40,13 @@
 import { mapGetters, mapActions } from "vuex";
 import dialoger from "../common/dialoger";
 import { ipcRenderer } from "electron";
-import messenger from "./messenger";
 import profiles from "./profiles";
 import switcher from "./switcher";
 import caller from "./caller";
 import disc from "./disc";
 
 export default {
-  components: { caller, switcher, dialoger, disc, messenger, profiles },
+  components: { caller, switcher, dialoger, disc, profiles },
   data() {
     return {
       componentData: null,
@@ -142,9 +141,9 @@ export default {
     openPanel(args) {
       this.$bus.emit("__THREAD__OPEN", { component: "dockMenu", args });
     },
-    messageCenter(view) {
-      this.$route.name === "Dashboard" && this.$open("messenger", { view });
-    },
+    // messageCenter(view) {
+    //   this.$route.name === "Dashboard" && this.$open("messenger", { view });
+    // },
     changeType() {
       this.$route.name === "Menu" && this.$open("switcher");
     },
@@ -194,7 +193,7 @@ export default {
       this.spooler[i].content.forEach(item => {
         items.push(item.unique);
       });
-      console.log(this.spooler[0])
+      console.log(this.spooler[0]);
       Printer.setTarget("Order").print(this.spooler[0]);
       this.removeSpooler(i);
       let index = this.history.findIndex(order => order._id === _id);
@@ -212,12 +211,13 @@ export default {
       this.$socket.emit("[UPDATE] INVOICE", order);
     },
     editProfile() {
-      this.$route.name === "Menu" &&
-        this.$socket.emit("[CUSTOMER] PROFILE", this.customer._id, customer =>
-          this.$p("profiles", { customer })
-        );
+      if (this.$route.name !== "Menu") return;
 
-      //this.$router.push({ name: "Information" });
+      this.$socket.emit("[CUSTOMER] PROFILE", this.customer._id, customer => {
+        customer
+          ? this.$p("profiles", { customer })
+          : this.$p("profiles", { customer: this.customer });
+      });
     },
     ...mapActions([
       "setApp",

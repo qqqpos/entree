@@ -140,15 +140,16 @@ export default {
             number: this.app.newTicket ? this.ticket.number : order.number,
             customer: this.customer,
             course: schedule.name,
-            delay,
-            time: delay,
+            schedule: delay,
+            time: +new Date(),
             content: schedule.contain.map(item => {
               item.pending = true;
               return item;
             })
           });
           return order;
-        }).forEach(task => this.delayPrint(task));
+        })
+        .forEach(task => this.delayPrint(task));
       this.exit();
     },
     exit() {
@@ -159,7 +160,6 @@ export default {
         type: this.app.newTicket ? this.ticket.type : order.type,
         number: this.app.newTicket ? this.ticket.number : order.number,
         modify: this.app.newTicket ? 0 : order.modify++,
-        source: this.op.role !== "ThirdParty" ? "POS" : this.op.name,
         status: 1,
         settle: false,
         customer,
@@ -187,7 +187,6 @@ export default {
         this.setOrder(order);
         this.$router.push({ path: "/main/table" });
       }
-
     },
     ...mapActions(["setOp", "setOrder", "resetAll", "delayPrint"])
   },
@@ -199,7 +198,7 @@ export default {
       "dinein",
       "station",
       "customer",
-      "language",
+      "language"
     ])
   }
 };

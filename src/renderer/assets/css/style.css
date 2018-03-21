@@ -505,8 +505,12 @@ header.dock {
 .dock .na {
   color: #9e9e9e;
 }
-
-.dock .status .spooler {
+.dock .infoWrap{
+  display: flex;
+  flex:1;
+  height: 22px;
+}
+/* .dock .status .spooler {
   position: relative;
 }
 
@@ -519,7 +523,7 @@ header.dock {
   background: #ff5722;
   border-radius: 50%;
   padding: 4px;
-}
+} */
 
 .dock .shift {
   text-shadow: 0 1px 1px #fff;
