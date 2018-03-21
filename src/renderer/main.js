@@ -139,9 +139,11 @@ new Promise((resolve, reject) => {
     document.documentElement;
   head.insertBefore(printScript, head.firstChild);
 
-  Vue.filter("moment", (time, regEx) => (time ? moment(Number(time)).format(regEx) : ""));
-  Vue.filter("decimal", value => (isNumber(value) ? parseFloat(value).toFixed(2) : value));
-  Vue.filter("fromNow", (time, pass) => (time ? moment(Number(time)).fromNow(pass) : ""));
+  Vue.filter("moment", (time, regEx) => time ? moment(Number(time)).format(regEx) : "");
+  Vue.filter("decimal", value => isNumber(value) ? parseFloat(value).toFixed(2) : value);
+  Vue.filter("fromNow", (time, pass) => time ? moment(Number(time)).fromNow(pass) : "");
+  Vue.filter("toNow", (time, pass) => time ? moment().to(moment(Number(time), true)) : "");
+
   Vue.filter(
     "phone",
     number =>

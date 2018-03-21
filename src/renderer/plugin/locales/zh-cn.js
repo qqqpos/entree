@@ -1058,7 +1058,7 @@ export default {
     progressTicket: "订单处理中 - {i} 个未打印",
     doneTicket: "订单完成",
     guest: "人数",
-    delayTask: "有{i}个打印任务",
+    delayTask: "有 {i} 个打印任务",
     sales: "销售",
     printReceipt: "打印收据",
     count: "计数",

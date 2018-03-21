@@ -11,110 +11,14 @@
       <div class="time">{{time | moment('hh:mm')}}</div>
       <div class="date">{{time | moment('dddd MMM D')}}</div>
     </div>
-    <toast></toast>
+    <toast @open="$open('spooler')"></toast>
     <transition name="payment">
       <div class="popupMask center dark" v-if="component">
         <div :is="component" :init="componentData"></div>
       </div>
     </transition>
-
   </div>
 </template>
-
-<style scoped>
-.cardWrap {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 50px;
-  width: 704px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
-}
-
-.card {
-  width: 135px;
-  height: 115px;
-  padding: 20px;
-  margin: 0px;
-  cursor: pointer;
-  background: #fff;
-  border-right: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  transition: background, box-shadow 0.22s ease;
-  position: relative;
-}
-
-.card.disable {
-  pointer-events: none;
-}
-
-.card.disable::after {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(255, 255, 255, 0.9);
-  z-index: 1;
-  content: " ";
-}
-
-.card:active {
-  background: #f6f6f6;
-  color: #666;
-  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.55);
-}
-
-.card:nth-child(n + 5) {
-  border-bottom: none;
-}
-
-.card:nth-child(4),
-.card:nth-child(8) {
-  border-right: none;
-}
-
-.card i {
-  position: absolute;
-  right: 20px;
-  font-size: 2em;
-  color: #039be5;
-  text-shadow: 0 -1px 0px rgba(0, 0, 0, 0.5);
-}
-
-h4 {
-  font-weight: normal;
-  color: #757575;
-}
-
-h1 {
-  font-weight: normal;
-  margin-top: 50px;
-}
-
-.enlarge h1 {
-  font-size: 46px;
-}
-
-.dashboard .clock {
-  position: absolute;
-  bottom: 50px;
-  left: 50px;
-  color: #f1f1f1;
-  text-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
-}
-
-.dashboard .time {
-  font-size: 6em;
-}
-
-.dashboard .date {
-  font-size: 2em;
-  margin-top: -10px;
-}
-</style>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -124,9 +28,18 @@ import toast from "./component/toast";
 import unlock from "./common/unlock";
 import provider from "./dock/source";
 import noSales from "./component/noSale";
+import spooler from "./component/spooler";
 
 export default {
-  components: { dialoger, collector, toast, unlock, provider, noSales },
+  components: {
+    dialoger,
+    collector,
+    toast,
+    unlock,
+    provider,
+    noSales,
+    spooler
+  },
   computed: {
     ...mapGetters([
       "op",
@@ -562,3 +475,98 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.cardWrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 50px;
+  width: 704px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card {
+  width: 135px;
+  height: 115px;
+  padding: 20px;
+  margin: 0px;
+  cursor: pointer;
+  background: #fff;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  transition: background, box-shadow 0.22s ease;
+  position: relative;
+}
+
+.card.disable {
+  pointer-events: none;
+}
+
+.card.disable::after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  content: " ";
+}
+
+.card:active {
+  background: #f6f6f6;
+  color: #666;
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+.card:nth-child(n + 5) {
+  border-bottom: none;
+}
+
+.card:nth-child(4),
+.card:nth-child(8) {
+  border-right: none;
+}
+
+.card i {
+  position: absolute;
+  right: 20px;
+  font-size: 2em;
+  color: #039be5;
+  text-shadow: 0 -1px 0px rgba(0, 0, 0, 0.5);
+}
+
+h4 {
+  font-weight: normal;
+  color: #757575;
+}
+
+h1 {
+  font-weight: normal;
+  margin-top: 50px;
+}
+
+.enlarge h1 {
+  font-size: 46px;
+}
+
+.dashboard .clock {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  color: #f1f1f1;
+  text-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+.dashboard .time {
+  font-size: 6em;
+}
+
+.dashboard .date {
+  font-size: 2em;
+  margin-top: -10px;
+}
+</style>
