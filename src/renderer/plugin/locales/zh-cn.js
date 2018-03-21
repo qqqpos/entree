@@ -403,6 +403,8 @@ export default {
     ticketClosed: "订单已经结账",
     paymentFound: "订单有付款记录",
     removePaymentRecordFirst: "请先移除此订单的付款记录",
+    splitTicketPaymentFound: "部分的分单已经结账",
+    whatNext: "您想要执行什么动作？",
     paymentRemoveConfirm: "移除{i}付款记录",
     paymentRemoveConfirmTip: "您确定要移除这笔 $ {i} 的付款记录吗？",
     removeAllPaymentConfirm: "移除所有付款记录？",
@@ -599,7 +601,9 @@ export default {
     printReport: "打印报表",
     printSessionReport: "您需要打印一份从开始到当前时段的{i}报表吗？",
     settleConfirm: "确认结账",
-    settleDeliveryCashTicket: "请确定您已经收到送餐订单的尾款"
+    settleDeliveryCashTicket: "请确定您已经收到送餐订单的尾款",
+    splitItemRemove: "移除分单物品",
+    splitItemRemoveConfirm: "您确定要从此分单中里删除选定的 {i} 个物品吗？"
   },
   terminal: {
     initial: "正在初始化 {i}...",

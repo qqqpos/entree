@@ -153,21 +153,45 @@ export default {
             { text: "button.cancel", fn: "reject" }
           ]
         };
+
+        const splitTicketAction = {
+          type: "question",
+          title: "dialog.splitTicketPaymentFound",
+          msg: "dialog.whatNext",
+          buttons: [
+            { text: "button.removePayment", fn: "resolve" },
+            { text: "button.edit", fn: "reject" }
+          ]
+        };
+
         if (this.order.settled) throw ticketSettledError;
 
         this.$socket.emit("[PAYMENT] COUNT", this.order._id, count => {
-          count > 0 ? reject(paymentFoundError) : resolve();
+          count > 0
+            ? this.order.split
+              ? resolve(splitTicketAction)
+              : reject(paymentFoundError)
+            : resolve();
         });
       });
     },
-    edit() {
-      const { type, number } = this.order;
+    edit(prompt) {
+      if (isObject(prompt)) {
+        this.$dialog(prompt)
+          .then(this.removeRecordFromList)
+          .catch(() => {
+            this.$q();
+            this.edit();
+          });
+      } else {
+        const { type, number } = this.order;
 
-      this.setApp({ newTicket: false });
-      this.setCustomer(this.order.customer);
-      this.setTicket({ type, number });
+        this.setApp({ newTicket: false });
+        this.setCustomer(this.order.customer);
+        this.setTicket({ type, number });
 
-      this.$router.push({ path: "/main/menu" });
+        this.$router.push({ path: "/main/menu" });
+      }
     },
     editFailed(reason) {
       this.$dialog(reason)

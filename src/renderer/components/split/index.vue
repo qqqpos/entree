@@ -9,7 +9,7 @@
       <div class="wrap">
         <div class="view" ref="scroll">
           <div class="scroll" :style="scroll">
-            <ticket v-for="(order,index) in splits" :key="index" :index="index" :data="order" @acquire="transfer" :master="false" @destroy="destroy"></ticket>
+            <ticket v-for="(order,index) in splits" :key="index" :index="index" :data="order" @acquire="transfer" @delete="remove" :master="false" @destroy="destroy"></ticket>
           </div>
         </div>
         <div class="option" @click="create" v-if="!done">
@@ -184,6 +184,13 @@ export default {
     destroy({ _id, index }) {
       //const orders = this.$children.filter((vm, index) => index !== 0).map(vm => vm.order).filter((order, index) => order._id !== _id);
       return;
+    },
+    remove(items){
+      items.forEach(({unique})=>{
+        this.order.content = this.order.content.filter(item=>item.unique !== unique);
+      })
+
+      console.log(this.order.content)
     },
     confirm() {
       const parent = this.order._id;

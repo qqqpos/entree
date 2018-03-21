@@ -503,6 +503,8 @@ export default {
     ticketClosed: "Ticket Is Closed",
     paymentFound: "Payment Record",
     removePaymentRecordFirst: "Please remove payment record before all actions",
+    splitTicketPaymentFound: "Partially Ticket Settled",
+    whatNext: "What are you going to do?",
     paymentRemoveConfirm: "{i} Payment Removal",
     paymentRemoveConfirmTip:
       "Are you sure you want to remove this $ {i} record?",
@@ -716,7 +718,9 @@ export default {
     printReport: "Print Report",
     printSessionReport: "Would you like to print a {i} session report? ",
     settleConfirm: "Settle Confirm",
-    settleDeliveryCashTicket: "Please make sure that you have received the correct amount of cash from the drivers."
+    settleDeliveryCashTicket: "Please make sure that you have received the correct amount of cash from the drivers.",
+    splitItemRemove: "Item Remove Confirm",
+    splitItemRemoveConfirm: "Are you sure to remove selected {i} items from split ticket?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",

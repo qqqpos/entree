@@ -15,6 +15,7 @@
           </template>
           <template v-else>
             <span>{{item.total}}</span>
+            <i class="fa fa-trash" @click.stop="del(item)"></i>
           </template>
         </div>
         <div class="sub">
@@ -57,6 +58,7 @@ import { mapGetters } from "vuex";
 import evener from "./component/evener";
 import options from "./component/options";
 import splitor from "./component/splitor";
+import { isArray } from "util";
 
 export default {
   props: ["data", "master", "index"],
@@ -418,9 +420,17 @@ export default {
 
           this.order.coupons = result;
           break;
+        case "dialog":
+          if (result) {
+            this.$emit("delete", this.buffer);
+            this.remove();
+          }
+          break;
       }
       this.$calculatePayment(this.order.content);
-      this.componentData.isDiscount = this.order.payment.discount > 0;
+
+      if (this.componentData)
+        this.componentData.isDiscount = this.order.payment.discount > 0;
     },
     tap() {
       this.buffer = [];
@@ -455,6 +465,18 @@ export default {
 
       const target = this.buffer.find(i => i.unique === item.unique);
       target.lock = item.lock;
+    },
+    del(item) {
+      const prompt = {
+        title: "dialog.splitItemRemove",
+        msg: ["dialog.splitItemRemoveConfirm", this.buffer.length]
+      };
+
+      this.$bus.emit("__THREAD__OPEN", {
+        threadID: this.unique,
+        component: "dialog",
+        args: prompt
+      });
     }
   },
   watch: {

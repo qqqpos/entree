@@ -9,11 +9,12 @@
 <script>
 import dock from "./dock/dock";
 import posMenu from "./dock/posMenu";
+import dialoger from "./common/dialoger";
 import discount from "./payment/discount";
 import coupon from "./menu/component/coupon";
 
 export default {
-  components: { dock, coupon, discount, posMenu },
+  components: { dock, coupon, discount, posMenu, dialoger },
   data() {
     return {
       componentData: null,
@@ -71,6 +72,25 @@ export default {
           break;
         case "dockMenu":
           this.$open("posMenu", { args });
+          break;
+        case "dialog":
+          this.$dialog(args)
+            .then(() => {
+              this.$bus.emit("__THREAD__CLOSE", {
+                result: true,
+                component,
+                threadID
+              });
+              this.$q();
+            })
+            .catch(() => {
+              this.$bus.emit("__THREAD__CLOSE", {
+                result: false,
+                component,
+                threadID
+              });
+              this.$q();
+            });
           break;
       }
     }
