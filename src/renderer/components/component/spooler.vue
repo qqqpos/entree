@@ -2,12 +2,12 @@
     <div class="popupMask dark" @click.self="init.resolve">
         <transition>
             <div class="tasks">
-                <div class="task" v-for="(job,index) in jobs" :key="index">
+                <div class="task" v-for="(job,index) in spooler" :key="index">
                     <h5>
                         <span>#{{job.order.number}} {{$t('type.'+job.order.type)}}</span>
-                        <span class="type">{{job.type}}</span>
+                        <span class="type">{{$t('type.'+job.type)}}</span>
                     </h5>
-                    <h3>{{job.schedule | toNow}}</h3>
+                    <h3>{{job.schedule | countDown(time)}}</h3>
                     <h5>
                         <span class="f1">{{job.creator}}</span>
                         <span class="at">{{job.schedule | moment('hh:mm a')}}</span>
@@ -28,24 +28,25 @@ export default {
   props: ["init"],
   components: { dialoger },
   computed: {
-    ...mapGetters(["spooler", "history"])
+    ...mapGetters(["time", "spooler", "history"])
+  },
+  filters: {
+    countDown(schedule, current) {
+      const isToday = moment(schedule).format("MM-DD") === moment().format("MM-DD");
+      const duration = schedule - current;
+      const hh = (
+        "00" + Math.floor((duration % (3600000 * 24)) / 3600000)
+      ).slice(-2);
+      const mm = ("00" + Math.floor((duration % 3600000) / 60000)).slice(-2);
+      const ss = ("00" + Math.floor((duration % (1000 * 60)) / 1000)).slice(-2);
+      return (isToday && hh > 0) ? `${mm}:${ss}` : moment(parseFloat(schedule)).toNow(true);
+    }
   },
   data() {
     return {
       componentData: null,
       component: null,
-      isVisible: false,
-      jobs: [
-        {
-          type: "计划中",
-          schedule: 1521620641126,
-          creator: "Manager",
-          order: {
-            number: 16,
-            type: "DELIVERY"
-          }
-        }
-      ]
+      isVisible: false
     };
   }
 };

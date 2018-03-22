@@ -79,7 +79,8 @@ export default {
     Cashier: "收银员",
     Waitstaff: "企台",
     Bartender: "酒保",
-    Worker: "员工"
+    Worker: "员工",
+    delay: "延迟出单"
   },
   filter: {
     cashier: "按收银员",

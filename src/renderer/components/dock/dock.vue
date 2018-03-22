@@ -141,9 +141,6 @@ export default {
     openPanel(args) {
       this.$bus.emit("__THREAD__OPEN", { component: "dockMenu", args });
     },
-    // messageCenter(view) {
-    //   this.$route.name === "Dashboard" && this.$open("messenger", { view });
-    // },
     changeType() {
       this.$route.name === "Menu" && this.$open("switcher");
     },
@@ -188,27 +185,31 @@ export default {
       }
     },
     printFromSpooler(i) {
-      let _id = this.spooler[i]._id;
-      let items = [];
-      this.spooler[i].content.forEach(item => {
-        items.push(item.unique);
-      });
-      console.log(this.spooler[0]);
-      Printer.setTarget("Order").print(this.spooler[0]);
-      this.removeSpooler(i);
-      let index = this.history.findIndex(order => order._id === _id);
-      let order = Object.assign({}, this.history[index]);
-      items.forEach(unique => {
-        for (let i = 0; i < order.content.length; i++) {
-          if (order.content[i].unique === unique) {
-            order.content[i].print = true;
-            order.content[i].pending = false;
-            break;
-          }
-        }
-      });
+      const { target = "All" } = this.spooler[i];
+      const { _id } = this.spooler[i].order;
 
-      this.$socket.emit("[UPDATE] INVOICE", order);
+      let items = [];
+
+      this.spooler[i].order.content.forEach(({ unique }) => items.push(unique));
+      Printer.setTarget(target).print(this.spooler[0].order);
+      this.removeSpooler(i);
+
+      let index = this.history.findIndex(order => order._id === _id);
+
+      if (index !== -1) {
+        let order = Object.assign({}, this.history[index]);
+        items.forEach(unique => {
+          for (let i = 0; i < order.content.length; i++) {
+            if (order.content[i].unique === unique) {
+              order.content[i].print = true;
+              order.content[i].pending = false;
+              break;
+            }
+          }
+        });
+
+        this.$socket.emit("[UPDATE] INVOICE", order);
+      }
     },
     editProfile() {
       if (this.$route.name !== "Menu") return;

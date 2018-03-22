@@ -194,14 +194,14 @@ export default {
       this.checkTime() ? this.init.resolve(this.date) : this.invalidDate();
     },
     invalidDate() {
-      this.$dialog({
+      const prompt = {
         type: "error",
         title: "INVALID_DATE",
         msg: "INVALID_DATE_TIP",
         buttons: [{ text: "CONFIRM", fn: "resolve" }]
-      }).then(() => {
-        this.$q();
-      });
+      };
+
+      this.$dialog(prompt).then(() => this.$q());
     },
     checkTime() {
       let from, to;

@@ -129,7 +129,7 @@ const mutations = {
     },
     [types.ADD_SPOOLER](state, data) {
         state.spooler.push(data);
-        state.spooler.sort((a, b) => (a.delay - b.delay))
+        state.spooler.sort((a, b) => (a.schedule - b.schedule))
     },
     [types.REMOVE_SPOOLER](state, index) {
         state.spooler.splice(index, 1)

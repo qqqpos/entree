@@ -91,10 +91,9 @@
                   <span class="text">{{$t('text.tip')}}</span>
                   <span class="value">{{tip}}</span>
                 </div>
-                <div class="input" @click="setAnchor($event)" data-anchor="total" data-format="money">
-                  <span class="text">{{$t('text.total')}}</span>
-                  <span class="value paid">$ {{paidTotal | decimal}}</span>
-                  <span class="value total">$ {{total | decimal}}</span>
+                <div class="input">
+                  <span class="text">{{$t('text.changeDue')}}</span>
+                  <span class="value">$ {{changeDue | decimal}}</span>
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="evenly" data-format="number">
                   <span class="text">{{$t('text.separate')}}
@@ -238,6 +237,7 @@ import creditCard from "./creditCard";
 import discount from "./discount";
 import thirdParty from "./mark";
 import tiper from "./tiper";
+import { isObject } from 'util';
 
 export default {
   props: ["init"],
@@ -256,17 +256,13 @@ export default {
     isNewTicket() {
       return this.app.newTicket && this.$route.name === "Menu";
     },
-    paidTotal() {
-      const total = parseFloat(this.paid) + parseFloat(this.tip);
-      return isNumber(total) ? total : 0;
+    changeDue() {
+      const tender =
+        this.payment.balance + parseFloat(this.tip) - parseFloat(this.paid);
+      return tender > 0 ? 0 : Math.abs(tender);
     },
     disableCashCharge() {
-      return (
-        this.payment.remain <= 0 ||
-        this.paidTotal === 0 ||
-        (parseFloat(this.total) > 0 &&
-          parseFloat(this.total) < parseFloat(this.tip))
-      );
+      return this.payment.remain <= 0 || parseFloat(this.total) > 0;
     },
     ...mapGetters([
       "op",
@@ -301,8 +297,7 @@ export default {
       current: 0,
       reset: true,
       paid: "0.00",
-      tip: "0.00",
-      total: "0.00"
+      tip: "0.00"
     };
   },
   created() {
@@ -506,7 +501,7 @@ export default {
           .classList.add("active");
       }
 
-      if (this.anchor === "paid") this.total = "0.00";
+      //f (this.anchor === "paid") this.total = "0.00";
 
       this.reset = true;
     },
@@ -532,22 +527,12 @@ export default {
           break;
       }
 
-      if (anchor === "total") {
-        if (this.total > this.tip) {
-          this.paid = (this.total - this.tip).toFixed(2);
-        } else {
-          this.paid = "0.00";
-        }
-      }
-
       this.reset = false;
     },
     clear() {
       const { anchor, format } = document.querySelector(
         ".input.active"
       ).dataset;
-
-      if (this.anchor === "total") this.paid = "0.00";
 
       switch (format) {
         case "money":
@@ -573,7 +558,7 @@ export default {
             .then(this.postToDatabase)
             .then(this.tenderCash)
             .then(this.checkBalance)
-            .catch(this.payFailed);
+            //.catch(this.payFailed);
           break;
         case "CREDIT":
           this.checkOverPay()
@@ -615,8 +600,9 @@ export default {
         data: this.order._id,
         note: `Failed to pay bill.\n\nError message:\n${JSON.stringify(error)}`
       });
+      console.log(error)
 
-      error === Object(error)
+      isObject(error)
         ? this.$dialog(error).then(() => this.$q())
         : this.$q();
     },
@@ -861,7 +847,7 @@ export default {
           case "CASH":
             this.currentTender = change = Math.max(
               0,
-              toFixed(this.paid - this.payment.remain, 2)
+              toFixed(this.paid - parseFloat(this.tip) - this.payment.remain, 2)
             );
             transaction = {
               _id,
@@ -1074,7 +1060,7 @@ export default {
     },
     tenderCash() {
       return new Promise(next => {
-        const paid = this.paidTotal.toFixed(2);
+        const paid = this.paid.toFixed(2);
         const tender = this.currentTender.toFixed(2);
 
         this.poleDisplay(["Paid CASH", paid], ["Change Due", tender]);
@@ -1263,17 +1249,6 @@ export default {
           break;
       }
 
-      if (anchor === "total") {
-        if (this.total > this.tip) {
-          this.paid = (this.total - this.tip).toFixed(2);
-        } else {
-          this.paid =
-            this.total - this.tip > 0
-              ? (this.total - this.tip).toFixed(2)
-              : "0.00";
-        }
-      }
-
       this.reset = false;
     },
     openDiscount() {
@@ -1336,14 +1311,9 @@ export default {
 
       switch (anchor) {
         case "tip":
-          this.setAnchor("total");
-          this.paid = "0.00";
           this.tip = val.toFixed(2);
-          this.getQuickInput(this.payment.remain + parseFloat(val));
-          break;
-        case "total":
-          this.total = val.toFixed(2);
-          this.paid = (val - this.tip).toFixed(2);
+          Object.assign(this.payment, { tip: parseFloat(val) });
+          this.setOrder(Object.assign(this.order, { payment: this.payment }));
           break;
         default:
           this.paid = val.toFixed(2);

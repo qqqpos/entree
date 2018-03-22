@@ -39,6 +39,9 @@
             </div>
         </div>
         <footer>
+            <div class="f1">
+              <button class="btn" @click="setDate">{{$t('button.calendar')}}</button>
+            </div>
             <button class="btn" @click="verify">{{$t('button.confirm')}}</button>
         </footer>
     </div>
@@ -49,14 +52,16 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import dialoger from "../../common/dialoger";
+import calendar from "../../history/component/calendar";
 
 export default {
   props: ["init"],
-  components: { dialoger },
+  components: { dialoger, calendar },
   data() {
     return {
       componentData: null,
       component: null,
+      date: moment().format("YYYY-MM-DD"),
       timer: moment(),
       now: moment(),
       time: null
@@ -88,9 +93,28 @@ export default {
       this.time = this.timer.format("HHmm").split("");
     },
     verify() {
-      this.checkTime()
+      this.combineTime()
+        .then(this.checkTime)
         .then(this.confirm)
         .catch(this.failed);
+    },
+    setDate() {
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject };
+        this.component = "calendar";
+      })
+        .then(date => {
+          this.date = date;
+          this.$q();
+        })
+        .catch(() => this.$q());
+    },
+    combineTime() {
+      return new Promise(next => {
+        const date = this.date + " " + this.timer.format("HH:mm:ss");
+        this.timer = moment(date, "YYYY-MM-DD HH:mm:ss");
+        next();
+      });
     },
     checkTime() {
       return new Promise((next, stop) => {
@@ -109,7 +133,7 @@ export default {
         title: "dialog.scheduleTimer",
         msg: [
           "dialog.scheduleTimerConfirm",
-          this.timer.format("hh:mm a"),
+          this.timer.format("MMM DD hh:mm a"),
           duration
         ]
       };
@@ -141,14 +165,14 @@ export default {
           })
         });
 
-        this.$socket.emit("[SAVE] INVOICE", this.order, false, content => {
-          this.delayPrint(content);
+        this.$socket.emit("[SAVE] INVOICE", this.order, false, order => {
+          this.createSchedule(order);
           this.resetAll();
           this.$router.push({ path: "/main" });
         });
       } else {
         Object.assign(this.order, {
-          customer: this.customer,
+          customer: this.$minifyCustomer(this.customer),
           lastEdit: +new Date(),
           editor: this.op.name,
           schedule: +this.timer,
@@ -156,15 +180,27 @@ export default {
         });
 
         this.$socket.emit("[UPDATE] INVOICE", this.order);
-        this.delayPrint(this.order);
+        this.createSchedule(this.order);
         this.resetAll();
         this.$router.push({ path: "/main" });
       }
     },
+    createSchedule(order) {
+      const job = {
+        type: "delay",
+        target: "ALL",
+        schedule: +this.timer,
+        creator: this.op.name,
+        station: this.station.alias,
+        order
+      };
+
+      this.delayPrint(job);
+    },
     ...mapActions(["delayPrint", "resetAll"])
   },
   computed: {
-    ...mapGetters(["op", "app", "order", "ticket", "customer"])
+    ...mapGetters(["op", "app", "order", "ticket", "customer", "station"])
   }
 };
 </script>

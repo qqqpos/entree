@@ -86,7 +86,8 @@ export default {
     Cashier: "Cashier",
     Waitstaff: "Waitstaff",
     Bartender: "Bartender",
-    Worker: "Worker"
+    Worker: "Worker",
+    delay: "Delay"
   },
   filter: {
     cashier: "By Cashier",
