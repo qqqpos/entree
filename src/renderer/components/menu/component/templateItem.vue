@@ -38,7 +38,7 @@ export default {
   props: ["init"],
   components: { checkbox },
   computed: {
-    ...mapGetters(["templates", "language"])
+    ...mapGetters(["item", "templates", "language"])
   },
   data() {
     return {
@@ -52,10 +52,12 @@ export default {
     };
   },
   created() {
-    const { template, max } = this.init.side;
+    const { template, max = Infinity } = this.init.side;
+
     this.template = this.templates.find(t => t.name === template);
     this.insert = this.template.insert;
     this.itemCount = Array(this.template.contain.length).fill(0);
+    this.retrieve();
     this.initialItems();
   },
   methods: {
@@ -82,6 +84,29 @@ export default {
 
         document.querySelectorAll("li.page")[index].classList.add("current");
       });
+    },
+    retrieve() {
+      const { choiceSet } = this.item;
+
+      if (choiceSet.length === 0) {
+        this.insert = true;
+      } else {
+        let saved = Array.from({ length: this.template.contain.length }).map(
+          _ => []
+        );
+
+        this.template.contain.forEach((page, index) => {
+          page.contain.forEach(item => {
+            choiceSet.forEach(set => {
+              set.key === item.key &&
+                saved[index].push(Object.assign({}, item, { qty: set.qty }));
+            });
+          });
+          this.itemCount[index] = saved[index].reduce((a, c) => a + c.qty, 0);
+        });
+        this.saved = saved;
+        this.insert = false;
+      }
     },
     saveItems(index) {
       this.saved[index] = this.items.filter(i => i.qty > 0);
@@ -119,21 +144,30 @@ export default {
         function: true
       });
 
-      [].concat
-        .apply([], this.saved)
-        .filter(item => item)
-        .forEach(({ zhCN, usEN, qty = 1, price, print }) => {
+      this.saved.forEach((page, index) => {
+        let { startAt, addition } = this.template.contain[index];
+        //let count = 0;
+        startAt = isNumber(startAt) ? startAt : 0;
+        addition = isNumber(addition) ? addition : 0;
+
+        page.forEach(({ zhCN, usEN, qty = 1, price, print, key },count) => {
+          //count += qty;
+          if (startAt > 0 && count + 1 >= startAt)
+            price = parseFloat(price) + addition;
+
           const content = {
             qty,
+            key,
             zhCN,
             usEN,
             print,
-            single: parseFloat(price),
+            single: price,
             price: (price * qty).toFixed(2)
           };
 
           this.setChoiceSet(content);
         });
+      });
 
       this.init.resolve();
     },

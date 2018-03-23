@@ -1109,7 +1109,7 @@ export default {
     openFood: "Open Food",
     alphabetical: "Alphabetical",
     maxItem: "Max Item",
-    overCharge: "Extra Charge",
+    overCharge: "Extra Chrg.",
     subItemGroup: "SubMenu Group",
     records: "{i} Records",
     allDeliveries: "All Deliveries",

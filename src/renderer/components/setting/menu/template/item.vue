@@ -29,7 +29,7 @@
                 <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}">
                     <transition-group tag="div" class="items">
                         <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable">{{item[language]}}</div>
-                        <div @click="create" :key="-1">
+                        <div @click="create" :key="-1" v-show="template.contain[index].contain.length < 56">
                             <i class="fa fa-plus"></i>
                         </div>
                     </transition-group>
@@ -170,7 +170,7 @@ h5 {
 
 section {
   flex: 1;
-  height: 600px;
+  height: 659px;
   background: #f5f5f5;
 }
 
