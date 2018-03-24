@@ -39,7 +39,7 @@ export default {
       ).slice(-2);
       const mm = ("00" + Math.floor((duration % 3600000) / 60000)).slice(-2);
       const ss = ("00" + Math.floor((duration % (1000 * 60)) / 1000)).slice(-2);
-      return (isToday && hh > 0) ? `${mm}:${ss}` : moment(parseFloat(schedule)).toNow(true);
+      return (isToday && hh < 1) ? `${mm}:${ss}` : moment(parseFloat(schedule)).toNow(true);
     }
   },
   data() {

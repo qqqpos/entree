@@ -188,7 +188,7 @@ export default {
     createSchedule(order) {
       const job = {
         type: "delay",
-        target: "ALL",
+        target: "All",
         schedule: +this.timer,
         creator: this.op.name,
         station: this.station.alias,

@@ -12,13 +12,13 @@
       <i class="fa fa-ban"></i>
       <span class="text">{{$t('button.void')}}</span>
     </button>
+    <button class="btn" @click="receipt">
+      <i class="fa fa-file-text"></i>
+      <span class="text">{{$t('button.receipt')}}</span>
+    </button>
     <button class="btn" @click="combine" :disabled="true">
       <i class="fa fa-link"></i>
       <span class="text">{{$t('button.combine')}}</span>
-    </button>
-    <button class="btn" @click="receipt">
-      <i class="fa fa-print"></i>
-      <span class="text">{{$t('button.receipt')}}</span>
     </button>
     <button class="btn" @click="print">
       <i class="fa fa-print"></i>

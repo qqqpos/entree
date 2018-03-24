@@ -149,7 +149,21 @@ export default {
           });
           return order;
         })
-        .forEach(task => this.delayPrint(task));
+        .forEach(order =>
+          this.delayPrint(
+            Object.assign(
+              {},
+              {
+                type: "Course",
+                target: "Order",
+                schedule: order.schedule,
+                creator: this.op.name,
+                station: this.station.alias,
+                order
+              }
+            )
+          )
+        );
       this.exit();
     },
     exit() {

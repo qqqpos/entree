@@ -58,14 +58,14 @@
               <i class="fa fa-2x fa-money"></i>
               <div>
                 <h3>{{$t('dock.staffCashIn')}}</h3>
-                <h5>{{$t('dock.cashInTip')}}</h5>
+                <h5>{{$t('dock.staffCashInTip')}}</h5>
               </div>
           </li>
           <li @click="askStaffCashOut" v-else>
             <i class="fa fa-2x fa-money"></i>
             <div>
               <h3>{{$t('dock.staffCashOut')}}</h3>
-              <h5>{{$t('dock.cashOutTip')}}</h5>
+              <h5>{{$t('dock.staffCashOutTip')}}</h5>
             </div>
           </li>
           </template>
@@ -81,7 +81,7 @@
                 <i class="fa fa-2x fa-money"></i>
                 <div>
                   <h3>{{$t('dock.cashDrawerCashOut')}}</h3>
-                  <h5>{{$t('dock.cashOutTip')}}</h5>
+                  <h5>{{$t('dock.cashDrawerCashOutTip')}}</h5>
                 </div>
               </li>
           </template>

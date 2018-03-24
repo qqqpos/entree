@@ -213,6 +213,7 @@ function createList(printer, setting, invoice, preview) {
           item =>
             item.printer[printer] && !item.print && item.diffs !== "unchanged"
         );
+        console.log(items);
         items.forEach(item => {
           switch (item.diffs) {
             case "less":
@@ -230,7 +231,6 @@ function createList(printer, setting, invoice, preview) {
                 item.usEN = "★" + item.usEN;
                 return item
               })
-              console.log(item.choiceSet);
               break;
           }
         });
@@ -298,7 +298,7 @@ function createList(printer, setting, invoice, preview) {
 
   if (items.length === 0) return [];
 
-  const renderQty = items.filter(i => i.qty > 1).length > 0;
+  const renderQty = items.filter(i => i.qty > 1 || !isNumber(i.qty)).length > 0;
 
   prioritize && items.sort((p, n) => (p.priority || 0) < (n.priority || 0));
 
@@ -471,7 +471,9 @@ function createStyle(setting) {
   const secondary = languages.find(t => t.ref === "zhCN");
   const fontFamily = navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
   const zhCN = `.zhCN{font-family:'${secondary.fontFamily}';font-size:${secondary.fontSize}px;line-height:${secondary.lineHeight}}`;
-  const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${primary.fontSize}px;line-height:${primary.lineHeight}}`
+  const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${primary.fontSize}px;line-height:${primary.lineHeight}}`;
+  const zhCN_sub = secondary.subFontSize ? `.zhCN .sub{padding-left:20px;font-size:${secondary.subFontSize}em;}`:`.zhCN .sub{padding-left:20px;font-size:0.8em;}`;
+  const usEN_sub = primary.subFontSize ? `.usEN .sub{padding-left:20px;font-size:${primary.subFontSize}em;}`:`.usEN .sub{padding-left:20px;font-size:0.8em;}`;
 
   return `<style>\
               *{margin:0;padding:0}\
@@ -496,7 +498,7 @@ function createStyle(setting) {
               .main{display:flex;position:relative;width:100%;}\
               .main .wrap,.empty{flex:1;}\
               .main .side{font-size:0.9em;margin-left:2px;}\
-              .sub{padding-left:20px;font-size:0.8em;}\
+              ${zhCN_sub}${usEN_sub}
               .sub p{position:relative;width:100%;}\
               .qty{min-width:15px;margin-right:5px;}\     
               footer{font-family:'Agency FB';}\

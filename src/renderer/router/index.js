@@ -142,6 +142,11 @@ export default new Router({
                       path: "timecard",
                       name: "Setting.store.timecard",
                       component: require("../components/setting/store/sub/timecard")
+                    },
+                    {
+                      path: 'openHour',
+                      name: 'Setting.store.openHour',
+                      component: require('../components/setting/store/sub/openHour')
                     }
                   ]
                 },

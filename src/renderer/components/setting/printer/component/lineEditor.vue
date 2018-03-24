@@ -8,6 +8,7 @@
             <div class="wrap">
                 <selector title="print.fontFamily" v-model="language.fontFamily" :opts="fonts"></selector>
                 <range title="print.fontSize" :min="0" :max="40" :step="1" v-model="language.fontSize"></range>
+                <range title="print.subFontSize" :min="0.5" :max="1.5" :step="0.1" v-model="language.subFontSize"></range>
                 <range title="print.lineHeight" :min="1" :max="2" :step="0.1" v-model="language.lineHeight"></range>
                 <switches title="button.print" v-model="language.enable" @update="doubleCheck(index)"></switches>
                 <switches title="print.itemPrice" v-model="language.price"></switches>
