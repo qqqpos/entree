@@ -615,6 +615,44 @@ export default {
         }
       });
 
+      const weekDay = moment().format("d");
+      const { hours } = this.store.openingHours.rules[weekDay];
+      const sessions = hours
+        .map(({ from, to, alias }) => {
+          from = today() + " " + from;
+          to = today() + " " + to;
+
+          return {
+            from: +moment(from, "YYYY-MM-DD hh:mm A"),
+            to: +moment(to, "YYYY-MM-DD hh:mm A"),
+            alias
+          };
+        })
+        .map(hour => {
+          const orders = tickets.filter(
+            ({ create }) => create >= hour.from && create <= hour.to
+          );
+
+          const count = orders.length;
+          const amount = orders.reduce(
+            (a, c) =>
+              a +
+              c.payment.subtotal +
+              c.payment.tax +
+              c.payment.discount +
+              c.payment.rounding +
+              c.payment,
+            0
+          );
+          const tip = orders.reduce((a, c) => a + c.payment.tip, 0);
+
+          return Object.assign(hour, {
+            count,
+            amount,
+            tip
+          });
+        });
+
       const report = {
         title,
         subtitle,
@@ -635,7 +673,8 @@ export default {
         unsettled,
         settledCount,
         cash,
-        unsettledCount
+        unsettledCount,
+        sessions
       };
 
       Printer.printSessionReport(report);
