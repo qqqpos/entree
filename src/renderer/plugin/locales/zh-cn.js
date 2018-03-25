@@ -536,8 +536,9 @@ export default {
     subMenuRemoveConfirm: "移除子菜单组",
     subMenuRemoveConfirmTip:
       "您确定要移除整个 ({i}) 子菜单组以及其包含的物品吗？",
-    itemUnavailable: "物品不可用",
-    itemUnavailableTip: "{i} 物品暂时无法使用",
+    itemUnavailable: "{i} 不可用",
+    itemNotAvailableToday: "此物品无法在 {i} 使用",
+    itemNotAvailableNow: "{i} 只能在 {i} 到 {i} 之间使用",
     addressMismatch: "地址不一致",
     replaceAddress: "是否要将地址 {i} 替换成 {i} ?",
     invalidDate: "日期错误",
@@ -1194,7 +1195,8 @@ export default {
     historyInvoice: "历史订单",
     pickupList: "来取列表",
     portionDisplay: "只显示部分的数据",
-    groupByDepartments: "按部门分类物品"
+    groupByDepartments: "按部门分类物品",
+    timeLimit: "时间限制"
   },
   nav: {
     store: "店面",

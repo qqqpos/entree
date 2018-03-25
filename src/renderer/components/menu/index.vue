@@ -292,6 +292,18 @@ export default {
       return new Promise((next, stop) => {
         if (item.hasOwnProperty("clickable") && !item.clickable) {
           stop("unavailable");
+        } else if (item.hasOwnProperty("timeLimit")) {
+          const { from, to, days } = item.timeLimit;
+          const day = moment().format("d");
+          if (!days.includes(day)) {
+            stop("unavailableToday");
+          } else {
+            const time = moment(this.order.create);
+            const _from = moment(new Date(today() + " " + from));
+            const _to = moment(new Date(today() + " " + to));
+
+            time.isBetween(_from, _to) ? next(item) : stop("timeLimit");
+          }
         } else {
           next(item);
         }
@@ -395,6 +407,25 @@ export default {
         case "template":
           item ? this.addToOrder(item) : (item = this.item);
           this.$p("templateItem", { side: item.option[index], index });
+          break;
+        case "unavailableToday":
+          this.$dialog({
+            title: ["dialog.itemUnavailable",item[this.language]],
+            msg: ["dialog.itemNotAvailableToday", moment().format('dddd')],
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          }).then(() => this.$q());
+          break;
+        case "timeLimit":
+          this.$dialog({
+            title: ["dialog.itemUnavailable",item[this.language]],
+            msg: [
+              "dialog.itemNotAvailableNow",
+              item[this.language],
+              item.timeLimit.from,
+              item.timeLimit.to
+            ],
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          }).then(() => this.$q());
           break;
         default:
       }

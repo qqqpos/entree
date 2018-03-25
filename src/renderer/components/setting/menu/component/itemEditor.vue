@@ -82,6 +82,7 @@
             <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
             <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
             <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>
+            <external title="text.timeLimit" @open="setTimeLimit" :defaultStyle="false"></external>
           </div>
           <div class="side">
             <switches title="text.openFood" v-model="item.temporary"></switches>
@@ -120,6 +121,7 @@
 </template>
 
 <script>
+import limitor from "./limitor";
 import prices from "./priceEditor";
 import editor from "./optionEditor";
 import draggable from "vuedraggable";
@@ -137,6 +139,7 @@ export default {
     prices,
     editor,
     toggle,
+    limitor,
     external,
     switches,
     inputer,
@@ -244,6 +247,33 @@ export default {
           this.$q();
         })
         .catch(() => this.$q());
+    },
+    setTimeLimit() {
+      const {
+        timeLimit = {
+          from: "09:00 AM",
+          to: "11:00 PM",
+          days: ["0", "1", "2", "3", "4", "5", "6"]
+        }
+      } = this.item;
+
+      console.log(this.item);
+
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, timeLimit };
+        this.component = "limitor";
+      })
+        .then(_timeLimit => {
+          Object.assign(this.item, { timeLimit: _timeLimit });
+          console.log(this.item);
+          this.$q();
+        })
+        .catch(remove => {
+          if (remove) {
+            delete this.item.timeLimit;
+          }
+          this.$q();
+        });
     },
     save() {
       this.item.zhCN = this.item.zhCN || this.item.usEN;
@@ -431,7 +461,7 @@ p i {
   border: 1px solid #eee;
   border-radius: 2px;
   padding: 5px;
-  margin:0 5px;
+  margin: 0 5px;
 }
 
 .config {

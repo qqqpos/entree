@@ -44,7 +44,7 @@ export default {
 
       let index = value.indexOf(e.target.value);
       index === -1 ? value.push(e.target.value) : value.splice(index, 1);
-
+      
       this.$emit("input", value);
     }
   },

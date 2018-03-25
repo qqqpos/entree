@@ -93,7 +93,7 @@ export default {
         })
       );
 
-      if (!item.clickable) item = this.copyLastItem(group, index);
+      if (!item.hasOwnProperty("_id")) item = this.copyLastItem(group, index);
 
       new Promise((resolve, reject) => {
         this.componentData = {
@@ -121,14 +121,16 @@ export default {
         });
     },
     deleteItemConfirm(item, group, index) {
-      this.$dialog({
+      const prompt = {
         title: "dialog.deleteItem",
         msg: ["dialog.deleteItemConfirm", item[this.language]],
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.delete", fn: "resolve" }
         ]
-      })
+      };
+
+      this.$dialog(prompt)
         .then(() => {
           const sequence = [this.categoryIndex, group, index];
 
@@ -146,16 +148,15 @@ export default {
     copyLastItem(group, index) {
       let item;
       let lastItem = this.items[group][index - 1];
-      if (lastItem && lastItem.clickable) {
+      if (lastItem && lastItem.hasOwnProperty("_id")) {
         item = JSON.parse(JSON.stringify(lastItem));
         Object.assign(item, {
           _id: undefined,
           menuID: "",
           usEN: "",
           zhCN: "",
-          spicy: "",
           price: [0],
-          num: this.items[group].filter(i => i.clickable).length,
+          num: this.items[group].filter(i => i.hasOwnProperty("_id")).length,
           prices: {}
         });
       } else {
