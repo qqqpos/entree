@@ -538,7 +538,7 @@ export default {
       "您确定要移除整个 ({i}) 子菜单组以及其包含的物品吗？",
     itemUnavailable: "{i} 不可用",
     itemNotAvailableToday: "此物品无法在 {i} 使用",
-    itemNotAvailableNow: "{i} 只能在 {i} 到 {i} 之间使用",
+    itemNotAvailableNow: "此物品只能在 {i} 到 {i} 之间使用",
     addressMismatch: "地址不一致",
     replaceAddress: "是否要将地址 {i} 替换成 {i} ?",
     invalidDate: "日期错误",

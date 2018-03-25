@@ -387,6 +387,10 @@ export default {
     },
     specialItemHandler(item, type, index) {
       index = index || 0;
+      const name =
+        item[this.language].length > 15
+          ? item[this.language].slice(0, 15) + "..."
+          : item[this.language];
 
       switch (type) {
         case "openFood":
@@ -410,17 +414,16 @@ export default {
           break;
         case "unavailableToday":
           this.$dialog({
-            title: ["dialog.itemUnavailable",item[this.language]],
-            msg: ["dialog.itemNotAvailableToday", moment().format('dddd')],
+            title: ["dialog.itemUnavailable", name],
+            msg: ["dialog.itemNotAvailableToday", moment().format("dddd")],
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           }).then(() => this.$q());
           break;
         case "timeLimit":
           this.$dialog({
-            title: ["dialog.itemUnavailable",item[this.language]],
+            title: ["dialog.itemUnavailable", name],
             msg: [
               "dialog.itemNotAvailableNow",
-              item[this.language],
               item.timeLimit.from,
               item.timeLimit.to
             ],

@@ -652,7 +652,7 @@ export default {
     itemUnavailableTip: "{i} currently is not available for ordering",
     itemUnavailable: "{i} Unavailable",
     itemNotAvailableToday: "This item is not available on {i}",
-    itemNotAvailableNow: "{i} can only be ordered between {i} to {i}.",
+    itemNotAvailableNow: "This item can only be ordered between {i} to {i}.",
     addressMismatch: "Address Mismatch",
     replaceAddress: "Are you wish to replace address {i} with {i} ?",
     invalidDate: "Invalid Date",
