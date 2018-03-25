@@ -166,6 +166,7 @@ label .tooltip {
 
 header.nav {
   display: flex;
+  position: relative;
   padding: 6px;
   height: 38px;
   align-items: center;
@@ -177,9 +178,10 @@ header.nav .back {
   padding: 10px 25px;
   color: #555;
   cursor: pointer;
+  position: absolute;
 }
 
-header.nav .back:hover {
+header.nav .back {
   background: #eee;
   border-radius: 4px;
 }
@@ -196,7 +198,8 @@ header.nav .title h5 {
 
 header.nav nav {
   display: flex;
-  justify-content: flex-end;
+  position: absolute;
+  right:5px;
 }
 
 header.nav nav > span {
