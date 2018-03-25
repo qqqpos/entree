@@ -146,16 +146,12 @@ export default {
 
       this.saved.forEach((page, index) => {
         let { startAt, addition } = this.template.contain[index];
-        //let count = 0;
-        startAt = isNumber(startAt) ? startAt : 0;
-        addition = isNumber(addition) ? addition : 0;
+        let count = 0;
+        startAt = isNumber(startAt) ? parseInt(startAt) : 0;
+        addition = isNumber(addition) ? parseFloat(addition) : 0;
 
-        page.forEach(({ zhCN, usEN, qty = 1, price, print, key },count) => {
-          //count += qty;
-          if (startAt > 0 && count + 1 >= startAt)
-            price = parseFloat(price) + addition;
-
-          const content = {
+        page.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
+          this.setChoiceSet({
             qty,
             key,
             zhCN,
@@ -163,10 +159,23 @@ export default {
             print,
             single: price,
             price: (price * qty).toFixed(2)
-          };
+          });
 
-          this.setChoiceSet(content);
+          count += qty;
         });
+        if (startAt > 0 && count - startAt > 0) {
+          const qty = count - startAt;
+
+          this.setChoiceSet({
+            qty,
+            key: String().random(),
+            zhCN: "Extra Charge",
+            usEN: "Extra Charge",
+            print: [],
+            single: addition,
+            price: (addition * qty).toFixed(2)
+          });
+        }
       });
 
       this.init.resolve();

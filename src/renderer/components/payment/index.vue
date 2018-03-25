@@ -237,7 +237,7 @@ import creditCard from "./creditCard";
 import discount from "./discount";
 import thirdParty from "./mark";
 import tiper from "./tiper";
-import { isObject } from 'util';
+import { isObject } from "util";
 
 export default {
   props: ["init"],
@@ -557,8 +557,8 @@ export default {
             .then(this.saveTransaction)
             .then(this.postToDatabase)
             .then(this.tenderCash)
-            .then(this.checkBalance)
-            //.catch(this.payFailed);
+            .then(this.checkBalance);
+          //.catch(this.payFailed);
           break;
         case "CREDIT":
           this.checkOverPay()
@@ -600,11 +600,9 @@ export default {
         data: this.order._id,
         note: `Failed to pay bill.\n\nError message:\n${JSON.stringify(error)}`
       });
-      console.log(error)
+      console.log(error);
 
-      isObject(error)
-        ? this.$dialog(error).then(() => this.$q())
-        : this.$q();
+      isObject(error) ? this.$dialog(error).then(() => this.$q()) : this.$q();
     },
     setPaymentType(type, vip) {
       this.paymentType = type;
@@ -1468,7 +1466,7 @@ export default {
           const { done } = this.station.autoLock;
           if (this.ticket.type === "BUFFET") {
             this.resetMenu();
-            this.setOrder({ type: "BUFFET" });
+            this.setOrder({ type: "BUFFET", create: +new Date() });
             this.exit();
           } else {
             if (done) {

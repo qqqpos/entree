@@ -156,6 +156,7 @@ export default {
           type: this.ticket.type,
           number: this.ticket.number,
           date: today(),
+          create: +new Date(),
           customer: this.customer,
           taxFree:
             typeof this.tax.defaultTaxFree === "boolean"
@@ -343,8 +344,8 @@ export default {
           stop();
         }
         if (!manual && option[0]) {
-          option[0].template ? stop("template"): next(item);
-          
+          option[0].template ? stop("template") : next(item);
+
           if (option[0].subMenu) stop("subMenu");
         }
 
