@@ -70,6 +70,10 @@ export default {
           label: "type.fastFood",
           tooltip: "",
           value: "fastFood"
+        },{
+          label:"type.dessertShop",
+          tooltip:"",
+          value:"dessertShop"
         }
       ],
       timeZones: [

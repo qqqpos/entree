@@ -56,6 +56,7 @@ export default {
     buffet: "自助店",
     fastFood: "快餐店",
     retail: "零售",
+    dessertShop: "甜品店",
     CASH: "现金",
     CREDIT: "信用卡",
     DEBIT: "借记卡",
@@ -884,6 +885,7 @@ export default {
     REFUND: "退款"
   },
   text: {
+    OFB: "营业",
     tag: "标签",
     starter: "起始",
     appetizer: "头台",

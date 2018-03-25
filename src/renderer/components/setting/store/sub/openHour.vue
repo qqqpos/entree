@@ -6,19 +6,39 @@
       </div>
       <div class="title">{{$t('text.openHour')}}</div>
     </header>
+    <div>
+      <open-time v-for="(rule,index) in openingHours.rules" :key="index" :rule="rule" :day="$t(weekdays[index])"></open-time> 
+    </div>
   </div>
 </template>
 
 <script>
+import openTime from "../component/time";
+
 export default {
-    data(){
-        return{
-            
-        }
-    }
+  components: { openTime },
+  data() {
+    return {
+      weekdays: [
+        "calendar.sun",
+        "calendar.mon",
+        "calendar.tue",
+        "calendar.wed",
+        "calendar.thu",
+        "calendar.fri",
+        "calendar.sat"
+      ],
+      openingHours: []
+    };
+  },
+  created() {
+    this.openingHours = this.$store.getters.store.openingHours;
+  },
+  beforeDestroy() {
+    this.$socket.emit("[CONFIG] UPDATE", {
+      key: "store.openingHours",
+      value: this.openingHours
+    });
+  }
 };
 </script>
-
-<style scoped>
-
-</style>

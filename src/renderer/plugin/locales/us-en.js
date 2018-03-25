@@ -62,6 +62,7 @@ export default {
     vietDineIn: "Việt Dine-in Restaurant",
     buffet: "Buffet Restaurant",
     retail: "Retail Store",
+    dessertShop: "Dessert Shop",
     fastFood: "Fast Food Restaurant",
     CASH: "Cash",
     CREDIT: "Credit Card",
@@ -919,6 +920,7 @@ export default {
     }
   },
   text: {
+    OFB: "Open For Business",
     tag: "Tag",
     starter: "Starter",
     appetizer: "Appetizer",

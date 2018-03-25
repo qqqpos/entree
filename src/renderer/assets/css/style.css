@@ -1047,3 +1047,15 @@ ul.autoComplete li {
   font-weight: normal;
   color: #656565;
 }
+
+
+/* style overwrite */
+.timeSession .title,
+.timeSession label {
+  min-width: 0!important;
+}
+
+.timeSession .inner {
+  width: 100px;
+  margin-left: 10px;
+}
