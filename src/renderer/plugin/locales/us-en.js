@@ -1233,7 +1233,8 @@ export default {
     pickupList: "Pick Up List",
     portionDisplay: "Only display limited Data",
     groupByDepartments: "Group By Departments",
-    timeLimit: "Time Limit"
+    timeLimit: "Time Limit",
+    autoLogin: "Auto Login"
   },
   nav: {
     store: "Store",
@@ -1579,6 +1580,7 @@ export default {
     heightTop: "Height Top"
   },
   tip: {
+    autoLogin: "Operator auto login when pin is entered",
     insertTemplateItem: "Insert selected items on this template",
     autoJumpNext: "Auto jump to next page when condition met",
     alphabetical: "Sort menu item by alphabet",

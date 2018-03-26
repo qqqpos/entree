@@ -569,6 +569,7 @@ export default {
       }
 
       const payments = invoices.map(i => ({
+        create: i.create,
         number: isObject(i.ticket) ? i.ticket.number : "",
         ticket: isObject(i.ticket) ? this.$t("type." + i.ticket.type) : "",
         tip: i.tip,
@@ -598,23 +599,6 @@ export default {
         .reduce((a, c) => a + c.payment.balance, 0);
       const unsettledCount = tickets.filter(t => !t.settled).length;
 
-      const group = {};
-
-      payments.forEach(({ ticket, tip, amount }) => {
-        if (group.hasOwnProperty(ticket)) {
-          group[ticket].count++;
-          group[ticket].tip += tip;
-          group[ticket].amount += amount;
-        } else {
-          group[ticket] = {
-            type: ticket,
-            count: 1,
-            tip,
-            amount
-          };
-        }
-      });
-
       const weekDay = moment().format("d");
       const { hours } = this.store.openingHours.rules[weekDay];
       const sessions = hours
@@ -624,27 +608,36 @@ export default {
           alias
         }))
         .map(hour => {
-          const orders = tickets.filter(
+          const orders = payments.filter(
             ({ create }) => create >= hour.from && create <= hour.to
           );
 
+          const group = {};
+
+          orders.forEach(({ ticket, tip, amount }) => {
+            if (group.hasOwnProperty(ticket)) {
+              group[ticket].count++;
+              group[ticket].tip += tip;
+              group[ticket].amount += amount;
+            } else {
+              group[ticket] = {
+                type: ticket,
+                count: 1,
+                tip,
+                amount
+              };
+            }
+          });
+
           const count = orders.length;
-          const amount = orders.reduce(
-            (a, c) =>
-              a +
-              c.payment.subtotal +
-              c.payment.tax +
-              c.payment.discount +
-              c.payment.rounding +
-              c.payment,
-            0
-          );
-          const tip = orders.reduce((a, c) => a + c.payment.tip, 0);
+          const amount = orders.reduce((a, c) => a + c.amount, 0);
+          const tip = orders.reduce((a, c) => a + c.tip, 0);
 
           return Object.assign(hour, {
             count,
             amount,
-            tip
+            tip,
+            type: Object.values(group).sort((a, b) => a.amount < b.amount)
           });
         });
 
@@ -654,7 +647,6 @@ export default {
         for: name,
         date: today(),
         payments,
-        group: Object.values(group).sort((a, b) => a.amount < b.amount),
         guest,
         subtotal,
         tax,
@@ -671,7 +663,7 @@ export default {
         unsettledCount,
         sessions
       };
-
+      
       Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOp"])

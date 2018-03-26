@@ -557,8 +557,8 @@ export default {
             .then(this.saveTransaction)
             .then(this.postToDatabase)
             .then(this.tenderCash)
-            .then(this.checkBalance);
-          //.catch(this.payFailed);
+            .then(this.checkBalance)
+            .catch(this.payFailed);
           break;
         case "CREDIT":
           this.checkOverPay()
@@ -832,6 +832,7 @@ export default {
       const date = today();
       const time = +new Date();
       const order = this.order._id;
+      const create = this.order.create;
       const split = this.payInFull ? null : this.splits[this.current]._id;
       const ticket = {
         number: this.order.number || this.ticket.number,
@@ -852,6 +853,7 @@ export default {
               date,
               time,
               order,
+              create,
               split,
               ticket,
               paid,
@@ -899,6 +901,7 @@ export default {
               date,
               time,
               order,
+              create,
               split,
               ticket,
               paid,
@@ -960,6 +963,7 @@ export default {
               date,
               time,
               order,
+              create,
               split,
               ticket,
               paid,

@@ -22,6 +22,7 @@
         </div>
       </transition>
     </toggle>
+    <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
     <toggle title="text.menuID" v-model="display.menuID" @update="updateMenuID"></toggle>
     <toggle title="text.favoriteItem" v-model="display.favorite" @update="updateFavorite"></toggle>
     <toggle title="text.alphabetical" tooltip="tip.alphabetical" v-model="display.alphabetical" @update="updateAlphabetical"></toggle>
@@ -75,6 +76,12 @@ export default {
       let value = this.store.email.password;
       this.update({
         key: "store.email.password",
+        value
+      });
+    },
+    updateAutoLogin(value){
+      this.update({
+        key: "store.autoLogin",
         value
       });
     },

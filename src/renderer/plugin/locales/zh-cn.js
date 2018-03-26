@@ -1196,7 +1196,8 @@ export default {
     pickupList: "来取列表",
     portionDisplay: "只显示部分的数据",
     groupByDepartments: "按部门分类物品",
-    timeLimit: "时间限制"
+    timeLimit: "时间限制",
+    autoLogin: "自动登录"
   },
   nav: {
     store: "店面",
@@ -1545,6 +1546,7 @@ export default {
     heightTop: "高脚椅"
   },
   tip: {
+    autoLogin: "自动尝试用当前的密码登录用户",
     insertTemplateItem: "插入该模版选择的物品",
     autoJumpNext: "满足条件时自动转跳到下一页",
     alphabetical: "按字母排序菜单 (中文则按拼音排序)",

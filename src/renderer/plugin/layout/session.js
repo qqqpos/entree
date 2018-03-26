@@ -35,29 +35,41 @@ const session = function (data) {
                 </tbody>\
             </table></section>`;
 
-        const group = `
-            <section class="type">\
-            <h4>Group By Order Type</h4>\
+        const session = `
+        <section class="type">\
+            <h4>Group By Session</h4>\
             <table>\
                 <thead>\
                     <tr>\
-                        <th>Type</th>\
+                        <th>Time</th>\
                         <th>Count</th>\
                         <th>Tips</th>\
                         <th>Amount</th>\
                     </tr>\
                 </thead>\
                 <tbody>\
-                    ${data.group.map(i => `
-                    <tr>\
-                        <td>${i.type}</td>\
-                        <td>${i.count}</td>\
-                        <td>${i.tip > 0 ? i.tip.toFixed(2) : ""}</td>\
-                        <td>${i.amount.toFixed(2)}</td>\
-                    </tr>`
-            ).join("").toString()}
+                    ${data.sessions.map(i => {
+                        const total = `<tr class="bold">\
+                                        <td>${i.alias}</td>\
+                                        <td>${i.count}</td>\
+                                        <td>${i.tip > 0 ? i.tip.toFixed(2) : ""}</td>\
+                                        <td>${i.amount.toFixed(2)}</td>\
+                                    </tr>`;
+
+                        const types = i.type.filter(t => t.count > 0).map(i => `
+                                    <tr>\
+                                        <td>${i.type}</td>\
+                                        <td>( ${i.count} )</td>\
+                                        <td>${i.tip > 0 ?  "( " + i.tip.toFixed(2) + " )" : ""}</td>\
+                                        <td>( ${i.amount.toFixed(2)} )</td>\
+                                    </tr>`
+                        ).join("").toString();
+
+                        return total + types;
+                }).join("").toString()}
                 </tbody>\
-            </table></section>`;
+            </table></section>
+        `
 
         const summary = `
             <section class="type">\
@@ -92,7 +104,7 @@ const session = function (data) {
                   <h5>${data.date}</h5>\
                 </div>\
             </section>\
-            ${payment + group + summary + departments}
+            ${payment + session + summary + departments}
             <footer>\
               <p>Thanks For Your Hard Work</p>\
               <p>Print @ ${moment().format("YY-MM-DD HH:mm:ss")}</p>\
