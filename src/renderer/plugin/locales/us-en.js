@@ -153,7 +153,7 @@ export default {
     cashDrawerCashIn: "CashDrawer Deposit",
     cashInTip: "CashDrawer Cash In",
     cashDrawerCashOut: "Cash Out",
-    cashDrawerCashOutTip:"Cash Drawer Cash Settlement",
+    cashDrawerCashOutTip: "Cash Drawer Cash Settlement",
     report: "Session Report",
     reportTip: "Print Personal Session Report",
     logout: "Logout",
@@ -1460,9 +1460,11 @@ export default {
       ledger: "Allow review ledger summary"
     },
     giftcard: {
+      enable: "Enable Gift Card",
       expire: "Gift Card Expire",
       period: "Expire Period",
-      bonus: "Reload Bonus"
+      bonus: "Reload Bonus",
+      format: "Card Number Format"
     }
   },
   reservation: {

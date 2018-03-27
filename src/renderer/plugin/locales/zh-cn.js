@@ -1428,9 +1428,11 @@ export default {
       ledger: "允许核对销售账目"
     },
     giftcard: {
+      enable: "启用礼物卡",
       expire: "礼物卡过期",
       period: "过期年限",
-      bonus: "充值奖励"
+      bonus: "充值奖励",
+      format: "卡号格式"
     }
   },
   reservation: {

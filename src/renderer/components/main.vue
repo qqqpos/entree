@@ -9,12 +9,14 @@
 <script>
 import dock from "./dock/dock";
 import posMenu from "./dock/posMenu";
+import unlock from "./common/unlock";
 import dialoger from "./common/dialoger";
 import discount from "./payment/discount";
 import coupon from "./menu/component/coupon";
+import { mapGetters } from "vuex";
 
 export default {
-  components: { dock, coupon, discount, posMenu, dialoger },
+  components: { dock, coupon, unlock, discount, posMenu, dialoger },
   data() {
     return {
       componentData: null,
@@ -26,6 +28,9 @@ export default {
   },
   beforeDestroy() {
     this.$bus.off("__THREAD__OPEN", this.openComponent);
+  },
+  computed: {
+    ...mapGetters(["op"])
   },
   methods: {
     openComponent({ threadID, component, args }) {
@@ -74,23 +79,28 @@ export default {
           this.$open("posMenu", { args });
           break;
         case "dialog":
-          this.$dialog(args)
+          this.$checkPermission("modify", "item")
             .then(() => {
-              this.$bus.emit("__THREAD__CLOSE", {
-                result: true,
-                component,
-                threadID
-              });
-              this.$q();
+              this.$dialog(args)
+                .then(() => {
+                  this.$bus.emit("__THREAD__CLOSE", {
+                    result: true,
+                    component,
+                    threadID
+                  });
+                  this.$q();
+                })
+                .catch(() => {
+                  this.$bus.emit("__THREAD__CLOSE", {
+                    result: false,
+                    component,
+                    threadID
+                  });
+                  this.$q();
+                });
             })
-            .catch(() => {
-              this.$bus.emit("__THREAD__CLOSE", {
-                result: false,
-                component,
-                threadID
-              });
-              this.$q();
-            });
+            .catch(() => {});
+
           break;
       }
     }

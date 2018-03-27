@@ -60,6 +60,7 @@ import unlock from "../common/unlock";
 import ledger from "../ledger/index";
 import loger from "../payment/loger";
 import Terminal from "./terminal";
+import { isObject } from "util";
 
 export default {
   props: ["date"],
@@ -194,9 +195,11 @@ export default {
       }
     },
     editFailed(reason) {
-      this.$dialog(reason)
-        .then(this.removeRecordFromList)
-        .catch(() => this.$q());
+      reason.hasOwnProperty('title')
+        ? this.$dialog(reason)
+            .then(this.removeRecordFromList)
+            .catch(() => this.$q())
+        : this.edit();
     },
     voidTicket() {
       const prompt = {

@@ -338,7 +338,7 @@ export default {
         let order = this.combineOrderInfo();
 
         if (this.app.newTicket) {
-          let todo = !!document.querySelector(".item.todo");
+          const todo = !!document.querySelector(".item.todo");
           if (todo) {
             let items = [];
             order.content.forEach(item => {
@@ -351,10 +351,7 @@ export default {
             if (this.ticket.type !== "DINE_IN") {
               this.$socket.emit("[SAVE] INVOICE", order, false, content => {
                 Printer.setTarget("Order").print(
-                  Object.assign(order, {
-                    delay: +new Date(),
-                    content: items
-                  })
+                  Object.assign(order, { content: items })
                 );
               });
             } else {
@@ -367,10 +364,7 @@ export default {
 
               this.$socket.emit("[SAVE] INVOICE", order, false, content => {
                 if (print) {
-                  const ticket = Object.assign({}, order, {
-                    delay: +new Date(),
-                    content: items
-                  });
+                  const ticket = Object.assign({}, order, { content: items });
 
                   printOnDone
                     ? Printer.setTarget("All").print(ticket)
@@ -557,7 +551,7 @@ export default {
           return item;
         })
       );
-      
+
       return Object.assign(current, { content: items });
     },
     createTogo() {

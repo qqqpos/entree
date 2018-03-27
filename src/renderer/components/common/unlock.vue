@@ -31,12 +31,15 @@
 </template>
 
 <script>
+import _debounce from "lodash.debounce";
+
 export default {
   props: ["init"],
   data() {
     return {
       pin: [],
       self: true,
+      store: this.$store.getters.store,
       op: this.$store.getters.op
     };
   },
@@ -78,7 +81,11 @@ export default {
       this.$socket.emit("[ACCESS] CODE", this.pin.join(""), op => {
         op ? this.init.resolve(op) : this.init.reject();
       });
-    }
+    },
+    // autoAccess: _debounce(function() {
+    //   const password = this.pin.join("");
+    //   password && this.access();
+    // }, 300)
   }
 };
 </script>

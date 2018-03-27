@@ -235,8 +235,7 @@ export default {
     initialized() {
       this.isHost = window.isServer === true;
     },
-    initialFailed(error) {
-      const { data, reason } = error;
+    initialFailed({ data, reason }) {
       switch (reason) {
         case "outDatedVersion":
           this.$dialog(data).then(() => {
@@ -306,7 +305,7 @@ export default {
   },
   watch: {
     password(n) {
-      this.autoAccess();
+      this.store.autoLogin && this.autoAccess();
     }
   },
   computed: {

@@ -14,12 +14,14 @@ const state = {
       discount: 0,
       delivery: 0,
       surcharge: 0,
+      rounding: 0,
       remain: 0,
       log: []
     },
     content: [],
     coupons: [],
-    source: "POS"
+    source: "POS",
+    status: 1
   },
   diffs: null,
   archivedOrder: null,
@@ -44,13 +46,15 @@ const mutations = {
         discount: 0,
         delivery: 0,
         surcharge: 0,
+        rounding: 0,
         remain: 0,
         log: []
       },
       content: [],
       coupons: [],
       date: today(),
-      source: "POS"
+      source: "POS",
+      status: 1
     };
     state.item = null;
     state.choiceSetTarget = null;
@@ -173,9 +177,9 @@ const mutations = {
 
         if (assignSide) item.side = { zhCN: _zhCN, usEN: _usEN };
       }
-    } else if(ignore){
-      
-    }else{
+    } else if (ignore) {
+
+    } else {
       if (item.side.zhCN === _zhCN && item.side.usEN === _usEN) {
         item.total = data.function
           ? (item.qty * item.single).toFixed(2)
@@ -356,7 +360,7 @@ const mutations = {
   [types.ARCHIVE_ORDER](state, data) {
     state.archivedOrder = JSON.parse(JSON.stringify(data));
   },
-  [types.EMPTY_ARCHIVE_ORDER](state){
+  [types.EMPTY_ARCHIVE_ORDER](state) {
     state.archivedOrder = null;
   }
 };

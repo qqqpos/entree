@@ -1,5 +1,5 @@
 <template>
-  <li class="item" :class="{disable:$route.name === 'Menu' && (item.void || item.split)}" @click.prevent.stop="select(item,$event)" v-if="!checkbox">
+  <li class="item" :class="{disable:$route.name === 'Menu' && (item.split || item.pending)}" @click.prevent.stop="select(item,$event)" v-if="!checkbox">
     <div class="main">
       <span class="qty">{{item.qty}}</span>
       <div class="wrap">
