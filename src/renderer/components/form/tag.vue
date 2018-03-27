@@ -89,6 +89,10 @@
             <input type="checkbox" name="tag" v-model="tags" value="ad" id="ad">
             <label for="ad">{{$t('tag.ad')}}</label>
           </div>
+          <div class="tag">
+            <input type="checkbox" name="tag" v-model="tags" value="prank" id="prank">
+            <label for="prank">{{$t('tag.prank')}}</label>
+          </div>
       </section>
     </div>
 </template>
@@ -105,11 +109,24 @@ export default {
   created() {
     this.tags = this.$store.getters.customer.tags || [];
   },
-  beforeDestroy() {
-    this.setCustomer({ tags: this.tags });
-  },
   methods: {
+    update(tags) {
+      const { customer } = this.$store.getters;
+
+      customer._id &&
+        this.$socket.emit(
+          "[CUSTOMER] UPDATE_TAGS",
+          {
+            _id: customer._id,
+            tags
+          },
+          () => this.setCustomer({ tags })
+        );
+    },
     ...mapActions(["setCustomer"])
+  },
+  watch: {
+    tags: "update"
   }
 };
 </script>

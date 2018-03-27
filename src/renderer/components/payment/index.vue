@@ -826,7 +826,7 @@ export default {
       const actual = Math.min(this.paid, this.payment.remain)
         .toPrecision(12)
         .toFloat();
-      const paid = (parseFloat(this.paid) + parseFloat(this.tip))
+      const paid = parseFloat(this.paid)
         .toPrecision(12)
         .toFloat();
 

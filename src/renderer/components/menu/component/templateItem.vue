@@ -48,6 +48,7 @@ export default {
       index: 0,
       itemCount: [],
       insert: false,
+      editMode: false,
       max: Infinity
     };
   },
@@ -106,6 +107,7 @@ export default {
         });
         this.saved = saved;
         this.insert = false;
+        this.editMode = true;
       }
     },
     saveItems(index) {
@@ -123,6 +125,12 @@ export default {
       qty = this.items.reduce((a, c) => a + c.qty, 0);
 
       if (autoJump && qty === this.max) {
+        if (this.editMode) {
+          const saved = this.saved[this.index].shift();
+          saved && (this.items.find(i => i.key === saved.key).qty = 0);
+          item.qty++;
+        }
+
         const maxPage = this.template.contain.length - 1;
         this.index < maxPage ? this.index++ : this.confirm();
       }

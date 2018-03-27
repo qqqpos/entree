@@ -109,6 +109,7 @@ export default {
     hospital: "医院",
     apartment: "公寓",
     ad: "广告电话",
+    prank: "恶作剧",
     school: "学校",
     opinion: "评价",
     place: "位置",

@@ -116,6 +116,7 @@ export default {
     hospital: "Hospital",
     apartment: "Apartment",
     ad: "Ads.",
+    prank: "Prank",
     school: "School",
     opinion: "Opinion",
     place: "Place",

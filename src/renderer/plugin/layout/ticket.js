@@ -622,7 +622,13 @@ function createFooter(config, setting, printer, ticket) {
         break;
       default:
         settle.push(
-          `<section class="details"><h3>Paid by ${subType} - Thank You</h3></section>`
+          `<section class="details">\
+          <h3>Paid by ${subType} - Thank You</h3>\
+          <p>\
+              <span class="text">Paid:</span>\
+              <span class="value">$ ${paid.toFixed(2)}</span>\
+          </p>\
+          </section>`
         );
     }
   });
