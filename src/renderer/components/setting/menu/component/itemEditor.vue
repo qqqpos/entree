@@ -82,7 +82,7 @@
             <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
             <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
             <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>
-            <external title="text.timeLimit" @open="setTimeLimit" :defaultStyle="false"></external>
+            <external title="text.restrictionRules" @open="setRestriction" :defaultStyle="false"></external>
           </div>
           <div class="side">
             <switches title="text.openFood" v-model="item.temporary"></switches>
@@ -248,29 +248,38 @@ export default {
         })
         .catch(() => this.$q());
     },
-    setTimeLimit() {
+    setRestriction() {
       const {
-        timeLimit = {
+        restrict = {
           from: "09:00 AM",
           to: "11:00 PM",
-          days: ["0", "1", "2", "3", "4", "5", "6"]
+          days: ["0", "1", "2", "3", "4", "5", "6"],
+          types: [
+            "WALK_IN",
+            "PICK_UP",
+            "DELIVERY",
+            "DINE_IN",
+            "HIBACHI",
+            "BUFFET",
+            "BAR",
+            "SALES",
+            "TO_GO"
+          ]
         }
       } = this.item;
 
-      console.log(this.item);
-
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, timeLimit };
+        this.componentData = { resolve, reject, restrict };
         this.component = "limitor";
       })
-        .then(_timeLimit => {
-          Object.assign(this.item, { timeLimit: _timeLimit });
+        .then(_restrict => {
+          Object.assign(this.item, { restrict: _restrict });
           console.log(this.item);
           this.$q();
         })
         .catch(remove => {
           if (remove) {
-            delete this.item.timeLimit;
+            delete this.item.restrict;
           }
           this.$q();
         });

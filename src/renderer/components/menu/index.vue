@@ -292,17 +292,20 @@ export default {
       return new Promise((next, stop) => {
         if (item.hasOwnProperty("clickable") && !item.clickable) {
           stop("unavailable");
-        } else if (item.hasOwnProperty("timeLimit")) {
-          const { from, to, days } = item.timeLimit;
+        } else if (item.hasOwnProperty("restrict")) {
+          const { from, to, days, types } = item.restrict;
           const day = moment().format("d");
-          if (!days.includes(day)) {
-            stop("unavailableToday");
+          console.log(types,this.order.type)
+          if (!types.includes(this.order.type)) {
+            stop("typeRestricted");
+          } else if (!days.includes(day)) {
+            stop("dayRestricted");
           } else {
             const time = moment(this.order.create);
             const _from = moment(new Date(today() + " " + from));
             const _to = moment(new Date(today() + " " + to));
 
-            time.isBetween(_from, _to) ? next(item) : stop("timeLimit");
+            time.isBetween(_from, _to) ? next(item) : stop("timeRestricted");
           }
         } else {
           next(item);
@@ -387,10 +390,7 @@ export default {
     },
     specialItemHandler(item, type, index) {
       index = index || 0;
-      const name =
-        item[this.language].length > 15
-          ? item[this.language].slice(0, 15) + "..."
-          : item[this.language];
+      let name;
 
       switch (type) {
         case "openFood":
@@ -412,23 +412,33 @@ export default {
           item ? this.addToOrder(item) : (item = this.item);
           this.$p("templateItem", { side: item.option[index], index });
           break;
-        case "unavailableToday":
-          this.$dialog({
-            title: ["dialog.itemUnavailable", name],
-            msg: ["dialog.itemNotAvailableToday", moment().format("dddd")],
+        case "dayRestricted":
+        case "timeRestricted":
+        case "typeRestricted":
+          name =
+            item[this.language].length > 15
+              ? item[this.language].slice(0, 15) + "..."
+              : item[this.language];
+
+          const prompt = {
+            title: ["dialog.itemRestricted", name],
+            msg:
+              type === "dayRestricted"
+                ? ["dialog.itemNotAvailable", moment().format("dddd")]
+                : type === "timeRestricted"
+                  ? [
+                      "dialog.itemNotAvailableNow",
+                      item.timeLimit.from,
+                      item.timeLimit.to
+                    ]
+                  : [
+                      "dialog.itemNotAvailable",
+                      this.$t("type." + this.order.type)
+                    ],
             buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => this.$q());
-          break;
-        case "timeLimit":
-          this.$dialog({
-            title: ["dialog.itemUnavailable", name],
-            msg: [
-              "dialog.itemNotAvailableNow",
-              item.timeLimit.from,
-              item.timeLimit.to
-            ],
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => this.$q());
+          };
+
+          this.$dialog(prompt).then(() => this.$q());
           break;
         default:
       }

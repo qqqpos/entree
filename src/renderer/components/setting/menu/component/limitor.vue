@@ -2,21 +2,24 @@
     <div class="popupMask dark center setting" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <h3>{{$t('text.timeLimit')}}</h3>
-                <h5>Set up item available time</h5>
+                <h3>{{$t('text.restrictionRules')}}</h3>
+                <h5>{{$t('tip.itemRestrictionRules')}}</h5>
             </header>
             <div class="wrap">
-                <selector title="text.from" v-model="init.timeLimit.from" :opts="hours"></selector>
-                <selector title="text.to" v-model="init.timeLimit.to" :opts="hours"></selector>
+                <selector title="text.from" v-model="init.restrict.from" :opts="hours"></selector>
+                <selector title="text.to" v-model="init.restrict.to" :opts="hours"></selector>
                 <div class="days">
-                    <checkbox v-for="(day,index) in weekdays" :key="index" v-model="init.timeLimit.days" :title="day" :val="index.toString()" :multiple="true"></checkbox>
+                    <checkbox v-for="(day,index) in weekdays" :key="index" v-model="init.restrict.days" :title="day" :val="index.toString()" :multiple="true"></checkbox>
+                </div>
+                <div class="days">
+                    <checkbox v-for="(type,index) in types" :key="index" v-model="init.restrict.types" :title="$t('type.'+type)" :val="type" :multiple="true"></checkbox>
                 </div>
             </div>
             <footer>
                 <div class="opt">
                     <span class="del" @click="init.reject(true)">{{$t('button.remove')}}</span>
                 </div>
-                <button class="btn" @click="init.resolve(init.timeLimit)">{{$t('button.done')}}</button>
+                <button class="btn" @click="init.resolve(init.restrict)">{{$t('button.done')}}</button>
             </footer>
         </div>
     </div>
@@ -39,6 +42,17 @@ export default {
         "calendar.thu",
         "calendar.fri",
         "calendar.sat"
+      ],
+      types: [
+        "WALK_IN",
+        "PICK_UP",
+        "DELIVERY",
+        "DINE_IN",
+        "HIBACHI",
+        "BUFFET",
+        "BAR",
+        "SALES",
+        "TO_GO"
       ],
       hours: [
         "12:00 AM",

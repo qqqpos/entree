@@ -536,8 +536,8 @@ export default {
     subMenuRemoveConfirm: "移除子菜单组",
     subMenuRemoveConfirmTip:
       "您确定要移除整个 ({i}) 子菜单组以及其包含的物品吗？",
-    itemUnavailable: "{i} 不可用",
-    itemNotAvailableToday: "此物品无法在 {i} 使用",
+    itemRestricted: "{i} 被限制",
+    itemNotAvailable: "此物品无法在 {i} 使用",
     itemNotAvailableNow: "此物品只能在 {i} 到 {i} 之间使用",
     addressMismatch: "地址不一致",
     replaceAddress: "是否要将地址 {i} 替换成 {i} ?",
@@ -1196,7 +1196,7 @@ export default {
     pickupList: "来取列表",
     portionDisplay: "只显示部分的数据",
     groupByDepartments: "按部门分类物品",
-    timeLimit: "时间限制",
+    restrictionRules: "限制条件",
     autoLogin: "自动登录"
   },
   nav: {
@@ -1547,6 +1547,7 @@ export default {
   },
   tip: {
     autoLogin: "自动尝试用当前的密码登录用户",
+    itemRestrictionRules: "允许物品选择条件",
     insertTemplateItem: "插入该模版选择的物品",
     autoJumpNext: "满足条件时自动转跳到下一页",
     alphabetical: "按字母排序菜单 (中文则按拼音排序)",

@@ -648,10 +648,8 @@ export default {
     subMenuRemoveConfirm: "Remove SubMenu Group",
     subMenuRemoveConfirmTip:
       "Are you sure to remove entire ({i}) group and items?",
-    itemUnavailable: "Item Unavailable",
-    itemUnavailableTip: "{i} currently is not available for ordering",
-    itemUnavailable: "{i} Unavailable",
-    itemNotAvailableToday: "This item is not available on {i}",
+    itemRestricted: "{i} Restricted",
+    itemNotAvailable: "This item is not available on {i}",
     itemNotAvailableNow: "This item can only be ordered between {i} to {i}.",
     addressMismatch: "Address Mismatch",
     replaceAddress: "Are you wish to replace address {i} with {i} ?",
@@ -1233,7 +1231,7 @@ export default {
     pickupList: "Pick Up List",
     portionDisplay: "Only display limited Data",
     groupByDepartments: "Group By Departments",
-    timeLimit: "Time Limit",
+    restrictionRules: "Restriction Rules",
     autoLogin: "Auto Login"
   },
   nav: {
@@ -1581,6 +1579,7 @@ export default {
   },
   tip: {
     autoLogin: "Operator auto login when pin is entered",
+    itemRestrictionRules: "Item select restriction rules",
     insertTemplateItem: "Insert selected items on this template",
     autoJumpNext: "Auto jump to next page when condition met",
     alphabetical: "Sort menu item by alphabet",
