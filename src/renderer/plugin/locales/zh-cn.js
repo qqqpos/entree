@@ -886,6 +886,8 @@ export default {
     REFUND: "退款"
   },
   text: {
+    storeClose: "打烊",
+    storeOpen: "{i} 时段从 {i} 到 {i}",
     OFB: "营业",
     tag: "标签",
     starter: "起始",

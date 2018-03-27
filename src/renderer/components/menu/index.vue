@@ -295,16 +295,15 @@ export default {
         } else if (item.hasOwnProperty("restrict")) {
           const { from, to, days, types } = item.restrict;
           const day = moment().format("d");
-          console.log(types,this.order.type)
+          
           if (!types.includes(this.order.type)) {
             stop("typeRestricted");
           } else if (!days.includes(day)) {
             stop("dayRestricted");
           } else {
             const time = moment(this.order.create);
-            const _from = moment(new Date(today() + " " + from));
-            const _to = moment(new Date(today() + " " + to));
-
+            const _from = moment(new Date(moment().format("YYYY-MM-DD ") + from));
+            const _to = moment(new Date(moment().format("YYYY-MM-DD ") + to));
             time.isBetween(_from, _to) ? next(item) : stop("timeRestricted");
           }
         } else {
@@ -428,8 +427,8 @@ export default {
                 : type === "timeRestricted"
                   ? [
                       "dialog.itemNotAvailableNow",
-                      item.timeLimit.from,
-                      item.timeLimit.to
+                      item.restrict.from,
+                      item.restrict.to
                     ]
                   : [
                       "dialog.itemNotAvailable",

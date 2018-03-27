@@ -1,14 +1,16 @@
 <template>
     <div class="time">
-        <div>{{day}}</div>
+        <div class="day">{{day}}</div>
         <switches v-model="rule.open" class="toggle"></switches>
-        <div class="hours">
+        <div>
             <div class="timeSession" v-for="(session,index) in rule.hours" :key="index">
                 <div class="name">   
-                    <input v-model="session.alias">
+                    <input v-model="session.alias" maxlength="10">
                 </div>
                 <selector :opts="hours" v-model="session.from"></selector>
                 <selector :opts="hours" v-model="session.to"></selector>
+                <i class="fa fa-plus icon" @click="add" v-if="index === 0"></i>
+                <i class="fa fa-times icon" @click="remove(index)" v-else></i>
             </div>
         </div>
     </div>
@@ -79,7 +81,18 @@ export default {
       }))
     };
   },
-  methods: {}
+  methods: {
+    add(){
+      this.rule.hours.push({
+        from:this.rule.hours[0].to,
+        to:"11:00 PM",
+        alias:"",
+      })
+    },
+    remove(index){
+      this.rule.hours.splice(index,1)
+    },
+  }
 };
 </script>
 
@@ -87,13 +100,25 @@ export default {
 .time {
   display: flex;
   align-items: center;
-  padding: 5px 0 5px 15px;
+  padding: 5px 0 5px 10px;
   border-bottom: 1px solid #eee;
+}
+
+.day{
+  width: 32px;
 }
 
 .timeSession {
   display: flex;
+  position: relative;
+  align-items: center;
   flex: 1;
+}
+
+.timeSession .icon{
+  padding: 5px;
+  cursor: pointer;
+  color:rgba(0,0,0,0.5);
 }
 
 input.name {

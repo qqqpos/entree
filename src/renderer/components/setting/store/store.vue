@@ -12,7 +12,7 @@
         <text-input title="text.contactInfo" v-model="store.contact" @update="updateContact"></text-input>
         <text-list title="text.timezone" v-model="store.timeZone" :opts="timeZones" @update="updateTimeZone"></text-list>
         <text-list title="text.storeType" v-model="store.type" :opts="types" @update="updateStoreType"></text-list>
-        <external title="text.openHour" @open="$router.push({ name: 'Setting.store.openHour' })"></external>
+        <external title="text.openHour" @open="$router.push({ name: 'Setting.store.openHour' })" :tooltip="getOpenHour()"></external>
         <div :is="component" :init="componentData"></div>
     </div>
 </template>
@@ -70,10 +70,11 @@ export default {
           label: "type.fastFood",
           tooltip: "",
           value: "fastFood"
-        },{
-          label:"type.dessertShop",
-          tooltip:"",
-          value:"dessertShop"
+        },
+        {
+          label: "type.dessertShop",
+          tooltip: "",
+          value: "dessertShop"
         }
       ],
       timeZones: [
@@ -151,6 +152,27 @@ export default {
         key: "store.type",
         value
       });
+    },
+    getOpenHour() {
+      const { rules } = this.store.openingHours;
+      const rule = rules[moment().format("d")];
+
+      if (rule.open) {
+        const hours = rule.hours.map(h => ({
+          from: moment(new Date(moment().format("YYYY-MM-DD ") + h.from)),
+          to: moment(new Date(moment().format("YYYY-MM-DD ") + h.to)),
+          alias:h.alias
+        }));
+
+        const open = hours.find(h => moment().isBetween(h.from, h.to));
+        if (open) {
+          return this.$t("text.storeOpen", open.alias, open.from.format("HH:mm"), open.to.format("HH:mm"));
+        } else {
+          return "text.storeClose";
+        }
+      } else {
+        return "text.storeClose";
+      }
     }
   }
 };

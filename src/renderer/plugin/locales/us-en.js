@@ -921,6 +921,8 @@ export default {
     }
   },
   text: {
+    storeClose: "Store closed",
+    storeOpen: "{i} time from {i} to {i}",
     OFB: "Open For Business",
     tag: "Tag",
     starter: "Starter",
