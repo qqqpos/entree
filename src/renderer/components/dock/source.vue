@@ -25,7 +25,7 @@ export default {
       providers: [
         { name: "GrubHub", img: "static/image/provider/grubhub.png" },
         { name: "Seamless", img: "static/image/provider/seamless.png" },
-        { name: "Eat 24", img: "static/image/provider/eat24.png" },
+        { name: "Delivery", img: "static/image/provider/delivery.png" },
         {
           name: "BeyondMenu",
           img: "static/image/provider/beyondmenu.png"

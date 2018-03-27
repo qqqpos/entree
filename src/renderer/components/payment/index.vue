@@ -30,13 +30,17 @@
               <input type="radio" v-model="paymentType" name="paymentType" value="THIRD" id="THIRD" @change="setPaymentType('THIRD')">
               <label for="THIRD">{{$t('type.THIRD')}}</label>
             </div>
-            <div class="type" v-if="!order.hasOwnProperty('__vip__')">
+            <!-- <div class="type" v-if="!order.hasOwnProperty('__vip__')">
               <input type="radio" v-model="paymentType" name="paymentType" value="GIFT" id="GIFT" @change="setPaymentType('GIFT',false)">
               <label for="GIFT">{{$t('type.GIFT')}}</label>
-            </div>
-            <div class="type" v-else>
+            </div> -->
+            <div class="type" v-if="store.giftcard.enable">
               <input type="radio" v-model="paymentType" name="paymentType" value="GIFT" id="GIFT" @change="setPaymentType('GIFT',true)">
               <label for="GIFT">{{$t('type.VIP')}}</label>
+            </div>
+            <div class="type" v-else>
+              <input type="radio" v-model="paymentType" name="paymentType" value="THIRD" id="THIRD" @change="setPaymentType('THIRD')">
+              <label for="THIRD">{{$t('type.THIRD')}}</label>
             </div>
           </div>
           <div class="balanceDue" @dblclick="roundUp">
@@ -168,8 +172,8 @@
                     <label for="GrubHub">GrubHub</label>
                   </div>
                   <div class="type">
-                    <input type="radio" v-model="thirdPartyType" value="Eat 24" id="Eat">
-                    <label for="Eat">Eat 24</label>
+                    <input type="radio" v-model="thirdPartyType" value="Gift Card" id="Eat">
+                    <label for="Eat">Gift Card</label>
                   </div>
                 </div>
               </div>
@@ -237,7 +241,6 @@ import creditCard from "./creditCard";
 import discount from "./discount";
 import thirdParty from "./mark";
 import tiper from "./tiper";
-import { isObject } from "util";
 
 export default {
   props: ["init"],
@@ -600,9 +603,10 @@ export default {
         data: this.order._id,
         note: `Failed to pay bill.\n\nError message:\n${JSON.stringify(error)}`
       });
-      console.log(error);
 
-      isObject(error) ? this.$dialog(error).then(() => this.$q()) : this.$q();
+      error.hasOwnProperty("title")
+        ? this.$dialog(error).then(() => this.$q())
+        : this.$q();
     },
     setPaymentType(type, vip) {
       this.paymentType = type;

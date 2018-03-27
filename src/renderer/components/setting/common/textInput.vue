@@ -66,9 +66,6 @@ input {
   font-size: 18px;
   outline: none;
   margin-top: 2px;
-}
-
-label {
   color: #656565;
 }
 </style>

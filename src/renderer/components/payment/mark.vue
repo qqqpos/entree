@@ -31,7 +31,7 @@ export default {
       options: [
         "GrubHub",
         "Seamless",
-        "Eat 24",
+        "Delivery",
         "Uber Eats",
         "Postmates",
         "EatStreet",
