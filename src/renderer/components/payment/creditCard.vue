@@ -63,9 +63,7 @@ export default {
         this.terminal
           .initial(ip, port, sn, this.station, this.attached)
           .then(response => next(response.data))
-          .catch(error => {
-            stop({ error: "TERMINAL_RETURN_ERROR" });
-          });
+          .catch(error => stop({ error: "TERMINAL_RETURN_ERROR" }));
       });
     },
     initTransaction(initial) {
@@ -88,9 +86,9 @@ export default {
                   this.device.model || this.config.model
                 );
 
-          this.terminal.charge(this.init.card).then(response => {
-            next(response.data);
-          });
+          this.terminal
+            .charge(this.init.card)
+            .then(response => next(response.data));
         }
       });
     },

@@ -165,6 +165,7 @@ const mutations = {
         }
 
         item.total = item.single.toFixed(2);
+
         if (overWrite || replace) {
           item.zhCN = zhCN;
           item.usEN = usEN;

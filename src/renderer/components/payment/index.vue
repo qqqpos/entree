@@ -604,7 +604,7 @@ export default {
         note: `Failed to pay bill.\n\nError message:\n${JSON.stringify(error)}`
       });
 
-      error.hasOwnProperty("title")
+      error && error.hasOwnProperty("title")
         ? this.$dialog(error).then(() => this.$q())
         : this.$q();
     },
