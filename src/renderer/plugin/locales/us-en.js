@@ -573,7 +573,7 @@ export default {
     scheduleError: "Schedule Time Error",
     scheduleErrorTip: "Entered Time must grater than current time",
     scheduleTimer: "Schedule Confirm",
-    scheduleConfirm: "You have set cook time to {i} ( {i} )",
+    scheduleTimerConfirm: "You have set cook time to {i} ( {i} )",
     printerRemove: "Printer Remove",
     printerRemoveConfirm: "Are you sure you want to remove {i} printer?",
     noTerminal: "No Terminal",

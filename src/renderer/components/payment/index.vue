@@ -36,7 +36,7 @@
             </div> -->
             <div class="type" v-if="store.giftcard.enable">
               <input type="radio" v-model="paymentType" name="paymentType" value="GIFT" id="GIFT" @change="setPaymentType('GIFT',true)">
-              <label for="GIFT">{{$t('type.VIP')}}</label>
+              <label for="GIFT">{{$t('type.GIFT')}}</label>
             </div>
             <div class="type" v-else>
               <input type="radio" v-model="paymentType" name="paymentType" value="THIRD" id="THIRD" @change="setPaymentType('THIRD')">

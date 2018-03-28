@@ -22,10 +22,10 @@ const ticket = function (raw, receipt) {
           const index = current.findIndex(i => i.seat === item.seat);
           index === -1 ? current.push(item) : next.push(item);
         });
-        this.printHibachi(printer, raw, current);
+        current.length && this.printHibachi(printer, raw, current);
         next.length && slicer(next);
       };
-      slicer(items);
+      slicer(items.filter(i=>!i.print));
       return false;
     }
 
@@ -226,7 +226,7 @@ function createList(printer, setting, invoice, preview) {
             case "removed":
               break;
             case "inserted":
-              item.choiceSet = item.choiceSet.map(item=>{
+              item.choiceSet = item.choiceSet.map(item => {
                 item.zhCN = "★" + item.zhCN;
                 item.usEN = "★" + item.usEN;
                 return item
@@ -472,8 +472,8 @@ function createStyle(setting) {
   const fontFamily = navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
   const zhCN = `.zhCN{font-family:'${secondary.fontFamily}';font-size:${secondary.fontSize}px;line-height:${secondary.lineHeight}}`;
   const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${primary.fontSize}px;line-height:${primary.lineHeight}}`;
-  const zhCN_sub = secondary.subFontSize ? `.zhCN .sub{padding-left:20px;font-size:${secondary.subFontSize}em;}`:`.zhCN .sub{padding-left:20px;font-size:0.8em;}`;
-  const usEN_sub = primary.subFontSize ? `.usEN .sub{padding-left:20px;font-size:${primary.subFontSize}em;}`:`.usEN .sub{padding-left:20px;font-size:0.8em;}`;
+  const zhCN_sub = secondary.subFontSize ? `.zhCN .sub{padding-left:20px;font-size:${secondary.subFontSize}em;}` : `.zhCN .sub{padding-left:20px;font-size:0.8em;}`;
+  const usEN_sub = primary.subFontSize ? `.usEN .sub{padding-left:20px;font-size:${primary.subFontSize}em;}` : `.usEN .sub{padding-left:20px;font-size:0.8em;}`;
 
   return `<style>\
               *{margin:0;padding:0}\
