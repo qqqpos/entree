@@ -142,7 +142,7 @@ export default {
     },
     confirm() {
       this.saveItems(this.index);
-      !this.insert && this.emptyChoiceSet();
+      !this.insert && this.emptyChoiceSet("_ti");
 
       const { skip, ignore } = this.init.side;
 
@@ -166,7 +166,8 @@ export default {
             usEN,
             print,
             single: price,
-            price: (price * qty).toFixed(2)
+            price: (price * qty).toFixed(2),
+            _ti:true
           });
 
           count += qty;
@@ -181,7 +182,8 @@ export default {
             usEN: "Extra Charge",
             print: [],
             single: addition,
-            price: (addition * qty).toFixed(2)
+            price: (addition * qty).toFixed(2),
+            _ti:true
           });
         }
       });

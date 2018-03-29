@@ -189,10 +189,11 @@ export default {
       items.forEach(({unique})=>{
         this.order.content = this.order.content.filter(item=>item.unique !== unique);
       })
-
-      console.log(this.order.content)
     },
     confirm() {
+      if(document.getElementsByClassName("evener").length > 0) return;
+      if(document.getElementsByClassName("splitor").length > 0) return;
+
       const parent = this.order._id;
       const splits = this.$children
         .map(vm => vm.order)

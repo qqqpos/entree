@@ -320,8 +320,8 @@ const mutations = {
   [types.RESET_CHOICE_SET](state) {
     state.choiceSetTarget = null;
   },
-  [types.EMPTY_CHOICE_SET](state) {
-    state.item.choiceSet = [];
+  [types.EMPTY_CHOICE_SET](state, key) {
+    key ? state.item.choiceSet = state.item.choiceSet.filter(i => !i.hasOwnProperty(key)) : [];
   },
   [types.SET_PRICE_FOR_CHOICE_SET](state, data) {
     if (!state.choiceSetTarget) return;

@@ -84,37 +84,27 @@ export const resetAll = ({ commit }) => {
   commit(types.SET_TICKET, { type: "" });
   commit(types.SET_APP, { newTicket: true });
 };
-export const updateMenuItem = ({ commit }, data) =>
-  commit(types.UPDATE_MENU_ITEM, data);
+export const updateMenuItem = ({ commit }, data) => commit(types.UPDATE_MENU_ITEM, data);
 
-export const removeMenuItem = ({ commit }, data) =>
-  commit(types.REMOVE_MENU_ITEM, data);
+export const removeMenuItem = ({ commit }, data) => commit(types.REMOVE_MENU_ITEM, data);
 
-export const updateRequestCategory = ({ commit }, data) =>
-  commit(types.UPDATE_REQUEST_CATEGORY, data);
+export const updateRequestCategory = ({ commit }, data) => commit(types.UPDATE_REQUEST_CATEGORY, data);
 
-export const updateRequestItem = ({ commit }, data) =>
-  commit(types.UPDATE_REQUEST_ITEM, data);
+export const updateRequestItem = ({ commit }, data) => commit(types.UPDATE_REQUEST_ITEM, data);
 
-export const updateRequestAction = ({ commit }, data) =>
-  commit(types.UPDATE_REQUEST_ACTION, data);
+export const updateRequestAction = ({ commit }, data) => commit(types.UPDATE_REQUEST_ACTION, data);
 
-export const removeRequestItem = ({ commit }, id) =>
-  commit(types.REMOVE_REQUEST_ITEM, id);
+export const removeRequestItem = ({ commit }, id) => commit(types.REMOVE_REQUEST_ITEM, id);
 
 export const delPin = ({ commit }) => commit(types.DEL_PIN);
 
-export const delayPrint = ({ commit }, order) =>
-  commit(types.ADD_SPOOLER, order);
+export const delayPrint = ({ commit }, order) => commit(types.ADD_SPOOLER, order);
 
-export const removeSpooler = ({ commit }, index) =>
-  commit(types.REMOVE_SPOOLER, index);
+export const removeSpooler = ({ commit }, index) => commit(types.REMOVE_SPOOLER, index);
 
-export const addToOrder = ({ commit }, item) =>
-  commit(types.ADD_TO_ORDER, item);
+export const addToOrder = ({ commit }, item) => commit(types.ADD_TO_ORDER, item);
 
-export const setPointer = ({ commit }, target) =>
-  commit(types.SET_POINTER, target);
+export const setPointer = ({ commit }, target) => commit(types.SET_POINTER, target);
 
 export const resetPointer = ({ commit }) => commit(types.RESET_POINTER);
 
@@ -135,21 +125,17 @@ export const alterItemOption = ({ commit }, data) => {
     })
     : commit(types.ALTER_ITEM_OPTION, data);
 };
-export const setChoiceSet = ({ commit }, set) =>
-  commit(types.SET_CHOICE_SET, set);
+export const setChoiceSet = ({ commit }, set) => commit(types.SET_CHOICE_SET, set);
 
-export const alertChoiceSet = ({ commit }, set) =>
-  commit(types.ALERT_CHOICE_SET, set);
+export const alertChoiceSet = ({ commit }, set) => commit(types.ALERT_CHOICE_SET, set);
 
 export const resetChoiceSet = ({ commit }) => commit(types.RESET_CHOICE_SET);
 
-export const emptyChoiceSet = ({ commit }) => commit(types.EMPTY_CHOICE_SET);
+export const emptyChoiceSet = ({ commit }, key) => commit(types.EMPTY_CHOICE_SET, key);
 
-export const setChoiceSetTarget = ({ commit }, target) =>
-  commit(types.SET_CHOICE_SET_TARGET, target);
+export const setChoiceSetTarget = ({ commit }, target) => commit(types.SET_CHOICE_SET_TARGET, target);
 
-export const setPriceForChoiceSet = ({ commit }, price) =>
-  commit(types.SET_PRICE_FOR_CHOICE_SET, price);
+export const setPriceForChoiceSet = ({ commit }, price) => commit(types.SET_PRICE_FOR_CHOICE_SET, price);
 
 export const updateTable = ({ commit }, data) => {
   const { table, sync } = data;
