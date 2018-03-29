@@ -107,7 +107,7 @@ export default {
         });
         this.saved = saved;
         this.insert = false;
-        this.editMode = true;
+        this.editMode = choiceSet.filter(i=>i._ti).length > 0;
       }
     },
     saveItems(index) {
