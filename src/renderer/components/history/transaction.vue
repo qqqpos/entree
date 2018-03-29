@@ -39,8 +39,8 @@
               <td class="type">({{$t('type.'+record.for)}})</td>
             </template>
             <td>{{record.time | moment("HH:mm:ss")}}</td>
-            <td>{{record.cashier}}</td>
-            <td>{{record.server}}</td>
+            <td class="name">{{record.cashier}}</td>
+            <td class="name">{{record.server}}</td>
             <td class="settlement">
               <span class="main">{{$t('type.'+record.type)}}</span>
               <span class="sub">{{record.subType}}</span>
@@ -350,5 +350,13 @@ tfoot td {
   font-style: italic;
   text-align: left;
   color: #979797;
+}
+
+td.name {
+    width: 99px;
+    height: 19px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 </style>

@@ -156,6 +156,7 @@ export default {
                 }
               }
               break;
+            case "HIBACHI":
             case "DINE_IN":
               dineInCount++;
               dineInAmount += due;

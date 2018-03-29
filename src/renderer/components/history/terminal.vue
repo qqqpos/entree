@@ -168,7 +168,7 @@ export default {
           const reason = {
             title: "dialog.noTerminal",
             msg: "dialog.missTerminalConfig",
-            timeout: { duration: 1000, fn: "resolve" },
+            timeout: { duration: 10000, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
@@ -181,7 +181,7 @@ export default {
         let data = {
           title: "dialog.accessDenied",
           msg: "dialog.terminalBatching",
-          timeout: { duration: 1000, fn: "resolve" },
+          timeout: { duration: 10000, fn: "resolve" },
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
         next();
@@ -194,7 +194,7 @@ export default {
             type: "warning",
             title: "dialog.noTerminal",
             msg: "dialog.missTerminalConfig",
-            timeout: { duration: 1000, fn: "resolve" },
+            timeout: { duration: 10000, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
