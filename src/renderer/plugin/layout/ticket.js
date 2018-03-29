@@ -25,7 +25,7 @@ const ticket = function (raw, receipt) {
         current.length && this.printHibachi(printer, raw, current);
         next.length && slicer(next);
       };
-      slicer(items.filter(i=>!i.print));
+      slicer(items.filter(i => !i.print));
       return false;
     }
 
@@ -213,7 +213,6 @@ function createList(printer, setting, invoice, preview) {
           item =>
             item.printer[printer] && !item.print && item.diffs !== "unchanged"
         );
-        console.log(items);
         items.forEach(item => {
           switch (item.diffs) {
             case "less":
@@ -333,8 +332,8 @@ function createList(printer, setting, invoice, preview) {
       .join("")
       .toString();
   }
-
-  return `<section class="receipt">${content}</section>`;
+  const delay = invoice.delay ? `<h1 class="delay">${moment(invoice.delay).format('MM-DD HH:mm')}</h1>` : '';
+  return `<section class="receipt">${delay + content}</section>`;
 
   function mockup(item, renderQty) {
     const { replace = false, zhCN, usEN, note } = item.printer[printer];
@@ -481,7 +480,8 @@ function createStyle(setting) {
               div.store{margin-bottom:10px;${contact ? "" : "display:none;"}}\
               .store h3{font-size:1.25em;}\
               .store h5{font-size:16px;font-weight:lighter}\
-              h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${fontFamily}"}\
+              h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${fontFamily}";}\
+              .delay{border:1px dashed #000;margin:10px 0;text-align:center;}
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
               footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}\
               .ticketNumber{right:10px;}.table{left:10px;}\

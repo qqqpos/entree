@@ -42,7 +42,8 @@
             <div class="f1">
               <button class="btn" @click="setDate">{{$t('button.calendar')}}</button>
             </div>
-            <button class="btn" @click="verify">{{$t('button.confirm')}}</button>
+            <button class="btn" @click="promptPrint">{{$t('button.print')}}</button>
+            <button class="btn" @click="verify">{{$t('type.delay')}}</button>
         </footer>
     </div>
     <div :is="component" :init="componentData"></div>
@@ -139,53 +140,75 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(this.submit)
+        .then(this.save)
+        .then(this.delay)
         .catch(() => this.$q());
+    },
+    promptPrint() {
+      const duration = moment.duration(this.timer.diff(this.now)).humanize();
+      const prompt = {
+        title: "dialog.printConfirm",
+        msg: [
+          "dialog.scheduleTimerConfirm",
+          this.timer.format("MMM DD hh:mm a"),
+          duration
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(this.save)
+        .then(this.print)
+        .catch(() => this.$q());
+    },
+    print(order) {
+      Printer.setTarget("All").print(
+        Object.assign(order, { delay: +this.timer })
+      );
+      this.resetAll();
+      this.$router.push({ path: "/main" });
     },
     failed(prompt) {
       this.$dialog(prompt).then(() => this.$q());
     },
-    submit() {
+    save() {
       this.$q();
 
-      if (this.app.newTicket) {
-        Object.assign(this.order, {
-          customer: this.customer,
-          number: this.ticket.number,
-          modify: 0,
-          time: +new Date(),
-          schedule: +this.timer,
-          status: 1,
-          date: today(),
-          timer: true,
-          print: false,
-          content: this.order.content.map(item => {
-            item.pending = true;
-            return item;
-          })
-        });
+      return new Promise(next => {
+        if (this.app.newTicket) {
+          Object.assign(this.order, {
+            customer: this.customer,
+            number: this.ticket.number,
+            modify: 0,
+            time: +new Date(),
+            schedule: +this.timer,
+            status: 1,
+            date: today(),
+            timer: true,
+            print: false,
+            content: this.order.content.map(item => {
+              item.pending = true;
+              return item;
+            })
+          });
 
-        this.$socket.emit("[SAVE] INVOICE", this.order, false, order => {
-          this.createSchedule(order);
-          this.resetAll();
-          this.$router.push({ path: "/main" });
-        });
-      } else {
-        Object.assign(this.order, {
-          customer: this.$minifyCustomer(this.customer),
-          lastEdit: +new Date(),
-          editor: this.op.name,
-          schedule: +this.timer,
-          modify: isNumber(this.order.modify) ? this.order.modify + 1 : 1
-        });
+          this.$socket.emit("[SAVE] INVOICE", this.order, false, order =>
+            next(order)
+          );
+        } else {
+          Object.assign(this.order, {
+            customer: this.$minifyCustomer(this.customer),
+            lastEdit: +new Date(),
+            editor: this.op.name,
+            schedule: +this.timer,
+            modify: isNumber(this.order.modify) ? this.order.modify + 1 : 1
+          });
 
-        this.$socket.emit("[UPDATE] INVOICE", this.order);
-        this.createSchedule(this.order);
-        this.resetAll();
-        this.$router.push({ path: "/main" });
-      }
+          this.$socket.emit("[UPDATE] INVOICE", this.order);
+          next(this.order);
+        }
+      });
     },
-    createSchedule(order) {
+    delay(order) {
       const job = {
         type: "delay",
         target: "All",
@@ -196,6 +219,8 @@ export default {
       };
 
       this.delayPrint(job);
+      this.resetAll();
+      this.$router.push({ path: "/main" });
     },
     ...mapActions(["delayPrint", "resetAll"])
   },
