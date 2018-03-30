@@ -160,6 +160,8 @@ export default {
         case "PICK_UP":
         case "DELIVERY":
         case "DINE_IN":
+        case "HIBACHI":
+        case "BUFFET":
         case "BAR":
           return Array.isArray(this.prevHistory)
             ? this.prevHistory.filter(
