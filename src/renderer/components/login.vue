@@ -252,6 +252,8 @@ export default {
           this.access();
           break;
         case "Escape":
+          this.setPin();
+          break;
         case "Backspace":
           this.delPin();
           break;

@@ -37,6 +37,7 @@
                 <li @click="setTimer(90)">{{$t('text.setTime',90)}}</li>
               </ul>
             </div>
+              <slider v-model="ahead" :piecewise="true" :data="gaps" tooltip="hover" :dot-size="20"></slider>
         </div>
         <footer>
             <div class="f1">
@@ -54,10 +55,11 @@
 import { mapGetters, mapActions } from "vuex";
 import dialoger from "../../common/dialoger";
 import calendar from "../../history/component/calendar";
+import slider from "../../setting/common/slider";
 
 export default {
   props: ["init"],
-  components: { dialoger, calendar },
+  components: { dialoger, calendar, slider },
   data() {
     return {
       componentData: null,
@@ -65,7 +67,9 @@ export default {
       date: moment().format("YYYY-MM-DD"),
       timer: moment(),
       now: moment(),
-      time: null
+      time: null,
+      ahead: 10,
+      gaps: [0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
     };
   },
   created() {
@@ -212,7 +216,7 @@ export default {
       const job = {
         type: "delay",
         target: "All",
-        schedule: +this.timer,
+        schedule: +this.timer.subtract(this.ahead, "m"),
         creator: this.op.name,
         station: this.station.alias,
         order

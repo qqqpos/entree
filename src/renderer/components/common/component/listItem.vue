@@ -170,7 +170,7 @@ li {
 }
 
 .item.print.pending:after {
-  content: "\f02f";
+  content: "\f017";
 }
 
 .item.print.pending {

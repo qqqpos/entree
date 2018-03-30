@@ -107,7 +107,7 @@ export default {
         });
         this.saved = saved;
         this.insert = false;
-        this.editMode = choiceSet.filter(i=>i._ti).length > 0;
+        this.editMode = choiceSet.filter(i => i._ti).length > 0;
       }
     },
     saveItems(index) {
@@ -115,16 +115,17 @@ export default {
     },
     moreQty(item) {
       const { autoJump } = this.template;
+      const max = this.max * this.init.item.qty;
       let qty = this.items.reduce((a, c) => a + c.qty, 0);
 
-      if (qty < this.max) {
+      if (qty < max) {
         item.qty++;
         this.itemCount[this.index]++;
       }
 
       qty = this.items.reduce((a, c) => a + c.qty, 0);
 
-      if (autoJump && qty === this.max) {
+      if (autoJump && qty === max) {
         if (this.editMode) {
           const saved = this.saved[this.index].shift();
           saved && (this.items.find(i => i.key === saved.key).qty = 0);
@@ -167,7 +168,7 @@ export default {
             print,
             single: price,
             price: (price * qty).toFixed(2),
-            _ti:true
+            _ti: true
           });
 
           count += qty;
@@ -183,7 +184,7 @@ export default {
             print: [],
             single: addition,
             price: (addition * qty).toFixed(2),
-            _ti:true
+            _ti: true
           });
         }
       });

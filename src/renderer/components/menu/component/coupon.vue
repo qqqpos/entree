@@ -13,7 +13,7 @@
         <div class="opt">
 
         </div>
-        <button class="btn" @click="swipe">{{$t('card.vip')}}</button>
+        <button class="btn" @click="swipe" v-show="vip">{{$t('card.vip')}}</button>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
       </footer>
     </div>
@@ -38,6 +38,7 @@ export default {
         ? this.init.order
         : this.$store.getters.order,
       callback: this.init.hasOwnProperty("order"),
+      vip: this.$store.getters.store.giftcard.vip,
       coupons: [],
       stack: false
     };
@@ -91,7 +92,7 @@ export default {
           this.$q();
           if (card.vip) {
             this.setOrder({ __vip__: card });
-            card.holder && this.setCustomer({})
+            card.holder && this.setCustomer({});
           } else {
             const prompt = {
               title: "dialog.cantExecute",

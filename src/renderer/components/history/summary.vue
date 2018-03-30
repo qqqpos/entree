@@ -36,6 +36,12 @@
       </div>
       <div class="value">$ {{summary.dineInAmount | decimal}}</div>
     </div>
+    <div class="filter" @click="setFilter('HIBACHI',$event)" v-show="summary.hibachiCount">
+      <div class="text">{{$t('type.dineInInvoice')}}
+        <span class="count">{{summary.hibachiCount}}</span>
+      </div>
+      <div class="value">$ {{summary.hibachiAmount | decimal}}</div>
+    </div>
     <div class="filter" @click="setFilter('UNSETTLE',$event)" v-show="summary.unsettledCount">
       <div class="text">{{$t('type.unpaidInvoice')}}
         <span class="count">{{summary.unsettledCount}}</span>
@@ -100,19 +106,21 @@ export default {
     summary() {
       const sum = (a, b) => a + b;
       let driver = {};
+
       let totalCount = 0,
         walkInCount = 0,
         pickUpCount = 0,
         deliveryCount = 0,
         dineInCount = 0,
+        hibachiCount = 0,
         buffetCount = 0,
-        unsettledCount = 0;
-
-      let totalAmount = 0,
+        unsettledCount = 0,
+        totalAmount = 0,
         walkInAmount = 0,
         pickUpAmount = 0,
         deliveryAmount = 0,
         dineInAmount = 0,
+        hibachiAmount = 0,
         buffetAmount = 0,
         unsettledAmount = 0;
 
@@ -157,6 +165,9 @@ export default {
               }
               break;
             case "HIBACHI":
+              hibachiCount++;
+              hibachiAmount += due;
+              break;
             case "DINE_IN":
               dineInCount++;
               dineInAmount += due;
@@ -185,6 +196,8 @@ export default {
         deliveryAmount,
         dineInCount,
         dineInAmount,
+        hibachiCount,
+        hibachiAmount,
         buffetCount,
         buffetAmount,
         unsettledCount,

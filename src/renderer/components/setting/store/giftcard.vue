@@ -1,6 +1,7 @@
 <template>
   <div>
     <toggle title="setting.giftcard.enable" v-model="giftcard.enable"></toggle>
+    <toggle title="card.vip" v-model="giftcard.vip"></toggle>
     <toggle title="setting.giftcard.expire" v-model="giftcard.expire">
       <transition name="dropdown">
         <div v-if="giftcard.expire" class="opt">
@@ -15,7 +16,7 @@
         </div>
       </transition>
     </toggle>
-    <text-input title="setting.giftcard.format" v-model="giftcard.format" placeholder="################"></text-input>
+    <text-input title="setting.giftcard.format" v-model="giftcard.format" v-show="authorized"></text-input>
   </div>
 </template>
 
@@ -27,9 +28,10 @@ import selector from "../common/selector";
 import textInput from "../common/textInput";
 
 export default {
-  components: { toggle, switches, inputer, selector,textInput },
+  components: { toggle, switches, inputer, selector, textInput },
   data() {
     return {
+      authorized: this.$store.getters.authorized,
       giftcard: this.$store.getters.store.giftcard,
       periodOpts: [
         {

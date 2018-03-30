@@ -295,14 +295,16 @@ export default {
         } else if (item.hasOwnProperty("restrict")) {
           const { from, to, days, types } = item.restrict;
           const day = moment().format("d");
-          
+
           if (!types.includes(this.order.type)) {
             stop("typeRestricted");
           } else if (!days.includes(day)) {
             stop("dayRestricted");
           } else {
             const time = moment(this.order.create);
-            const _from = moment(new Date(moment().format("YYYY-MM-DD ") + from));
+            const _from = moment(
+              new Date(moment().format("YYYY-MM-DD ") + from)
+            );
             const _to = moment(new Date(moment().format("YYYY-MM-DD ") + to));
             time.isBetween(_from, _to) ? next(item) : stop("timeRestricted");
           }
@@ -409,7 +411,7 @@ export default {
           break;
         case "template":
           item ? this.addToOrder(item) : (item = this.item);
-          this.$p("templateItem", { side: item.option[index], index });
+          this.$p("templateItem", { side: item.option[index], item, index });
           break;
         case "dayRestricted":
         case "timeRestricted":
