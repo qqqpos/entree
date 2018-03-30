@@ -121,7 +121,9 @@ export default {
             item.hasOwnProperty("prices") &&
             item.prices.hasOwnProperty("DEFAULT")
           ) {
-            item.price = item.prices["DEFAULT"].split(",");
+            item.price = Array.isArray(item.prices["DEFAULT"])
+              ? item.prices["DEFAULT"]
+              : item.prices["DEFAULT"].split(",");
           }
 
           return item;

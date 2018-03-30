@@ -37,7 +37,7 @@
       <div class="value">$ {{summary.dineInAmount | decimal}}</div>
     </div>
     <div class="filter" @click="setFilter('HIBACHI',$event)" v-show="summary.hibachiCount">
-      <div class="text">{{$t('type.dineInInvoice')}}
+      <div class="text">{{$t('type.hibachiInvoice')}}
         <span class="count">{{summary.hibachiCount}}</span>
       </div>
       <div class="value">$ {{summary.hibachiAmount | decimal}}</div>

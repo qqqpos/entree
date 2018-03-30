@@ -42,6 +42,7 @@ export default {
     pickUpInvoice: "来取订单",
     deliveryInvoice: "送餐订单",
     dineInInvoice: "堂吃订单",
+    hibachiInvoice: "贴板订单",
     buffetInvoice: "自助餐订单",
     unpaidInvoice: "未付款订单",
     driverInvoice: "司机订单",
