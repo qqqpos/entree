@@ -152,8 +152,8 @@ export default {
     staffCashInTip: "Staff Cash In",
     staffCashOut: "Staff Cash Out",
     staffCashOutTip: "Staff Cash Settlement",
-    cashDrawerCashIn: "CashDrawer Deposit",
-    cashInTip: "CashDrawer Cash In",
+    cashDrawerCashIn: "Cash In",
+    cashInTip: "Cash Drawer Initial Deposit",
     cashDrawerCashOut: "Cash Out",
     cashDrawerCashOutTip: "Cash Drawer Cash Settlement",
     report: "Session Report",
@@ -1453,6 +1453,7 @@ export default {
       tables: "Allow to View All Tables"
     },
     privilege: {
+      batch: "Allow Perform Batch Action",
       employee: "Allow Modify Employee",
       database: "Allow View Database",
       timecard: "Allow Modify Employee Time Card",

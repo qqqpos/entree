@@ -1,5 +1,5 @@
 <template>
-  <div class="function" v-if="layout ==='DINE_IN' || layout === 'HIBACHI'">
+  <div class="function" v-if="layout ==='DINE_IN' || layout === 'HIBACHI' || layout === 'BAR'">
     <div class="top">
       <div class="btn" @click="less">
         <i class="fa fa-minus-square"></i>

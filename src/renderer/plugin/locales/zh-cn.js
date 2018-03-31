@@ -1421,6 +1421,7 @@ export default {
       tables: "允许查看所有座位订单"
     },
     privilege: {
+      batch: "允许信用卡过账",
       employee: "允许管理员工信息",
       database: "允许查看数据库",
       timecard: "允许修改打卡时段",

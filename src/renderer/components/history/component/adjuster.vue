@@ -44,7 +44,7 @@
         </section>
       </div>
       <footer>
-        <div class="opt">
+        <div class="opt" v-show="isBatchable">
           <checkbox v-model="batch" title="text.readyBatch"></checkbox>
         </div>
         <button class="btn" v-if="batch" @click="init.resolve">{{$t('button.batch')}}</button>
@@ -73,6 +73,7 @@ export default {
     return {
       componentData: null,
       component: null,
+      isBatchable: false,
       transactions: [],
       transaction: null,
       placeholder: "0.00",
@@ -92,6 +93,14 @@ export default {
       .reverse();
     const next = this.transactions.find(t => t.status !== 2);
     this.index = next ? next.index : 0;
+
+    try {
+      this.isBatchable =
+        this.$store.getters.authorized ||
+        this.$store.getters.op.permission.includes("batch");
+    } catch (e) {
+      this.isBatchable = false;
+    }
   },
   mounted() {
     window.addEventListener("keydown", this.entry, false);

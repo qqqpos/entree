@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     create() {
-      const name = "tax" + String().random();
+      const name = "tax_" + String().random();
       const tax = {
         alias: "",
         rate: 0,
@@ -82,7 +82,8 @@ export default {
         this.component = "editor";
       })
         .then(_tax => {
-          Object.assign(this.tax.class[name], _tax);
+          console.log(this.tax)
+          this.tax.class[name] = _tax;
           this.$q();
         })
         .catch(del => {

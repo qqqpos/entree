@@ -173,9 +173,30 @@ export default {
               .catch(() => stop());
             break;
           case "bar":
-            this.selectBarTab()
-              .then(seats => next(Object.assign(table, { seats })))
-              .catch(() => stop());
+            const session = ObjectId();
+
+            this.setTicket({ type: "BAR" });
+            this.setApp({ newTicket: true });
+            this.setOrder({
+              table,
+              session,
+              guest: table.guest || 1,
+              type: "BAR",
+              server: this.op.name
+            });
+
+            this.setCurrentTable(
+              Object.assign(table, {
+                status: 2,
+                session,
+                server: this.op.name,
+                time: +new Date()
+              })
+            );
+
+            this.$socket.emit("[TABLE] SETUP", this.currentTable);
+            this.$router.push({ path: "/main/menu" });
+            stop();
             break;
           default:
             next(table);
@@ -254,7 +275,7 @@ export default {
       });
     },
     viewTicket(table) {
-      !table.hasOwnProperty('invoice') && Object.assign(table, { invoice: [] });
+      !table.hasOwnProperty("invoice") && Object.assign(table, { invoice: [] });
 
       const invoice = this.history.find(i => i._id === table.invoice[0]);
       const prompt = {
@@ -308,8 +329,9 @@ export default {
     },
     selectBarTab() {
       return new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject };
-        this.component = "barTab";
+        resolve();
+        // this.componentData = { resolve, reject };
+        // this.component = "barTab";
       });
     },
     createTable(table) {
@@ -368,13 +390,13 @@ export default {
       prompt && this.$dialog(prompt).then(() => this.$q());
     },
     option(table, index) {
-      (table._id && !table.temporary)
+      table._id && !table.temporary
         ? this.resetTableDialog(table)
         : table.temporary
           ? this.collapseTable(table, index)
           : this.temporaryTable(table, index);
     },
-    resetTableDialog(table,index) {
+    resetTableDialog(table, index) {
       const { server, name, _id } = table;
       const { role } = this.op;
 
