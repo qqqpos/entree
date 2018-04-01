@@ -348,7 +348,7 @@ export default {
               }
             });
 
-            if (this.ticket.type !== "DINE_IN") {
+            if (this.ticket.type !== "DINE_IN" && this.ticket.type !== "BAR") {
               this.$socket.emit("[SAVE] INVOICE", order, false, content => {
                 Printer.setTarget("Order").print(
                   Object.assign(order, { content: items })
@@ -372,7 +372,7 @@ export default {
                 }
               });
             }
-          } else if (this.ticket.type !== "DINE_IN") {
+          } else if (this.ticket.type !== "DINE_IN" && this.ticket.type !== "BAR") {
             this.$socket.emit("[SAVE] INVOICE", order, print, content => {
               print && Printer.setTarget("All").print(content);
             });
@@ -396,7 +396,7 @@ export default {
             if (print) {
               let diffs = this.analyzeDiffs(order);
 
-              if (this.order.type !== "DINE_IN") {
+              if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
               } else {
                 this.dinein.printOnDone

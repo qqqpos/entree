@@ -8,7 +8,7 @@
       <span class="data">{{invoice.customer.address}}</span>
       <span>{{invoice.customer.phone | phone}}</span>
     </div>
-    <span class="info" v-else-if="invoice.type === 'DINE_IN' || invoice.type === 'HIBACHI'">{{invoice.table}}</span>
+    <span class="info" v-else-if="invoice.type === 'DINE_IN' || invoice.type === 'HIBACHI' || invoice.type === 'BAR'">{{invoice.table}}</span>
     <div class="info" v-else>
       <span class="data">{{invoice.customer.name}}</span>
       <span>{{invoice.customer.phone | phone}}</span>

@@ -22,7 +22,6 @@
           <i class="fa fa-phone-square" :class="{na:!device.callid}"></i>
           <i class="fa fa-credit-card" :class="{na:!device.terminal}"></i>
           <i class="fa fa-desktop" :class="{na:!device.poleDisplay}"></i>
-          <!-- <i class="fa fa-print spooler" v-show="spooler.length > 0" @click="messageCenter(true)"></i> -->
           <i class="fa fa-globe" :class="{na:!device.online}"></i>
           <i class="fa fa-sitemap" :class="{na:!app.database}"></i>
         </div>
@@ -59,7 +58,7 @@ export default {
         ? "type." + this.order.type
         : "type." + this.ticket.type;
 
-      return this.ticket.type === "DINE_IN"
+      return this.ticket.type === "DINE_IN" || this.ticket.type === "BAR"
         ? this.$t(type, this.app.language) +
             (this.order.table
               ? " - " +

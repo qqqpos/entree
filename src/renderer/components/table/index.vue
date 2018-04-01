@@ -178,13 +178,13 @@ export default {
             this.setTicket({ type: "BAR" });
             this.setApp({ newTicket: true });
             this.setOrder({
-              table,
+              table:table.name,
               session,
               guest: table.guest || 1,
               type: "BAR",
               server: this.op.name
             });
-
+            
             this.setCurrentTable(
               Object.assign(table, {
                 status: 2,
