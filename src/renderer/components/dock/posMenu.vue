@@ -38,7 +38,7 @@
             <h5>{{$t('dock.terminalTip')}}</h5>
           </div>
         </li>
-        <li @click="$open('giftcard')">
+        <li @click="$open('giftcard')" v-show="giftcardEnable">
           <i class="fa fa-2x fa-gift"></i>
           <div>
             <h3>{{$t('dock.giftCard')}}</h3>
@@ -158,8 +158,16 @@ export default {
     return {
       componentData: null,
       component: null,
-      isShow: this.init.args
+      isShow: this.init.args,
+      giftcardEnable: false
     };
+  },
+  created() {
+    try {
+      this.giftcardEnable = this.$store.getters.store.giftcard.enable;
+    } catch (e) {
+      this.giftcardEnable = false;
+    }
   },
   methods: {
     changeLanguage() {
@@ -663,7 +671,7 @@ export default {
         unsettledCount,
         sessions
       };
-      
+
       Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOp"])

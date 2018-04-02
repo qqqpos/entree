@@ -341,6 +341,7 @@ function createList(printer, setting, invoice, preview) {
     const idEN = primary.id ? item.menuID + " " : "";
     const nameCN = replace ? idCN + zhCN : idCN + (item.zhCN || "");
     const nameEN = replace ? idEN + usEN : idEN + (item.usEN || "");
+    const singleLanguage = item.zhCN === item.usEN && languages[0].enable && languages[1].enable;
     const sideCN = item.side.zhCN || "";
     const sideEN = item.side.usEN || "";
     const cnPrice = secondary.price
@@ -459,8 +460,8 @@ function createList(printer, setting, invoice, preview) {
         : "";
     }
     return languages[0].ref === "zhCN"
-      ? chineseItem + englishItem
-      : englishItem + chineseItem;
+      ? (singleLanguage ? chineseItem : chineseItem + englishItem)
+      : (singleLanguage ? englishItem : englishItem + chineseItem);
   }
 }
 

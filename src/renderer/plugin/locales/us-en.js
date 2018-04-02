@@ -854,6 +854,7 @@ export default {
     customize: "Customize",
     salesFrom: "Sales Source",
     categorySales: "Category Sales",
+    departmentSales: "Department Sales",
     hourlyReport: "Hourly Summary",
     tipSummary: "Tip Summary Report",
     giftCardSummary: "Gift Card Sales Report",

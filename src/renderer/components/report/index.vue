@@ -46,10 +46,11 @@
               <transition-group name="fadeDown" tag="div" class="options">
                 <template v-if="reportDetail === 'customize'">
                   <checkbox v-model="detailPayment" title="report.detailPayment" :key="1"></checkbox>
-                  <checkbox v-model="managerWaive" title="report.redemptionReport" :key="3"></checkbox>
-                  <checkbox v-model="itemSales" title="report.itemSales" :key="4"></checkbox>
-                  <checkbox v-model="categorySales" title="report.categorySales" :key="5"></checkbox>
-                  <checkbox v-model="hourly" title="report.hourlyReport" :key="6"></checkbox>
+                  <checkbox v-model="itemSales" title="report.itemSales" :key="2"></checkbox>
+                  <checkbox v-model="categorySales" title="report.categorySales" :key="3"></checkbox>
+                  <checkbox v-model="departmentSales" title="report.departmentSales" :key="4"></checkbox>
+                  <checkbox v-model="hourly" title="report.hourlyReport" :key="5"></checkbox>
+                  <checkbox v-model="managerWaive" title="report.redemptionReport" :key="6"></checkbox>
                 </template>
               </transition-group>
             </div>
@@ -65,7 +66,7 @@
       </div>
       <footer>
         <div class="opt">
-          <checkbox v-model="daily" title="report.dailyReport"></checkbox>
+          <checkbox v-model="daily" title="report.dailyReport" v-show="range !== 'today'"></checkbox>
         </div>
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
@@ -103,6 +104,7 @@ export default {
       hourly: false,
       itemSales: false,
       categorySales: false,
+      departmentSales: false,
       managerWaive: false
     };
   },
@@ -280,6 +282,9 @@ export default {
           this.report["Item Sales"] = this.itemSalesReport(invoices);
         if (this.categorySales)
           this.report["Category Sales"] = this.categorySalesReport(invoices);
+
+        if(this.departmentSales)
+          this.report["Department Sales"] = this.departmentSalesReport(invoices);
         if (this.cashier)
           this.report["Cashier Report"] = this.cashierReport(data);
         if (this.waitStaff)
@@ -764,6 +769,9 @@ export default {
         });
 
       return report;
+    },
+    departmentSalesReport(invoices){
+      
     },
     cashierReport(data) {
       const { invoices, transactions } = data;

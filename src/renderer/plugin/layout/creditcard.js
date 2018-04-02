@@ -25,13 +25,13 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
       .join("")
       .toString();
 
-      suggestions = `<section class="suggestion">\
+    suggestions = `<section class="suggestion">\
                       <h5>Tips Suggestion</h5>\
                       <i>These tip amounts are provided for your convenience.</i>\
                       ${data}\
                   </section>`;
   }
-  
+
   let html = createHtml();
   const style = createStyle();
   const duplicate = reprint ? '<p class="center">***Duplicate***</p>' : '';
@@ -74,6 +74,10 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
 
   function createHtml() {
     const due = parseFloat(trans.amount.due) > 0 ? `<p class="due"><span class="text">Due:</span><span class="value">$${trans.amount.due}</span></p>` : "";
+    const ticketInfo = (trans.order && trans.order.hasOwnProperty("type") && trans.order.hasOwnProperty("number")) ?
+      `<p><span class="text">Ticket</span><span class="value">${trans.order.number}</span></p>\
+       <p><span class="text">Type</span><span class="value">${trans.order.type.replace("_", " ")}</span></p>` : "";
+
     return `<section class="header">\
               <div class="store">\
                 <h3>${store.name}</h3>\
@@ -98,7 +102,8 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
               <p class="bold"><span class="text">Total:</span><span class="value ul">$</span></p>\
               <p><span class="text">Auth Code</span><span class="value">${trans.host.auth}</span></p>\
               <p><span class="text">Response</span><span class="value">${trans.host.msg}</span></p>\
-              <p><span class="text">From Station</span><span class="value">${trans.station}</span></p>\
+              <p><span class="text">Terminal</span><span class="value">${trans.terminal}</span></p>\
+              ${ticketInfo}
             </article>`;
   }
 
