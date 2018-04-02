@@ -1,9 +1,12 @@
 <template>
-    <div class="popupMask setting dark center" @click.self="init.reject">
+    <div class="popupMask setting dark center" @click.self="init.reject(false)">
         <div class="editor" v-show="!component">
             <header>
+              <div>
                 <h5>{{$t('title.edit')}}</h5>
                 <h3>{{$t('title.timecard')}}</h3>
+              </div>
+                
             </header>
             <div class="banner"></div>
             <div class="wrap">
@@ -21,7 +24,7 @@
             </div>
             <footer>
                 <div class="opt">
-                    <checkbox v-model="lock" title="text.lock"></checkbox>
+                    <span class="del" @click="init.reject(true)">{{$t('button.delete')}}</span>
                 </div>
                 <button class="btn" @click="confirm" :disabled="!valid">{{$t('button.confirm')}}</button>
             </footer>
@@ -34,11 +37,10 @@
 import picker from "./picker";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
-import checkbox from "../../common/checkbox";
 
 export default {
   props: ["init"],
-  components: { picker, toggle, inputer, checkbox },
+  components: { picker, toggle, inputer,  },
   computed: {
     valid() {
       const { wage, date, clockIn, clockOut } = this.log;
@@ -83,7 +85,6 @@ export default {
         this.component = "picker";
       })
         .then(() => {
-
           this.$q();
         })
         .catch(() => this.$q());

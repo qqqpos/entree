@@ -229,7 +229,7 @@ export default {
       const remain = items.filter(item => !item.print).length;
 
       order.content = this.spooler;
-      order.delay = +new Date();
+      order.schedule = +new Date();
       Printer.setTarget("Order").print(order);
       this.spooler.forEach(item => {
         item.print = true;

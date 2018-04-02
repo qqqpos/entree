@@ -251,7 +251,7 @@ export default {
         const mm = ("00" + Math.floor((duration % 3.6e6) / 6e4)).slice(-2);
         const ss = ("00" + Math.floor((duration % 6e4) / 1e3)).slice(-2);
 
-        return this.$t("text.hhmmss", hh, mm, ss);
+        return this.$t("text.hhmm", hh, mm);
       }
     },
     salary({ clockIn, clockOut, wage }) {
@@ -279,7 +279,20 @@ export default {
         .catch(() => this.$q());
     },
     edit(log) {
-      this.$p("editor", { operator: this.operator, log });
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, operator: this.operator, log };
+        this.component = "editor";
+      })
+        .then(() => this.$q())
+        .catch(del => {
+          if (del) {
+            this.$socket.emit("[TIMECARD] REMOVE", log._id, () =>
+              this.fetchData()
+            );
+          }
+
+          this.$q();
+        });
     },
     unlock(log) {
       if (this.op.role !== "Developer") return;
