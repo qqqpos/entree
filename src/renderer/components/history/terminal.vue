@@ -178,12 +178,12 @@ export default {
     },
     checkOccupy() {
       return new Promise((next, reject) => {
-        let data = {
-          title: "dialog.accessDenied",
-          msg: "dialog.terminalBatching",
-          timeout: { duration: 10000, fn: "resolve" },
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
-        };
+        // let data = {
+        //   title: "dialog.accessDenied",
+        //   msg: "dialog.terminalBatching",
+        //   timeout: { duration: 10000, fn: "resolve" },
+        //   buttons: [{ text: "button.confirm", fn: "resolve" }]
+        // };
         next();
       });
     },
@@ -320,7 +320,12 @@ export default {
       this.initialParser(this.station.terminal).then(() => {
         this.terminal.refund(amount, number).then(response => {
           let result = this.terminal.explainTransaction(response.data);
-          result._id = ObjectId();
+
+          Object.assign(result, {
+            _id: ObjectId(),
+            date: today(),
+            for: "Refund"
+          });
 
           if (result.code === "000000") {
             const transaction = {
@@ -351,8 +356,8 @@ export default {
             this.$socket.emit("[TERMINAL] SAVE", result);
             this.$socket.emit("[TRANSACTION] SAVE", transaction);
             this.$q();
-            
-            Printer.printCreditCard(result,{})
+
+            Printer.printCreditCard(result, {});
           } else {
             const prompt = {
               title: ["terminal.error", result.code],

@@ -1158,9 +1158,7 @@ export default {
       this.$q();
       if (this.payInFull) {
         this.$socket.emit("[PAYMENT] CHECK", this.order._id, paid => {
-          const remain = Math.max(0, this.payment.balance - paid)
-            .toPrecision(12)
-            .toFloat();
+          const remain = Math.max(0, toFixed(this.payment.balance - paid, 2));
 
           if (remain > 0) {
             this.$q();

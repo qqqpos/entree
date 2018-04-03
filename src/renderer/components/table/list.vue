@@ -95,7 +95,9 @@ export default {
       ? this.history
           .filter(
             invoice =>
-              invoice.type === "DINE_IN" &&
+              (invoice.type === "DINE_IN" ||
+                invoice.type === "BAR" ||
+                invoice.type === "HIBACHI") &&
               invoice.status === 1 &&
               !invoice.settled
           )
@@ -103,7 +105,9 @@ export default {
       : this.history
           .filter(
             invoice =>
-              invoice.type === "DINE_IN" &&
+              (invoice.type === "DINE_IN" ||
+                invoice.type === "BAR" ||
+                invoice.type === "HIBACHI") &&
               invoice.server === this.op.name &&
               invoice.status === 1 &&
               !invoice.settled
@@ -160,7 +164,9 @@ export default {
               ticket.content.forEach(item => {
                 master.content.push(item);
               });
+              master.guest += ticket.guest || 1;
               //combine payment
+
               master.payment.subtotal += ticket.payment.subtotal;
               master.payment.tax += ticket.payment.tax;
               master.payment.total += ticket.payment.total;
@@ -168,12 +174,8 @@ export default {
               master.payment.balance += ticket.payment.balance;
               master.payment.paid += ticket.payment.paid;
               master.payment.change += ticket.payment.change;
-
-              //should we ignore surcharge?
               master.payment.gratuity += ticket.payment.gratuity;
               master.payment.tip += ticket.payment.tip;
-              master.payment.surcharge += ticket.payment.surcharge;
-
               master.payment.discount += ticket.payment.discount;
               master.payment.remain += ticket.payment.remain;
 
@@ -200,7 +202,9 @@ export default {
       this.invoices = invoices
         .filter(
           invoice =>
-            invoice.type === "DINE_IN" &&
+            (invoice.type === "DINE_IN" ||
+              invoice.type === "BAR" ||
+              invoice.type === "HIBACHI") &&
             invoice.status === 1 &&
             !invoice.settled
         )
@@ -211,7 +215,7 @@ export default {
 </script>
 
 <style scoped>
-table{
+table {
   width: 825px;
 }
 .action {
