@@ -134,7 +134,7 @@ export default {
         .catch(() => this.$q());
     },
     register(card) {
-      this.operator = Object.assign({}, this.operator, { card });
+      this.operator = Object.assign(this.operator, { card });
       this.$q();
     },
     unregister() {
@@ -143,7 +143,7 @@ export default {
         msg: "card.removeEmployeeCardConfirm"
       };
 
-      this.$dialog()
+      this.$dialog(prompt)
         .then(() => {
           delete this.operator.card;
           this.$q();

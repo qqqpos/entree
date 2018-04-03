@@ -283,8 +283,10 @@ export default {
         if (this.categorySales)
           this.report["Category Sales"] = this.categorySalesReport(invoices);
 
-        if(this.departmentSales)
-          this.report["Department Sales"] = this.departmentSalesReport(invoices);
+        if (this.departmentSales)
+          this.report["Department Sales"] = this.departmentSalesReport(
+            invoices
+          );
         if (this.cashier)
           this.report["Cashier Report"] = this.cashierReport(data);
         if (this.waitStaff)
@@ -585,12 +587,20 @@ export default {
       });
 
       const unsettled = validInvoices.filter(invoice => !invoice.settled);
+      const refunds = transactions.filter(t => t.for === "Refund");
 
       report.push({
         text: this.$t("report.unsettled") + ` ( ${unsettled.length} )`,
-        style: "space breakline",
+        style: refunds.length > 0 ? "space" : "space breakline",
         value: unsettled.reduce((a, c) => a + c.payment.due, 0).toFixed(2)
       });
+
+      refunds.length > 0 &&
+        report.push({
+          text: this.$t("report.refund") + ` ( ${refunds.length} )`,
+          style: "space breakline bold",
+          value: refunds.reduce((a, c) => a + c.actual, 0).toFixed(2)
+        });
 
       const tipTotal = orderPayments.reduce((a, c) => a + c.tip, 0);
 
@@ -770,9 +780,7 @@ export default {
 
       return report;
     },
-    departmentSalesReport(invoices){
-      
-    },
+    departmentSalesReport(invoices) {},
     cashierReport(data) {
       const { invoices, transactions } = data;
       let cashiers = new Set();
