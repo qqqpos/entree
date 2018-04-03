@@ -143,7 +143,7 @@ export default {
     },
     confirm() {
       this.saveItems(this.index);
-      !this.insert && this.emptyChoiceSet("_ti");
+     !this.insert && this.emptyChoiceSet({ _ti: this.template._id });
 
       const { skip, ignore } = this.init.side;
 
@@ -168,7 +168,7 @@ export default {
             print,
             single: price,
             price: (price * qty).toFixed(2),
-            _ti: true
+            _ti: this.template._id
           });
 
           count += qty;
@@ -184,7 +184,7 @@ export default {
             print: [],
             single: addition,
             price: (addition * qty).toFixed(2),
-            _ti: true
+            _ti: this.template._id
           });
         }
       });

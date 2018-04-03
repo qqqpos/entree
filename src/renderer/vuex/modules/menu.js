@@ -1,4 +1,5 @@
 import * as types from "../mutation-types";
+import { isObject } from "util";
 
 const state = {
   order: {
@@ -320,8 +321,14 @@ const mutations = {
   [types.RESET_CHOICE_SET](state) {
     state.choiceSetTarget = null;
   },
-  [types.EMPTY_CHOICE_SET](state, key) {
-    key ? state.item.choiceSet = state.item.choiceSet.filter(i => !i.hasOwnProperty(key)) : [];
+  [types.EMPTY_CHOICE_SET](state, target) {
+    if (isObject(target)) {
+      const key = Object.keys(target)[0];
+      const value = Object.values(target)[0];
+      state.item.choiceSet = state.item.choiceSet.filter(i => i[key] !== value)
+    } else {
+      state.item.choiceSet = []
+    }
   },
   [types.SET_PRICE_FOR_CHOICE_SET](state, data) {
     if (!state.choiceSetTarget) return;

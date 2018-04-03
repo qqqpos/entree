@@ -131,7 +131,7 @@ export const alertChoiceSet = ({ commit }, set) => commit(types.ALERT_CHOICE_SET
 
 export const resetChoiceSet = ({ commit }) => commit(types.RESET_CHOICE_SET);
 
-export const emptyChoiceSet = ({ commit }, key) => commit(types.EMPTY_CHOICE_SET, key);
+export const emptyChoiceSet = ({ commit }, target) => commit(types.EMPTY_CHOICE_SET, target);
 
 export const setChoiceSetTarget = ({ commit }, target) => commit(types.SET_CHOICE_SET_TARGET, target);
 

@@ -351,6 +351,8 @@ export default {
             this.$socket.emit("[TERMINAL] SAVE", result);
             this.$socket.emit("[TRANSACTION] SAVE", transaction);
             this.$q();
+            
+            Printer.printCreditCard(result,{})
           } else {
             const prompt = {
               title: ["terminal.error", result.code],
