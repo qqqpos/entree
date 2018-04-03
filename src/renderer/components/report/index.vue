@@ -48,7 +48,7 @@
                   <checkbox v-model="detailPayment" title="report.detailPayment" :key="1"></checkbox>
                   <checkbox v-model="itemSales" title="report.itemSales" :key="2"></checkbox>
                   <checkbox v-model="categorySales" title="report.categorySales" :key="3"></checkbox>
-                  <checkbox v-model="departmentSales" title="report.departmentSales" :key="4"></checkbox>
+                  <checkbox v-model="departmentSales" title="report.departmentSales" :key="4" :disabled="true"></checkbox>
                   <checkbox v-model="hourly" title="report.hourlyReport" :key="5"></checkbox>
                   <checkbox v-model="managerWaive" title="report.redemptionReport" :key="6"></checkbox>
                 </template>
