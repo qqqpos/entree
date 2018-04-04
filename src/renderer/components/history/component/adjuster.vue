@@ -89,7 +89,7 @@ export default {
   },
   created() {
     this.transactions = this.init.transactions
-      .filter(t => t.type === "SALE" && t.status !== 0 && !t.close)
+      .filter(t => t.transType === "SALE" && t.status !== 0 && !t.close)
       .reverse();
     const next = this.transactions.find(t => t.status !== 2);
     this.index = next ? next.index : 0;
@@ -234,7 +234,7 @@ export default {
           this.$socket.emit("[TERMINAL] ADJUST", record);
           this.next();
         } else {
-          let data = {
+          const data = {
             type: "error",
             title: "dialog.tipAdjustDenied",
             msg: ["dialog.tipAdjustDeniedTip", result.code],
