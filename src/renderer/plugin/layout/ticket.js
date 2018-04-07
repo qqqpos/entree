@@ -705,7 +705,7 @@ function createFooter(config, setting, printer, ticket) {
     : "";
   const _table = tableName ? `<div class="tableName">${table || ""}</div>` : "";
   const extraInfo = _waterMark + _time + _number + _table;
-  const _geo = geo
+  const _geo = geo && type === 'DELIVERY'
     ? `<div class="geo">\
             <p>${customer.duration || ""}</p>\
             <p>${customer.distance || ""}</p>\

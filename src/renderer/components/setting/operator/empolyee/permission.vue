@@ -11,6 +11,7 @@
             <nav></nav>
         </header>
         <checkbox title="setting.privilege.batch" v-model="operator.permission" val="batch" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.privilege.reprint" v-model="operator.permission" val="reprint" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.employee" v-model="operator.permission" val="employee" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.database" v-model="operator.permission" val="database" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.timecard" v-model="operator.permission" val="timecard" :multiple="true" class="list"></checkbox>

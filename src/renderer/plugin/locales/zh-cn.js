@@ -767,13 +767,15 @@ export default {
     cashTotal: "现金",
     creditTotal: "信用卡",
     thirdPartyTotal: "第三方",
-    tipTotal: "总小费",
+    tipsTotal: "总小费",
     tips: "小费",
     tipsDetail: "小费明细",
+    voided: "取消订单",
     payout: "支出",
     others: "其它",
     overallTotal: "总数",
     redemptionReport: "经理买单",
+    voidedReport: "列出取消订单",
     settled: "已结账",
     unsettled: "未结账",
     count: "订单数",
@@ -1202,7 +1204,8 @@ export default {
     portionDisplay: "只显示部分的数据",
     groupByDepartments: "按部门分类物品",
     restrictionRules: "限制条件",
-    autoLogin: "自动登录"
+    autoLogin: "自动登录",
+    recommendItem: "推荐物品"
   },
   nav: {
     store: "店面",
@@ -1423,6 +1426,7 @@ export default {
     },
     privilege: {
       batch: "允许信用卡过账",
+      reprint: "允许重新发送订单",
       employee: "允许管理员工信息",
       database: "允许查看数据库",
       timecard: "允许修改打卡时段",

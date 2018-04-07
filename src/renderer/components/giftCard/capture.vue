@@ -49,9 +49,7 @@ export default {
         this.buffer = "";
       } else {
         try {
-          const regExp = new RegExp(/\d{16,16}/);
-
-          console.log(regExp);
+          const regExp = new RegExp(this.format);
           const number = buffer.match(regExp)[0]; //buffer.match(/\d{16,16}/)[0];
           this.$socket.emit("[GIFTCARD] QUERY", number, card => {
             card ? this.init.resolve(card) : this.init.reject(number);

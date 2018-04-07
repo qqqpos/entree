@@ -6,6 +6,10 @@
                     <i class="fa fa-users"></i>
                     <span class="text">{{$t('nav.overview')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.operator.timecards'}">
+                    <i class="fa fa-id-badge"></i>
+                    <span class="text">{{$t('nav.timecard')}}</span>
+                </router-link>
                 <router-link tag="li" :to="{name:'Setting.operator.payroll'}">
                     <i class="fa fa-calculator"></i>
                     <span class="text">{{$t('nav.payroll')}}</span>

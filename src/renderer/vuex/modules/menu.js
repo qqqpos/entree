@@ -1,5 +1,4 @@
 import * as types from "../mutation-types";
-import { isObject } from "util";
 
 const state = {
   order: {
@@ -29,7 +28,7 @@ const state = {
   item: null,
   sides: [],
   choiceSetTarget: null,
-  lastActionTime: +new Date()
+  lastActionTime: Date.now()
 };
 const mutations = {
   [types.RESET_MENU](state) {
@@ -55,7 +54,8 @@ const mutations = {
       coupons: [],
       date: today(),
       source: "POS",
-      status: 1
+      status: 1,
+      type: ""
     };
     state.item = null;
     state.choiceSetTarget = null;
@@ -87,6 +87,8 @@ const mutations = {
   },
   [types.ADD_TO_ORDER](state, item) {
     delete item.clickable;
+    delete item.like;
+    
     Object.assign(item, {
       unique: String().random(),
       print: false,

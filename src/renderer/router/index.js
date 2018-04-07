@@ -383,6 +383,11 @@ export default new Router({
                   ]
                 },
                 {
+                  path: "timecards",
+                  name: "Setting.operator.timecards",
+                  component: require("../components/setting/operator/timecards")
+                },
+                {
                   path: "payroll",
                   component: require("../components/setting/operator/payroll"),
                   children: [

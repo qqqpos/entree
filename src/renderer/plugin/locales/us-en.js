@@ -890,10 +890,12 @@ export default {
     tips: "Tips",
     tipsTotal: "Tips Total",
     tipsDetail: "Tips Detail",
+    voided: "Voided Ticket",
     payout: "Payout",
     others: "Others",
     overallTotal: "Overall Total",
     redemptionReport: "Redemption Summary",
+    voidedReport: "List Voided Ticket",
     settled: "Settled",
     unsettled: "Unsettled",
     count: "Invoice Count",
@@ -1237,7 +1239,8 @@ export default {
     portionDisplay: "Only display limited Data",
     groupByDepartments: "Group By Departments",
     restrictionRules: "Restriction Rules",
-    autoLogin: "Auto Login"
+    autoLogin: "Auto Login",
+    recommendItem: "Recommend"
   },
   nav: {
     store: "Store",
@@ -1455,6 +1458,7 @@ export default {
     },
     privilege: {
       batch: "Allow Perform Batch Action",
+      reprint: "Allow Reprint Ticket",
       employee: "Allow Modify Employee",
       database: "Allow View Database",
       timecard: "Allow Modify Employee Time Card",

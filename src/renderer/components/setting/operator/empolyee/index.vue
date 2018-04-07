@@ -42,8 +42,7 @@ export default {
           "Cashier",
           "Waitstaff",
           "Bartender",
-          "Worker",
-          "ThirdParty"
+          "Worker"
         ];
         vm.list = data.sort(
           (a, b) => (sort.indexOf(a.role) > sort.indexOf(b.role) ? 1 : -1)
@@ -72,8 +71,7 @@ export default {
               "Cashier",
               "Waitstaff",
               "Bartender",
-              "Worker",
-              "ThirdParty"
+              "Worker"
             ];
 
             this.list = data.sort(

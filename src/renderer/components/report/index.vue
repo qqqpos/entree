@@ -51,6 +51,7 @@
                   <!-- <checkbox v-model="departmentSales" title="report.departmentSales" :key="4" :disabled="departments.length === 0"></checkbox> -->
                   <checkbox v-model="hourly" title="report.hourlyReport" :key="5"></checkbox>
                   <checkbox v-model="managerWaive" title="report.redemptionReport" :key="6"></checkbox>
+                  <checkbox v-model="voidedTicket" title="report.voidedReport" :key="7"></checkbox>
                 </template>
               </transition-group>
             </div>
@@ -105,7 +106,8 @@ export default {
       itemSales: false,
       categorySales: false,
       departmentSales: false,
-      managerWaive: false
+      managerWaive: false,
+      voidedTicket: false
     };
   },
   created() {
@@ -139,7 +141,8 @@ export default {
         hourly: this.hourly,
         itemSales: this.itemSales,
         categorySales: this.categorySales,
-        managerWaive: this.managerWaive
+        managerWaive: this.managerWaive,
+        voidedTicket: this.voidedTicket
       };
       localStorage.setItem("reportPreferences", JSON.stringify(preferences));
     },
@@ -287,6 +290,9 @@ export default {
           this.report["Department Sales"] = this.departmentSalesReport(
             invoices
           );
+
+        if (this.voidedTicket)
+          this.report["Voided Tickets"] = this.voidedTicketReport(invoices);
         if (this.cashier)
           this.report["Cashier Report"] = this.cashierReport(data);
         if (this.waitStaff)
@@ -617,7 +623,7 @@ export default {
           });
         } else {
           report.push({
-            text: this.$t("report.tipTotal"),
+            text: this.$t("report.tipsTotal"),
             style: "bold",
             value: "$ " + tipTotal.toFixed(2)
           });
@@ -777,6 +783,30 @@ export default {
             value: category.value.toFixed(2)
           });
         });
+
+      return report;
+    },
+    departmentSalesReport() {},
+    voidedTicketReport(data) {
+      let report = [];
+      const invoices = data.filter(i => i.status === 0);
+
+      invoices.forEach(invoice => {
+        const text = `#${invoice.number}&nbsp;&nbsp;&nbsp;${this.$t(
+          "type." + invoice.type
+        )}&nbsp;&nbsp;&nbsp;$ ${invoice.payment.balance.toFixed(
+          2
+        )}&nbsp;&nbsp;&nbsp;${this.$t("reason." + invoice.void.note)}`;
+        const style = "";
+        const value = invoice.void.by;
+        report.push({ text, style, value });
+      });
+
+      report.push({
+        text: this.$t("report.voided") + ` ( ${invoices.length} )`,
+        style: "bold",
+        value: "$ " + invoices.reduce((a, c) => a + c.payment.balance, 0).toFixed(2)
+      });
 
       return report;
     },

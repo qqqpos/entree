@@ -195,7 +195,7 @@ export default {
       }
     },
     editFailed(reason) {
-      reason.hasOwnProperty('title')
+      reason.hasOwnProperty("title")
         ? this.$dialog(reason)
             .then(this.removeRecordFromList)
             .catch(() => this.$q())
@@ -285,7 +285,10 @@ export default {
       if (this.isEmptyTicket) return;
 
       if (this.order.print) {
-        this.rePrint();
+        console.log(this.op)
+        this.$checkPermission("permission", "reprint")
+          .then(this.rePrint)
+          .catch(() => {});
       } else {
         const order = JSON.parse(JSON.stringify(this.order));
         order.split ? this.askSplitPrint(order) : this.printTicket(order);
@@ -304,6 +307,7 @@ export default {
       });
 
       const prompt = {
+        type:"warning",
         title: "dialog.reprintConfirm",
         msg: "dialog.reprintTicketAgain"
       };

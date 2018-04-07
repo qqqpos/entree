@@ -244,7 +244,7 @@ export default {
       clockOut = isNumber(clockOut) ? clockOut : +new Date();
       const duration = clockOut - clockIn;
 
-      if (duration === 0) return this.$t("text.hhmmss", "00", "00", "00");
+      if (duration === 0) return this.$t("text.hhmm", "00", "00", "00");
 
       if (isNumber(duration)) {
         const hh = ("00" + Math.floor((duration % 8.64e7) / 3.6e6)).slice(-2);

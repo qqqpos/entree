@@ -25,13 +25,15 @@
 import { mapGetters, mapActions } from "vuex";
 import checkbox from "../../setting/common/checkbox";
 export default {
-  props: ["item", "checkbox"],
+  props: ["item", "ignore", "checkbox"],
   components: { checkbox },
   computed: {
     ...mapGetters(["language", "choiceSet"])
   },
   methods: {
     select(item, e) {
+      if (this.ignore) return;
+
       this.$route.name === "Menu" && this.focus(item, e);
     },
     focus(item, e) {
@@ -54,8 +56,9 @@ export default {
       }
     },
     adjustChoiceSet(choice, e) {
-      if (this.$route.name !== 'Menu') return;
-      
+      if (this.ignore) return;
+      if (this.$route.name !== "Menu") return;
+
       let dom = document.querySelector(".sub.target");
       dom && dom.classList.remove("target");
 
@@ -101,7 +104,7 @@ li {
   flex: 1;
   display: flex;
   max-width: 215px;
-  margin-right:5px;
+  margin-right: 5px;
 }
 
 .sub .item {
@@ -109,9 +112,9 @@ li {
 }
 
 .sub .item:before {
-    content: "·";
-    color: rgba(154, 154, 154, 0.5);
-    padding: 0 2px;
+  content: "·";
+  color: rgba(154, 154, 154, 0.5);
+  padding: 0 2px;
 }
 
 .sub.target {
@@ -182,7 +185,7 @@ li {
   visibility: hidden;
 }
 
-.price.hide{
+.price.hide {
   display: none;
 }
 

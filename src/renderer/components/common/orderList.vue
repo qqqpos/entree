@@ -7,7 +7,7 @@
     </header>
     <header v-else class="info">
       <div class="content">
-        <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI'">
+        <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
           <span class="table">{{order.table}} - {{order.guest}} - {{order.server}}</span>
           <span class="time">{{order.time | moment('YYYY-MM-DD HH:mm:ss')}}</span>
           <span class="corner" v-if="undoneItems">{{$t('text.progressTicket',undoneItems)}}</span>
@@ -23,10 +23,6 @@
                 <i class="fa fa-map-marker"></i>
                 <span>{{order.customer.address}}</span>
               </p>
-              <p>
-                <i class="fa fa-sticky-note-o"></i>
-                <span>{{order.customer.note}}</span>
-              </p>
             </div>
           </template>
         </template>
@@ -40,13 +36,13 @@
         </template>
       </div>
     </header>
-    <div class="order" v-if="viewHistory">
+    <!-- <div class="order" v-if="viewHistory">
       <div class="inner search" @click="openHistory">
         <i class="fa fa-3x fa-search"></i>
         <h3>{{$t('text.viewInvoice')}}</h3>
       </div>
-    </div>
-    <div class="order" v-else-if="order.type === 'HIBACHI' && $route.name === 'Menu'">
+    </div> -->
+    <div class="order" v-if="order.type === 'HIBACHI' && $route.name === 'Menu'">
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd">
         <group-item :items="order.content" :seats="seats" @update="setSeat"></group-item>
       </v-touch>
@@ -55,6 +51,7 @@
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd" tag="ul">
         <list-item v-for="(item,index) in order.content" :data-category="item.category" :key="index" :item="item" :checkbox="todo"></list-item>
       </v-touch>
+      <shortcut :items="shortcutItems" @add="add" v-if="customer._id && shortcutItems.length > 0 && offset >=0"></shortcut>
     </div>
     <div class="order" v-else>
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd" tag="ul">
@@ -129,7 +126,7 @@ import creditVault from "./component/creditVault";
 import groupItem from "./component/groupItem";
 import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
-import history from "./component/history";
+import shortcut from "./component/shortcut";
 import dialoger from "../common/dialoger";
 import config from "./component/config";
 
@@ -137,7 +134,7 @@ export default {
   components: {
     entry,
     config,
-    history,
+    shortcut,
     dialoger,
     listItem,
     groupItem,
@@ -166,6 +163,7 @@ export default {
       todo: false,
       component: null,
       componentData: null,
+      prevsItems: [],
       spooler: []
     };
   },
@@ -173,6 +171,8 @@ export default {
     this.$route.name === "Table" && this.order.content.length > 0
       ? (this.payment = this.order.payment)
       : this.calculator(this.order.content);
+
+    this.$route.name === "Menu" && this.getShortCutItems();
   },
   methods: {
     resetHighlight() {
@@ -200,6 +200,21 @@ export default {
         menuID,
         seatOrder
       });
+    },
+    getShortCutItems() {
+      this.customer._id &&
+        this.$socket.emit(
+          "[CUSTOMER] FAVORITE_ITEMS",
+          this.customer._id,
+          items => {
+            this.prevsItems = items;
+          }
+        );
+    },
+    add(item){
+      this.addToOrder(item);
+      this.resetChoiceSet();
+      this.resetPointer();
     },
     addToSpooler(item) {
       if (item.print) return;
@@ -317,11 +332,11 @@ export default {
 
       !this.todo && this.order.content.forEach(item => (item.pending = false));
     },
-    openHistory() {
-      this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
-        this.$open("history", { invoices })
-      );
-    },
+    // openHistory() {
+    //   this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
+    //     this.$open("history", { invoices })
+    //   );
+    // },
     calculator(items) {
       if (items.length === 0) {
         let delivery =
@@ -534,6 +549,7 @@ export default {
       "resetPointer",
       "resetChoiceSet",
       "setChoiceSetTarget",
+      "addToOrder",
       "setOrder"
     ])
   },
@@ -544,14 +560,19 @@ export default {
     undoneItems() {
       return this.order.content.map(i => !i.print).reduce((a, b) => a + b, 0);
     },
-    viewHistory() {
-      return (
-        this.$route.name === "Menu" &&
-        this.order.content.length === 0 &&
-        this.app.newTicket &&
-        this.customer._id
-      );
+    shortcutItems() {
+      const items = this.order.content.map(i => i._id);
+
+      return this.prevsItems.filter(({ _id }) => !items.includes(_id));
     },
+    // viewHistory() {
+    //   return (
+    //     this.$route.name === "Menu" &&
+    //     this.order.content.length === 0 &&
+    //     this.app.newTicket &&
+    //     this.customer._id
+    //   );
+    // },
     ...mapGetters([
       "app",
       "tax",
