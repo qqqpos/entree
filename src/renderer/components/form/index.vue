@@ -16,8 +16,8 @@
         </ul>
         </div>
       </div>
-      <div class="edit" v-show="checkOrder.exist">
-        <button @click="editInvoice" :disabled="!checkOrder.editable">{{$t('button.editInvoice')}}</button>
+      <div class="edit" v-show="status.exist">
+        <button @click="editInvoice" :disabled="!status.editable">{{$t('button.editInvoice')}}</button>
       </div>
       <i class="fa fa-times cancel" @click="cancel"></i>
     </header>
@@ -39,31 +39,7 @@ import switchType from "./component/switchType";
 export default {
   components: { switchType, keyboard, dialoger, pageTab, unlock },
   computed: {
-    checkOrder() {
-      if (this.customer._id) {
-        this.$socket.emit("[CUSTOMER] INTEGRITY", this.customer._id, flags => {
-          this.flags = flags;
-        });
-
-        const ticket = this.history.find(
-          t => t.customer._id === this.customer._id
-        );
-
-        if (ticket) {
-          return {
-            exist: true,
-            editable: !ticket.settled && ticket.status === 1
-          };
-        }
-      } else {
-        this.flags = [];
-      }
-
-      return {
-        exist: false,
-        editable: false
-      };
-    },
+    checkOrder() {},
     ...mapGetters([
       "op",
       "app",
@@ -82,12 +58,17 @@ export default {
       entry: "phone",
       keyboard: true,
       componentData: null,
-      component: null
+      component: null,
+      status: {
+        exist: false,
+        editable: false
+      }
     };
   },
   created() {
     this.type = this.app.newTicket ? this.ticket.type : this.order.type;
   },
+  mounted() {},
   methods: {
     setType(type) {
       this.type = type;
@@ -96,9 +77,27 @@ export default {
     setFocus(entry) {
       this.entry = entry;
 
-      setTimeout(()=>{
-        this.caret = document.querySelector(".wrap.active input").selectionStart;
-      })
+      setTimeout(() => {
+        this.caret = document.querySelector(
+          ".wrap.active input"
+        ).selectionStart;
+      });
+    },
+    checkIfOrderToday() {
+      this.$socket.emit("[CUSTOMER] INTEGRITY", this.customer._id, flags => {
+        this.flags = flags;
+      });
+
+      const ticket = this.history.find(
+        t => t.customer._id === this.customer._id
+      );
+
+      if (ticket) {
+        this.status = {
+          exist: true,
+          editable: !ticket.settled && ticket.status === 1
+        };
+      }
     },
     input(char) {
       const value = this.customer[this.entry];
@@ -170,8 +169,8 @@ export default {
 
       if (!enable || !api || !address) {
         this.$bus.emit("GOOGLE_ADDRESS_QUERY", false);
-        return
-      };
+        return;
+      }
 
       try {
         await this.calculateDistance({ address, city, zipCode });
@@ -207,7 +206,7 @@ export default {
 
         this.$socket.emit("[GOOGLE] ADDRESS", url, raw => {
           const result = JSON.parse(raw);
-          
+
           if (result.status === "OK") {
             let addresses = result.destination_addresses;
 
@@ -358,6 +357,9 @@ export default {
       "resetCustomer",
       "emptyCustomerInfo"
     ])
+  },
+  watch:{
+    'customer._id':'checkIfOrderToday'
   }
 };
 </script>
