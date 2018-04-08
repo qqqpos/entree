@@ -85,10 +85,14 @@ const mutations = {
     state.sides = sides;
     state.choiceSetTarget = null;
   },
+  [types.PUSH_TO_ORDER](state, item) {
+    state.order.content.push(item);
+    state.item = state.order.content.last();
+  },
   [types.ADD_TO_ORDER](state, item) {
     delete item.clickable;
     delete item.like;
-    
+
     Object.assign(item, {
       unique: String().random(),
       print: false,

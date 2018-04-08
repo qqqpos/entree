@@ -54,6 +54,7 @@ export const SET_SIDES = "SET_SIDES";
 export const SET_POINTER = "SET_POINTER";
 export const RESET_POINTER = "RESET_POINTER";
 export const ADD_TO_ORDER = "ADD_TO_ORDER";
+export const PUSH_TO_ORDER = "PUSH_TO_ORDER";
 export const ALTER_ITEM = "ALTER_ITEM";
 
 export const SET_QTY = "SET_QTY";

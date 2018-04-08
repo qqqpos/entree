@@ -104,6 +104,8 @@ export const removeSpooler = ({ commit }, index) => commit(types.REMOVE_SPOOLER,
 
 export const addToOrder = ({ commit }, item) => commit(types.ADD_TO_ORDER, item);
 
+export const pushToOrder = ({ commit }, item) => commit(types.PUSH_TO_ORDER, item);
+
 export const setPointer = ({ commit }, target) => commit(types.SET_POINTER, target);
 
 export const resetPointer = ({ commit }) => commit(types.RESET_POINTER);

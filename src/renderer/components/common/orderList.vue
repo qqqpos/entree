@@ -212,7 +212,7 @@ export default {
         );
     },
     add(item){
-      this.addToOrder(item);
+      this.pushToOrder(item);
       this.resetChoiceSet();
       this.resetPointer();
     },
@@ -549,7 +549,7 @@ export default {
       "resetPointer",
       "resetChoiceSet",
       "setChoiceSetTarget",
-      "addToOrder",
+      "pushToOrder",
       "setOrder"
     ])
   },
