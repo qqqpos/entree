@@ -228,7 +228,6 @@ export default {
       })
         .then(_option => {
           this.item.option.splice(index, 1, _option);
-          console.log(this.item);
           this.$q();
         })
         .catch(() => this.$q());
@@ -274,7 +273,6 @@ export default {
       })
         .then(_restrict => {
           Object.assign(this.item, { restrict: _restrict });
-          console.log(this.item);
           this.$q();
         })
         .catch(remove => {

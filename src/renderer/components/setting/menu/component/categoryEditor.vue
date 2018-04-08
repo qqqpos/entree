@@ -26,7 +26,7 @@
           <inputer title="text.primary" v-model.trim="category.usEN" length="20"></inputer>
           <inputer title="text.secondary" v-model.trim="category.zhCN" length="20"></inputer>
           <inputer title="text.contain" v-model="category.contain" v-if="manual"></inputer>
-          <div class="checkboxes" v-else>
+          <div class="checkboxes categories" v-else>
             <checkbox :title="name" v-model="category.contain" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false"></checkbox>
           </div>
         </div>
@@ -124,5 +124,10 @@ export default {
 header {
   flex-direction: row;
   justify-content: flex-start;
+}
+
+.categories {
+  height: 405px;
+  overflow: auto;
 }
 </style>

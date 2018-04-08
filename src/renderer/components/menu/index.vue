@@ -485,12 +485,13 @@ export default {
         items.push(...subItems);
       });
 
-      length < 33 &&
-        Array(33 - items.length)
+      if (items.length > 33) {
+        Array(96 - items.length)
           .fill()
           .forEach(() =>
             items.push({ zhCN: "", usEN: "", clickable: false, group: null })
           );
+      }
 
       this.items = items;
       this.openSubGroup = true;

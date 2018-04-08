@@ -109,7 +109,7 @@
               <aside class="padCtrl">
                 <div @click="del">&#8592;</div>
                 <div @click="clear">C</div>
-                <div @click="charge" :class="{disabled:disableCashCharge}">&#8626;</div>
+                <div @click="charge" :class="{disabled:paid === '0.00'}">&#8626;</div>
               </aside>
             </template>
             <template v-else-if="paymentType === 'CREDIT'">
@@ -137,7 +137,7 @@
               <aside class="padCtrl">
                 <div @click="del">&#8592;</div>
                 <div @click="clear">C</div>
-                <div @click="charge">&#8626;</div>
+                <div @click="charge" :class="{disabled:paid === '0.00'}">&#8626;</div>
               </aside>
             </template>
             <template v-else-if="paymentType === 'THIRD'">
@@ -263,9 +263,6 @@ export default {
       const tender =
         this.payment.balance + parseFloat(this.tip) - parseFloat(this.paid);
       return tender > 0 ? 0 : Math.abs(tender);
-    },
-    disableCashCharge() {
-      return this.payment.remain <= 0 || parseFloat(this.total) > 0;
     },
     ...mapGetters([
       "op",

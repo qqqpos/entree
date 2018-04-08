@@ -56,14 +56,14 @@ export default {
         value: ""
       });
     });
-    this.printers = Object.keys(this.$store.getters.config.printers).map(
-      name => ({
+    this.printers = Object.keys(this.$store.getters.config.printers)
+      .filter(p => /cashier/i.test(p))
+      .map(name => ({
         label: name,
         tooltip: "",
         plainText: true,
         value: name
-      })
-    );
+      }));
   },
   methods: {
     update(data) {
@@ -94,7 +94,7 @@ export default {
         value
       });
     },
-    editScale() { },
+    editScale() {},
     updateAutoLock(value) {
       if (!value) {
         this.station.autoLock.timeout = 0;
@@ -103,14 +103,13 @@ export default {
         this.update({
           key: "autoLock",
           value: this.station.autoLock
-        })
+        });
       } else {
         this.update({
           key: "autoLock.enable",
           value
         });
       }
-
     },
     updateTimeout(value) {
       value = parseInt(value);

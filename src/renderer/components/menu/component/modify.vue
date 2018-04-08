@@ -131,7 +131,7 @@ export default {
           this.reset
             ? (this.item.qty = num)
             : this.item.qty + num < 1000 &&
-            (this.item.qty = String(this.item.qty) + num);
+              (this.item.qty = String(this.item.qty) + num);
           break;
         case "discount":
           if (this.reset) {
@@ -202,7 +202,7 @@ export default {
       this.init.resolve();
     },
     adjustMenuItem() {
-      const single = toFixed(this.item.single,2);
+      const single = toFixed(this.item.single, 2);
       let discount = this.unit
         ? this.discount
         : single * this.item.qty * (this.discount / 100);
@@ -213,8 +213,12 @@ export default {
         total: (single * this.item.qty).toFixed(2)
       });
 
-      const zhCN = this.unit ? "$ " + this.discount.toFixed(2) + " OFF": this.discount + " % " + this.$t('text.discount');
-      const usEN = this.unit ? "$ " + this.discount.toFixed(2) + " OFF" : this.discount + " % Discount";
+      const zhCN = this.unit
+        ? "$ " + this.discount.toFixed(2) + " OFF"
+        : this.discount + " % " + this.$t("text.discount");
+      const usEN = this.unit
+        ? "$ " + this.discount.toFixed(2) + " OFF"
+        : this.discount + " % Discount";
 
       discount > 0 &&
         item.choiceSet.push({
@@ -222,7 +226,8 @@ export default {
           zhCN,
           usEN,
           single: -discount,
-          price: -discount
+          price: -discount,
+          type: "discount"
         });
       this.init.marketPrice
         ? (this.addToOrder(item), this.setSides(this.fillOption(item.option)))
