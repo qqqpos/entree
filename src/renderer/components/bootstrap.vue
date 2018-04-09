@@ -176,6 +176,18 @@ export default {
             let name = raw.find(i => i.indexOf("NAME") !== -1);
             name = name ? name.split("=")[1].replace(/[\r\n]/g, "") : "";
 
+            if (
+              [
+                "AVAILABLE",
+                "UNAVAILA",
+                "WIRELESS",
+                "CELL PHONE",
+                "UNKNOWN"
+              ].includes(name.toUpperCase())
+            ) {
+              name = "";
+            }
+
             const phone = raw
               .find(i => i.indexOf("NMBR") !== -1)
               .split("=")[1]
