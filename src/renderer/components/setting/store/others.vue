@@ -4,7 +4,7 @@
     <toggle title="setting.googleMatrix" true-tooltip="tip.matrixService" false-tooltip="tip.disableMatrix" v-model="store.matrix.enable" :conditionalTooltip="true" @update="updateMatrix">
       <transition name="dropdown">
         <div v-if="store.matrix.enable" class="opt">
-          <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect"></switches>
+          <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect" @update="updateAutoCorrect"></switches>
           <inputer title="text.coordinate" v-model="store.matrix.coordinate" @update="updateStoreCoordinate"></inputer>
           <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI"></inputer>
         </div>
@@ -79,7 +79,7 @@ export default {
         value
       });
     },
-    updateAutoLogin(value){
+    updateAutoLogin(value) {
       this.update({
         key: "store.autoLogin",
         value
@@ -112,6 +112,12 @@ export default {
     updateStoreCoordinate(value) {
       this.update({
         key: "store.matrix.coordinate",
+        value
+      });
+    },
+    updateAutoCorrect(value) {
+      this.update({
+        key: "store.matrix.autoCorrect",
         value
       });
     }

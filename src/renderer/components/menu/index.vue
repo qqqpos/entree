@@ -102,7 +102,6 @@ export default {
     this.initialData();
 
     this.$socket.emit("[INQUIRY] TICKET_NUMBER", number => {
-      ``;
       if (this.app.newTicket) {
         this.setTicket({ number });
         this.$log({

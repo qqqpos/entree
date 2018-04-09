@@ -42,7 +42,7 @@
             <td>{{invoice.table}}</td>
             <td>{{invoice.server}}</td>
             <td>{{invoice.time | moment('HH:mm')}}</td>
-            <td>{{invoice.time | fromNow}}</td>
+            <td>{{invoice.time | fromNow(true)}}</td>
             <td>$ {{invoice.payment.due | decimal}}</td>
             <td>{{todo(invoice.content)}} / {{invoice.content.length}}</td>
             <td class="action">
@@ -216,7 +216,7 @@ export default {
 
 <style scoped>
 table {
-  width: 825px;
+  width: 865px;
 }
 .action {
   width: 200px;

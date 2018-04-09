@@ -222,6 +222,7 @@ export default {
                 zipCode = addressArray[3].replace(/\D/g, "");
                 note = address[0].trim();
               } else {
+                console.log(addressArray);
                 //regular residential address
                 address = addressArray[0].trim().toUpperCase();
                 city = addressArray[1].trim().toUpperCase();
@@ -231,37 +232,32 @@ export default {
               const matrix = result.rows[0].elements[0];
               const distance = matrix.distance.text;
               const duration = matrix.duration.text;
+              const profile = {
+                address,
+                city,
+                distance,
+                duration,
+                zipCode,
+                note
+              };
 
               if (address.indexOf(this.customer.address.trim()) !== -1) {
-                this.setCustomer({
-                  address,
-                  city,
-                  distance,
-                  duration,
-                  zipCode
-                });
-                note && this.setCustomer({ note });
+                this.updateProfile(profile);
                 next();
               } else {
                 const prompt = {
                   title: "dialog.addressMismatch",
                   msg: ["dialog.replaceAddress", this.customer.address, address]
                 };
-
-                this.$dialog(prompt)
-                  .then(() => {
-                    this.setCustomer({
-                      address,
-                      city,
-                      distance,
-                      duration,
-                      zipCode
-                    });
-                    note && this.setCustomer({ note });
-                    this.$q();
-                    next();
-                  })
-                  .catch(() => this.$q());
+                this.store.matrix.autoCorrect
+                  ? this.updateProfile(profile)
+                  : this.$dialog(prompt)
+                      .then(() => {
+                        this.$q();
+                        this.updateProfile(profile);
+                        next();
+                      })
+                      .catch(() => this.$q());
               }
             } else {
             }
@@ -270,6 +266,16 @@ export default {
           }
         });
       });
+    },
+    updateProfile({ address, city, distance, duration, zipCode, note }) {
+      this.setCustomer({
+        address,
+        city,
+        distance,
+        duration,
+        zipCode
+      });
+      note && this.setCustomer({ note });
     },
     getCoordinate({ address, city }) {
       return new Promise((next, stop) => {

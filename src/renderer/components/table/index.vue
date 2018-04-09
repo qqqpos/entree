@@ -175,6 +175,7 @@ export default {
           case "bar":
             const session = ObjectId();
 
+            this.resetMenu();
             this.setTicket({ type: "BAR" });
             this.setApp({ newTicket: true });
             this.setOrder({
@@ -213,10 +214,9 @@ export default {
       return new Promise((next, stop) => {
         if (this.transfer) {
           this.buffer.push(table);
-          this.$socket.emit("[TABLE] SWAP", this.buffer);
+          this.swapTable(this.buffer);
           this.buffer = [];
           this.transfer = false;
-          this.resetTable();
           stop();
         } else {
           next();
@@ -299,6 +299,62 @@ export default {
               this.$socket.emit("[TABLE] RESET", { _id: table._id });
               this.$q();
             });
+    },
+    swapTable(tables) {
+      let [t1, t2] = tables;
+      const {
+        server,
+        status,
+        session,
+        invoice,
+        time,
+        guest,
+        type = "regular"
+      } = t1;
+      Object.assign(t2, {
+        server,
+        status,
+        session,
+        invoice,
+        time,
+        guest
+      });
+
+      Object.assign(t1, {
+        server: "",
+        status: 1,
+        session: "",
+        invoice: [],
+        time: null,
+        guest: 0
+      });
+
+      this.$socket.emit("[TABLE] UPDATE", t1);
+
+      let order = this.history.find(i => i._id === invoice[0]);
+
+      if (order) {
+        let orderType;
+        switch (t2.type) {
+          case "bar":
+            orderType = "BAR";
+            break;
+          case "hibachi":
+            orderType = "HIBACHI";
+            break;
+          default:
+            orderType = "DINE_IN";
+        }
+        Object.assign(order, {
+          type: orderType,
+          table: t2.name,
+          tableID: t2._id
+        });
+
+        this.$socket.emit("[UPDATE] INVOICE", order);
+      }
+
+      this.$socket.emit("[TABLE] UPDATE", t2);
     },
     selectHibachiTable(table) {
       return new Promise((resolve, reject) => {

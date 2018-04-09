@@ -197,7 +197,7 @@ export default {
       );
 
       Printer.setTarget("Receipt").print(order, true);
-      this.$socket.emit("[TABLE] UPDATE", { _id: order.tableID, status: 3 });
+      this.$socket.emit("[TABLE] STATUS", { _id: order.tableID, status: 3 });
     },
     askSplitPrePayment() {
       const prompt = {
@@ -226,10 +226,7 @@ export default {
         });
       });
 
-      this.$socket.emit("[TABLE] UPDATE", {
-        _id: this.order.tableID,
-        status: 3
-      });
+      this.$socket.emit("[TABLE] STATUS", {_id: this.order.tableID,status: 3});
     },
     settle() {
       if (this.isEmptyTicket) return;
