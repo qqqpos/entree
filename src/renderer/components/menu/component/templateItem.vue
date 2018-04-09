@@ -114,6 +114,7 @@ export default {
       this.saved[index] = this.items.filter(i => i.qty > 0);
     },
     moreQty(item) {
+      let increased = false;
       const { autoJump } = this.template;
       const max = this.max * this.init.item.qty;
       let qty = this.items.reduce((a, c) => a + c.qty, 0);
@@ -121,6 +122,7 @@ export default {
       if (qty < max) {
         item.qty++;
         this.itemCount[this.index]++;
+        increased = true;
       }
 
       qty = this.items.reduce((a, c) => a + c.qty, 0);
@@ -129,7 +131,7 @@ export default {
         if (this.editMode) {
           const saved = this.saved[this.index].shift();
           saved && (this.items.find(i => i.key === saved.key).qty = 0);
-          item.qty++;
+          !increased && item.qty++;
         }
 
         const maxPage = this.template.contain.length - 1;
