@@ -868,6 +868,7 @@ export default {
     grossSales: "Gross Sales",
     netSales: "Net Sales",
     discount: "Discount",
+    itemDiscount: "Item Discount",
     cash: "Cash",
     creditCard: "Credit Card",
     debitCard: "Debit Card",

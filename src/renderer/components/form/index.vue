@@ -67,8 +67,8 @@ export default {
   },
   created() {
     this.type = this.app.newTicket ? this.ticket.type : this.order.type;
+    this.customer._id && this.checkIfOrderToday();
   },
-  mounted() {},
   methods: {
     setType(type) {
       this.type = type;
@@ -358,8 +358,8 @@ export default {
       "emptyCustomerInfo"
     ])
   },
-  watch:{
-    'customer._id':'checkIfOrderToday'
+  watch: {
+    "customer._id": "checkIfOrderToday"
   }
 };
 </script>

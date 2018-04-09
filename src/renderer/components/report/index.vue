@@ -341,6 +341,26 @@ export default {
         value: foodSales.toFixed(2)
       });
 
+      let discountedItem = [];
+
+      validInvoices.forEach(invoice => {
+        invoice.content.forEach(item => {
+          item.choiceSet
+            .filter(set => set.type === "discount")
+            .forEach(set => discountedItem.push(set));
+        });
+      });
+
+      discountedItem.length > 0 &&
+        report.push({
+          text:
+            this.$t("report.itemDiscount") + ` ( ${discountedItem.length} )`,
+          style: "indent",
+          value: `( $ ${discountedItem
+            .reduce((a, c) => a + Math.abs(c.price), 0)
+            .toFixed(2)} )`
+        });
+
       const tax = validInvoices.reduce(
         (a, c) => a + parseFloat(c.payment.tax),
         0
@@ -805,7 +825,8 @@ export default {
       report.push({
         text: this.$t("report.voided") + ` ( ${invoices.length} )`,
         style: "bold",
-        value: "$ " + invoices.reduce((a, c) => a + c.payment.balance, 0).toFixed(2)
+        value:
+          "$ " + invoices.reduce((a, c) => a + c.payment.balance, 0).toFixed(2)
       });
 
       return report;

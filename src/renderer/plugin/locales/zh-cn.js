@@ -747,6 +747,7 @@ export default {
     thirdPartySummary: "第三方概要",
     viaEmail: "发送报表至邮箱",
     discount: "折扣",
+    itemDiscount: "折扣物品",
     cash: "现金",
     creditCard: "信用卡",
     debitCard: "借记卡",
