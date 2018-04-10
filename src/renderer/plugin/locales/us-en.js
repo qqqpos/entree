@@ -929,6 +929,7 @@ export default {
   text: {
     storeClose: "Store closed",
     storeOpen: "{i} time from {i} to {i}",
+    dayOff: "Day Off",
     OFB: "Open For Business",
     tag: "Tag",
     starter: "Starter",
@@ -1366,7 +1367,8 @@ export default {
     timecard: {
       tipReport: "Tip Report",
       excludeBreak: "Exclude Break Time",
-      valid: "Auto Validation"
+      valid: "Auto Validation",
+      isoWeek: "ISO Week"
     },
     basic: "Basic",
     style: "Style",
@@ -1641,7 +1643,8 @@ export default {
     timecard: {
       forOne: "Enable Clock in/out",
       forAll: "All employees clock in/out",
-      tipReport: "Report tip when clock out"
+      tipReport: "Report tip when clock out",
+      isoWeek: "Set Monday as start of weekday"
     },
     dinein: {
       useTableLayout: "Use table to place order",

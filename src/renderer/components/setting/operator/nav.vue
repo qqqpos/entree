@@ -6,6 +6,10 @@
                     <i class="fa fa-users"></i>
                     <span class="text">{{$t('nav.overview')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.operator.shift'}">
+                    <i class="fa fa-braille"></i>
+                    <span class="text">{{$t('nav.schedule')}}</span>
+                </router-link>
                 <router-link tag="li" :to="{name:'Setting.operator.timecards'}">
                     <i class="fa fa-id-badge"></i>
                     <span class="text">{{$t('nav.timecard')}}</span>
@@ -13,10 +17,6 @@
                 <router-link tag="li" :to="{name:'Setting.operator.payroll'}">
                     <i class="fa fa-calculator"></i>
                     <span class="text">{{$t('nav.payroll')}}</span>
-                </router-link>
-                <router-link tag="li" :to="{name:'Setting.operator.shift'}">
-                    <i class="fa fa-braille"></i>
-                    <span class="text">{{$t('nav.schedule')}}</span>
                 </router-link>
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>

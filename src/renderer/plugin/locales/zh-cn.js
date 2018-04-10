@@ -894,6 +894,7 @@ export default {
   text: {
     storeClose: "打烊",
     storeOpen: "{i} 时段从 {i} 到 {i}",
+    dayOff: "休假",
     OFB: "营业",
     tag: "标签",
     starter: "起始",
@@ -1331,7 +1332,8 @@ export default {
     timecard: {
       tipReport: "上报小费",
       excludeBreak: "休息不计时",
-      valid: "默认有效"
+      valid: "默认有效",
+      isoWeek: "国际标准时间"
     },
     basic: "基本设置",
     style: "样式设置",
@@ -1608,7 +1610,8 @@ export default {
     timecard: {
       forOne: "记录上下班打卡情况",
       forAll: "全体员工打卡上下班",
-      tipReport: "打卡下班时上报小费信息"
+      tipReport: "打卡下班时上报小费信息",
+      isoWeek: "设定星期一为周的开始"
     },
     dinein: {
       useTableLayout: "使用座位下单",

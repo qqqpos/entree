@@ -62,10 +62,11 @@ ul.tabs {
 }
 
 ul.tabs li {
-  margin: 0px 15px 0px 0;
+  min-width: 90px;
   padding: 10px 20px;
   color: #666;
   cursor: pointer;
+  text-align: center;
   border-bottom: 2px solid transparent;
 }
 
