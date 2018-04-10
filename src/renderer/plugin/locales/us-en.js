@@ -1465,8 +1465,9 @@ export default {
       timecard: "Allow Modify Employee Time Card",
       giftcard: "Allow Issue New Gift Card",
       promotion: "Allow Create New Promotion Rule",
-      payout: "Allow payout from cash drawer",
-      ledger: "Allow review ledger summary"
+      payout: "Allow Payout From Cash Drawer",
+      ledger: "Allow Review Ledger Summary",
+      anydate: "Allow To Operate Ticket Without Date Limit"
     },
     giftcard: {
       enable: "Enable Gift Card",

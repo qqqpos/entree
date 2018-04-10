@@ -25,9 +25,9 @@
 import Preset from "../../../preset";
 import draggable from "vuedraggable";
 import dialoger from "../../common/dialoger";
+import itemTrend from "./component/itemTrend";
 import itemEditor from "./component/itemEditor";
 import categoryEditor from "./component/categoryEditor";
-import itemTrend from "./component/itemTrend";
 
 export default {
   components: { dialoger, draggable, itemEditor, categoryEditor, itemTrend },
@@ -211,15 +211,16 @@ export default {
     },
     copy(data) {
       this.clipboard = data;
+    },
+    updateStyle(index) {
+      const dom = document.querySelector(".category .active");
+      dom && dom.classList.remove("active");
+
+      document.querySelectorAll(".category div")[index].classList.add("active");
     }
   },
   watch: {
-    categoryIndex(n) {
-      let dom = document.querySelector(".category .active");
-      dom && dom.classList.remove("active");
-
-      document.querySelectorAll(".category div")[n].classList.add("active");
-    }
+    categoryIndex: "updateStyle"
   }
 };
 </script>

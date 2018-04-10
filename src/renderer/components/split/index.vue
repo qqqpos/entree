@@ -185,14 +185,16 @@ export default {
       //const orders = this.$children.filter((vm, index) => index !== 0).map(vm => vm.order).filter((order, index) => order._id !== _id);
       return;
     },
-    remove(items){
-      items.forEach(({unique})=>{
-        this.order.content = this.order.content.filter(item=>item.unique !== unique);
-      })
+    remove(items) {
+      items.forEach(({ unique }) => {
+        this.order.content = this.order.content.filter(
+          item => item.unique !== unique
+        );
+      });
     },
     confirm() {
-      if(document.getElementsByClassName("evener").length > 0) return;
-      if(document.getElementsByClassName("splitor").length > 0) return;
+      if (document.getElementsByClassName("evener").length > 0) return;
+      if (document.getElementsByClassName("splitor").length > 0) return;
 
       const parent = this.order._id;
       const splits = this.$children
@@ -201,9 +203,7 @@ export default {
 
       if (this.app.newTicket && this.$route.name === "Menu") {
         const { number, type } = this.ticket;
-
-        this.order.number = number;
-        this.order.type = type;
+        Object.assign(this.order, { number, type, time: Date.now() });
       }
 
       let tip = 0;
@@ -264,7 +264,7 @@ export default {
         this.order.split = false;
         this.order.children = [];
         this.order.coupons = [];
-        
+
         this.setOrder(this.order);
         this.$socket.emit("[UPDATE] INVOICE", this.order);
         this.init.resolve();

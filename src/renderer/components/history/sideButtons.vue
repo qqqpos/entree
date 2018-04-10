@@ -120,7 +120,9 @@ export default {
           buttons: [{ text: "button.confirm", fn: "reject" }]
         };
 
-        this.date === this.today ? next() : stop(prompt);
+        this.date === this.today
+          ? next()
+          : this.approval("permission", "anydate") ? next() : stop(prompt);
       });
     },
     checkStatus() {
@@ -285,7 +287,7 @@ export default {
       if (this.isEmptyTicket) return;
 
       if (this.order.print) {
-        console.log(this.op)
+        console.log(this.op);
         this.$checkPermission("permission", "reprint")
           .then(this.rePrint)
           .catch(() => {});
@@ -307,7 +309,7 @@ export default {
       });
 
       const prompt = {
-        type:"warning",
+        type: "warning",
         title: "dialog.reprintConfirm",
         msg: "dialog.reprintTicketAgain"
       };

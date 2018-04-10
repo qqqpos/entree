@@ -1,6 +1,6 @@
 <template>
   <div class="shortcut">
-      <div class="tag" @click="expand = !expand">{{$t('text.recommendItem')}}</div>
+      <div class="toggle" @click="expand = !expand">{{$t('text.recommendItem')}}</div>
       <ul v-show="visible">
           <list-item v-for="(item,index) in shortcuts" :key="index" :item="item" class="shortcut" @click.native="$emit('add',item)" :ignore="true"></list-item>
       </ul>
@@ -25,11 +25,14 @@ export default {
     visible() {
       return this.shortcuts.length > 0;
     }
+  },
+  watch: {
+    "$store.getters.language": "$forceUpdate"
   }
 };
 </script>
 
-<style>
+<style scoped>
 div.shortcut {
   position: absolute;
   width: 100%;
@@ -44,7 +47,7 @@ li.shortcut {
   border-bottom: 1px dashed #ffe0b2;
 }
 
-.tag {
+.toggle {
   position: absolute;
   top: -26px;
   right: 35px;

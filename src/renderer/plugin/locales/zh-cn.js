@@ -1434,7 +1434,8 @@ export default {
       giftcard: "允许发行礼物卡",
       promotion: "允许创建促销规则",
       payout: "允许现金支出",
-      ledger: "允许核对销售账目"
+      ledger: "允许核对销售账目",
+      anydate: "允许操作任意时间的订单"
     },
     giftcard: {
       enable: "启用礼物卡",

@@ -15,10 +15,19 @@
         </template>
         <template v-else>
           <template v-if="order.customer">
-            <h3 class="phone">{{order.customer.phone | phone}}
-              <span class="name">{{order.customer.name}}</span>
-            </h3>
             <div class="detail">
+              <p>
+                <i class="fa fa-phone"></i>
+                <span class="phone">{{order.customer.phone | phone}}</span>
+                <i class="fa fa-id-card-o"></i>
+                <span class="name">{{order.customer.name}}</span>
+              </p>
+              <p>
+                <i class="fa fa-user"></i>
+                <span>{{order.server}}</span>
+                <i class="fa fa-clock-o"></i>
+                <span>{{order.time | moment('MMM DD HH:mm')}}</span>
+              </p>
               <p>
                 <i class="fa fa-map-marker"></i>
                 <span>{{order.customer.address}}</span>
@@ -36,12 +45,6 @@
         </template>
       </div>
     </header>
-    <!-- <div class="order" v-if="viewHistory">
-      <div class="inner search" @click="openHistory">
-        <i class="fa fa-3x fa-search"></i>
-        <h3>{{$t('text.viewInvoice')}}</h3>
-      </div>
-    </div> -->
     <div class="order" v-if="order.type === 'HIBACHI' && $route.name === 'Menu'">
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd">
         <group-item :items="order.content" :seats="seats" @update="setSeat"></group-item>
@@ -211,7 +214,7 @@ export default {
           }
         );
     },
-    add(item){
+    add(item) {
       this.pushToOrder(item);
       this.resetChoiceSet();
       this.resetPointer();
@@ -332,11 +335,6 @@ export default {
 
       !this.todo && this.order.content.forEach(item => (item.pending = false));
     },
-    // openHistory() {
-    //   this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
-    //     this.$open("history", { invoices })
-    //   );
-    // },
     calculator(items) {
       if (items.length === 0) {
         let delivery =
@@ -642,16 +640,12 @@ header.info {
   flex-direction: column;
 }
 
-.phone,
-.number {
-  font-family: "Agency FB";
-  font-weight: bold;
-  font-size: 18px;
-}
-
 .number {
   width: 40px;
   text-align: center;
+  font-family: "Agency FB";
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .bar {
@@ -832,18 +826,20 @@ header.info {
 .content > div {
   display: flex;
   flex-direction: column;
-  margin-left: 15px;
 }
 
 .detail i {
-  color: #ccc;
+  color: rgba(0, 0, 0, 0.75);
   width: 15px;
   text-align: center;
 }
 
 .detail p {
-  color: #757575;
-  font-size: 14px;
+  color: #3c3c3c;
+}
+
+.detail span {
+  margin-right: 10px;
 }
 
 .content .time {
@@ -874,11 +870,16 @@ header.info {
 
 .content {
   flex: 1;
-  padding: 5px 5px 0;
+  padding: 6px 15px 0;
   background: #fff;
 }
 
-.phone .name {
+.phone{
+  min-width: 108px;
+  display: inline-block;
+}
+
+.name {
   margin-left: 10px;
   font-size: 14px;
   color: #009688;

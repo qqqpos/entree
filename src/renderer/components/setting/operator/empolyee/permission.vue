@@ -19,6 +19,7 @@
         <checkbox title="setting.privilege.promotion" v-model="operator.permission" val="promotion" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.payout" v-model="operator.permission" val="payout" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.ledger" v-model="operator.permission" val="ledger" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.privilege.anydate" v-model="operator.permission" val="anydate" :multiple="true" class="list"></checkbox>
     </div>
 </template>
 

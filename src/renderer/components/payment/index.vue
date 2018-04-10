@@ -376,7 +376,11 @@ export default {
     },
     checkDate() {
       return new Promise((next, stop) => {
-        this.order.date === today() ? next() : stop({ error: "expired" });
+        this.order.date === today()
+          ? next()
+          : this.approval("permission", "anydate")
+            ? next()
+            : stop({ error: "expired" });
       });
     },
     checkPermission() {
@@ -830,8 +834,8 @@ export default {
       const tip = parseFloat(this.tip);
 
       const _id = ObjectId();
-      const date = today();
-      const time = +new Date();
+      const date = this.order.date ? this.order.date : today();
+      const time = Date.now();
       const order = this.order._id;
       const create = this.order.create;
       const split = this.payInFull ? null : this.splits[this.current]._id;
