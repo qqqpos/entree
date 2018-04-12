@@ -243,11 +243,16 @@ function createList(printer, setting, invoice, preview) {
           item =>
             item.printer[printer] &&
             !item.print &&
-            (item.diffs === "new" || item.diffs === "inserted")
+            (item.diffs === "new" || item.diffs === "inserted" || item.diffs === "more")
         );
         items.forEach(item => {
           switch (item.diffs) {
             case "new":
+              item.zhCN = "★" + item.zhCN;
+              item.usEN = "★" + item.usEN;
+              break;
+            case "more":
+              item.qty = item.qty - item.origin;
               item.zhCN = "★" + item.zhCN;
               item.usEN = "★" + item.usEN;
               break;

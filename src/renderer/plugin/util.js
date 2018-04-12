@@ -214,10 +214,27 @@ export default {
 
       let delivery = 0;
 
-      if (type === "DELIVERY") {
-        if (this.store.deliver.charge && !deliveryFree) {
+      if (type === "DELIVERY" && !deliveryFree) {
+        if (this.store.deliver.charge)
           delivery = parseFloat(this.store.deliver.baseFee);
+
+        if (this.store.deliver.surcharge) {
+          const duration = parseFloat(
+            this.customer.distance.replace(/[^\d.]/g, "")
+          );
+
+          const distance = isNumber(duration) ? duration : 0;
+          const surcharge = this.store.deliver.rules
+            .sort((a, b) => a.distance < b.distance)
+            .find(rule => rule.distance < distance);
+
+          if (surcharge) {
+            delivery += parseFloat(surcharge.fee);
+          }
         }
+
+        if (this.order.hasOwnProperty("$delivery"))
+          delivery = this.order.$delivery;
       }
 
       let { tip, gratuity, paid, rounding = 0 } = this.order.payment;
@@ -281,6 +298,9 @@ export default {
             .find(r => guest >= r.guest);
           gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
         } catch (e) { }
+
+        if (this.order.hasOwnProperty("$gratuity"))
+          gratuity = this.order.$gratuity;
       } else {
         gratuity = 0;
       }

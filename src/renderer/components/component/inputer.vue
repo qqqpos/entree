@@ -1,5 +1,5 @@
 <template>
-  <div class="popupMask center dark" @click.self="init.reject">
+  <div class="popupMask center dark" @click.self="init.reject(true)">
     <div class="editor">
         <header>
           <h5></h5>
@@ -23,7 +23,7 @@ export default {
   components: { numPad },
   data() {
     return {
-      amount: "0.00"
+      amount: isNumber(this.init.amount) ? this.init.amount.toFixed(2) : "0.00"
     };
   },
   methods: {

@@ -10,14 +10,14 @@
       </nav>
     </header>
     <toggle title="setting.delivery.tax" tooltip="tip.delivery.tax" v-model="tax.deliveryTax" @update="updateDeliveryTax"></toggle>
-    <toggle title="setting.delivery.charge" true-tooltip="tip.delivery.charge" false-tooltip="tip.delivery.free" v-model="store.deliver.charge" :conditionalTooltip="true" @update="updateDelivery">
+    <toggle title="setting.delivery.charge" true-tooltip="tip.delivery.charge" false-tooltip="tip.delivery.free" v-model="store.deliver.charge" :conditionalTooltip="true">
       <transition name="dropdown">
         <div class="opt" v-if="store.deliver.charge">
-          <inputer title="text.amount" v-model.number="store.deliver.baseFee" @update="updateDeliveryFee"></inputer>
+          <inputer title="text.amount" v-model.number="store.deliver.baseFee"></inputer>
         </div>
       </transition>
     </toggle>
-    <toggle title="setting.delivery.adjustTip" v-model="store.deliver.adjustTip" @update="updateDeliveryTip"></toggle>
+    <!-- <toggle title="setting.delivery.adjustTip" v-model="store.deliver.adjustTip" @update="updateDeliveryTip"></toggle> -->
     <toggle title="setting.delivery.surcharge" v-model="store.deliver.surcharge">
       <transition name="dropdown">
         <div v-if="store.deliver.surcharge">
@@ -32,7 +32,7 @@
             </thead>
             <tbody>
               <tr v-for="(rule,index) in store.deliver.rules" :key="index">
-                <td class="guest">{{$t('text.withInMile',rule.distance)}}</td>
+                <td class="guest">{{$t('text.overMile',rule.distance)}}</td>
                 <td class="amount">$ {{rule.fee | decimal}}</td>
                 <td @click="edit(rule,index)" class="opt" colspan="2">
                   <i class="fa fa-pencil-square"></i>
@@ -68,6 +68,12 @@ export default {
   created() {
     this.store = Object.assign({}, this.config.store);
   },
+  beforeDestroy() {
+    this.update({
+      key: "store.deliver",
+      value: this.store.deliver
+    });
+  },
   methods: {
     update(data) {
       this.$socket.emit("[CONFIG] UPDATE", data);
@@ -90,7 +96,7 @@ export default {
         value
       });
     },
-    updateDeliveryTip() {
+    updateDeliveryTip(value) {
       this.update({
         key: "store.deliver.adjustTip",
         value: parseFloat(value)
@@ -100,6 +106,12 @@ export default {
       this.update({
         key: "store.deliver.rules",
         value: this.store.deliver.rules
+      });
+    },
+    updateDeliverySurcharge(value) {
+      this.update({
+        key: "store.deliver.surcharge.enable",
+        value
       });
     },
     create() {

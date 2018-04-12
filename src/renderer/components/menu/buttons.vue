@@ -499,8 +499,8 @@ export default {
             compare[index].print = false;
           } else {
             //compare unchanged item find out if choiceSet is different
-            const nowSet = now.choiceSet.map(s => s.unique);
-            const prevSet = prev.choiceSet.map(s => s.unique);
+            const nowSet = now.choiceSet.filter(s=>!s.type).map(s => s.unique);
+            const prevSet = prev.choiceSet.filter(s=>!s.type).map(s => s.unique);
 
             let sameSet = nowSet.reduce(
               (a, b) => a && prevSet.includes(b),

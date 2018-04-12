@@ -1,7 +1,7 @@
 <template>
   <div class="popupMask center dark" @click.self="init.reject">
     <transition appear name="fadeUp">
-      <div class="config" :style="offsetTop">
+      <div class="config" :style="offsetTop" v-show="!component">
         <div class="option">
           <label class="f1" for="tax">{{$t('text.taxFree')}}</label>
           <label class="input-toggle">
@@ -44,21 +44,21 @@
             <span></span>
           </label>
         </div>
-      <!-- <div class="option">
-        <span class="f1">{{$t('text.deliveryFee')}}</span>
-        <label class="external">
-          <i class="fa fa-caret-right"></i>
-        </label>
-      </div> -->
+      <div class="btns">
+        <button @click="setDelivery" :disabled="order.type !== 'DELIVERY'">{{$t('button.setDelivery')}}</button>
+        <button @click="setGratuity" :disabled="(order.type !== 'DINE_IN' || order.type !== 'BAR' || order.type !== 'HIBACHI')">{{$t('button.setGratuity')}}</button>
+      </div>
     </div>
     </transition>
-
+    <div :is="component" :init="componentData"></div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import inputer from "../../component/inputer";
 export default {
   props: ["init"],
+  components: { inputer },
   mounted() {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
@@ -73,6 +73,8 @@ export default {
   },
   data() {
     return {
+      componentData: null,
+      component: null,
       viewCategory: false,
       offsetTop: {}
     };
@@ -108,10 +110,44 @@ export default {
     toggleSeatOrder() {
       this.init.seatOrder = false;
     },
-    ...mapActions(["setConfig"])
+    setDelivery() {
+      new Promise((resolve, reject) => {
+        const title = "setting.delivery.charge";
+        const amount = this.store.deliver.baseFee;
+        this.componentData = { resolve, reject, title, amount };
+        this.component = "inputer";
+      })
+        .then(_amount => {
+          this.setOrder({ $delivery: _amount });
+          this.$q();
+        })
+        .catch(del => {
+          if (del) delete this.order.$delivery;
+
+          this.$q();
+        });
+    },
+    setGratuity() {
+      new Promise((resolve, reject) => {
+        const title = "setting.delivery.charge";
+        const amount = this.store.deliver.baseFee;
+        this.componentData = { resolve, reject, title, amount };
+        this.component = "inputer";
+      })
+        .then(_amount => {
+          this.setOrder({ $gratuity: _amount });
+          this.$q();
+        })
+        .catch(del => {
+          if (del) delete this.order.$gratuity;
+
+          this.$q();
+        });
+    },
+    ...mapActions(["setConfig", "setOrder"])
   },
   computed: {
-    ...mapGetters(["config"])
+    ...mapGetters(["config", "store", "order"])
   }
 };
 </script>
@@ -160,5 +196,22 @@ export default {
   background: #f5f5f5;
   border-radius: 4px;
   color: #616161;
+}
+
+.btns {
+  display: flex;
+  padding: 5px 10px;
+  justify-content: center;
+  background: #eee;
+}
+
+.btns button {
+  padding: 15px 10px;
+  margin: 0 5px;
+  background: linear-gradient(#fefefe, #cfd0d3);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px #616161;
+  border: none;
+  outline: none;
 }
 </style>

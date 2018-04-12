@@ -374,10 +374,27 @@ export default {
 
       let delivery = 0;
 
-      if (type === "DELIVERY") {
-        if (this.store.deliver.charge && !deliveryFree) {
+      if (type === "DELIVERY" && !deliveryFree) {
+        if (this.store.deliver.charge)
           delivery = parseFloat(this.store.deliver.baseFee);
+
+        if (this.store.deliver.surcharge) {
+          const duration = parseFloat(
+            this.customer.distance.replace(/[^\d.]/g, "")
+          );
+
+          const distance = isNumber(duration) ? duration : 0;
+          const surcharge = this.store.deliver.rules
+            .sort((a, b) => a.distance < b.distance)
+            .find(rule => rule.distance < distance);
+
+          if (surcharge) {
+            delivery += parseFloat(surcharge.fee);
+          }
         }
+
+        if (this.order.hasOwnProperty("$delivery"))
+          delivery = this.order.$delivery;
       }
 
       let {
@@ -445,6 +462,9 @@ export default {
             .find(r => guest >= r.guest);
           gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
         } catch (e) {}
+
+        if (this.order.hasOwnProperty("$gratuity"))
+          gratuity = this.order.$gratuity;
       } else {
         gratuity = 0;
       }
@@ -593,6 +613,9 @@ export default {
           : this.calculator(items);
       },
       deep: true
+    },
+    customer() {
+      this.calculator(this.order.content);
     },
     payment() {
       this.$nextTick(() => {
@@ -874,7 +897,7 @@ header.info {
   background: #fff;
 }
 
-.phone{
+.phone {
   min-width: 108px;
   display: inline-block;
 }

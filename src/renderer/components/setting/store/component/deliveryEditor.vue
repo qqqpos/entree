@@ -4,12 +4,12 @@
             <header>
                 <h5 v-if="init.edit">{{$t('title.edit')}}</h5>
                 <h5 v-else>{{$t('title.create')}}</h5>
-                <h3>{{$t('setting.deliveryCharge')}}</h3>
+                <h3>{{$t('setting.delivery.surcharge')}}</h3>
             </header>
             <div class="banner"></div>
             <div class="wrap">
-                <inputer title="text.distance" v-model.trim="rule.distance" :autoFocus="true"></inputer>
-                <inputer title="text.fee" v-model.number="rule.fee"></inputer>
+                <inputer title="text.distance" v-model.number="rule.distance" :autoFocus="true"></inputer>
+                <inputer title="text.extraPrice" v-model.number="rule.fee"></inputer>
             </div>
             <footer>
                 <div class="opt">

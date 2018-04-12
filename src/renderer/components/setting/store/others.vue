@@ -10,7 +10,7 @@
         </div>
       </transition>
     </toggle>
-    <toggle title="setting.emailService" tooltip="tip.emailService" v-model="store.email.enable" @update="updateEmail">
+    <toggle title="setting.emailService" tooltip="tip.emailService" v-model="store.email.enable" @update="updateEmail" :disabled="true">
       <transition name="dropdown">
         <div v-if="store.email.enable" class="opt">
           <inputer title="text.username" v-model="store.email.username" @update="updateUser"></inputer>

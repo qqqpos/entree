@@ -181,6 +181,7 @@ export default {
     setGratuity: "设服务费",
     setDiscount: "设折扣",
     setCoupon: "应用优惠劵",
+    setDelivery: "设送餐费",
     changeDate: "更改日期",
     edit: "修改",
     recover: "恢复",
@@ -1149,7 +1150,6 @@ export default {
     search: "搜索",
     amountGreaterThan: "金额大于",
     assignToItems: "分配到所有物品",
-    content: "内容",
     osk: "屏幕键盘",
     english: "英文",
     chinese: "中文",
@@ -1190,7 +1190,7 @@ export default {
     viewInvoice: "查看以往订单",
     rename: "重命名",
     itemTrend: "物品热度",
-    withInMile: "{i} 哩航程内",
+    overMile: "{i} 哩以上",
     setTime: "{i} 分钟后",
     map: "地图",
     stationPrinters: "已使用 {i} 台打印机",
@@ -1207,7 +1207,8 @@ export default {
     groupByDepartments: "按部门分类物品",
     restrictionRules: "限制条件",
     autoLogin: "自动登录",
-    recommendItem: "推荐物品"
+    recommendItem: "推荐物品",
+    distance: "距离"
   },
   nav: {
     store: "店面",
@@ -1582,7 +1583,7 @@ export default {
     doNotPrintReceipt: "从不打印收据",
     alwaysPrintReceipt: "总是打印收据",
     delivery: {
-      setting: "设置送餐",
+      setting: "设置送餐相关",
       free: "不收取送餐费",
       charge: "设定送餐费用",
       tax: "是否对送餐费进行征税"
