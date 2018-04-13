@@ -35,7 +35,7 @@ import request from "./component/request";
 import dialoger from "../common/dialoger";
 import queryBar from "./component/queryBar";
 import orderList from "../common/orderList";
-import weightItem from "./component/weightScale";
+import weightItem from "./component/scale";
 import templateItem from "./component/templateItem";
 import temporaryItem from "./component/temporaryItem";
 

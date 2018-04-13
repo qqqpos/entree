@@ -145,8 +145,7 @@ export default {
       });
     },
     cancel() {
-      this.resetMenu();
-      this.resetCustomer();
+      this.resetAll();
       this.$router.push({ path: "/main" });
     },
     create() {
@@ -357,7 +356,7 @@ export default {
       "setApp",
       "setTicket",
       "setOrder",
-      "resetMenu",
+      "resetAll",
       "setCustomer",
       "setFavorites",
       "resetCustomer",
