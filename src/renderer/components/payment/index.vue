@@ -213,7 +213,7 @@
               <aside class="padCtrl">
                 <div @click="del">&#8592;</div>
                 <div @click="clear">C</div>
-                <div @click="queryGiftCard" v-if="anchor === 'giftCard' && typeof giftCard === 'string'" :class="{disabled:giftCard.length < 19}">
+                <div @click="queryGiftCard" v-if="anchor === 'giftCard' && typeof giftCard === 'string'">
                   <i class="fa fa-search"></i>
                 </div>
                 <div @click="charge" v-else>&#8626;</div>
@@ -1515,6 +1515,11 @@ export default {
         .catch(() => this.exit());
     },
     ...mapActions(["setOp", "setOrder", "resetAll", "resetMenu"])
+  },
+  sockets: {
+    TICKET_NUMBER(number) {
+      this.isNewTicket && Object.assign(this.order, { number });
+    }
   }
 };
 </script>

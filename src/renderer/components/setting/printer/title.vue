@@ -21,7 +21,7 @@
     <text-input v-model="title.SALES" title="type.SALES"></text-input>
     <text-input v-model="title.TO_GO" title="type.TO_GO"></text-input>
     <text-input v-model="title.PRE_PAYMENT" title="type.PRE_PAYMENT"></text-input>
-    <text-input v-model="title.RECEIPT" title="type.RECEIPT"></text-input>
+    <!-- <text-input v-model="title.RECEIPT" title="type.RECEIPT"></text-input> -->
   </div>
 </template>
 

@@ -91,6 +91,7 @@ export default {
     autoComplete(n) {
       const street = n
         .replace(/ +/g, " ")
+        .replace(/[\W_]+/g," ")
         .split(" ")
         .slice(1)
         .join(" ");

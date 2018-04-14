@@ -466,7 +466,7 @@ export default {
         return result;
       },
       formatAddress(address) {
-        const reg = /\d+(\s+\w+){1,}\s+(?:st(?:\.|reet)?|dr(?:\.|ive)?|pl(?:\.|ace)?|ave(?:\.|nue)?|rd|road|ln|lane|drive|way|court|plaza|square|run|parkway|point|pike|square|driveway|trace|park|terrace|circle|loop|blvd|broadway)/i;
+        const reg = /\d+(\s+\w+){1,}\s+(?:st(?:\.|reet)?|dr(?:\.|ive)?|pl(?:\.|ace)?|ave(?:\.|nue)?|rd|road|ln|lane|drive|way|court|plaza|square|run|parkway|point|pike|square|driveway|trace|park|terrace|circle|loop|blvd|broadway|trail|trl)/i;
         const match = address.match(reg);
 
         return match ? match[0] : false;

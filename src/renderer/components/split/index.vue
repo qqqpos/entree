@@ -224,6 +224,7 @@ export default {
           tip += order.payment.tip;
           tax += order.payment.tax;
           subtotal += order.payment.subtotal;
+          rounding += order.payment.rounding;
           delivery += order.payment.delivery;
           total += order.payment.total;
           due += order.payment.due;
@@ -237,12 +238,28 @@ export default {
         this.order.payment.tip = toFixed(tip, 2);
         this.order.payment.tax = toFixed(tax, 2);
         this.order.payment.subtotal = toFixed(subtotal, 2);
+        this.order.payment.rounding = toFixed(rounding, 2);
         this.order.payment.total = toFixed(total, 2);
         this.order.payment.discount = toFixed(discount, 2);
         this.order.payment.delivery = toFixed(delivery, 2);
         this.order.payment.due = toFixed(due, 2);
         this.order.payment.balance = toFixed(balance, 2);
         this.order.payment.remain = toFixed(remain, 2);
+
+        // Object.assign(this.order, {
+        //   payment: {
+        //     tip: toFixed(tip, 2),
+        //     tax: toFixed(tax, 2),
+        //     subtotal: toFixed(subtotal, 2),
+        //     rounding: toFixed(rounding, 2),
+        //     total: toFixed(total, 2),
+        //     discount: toFixed(discount, 2),
+        //     delivery: toFixed(delivery, 2),
+        //     due: toFixed(due, 2),
+        //     balance: toFixed(balance, 2),
+        //     remain: toFixed(remain, 2)
+        //   }
+        // });
         this.order.content.forEach(item => (item.split = true));
         this.order.children = splits.map(i => i._id);
         this.order.split = true;

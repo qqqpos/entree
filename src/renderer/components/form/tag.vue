@@ -150,7 +150,8 @@ section:last-child {
   min-width: 65px;
   text-align: center;
   cursor: pointer;
-  background: #fff;
+  background: #f5f5f5;
+  color: #666;
 }
 
 .tag {
@@ -160,6 +161,7 @@ section:last-child {
 label.type {
   width: 90px;
   color: #3c3c3c;
+  font-weight: bold;
 }
 
 input:checked + label {

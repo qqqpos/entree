@@ -66,7 +66,7 @@
         <button class="fn fa fa-credit-card-alt" @click="openVault" :disabled="!customer._id"></button>
         <button class="fn" @click="separator" :disabled="$route.name !== 'Menu'">-----</button>
         <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'"></button>
-        <button class="fn fa fa-check-square-o" v-else @click="toggleTodoList" :disabled="app.mode ==='edit' || order.type === 'HIBACHI'"></button>
+        <button class="fn fa fa-check-square-o" v-else @click="toggleTodoList" :disabled="!app.newTicket || order.type === 'HIBACHI'"></button>
         <button class="fn fa fa-keyboard-o" @click="openKeyboard" :disabled="$route.name !== 'Menu'"></button>
       </div>
       <div class="settle" @click="openConfig">
@@ -862,7 +862,7 @@ header.info {
 }
 
 .detail span {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .content .time {
@@ -893,7 +893,7 @@ header.info {
 
 .content {
   flex: 1;
-  padding: 6px 15px 0;
+  padding: 6px 6px 0;
   background: #fff;
 }
 

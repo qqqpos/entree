@@ -268,7 +268,7 @@ export default {
       );
     },
     TICKET_NUMBER(number) {
-      this.app.mode !== "edit" && this.setTicket({ number });
+      this.app.newTicket && this.setTicket({ number });
     },
     UPDATE_CONFIG(update) {
       const { target, data } = update;
