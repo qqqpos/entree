@@ -105,6 +105,7 @@ export default {
         tip: 0,
         discount: 0,
         delivery: 0,
+        rouding: 0,
         surcharge: 0,
         remain: 0,
         log: []
@@ -186,10 +187,25 @@ export default {
       return;
     },
     remove(items) {
-      items.forEach(({ unique }) => {
-        this.order.content = this.order.content.filter(
-          item => item.unique !== unique
-        );
+      items.forEach(({ unique, parent, __split__ = false }) => {
+        if (__split__) {
+          const index = this.order.content.findIndex(
+            item => item.unique === parent
+          );
+          const target = this.order.content[index];
+
+          if (target.qty > 1) {
+            target.total = (--target.qty * target.single).toFixed(2);
+          } else {
+            this.order.content = this.order.content.filter(
+              item => item.unique !== parent
+            );
+          }
+        } else {
+          this.order.content = this.order.content.filter(
+            item => item.unique !== unique
+          );
+        }
       });
     },
     confirm() {
@@ -209,6 +225,7 @@ export default {
       let tip = 0;
       let tax = 0;
       let subtotal = 0;
+      let rounding = 0;
       let delivery = 0;
       let total = 0;
       let discount = 0;
