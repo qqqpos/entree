@@ -38,6 +38,7 @@
           </div>
         </div>
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
+        <button class="btn" @click="print">{{$t('button.printAll')}}</button>
         <button class="btn" @click="confirm" :disabled="!done">{{$t('button.confirm')}}</button>
       </footer>
     </div>
@@ -207,6 +208,20 @@ export default {
           );
         }
       });
+    },
+    print() {
+      const { number } = this.order;
+      this.$children
+        .filter(
+          (instance, index) =>
+            index !== 0 && instance.order.content.length !== 0
+        )
+        .map(instance => instance.order)
+        .forEach((ticket, index) =>
+          Printer.setTarget("Receipt").print(
+            Object.assign(ticket, { number: `${number}-${index + 1}` })
+          )
+        );
     },
     confirm() {
       if (document.getElementsByClassName("evener").length > 0) return;
