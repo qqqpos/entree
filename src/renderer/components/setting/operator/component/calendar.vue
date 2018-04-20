@@ -1,0 +1,363 @@
+<template>
+    <div class="relative" v-outer-click="close">
+        <div class="button" @click="toggle">
+            <i class="fa fa-calendar"></i>
+            <span class="text">{{$t('report.'+range)}}</span>
+            <i class="fa fa-sort"></i>
+        </div>
+        <div class="dialog" v-show="visible">
+            <div class="calendar">
+                <header>
+                    <i class="fa fa-chevron-left" @click="prev"></i>
+                    <h3>{{date | moment('MMMM YYYY')}}</h3>
+                    <i class="fa fa-chevron-right" @click="next"></i>
+                </header>
+                <div class="wrap">
+                    <div class="title">
+                        <span>{{$t('calendar.mon')}}</span>
+                        <span>{{$t('calendar.tue')}}</span>
+                        <span>{{$t('calendar.wed')}}</span>
+                        <span>{{$t('calendar.thu')}}</span>
+                        <span>{{$t('calendar.fri')}}</span>
+                        <span>{{$t('calendar.sat')}}</span>
+                        <span>{{$t('calendar.sun')}}</span>
+                    </div>
+                    <div class="dates">
+                        <div class="week" v-for="(week,index) in calendar" :key="index">
+                            <div class="day" v-for="(day,idx) in week.days" :key="idx" :class="{diff:isDiff(day),between:isBetween(day)}" @click="select(day)">{{day | moment('D')}}</div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="selection">
+                <div class="preset" v-for="(preset,index) in presets" :key="index">
+                  <input type="radio" name="preset" v-model="range" :value="preset.value" :id="preset.value" @click="setRange(preset.value)">
+                  <label :for="preset.value">{{preset.label}}</label>
+                </div>
+                <button class="btn" @click="apply">{{$t('button.view')}}</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      range: "today",
+      temp: "today",
+      visible: false,
+      date: moment(),
+      calendar: [],
+      dates: [moment().startOf("day"), moment().endOf("day")],
+      presets: [
+        "today",
+        "currentWeek",
+        "lastWeek",
+        "currentMonth",
+        "lastMonth"
+      ].map(text => ({
+        label: this.$t("report." + text),
+        value: text
+      }))
+    };
+  },
+  created() {
+    this.initialCalendar();
+  },
+  mounted() {
+    this.apply();
+  },
+  methods: {
+    close() {
+      this.visible = false;
+      this.range = this.temp;
+      this.setRange(this.temp);
+    },
+    toggle() {
+      this.visible ? this.close() : (this.visible = true);
+    },
+    apply() {
+      switch (this.range) {
+        case "today":
+          this.$emit("update", [
+            moment()
+              .subtract(4, "hours")
+              .startOf("day")
+              .hours(4),
+            moment()
+              .subtract(4, "hours")
+              .endOf("day")
+              .add(4, "h")
+          ]);
+          break;
+        case "currentWeek":
+          this.$emit("update", [
+            moment()
+              .startOf("week")
+              .hours(4),
+            moment()
+              .endOf("week")
+              .add(4, "h")
+          ]);
+          break;
+        case "lastWeek":
+          this.$emit("update", [
+            moment()
+              .subtract(1, "w")
+              .startOf("week")
+              .hours(4),
+            moment()
+              .subtract(1, "w")
+              .endOf("week")
+              .add(4, "h")
+          ]);
+          break;
+        case "currentMonth":
+          this.$emit("update", [
+            moment()
+              .startOf("month")
+              .hours(4),
+            moment()
+              .endOf("month")
+              .add(4, "h")
+          ]);
+          break;
+        case "lastMonth":
+          this.$emit("update", [
+            moment()
+              .subtract(1, "M")
+              .startOf("month")
+              .hours(4),
+            moment()
+              .subtract(1, "M")
+              .endOf("month")
+              .add(4, "h")
+          ]);
+          break;
+        default:
+      }
+
+      this.visible = false;
+      this.temp = this.range;
+    },
+    prev() {
+      this.date.subtract(1, "M");
+      this.initialCalendar();
+    },
+    next() {
+      this.date.add(1, "M");
+      this.initialCalendar();
+    },
+    setRange(value) {
+      switch (value) {
+        case "today":
+          this.dates = [moment().startOf("day"), moment().endOf("day")];
+          break;
+        case "currentWeek":
+          this.dates = [moment().startOf("week"), moment().endOf("week")];
+          break;
+        case "lastWeek":
+          this.dates = [
+            moment()
+              .subtract(1, "w")
+              .startOf("week"),
+            moment()
+              .subtract(1, "w")
+              .endOf("week")
+          ];
+          break;
+        case "currentMonth":
+          this.dates = [moment().startOf("month"), moment().endOf("month")];
+          break;
+        case "lastMonth":
+          this.dates = [
+            moment()
+              .subtract(1, "M")
+              .startOf("month"),
+            moment()
+              .subtract(1, "M")
+              .endOf("month")
+          ];
+          break;
+      }
+    },
+    initialCalendar() {
+      let calendar = [];
+
+      const startDay = this.date
+        .clone()
+        .startOf("month")
+        .startOf("isoWeek");
+      const endDay = this.date
+        .clone()
+        .endOf("month")
+        .endOf("isoWeek");
+
+      let date = startDay.clone().subtract(1, "day");
+
+      while (date.isBefore(endDay, "day")) {
+        calendar.push({
+          days: Array(7)
+            .fill(0)
+            .map(() => date.add(1, "day").clone())
+        });
+      }
+
+      calendar.length === 5 &&
+        calendar.push({
+          days: Array(7)
+            .fill(0)
+            .map((n, i) =>
+              date
+                .clone()
+                .add(1, "week")
+                .startOf("isoWeek")
+                .add(n + i, "day")
+            )
+        });
+
+      this.calendar = calendar;
+      this.$forceUpdate();
+    },
+    isDiff(day) {
+      return this.date.format("M") !== day.format("M");
+    },
+    isBetween(day) {
+      if (this.dates.length !== 2) return false;
+
+      const [from, to] = this.dates;
+      return day.isBetween(from, to, null, "[]");
+    },
+    select() {}
+  }
+};
+</script>
+
+<style scoped>
+.button {
+  padding: 10px;
+}
+
+.button .text {
+  display: inline-block;
+  min-width: 120px;
+}
+
+.fa-sort {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog {
+  position: absolute;
+  display: flex;
+  top: 45px;
+  right: 0;
+  width: 680px;
+  height: 350px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 5px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+.calendar {
+  flex: 1;
+  padding-right: 5px;
+  border-width: 0 1px 0 0;
+  border-style: solid;
+  border-image: linear-gradient(
+      to bottom,
+      rgba(224, 224, 224, 0),
+      #9e9e9e,
+      rgba(224, 224, 224, 0)
+    )
+    1 100%;
+}
+
+.calendar header {
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.calendar header i {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.calendar h3 {
+  margin: 0 10px;
+}
+
+.selection {
+  padding-left: 5px;
+  width: 250px;
+  text-align: center;
+}
+
+.preset label {
+  padding: 17px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: rgba(55, 71, 79, 0.4);
+  cursor: pointer;
+  display: block;
+}
+
+input:checked + label {
+  color: #37474f;
+}
+
+.preset label:hover {
+  background: #f3f3f3;
+  border-radius: 4px;
+}
+
+.title,
+.calendar .week {
+  display: flex;
+}
+
+.title span {
+  flex: 1;
+  text-align: center;
+  padding: 5px 0;
+  background: #009688;
+  color: #e8f5e9;
+}
+
+.week .day {
+  flex: 1;
+  height: 43px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: #eceff1;
+  position: relative;
+  z-index: 1;
+  border: 1px solid #fff;
+  font-family: "Agency FB";
+  font-weight: bold;
+  font-size: 30px;
+  opacity: 0.75;
+}
+
+.day.diff {
+  color: rgba(0, 0, 0, 0.4);
+  background: #fff;
+}
+
+.day.between {
+  color: #b71c1c;
+  background: #fff3e0;
+}
+
+button.btn {
+  width: 247px;
+}
+</style>
+

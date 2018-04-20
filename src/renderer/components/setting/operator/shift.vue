@@ -1,36 +1,35 @@
 <template>
     <div>
-        <ul class="tabs">
-            <li class="tab" @click="setDay(0)">{{$t('calendar.sun')}}</li>
-            <li class="tab" @click="setDay(1)">{{$t('calendar.mon')}}</li>
-            <li class="tab" @click="setDay(2)">{{$t('calendar.tue')}}</li>
-            <li class="tab" @click="setDay(3)">{{$t('calendar.wed')}}</li>
-            <li class="tab" @click="setDay(4)">{{$t('calendar.thu')}}</li>
-            <li class="tab" @click="setDay(5)">{{$t('calendar.fri')}}</li>
-            <li class="tab" @click="setDay(6)">{{$t('calendar.sat')}}</li>
+        <ul class="dates">
+          <li v-for="(date,index) in dates" :key="index" :class="{active:isActive(date)}" @click="set(date)">
+            <span>{{date | moment('ddd')}}</span>
+            <span>{{date | moment('D')}}</span>
+          </li>
         </ul>
         <div class="employees">
             <table>
                 <thead>
                     <tr>
-                        <td>Name</td>
-                        <td>Role</td>
-                        <td>From</td>
-                        <td>To</td>
-                        <td>ClockIn</td>
-                        <td>ClockOut</td>
-                        <td>Edit</td>
+                        <td class="index"></td>
+                        <td>{{$t('text.name')}}</td>
+                        <td>{{$t('text.role')}}</td>
+                        <td class="shift">{{$t('text.time')}}</td>
+                        <td colspan="3"></td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(op,index) in operators" :key="index">
+                    <tr v-for="(op,index) in onDuty" :key="index">
+                        <td class="index">{{index + 1}}</td>
                         <td>{{op.name}}</td>
                         <td>{{$t('type.'+op.role)}}</td>
-                        <td>{{op.schedule[i].from}}</td>
-                        <td>{{op.schedule[i].to}}</td>
-                        <td></td>
-                        <td></td>
-                        <td><i class="fa fa-pencil"></i></td>
+                        <td class="shift" :title="date.format('YYYY-MM-DD')">
+                          <span class="time">{{op.schedule.from}}</span>
+                          <i class="fa fa-angle-right"></i>
+                          <span class="time">{{op.schedule.to}}</span>
+                        </td>
+                        <td colspan="3">
+                          <time-bar :shift="op.schedule" :id="op.id" :date="date.format('YYYY-MM-DD')"></time-bar>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -39,44 +38,154 @@
 </template>
 
 <script>
+import timeBar from "./component/timeBar";
+
 export default {
+  components: { timeBar },
   data() {
     return {
-      i: moment().format("d"),
-      operators: []
+      date: moment().startOf("days"),
+      operators: [],
+      onDuty: [],
+      dates: []
     };
   },
-  created() {
-    this.$socket.emit("[OPERATOR] LIST", data => {
-      this.operators = data
-        .filter(op => op.hasOwnProperty("schedule") && !op.schedule[this.i].off)
-        .map(op => ({
-          name: op.name,
-          role: op.role,
-          schedule: op.schedule,
-          clockIn: "",
-          clockOut: ""
-        }));
+  beforeRouteEnter: (to, from, next) => {
+    appSocket.emit("[OPERATOR] LIST", data => {
+      next(vm => {
+        const sort = [
+          "Owner",
+          "Manager",
+          "Cashier",
+          "Waitstaff",
+          "Bartender",
+          "Worker"
+        ];
+        vm.operators = data
+          .filter(d => d.role !== "Owner")
+          .sort(
+            (a, b) => (sort.indexOf(a.role) > sort.indexOf(b.role) ? 1 : -1)
+          );
+        vm.generateDates();
+      });
     });
   },
-  mounted() {
-    this.setDay(this.i);
-  },
   methods: {
-    setDay(index) {
-      const dom = document.querySelector(".router-link-exact-active");
-      dom && dom.classList.remove("router-link-exact-active");
+    isActive(date) {
+      return date === +this.date;
+    },
+    generateDates() {
+      let dates = [];
 
-      document
-        .querySelectorAll(".tabs li")
-        [index].classList.add("router-link-exact-active");
+      for (let i = 6; i > 0; i--) {
+        dates.push(
+          +this.date
+            .clone()
+            .subtract(i, "d")
+            .startOf("days")
+        );
+      }
+      dates.push(+this.date);
 
-      this.i = index;
+      for (let i = 1; i < 7; i++) {
+        dates.push(
+          +this.date
+            .clone()
+            .add(i, "d")
+            .startOf("days")
+        );
+      }
+      this.dates = dates;
+
+      this.getOnDuty();
+    },
+    set(date) {
+      this.date = moment(date);
+      this.generateDates();
+    },
+
+    getOnDuty() {
+      const index = this.date.format("d");
+      this.onDuty = this.operators
+        .filter(op => op.hasOwnProperty("schedule") && !op.schedule[index].off)
+        .map(op => ({
+          id: op._id,
+          name: op.name,
+          role: op.role,
+          schedule: op.schedule[index]
+        }));
     }
   }
 };
 </script>
 
 <style scoped>
+tbody {
+  height: 637px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: block;
+}
 
+table thead,
+table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+td.shift {
+  width: 180px;
+}
+thead td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  background: #f5f5f5;
+  color: #505865;
+  font-weight: bold;
+}
+
+tbody td {
+  padding: 14px;
+}
+
+.center {
+  text-align: center;
+}
+
+.time {
+  color: rgba(0, 0, 0, 0.65);
+  margin: 0 10px;
+}
+
+.index {
+  width: 15px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+ul.dates {
+  display: flex;
+  padding: 5px 0;
+  background: #90a4ae;
+}
+
+ul.dates li {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: 0px 10px;
+  padding: 4px;
+  color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+
+ul.dates li.active {
+  border-radius: 4px;
+  background: rgba(250, 250, 250, 0.75);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  color: #263238;
+  font-weight: bold;
+}
 </style>

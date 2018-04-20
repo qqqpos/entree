@@ -383,25 +383,9 @@ export default new Router({
                   ]
                 },
                 {
-                  path: "timecards",
-                  name: "Setting.operator.timecards",
-                  component: require("../components/setting/operator/timecards")
-                },
-                {
                   path: "payroll",
-                  component: require("../components/setting/operator/payroll"),
-                  children: [
-                    {
-                      path: "/",
-                      name: "Setting.operator.payroll",
-                      component: require("../components/setting/operator/payroll/index")
-                    },
-                    {
-                      path: "sheet",
-                      name: "Setting.operator.payroll.sheet",
-                      component: require("../components/setting/operator/payroll/sheet")
-                    }
-                  ]
+                  name: "Setting.operator.payroll",
+                  component: require("../components/setting/operator/payroll/index")
                 },
                 {
                   path: "shift",

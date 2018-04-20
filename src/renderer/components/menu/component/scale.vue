@@ -107,6 +107,44 @@ section.numpad {
   flex-wrap: wrap;
   width: 315px;
 }
+
+.input {
+  display: flex;
+  width: 422px;
+}
+
+.input div {
+  flex: 1;
+  height: 90px;
+  margin: 5px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.input h3 {
+  padding: 8px 5px;
+  border-bottom: 1px solid #eee;
+  background: #607d8b;
+  color: #fff;
+  text-align: center;
+  font-weight: normal;
+}
+
+input {
+  border: none;
+  width: 100%;
+}
+
+.value {
+  font-size: 43px;
+  font-family: "Agency FB";
+  font-weight: bold;
+  color: #616161;
+  letter-spacing: 4px;
+  text-align: right;
+  display: block;
+}
 </style>
 
 

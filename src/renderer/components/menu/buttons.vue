@@ -372,7 +372,10 @@ export default {
                 }
               });
             }
-          } else if (this.ticket.type !== "DINE_IN" && this.ticket.type !== "BAR") {
+          } else if (
+            this.ticket.type !== "DINE_IN" &&
+            this.ticket.type !== "BAR"
+          ) {
             this.$socket.emit("[SAVE] INVOICE", order, print, content => {
               print && Printer.setTarget("All").print(content);
             });
@@ -470,12 +473,125 @@ export default {
       }
       return Object.assign({}, order, extra);
     },
+    compare(current) {
+      //calculat difference algorithm
+      const oldContent = this.diffs;
+      //deep copy current order & mark as printed
+      current = JSON.parse(JSON.stringify(current));
+      current.print = true;
+
+      let items = [];
+      let { content } = current;
+
+      //loop for diffs
+      content.forEach(item => {
+        if (!item.print) {
+          //Push all unprint item to stack
+          item.diffs = "new";
+          items.push(item);
+          return;
+        }
+
+        const index = oldContent.findIndex(i => i.unique === item.unique);
+
+        if (index !== -1) {
+          //if item exist in old content
+          //compare item quantaty first
+          //then check item's subitem
+          const oldItem = oldContent[index];
+
+          if (item.qty < oldItem.qty) {
+            Object.assign(item, {
+              diffs: "less",
+              print: false
+            });
+          } else if (item.qty > oldItem.qty) {
+            Object.assign(item, {
+              diffs: "more",
+              print: false
+            });
+          } else {
+            //comparing subitem
+            const newSet = item.choiceSet
+              .filter(s => !s.type)
+              .map(s => s.unique);
+            const oldSet = oldItem.choiceSet
+              .filter(s => !s.type)
+              .map(s => s.unique);
+
+            const isSame = newSet.reduce(
+              (a, b) => a && oldSet.includes(b),
+              true
+            );
+
+            if (isSame) {
+              item.diffs = "unchanged";
+            } else {
+              let _item = JSON.parse(JSON.stringify(item));
+
+              items.push(
+                Object.assign(oldItem, {
+                  diffs: "removed",
+                  print: false
+                })
+              );
+
+              items.push(
+                Object.assign(_item, {
+                  diffs: "new",
+                  print: false
+                })
+              );
+
+              Object.assign(item, {
+                diffs: "inserted",
+                print: false
+              });
+
+              item.choiceSet = item.choiceSet.filter(
+                set => !oldSet.includes(set.unique)
+              );
+
+              let printer = new Set();
+              item.choiceSet.forEach(set => {
+                if (set.hasOwnProperty("print")) {
+                  set.print.forEach(name => printer.add(name));
+                  set.print = [];
+                }
+              });
+
+              if (Array.from(printer).length > 0) {
+                item.printer = {};
+                printer.forEach(name => {
+                  item.printer[name] = {
+                    replace: false
+                  };
+                });
+              }
+            }
+          }
+
+          item.origin = oldItem.qty;
+          items.push(item);
+        } else {
+          items.push(
+            Object.assign(item, {
+              diffs: "removed",
+              print: false
+            })
+          );
+        }
+      });
+
+      return Object.assign(current, { content: items });
+    },
     analyzeDiffs(current) {
       current = JSON.parse(JSON.stringify(current));
       current.print = true;
 
       let items = [];
       let compare = current.content;
+
       //push unprinted item
 
       this.diffs.forEach(prev => {
@@ -499,8 +615,12 @@ export default {
             compare[index].print = false;
           } else {
             //compare unchanged item find out if choiceSet is different
-            const nowSet = now.choiceSet.filter(s=>!s.type).map(s => s.unique);
-            const prevSet = prev.choiceSet.filter(s=>!s.type).map(s => s.unique);
+            const nowSet = now.choiceSet
+              .filter(s => !s.type)
+              .map(s => s.unique);
+            const prevSet = prev.choiceSet
+              .filter(s => !s.type)
+              .map(s => s.unique);
 
             let sameSet = nowSet.reduce(
               (a, b) => a && prevSet.includes(b),

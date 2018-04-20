@@ -88,7 +88,7 @@
             <template v-if="paymentType === 'CASH'">
               <div class="inputs">
                 <div class="input" @click="setAnchor($event)" data-anchor="paid" data-format="money">
-                  <span class="text">{{$t('text.paid')}}</span>
+                  <span class="text">{{$t('text.pay')}}</span>
                   <span class="value">{{paid}}</span>
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money">
@@ -115,7 +115,7 @@
             <template v-else-if="paymentType === 'CREDIT'">
               <div class="inputs">
                 <div class="input" @click="setAnchor($event)" data-anchor="paid" data-format="money">
-                  <span class="text">{{$t('text.paid')}}</span>
+                  <span class="text">{{$t('text.pay')}}</span>
                   <span class="value">{{paid}}</span>
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money">
@@ -143,7 +143,7 @@
             <template v-else-if="paymentType === 'THIRD'">
               <div class="inputs">
                 <div class="input" @click="setAnchor($event)" data-anchor="paid" data-format="money">
-                  <span class="text">{{$t('text.paid')}}</span>
+                  <span class="text">{{$t('text.pay')}}</span>
                   <span class="value">{{paid}}</span>
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money">
@@ -186,7 +186,7 @@
             <template v-else>
               <div class="inputs">
                 <div class="input" @click="setAnchor($event)" data-anchor="paid" data-format="money">
-                  <span class="text">{{$t('text.paid')}}</span>
+                  <span class="text">{{$t('text.pay')}}</span>
                   <span class="value">{{paid}}</span>
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="tip" data-format="money">

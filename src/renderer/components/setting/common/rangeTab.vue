@@ -47,7 +47,6 @@ export default {
             .subtract(1, "w")
             .endOf("w")
             .add(4, "h");
-
           break;
         case "lastMonth":
           from = +moment()

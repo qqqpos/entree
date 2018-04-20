@@ -12,14 +12,19 @@
         <span @click="removePrinter" class="remove">{{$t('button.remove')}}</span>
       </nav>
     </header>
-    <external title="print.printTicket" @open="$router.push({name:'Setting.printer.option',params:{printer,obj:'print'}})"></external>
-    <external title="print.printDouble" @open="$router.push({name:'Setting.printer.option',params:{printer,obj:'reprint'}})"></external>
-    <external title="print.title" @open="$router.push({name:'Setting.printer.title',params:{printer}})"></external>
-    <external title="print.footer" @open="openFooterEditor"></external>
-    <toggle title="print.buzzer" v-model="config.control.buzzer" @update="updateBuzzer"></toggle>
-    <toggle title="print.category" v-model="config.control.categorize" @update="updateCategorize"></toggle>
-    <toggle title="print.priority" v-model="config.control.prioritize" @update="updatePrioritize"></toggle>
-    <options title="print.mode" tooltip="tip.printMode" v-model="config.control.mode" :opts="modeOpts" @update="updateMode"></options>
+    <template v-if="config.type === 'label'">
+      <external title="print.printTicket" @open="$router.push({name:'Setting.printer.option',params:{printer,obj:'print'}})"></external>
+    </template>
+    <template v-else>
+      <external title="print.printTicket" @open="$router.push({name:'Setting.printer.option',params:{printer,obj:'print'}})"></external>
+      <external title="print.printDouble" @open="$router.push({name:'Setting.printer.option',params:{printer,obj:'reprint'}})"></external>
+      <external title="print.title" @open="$router.push({name:'Setting.printer.title',params:{printer}})"></external>
+      <external title="print.footer" @open="openFooterEditor"></external>
+      <toggle title="print.buzzer" v-model="config.control.buzzer" @update="updateBuzzer"></toggle>
+      <toggle title="print.category" v-model="config.control.categorize" @update="updateCategorize"></toggle>
+      <toggle title="print.priority" v-model="config.control.prioritize" @update="updatePrioritize"></toggle>
+      <options title="print.mode" tooltip="tip.printMode" v-model="config.control.mode" :opts="modeOpts" @update="updateMode"></options>
+    </template>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>

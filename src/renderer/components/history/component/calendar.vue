@@ -3,11 +3,12 @@
         <div class="editor">
             <header>
                 <div>
-                    <h5>{{date | moment('YYYY-MM')}}</h5>
+                    <h5>{{date | moment('YYYY')}}</h5>
                     <h3>{{$t('nav.calendar')}}</h3>
                 </div>
                 <nav>
                     <i class="fa fa-angle-left" @click="prev" @contextmenu="prevYear"></i>
+                    <h5>{{date | moment('MMMM')}}</h5>
                     <i class="fa fa-angle-right" @click="next" @contextmenu="nextYear"></i>
                 </nav>
             </header>
