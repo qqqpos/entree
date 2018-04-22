@@ -960,6 +960,7 @@ export default {
     itemComment: "Customer Comment",
     balanceDue: "Balance Due",
     reservation: "Reservation",
+    day: "Day",
     hour: "Hour",
     minute: "Minute",
     second: "Second",

@@ -923,6 +923,7 @@ export default {
     itemComment: "特殊需求备注",
     balanceDue: "余款",
     reservation: "预约",
+    day: "天",
     hour: "小时",
     minute: "分钟",
     second: "秒",

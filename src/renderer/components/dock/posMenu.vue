@@ -217,19 +217,31 @@ export default {
     },
     askClockOut() {
       const diff = moment().diff(moment(this.op.clockIn));
+
       const h =
         ("0" + Math.floor(diff / 36e5)).slice(-2) + " " + this.$t("text.hour");
       const m =
         ("0" + Math.floor(diff / 6e4)).slice(-2) + " " + this.$t("text.minute");
-      const prompt = {
-        type: "question",
-        title: "dialog.clockOutConfirm",
-        msg: [
+
+      let d = Math.round(diff / 864e5);
+      let msg = [];
+
+      if (d > 1) {
+        d += " " + this.$t("text.day");
+        msg = [
+          "dialog.clockOutTip",
+          moment(this.op.clockIn).format("MM-DD hh:mm a"),
+          d + "" + h + " " + m
+        ];
+      } else {
+        msg = [
           "dialog.clockOutTip",
           moment(this.op.clockIn).format("hh:mm:ss a"),
           h + " " + m
-        ]
-      };
+        ];
+      }
+
+      const prompt = { type: "question", title: "dialog.clockOutConfirm", msg };
 
       this.checkOpenTicket()
         .then(() => {

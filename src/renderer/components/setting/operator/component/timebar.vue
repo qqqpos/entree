@@ -2,8 +2,8 @@
   <div>
       <div class="progress">
         <transition-group @before-enter="beforeEnter" @enter="enter">
-          <span class="shift" :data-left="getStart(record)" :data-width="getWidth(record)" :data-clock-in="format(record.clockIn)" :data-clock-out="format(record.clockOut)" v-for="(record,index) in records" :key="index">
-            <span class="break"></span>
+          <span class="shift" :data-left="getStart(record.clockIn)" :data-width="getWidth(record.clockIn,record.clockOut)" :data-clock-in="format(record.clockIn)" :data-clock-out="format(record.clockOut)" v-for="(record,index) in records" :key="index">
+            <span class="break" :data-left="getStart(bk.start,record.clockIn)" :data-width="getWidth(bk.start,bk.end)" v-for="(bk,index) in record.break" :key="index"></span>
           </span>
         </transition-group>
       </div>
@@ -63,41 +63,28 @@ export default {
       Velocity(
         el,
         { width: width + "px" },
-        { duration: 300 },
-        { complete: done }
+        {
+          duration: 300,
+          complete: done
+        }
       );
     },
+    getStart(value, offset) {
+      value = value >= this.from ? value : this.from;
 
-    getStart({ clockIn }) {
-      clockIn = clockIn >= this.from ? clockIn : this.from;
+      let start = (value - this.from) / 6e4;
 
-      const start = (clockIn - this.from) / 6e4;
+      if (offset) start -= (offset - this.from) / 6e4;
+
       return toFixed(start * this.gap, 2);
     },
-    getWidth({ clockIn, clockOut }) {
-      clockOut = isNumber(clockOut)
-        ? clockOut > this.to ? this.to : clockOut
+    getWidth(start, end) {
+      end = isNumber(end)
+        ? end > this.to ? this.to : end
         : this.now < this.to ? this.now : this.to;
 
-      const timepass = (clockOut - clockIn) / 6e4;
+      const timepass = (end - start) / 6e4;
       return toFixed(timepass * this.gap, 2);
-    },
-    duration({ clockIn, clockOut }) {
-      clockIn = clockIn >= this.from ? clockIn : this.from;
-      clockOut = isNumber(clockOut)
-        ? clockOut > this.to ? this.to : clockOut
-        : this.now < this.to ? this.now : this.to;
-
-      const timepass = (clockOut - clockIn) / 6e4;
-      const start = (clockIn - this.from) / 6e4;
-
-      const width = toFixed(timepass * this.gap, 2);
-      const left = toFixed(start * this.gap, 2);
-
-      return {
-        width: width + "px",
-        left: left + "px"
-      };
     }
   },
   watch: {
@@ -163,7 +150,7 @@ export default {
 .break {
   position: absolute;
   height: 15px;
-  background: #607d8b;
+  background: #607D8B;
 }
 </style>
 
