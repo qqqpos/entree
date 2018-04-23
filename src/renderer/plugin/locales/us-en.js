@@ -161,7 +161,9 @@ export default {
     logout: "Logout",
     logoutTip: "Exit Program & Shutdown",
     setting: "Setting",
-    settingTip: "Software Setting"
+    settingTip: "Software Setting",
+    update: "Update",
+    updateApp: "Check & Update Latest Version"
   },
   button: {
     new: "New",
@@ -726,7 +728,12 @@ export default {
     settleConfirm: "Settle Confirm",
     settleDeliveryCashTicket: "Please make sure that you have received the correct amount of cash from the drivers.",
     splitItemRemove: "Item Remove Confirm",
-    splitItemRemoveConfirm: "Are you sure to remove selected {i} items from split ticket?"
+    splitItemRemoveConfirm: "Are you sure to remove selected {i} items from split ticket?",
+    printTimecardRecord: "Are you sure to print out {i}'s timecard record?",
+    removeTimecard: "Remove Timecard Record",
+    removeTimecardConfirm: "Are you sure to remove timecard record on {i}?",
+    releasePayroll: "Payment Confirm",
+    payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -847,7 +854,7 @@ export default {
     lastWeek: "Last Week",
     currentMonth: "Cur. Month",
     lastMonth: "Last Month",
-    setDate: "Set Date",
+    custom: "Set Date",
     details: "Report Details",
     statistics: "Statistics",
     simple: "Simple",
@@ -1366,7 +1373,6 @@ export default {
     timecard: {
       tipReport: "Tip Report",
       excludeBreak: "Exclude Break Time",
-      valid: "Auto Validation",
       isoWeek: "ISO Week"
     },
     basic: "Basic",
@@ -1695,6 +1701,17 @@ export default {
       disable: "Cash drawer restricted use",
       staffBank: "Employee as a cash drawer"
     }
+  },
+  payroll: {
+    timecardCount: "Timecard Counts",
+    overview: "Payroll Overview",
+    count: "Payroll Counts",
+    overallWorkHour: "Overall Work Hours",
+    averageWorkHour: "Average Work Hours",
+    overallTipAmount: "Overall Tip Amount",
+    averageTipAmount: "Average Tip Amount",
+    previousPayout: "Previous Payout",
+    currentPayout: "Current Payout Amount"
   },
   spec: {
     version: "Version",

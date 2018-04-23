@@ -3,14 +3,14 @@
       <header @click="expand = !expand">
           <h3>{{sheet.name}}</h3>
           <h5>{{$t('type.'+sheet.role)}}</h5>
-          <span class="pay" v-show="!expand">$ {{sheet.salary | decimal}}</span>
+          <span class="pay" v-show="!expand">$ {{sheet.unpaid | decimal}}</span>
           <i class="fa fa-chevron-up" v-if="expand"></i>
           <i class="fa fa-chevron-down" v-else></i>
       </header>
       <div class="detail" v-if="expand">
           <div class="stats f1">
             <p>
-              <span class="text">Time Card Count</span>
+              <span class="text">{{$t('payroll.timecardCount')}}</span>
               <span class="value">{{sheet.timecard.length}}</span>
             </p>
             <p>
@@ -18,15 +18,15 @@
               <span class="value">{{sheet.hours}}</span>
             </p>
             <p>
-              <span class="text">Break Time</span>
+              <span class="text">{{$t('thead.breakTime')}}</span>
               <span class="value">{{sheet.breakTime}}</span>
             </p>
             <p>
-              <span class="text">Wage</span>
+              <span class="text">{{$t('thead.baseWage')}}</span>
               <span class="value">$ {{sheet.wage | decimal}} / Hr</span>
             </p>
             <p>
-              <span class="text">Tips</span>
+              <span class="text">{{$t('text.tip')}}</span>
               <span class="value">{{sheet.tips | decimal}}</span>
             </p>
           </div>
@@ -37,12 +37,12 @@
             </p>
             <p>
               <span class="text">{{$t('text.unpaid')}}</span>
-              <span class="value">$ {{sheet.salary | decimal}}</span>
+              <span class="value">$ {{sheet.unpaid | decimal}}</span>
             </p>
             <div class="action">
               <button class="button" @click="$emit('view',sheet)">{{$t('button.view')}}</button>
               <button class="button" @click="$emit('print',sheet)">{{$t('button.print')}}</button>
-              <button class="button" :disabled="sheet.salary === 0">{{$t('button.pay')}}</button>
+              <button class="button" :disabled="sheet.unpaid === 0" @click="$emit('pay',sheet)">{{$t('button.pay')}}</button>
             </div>
           </div>
       </div>
@@ -117,14 +117,14 @@ header i {
 }
 
 .action {
-    margin-top: 20px;
-    display: flex;
+  margin-top: 20px;
+  display: flex;
 }
 
 .action button {
-    padding: 10px;
-    flex: 1;
-    margin: 0 4px;
+  padding: 10px;
+  flex: 1;
+  margin: 0 4px;
 }
 </style>
 

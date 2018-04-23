@@ -30,7 +30,7 @@
             </div>
             <div>
               <input type="radio" name="range" v-model="range" value="custom" id="custom" @click="openCalendar">
-              <label for="custom">{{$t('report.setDate')}}</label>
+              <label for="custom">{{$t('report.custom')}}</label>
             </div>
           </div>
         </section>

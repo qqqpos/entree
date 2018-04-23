@@ -6,21 +6,20 @@
                 <h5>{{$t('title.edit')}}</h5>
                 <h3>{{$t('title.timecard')}}</h3>
               </div>
-                
             </header>
             <div class="banner"></div>
             <div class="wrap">
-                <inputer title="text.date" v-model="log.date" placeholder="YYYY-MM-DD"></inputer>
-                <inputer title="text.clockIn" v-model="log.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
-                  <i class="fa fa-pencil-square" @click="edit('clockIn',log.clockIn)"></i>
+                <inputer title="text.date" v-model="record.date" placeholder="YYYY-MM-DD"></inputer>
+                <inputer title="text.clockIn" v-model="record.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
+                  <i class="fa fa fa-calendar" @click="edit('clockIn',record.clockIn)"></i>
                 </inputer>
-                <inputer title="text.clockOut" v-model="log.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
-                  <i class="fa fa-pencil-square" @click="edit('clockOut',log.clockOut)"></i>
+                <inputer title="text.clockOut" v-model="record.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
+                  <i class="fa fa fa-calendar" @click="edit('clockOut',record.clockOut)"></i>
                 </inputer>
-                <inputer title="text.tip" v-model.number="log.tip"></inputer>
-                <inputer title="text.salary" v-model.number="log.wage" :placeholder="init.operator.wage"></inputer>
-                <inputer title="text.note" v-model="log.note" type="textarea"></inputer>
-                <toggle title="button.valid" v-model="log.valid" :defaultStyle="false"></toggle>
+                <inputer title="text.tip" v-model.number="record.tip"></inputer>
+                <inputer title="text.salary" v-model.number="record.wage" :placeholder="init.operator.wage"></inputer>
+                <inputer title="text.note" v-model="record.note" type="textarea"></inputer>
+                <toggle title="text.validRecord" v-model="record.valid" :defaultStyle="false"></toggle>
             </div>
             <footer>
                 <div class="opt">
@@ -34,16 +33,15 @@
 </template>
 
 <script>
-import picker from "./picker";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 
 export default {
   props: ["init"],
-  components: { picker, toggle, inputer,  },
+  components: { toggle, inputer  },
   computed: {
     valid() {
-      const { wage, date, clockIn, clockOut } = this.log;
+      const { wage, date, clockIn, clockOut } = this.record;
       return (
         isNumber(wage) &&
         moment(date, "YYYY-MM-DD", true).isValid() &&
@@ -57,54 +55,54 @@ export default {
   },
   data() {
     return {
+      record: Object.assign({}, this.init.record),
+      op: this.$store.getters.op,
       componentData: null,
       component: null,
-      log: Object.assign({}, this.init.log),
-      op: this.$store.getters.op,
       lock: false
     };
   },
   created() {
-    if (this.log.clockIn)
-      this.log.clockIn = moment(this.log.clockIn).format("YYYY-MM-DD HH:mm:ss");
-    if (this.log.clockOut)
-      this.log.clockOut = moment(this.log.clockOut).format(
+    if (this.record.clockIn)
+      this.record.clockIn = moment(this.record.clockIn).format("YYYY-MM-DD HH:mm:ss");
+    if (this.record.clockOut)
+      this.record.clockOut = moment(this.record.clockOut).format(
         "YYYY-MM-DD HH:mm:ss"
       );
-    if (!this.log.wage)
-      Object.assign(this.log, {
+    if (!this.record.wage)
+      Object.assign(this.record, {
         wage: this.init.operator.wage || 0
       });
   },
   methods: {
     edit(target, time) {
-      time = value || moment().format("YYYY-MM-DD HH:mm:ss");
+      // time = value || moment().format("YYYY-MM-DD HH:mm:ss");
 
-      new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, time };
-        this.component = "picker";
-      })
-        .then(() => {
-          this.$q();
-        })
-        .catch(() => this.$q());
+      // new Promise((resolve, reject) => {
+      //   this.componentData = { resolve, reject, time };
+      //   this.component = "picker";
+      // })
+      //   .then(() => {
+      //     this.$q();
+      //   })
+      //   .catch(() => this.$q());
     },
     confirm() {
-      Object.assign(this.log, {
+      Object.assign(this.record, {
         lock: this.lock,
-        clockIn: +moment(this.log.clockIn, "YYYY-MM-DD HH:mm:ss"),
-        clockOut: +moment(this.log.clockOut, "YYYY-MM-DD HH:mm:ss")
+        clockIn: +moment(this.record.clockIn, "YYYY-MM-DD HH:mm:ss"),
+        clockOut: +moment(this.record.clockOut, "YYYY-MM-DD HH:mm:ss")
       });
 
-      this.log.valid &&
-        Object.assign(this.log, {
+      this.record.valid &&
+        Object.assign(this.record, {
           verifier: this.op.name,
           verifyDate: +new Date()
         });
 
-      this.$socket.emit("[TIMECARD] UPDATE", this.log, () => {
+      this.$socket.emit("[TIMECARD] UPDATE", this.record, () => {
         this.$emit("refresh");
-        this.init.resolve();
+        this.init.resolve(this.record);
       });
     }
   }

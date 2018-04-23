@@ -215,7 +215,7 @@ export default {
         );
     },
     add(item) {
-      this.pushToOrder(item);
+      this.pushToOrder(JSON.parse(JSON.stringify(item)));
       this.resetChoiceSet();
       this.resetPointer();
     },

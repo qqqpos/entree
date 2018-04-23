@@ -1,7 +1,7 @@
 {
   "name": "unitedpos",
   "version": "0.8.80",
-  "stage": "Alpha",
+  "stage": "Beta",
   "description": "UnitedPOS point of sale system",
   "author": "Xuewu Huang <UnitedPOS.service@gmail.com>",
   "license": "Apache-2.0",

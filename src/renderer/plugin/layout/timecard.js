@@ -3,8 +3,8 @@ const timecard = function (data) {
   let content = "";
 
   data.forEach(employee => {
-    content +=
-      `
+    const timecards = employee.timecard.filter(t => t.clockOut > t.clockIn);
+    content += `
       <section class="report">\
         <h3>Records</h3>\
         <table>\
@@ -18,13 +18,13 @@ const timecard = function (data) {
             </tr>\
           </thead>\
           <tbody>\
-            ${employee.validSession.map(timecard => `
+            ${timecards.map(timecard => `
               <tr>\
-                <td>${moment(timecard.clockIn).locale("en").format("MM/DD HH:mm:ss")}</td>\
-                <td>${moment(timecard.clockOut).locale("en").format("MM/DD HH:mm:ss")}</td>\
+                <td>${moment(timecard.clockIn).locale("en").format("MM/DD HH:mm")}</td>\
+                <td>${moment(timecard.clockOut).locale("en").format("MM/DD HH:mm")}</td>\
                 <td>${timecard.hours.toFixed(2)}</td>\
                 <td>${timecard.tip.toFixed(2)}</td>\
-                <td>${timecard.salary.toFixed(2)}</td>\
+                <td>${timecard.unpaid.toFixed(2)}</td>\
               </tr>\
             `).join("").toString()}
           </tbody>\
@@ -33,12 +33,12 @@ const timecard = function (data) {
       <section class="report">\
         <h3>Summary</h3>\
         <p><span class="text">${employee.role} Name</span><span class="value">${employee.name}</span></p>\
-        <p><span class="text">Valid Records</span><span class="value">${employee.valid}</span></p>\
-        <p><span class="text">Work Hours</span><span class="value">${employee.validTime.toFixed(2)}</span></p>\
-        <p><span class="text">Total Tips</span><span class="value">${employee.tipTotal.toFixed(2)}</span></p>\
-        <p><span class="text">Total Pays</span><span class="value">${employee.salary.toFixed(2)}</span></p>\
-      </section>
-    `
+        <p><span class="text">Valid Records</span><span class="value">${timecards.length} (${employee.timecard.length})</span></p>\
+        <p><span class="text">Work Hours</span><span class="value">${employee.hours.toFixed(2)}</span></p>\
+        <p><span class="text">Break Hours</span><span class="value">${employee.breakTime.toFixed(2)}</span></p>\
+        <p><span class="text">Total Tips</span><span class="value">${employee.tips.toFixed(2)}</span></p>\
+        <p><span class="text">Total Pays</span><span class="value">${employee.unpaid.toFixed(2)}</span></p>\
+      </section>`
   })
 
   const html = `<section class="header">\
@@ -74,7 +74,6 @@ const timecard = function (data) {
                 footer p {justify-content: center;}</style>`;
 
   this.plugin.PRINT_INIT('Time card report');
-  console.log(html + style);
   this.plugin.ADD_PRINT_HTM(0, 0, "100%", "100%", html + style);
   this.plugin.SET_PRINTER_INDEX(this.station.receipt || 'cashier');
   this.plugin.PRINT();

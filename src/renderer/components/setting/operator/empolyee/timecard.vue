@@ -244,7 +244,7 @@ export default {
       clockOut = isNumber(clockOut) ? clockOut : +new Date();
       const duration = clockOut - clockIn;
 
-      if (duration === 0) return this.$t("text.hhmm", "00", "00", "00");
+      if (duration === 0) return this.$t("text.hhmm", "00", "00");
 
       if (isNumber(duration)) {
         const hh = ("00" + Math.floor((duration % 8.64e7) / 3.6e6)).slice(-2);
@@ -278,15 +278,22 @@ export default {
         })
         .catch(() => this.$q());
     },
-    edit(log) {
+    edit(record) {
+      const operator = this.operator;
+      
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, operator: this.operator, log };
+        this.componentData = {
+          resolve,
+          reject,
+          operator,
+          record
+        };
         this.component = "editor";
       })
         .then(() => this.$q())
         .catch(del => {
           if (del) {
-            this.$socket.emit("[TIMECARD] REMOVE", log._id, () =>
+            this.$socket.emit("[TIMECARD] REMOVE", record._id, () =>
               this.fetchData()
             );
           }

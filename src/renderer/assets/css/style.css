@@ -54,6 +54,11 @@ table {
 .f2 {
   flex: 2;
 }
+
+.f3{
+  flex:3;
+}
+
 i {
   --gray: #607d8b;
   --deepBlue: #1f7dc7;

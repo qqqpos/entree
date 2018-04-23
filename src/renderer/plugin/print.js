@@ -9,6 +9,7 @@ import Session from "./layout/session";
 import CashOut from "./layout/cashout";
 import CashIn from "./layout/cashin";
 import Report from "./layout/report";
+import Label from "./layout/label";
 
 const Printer = function (plugin, config, station) {
   this.plugin = plugin;
@@ -99,6 +100,7 @@ const Printer = function (plugin, config, station) {
   this.print = (raw, receipt) => Ticket.bind(this)(raw, receipt);
   this.preview = (printer, ticket) => Preview.bind(this)(printer, ticket);
   this.printReport = data => Report.bind(this)(data);
+  this.printLabel = (printer, order) => Label.bind(this)(printer, order);
   this.printHibachi = (printer, order, items) => Hibachi.bind(this)(printer, order, items);
   this.printGiftCard = (title, card, bonus) => Giftcard.bind(this)(title, card, bonus);
   this.printCreditCard = (trans, config, reprint) => Creditcard.bind(this)(trans, config, reprint);

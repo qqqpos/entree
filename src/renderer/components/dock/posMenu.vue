@@ -114,6 +114,13 @@
             <h5>{{$t('dock.logoutTip')}}</h5>
           </div>
         </li>
+        <li @click="checkUpdate" v-show="op.role === 'developer'">
+          <i class="fa fa-2x fa-refresh"></i>
+          <div>
+            <h3>{{$t('dock.update')}}</h3>
+            <h5>{{$t('dock.updateApp')}}</h5>
+          </div>
+        </li>
       </ul>
     </transition>
     <div :is="component" :init="componentData"></div>
@@ -560,6 +567,9 @@ export default {
           : next();
       });
     },
+    checkUpdate(){
+
+    },
     printReport(transactions) {
       const { role, name } = this.op;
       let invoices = [];
@@ -683,7 +693,6 @@ export default {
         unsettledCount,
         sessions
       };
-
       Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOp"])

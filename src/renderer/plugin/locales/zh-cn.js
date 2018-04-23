@@ -154,7 +154,9 @@ export default {
     logout: "登出",
     logoutTip: "退出软件 · 关机",
     setting: "设置",
-    settingTip: "软件后台设置"
+    settingTip: "软件后台设置",
+    update: "更新软件",
+    updateApp: "检查并更新软件"
   },
   button: {
     new: "新增",
@@ -609,7 +611,12 @@ export default {
     settleConfirm: "确认结账",
     settleDeliveryCashTicket: "请确定您已经收到送餐订单的尾款",
     splitItemRemove: "移除分单物品",
-    splitItemRemoveConfirm: "您确定要从此分单中里删除选定的 {i} 个物品吗？"
+    splitItemRemoveConfirm: "您确定要从此分单中里删除选定的 {i} 个物品吗？",
+    printTimecardRecord: "您确定要打印一份 {i} 的打卡记录吗？",
+    removeTimecard: "移除打卡记录",
+    removeTimecardConfirm: "您确定要移除 {i} 的打卡记录吗",
+    releasePayroll: "工资结算",
+    payrollPaymentConfirm: "您确定要支付 $ {i} 给 {i} 吗？"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -728,7 +735,7 @@ export default {
     lastWeek: "上周",
     currentMonth: "当月",
     lastMonth: "上个月",
-    setDate: "自定日期",
+    custom: "自定日期",
     details: "报表内容",
     statistics: "数据",
     simple: "简要报告",
@@ -872,7 +879,7 @@ export default {
     for: "用于",
     card: "卡号",
     auth: "认证码",
-    breakTime: "休息次数",
+    breakTime: "休息时间",
     paid: "支付",
     expire: "过期日期",
     default: "默认",
@@ -1160,7 +1167,7 @@ export default {
     salary: "时薪",
     workHour: "工时",
     workSalary: "薪水",
-    validRecord: "有效记录",
+    validRecord: "记录有效",
     bit: "{i} 位",
     viewTag: "查看标签",
     viewFavoriteItem: "查看常点物品",
@@ -1332,7 +1339,6 @@ export default {
     timecard: {
       tipReport: "上报小费",
       excludeBreak: "休息不计时",
-      valid: "默认有效",
       isoWeek: "国际标准时间"
     },
     basic: "基本设置",
@@ -1657,6 +1663,17 @@ export default {
       disable: "不可以结算订单",
       staffBank: "员工私场"
     }
+  },
+  payroll: {
+    timecardCount: "打卡次数",
+    overview: "工资概览",
+    count: "有效工资单",
+    overallWorkHour: "工作时间总长",
+    averageWorkHour: "人均工作时间",
+    overallTipAmount: "上报小费总计",
+    averageTipAmount: "人均小费",
+    previousPayout: "已结款",
+    currentPayout: "本次工资出款"
   },
   spec: {
     version: "版本号",

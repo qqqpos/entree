@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     gap() {
-      return toFixed(386 / ((this.to - this.from) / 6e4), 2);
+      return toFixed(392 / ((this.to - this.from) / 6e4), 2);
     }
   },
   methods: {
@@ -65,7 +65,14 @@ export default {
         { width: width + "px" },
         {
           duration: 300,
-          complete: done
+          complete: () => {
+            Array.prototype.forEach.call(el.children, dom => {
+              dom.style.width = dom.dataset.width + "px";
+              dom.style.left = dom.dataset.left + "px";
+            });
+
+            done();
+          }
         }
       );
     },
@@ -76,7 +83,7 @@ export default {
 
       if (offset) start -= (offset - this.from) / 6e4;
 
-      return toFixed(start * this.gap, 2);
+      return Math.ceil(start * this.gap);
     },
     getWidth(start, end) {
       end = isNumber(end)
@@ -84,7 +91,7 @@ export default {
         : this.now < this.to ? this.now : this.to;
 
       const timepass = (end - start) / 6e4;
-      return toFixed(timepass * this.gap, 2);
+      return Math.ceil(timepass * this.gap);
     }
   },
   watch: {
@@ -150,7 +157,7 @@ export default {
 .break {
   position: absolute;
   height: 15px;
-  background: #607D8B;
+  background: #6ea9c5;
 }
 </style>
 

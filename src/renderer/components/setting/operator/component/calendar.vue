@@ -135,6 +135,22 @@ export default {
               .add(4, "h")
           ]);
           break;
+        case "custom":
+          if (this.dates.length === 2) {
+            this.$emit("update", [
+              this.dates[0].add(4, "h"),
+              this.dates[1].endOf("day").add(4, "h")
+            ]);
+          } else {
+            const from = this.dates[0];
+            const to = from
+              .clone()
+              .endOf("day")
+              .add(4, "h");
+
+            this.$emit("update", [from, to]);
+          }
+          break;
         default:
       }
 
@@ -224,12 +240,32 @@ export default {
       return this.date.format("M") !== day.format("M");
     },
     isBetween(day) {
-      if (this.dates.length !== 2) return false;
+      if (this.dates.length === 1) {
+        const start = this.dates[0];
+        const end = this.dates[0].clone().endOf("day");
+        return day.isBetween(start, end, null, "[]");
+      }
 
       const [from, to] = this.dates;
       return day.isBetween(from, to, null, "[]");
     },
-    select() {}
+    select(day) {
+      switch (this.dates.length) {
+        case 0:
+          this.dates.push(day);
+          break;
+        case 1:
+          day.isBefore(this.dates[0])
+            ? this.dates.unshift(day)
+            : this.dates.push(day);
+          break;
+        case 2:
+          this.dates = [];
+          this.dates.push(day);
+          break;
+      }
+      this.range = "custom";
+    }
   }
 };
 </script>
@@ -258,6 +294,7 @@ export default {
   background: #fff;
   border-radius: 4px;
   padding: 5px;
+  z-index: 10;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
 
