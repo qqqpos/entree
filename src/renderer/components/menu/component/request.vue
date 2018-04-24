@@ -51,14 +51,20 @@ export default {
     getPrefix(action, e) {
       const dom = document.querySelector(".acting");
       dom && dom.classList.remove("acting");
-
-      this.action = action;
-      e.currentTarget.classList.add("acting");
+      if (this.action === action) {
+        this.action = null;
+      } else {
+        this.action = action;
+        e.currentTarget.classList.add("acting");
+      }
     },
-    setChoice({ zhCN, usEN, price, clickable }) {
-      if (!clickable) return;
+    setChoice({ _id, zhCN, usEN, price, affix }) {
+      if (!_id) return;
+
+      price = isNumber(price) ? parseFloat(price) : 0;
 
       if (this.action) {
+        //has prefix to change direction
         if (this.action.prefix) {
           zhCN = this.action.zhCN + zhCN;
           usEN = this.action.usEN + " " + usEN;
@@ -66,12 +72,35 @@ export default {
           zhCN = zhCN + this.action.zhCN;
           usEN = usEN + " " + this.action.usEN;
         }
+        //if has condition multiplier
+        if (this.action.multiplier) {
+          price = toFixed(
+            price * (isNumber(this.action.multiply) ? this.action.multiply : 0),
+            2
+          );
+        }
+      } else if (affix) {
+        //check default prefix
+        const action = this.actions.find(act => act.key === affix);
+
+        if (action) {
+          if (action.prefix) {
+            zhCN = action.zhCN + zhCN;
+            usEN = action.usEN + " " + usEN;
+          } else {
+            zhCN = zhCN + action.zhCN;
+            usEN = usEN + " " + action.usEN;
+          }
+          //if has condition multiplier
+          if (action.multiplier) {
+            price = toFixed(
+              price * (isNumber(action.multiply) ? action.multiply : 0),
+              2
+            );
+          }
+        }
       }
-      price =
-        this.action && this.action.ignoreDefaultPrice
-          ? 0
-          : isNumber(price) ? parseFloat(price) : 0;
-          
+
       let content = {
         qty: 1,
         zhCN,
@@ -90,13 +119,13 @@ export default {
       total
         ? this.setPriceForChoiceSet({ total })
         : this.$p("modify", {
-          item: {
-            qty: 1,
-            single: 0,
-            discount: 0
-          },
-          type: "choiceSet"
-        });
+            item: {
+              qty: 1,
+              single: 0,
+              discount: 0
+            },
+            type: "choiceSet"
+          });
     },
     ...mapActions([
       "setChoiceSet",

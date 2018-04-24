@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     gap() {
-      return toFixed(392 / ((this.to - this.from) / 6e4), 2);
+      return 392 / ((this.to - this.from) / 6e4);
     }
   },
   methods: {

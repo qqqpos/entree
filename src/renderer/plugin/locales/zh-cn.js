@@ -1587,6 +1587,7 @@ export default {
     alwaysAskReceipt: "总是询问是否打印收据",
     doNotPrintReceipt: "从不打印收据",
     alwaysPrintReceipt: "总是打印收据",
+    sameItemName: "当两种语言相同时，只会打印第一语言文本",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

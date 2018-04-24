@@ -1619,6 +1619,7 @@ export default {
     alwaysAskReceipt: "Always prompt dialog",
     doNotPrintReceipt: "Never print receipt",
     alwaysPrintReceipt: "Always print receipt",
+    sameItemName: "Will only print primary text when both primary & secondary text are the same.",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

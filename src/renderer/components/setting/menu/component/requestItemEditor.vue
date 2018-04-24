@@ -40,12 +40,13 @@ export default {
     };
   },
   created() {
-    this.actions = this.$store.getters.actions.map(action => ({
-      label: action.usEN,
-      tooltip: action.zhCN,
+    this.actions = this.$store.getters.actions.map(({ usEN, zhCN, key }) => ({
+      label: usEN,
+      tooltip: zhCN,
       plainText: true,
-      value: action
+      value: key
     }));
+    
     this.actions.unshift({
       label: this.$t("text.noUse"),
       tooltip: "",

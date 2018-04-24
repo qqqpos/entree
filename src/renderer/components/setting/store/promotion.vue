@@ -1,6 +1,6 @@
 <template>
     <div>
-        <toggle title="setting.rewardSystem" v-model="store.reward" @update="updateReward"></toggle>
+        <toggle title="setting.rewardSystem" v-model="store.reward" @update="updateReward" :disabled="true"></toggle>
         <external title="setting.coupon" tooltip="tip.couponList" @open="$router.push({name:'Setting.promotion.coupon'})"></external>
     </div>
 </template>

@@ -51,6 +51,9 @@ export default {
       });
     },
     confirm() {
+      !this.action.hasOwnProperty("key") &&
+        Object.assign(this.action, { key: String().random() });
+
       this.$socket.emit(
         "[REQUEST] UPDATE_ACTION",
         {

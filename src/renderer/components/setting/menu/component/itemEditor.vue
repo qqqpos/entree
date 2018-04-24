@@ -24,11 +24,12 @@
       </header>
       <template v-if="mode === 'basic'">
         <div class="wrap info">
-          <div class="item">
+          <div class="item relative">
             <inputer title="text.menuID" v-model="item.menuID"></inputer>
             <selector title="text.category" v-model="item.category" :opts="init.categories" :editable="false"></selector>
             <inputer title="text.primary" v-model.trim="item.usEN" :autoFocus="true" @keydown.enter.native="save"></inputer>
             <inputer title="text.secondary" v-model.trim="item.zhCN"></inputer>
+            <i class="fa fa-link" v-show="item.usEN === item.zhCN" :title="$t('tip.sameItemName')"></i>
             <inputer title="text.price" v-model="item.price" @keydown.enter.native="save">
               <i class="fa fa-ellipsis-v price" @click="openPriceEditor"></i>
             </inputer>
@@ -477,5 +478,11 @@ p i {
 
 .config h3 {
   margin-bottom: 5px;
+}
+
+.fa-link {
+  position: absolute;
+  right: 6px;
+  top: 101px;
 }
 </style>

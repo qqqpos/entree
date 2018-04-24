@@ -27,10 +27,12 @@
             <p>
               <span class="f1">{{$t('payroll.overallWorkHour')}}</span>
               <span class="value">{{summary.totalHour}}</span>
+              <span class="unit">{{$t('text.hour')}}</span>
             </p>
             <p>
               <span class="f1">{{$t('payroll.averageWorkHour')}}</span>
               <span class="value">{{(summary.totalHour / (summary.count || 1)).toFixed(2)}}</span>
+              <span class="unit">{{$t('text.hour')}}</span>
             </p>
           </div>
           <div class="group">
@@ -78,9 +80,7 @@ export default {
   },
   computed: {
     summary() {
-      const payables = this.payables.filter(
-        employee => employee.timecard.length > 0
-      );
+      const payables = this.payables.filter(e => e.timecard.length > 0);
       const count = payables.length;
       const payout = payables.reduce((a, c) => a + c.unpaid, 0);
       const totalHour = payables
@@ -154,7 +154,11 @@ export default {
     pay(payroll) {
       const prompt = {
         title: "dialog.releasePayroll",
-        msg: ["dialog.payrollPaymentConfirm", payroll.unpaid.toFixed(2), payroll.name],
+        msg: [
+          "dialog.payrollPaymentConfirm",
+          payroll.unpaid.toFixed(2),
+          payroll.name
+        ],
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.pay", fn: "resolve" }
@@ -319,6 +323,11 @@ section.overview {
   font-family: "Agency FB";
   font-weight: bold;
   color: #4b5086;
+}
+
+.unit {
+  margin-left: 3px;
+  color: #a6aac3;
 }
 </style>
 
