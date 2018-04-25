@@ -8,7 +8,7 @@
         </ul>
         <div class="employees">
             <table>
-                <thead>
+                <thead class="title">
                     <tr>
                         <td class="index"></td>
                         <td>{{$t('text.name')}}</td>
@@ -136,13 +136,6 @@ table tbody tr {
 
 td.shift {
   width: 180px;
-}
-thead td {
-  padding: 14px;
-  border-bottom: 1px solid #eee;
-  background: #f5f5f5;
-  color: #505865;
-  font-weight: bold;
 }
 
 tbody td {

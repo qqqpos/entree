@@ -139,6 +139,7 @@ tbody td {
 thead th {
   padding: 15px 0;
   background: #f5f5f5;
+  color: rgb(80, 88, 101);
 }
 
 tr {

@@ -1064,6 +1064,14 @@ ul.autoComplete li {
   color: #656565;
 }
 
+thead.title td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  background: #f5f5f5;
+  color: #505865;
+  font-weight: bold;
+}
+
 
 /* style overwrite */
 .timeSession .title,
