@@ -112,7 +112,7 @@ export default {
                   this.openPanel({ cashCtrl: true, staffBank: false, deposit })
                 )
               : this.openPanel({
-                  cashCtrl: true,
+                  cashCtrl: false,
                   staffBank: false,
                   deposit: false
                 });

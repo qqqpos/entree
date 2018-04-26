@@ -101,6 +101,14 @@ export default {
   created() {
     this.initialData();
 
+    if (this.archivedOrder) {
+      const { session,table,tableID } = this.order;
+      this.setApp({ newTicket: false });
+      this.saveForDiffs(this.archivedOrder.content);
+      this.setOrder({ ...this.archivedOrder, session,table,tableID });
+      this.emptyArchiveOrder();
+    }
+
     this.$socket.emit("[INQUIRY] TICKET_NUMBER", number => {
       if (this.app.newTicket) {
         this.setTicket({ number });
@@ -124,10 +132,6 @@ export default {
   },
   mounted() {
     toggleClass(".category div", "active");
-    if (this.archivedOrder) {
-      this.setOrder({ content: this.archivedOrder });
-      //this.emptyArchive();
-    }
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.entry, false);
@@ -554,6 +558,7 @@ export default {
       }
     },
     ...mapActions([
+      "setApp",
       "lessQty",
       "moreQty",
       "setOrder",
@@ -565,7 +570,8 @@ export default {
       "saveForDiffs",
       "archiveOrder",
       "alertChoiceSet",
-      "alterItemOption"
+      "alterItemOption",
+      "emptyArchiveOrder"
     ])
   },
   watch: {

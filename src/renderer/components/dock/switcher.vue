@@ -91,7 +91,7 @@ export default {
           this.$router.push({ name: "Information" });
           break;
         case "DINE_IN":
-          this.archiveOrder(this.order.content);
+          this.archiveOrder(this.order);
           this.$router.push({ name: "Table" });
           break;
       }
