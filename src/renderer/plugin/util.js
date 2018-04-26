@@ -269,9 +269,9 @@ export default {
 
       if (this.tax.deliveryTax) {
         /*
-                    is Delivery fee taxable?
-                    Find out default tax rate and apply to delivery charge
-                */
+            is Delivery fee taxable?
+            Find out default tax rate and apply to delivery charge
+        */
 
         let taxRate = 0;
         Object.keys(this.tax.class).forEach(type => {

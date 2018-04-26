@@ -144,7 +144,7 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(this.save)
+        .then(this.save.bind(null, false))
         .then(this.delay)
         .catch(() => this.$q());
     },
@@ -160,7 +160,7 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(this.save)
+        .then(this.save.bind(null, true))
         .then(this.print)
         .catch(() => this.$q());
     },
@@ -174,7 +174,7 @@ export default {
     failed(prompt) {
       this.$dialog(prompt).then(() => this.$q());
     },
-    save() {
+    save(print) {
       this.$q();
 
       return new Promise(next => {
@@ -183,7 +183,7 @@ export default {
             customer: this.customer,
             number: this.ticket.number,
             modify: 0,
-            time: +new Date(),
+            time: Date.now(),
             schedule: +this.timer,
             status: 1,
             date: today(),
@@ -199,16 +199,40 @@ export default {
             next(order)
           );
         } else {
-          Object.assign(this.order, {
-            customer: this.$minifyCustomer(this.customer),
-            lastEdit: +new Date(),
-            editor: this.op.name,
-            schedule: +this.timer,
-            modify: isNumber(this.order.modify) ? this.order.modify + 1 : 1
-          });
+          try {
+            Object.assign(this.order, {
+              customer: this.$minifyCustomer(this.customer),
+              lastEdit: Date.now(),
+              editor: this.op.name,
+              schedule: +this.timer,
+              modify: isNumber(this.order.modify) ? this.order.modify + 1 : 1
+            });
 
-          this.$socket.emit("[UPDATE] INVOICE", this.order);
-          next(this.order);
+            if (this.order.type === "TO_GO") {
+              const order = JSON.parse(JSON.stringify(this.order));
+
+              let { type, content } = this.archivedOrder;
+              content.push(
+                ...this.order.content.map(item => {
+                  print ? (item.print = true) : (item.pending = true);
+                  return item;
+                })
+              );
+
+              this.order.type = type;
+              this.order.content = content;
+
+              this.$calculatePayment(content);
+
+              this.$socket.emit("[UPDATE] INVOICE", this.order);
+              next(order);
+            } else {
+              this.$socket.emit("[UPDATE] INVOICE", this.order);
+              next(this.order);
+            }
+          } catch (e) {
+            console.log(e);
+          }
         }
       });
     },
@@ -229,7 +253,18 @@ export default {
     ...mapActions(["delayPrint", "resetAll"])
   },
   computed: {
-    ...mapGetters(["op", "app", "order", "ticket", "customer", "station"])
+    ...mapGetters([
+      "op",
+      "app",
+      "tax",
+      "store",
+      "order",
+      "ticket",
+      "dinein",
+      "station",
+      "customer",
+      "archivedOrder"
+    ])
   }
 };
 </script>
