@@ -3,32 +3,34 @@
     <header>
       <div>
         <h3>{{$t('text.pickUpList')}}</h3>
-        <h5>{{$t('text.remainTicket',invoices.length)}}</h5>
+        <p>{{$t('text.remainTicket',invoices.length)}}</p>
       </div>
     </header>
     <section class="wrap">
-      <article>
+      <article v-if="invoices.length">
         <ul class="list">
           <li v-for="(ticket,index) in tickets" :key="index" @click="display(ticket,$event)">
-            <div class="ticket">
-              <span class="number">{{ticket.number}}</span>
-              <span class="time">{{ticket.time | moment('HH:mm')}}</span>
+            <div class="ticket">{{ticket.number}}</div>
+            <div class="wrap">
+              <div class="customer relative">
+                <h3>{{ticket.customer.name}}</h3>
+                <h5>{{ticket.customer.phone | tel}}</h5>
+                <p>$ {{ticket.payment.due}}</p>
+              </div>
+              <div class="info">
+                <span class="pass">{{ticket.time | fromNow}}</span>
+                <span>{{$t('type.'+ticket.type)}}</span>
+              </div>
             </div>
-            <div class="info">
-              <span>{{ticket.customer.phone | phone}}</span>
-              <span>{{ticket.customer.name}}</span>
-            </div>
-            <span class="amount">$ {{ticket.payment.due}}</span>
           </li>
         </ul>
-        <div class="pagination" v-if="totalPage > 1">
-          <div class="page" @click="page = page > 0 ? page - 1 : 0">
-            <i class="fa fa-angle-left"></i>
-          </div>
-          <div class="page" v-for="i in totalPage" @click="page = (i-1)" :key="i" :class="{active:page === (i-1)}">{{i}}</div>
-          <div class="page" @click="page = page === (totalPage-1) ? page : page + 1">
-            <i class="fa fa-angle-right"></i>
-          </div>
+        <pagination :of="invoices" @page="setPage" :contain="14" :max="10"></pagination>
+      </article>
+      <article v-else>
+        <div class="placeholder">
+          <i class="fa fa-5x fa-thumbs-o-up"></i>
+          <h3>Well Done</h3>
+          <h5>There is no order for pick up.</h5>
         </div>
       </article>
       <aside>
@@ -38,17 +40,17 @@
             <i class="fa fa-list-alt"></i>
             <span class="text">{{$t("button.edit")}}</span>
           </button>
-          <div class="btn" @click="settle">
-            <i class="fa fa-print"></i>
-            <span class="text">{{$t("button.payment")}}</span>
-          </div>
-          <div class="btn" @click="print">
-            <i class="fa fa-print"></i>
-            <span class="text">{{$t("button.print")}}</span>
-          </div>
           <div class="btn" @click="split">
             <i class="fa fa-clone"></i>
             <span class="text">{{$t("button.split")}}</span>
+          </div>
+          <div class="btn" @click="print">
+            <i class="fa fa-print"></i>
+            <span class="text">{{$t("button.receipt")}}</span>
+          </div>
+          <div class="btn" @click="settle">
+            <i class="fa fa-print"></i>
+            <span class="text">{{$t("button.payment")}}</span>
           </div>
           <div class="btn" @click="exit">
             <i class="fa fa-times"></i>
@@ -67,6 +69,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import pagination from "./common/pagination";
 import reason from "./history/component/reason";
 import orderList from "./common/orderList";
 import dialoger from "./common/dialoger";
@@ -74,7 +77,7 @@ import payment from "./payment/index";
 import split from "./split/index";
 
 export default {
-  components: { orderList, payment, split, reason, dialoger },
+  components: { orderList, payment, split, reason, dialoger, pagination },
   data() {
     return {
       componentData: null,
@@ -93,32 +96,34 @@ export default {
       let dom = document.querySelector("li.active");
       dom && dom.classList.remove("active");
       e.currentTarget.classList.add("active");
+
       this.setOrder(JSON.parse(JSON.stringify(ticket)));
     },
+    setPage(page) {
+      this.page = page;
+    },
     edit() {
-      this.setTicket({ type: this.order.type, number: this.order.number });
-      this.setApp({ mode: "edit" });
-      this.setCustomer(this.order.customer);
+      const { type, number, customer } = this.order;
+
+      this.setApp({ newTicket: false });
+      this.setCustomer(customer);
+      this.setTicket({ type, number });
+
       this.$router.push({ path: "/main/menu" });
     },
     settle() {
       this.$p("payment");
     },
     print() {
-      let order = JSON.parse(JSON.stringify(this.order));
-      Printer.setTarget("Receipt").print(order);
-      order.content.forEach(item => {
-        delete item.new;
-        item.print = true;
-        item.pending = false;
-      });
-      this.$socket.emit("[UPDATE] INVOICE", order);
+      Printer.setTarget("Receipt").print(this.order);
+
+      this.$socket.emit("[UPDATE] INVOICE", order, true);
     },
     split() {
       this.$p("split");
     },
     voidTicket() {
-      this.$dialog({
+      const prompt = {
         type: "warning",
         title: [
           "dialog.voidOrderConfirm",
@@ -130,13 +135,11 @@ export default {
           { text: "button.cancel", fn: "reject" },
           { text: "button.delete", fn: "resolve" }
         ]
-      })
-        .then(confirm => {
-          this.$p("reason");
-        })
-        .catch(() => {
-          this.$q();
-        });
+      };
+
+      this.$dialog(prompt)
+        .then(confirm => this.$p("reason"))
+        .catch(() => this.$q());
     },
     exit() {
       this.resetMenu();
@@ -150,11 +153,6 @@ export default {
       "resetMenu"
     ])
   },
-  filters: {
-    phone(number) {
-      return number.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "($1) $2-$3");
-    }
-  },
   computed: {
     invoices() {
       return this.history.filter(
@@ -165,12 +163,9 @@ export default {
       );
     },
     tickets() {
-      let min = this.page * 20;
-      let max = this.page + 20;
+      const min = this.page * 14;
+      const max = min + 14;
       return this.invoices.slice(min, max);
-    },
-    totalPage() {
-      return Math.ceil(this.invoices.length / 20);
     },
     ...mapGetters(["order", "history"])
   }
@@ -188,18 +183,14 @@ export default {
 }
 
 header {
-  height: 70px;
-  background: #234c75;
-  color: #fff;
+  display: flex;
+  height: 68px;
+  background-image: linear-gradient(170deg, rgb(81, 103, 140) 0%, #234c75 100%);
 }
 
 header div {
   margin: 14px;
-}
-
-h3,
-h5 {
-  font-weight: normal;
+  color: #fff;
 }
 
 .wrap {
@@ -211,6 +202,10 @@ article {
   flex: 1;
 }
 
+.function {
+  width: 282px;
+}
+
 ul {
   display: flex;
   flex-direction: column;
@@ -218,51 +213,67 @@ ul {
   height: 620px;
 }
 
-.function {
-  width: 282px;
-}
-
 li {
   display: flex;
-  width: 360px;
+  width: 350px;
+  height: 65px;
   background: #fff;
-  margin: 2px;
+  margin: 4px;
+  padding: 5px;
+  color: #666;
+  filter: opacity(0.6) grayscale(0.8);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  transition: background 0.3s ease;
+  border-top: 2px solid transparent;
 }
 
-li.active {
-  background: #eceff1;
-}
-
-li > * {
+li .wrap {
   display: flex;
   flex-direction: column;
-  padding: 1px 10px;
+}
+
+.info {
+  border-top: 1px solid #fff;
+  padding-top: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.pass {
+  font-size: 14px;
+  flex: 1;
+  color: #ff5722;
+}
+
+.customer {
+  height: 42px;
+  padding: 0 0 5px;
+  color: #3c3c3c;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.customer p {
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  font-family: "Agency FB";
+  font-weight: bold;
+  font-size: 30px;
+  color: #6d6d6d;
 }
 
 .ticket {
-  width: 60px;
-  align-items: center;
-  background: #009688;
-  color: #fff;
-  text-shadow: 0 1px 1px #333;
-}
-
-ul.list .info {
-  flex: 1;
-  justify-content: center;
-  font-size: 20px;
-}
-
-span.number {
-  font-size: 32px;
   font-family: "Agency FB";
   font-weight: bold;
+  font-size: 30px;
+  width: 45px;
+  text-align: center;
+  margin-right: 5px;
+  color: #3c3c3c;
 }
 
-.amount {
-  justify-content: center;
+li.active {
+  border-top: 2px solid #03a9f4;
+  filter: none;
 }
 
 .pagination {
@@ -289,5 +300,31 @@ span.number {
   color: #fff;
   text-shadow: 0 1px 1px #000;
   box-shadow: rgba(0, 0, 0, 0.75) 0 0 0 0 inset;
+}
+
+.placeholder {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0px 150px 40px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder i {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0px 1px #f5f5f5;
+}
+
+.placeholder h3 {
+  font-size: 30px;
+  color: #3c3c3c;
+  margin-top: 24px;
+}
+
+.placeholder h5 {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 16px;
 }
 </style>

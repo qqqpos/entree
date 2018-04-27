@@ -187,10 +187,10 @@ export default {
             this.edit();
           });
       } else {
-        const { type, number } = this.order;
+        const { type, number,customer } = this.order;
 
         this.setApp({ newTicket: false });
-        this.setCustomer(this.order.customer);
+        this.setCustomer(customer);
         this.setTicket({ type, number });
 
         this.$router.push({ path: "/main/menu" });
