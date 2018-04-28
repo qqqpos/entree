@@ -1275,6 +1275,24 @@ export default {
           if (coupon.type === "discount")
             discount = toFixed(this.payment.subtotal * discount / 100, 2);
 
+          if (discount > this.payment.subtotal) {
+            //discount can not grater than subtotal
+            const prompt = {
+              type:"warning",
+              title: "dialog.cantExecute",
+              msg: "dialog.discountAmountNotAllow",
+              buttons: [
+                { button: "button.cancel", fn: "reject" },
+                { button: "button.retry", fn: "resolve" }
+              ]
+            };
+
+            this.$dialog(prompt)
+              .then(this.setDiscount)
+              .catch(() => this.$q());
+            return;
+          }
+
           Object.assign(this.payment, { discount });
 
           let coupons = this.order.coupons.filter(

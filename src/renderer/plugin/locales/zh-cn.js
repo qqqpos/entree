@@ -271,7 +271,8 @@ export default {
     processAnyway: "依然执行",
     editInvoice: "修改订单",
     settle: "结账",
-    view: "查看"
+    view: "查看",
+    retry: "重试"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -616,7 +617,8 @@ export default {
     removeTimecard: "移除打卡记录",
     removeTimecardConfirm: "您确定要移除 {i} 的打卡记录吗",
     releasePayroll: "工资结算",
-    payrollPaymentConfirm: "您确定要支付 $ {i} 给 {i} 吗？"
+    payrollPaymentConfirm: "您确定要支付 $ {i} 给 {i} 吗？",
+    discountAmountNotAllow: "您输入的折扣信息无效，折扣不能大于订单本身价值"
   },
   terminal: {
     initial: "正在初始化 {i}...",

@@ -208,6 +208,7 @@ export default {
 .btns button {
   padding: 15px 10px;
   margin: 0 5px;
+  font-family: 'Yuanti-SC';
   background: linear-gradient(#fefefe, #cfd0d3);
   border-radius: 4px;
   box-shadow: 0 1px 3px #616161;

@@ -278,7 +278,8 @@ export default {
     processAnyway: "Process Anyway",
     editInvoice: "Edit Order",
     settle: "Settle",
-    view: "View"
+    view: "View",
+    retry: "Retry"
   },
   thead: {
     orderType: "Order Type",
@@ -733,7 +734,8 @@ export default {
     removeTimecard: "Remove Timecard Record",
     removeTimecardConfirm: "Are you sure to remove timecard record on {i}?",
     releasePayroll: "Payment Confirm",
-    payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?"
+    payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?",
+    discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal."
   },
   terminal: {
     initial: "Initializing terminal {i}...",

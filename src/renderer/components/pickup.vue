@@ -216,7 +216,7 @@ ul {
 li {
   display: flex;
   width: 350px;
-  height: 65px;
+  height: 68px;
   background: #fff;
   margin: 4px;
   padding: 5px;

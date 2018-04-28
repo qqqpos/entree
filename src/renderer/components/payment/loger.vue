@@ -46,6 +46,7 @@
         <div class="f1">
           <pagination :of="init.logs" @page="setPage" :contain="10" :max="6"></pagination>
         </div>
+        <button class="btn" @click="edit" v-if="logs.length === 0">{{$t('button.edit')}}</button>
         <button class="btn" @click="close">{{$t('button.close')}}</button>
       </footer>
     </div>
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import dialoger from "../common/dialoger";
 import pagination from "../common/pagination";
 
@@ -67,7 +68,7 @@ export default {
       let max = min + 10;
       return this.init.logs.slice(min, max);
     },
-    ...mapGetters(["op", "station"])
+    ...mapGetters(["op", "order", "station"])
   },
   data() {
     return {
@@ -104,7 +105,7 @@ export default {
         .then(() => {
           switch (payment.type) {
             case "CASH":
-              this.remove(payment,index);
+              this.remove(payment, index);
               Printer.openCashDrawer();
               break;
             case "CREDIT":
@@ -178,7 +179,7 @@ export default {
           let voidSale = this.terminal.explainTransaction(response.data);
 
           if (voidSale.code === "000000") {
-            this.printTicket && Printer.printCreditCard(voidSale,{});
+            this.printTicket && Printer.printCreditCard(voidSale, {});
             Object.assign(record, voidSale, { status: 0 });
             this.$socket.emit("[TERMINAL] VOID", record);
             next();
@@ -201,6 +202,15 @@ export default {
     voidFailed(error) {
       this.$dialog(error).then(() => this.$q());
     },
+    edit() {
+      const { type, number, customer } = this.order;
+
+      this.setApp({ newTicket: false });
+      this.setCustomer(customer);
+      this.setTicket({ type, number });
+
+      this.$router.push({ path: "/main/menu" });
+    },
     close() {
       this.init.resolve();
     },
@@ -215,7 +225,8 @@ export default {
         default:
           return require("./parser/pax.js");
       }
-    }
+    },
+    ...mapActions(["setApp", "setCustomer", "setTicket"])
   }
 };
 </script>
@@ -278,7 +289,7 @@ footer {
   display: inline-block;
 }
 
-.zero{
+.zero {
   opacity: 0.15;
 }
 </style>
