@@ -39,7 +39,7 @@ export default {
   props: ["init"],
   components: { dialoger, tpp },
   computed: {
-    ...mapGetters(["app", "store", "ticket", "order"])
+    ...mapGetters(["app", "tax", "store", "ticket", "order"])
   },
   data() {
     return {
@@ -86,11 +86,16 @@ export default {
       this.applyPrice(type);
 
       switch (type) {
+        case "WALK_IN":
+          this.setOrder({ plasticBag: 1 });
+          break;
         case "PICK_UP":
         case "DELIVERY":
+          this.setOrder({ plasticBag: 1 });
           this.$router.push({ name: "Information" });
           break;
         case "DINE_IN":
+          this.setOrder({ plasticBag: 0 });
           this.archiveOrder(this.order);
           this.$router.push({ name: "Table" });
           break;
@@ -104,6 +109,7 @@ export default {
         msg: "dialog.togoConfirm"
       })
         .then(() => {
+          this.setOrder({ plasticBag: 1 });
           this.$bus.emit("FOOD_TOGO");
           this.init.resolve();
         })

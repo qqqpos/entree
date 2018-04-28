@@ -190,7 +190,7 @@ export default {
     setGratuity: "Set Gratuity",
     setDiscount: "Discount",
     setCoupon: "Set Coupon",
-    setDelivery: "Set Delivery Fee",
+    setDelivery: "Set Delivery",
     changeDate: "Change Date",
     edit: "Edit",
     recover: "Recover",
@@ -1430,6 +1430,7 @@ export default {
     employeeCard: "Employee Card",
     employeeCardRegistration: "Register employee card",
     settledReceipt: "Settle Payment Receipt",
+    plasticPenaltyTax: "Plastic Bag Penalty Tax",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",

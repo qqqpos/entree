@@ -9,9 +9,16 @@
         <span @click="create">{{$t('button.new')}}</span>
       </nav>
     </header>
-    <toggle title="setting.taxBeforeDiscount" v-model="tax.beforeDiscount" @update="updateTaxDiscount"></toggle>
-    <toggle title="setting.taxBeforeCredit" v-model="tax.beforeCredit" @update="updateTaxCredit"></toggle>
-    <toggle title="text.taxFree" v-model="tax.defaultTaxFree" tooltip="tip.taxApply" @update="updateTaxApply"></toggle>
+    <toggle title="setting.taxBeforeDiscount" v-model="tax.beforeDiscount" :disabled="true"></toggle>
+    <toggle title="setting.taxBeforeCredit" v-model="tax.beforeCredit" :disabled="true"></toggle>
+    <toggle title="setting.plasticPenaltyTax" v-model="tax.plasticPenalty">
+      <transition name="dropdown">
+        <div class="opt" v-if="tax.plasticPenalty">
+          <inputer title="text.amount" v-model.number="tax.plasticCharge"></inputer>
+        </div>
+      </transition>
+    </toggle>
+    <toggle title="text.taxFree" v-model="tax.defaultTaxFree" tooltip="tip.taxApply"></toggle>
     <table class="setting">
       <thead>
         <tr>
@@ -44,9 +51,10 @@
 <script>
 import toggle from "../../common/toggle";
 import editor from "../component/taxEditor";
+import inputer from "../../common/inputer";
 
 export default {
-  components: { toggle, editor },
+  components: { toggle, editor, inputer },
   data() {
     return {
       component: null,
@@ -82,7 +90,6 @@ export default {
         this.component = "editor";
       })
         .then(_tax => {
-          console.log(this.tax)
           this.tax.class[name] = _tax;
           this.$q();
         })
@@ -100,28 +107,34 @@ export default {
       );
       tax.default = true;
     },
-    updateTaxDiscount(value) {
-      this.update({
-        key: "tax.beforeDiscount",
-        value
-      });
-    },
-    updateTaxCredit(value) {
-      this.update({
-        key: "tax.beforeCredit",
-        value
-      });
-    },
-    updateTaxApply(value){
-      this.update({
-        key:'tax.defaultTaxFree',
-        value
-      })
-    },
+    // updateTaxDiscount(value) {
+    //   this.update({
+    //     key: "tax.beforeDiscount",
+    //     value
+    //   });
+    // },
+    // updateTaxCredit(value) {
+    //   this.update({
+    //     key: "tax.beforeCredit",
+    //     value
+    //   });
+    // },
+    // updateTaxApply(value) {
+    //   this.update({
+    //     key: "tax.defaultTaxFree",
+    //     value
+    //   });
+    // },
+    // updatePlasticPenalty(value) {
+    //   this.update({
+    //     key: "tax.plasticPenalty",
+    //     value
+    //   });
+    // },
     save() {
       this.$socket.emit("[CONFIG] UPDATE", {
-        key: "tax.class",
-        value: this.tax.class
+        key: "tax",
+        value: this.tax
       });
       this.$router.push({ name: "Setting.store.payment" });
     }

@@ -77,7 +77,7 @@
           </p>
           <p>
             <span class="text">{{$t("text.tax")}}:</span>
-            <span class="value">{{payment.tax | decimal}}</span>
+            <span class="value">{{(payment.tax + payment.plasticTax) | decimal}}</span>
           </p>
           <p :class="{hidden:parseFloat(payment.tip) === 0}">
             <span class="text">{{$t("text.tip")}}:</span>
@@ -149,6 +149,7 @@ export default {
       payment: {
         subtotal: 0,
         tax: 0,
+        plasticTax: 0,
         total: 0, // subtotal + tax
         discount: 0,
         due: 0, // total + delivery - discount
@@ -347,6 +348,7 @@ export default {
         this.payment = Object.assign(this.order.payment, {
           subtotal: 0,
           tax: 0,
+          plasticTax: 0,
           total: 0, // subtotal + tax
           discount: 0,
           due: 0, // total + delivery - discount
@@ -454,6 +456,16 @@ export default {
         tax += delivery * taxRate / 100;
       }
 
+      let plasticTax = 0;
+      if (this.tax.plasticPenalty) {
+        //calculate plastic bag penalty
+        const { plasticBag = 1 } = this.order;
+        const fine = isNumber(this.tax.plasticCharge)
+          ? this.tax.plasticCharge
+          : 0.5;
+        plasticTax = toFixed(plasticBag * fine, 2);
+      }
+
       if (type === "DINE_IN" && !gratuityFree && enable) {
         //find rule
         try {
@@ -507,7 +519,7 @@ export default {
         discount += offer;
       }
 
-      const total = subtotal + toFixed(tax, 2);
+      const total = subtotal + plasticTax + toFixed(tax, 2);
       const due = toFixed(Math.max(0, total + delivery - discount), 2);
       const _total = toFixed((due + gratuity) * 100, 2);
 
@@ -544,6 +556,7 @@ export default {
       this.payment = Object.assign({}, this.payment, {
         subtotal: toFixed(subtotal, 2),
         tax: toFixed(tax, 2),
+        plasticTax: toFixed(plasticTax, 2),
         total: toFixed(total, 2),
         discount: toFixed(discount, 2),
         due: toFixed(due, 2),

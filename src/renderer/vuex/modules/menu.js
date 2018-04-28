@@ -5,6 +5,7 @@ const state = {
     payment: {
       subtotal: 0,
       tax: 0,
+      plasticTax: 0,
       total: 0,
       due: 0,
       balance: 0,

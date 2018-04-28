@@ -102,10 +102,10 @@ export default {
     this.initialData();
 
     if (this.archivedOrder) {
-      const { session,table,tableID } = this.order;
+      const { session, table, tableID } = this.order;
       this.setApp({ newTicket: false });
       this.saveForDiffs(this.archivedOrder.content);
-      this.setOrder({ ...this.archivedOrder, session,table,tableID });
+      this.setOrder({ ...this.archivedOrder, session, table, tableID });
       this.emptyArchiveOrder();
     }
 
@@ -152,6 +152,13 @@ export default {
         !this.order.hasOwnProperty("source") &&
           Object.assign(this.order, { source: "POS" });
 
+        const plasticBag =
+          this.order.type !== "DINE_IN" &&
+          this.order.type !== "BAR" &&
+          this.order.type !== "HIBACHI"
+            ? 1
+            : 0;
+
         this.setOrder({
           _id: ObjectId(),
           server: this.op.name,
@@ -161,6 +168,7 @@ export default {
           date: today(),
           create: +new Date(),
           customer: this.customer,
+          plasticBag,
           taxFree:
             typeof this.tax.defaultTaxFree === "boolean"
               ? this.tax.defaultTaxFree

@@ -1399,6 +1399,7 @@ export default {
     employeeCard: "员工卡",
     employeeCardRegistration: "注册员工卡",
     settledReceipt: "结账收据",
+    plasticPenaltyTax: "塑料袋罚款税",
     delivery: {
       config: "送餐设定",
       charge: "送餐费",

@@ -666,6 +666,7 @@ function createFooter(config, setting, printer, ticket) {
     "subtotal",
     "discount",
     "tax",
+    "plasticTax",
     "delivery",
     "tip",
     "gratuity",
@@ -678,6 +679,9 @@ function createFooter(config, setting, printer, ticket) {
       let text = key.toCapitalCase();
 
       switch (key) {
+        case "plasticTax":
+          text = "Bag Fee";
+          break;
         case "discount":
           value = `- ${value}`;
           break;

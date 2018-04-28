@@ -290,6 +290,16 @@ export default {
         tax += delivery * taxRate / 100;
       }
 
+      let plasticTax = 0;
+      if (this.tax.plasticPenalty) {
+        //calculate plastic bag penalty
+        const { plasticBag = 1 } = this.order;
+        const fine = isNumber(this.tax.plasticCharge)
+          ? this.tax.plasticCharge
+          : 0.5;
+        plasticTax = toFixed(plasticBag * fine, 2);
+      }
+
       if (type === "DINE_IN" && !gratuityFree && enable) {
         //find rule
         try {
@@ -344,7 +354,7 @@ export default {
         discount += offer;
       }
 
-      const total = subtotal + toFixed(tax, 2);
+      const total = subtotal + plasticTax + toFixed(tax, 2);
       const due = Math.max(0, total + delivery - discount)
         .toPrecision(12)
         .toFloat();
@@ -383,6 +393,7 @@ export default {
       Object.assign(this.order.payment, {
         subtotal: toFixed(subtotal, 2),
         tax: toFixed(tax, 2),
+        plasticTax: toFixed(plasticTax, 2),
         total: toFixed(total, 2),
         discount: toFixed(discount, 2),
         due: toFixed(due, 2),
