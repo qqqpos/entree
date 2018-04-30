@@ -69,7 +69,33 @@ const session = function (data) {
                 }).join("").toString()}
                 </tbody>\
             </table></section>
-        `
+        `;
+
+        const department = data.departments.length > 0 ? `
+            <section class="type">
+                <h4>Department Summary</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dept.</th>
+                            <th>Count</th>
+                            <th>Subtotal</th>
+                            <th>Tax</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.departments.map(dep=>`<tr>
+                            <td>${dep.usEN}</td>
+                            <td>${dep.count}</td>
+                            <td>${dep.subtotal.toFixed(2)}</td>
+                            <td>${dep.tax.toFixed(2)}</td>
+                            <td>${dep.total.toFixed(2)}</td>
+                        </tr>`).join("").toString()}
+                    </tbody>
+                </table>
+            </section>
+        ` : "";
 
         const summary = `
             <section class="type">\
@@ -89,9 +115,6 @@ const session = function (data) {
                 <p><span class="type">Unsettled ( ${data.unsettledCount} )</span><span class="value">${data.unsettled.toFixed(2)}</span></p>\
             </section>`;
 
-        const departments = "";
-
-
         return `<section class="header">\
                 <div class="store">\
                   <h3>${store.name}</h3>\
@@ -104,7 +127,7 @@ const session = function (data) {
                   <h5>${data.date}</h5>\
                 </div>\
             </section>\
-            ${payment + session + summary + departments}
+            ${payment + session + department + summary}
             <footer>\
               <p>Thanks For Your Hard Work</p>\
               <p>Print @ ${moment().format("YY-MM-DD HH:mm:ss")}</p>\

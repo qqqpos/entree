@@ -152,6 +152,7 @@ export default {
     ...mapGetters([
       "op",
       "app",
+      "tax",
       "time",
       "store",
       "station",
@@ -434,7 +435,7 @@ export default {
         cashDrawer,
         operator: this.op.name,
         begin: amount.toFixed(2),
-        beginTime: +new Date(),
+        beginTime: Date.now(),
         end: null,
         endTime: null,
         close: false,
@@ -443,7 +444,7 @@ export default {
             type: "START",
             inflow: parseFloat(amount),
             outflow: 0,
-            time: +new Date(),
+            time: Date.now(),
             ticket: null,
             operator: this.op.name
           }
@@ -505,7 +506,7 @@ export default {
         type: "END",
         inflow: 0,
         outflow: 0,
-        time: +new Date(),
+        time: Date.now(),
         ticket: null,
         operator: this.op.name
       };
@@ -567,9 +568,7 @@ export default {
           : next();
       });
     },
-    checkUpdate(){
-
-    },
+    checkUpdate() {},
     printReport(transactions) {
       const { role, name } = this.op;
       let invoices = [];
@@ -584,6 +583,7 @@ export default {
           tickets = this.history.filter(t => t.status === 1);
           break;
         case "Cashier":
+        case "Bartender":
           subtitle = "Payment Handled By " + name;
           invoices = transactions.filter(p => p.cashier === name);
           tickets = this.history.filter(
@@ -599,7 +599,7 @@ export default {
       }
 
       const payments = invoices.map(i => ({
-        create: i.create,
+        create: i.create || i.time,
         number: isObject(i.ticket) ? i.ticket.number : "",
         ticket: isObject(i.ticket) ? this.$t("type." + i.ticket.type) : "",
         tip: i.tip,
@@ -629,6 +629,7 @@ export default {
         .reduce((a, c) => a + c.payment.balance, 0);
       const unsettledCount = tickets.filter(t => !t.settled).length;
 
+      //session report
       const weekDay = moment().format("d");
       const { hours } = this.store.openingHours.rules[weekDay];
       const sessions = hours
@@ -670,6 +671,61 @@ export default {
             type: Object.values(group).sort((a, b) => a.amount < b.amount)
           });
         });
+      //end of session report
+
+      //department report
+      let departments = this.departments.map(dep =>
+        Object.assign({}, dep, { count: 0, subtotal: 0, tax: 0, total: 0 })
+      );
+
+      if (departments.length > 0) {
+        departments.push({
+          usEN: "Others",
+          zhCN: "Others",
+          count: 0,
+          subtotal: 0,
+          tax: 0,
+          total: 0
+        });
+
+        const depLength = departments.length - 1;
+
+        tickets.forEach(({ type, content, taxFree = false }) => {
+          content.forEach(({ category, qty, single, taxClass, choiceSet }) => {
+            const index = departments.findIndex(dep =>
+              dep.contain.includes(category)
+            );
+
+            const Tax = this.tax.class[taxClass];
+
+            let tax = 0;
+            let amount = toFixed(qty * single, 2);
+
+            choiceSet.forEach(set => {
+              const p = parseFloat(set.single);
+              const s = set.qty || 1;
+              const t = toFixed(p * s, 2);
+              amount = toFixed(amount + t, 2);
+            });
+
+            if (!taxFree && Tax.apply[type]) tax += Tax.rate / 100 * amount;
+
+            if (index === -1) {
+              departments[depLength].count += qty;
+              departments[depLength].subtotal += amount;
+              departments[depLength].tax += tax;
+              departments[depLength].total += amount + tax;
+            } else {
+              departments[index].count += qty;
+              departments[index].subtotal += amount;
+              departments[index].tax += tax;
+              departments[index].total += amount + tax;
+            }
+          });
+        });
+
+        departments.last().count === 0 && departments.pop();
+      }
 
       const report = {
         title,
@@ -691,7 +747,8 @@ export default {
         settledCount,
         cash,
         unsettledCount,
-        sessions
+        sessions,
+        departments
       };
       Printer.printSessionReport(report);
     },
