@@ -45,6 +45,7 @@ import counter from "./component/counter";
 import creator from "./component/creator";
 import unlock from "../common/unlock";
 import buttons from "./buttons";
+import { stringify } from "querystring";
 
 export default {
   props: ["reserved"],
@@ -116,17 +117,32 @@ export default {
       if (!table.hasOwnProperty("_id")) return;
       this.setCurrentTable(table);
 
-      table.status === 1
-        ? this.checkReservation(table)
+      switch (table.status) {
+        case 1:
+          this.checkReservation(table)
             .then(this.checkIfSwitch)
             .then(this.checkAccessPin)
             .then(this.countGuest.bind(null, table))
             .then(this.checkTableType)
             .then(this.createTable)
-            .catch(this.createTableFailed)
-        : this.checkPermission(table)
+            .catch(this.createTableFailed);
+          break;
+        case 2:
+          const prompt = {
+            type: "warning",
+            title: "dialog.accessDenied",
+            msg: ["dialog.noRightToModify", table.server],
+            timeout: { duration: 5000, fn: "resolve" },
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+
+          this.$dialog(prompt).then(() => this.$q());
+          break;
+        default:
+          this.checkPermission(table)
             .then(this.viewTicket)
             .catch(this.exceptionHandler);
+      }
     },
     checkPermission(table) {
       return new Promise((next, stop) => {
@@ -278,7 +294,9 @@ export default {
     viewTicket(table) {
       !table.hasOwnProperty("invoice") && Object.assign(table, { invoice: [] });
 
-      const invoice = this.history.find(i => i._id === table.invoice[0] || i.session === table.session);
+      const invoice = this.history.find(
+        i => i._id === table.invoice[0] || i.session === table.session
+      );
       const prompt = {
         title: "dialog.invoiceNotFound",
         msg: "dialog.actionProcess",

@@ -446,8 +446,6 @@ export default {
     cashChangeTip: "客人支付现金 ($ {i})",
     printReceiptConfirm: "打印收据",
     printReceiptConfirmTip: "是否需要打印收据给客人？",
-    lockSession: "锁定打卡时段",
-    lockSessionTip: "您将无法编辑已锁定的打卡时段！",
     unableEdit: "无法修改",
     editPrevOrderTip: "您无法修改过去的订单",
     editVoidOrderTip: "您无法修改已经删除的订单。(此订单被 {i} 删除)",

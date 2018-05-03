@@ -548,8 +548,6 @@ export default {
     cashChangeTip: "Customer has paid ($ {i})",
     printReceiptConfirm: "Print Receipt",
     printReceiptConfirmTip: "Do you want to print a receipt to customer?",
-    lockSession: "Lock Time Session",
-    lockSessionTip: "You will no longer be able to edit a locked timecard!",
     unableEdit: "Unable Edit",
     editPrevOrderTip: "You can not edit previous ticket.",
     editVoidOrderTip: "You can not edit voided ticket ( Voided By: {i} )",
