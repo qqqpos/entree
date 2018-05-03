@@ -415,15 +415,11 @@ export default {
         let tax = 0;
         let total = 0;
         Object.keys(department).forEach(key => {
-          if (department[key].hasOwnProperty("subtotal")) {
-            subtotal += department[key].subtotal;
-          }
-          if (department[key].hasOwnProperty("tax")) {
-            tax += department[key].tax;
-          }
-          if (department[key].hasOwnProperty("total")) {
-            total += department[key].total;
-          }
+          if (department[key].hasOwnProperty("subtotal")) subtotal += department[key].subtotal;
+
+          if (department[key].hasOwnProperty("tax")) tax += department[key].tax;
+
+          if (department[key].hasOwnProperty("total")) total += department[key].total;
         });
 
         Object.assign(department, { subtotal, tax, total });

@@ -92,7 +92,7 @@ export default {
     },
     create() {
       const _id = ObjectId();
-      const order = clone(this.order);
+      const order = JSON.parse(JSON.stringify(this.order));
 
       let content = [];
       let payment = {
@@ -123,7 +123,7 @@ export default {
     transfer({ unique, index }) {
       let buffer = [];
       this.$children.map(vm =>
-        vm.buffer.forEach(item => buffer.push(clone(item)))
+        vm.buffer.forEach(item => buffer.push(JSON.parse(JSON.stringify(item))))
       );
       this.$bus.emit("transfer", {
         unique,
@@ -236,6 +236,7 @@ export default {
       if (this.app.newTicket && this.$route.name === "Menu") {
         const { number, type } = this.ticket;
         Object.assign(this.order, { number, type, time: Date.now() });
+        this.setApp({ newTicket: false });
       }
 
       let tip = 0;
@@ -272,7 +273,7 @@ export default {
 
         this.order.payment.tip = toFixed(tip, 2);
         this.order.payment.tax = toFixed(tax, 2);
-        this.order.payment.plasticTax = toFixed(plasticTax,2);
+        this.order.payment.plasticTax = toFixed(plasticTax, 2);
         this.order.payment.subtotal = toFixed(subtotal, 2);
         this.order.payment.rounding = toFixed(rounding, 2);
         this.order.payment.total = toFixed(total, 2);
@@ -323,7 +324,7 @@ export default {
         this.init.resolve();
       }
     },
-    ...mapActions(["setOrder"])
+    ...mapActions(["setApp", "setOrder"])
   }
 };
 </script>
