@@ -136,7 +136,11 @@ export default {
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
-          this.$dialog(prompt).then(() => this.$q());
+          table.invoice.length === 0
+            ? this.$dialog(prompt).then(() => this.$q())
+            : this.checkPermission(table)
+                .then(this.viewTicket)
+                .catch(this.exceptionHandler);
           break;
         default:
           this.checkPermission(table)

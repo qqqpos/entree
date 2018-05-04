@@ -1416,6 +1416,7 @@ export default {
       const {
         subtotal,
         tax,
+        plasticTax,
         discount,
         paid,
         delivery,
@@ -1424,11 +1425,12 @@ export default {
         rounding
       } = this.payment;
 
-      const total = toFixed(subtotal + tax, 2);
+      const total = toFixed(subtotal + tax + plasticTax, 2);
       const due = toFixed(total + delivery - discount, 2);
       const surcharge = toFixed(tip + gratuity, 2);
       const balance = toFixed(due + gratuity + rounding, 2);
       const remain = Math.max(0, toFixed(balance - paid, 2));
+      console.log(balance,paid);
 
       this.payment = Object.assign({}, this.payment, {
         total,
@@ -1491,7 +1493,7 @@ export default {
           const { done } = this.station.autoLock;
           if (this.ticket.type === "BUFFET") {
             this.resetMenu();
-            this.setOrder({ type: "BUFFET", create: +new Date() });
+            this.setOrder({ type: "BUFFET", create: Date.now() });
             this.exit();
           } else {
             if (done) {

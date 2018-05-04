@@ -77,7 +77,7 @@
           </p>
           <p>
             <span class="text">{{$t("text.tax")}}:</span>
-            <span class="value">{{(payment.tax + payment.plasticTax) | decimal}}</span>
+            <span class="value">{{(payment.tax + (payment.plasticTax | 0)) | decimal}}</span>
           </p>
           <p :class="{hidden:parseFloat(payment.tip) === 0}">
             <span class="text">{{$t("text.tip")}}:</span>
