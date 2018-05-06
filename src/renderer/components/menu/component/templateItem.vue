@@ -33,6 +33,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import checkbox from "../../setting/common/checkbox";
+import { isNumber } from "util";
 
 export default {
   props: ["init"],
@@ -145,7 +146,7 @@ export default {
     },
     confirm() {
       this.saveItems(this.index);
-     !this.insert && this.emptyChoiceSet({ _ti: this.template._id });
+      !this.insert && this.emptyChoiceSet({ _ti: this.template._id });
 
       const { skip, ignore } = this.init.side;
 
@@ -162,6 +163,9 @@ export default {
         addition = isNumber(addition) ? parseFloat(addition) : 0;
 
         page.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
+          //make sure all price are decimal
+          price = isNumber(price) ? parseFloat(price) : 0;
+
           this.setChoiceSet({
             qty,
             key,

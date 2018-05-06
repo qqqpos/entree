@@ -578,7 +578,7 @@ export default {
 
       switch (role) {
         case "Manager":
-          subtitle = "All Payments";
+          subtitle = "All Tickets";
           invoices = transactions.slice();
           tickets = this.history.filter(t => t.status === 1);
           break;
@@ -591,7 +591,7 @@ export default {
           );
           break;
         case "Waitstaff":
-          subtitle = "Payment Handled By " + name;
+          subtitle = "Order Taken By " + name;
           invoices = transactions.filter(p => p.server === name);
           tickets = this.history.filter(
             t => t.server === name && t.status === 1

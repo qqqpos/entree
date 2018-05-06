@@ -161,22 +161,22 @@ export default {
       })
         .then(data => {
           const date = today();
-          const time = +new Date();
+          const time = Date.now();
           const cashDrawer =
             this.op.cashCtrl === "staffBank"
               ? this.op.name
               : this.station.cashDrawer.name;
 
           Object.assign(data, {
+            _id: ObjectId(),
+            for: "Order",
+            date,
             order: {
               _id: null,
               type: "NO_SALES",
               number: "",
               cashier: this.op.name
-            },
-            for: "Order",
-            date: today(),
-            _id: ObjectId()
+            }
           });
 
           this.$socket.emit("[TERMINAL] SAVE", data, content =>
@@ -215,12 +215,7 @@ export default {
           this.$socket.emit("[TRANSACTION] SAVE", transaction);
           this.init.resolve();
         })
-        .catch(error => {
-          console.log(error);
-          this.$q();
-        });
-
-        this.init.resovle();
+        .catch(error => this.$q());
     }
   }
 };

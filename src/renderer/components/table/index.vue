@@ -127,21 +127,21 @@ export default {
             .then(this.createTable)
             .catch(this.createTableFailed);
           break;
-        case 2:
-          const prompt = {
-            type: "warning",
-            title: "dialog.accessDenied",
-            msg: ["dialog.noRightToModify", table.server],
-            timeout: { duration: 5000, fn: "resolve" },
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          };
+        // case 2:
+        //   const prompt = {
+        //     type: "warning",
+        //     title: "dialog.accessDenied",
+        //     msg: ["dialog.noRightToModify", table.server],
+        //     timeout: { duration: 5000, fn: "resolve" },
+        //     buttons: [{ text: "button.confirm", fn: "resolve" }]
+        //   };
 
-          table.invoice.length === 0
-            ? this.$dialog(prompt).then(() => this.$q())
-            : this.checkPermission(table)
-                .then(this.viewTicket)
-                .catch(this.exceptionHandler);
-          break;
+        //   table.invoice.length === 0
+        //     ? this.$dialog(prompt).then(() => this.$q())
+        //     : this.checkPermission(table)
+        //         .then(this.viewTicket)
+        //         .catch(this.exceptionHandler);
+        //   break;
         default:
           this.checkPermission(table)
             .then(this.viewTicket)
@@ -171,7 +171,7 @@ export default {
                   Object.assign(seat, {
                     session,
                     server: this.op.name,
-                    time: +new Date()
+                    time: Date.now()
                   })
                 );
 
@@ -212,7 +212,7 @@ export default {
                 status: 2,
                 session,
                 server: this.op.name,
-                time: +new Date()
+                time: Date.now()
               })
             );
 
@@ -433,7 +433,7 @@ export default {
           status: 2,
           session,
           server: this.op.name,
-          time: +new Date()
+          time: Date.now()
         })
       );
 

@@ -281,8 +281,8 @@ export default {
 
       this.initialPrint(print)
         .then(this.save.bind(null, print))
-        .then(this.exit)
-        //.catch(this.placeFailed);
+        .then(this.exit);
+      //.catch(this.placeFailed);
     },
     placeFailed(error) {
       this.$log({
@@ -592,6 +592,11 @@ export default {
       let items = [];
       let compare = current.content;
 
+      if (!this.diffs) {
+        //if no need comparison
+        return current;
+      }
+      
       //push unprinted item
       this.diffs.forEach(prev => {
         if (!prev.print) {

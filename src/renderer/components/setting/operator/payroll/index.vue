@@ -52,7 +52,11 @@
           <p>
             <span class="f1">{{$t('payroll.currentPayout')}}</span>
             <span class="value">$ {{summary.payout | decimal}}</span>
-          </p>                                            
+          </p>    
+          <p>
+            <button class="btn" @click="printAll">{{$t('button.printAll')}}</button>
+            <button class="btn" @click="payAll" :disabled="true">{{$t('button.pay')}}</button>
+          </p>                                    
         </div>
       </section>
     </div>
@@ -73,6 +77,7 @@ export default {
       config: this.$store.getters.store.timecard,
       componentData: null,
       component: null,
+      reversed: false,
       payables: [],
       range: [],
       type: null
@@ -101,9 +106,9 @@ export default {
   },
   methods: {
     sort(type) {
-      console.log(type, this.type);
       if (type === this.type) {
         this.payables.reverse();
+        this.reversed = true;
         return;
       }
 
@@ -134,6 +139,7 @@ export default {
       }
 
       this.type = type;
+      this.reversed = false;
     },
     view(payroll) {
       this.$open("viewer", { payroll });
@@ -151,6 +157,20 @@ export default {
         })
         .catch(() => this.$q());
     },
+    printAll() {
+      const prompt = {
+        title: "dialog.printConfirm",
+        msg: "dialog.printAllTimecardRecords"
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.$q();
+          Printer.printTimecardReport(this.payables);
+        })
+        .catch(() => this.$q());
+    },
+    payAll() {},
     pay(payroll) {
       const prompt = {
         title: "dialog.releasePayroll",
