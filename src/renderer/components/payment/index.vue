@@ -1336,7 +1336,7 @@ export default {
         case "tip":
           this.tip = val.toFixed(2);
           Object.assign(this.payment, { tip: parseFloat(val) });
-          this.setOrder(Object.assign(this.order, { payment: this.payment }));
+          //this.setOrder(Object.assign(this.order, { payment: this.payment }));
           break;
         default:
           this.paid = val.toFixed(2);
@@ -1416,7 +1416,7 @@ export default {
       const {
         subtotal,
         tax,
-        plasticTax,
+        plasticTax = 0,
         discount,
         paid,
         delivery,

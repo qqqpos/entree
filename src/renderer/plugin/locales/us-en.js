@@ -1603,7 +1603,7 @@ export default {
   tip: {
     autoLogin: "Operator auto login when pin is entered",
     itemRestrictionRules: "Item select restriction rules",
-    insertTemplateItem: "Insert selected items on this template",
+    insertTemplateItem: "Always insert selected item to main item",
     autoJumpNext: "Auto jump to next page when condition met",
     alphabetical: "Sort menu item by alphabet",
     createSubMenuGroup: "Create a sub menu group",

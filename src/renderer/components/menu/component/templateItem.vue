@@ -21,9 +21,6 @@
         </div>
       </div>
       <footer>
-        <div class="opt">
-          <checkbox title="text.insert" v-model="insert"></checkbox>
-        </div>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
       </footer>
     </div>
@@ -32,12 +29,9 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import checkbox from "../../setting/common/checkbox";
-import { isNumber } from "util";
 
 export default {
   props: ["init"],
-  components: { checkbox },
   computed: {
     ...mapGetters(["item", "templates", "language"])
   },
@@ -59,7 +53,7 @@ export default {
     this.template = this.templates.find(t => t.name === template);
     this.insert = this.template.insert;
     this.itemCount = Array(this.template.contain.length).fill(0);
-    this.retrieve();
+    !this.insert && this.retrieve();
     this.initialItems();
   },
   methods: {
@@ -90,26 +84,19 @@ export default {
     retrieve() {
       const { choiceSet } = this.item;
 
-      if (choiceSet.length === 0) {
-        this.insert = true;
-      } else {
-        let saved = Array.from({ length: this.template.contain.length }).map(
-          _ => []
-        );
+      let saved = Array.from({ length: this.template.contain.length }).map(_ => []);
 
-        this.template.contain.forEach((page, index) => {
-          page.contain.forEach(item => {
-            choiceSet.forEach(set => {
-              set.key === item.key &&
-                saved[index].push(Object.assign({}, item, { qty: set.qty }));
-            });
+      this.template.contain.forEach((page, index) => {
+        page.contain.forEach(item => {
+          choiceSet.forEach(set => {
+            set.key === item.key &&
+              saved[index].push(Object.assign({}, item, { qty: set.qty }));
           });
-          this.itemCount[index] = saved[index].reduce((a, c) => a + c.qty, 0);
         });
-        this.saved = saved;
-        this.insert = false;
-        this.editMode = choiceSet.filter(i => i._ti).length > 0;
-      }
+        this.itemCount[index] = saved[index].reduce((a, c) => a + c.qty, 0);
+      });
+      this.saved = saved;
+      this.editMode = choiceSet.filter(i => i._ti).length > 0;
     },
     saveItems(index) {
       this.saved[index] = this.items.filter(i => i.qty > 0);

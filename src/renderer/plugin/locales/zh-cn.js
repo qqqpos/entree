@@ -1572,7 +1572,7 @@ export default {
   tip: {
     autoLogin: "自动尝试用当前的密码登录用户",
     itemRestrictionRules: "允许物品选择条件",
-    insertTemplateItem: "插入该模版选择的物品",
+    insertTemplateItem: "永远添加选中的物品",
     autoJumpNext: "满足条件时自动转跳到下一页",
     alphabetical: "按字母排序菜单 (中文则按拼音排序)",
     createSubMenuGroup: "创建一个子菜单组",
