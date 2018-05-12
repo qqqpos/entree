@@ -276,6 +276,7 @@ export default {
   },
   data() {
     return {
+      ticketNumberUpdateable: true,
       releaseComponentLock: true,
       isThirdPartyPayment: true,
       thirdPartyType: null,
@@ -365,8 +366,8 @@ export default {
           component: "payment",
           operator: this.op.name,
           lock: this.order._id,
-          time: +new Date(),
-          exp: +new Date() + 1000 * 120
+          time: Date.now(),
+          exp: Date.now() + 1.2e5
         };
 
         this.$socket.emit("[COMPONENT] LOCK", data, lock => {
@@ -460,7 +461,7 @@ export default {
         case "paymentPending":
           this.releaseComponentLock = false;
 
-          const current = +new Date();
+          const current = Date.now();
           const exp = data.exp;
           const duration = exp - current;
 
@@ -786,7 +787,7 @@ export default {
           balance: this.giftCard.balance,
           change: -paid,
           date: today(),
-          time: +new Date(),
+          time: Date.now(),
           type: "Purchase",
           cashier: this.op.name,
           number: this.giftCard.number.replace(/\D/g, ""),
@@ -955,7 +956,7 @@ export default {
                       ""
                     ],
                     cipher,
-                    lastUse: +new Date()
+                    lastUse: Date.now()
                   },
                   () => {}
                 );
@@ -1037,10 +1038,11 @@ export default {
             modify: 0,
             status: 1,
             date: today(),
-            time: +new Date(),
+            time: Date.now(),
             settled
           });
           this.$socket.emit("[SAVE] INVOICE", this.order, false, order => {
+            this.ticketNumberUpdateable = false;
             this.order = order;
             resolve();
           });
@@ -1278,12 +1280,12 @@ export default {
           if (discount > this.payment.subtotal) {
             //discount can not grater than subtotal
             const prompt = {
-              type:"warning",
+              type: "warning",
               title: "dialog.cantExecute",
               msg: "dialog.discountAmountNotAllow",
               buttons: [
-                { button: "button.cancel", fn: "reject" },
-                { button: "button.retry", fn: "resolve" }
+                { text: "button.cancel", fn: "reject" },
+                { text: "button.retry", fn: "resolve" }
               ]
             };
 
@@ -1336,7 +1338,6 @@ export default {
         case "tip":
           this.tip = val.toFixed(2);
           Object.assign(this.payment, { tip: parseFloat(val) });
-          //this.setOrder(Object.assign(this.order, { payment: this.payment }));
           break;
         default:
           this.paid = val.toFixed(2);
@@ -1430,7 +1431,7 @@ export default {
       const surcharge = toFixed(tip + gratuity, 2);
       const balance = toFixed(due + gratuity + rounding, 2);
       const remain = Math.max(0, toFixed(balance - paid, 2));
-      console.log(balance,paid);
+      console.log(balance, paid);
 
       this.payment = Object.assign({}, this.payment, {
         total,
@@ -1538,7 +1539,7 @@ export default {
   },
   sockets: {
     TICKET_NUMBER(number) {
-      this.isNewTicket && Object.assign(this.order, { number });
+      this.isNewTicket && this.ticketNumberUpdateable && Object.assign(this.order, { number });
     }
   }
 };

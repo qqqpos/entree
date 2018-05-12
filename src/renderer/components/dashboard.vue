@@ -197,13 +197,14 @@ export default {
         : this.setApp({ autoLock: false });
     },
     initialFailed(error) {
-      this.$log({
-        eventID: 9101,
-        type: "failure",
-        note: `Dashboard initial has failed.\n\nError Message:\n${JSON.stringify(
-          error
-        )}`
-      });
+      console.log(error)
+      // this.$log({
+      //   eventID: 9101,
+      //   type: "failure",
+      //   note: `Dashboard initial has failed.\n\nError Message:\n${JSON.stringify(
+      //     error
+      //   )}`
+      // });
     },
     welcomeScreen() {
       const { top, bot } = this.station.pole;
