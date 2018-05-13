@@ -138,7 +138,7 @@ export default {
     },
     checkSettlement() {
       return new Promise((resolve, reject) => {
-        const ticketSettledError = {
+        const ticketSettled = {
           type: "question",
           title: "dialog.ticketClosed",
           msg: "dialog.removePaymentRecordFirst",
@@ -167,7 +167,7 @@ export default {
           ]
         };
 
-        if (this.order.settled) throw ticketSettledError;
+        if (this.order.settled) throw ticketSettled;
 
         this.$socket.emit("[PAYMENT] COUNT", this.order._id, count => {
           count > 0
@@ -187,7 +187,7 @@ export default {
             this.edit();
           });
       } else {
-        const { type, number,customer } = this.order;
+        const { type, number, customer } = this.order;
 
         this.setApp({ newTicket: false });
         this.setCustomer(customer);
@@ -362,7 +362,7 @@ export default {
     printTicket(order, receipt) {
       this.$q();
       this.updateInvoice(order);
-      order.content.forEach(item => (item.diffs = "unchanged"));
+      order.content.forEach(item => (item.diffs = "UNCHANGED"));
       receipt
         ? Printer.setTarget("Receipt").print(order, true)
         : Printer.setTarget("All").print(order);

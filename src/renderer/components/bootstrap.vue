@@ -183,7 +183,7 @@ export default {
                 "WIRELESS",
                 "CELL PHONE",
                 "UNKNOWN"
-              ].includes(name.toUpperCase())
+              ].some(verb => name.contains(verb))
             ) {
               name = "";
             }

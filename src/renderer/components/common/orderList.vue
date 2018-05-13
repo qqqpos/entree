@@ -403,7 +403,8 @@ export default {
         tip = 0,
         gratuity = 0,
         paid = 0,
-        rounding = 0
+        rounding = 0,
+        log = []
       } = this.order.payment;
       let subtotal = 0,
         tax = 0,
@@ -566,7 +567,8 @@ export default {
         tip: toFixed(tip, 2),
         gratuity: toFixed(gratuity, 2),
         delivery: toFixed(delivery, 2),
-        rounding: toFixed(rounding, 2)
+        rounding: toFixed(rounding, 2),
+        log
       });
 
       Object.assign(this.order, { payment: this.payment });

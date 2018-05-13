@@ -201,9 +201,7 @@ function createList(printer, setting, invoice, preview) {
     case "normal":
       items = !invoice.print
         ? list.filter(item => item.printer[printer])
-        : list.filter(
-          item => item.printer[printer] && item.diffs !== "removed"
-        );
+        : list.filter(item => item.printer[printer] && item.diffs !== "REMOVED" && item.diffs !== "MODIFIED");
       break;
     case "difference":
       if (!invoice.print) {
@@ -211,27 +209,13 @@ function createList(printer, setting, invoice, preview) {
       } else {
         items = list.filter(
           item =>
-            item.printer[printer] && !item.print && item.diffs !== "unchanged"
-        );
-        items.forEach(item => {
-          switch (item.diffs) {
-            case "less":
-            case "more":
-              item.qty = item.origin + "&rsaquo;" + item.qty;
-              break;
-            case "new":
-              item.zhCN = "★" + item.zhCN;
-              item.usEN = "★" + item.usEN;
-            case "removed":
-              break;
-            case "inserted":
-              item.choiceSet = item.choiceSet.map(item => {
-                item.zhCN = "★" + item.zhCN;
-                item.usEN = "★" + item.usEN;
-                return item
-              })
-              break;
+            item.printer[printer] && !item.print && item.diffs !== "UNCHANGED" && item.diffs !== "MODIFIED"
+        ).map(item=>{
+          if(item.diffs === "NEW"){
+            item.zhCN = "★" + item.zhCN;
+            item.usEN = "★" + item.usEN;
           }
+          return item;
         });
       }
       break;
@@ -241,28 +225,17 @@ function createList(printer, setting, invoice, preview) {
       } else {
         items = list.filter(
           item =>
-            item.printer[printer] &&
-            !item.print &&
-            (item.diffs === "new" || item.diffs === "inserted" || item.diffs === "more")
-        );
-        items.forEach(item => {
-          switch (item.diffs) {
-            case "new":
-              item.zhCN = "★" + item.zhCN;
-              item.usEN = "★" + item.usEN;
-              break;
-            case "more":
-              item.qty = item.qty - item.origin;
-              item.zhCN = "★" + item.zhCN;
-              item.usEN = "★" + item.usEN;
-              break;
-            case "inserted":
-              item.choiceSet.forEach(set => {
-                set.zhCN = "★" + set.zhCN;
-                set.usEN = "★" + set.usEN;
-              });
-              break;
+            item.printer[printer] && !item.print &&
+            (item.diffs === 'NEW' || (item.diffs === "DIFFERENT" && item.hasOwnProperty('originQty')) || item.diffs === "MODIFIED")
+        ).map(item=>{
+          if(item.diffs === "MODIFIED"){
+            item.choiceSet = item.choiceSet.map(sub => {
+              sub.zhCN = "★" + sub.zhCN;
+              sub.usEN = "★" + sub.usEN;
+              return sub
+            })
           }
+          return item;
         });
       }
       break;
@@ -274,15 +247,15 @@ function createList(printer, setting, invoice, preview) {
           .filter(
             item =>
               item.printer[printer] &&
-              (item.diffs === "unchanged" || item.diffs === "new")
+              (item.diffs === "UNCHANGED" || item.diffs === "NEW")
           )
           .map(item => {
             switch (item.diffs) {
-              case "unchanged":
+              case "UNCHANGED":
                 item.zhCN = "☑ " + item.zhCN;
                 item.usEN = "☑ " + item.usEN;
                 break;
-              case "new":
+              case "NEW":
                 item.zhCN = "☐ " + item.zhCN;
                 item.usEN = "☐ " + item.usEN;
                 break;
@@ -296,7 +269,7 @@ function createList(printer, setting, invoice, preview) {
       items = !invoice.print
         ? list.filter(item => item.printer[printer])
         : list.filter(
-          item => item.printer[printer] && item.diffs !== "removed"
+          item => item.printer[printer] && item.diffs !== "REMOVED"
         );
   }
 
@@ -373,7 +346,7 @@ function createList(printer, setting, invoice, preview) {
       const _price =
         Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
 
-      if (diffs === "removed") {
+      if (diffs === "REMOVED") {
         chineseSub += enableChinese
           ? `<p>\
                 <del></del>\
@@ -407,7 +380,7 @@ function createList(printer, setting, invoice, preview) {
           : "";
       }
     });
-    if (diffs === "removed") {
+    if (diffs === "REMOVED") {
       chineseItem = enableChinese
         ? `<div class="zhCN">\
                 <div class="main">\

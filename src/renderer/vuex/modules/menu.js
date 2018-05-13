@@ -107,13 +107,21 @@ const mutations = {
         ? item.total
         : item.price[0].toFixed(2)
     });
+
     if (state.item) {
-      const insert =
-        state.order.content.findIndex(item => item === state.item) + 1;
+      //if item has no options 
+      if(item._id === state.item._id && item.option.length === 0){
+        state.item.total = (++state.item.qty * state.item.single).toFixed(2);
+        return;
+      }
+
+      const insert = state.order.content.findIndex(item => item === state.item) + 1;
       state.order.content.splice(insert, 0, item);
+
       let dom = document.querySelectorAll("li.item");
       let length = dom.length;
       let index;
+
       dom.forEach((div, i) => {
         if (div.className.indexOf("active") !== -1) {
           dom[i].classList.remove("active");
@@ -139,7 +147,6 @@ const mutations = {
   [types.ALTER_ITEM_OPTION](state, data) {
     const {
       disable,
-      overWrite = false,
       replace = false,
       price,
       extra,
@@ -152,6 +159,8 @@ const mutations = {
 
     if (disable) return;
     if (data.split) return;
+
+    item.unique = String().random();
 
     const _zhCN = `[${zhCN}]`;
     const _usEN = `[${usEN}]`;
@@ -174,7 +183,7 @@ const mutations = {
 
         item.total = item.single.toFixed(2);
 
-        if (overWrite || replace) {
+        if (replace) {
           item.zhCN = zhCN;
           item.usEN = usEN;
           return;

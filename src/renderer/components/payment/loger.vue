@@ -46,7 +46,7 @@
         <div class="f1">
           <pagination :of="init.logs" @page="setPage" :contain="10" :max="6"></pagination>
         </div>
-        <button class="btn" @click="edit" v-if="logs.length === 0">{{$t('button.edit')}}</button>
+        <button class="btn" @click="edit">{{$t(logs.length === 0 ? 'button.edit' : 'button.new')}}</button>
         <button class="btn" @click="close">{{$t('button.close')}}</button>
       </footer>
     </div>
@@ -68,7 +68,7 @@ export default {
       let max = min + 10;
       return this.init.logs.slice(min, max);
     },
-    ...mapGetters(["op", "order", "station"])
+    ...mapGetters(["op", "station"])
   },
   data() {
     return {
@@ -91,7 +91,7 @@ export default {
       );
     },
     removeConfirm(payment, index) {
-      let data = {
+      const data = {
         type: "warning",
         title: ["dialog.paymentRemoveConfirm", this.$t("type." + payment.type)],
         msg: ["dialog.paymentRemoveConfirmTip", payment.actual.toFixed(2)],
@@ -203,11 +203,13 @@ export default {
       this.$dialog(error).then(() => this.$q());
     },
     edit() {
-      const { type, number, customer } = this.order;
+      const invoice = JSON.parse(JSON.stringify(this.$store.getters.order));
+      const { type, number, customer } = invoice;
 
       this.setApp({ newTicket: false });
       this.setCustomer(customer);
       this.setTicket({ type, number });
+      this.setViewOrder(invoice);
 
       this.$router.push({ path: "/main/menu" });
     },
@@ -226,7 +228,7 @@ export default {
           return require("./parser/pax.js");
       }
     },
-    ...mapActions(["setApp", "setCustomer", "setTicket"])
+    ...mapActions(["setApp", "setViewOrder", "setCustomer", "setTicket"])
   }
 };
 </script>
