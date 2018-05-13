@@ -3,7 +3,7 @@
     <div class="editor">
       <header>
         <div>
-          <h5>{{today}}</h5>
+          <h5>{{setDate}}</h5>
           <h3>{{$t('title.ledger')}}</h3>
         </div>
         <nav class="tabs">
@@ -161,6 +161,7 @@ export default {
     return {
       language: this.$store.getters.language,
       tax: this.$store.getters.tax,
+      setDate: today(),
       today: today(),
       departments: [],
       creditcards: [],
@@ -171,8 +172,8 @@ export default {
           .set({ hour: 4, minute: 0, second: 0 }),
         to: +moment()
           .subtract(4, "hours")
-          .set({ hour: 3, minute: 59, second: 59 })
           .add(1, "days")
+          .set({ hour: 3, minute: 59, second: 59 })
       },
       summary: {},
       collection: [],
@@ -325,6 +326,15 @@ export default {
     },
     fetchData() {
       return new Promise(next => {
+        this.setDate = document.querySelector("#calendar .text").innerHTML;
+
+        if(this.setDate !== this.today){
+          this.dateRange = {
+            from:+moment(this.setDate,"YYYY-MM-DD",true).set({ hour: 4, minute: 0, second: 0 }),
+            to:+moment(this.setDate,"YYYY-MM-DD",true).add(1,'days').set({ hour: 4, minute: 0, second: 0 })
+          }
+        }
+
         this.$socket.emit("[REPORT] INITIAL_DATA", this.dateRange, data => {
           next(data);
         });

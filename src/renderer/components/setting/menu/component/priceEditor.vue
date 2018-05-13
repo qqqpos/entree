@@ -12,6 +12,7 @@
         <inputer title="type.DINE_IN" v-model="prices.DINE_IN" :placeholder="placeholder"></inputer>
         <inputer title="type.HIBACHI" v-model="prices.HIBACHI" :placeholder="placeholder"></inputer>
         <inputer title="type.SALES" v-model="prices.SALES" :placeholder="placeholder"></inputer>
+        <inputer title="type.THIRD" v-model="prices.THIRD" :placeholder="placeholder"></inputer>
       </div>
       <footer>
         <div class="opt">
@@ -39,7 +40,8 @@ export default {
         DINE_IN: "",
         HIBACHI: "",
         BUFFET: "",
-        SALES: ""
+        SALES: "",
+        THIRD: ""
       },
       placeholder: ""
     };
@@ -60,7 +62,8 @@ export default {
         DINE_IN: "",
         HIBACHI: "",
         BUFFET: "",
-        SALES: ""
+        SALES: "",
+        THIRD: ""
       };
     },
     confirm() {

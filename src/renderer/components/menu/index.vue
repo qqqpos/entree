@@ -295,7 +295,7 @@ export default {
       this.checkItemAvailable(item)
         .then(this.checkOption)
         .then(this.checkItemType)
-        .then(this.conditionPrice)
+        .then(this.conditionalPrice)
         .then(this.addToOrder)
         .catch(this.specialItemHandler.bind(null, item));
     },
@@ -389,14 +389,18 @@ export default {
         next(item);
       });
     },
-    conditionPrice(item) {
+    conditionalPrice(item) {
       return new Promise((next, stop) => {
         const type = this.order.type || this.ticket.type;
-        if (item.prices && item.prices.hasOwnProperty(type)) {
-          Object.assign(item, {
-            price: item.prices[type].split(",")
-          });
+
+        if (item.hasOwnProperty("prices")) {
+          if (this.order.source !== "POS" && item.prices.THIRD) {
+            Object.assign(item, { price: item.prices.THIRD.split(",") });
+          } else if (item.prices.hasOwnProperty(type)) {
+            Object.assign(item, { price: item.prices[type].split(",") });
+          }
         }
+
         next(item);
       });
     },

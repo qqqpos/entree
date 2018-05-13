@@ -306,7 +306,7 @@ export default {
       let archiveOrder = this.archivedOrder;
 
       this.order.content.forEach(item => {
-        item.diffs = "new";
+        item.diffs = "NEW";
         archiveOrder.content.push(item);
       });
       //recalculate price
@@ -506,6 +506,7 @@ export default {
             items.push(oldItem);
 
             //item quantaty changes
+            item.originQty = oldItem.qty;
             item.diffs = "DIFFERENT";
             item.print = false;
           } else {
@@ -551,7 +552,7 @@ export default {
               };
             }
           }
-          item.originQty = oldItem.qty;
+          
           items.push(item);
         } else {
           //this item has been remove
@@ -564,99 +565,6 @@ export default {
 
       return Object.assign(current,{ content: items });
     },
-    // analyzeDiffs(current) {
-    //   current = JSON.parse(JSON.stringify(current));
-    //   current.print = true;
-
-    //   let items = [];
-    //   let compare = current.content;
-
-    //   if (!this.diffs) {
-    //     //if no need comparison
-    //     return current;
-    //   }
-
-    //   //push unprinted item
-    //   this.diffs.forEach(prev => {
-    //     if (!prev.print) {
-    //       prev.diffs = "new";
-    //       items.push(prev);
-    //       return;
-    //     }
-
-    //     const index = compare.findIndex(item => item.unique === prev.unique);
-
-    //     if (index !== -1) {
-    //       const now = compare[index];
-
-    //       //compare quantity
-    //       if (now.qty < prev.qty) {
-    //         compare[index].diffs = "less";
-    //         compare[index].print = false;
-    //       } else if (now.qty > prev.qty) {
-    //         compare[index].diffs = "more";
-    //         compare[index].print = false;
-    //       } else {
-    //         //compare unchanged item find out if choiceSet is different
-    //         const nowSet = now.choiceSet
-    //           .filter(s => !s.type)
-    //           .map(s => s.unique);
-    //         const prevSet = prev.choiceSet
-    //           .filter(s => !s.type)
-    //           .map(s => s.unique);
-
-    //         let sameSet = nowSet.reduce(
-    //           (a, b) => a && prevSet.includes(b),
-    //           true
-    //         );
-
-    //         if (sameSet) {
-    //           compare[index].diffs = "unchanged";
-    //         } else {
-    //           compare[index].print = false;
-    //           compare[index].diffs = "inserted";
-    //           //filter insert choiceSet
-    //           compare[index].choiceSet = now.choiceSet.filter(
-    //             set => prevSet.indexOf(set.unique) < 0
-    //           );
-    //           //combine printer setting
-    //           let printer = new Set();
-    //           compare[index].choiceSet.forEach(set => {
-    //             if (set.hasOwnProperty("print")) {
-    //               set.print = [];
-    //               set.print.forEach(name => printer.add(name));
-    //             }
-    //           });
-
-    //           //apply to item printer setting
-    //           if (Array.from(printer) > 0) {
-    //             compare[index].printer = {};
-    //             printer.forEach(name => {
-    //               compare[index].printer[name] = {
-    //                 replace: false
-    //               };
-    //             });
-    //           }
-    //         }
-    //       }
-    //       compare[index].origin = prev.qty;
-    //       items.push(compare[index]);
-    //     } else {
-    //       prev.diffs = "removed";
-    //       prev.print = false;
-    //       items.push(prev);
-    //     }
-    //   });
-
-    //   items.push(
-    //     ...current.content.filter(item => item.new).map(item => {
-    //       item.diffs = "new";
-    //       return item;
-    //     })
-    //   );
-
-    //   return Object.assign(current, { content: items });
-    // },
     createTogo() {
       this.archiveOrder(this.order);
       Object.assign(this.ticket, { type: "TO_GO" });

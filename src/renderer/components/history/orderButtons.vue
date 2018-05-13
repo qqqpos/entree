@@ -150,13 +150,11 @@ export default {
       const date = document.querySelector("#calendar .text").innerText;
       if (date !== this.today) {
         this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, data => {
-          const invoices = data.filter(invoice => invoice.type === "DELIVERY");
+          const invoices = data.filter(i => i.type === "DELIVERY");
           this.$open("driver", { invoices });
         });
       } else {
-        const invoices = this.history.filter(
-          invoice => invoice.type === "DELIVERY"
-        );
+        const invoices = this.history.filter(i => i.type === "DELIVERY");
         this.$open("driver", { ticket: this.order.number, invoices, date });
       }
     },
