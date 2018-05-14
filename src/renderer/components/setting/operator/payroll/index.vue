@@ -319,6 +319,10 @@ section.overview {
   display: flex;
 }
 
+p > button{
+  margin: auto;
+}
+
 .title {
   padding: 0 50px 0 25px;
   display: flex;

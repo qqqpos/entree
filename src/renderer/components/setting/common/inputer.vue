@@ -21,7 +21,7 @@ export default {
     },
     title: String,
     value: [String, Number, Array, Object],
-    length: Number,
+    length: [String,Number],
     disabled: {
       type: Boolean,
       default: false

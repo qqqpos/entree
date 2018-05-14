@@ -33,12 +33,13 @@
 </template>
 
 <script>
+import clock from "./clock";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 
 export default {
   props: ["init"],
-  components: { toggle, inputer  },
+  components: { clock, toggle, inputer },
   computed: {
     valid() {
       const { wage, date, clockIn, clockOut } = this.record;
@@ -64,7 +65,9 @@ export default {
   },
   created() {
     if (this.record.clockIn)
-      this.record.clockIn = moment(this.record.clockIn).format("YYYY-MM-DD HH:mm:ss");
+      this.record.clockIn = moment(this.record.clockIn).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
     if (this.record.clockOut)
       this.record.clockOut = moment(this.record.clockOut).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -76,16 +79,17 @@ export default {
   },
   methods: {
     edit(target, time) {
-      // time = value || moment().format("YYYY-MM-DD HH:mm:ss");
-
-      // new Promise((resolve, reject) => {
-      //   this.componentData = { resolve, reject, time };
-      //   this.component = "picker";
-      // })
-      //   .then(() => {
-      //     this.$q();
-      //   })
-      //   .catch(() => this.$q());
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, time };
+        this.component = "clock";
+      })
+        .then(time => {
+          Object.assign(this.record, {
+            [target]: time.second(0).format("YYYY-MM-DD HH:mm:ss")
+          });
+          this.$q();
+        })
+        .catch(() => this.$q());
     },
     confirm() {
       Object.assign(this.record, {

@@ -17,16 +17,16 @@
           <template v-if="order.customer">
             <div class="detail">
               <p>
-                <i class="fa fa-phone"></i>
-                <span class="phone">{{order.customer.phone | phone}}</span>
-                <i class="fa fa-id-card-o"></i>
-                <span class="name">{{order.customer.name}}</span>
-              </p>
-              <p>
                 <i class="fa fa-user"></i>
-                <span>{{order.server}}</span>
+                <span class="filed">{{order.server}}</span>
                 <i class="fa fa-clock-o"></i>
                 <span>{{order.time | moment('MMM DD HH:mm')}}</span>
+              </p>
+              <p>
+                <i class="fa fa-phone"></i>
+                <span class="filed">{{order.customer.phone | phone}}</span>
+                <i class="fa fa-id-card-o"></i>
+                <span class="name">{{order.customer.name}}</span>
               </p>
               <p>
                 <i class="fa fa-map-marker"></i>
@@ -867,17 +867,13 @@ header.info {
 }
 
 .detail i {
-  color: rgba(0, 0, 0, 0.75);
-  width: 15px;
+  color: #b0bec5;
+  width: 25px;
   text-align: center;
 }
 
 .detail p {
   color: #3c3c3c;
-}
-
-.detail span {
-  margin-right: 5px;
 }
 
 .content .time {
@@ -908,19 +904,21 @@ header.info {
 
 .content {
   flex: 1;
-  padding: 6px 6px 0;
+  padding: 6px 0 0 0;
   background: #fff;
 }
 
-.phone {
-  min-width: 108px;
+.filed {
+  min-width: 110px;
   display: inline-block;
 }
 
 .name {
-  margin-left: 10px;
-  font-size: 14px;
   color: #009688;
+  white-space: nowrap;
+  width: 113px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .content .value {

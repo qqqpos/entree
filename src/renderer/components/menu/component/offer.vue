@@ -41,20 +41,28 @@ export default {
       } else {
         if (amount > 0) {
           let items = this.order.content;
+          const reference = this.coupon.reference;
+
           if (exclude.length > 0) {
             items = items.filter(i => !exclude.includes(i.category));
           }
-          const subtotal = items
-            .map(i => i.single * i.qty)
-            .reduce((a, b) => a + b, 0)
-            .toFixed(2)
-            .toFloat();
+          
+          if (reference.length > 0) {
+            items = items.filter(i => reference.includes(i.category));
+          }
+          //check if qualify
+          const subtotal = items.reduce((a, c) => {
+            let total = c.single * c.qty;
+            let sum = c.choiceSet.reduce((a, c) => a + parseFloat(c.total), 0);
+            return a + total + sum;
+          }, 0);
+
           const insufficient = subtotal < amount;
           this.tooltip = insufficient
             ? this.$t(
-              "tip.coupon.requireAmount",
-              (amount - subtotal).toFixed(2)
-            )
+                "tip.coupon.requireAmount",
+                (amount - subtotal).toFixed(2)
+              )
             : this.$t("tip.coupon.conditionMet");
           return insufficient;
         }

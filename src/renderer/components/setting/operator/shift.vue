@@ -20,14 +20,14 @@
                 <tbody>
                     <tr v-for="(op,index) in onDuty" :key="index">
                         <td class="index">{{index + 1}}</td>
-                        <td>{{op.name}}</td>
+                        <td class="name">{{op.name}}</td>
                         <td>{{$t('type.'+op.role)}}</td>
                         <td class="shift" :title="date.format('YYYY-MM-DD')">
                           <span class="time">{{op.schedule.from}}</span>
                           <i class="fa fa-angle-right"></i>
                           <span class="time">{{op.schedule.to}}</span>
                         </td>
-                        <td colspan="3">
+                        <td colspan="3" @click="edit(op)">
                           <time-bar :shift="op.schedule" :id="op.id" :date="date.format('YYYY-MM-DD')"></time-bar>
                         </td>
                     </tr>
@@ -103,7 +103,6 @@ export default {
       this.date = moment(date);
       this.generateDates();
     },
-
     getOnDuty() {
       const index = this.date.format("d");
       this.onDuty = this.operators
@@ -114,6 +113,9 @@ export default {
           role: op.role,
           schedule: op.schedule[index]
         }));
+    },
+    edit(op){
+      console.log(op)
     }
   }
 };
@@ -149,6 +151,13 @@ tbody td {
 .time {
   color: rgba(0, 0, 0, 0.65);
   margin: 0 10px;
+}
+
+.name {
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .index {

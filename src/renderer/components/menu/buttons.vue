@@ -398,6 +398,7 @@ export default {
           if (this.ticket.type !== "TO_GO") {
             if (print) {
               const diffs = this.compare(order);
+              console.log(diffs);
 
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
@@ -511,13 +512,20 @@ export default {
             item.print = false;
           } else {
             //compare item's subitem
-            const newSet = item.choiceSet.filter(s => !s.type).map(s => s.unique);
-            const oldSet = oldItem.choiceSet.filter(s => !s.type).map(s => s.unique);
-            const isSameSubitem = newSet.reduce((a, b) => a && oldSet.includes(b),true);
+            const newSet = item.choiceSet
+              .filter(s => !s.type)
+              .map(s => s.unique);
+            const oldSet = oldItem.choiceSet
+              .filter(s => !s.type)
+              .map(s => s.unique);
+            const isSameSubitem = newSet.reduce(
+              (a, b) => a && oldSet.includes(b),
+              true
+            );
 
-            if(newSet.length === oldSet.length && isSameSubitem){
+            if (newSet.length === oldSet.length && isSameSubitem) {
               item.diffs = "UNCHANGED";
-            }else{
+            } else {
               //mark old item as removed
               oldItem.diffs = "REMOVED";
               oldItem.print = false;
@@ -527,6 +535,7 @@ export default {
               item.diffs = "DIFFERENT";
               item.print = false;
               items.push(item);
+              console.log("current", item);
 
               //deep copy item
               item = JSON.parse(JSON.stringify(item));
@@ -535,35 +544,51 @@ export default {
 
               let printer = new Set();
 
-              item.choiceSet = item.choiceSet.filter(set=>!oldSet.includes(set.unique));
-              item.choiceSet.forEach(subitem=>{
-                if(subitem.hasOwnProperty("print")){
-                  subitem.print.forEach(name=>printer.add(name));
-                  subitem.print = []
+              item.choiceSet = item.choiceSet.filter(
+                set => !oldSet.includes(set.unique)
+              );
+              item.choiceSet.forEach(subitem => {
+                if (subitem.hasOwnProperty("print")) {
+                  subitem.print.forEach(name => printer.add(name));
+                  subitem.print = [];
                 }
               });
 
-              if(Array.from(printer).length >0){
+              if (Array.from(printer).length > 0) {
                 //reset item printer setting
                 item.printer = {};
-                printer.forEach(name=>{
-                  item.printer[name] = { replace: false }
+                printer.forEach(name => {
+                  item.printer[name] = { replace: false };
                 });
-              };
+              }
             }
           }
-          
+
           items.push(item);
         } else {
-          //this item has been remove
-          item.diffs = "REMOVED";
+          //this item is new
+          item.diffs = "NEW";
           item.print = false;
 
           items.push(item);
         }
       });
 
-      return Object.assign(current,{ content: items });
+      const itemsUniques = items.map(item => item.unique);
+      let removedItems = []
+      oldContent.forEach(item => {
+        !itemsUniques.includes(item.unique) &&
+          removedItems.push(
+            Object.assign(item, {
+              diffs: "REMOVED",
+              print: false
+            })
+          );
+      });
+
+      removedItems.length > 0 && items.unshift(...removedItems);
+
+      return Object.assign(current, { content: items });
     },
     createTogo() {
       this.archiveOrder(this.order);

@@ -7,7 +7,7 @@
             </header>
             <div class="wrap">
                 <inputer title="text.street" v-model.trim="street" :autoFocus="true"></inputer>
-                <inputer title="text.city" v-model.trim="city"></inputer>
+                <inputer title="text.city" v-model.trim="city" @keydown.enter.native="confirm"></inputer>
                 <inputer title="text.zipCode" v-model.trim="zipCode" mask="#####"></inputer>
             </div>
             <footer>

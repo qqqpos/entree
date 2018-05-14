@@ -254,6 +254,7 @@ li {
   cursor: pointer;
   border-bottom: 1px solid #eee;
   padding: 15px 10px;
+  align-items: center;
 }
 
 .page {

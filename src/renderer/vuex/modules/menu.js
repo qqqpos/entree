@@ -110,7 +110,7 @@ const mutations = {
 
     if (state.item) {
       //if item has no options 
-      if(item._id === state.item._id && item.option.length === 0){
+      if (item._id === state.item._id && item.option.length === 0) {
         state.item.total = (++state.item.qty * state.item.single).toFixed(2);
         return;
       }
@@ -145,6 +145,9 @@ const mutations = {
     state.item = item;
   },
   [types.ALTER_ITEM_OPTION](state, data) {
+    const { index } = data;
+    let { item } = state;
+
     const {
       disable,
       replace = false,
@@ -155,12 +158,10 @@ const mutations = {
       skip = false,
       ignore = false
     } = data.side;
-    let { item } = state;
 
     if (disable) return;
     if (data.split) return;
-
-    item.unique = String().random();
+    if (index !== item.optIndex) item.unique = String().random();
 
     const _zhCN = `[${zhCN}]`;
     const _usEN = `[${usEN}]`;
@@ -175,12 +176,12 @@ const mutations = {
       } else {
         if (isNumber(price)) {
           item.single = parseFloat(price);
-        } else if (isNumber(item.price[data.index])) {
-          item.single = parseFloat(item.price[data.index]);
+        } else if (isNumber(item.price[index])) {
+          item.single = parseFloat(item.price[index]);
         } else if (isNumber(extra)) {
           item.single = parseFloat(item.price[0]) + parseFloat(extra);
         }
-
+        item.optIndex = index;
         item.total = item.single.toFixed(2);
 
         if (replace) {
@@ -212,8 +213,8 @@ const mutations = {
 
         if (isNumber(price)) {
           _item.single = parseFloat(price);
-        } else if (isNumber(item.price[data.index])) {
-          _item.single = parseFloat(item.price[data.index]);
+        } else if (isNumber(item.price[index])) {
+          _item.single = parseFloat(item.price[index]);
         } else if (isNumber(extra)) {
           _item.single =
             parseFloat(item.price[0]) + parseFloat(data.side.extra);
@@ -224,14 +225,14 @@ const mutations = {
         const dom = document.querySelector("li.item.active");
         dom && dom.classList.remove("active");
 
-        const index =
+        const idx =
           state.order.content.findIndex(i => i.unique === item.unique) + 1;
 
-        state.order.content.splice(index, 0, _item);
+        state.order.content.splice(idx, 0, _item);
         state.item = _item;
 
         setTimeout(() =>
-          document.querySelectorAll("li.item")[index].classList.add("active")
+          document.querySelectorAll("li.item")[idx].classList.add("active")
         );
       }
     }

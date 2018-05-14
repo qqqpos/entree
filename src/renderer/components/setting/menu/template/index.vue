@@ -22,8 +22,9 @@
 <script>
 import external from "../../common/external";
 import creator from "../component/templateCreator";
+import pagination from "../../../common/pagination";
 export default {
-  components: { external, creator },
+  components: { external, creator, pagination },
   data() {
     return {
       list: this.$store.getters.templates,

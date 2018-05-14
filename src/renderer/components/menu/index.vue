@@ -293,9 +293,9 @@ export default {
       !this.app.newTicket && Object.assign(item, { new: true });
 
       this.checkItemAvailable(item)
+        .then(this.conditionalPrice)
         .then(this.checkOption)
         .then(this.checkItemType)
-        .then(this.conditionalPrice)
         .then(this.addToOrder)
         .catch(this.specialItemHandler.bind(null, item));
     },
@@ -329,7 +329,7 @@ export default {
         this.seats.length > 0 && Object.assign(item, { seat: this.seat });
 
         item.option && this.setSides(this.fillOption(item.option));
-        Object.assign(item, { side: {} });
+        Object.assign(item, { side: {}, optIndex: 0 });
 
         if (item.manual) {
           next(item);

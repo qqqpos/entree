@@ -24,7 +24,7 @@
           <inputer title="text.alias" v-model.trim="coupon.alias" :length="27"></inputer>
           <inputer title="text.content" v-model="coupon.description" type="textarea"></inputer>
           <inputer title="text.couponCode" v-model="coupon.code"></inputer>
-          <inputer title="text.customFooter" v-model="coupon.footer" type="textarea"></inputer>
+          <!-- <inputer title="text.customFooter" v-model="coupon.footer" type="textarea"></inputer> -->
           <template v-if="coupon.type === 'giveaway'">
             <selector title="text.search" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference"></selector>
             <div class="items" v-show="coupon.reference.length">
