@@ -183,7 +183,7 @@ export default {
                 "WIRELESS",
                 "CELL PHONE",
                 "UNKNOWN"
-              ].some(verb => name.contains(verb))
+              ].some(verb => name.includes(verb))
             ) {
               name = "";
             }
