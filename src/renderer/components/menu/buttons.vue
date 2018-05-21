@@ -535,7 +535,6 @@ export default {
               item.diffs = "DIFFERENT";
               item.print = false;
               items.push(item);
-              console.log("current", item);
 
               //deep copy item
               item = JSON.parse(JSON.stringify(item));

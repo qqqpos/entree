@@ -6,7 +6,7 @@
       <name v-model="customer.name" @focus="setFocus"></name>
     </section>
     <section>
-      <street v-model="customer.address" :direction="customer.direction" :distance="customer.distance" :duration="customer.duration" @focus="setFocus" @query="$emit('query')"></street>
+      <street v-model="customer.address" :direction="customer.direction" :distance="customer.distance" :duration="customer.duration" :profile="customer.profiles ? customer.profiles.length : 0" @focus="setFocus" @query="$emit('query')"></street>
       <city v-model="customer.city" @focus="setFocus"></city>
     </section>
     <section>

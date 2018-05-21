@@ -1247,7 +1247,7 @@ export default {
     pickupList: "Pick Up List",
     portionDisplay: "Only display limited Data",
     groupByDepartments: "Group By Departments",
-    restrictionRules: "Restriction Rules",
+    restriction: "Restrictions",
     autoLogin: "Auto Login",
     recommendItem: "Recommend",
     distance: "Distance",

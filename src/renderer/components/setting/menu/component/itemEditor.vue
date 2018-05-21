@@ -83,7 +83,7 @@
             <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
             <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
             <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>
-            <external title="text.restrictionRules" @open="setRestriction" :defaultStyle="false"></external>
+            <external title="text.restriction" @open="setRestriction" :defaultStyle="false"></external>
           </div>
           <div class="side">
             <switches title="text.openFood" v-model="item.temporary"></switches>

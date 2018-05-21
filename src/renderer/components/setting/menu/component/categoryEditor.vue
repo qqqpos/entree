@@ -19,6 +19,10 @@
             <input type="radio" v-model="tab" value="rename" name="tab" id="rename" :disabled="!Array.isArray(category.contain)">
             <label for="rename">{{$t('text.rename')}}</label>
           </div>
+          <div>
+            <input type="radio" v-model="tab" value="restriction" name="tab" id="restriction" :disabled="!Array.isArray(category.contain)">
+            <label for="restriction">{{$t('text.restriction')}}</label>
+          </div>
         </nav>
       </header>
       <template v-if="tab === 'basic'">
@@ -41,11 +45,19 @@
           </div>
         </div>
       </template>
-      <template v-else>
+      <template v-else-if="tab === 'rename'">
         <div class="wrap">
           <div v-for="(category,index) in category.contain" :key="index">
             <h3>{{category}}</h3>
             <inputer title="text.alias" v-model="rename[index]" :placeholder="category"></inputer>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div class="wrap">
+          <div v-for="(category,index) in category.contain" :key="index">
+            <h3>{{category}}</h3>
+            <external title="tip.itemRestrictionRules" @open="setRestriction(category)" :defaultStyle="false"></external>
           </div>
         </div>
       </template>
@@ -55,20 +67,24 @@
         </div>
         <button class="btn" @click="confirm" v-if="tab === 'basic'">{{$t('button.done')}}</button>
         <button class="btn" @click="update" v-else-if="tab === 'print'">{{$t('button.apply')}}</button>
-        <button class="btn" @click="modify" v-else>{{$t('button.update')}}</button>
+        <button class="btn" @click="modify" v-else-if="tab === 'rename'">{{$t('button.update')}}</button>
+        <button class="btn" @click="apply" v-else>{{$t('button.apply')}}</button>
       </footer>
     </div>
+    <div :is="component" :init="componentData"></div>
   </div>
 </template>
 
 <script>
+import limitor from "./limitor";
 import inputer from "../../common/inputer";
 import checkbox from "../../common/checkbox";
 import switches from "../../common/switches";
+import external from "../../common/external";
 
 export default {
   props: ["init"],
-  components: { inputer, checkbox, switches },
+  components: { limitor, inputer, checkbox, switches, external },
   data() {
     return {
       tab: "basic",
@@ -76,7 +92,10 @@ export default {
       categories: this.init.categories,
       category: JSON.parse(JSON.stringify(this.init.category)),
       printers: Object.keys(this.$store.getters.config.printers),
+      component: null,
+      componentData: null,
       allowExit: true,
+      restrictions: {},
       rename: [],
       print: []
     };
@@ -113,6 +132,43 @@ export default {
         this.tab = "basic";
       });
     },
+    setRestriction(group) {
+      new Promise((resolve, reject) => {
+        const restrict = {
+          from: "09:00 AM",
+          to: "11:00 PM",
+          days: ["0", "1", "2", "3", "4", "5", "6"],
+          types: [
+            "WALK_IN",
+            "PICK_UP",
+            "DELIVERY",
+            "DINE_IN",
+            "HIBACHI",
+            "BUFFET",
+            "BAR",
+            "SALES",
+            "TO_GO"
+          ]
+        };
+        this.componentData = { resolve, reject, restrict };
+        this.component = "limitor";
+      })
+        .then(rule => {
+          this.restrictions[group] = rule;
+          this.$q();
+        })
+        .catch(del => {
+          if (del) {
+            this.restrictions[group] = null;
+          }
+          this.$q();
+        });
+    },
+    apply() {
+      this.allowExit = false;
+      this.tab = "basic";
+      this.$socket.emit("[CATEGORY] RESTRICTION", this.restrictions);
+    },
     exit() {
       if (this.allowExit) this.init.reject(false);
     }
@@ -127,7 +183,7 @@ header {
 }
 
 .categories {
-  height: 405px;
+  max-height: 405px;
   overflow: auto;
 }
 </style>

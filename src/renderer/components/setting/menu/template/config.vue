@@ -38,6 +38,9 @@ export default {
       disabled:true
     };
   },
+  beforeRouteLeave(to, from, next) {
+    this.$socket.emit("[TEMPLATE] SAVE", this.template, () => next());
+  },
   methods: {
     save() {
       this.$emit("reset");
@@ -65,7 +68,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-
-</style>

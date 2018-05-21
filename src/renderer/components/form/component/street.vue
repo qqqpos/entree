@@ -1,6 +1,6 @@
 <template>
   <div class="field-entry f3">
-    <h4>{{$t('text.address')}}</h4>
+    <h4>{{$t('text.address')}}<span v-show="profile > 1" class="profile">({{profile}})</span></h4>
     <div class="wrap" id="address">
       <div class="extra">
         <span v-show="direction">{{direction}}</span>
@@ -39,7 +39,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  props: ["value", "direction", "duration", "distance"],
+  props: ["value", "profile", "direction", "duration", "distance"],
   computed: {
     ...mapGetters(["customer"])
   },
@@ -91,7 +91,7 @@ export default {
     autoComplete(n) {
       const street = n
         .replace(/ +/g, " ")
-        .replace(/[\W_]+/g," ")
+        .replace(/[\W_]+/g, " ")
         .split(" ")
         .slice(1)
         .join(" ");
@@ -169,10 +169,14 @@ export default {
   color: #9e9e9e;
 }
 
-h4 {
+.profile {
+  margin-left: 5px;
+  color: #adb5bd;
+}
+/* h4 {
   display: flex;
   flex-direction: column;
-}
+} */
 
 ul.preset li {
   flex-direction: row;

@@ -2,7 +2,7 @@
     <div class="popupMask dark center setting" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <h3>{{$t('text.restrictionRules')}}</h3>
+                <h3>{{$t('text.restriction')}}</h3>
                 <h5>{{$t('tip.itemRestrictionRules')}}</h5>
             </header>
             <div class="wrap">

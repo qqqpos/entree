@@ -410,13 +410,13 @@ export default {
 
       switch (type) {
         case "openFood":
-          this.$p("temporaryItem", { item });
+          this.$open("temporaryItem", { item });
           break;
         case "marketPrice":
-          this.$p("modify", { item, marketPrice: true });
+          this.$open("modify", { item, marketPrice: true });
           break;
         case "weightFood":
-          this.$p("weightItem", { item });
+          this.$open("weightItem", { item });
           break;
         case "subMenu":
           item ? this.addToOrder(item) : (item = this.item);
@@ -426,7 +426,7 @@ export default {
           break;
         case "template":
           item ? this.addToOrder(item) : (item = this.item);
-          this.$p("templateItem", { side: item.option[index], item, index });
+          this.$open("templateItem", { side: item.option[index], item, index });
           break;
         case "dayRestricted":
         case "timeRestricted":

@@ -32,6 +32,9 @@ export default {
         database: true
       });
       window.appSocket = this.$socket;
+      // window.addEventListener("online", this.setDevice({ online: true }));
+      // window.addEventListener("offline", this.setDevice({ online: false }));
+
       this.setDevice({ online: navigator.onLine });
       ipcRenderer.send("Loading", this.$t("initial.findHost"));
     },

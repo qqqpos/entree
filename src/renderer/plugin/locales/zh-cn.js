@@ -1212,7 +1212,7 @@ export default {
     pickupList: "来取列表",
     portionDisplay: "只显示部分的数据",
     groupByDepartments: "按部门分类物品",
-    restrictionRules: "限制条件",
+    restriction: "限制条件",
     autoLogin: "自动登录",
     recommendItem: "推荐物品",
     distance: "距离",

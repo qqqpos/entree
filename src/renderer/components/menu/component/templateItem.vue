@@ -84,7 +84,9 @@ export default {
     retrieve() {
       const { choiceSet } = this.item;
 
-      let saved = Array.from({ length: this.template.contain.length }).map(_ => []);
+      let saved = Array.from({ length: this.template.contain.length }).map(
+        _ => []
+      );
 
       this.template.contain.forEach((page, index) => {
         page.contain.forEach(item => {
@@ -130,6 +132,26 @@ export default {
       item.qty = 0;
       this.itemCount[this.index] = this.items.reduce((a, c) => a + c.qty, 0);
       this.items.splice(index, 1, item);
+    },
+    setItemPrinter() {
+      if (this.item.choiceSet.length === 0) {
+        if(this.item.hasOwnProperty("defaultPrinter")){
+          this.item.printer = this.item.defaultPrinter;
+          delete this.item.defaultPrinter
+        }
+        return;
+      }
+
+      let printer = new Set();
+      this.item.choiceSet.forEach(
+        sub =>
+          Array.isArray(sub.print) &&
+          sub.print.forEach(name => printer.add(name))
+      );
+      Object.assign(this.item, {
+        defaultPrinter: JSON.parse(JSON.stringify(this.item.printer)),
+        printer
+      });
     },
     confirm() {
       this.saveItems(this.index);
@@ -182,6 +204,7 @@ export default {
         }
       });
 
+      this.template.dynamicPrint && this.setItemPrinter();
       this.init.resolve();
     },
     ...mapActions([

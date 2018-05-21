@@ -58,7 +58,7 @@ export default {
     };
   },
   beforeRouteLeave(to, from, next) {
-    this.$socket.emit("[TEMPLATE] SAVE", this.template, callback => next());
+    this.$socket.emit("[TEMPLATE] SAVE", this.template, () => next());
   },
   mounted() {
     setTimeout(() => {
