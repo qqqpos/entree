@@ -395,8 +395,8 @@ export default {
           }
         }
 
-        if (this.order.hasOwnProperty("$delivery"))
-          delivery = this.order.$delivery;
+        if (this.order.hasOwnProperty("deliveryFee"))
+          delivery = this.order.deliveryFee;
       }
 
       let {
@@ -476,8 +476,8 @@ export default {
           gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
         } catch (e) {}
 
-        if (this.order.hasOwnProperty("$gratuity"))
-          gratuity = this.order.$gratuity;
+        if (this.order.hasOwnProperty("gratuityFee"))
+          gratuity = this.order.gratuityFee;
       } else {
         gratuity = 0;
       }

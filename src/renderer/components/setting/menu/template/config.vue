@@ -15,6 +15,7 @@
         <text-input title="text.alias" v-model="template.name" :disabled="disabled"></text-input>
         <text-input title="text.note" v-model="template.note"></text-input>
         <toggle title="text.insert" tooltip="tip.insertTemplateItem" v-model="template.insert"></toggle>
+        <toggle title="text.dynamicPrint" tooltip="tip.dynamicPrint" v-model="template.dynamicPrint"></toggle>
         <toggle title="text.autoJump" tooltip="tip.autoJumpNext" v-model="template.autoJump"></toggle>
         <external title="text.contain" @open="$router.push({name:'Setting.template.item'})"></external>
         <div :is="component" :init="componentData"></div>

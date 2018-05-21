@@ -1057,6 +1057,7 @@ ul.autoComplete li {
 }
 .data-status h3 {
   font-size: 18px;
+  margin-bottom: 3px;
   color: #3c3c3c;
 }
 .data-status h5 {

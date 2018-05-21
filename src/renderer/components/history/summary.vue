@@ -224,7 +224,6 @@ export default {
   transition: background 0.22s linear;
 }
 .count {
-  margin-left: 5px;
   font-family: "Agency FB";
 }
 

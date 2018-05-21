@@ -37,16 +37,16 @@
             <span></span>
           </label>
         </div>
-        <div class="option">
+        <!-- <div class="option">
           <label class="f1" for="seat">{{$t('setting.seatOrder')}}</label>
           <label class="input-toggle" @change="toggleSeatOrder">
             <input type="checkbox" v-model="init.seatOrder" :disabled="true" id="seat">
             <span></span>
           </label>
-        </div>
+        </div> -->
       <div class="btns">
         <button @click="setDelivery" :disabled="order.type !== 'DELIVERY'">{{$t('button.setDelivery')}}</button>
-        <button @click="setGratuity" :disabled="(order.type !== 'DINE_IN' || order.type !== 'BAR' || order.type !== 'HIBACHI')">{{$t('button.setGratuity')}}</button>
+        <button @click="setGratuity" :disabled="!gratuitySettable">{{$t('button.setGratuity')}}</button>
       </div>
     </div>
     </transition>
@@ -107,9 +107,9 @@ export default {
         ? dom.classList.add("showCategory")
         : dom.classList.remove("showCategory");
     },
-    toggleSeatOrder() {
-      this.init.seatOrder = false;
-    },
+    // toggleSeatOrder() {
+    //   this.init.seatOrder = false;
+    // },
     setDelivery() {
       new Promise((resolve, reject) => {
         const title = "setting.delivery.charge";
@@ -118,11 +118,11 @@ export default {
         this.component = "inputer";
       })
         .then(_amount => {
-          this.setOrder({ $delivery: _amount });
+          this.setOrder({ deliveryFee: _amount });
           this.$q();
         })
         .catch(del => {
-          if (del) delete this.order.$delivery;
+          if (del) delete this.order.deliveryFee;
 
           this.$q();
         });
@@ -135,11 +135,11 @@ export default {
         this.component = "inputer";
       })
         .then(_amount => {
-          this.setOrder({ $gratuity: _amount });
+          this.setOrder({ gratuityFee: _amount });
           this.$q();
         })
         .catch(del => {
-          if (del) delete this.order.$gratuity;
+          if (del) delete this.order.gratuityFee;
 
           this.$q();
         });
@@ -147,6 +147,14 @@ export default {
     ...mapActions(["setConfig", "setOrder"])
   },
   computed: {
+    gratuitySettable() {
+      const correctType =
+        this.order.type === "DINE_IN" ||
+        this.order.type === "BAR" ||
+        this.order.type === "HIBACHI";
+        
+      return !this.init.gratuityFree && correctType;
+    },
     ...mapGetters(["config", "store", "order"])
   }
 };
@@ -208,7 +216,7 @@ export default {
 .btns button {
   padding: 15px 10px;
   margin: 0 5px;
-  font-family: 'Yuanti-SC';
+  font-family: "Yuanti-SC";
   background: linear-gradient(#fefefe, #cfd0d3);
   border-radius: 4px;
   box-shadow: 0 1px 3px #616161;

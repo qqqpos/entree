@@ -60,6 +60,7 @@ export const ALTER_ITEM = "ALTER_ITEM";
 export const SET_QTY = "SET_QTY";
 export const LESS_QTY = "LESS_QTY";
 export const MORE_QTY = "MORE_QTY";
+export const SPLIT_ITEM = "SPLIT_ITEM";
 export const SET_CHOICE_SET = "SET_CHOICE_SET";
 export const ALERT_CHOICE_SET = "ALERT_CHOICE_SET";
 export const ALTER_ITEM_OPTION = "ALTER_ITEM_OPTION";

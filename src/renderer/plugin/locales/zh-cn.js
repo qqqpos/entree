@@ -1215,7 +1215,8 @@ export default {
     restrictionRules: "限制条件",
     autoLogin: "自动登录",
     recommendItem: "推荐物品",
-    distance: "距离"
+    distance: "距离",
+    dynamicPrint: "动态打印"
   },
   nav: {
     store: "店面",
@@ -1573,6 +1574,7 @@ export default {
     autoLogin: "自动尝试用当前的密码登录用户",
     itemRestrictionRules: "允许物品选择条件",
     insertTemplateItem: "永远添加选中的物品",
+    dynamicPrint: "根据所选的子物品配置的集合打印",
     autoJumpNext: "满足条件时自动转跳到下一页",
     alphabetical: "按字母排序菜单 (中文则按拼音排序)",
     createSubMenuGroup: "创建一个子菜单组",

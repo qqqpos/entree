@@ -6,6 +6,7 @@
         <span class="name">{{item[language]}}</span>
         <span class="side">{{item.side[language]}}</span>
       </div>
+      <i class="fa fa-sort splitor" v-if="item.qty > 1 && item.choiceSet.length === 0" @click="splitItem(item)"></i>
       <span class="price">{{item.total | decimal}}</span>
     </div>
     <div class="sub" v-for="(set,index) in item.choiceSet" :key="index" @click.stop="adjustChoiceSet(set,$event)" :data-key="set.key">
@@ -71,6 +72,7 @@ export default {
     },
     ...mapActions([
       "setPointer",
+      "splitItem",
       "resetPointer",
       "resetChoiceSet",
       "setChoiceSetTarget"
@@ -124,20 +126,14 @@ li {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
 }
 
-.sub.target .item {
-  color: #fff;
-}
-
-.active .sub .item {
-  color: #fff;
-}
-
 .sub .price {
   min-width: 35px;
   padding-left: 4px;
   color: darkgray;
 }
 
+.sub.target .item,
+.active .sub .item,
 .active .price,
 .target .price {
   color: #fff;
@@ -203,5 +199,21 @@ li.disable {
 
 li.disable .side {
   color: #9e9e9e;
+}
+
+.splitor {
+  position: absolute;
+  right: 50px;
+  top: -9px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.44);
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+  box-shadow: 0 1px 1px #735448;
+}
+
+.active .splitor {
+  display: inline-block;
 }
 </style>

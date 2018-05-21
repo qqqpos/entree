@@ -110,7 +110,7 @@ const mutations = {
 
     if (state.item) {
       //if item has no options 
-      if (item._id === state.item._id && item.option.length === 0) {
+      if (item._id === state.item._id && item.option.length === 0 && state.item.choiceSet.length === 0) {
         state.item.total = (++state.item.qty * state.item.single).toFixed(2);
         return;
       }
@@ -143,6 +143,23 @@ const mutations = {
     const index = state.order.content.findIndex(item => item === state.item);
     state.order.content.splice(index, 1, item);
     state.item = item;
+  },
+  [types.SPLIT_ITEM](state,item){
+    state.item.total = (--state.item.qty * state.item.single).toFixed(2);
+
+    //clone
+    const index = state.order.content.findIndex(item => item === state.item) + 1;
+    let _item = JSON.parse(JSON.stringify(item));
+    _item.qty = 1;
+    _item.total = _item.single.toFixed(2);
+    _item.unique = String().random();
+    state.order.content.splice(index,0,_item);
+    
+    state.item = _item;
+
+    // setTimeout(() =>
+    //   document.querySelectorAll("li.item")[index].classList.add("active")
+    // );
   },
   [types.ALTER_ITEM_OPTION](state, data) {
     const { index } = data;

@@ -116,6 +116,8 @@ export const moreQty = ({ commit }) => commit(types.MORE_QTY);
 
 export const alterItem = ({ commit }, item) => commit(types.ALTER_ITEM, item);
 
+export const splitItem = ({ commit }, item) => commit(types.SPLIT_ITEM,item);
+
 export const alterItemOption = ({ commit }, data) => {
   data.side.sub
     ? commit(types.SET_CHOICE_SET, {
