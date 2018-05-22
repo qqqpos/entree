@@ -87,6 +87,8 @@ export default {
           Object.assign(this.record, {
             [target]: time.second(0).format("YYYY-MM-DD HH:mm:ss")
           });
+          target === "clockIn" &&
+            Object.assign(this.record, { date: time.format("YYYY-MM-DD") });
           this.$q();
         })
         .catch(() => this.$q());

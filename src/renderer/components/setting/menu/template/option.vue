@@ -7,7 +7,7 @@
                 <h3>{{$t('button.option')}}</h3>
             </header>
             <div class="wrap">
-                <inputer title="text.alias" v-model="option.name" :autoFocus="true" :test="10"></inputer>
+                <inputer title="text.alias" v-model="option.name" :autoFocus="true" :length="16"></inputer>
                 <inputer title="text.maxItem" v-model.number="option.max"></inputer>
                 <inputer title="text.startAt" v-model="option.startAt"></inputer>
                 <inputer title="text.overCharge" v-model="option.addition"></inputer>

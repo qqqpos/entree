@@ -638,6 +638,7 @@ export default {
     disableBatch: "过账功能被临时停用",
     refundConfirm: "退款确认",
     refundAmount: "您确定要执行退款操作吗？退款金额 $ {i}",
+    networkError: "网络发生错误! 信息: {i}",
     creditCard: {
       timeout: "交易超时",
       aborted: "交易被取消",
@@ -1216,7 +1217,8 @@ export default {
     autoLogin: "自动登录",
     recommendItem: "推荐物品",
     distance: "距离",
-    dynamicPrint: "动态打印"
+    dynamicPrint: "动态打印",
+    printAhead: "提前{i}分钟打印"
   },
   nav: {
     store: "店面",

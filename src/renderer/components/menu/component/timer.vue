@@ -8,34 +8,52 @@
         <div class="banner"></div>
         <div class="wrap">
             <div class="timer">
+              <div class="outer">
+                    <i class="fa fa-angle-up" @click="addMonth"></i>
+                    <span class="time extend">{{time[0]}}<span class="annot">{{timer | moment('MMMM')}}</span></span>
+                    <i class="fa fa-angle-down" @click="subMonth"></i>
+                </div>
+                <div class="outer">
+                    <i class="fa fa-angle-up" @click="addDay"></i>
+                    <span class="time extend">{{time[1]}}<span class="annot">{{timer | moment('ddd')}}</span></span>
+                    <i class="fa fa-angle-down" @click="subDay"></i>
+                </div>
                 <div class="outer">
                     <i class="fa fa-angle-up" @click="addHour(10)"></i>
-                    <span class="time">{{time[0]}}</span>
+                    <span class="time">{{time[2]}}</span>
                     <i class="fa fa-angle-down" @click="subHour(10)"></i>
                 </div>
                 <div class="outer">
                     <i class="fa fa-angle-up" @click="addHour(1)"></i>
-                    <span class="time">{{time[1]}}</span>
+                    <span class="time">{{time[3]}}</span>
                     <i class="fa fa-angle-down" @click="subHour(1)"></i>
                 </div>
                 <div class="blink">:</div>
                 <div class="outer">
                     <i class="fa fa-angle-up" @click="addMin(10)"></i>
-                    <span class="time">{{time[2]}}</span>
+                    <span class="time">{{time[4]}}</span>
                     <i class="fa fa-angle-down" @click="subMin(10)"></i>
                 </div>
                 <div class="outer">
                     <i class="fa fa-angle-up" @click="addMin(1)"></i>
-                    <span class="time">{{time[3]}}</span>
+                    <span class="time">{{time[5]}}</span>
                     <i class="fa fa-angle-down" @click="subMin(1)"></i>
                 </div>
+                <div class="outer">
+                    <i class="fa fa-angle-up" @click="setAM"></i>
+                    <span class="time">{{time[6]}}</span>
+                    <i class="fa fa-angle-down" @click="setPM"></i>
+                </div>
             </div>
-            <div class="option">
+            <div class="option relative">
               <ul>
                 <li @click="setTimer(30)">{{$t('text.setTime',30)}}</li>
                 <li @click="setTimer(45)">{{$t('text.setTime',45)}}</li>
                 <li @click="setTimer(90)">{{$t('text.setTime',90)}}</li>
+                <li @click="setTimer(120)">{{$t('text.setTime',120)}}</li>
+                <li @click="setTimer(150)">{{$t('text.setTime',150)}}</li>
               </ul>
+              <h5>{{$t('text.printAhead',ahead)}}</h5>
             </div>
               <slider v-model="ahead" :piecewise="true" :data="gaps" tooltip="hover" :dot-size="20"></slider>
         </div>
@@ -73,29 +91,58 @@ export default {
     };
   },
   created() {
-    this.time = this.timer.format("HHmm").split("");
+    this.generate();
   },
   methods: {
+    addMonth() {
+      this.timer.add(1, "M");
+      this.generate();
+    },
+    subMonth() {
+      this.timer.subtract(1, "M");
+      this.generate();
+    },
+    addDay() {
+      this.timer.add(1, "days");
+      this.generate();
+    },
+    subDay() {
+      this.timer.subtract(1, "days");
+      this.generate();
+    },
     addHour(t) {
       this.timer.add(t, "hours");
-      this.time = this.timer.format("HHmm").split("");
+      this.generate();
     },
     subHour(t) {
       this.timer.subtract(t, "hours");
-      this.time = this.timer.format("HHmm").split("");
+      this.generate();
     },
     addMin(t) {
       this.timer.add(t, "minutes");
-      this.time = this.timer.format("HHmm").split("");
+      this.generate();
     },
     subMin(t) {
       this.timer.subtract(t, "minutes");
-      this.time = this.timer.format("HHmm").split("");
+      this.generate();
+    },
+    setAM() {
+      ~~this.timer.format("H") > 12 && this.subHour(12);
+    },
+    setPM() {
+      ~~this.timer.format("H") < 12 && this.addHour(12);
+    },
+    generate() {
+      let time = this.timer.format("hhmm").split("");
+      time.push(this.timer.locale("en").format("A"));
+      time.unshift(this.timer.format("D"));
+      time.unshift(this.timer.format("M"));
+      this.time = time;
     },
     setTimer(t) {
       this.timer = moment();
       this.timer.add(t, "minutes");
-      this.time = this.timer.format("HHmm").split("");
+      this.generate();
     },
     verify() {
       this.combineTime()
@@ -109,7 +156,11 @@ export default {
         this.component = "calendar";
       })
         .then(date => {
-          this.date = date;
+          date = date.split("-");
+          this.timer.year(~~date[0]);
+          this.timer.month(date[1] - 1);
+          this.timer.date(~~date[2]);
+          this.generate();
           this.$q();
         })
         .catch(() => this.$q());
@@ -270,10 +321,6 @@ export default {
 </script>
 
 <style scoped>
-.wrap {
-  width: 400px;
-}
-
 .timer {
   display: flex;
   justify-content: center;
@@ -311,6 +358,21 @@ export default {
   width: 50px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 58px;
+}
+
+.time.extend {
+  width: 65px;
+}
+
+.annot {
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Yuanti-SC";
+  color: #bdbdbd;
 }
 
 .outer i {
@@ -326,6 +388,18 @@ export default {
 
 .option {
   border-top: 1px solid #fff;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.option h5 {
+  position: absolute;
+  background: #fafafa;
+  left: calc(50% - 80px);
+  text-align: center;
+  width: 160px;
+  bottom: -8px;
 }
 
 ul {

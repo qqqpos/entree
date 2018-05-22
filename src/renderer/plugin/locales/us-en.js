@@ -756,6 +756,7 @@ export default {
     disableBatch: "Temporary Disable Batch Function",
     refundConfirm: "Refund Confirm",
     refundAmount: "Are you wish to refund $ {i} to the customer?",
+    networkError: "Network Error! Error Message: {i}",
     creditCard: {
       timeout: "Transaction Timeout",
       aborted: "Transaction Aborted",
@@ -1251,7 +1252,8 @@ export default {
     autoLogin: "Auto Login",
     recommendItem: "Recommend",
     distance: "Distance",
-    dynamicPrint: "Dynamic Print"
+    dynamicPrint: "Dynamic Print",
+    printAhead: "Print Ahead In {i} Minutes"
   },
   nav: {
     store: "Store",

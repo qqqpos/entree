@@ -111,6 +111,7 @@ li {
 
 .sub .item {
   color: #666;
+  max-width: 245px;
 }
 
 .sub .item:before {

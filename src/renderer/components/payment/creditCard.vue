@@ -67,7 +67,7 @@ export default {
       });
     },
     initTransaction(initial) {
-      return new Promise((next, reject) => {
+      return new Promise((next, stop) => {
         this.device = this.terminal.check(initial);
 
         if (this.device.code !== "000000") {
@@ -88,7 +88,10 @@ export default {
 
           this.terminal
             .charge(this.init.card)
-            .then(response => next(response.data));
+            .then(response => next(response.data))
+            .catch(error =>
+              stop({ error: "NETWORK_ERROR", data: error.response.status })
+            );
         }
       });
     },
@@ -131,6 +134,12 @@ export default {
         case "TRANSACTION_FAILED":
           this.msg = this.$t(data.msg);
           this.tip = data.error ? data.error : "";
+          setTimeout(() => {
+            this.init.reject();
+          }, 2500);
+          break;
+        case "NETWORK_ERROR":
+          this.msg = this.$t("terminal.networkError", data);
           setTimeout(() => {
             this.init.reject();
           }, 2500);

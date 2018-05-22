@@ -547,10 +547,8 @@ export default {
                 set => !oldSet.includes(set.unique)
               );
               item.choiceSet.forEach(subitem => {
-                if (subitem.hasOwnProperty("print")) {
+                subitem.hasOwnProperty("print") &&
                   subitem.print.forEach(name => printer.add(name));
-                  subitem.print = [];
-                }
               });
 
               if (Array.from(printer).length > 0) {
@@ -574,7 +572,7 @@ export default {
       });
 
       const itemsUniques = items.map(item => item.unique);
-      let removedItems = []
+      let removedItems = [];
       oldContent.forEach(item => {
         !itemsUniques.includes(item.unique) &&
           removedItems.push(

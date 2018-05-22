@@ -1,27 +1,29 @@
 <template>
-    <transition class="fadeIn">
-        <ul v-show="trend.length > 0">
-            <li class="head">
-                <h3 class="f1">{{$t('text.itemTrend')}}</h3>
-                <i class="fa fa-sort" @click="reverse"></i>
-            </li>
-            <li class="stats" v-for="(item,index) in items" :key="index" @click="$emit('edit',item)">
-                <h5 class="name">{{item[language] || item.usEN}}</h5>
-                <div>
-                    <progress :max="max" :value="item.count"></progress>
-                    <span class="count">{{item.count}}</span>
-                </div>
-            </li>
-            <li class="footer">
-                <span class="total">{{$t('text.items',trend.length)}}</span>
-                <div class="wrap">
-                    <i class="fa fa-angle-left page" @click="prev"></i>
-                    <i class="fa fa-angle-right page" @click="next"></i>
-                </div>
-            </li>
-        </ul>
-    </transition>
-
+  <div>
+    <transition class="fade" appear>
+          <ul v-show="trend.length > 0">
+              <li class="head">
+                  <h3 class="f1">{{$t('text.itemTrend')}}</h3>
+                  <i class="fa fa-sort" @click="reverse"></i>
+              </li>
+              <li class="stats" v-for="(item,index) in items" :key="index" @click="getTrend(item)">
+                  <h5 class="name">{{item[language] || item.usEN}}</h5>
+                  <div>
+                      <progress :max="max" :value="item.count"></progress>
+                      <span class="count">{{item.count}}</span>
+                  </div>
+              </li>
+              <li class="footer">
+                  <span class="total">{{$t('text.items',trend.length)}}</span>
+                  <div class="wrap">
+                      <i class="fa fa-angle-left page" @click="prev"></i>
+                      <i class="fa fa-angle-right page" @click="next"></i>
+                  </div>
+              </li>
+          </ul>
+      </transition>
+      <div :is="component" :init="componentData"></div>
+  </div>
 </template>
 
 <script>
@@ -29,9 +31,11 @@ export default {
   data() {
     return {
       language: this.$store.getters.language,
+      componentData: null,
+      component: null,
+      trend: [],
       max: 100,
-      page: 0,
-      trend: []
+      page: 0
     };
   },
   computed: {
@@ -78,6 +82,11 @@ export default {
       const pages = Math.floor(this.trend.length / 17);
       if (this.page === pages) return;
       this.page++;
+    },
+    getTrend(item){
+      this.$socket.emit("[TREND] WEEKLY",item._id,data=>{
+        
+      })
     }
   }
 };
