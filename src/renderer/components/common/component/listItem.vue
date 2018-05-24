@@ -6,7 +6,7 @@
         <span class="name">{{item[language]}}</span>
         <span class="side">{{item.side[language]}}</span>
       </div>
-      <i class="fa fa-sort splitor" v-if="item.qty > 1 && item.choiceSet.length === 0" @click="splitItem(item)"></i>
+      <i class="fa fa-sort splitor" v-if="splitBtnVisible" @click="splitItem(item)"></i>
       <span class="price">{{item.total | decimal}}</span>
     </div>
     <div class="sub" v-for="(set,index) in item.choiceSet" :key="index" @click.stop="adjustChoiceSet(set,$event)" :data-key="set.key">
@@ -29,6 +29,13 @@ export default {
   props: ["item", "ignore", "checkbox"],
   components: { checkbox },
   computed: {
+    splitBtnVisible() {
+      return (
+        this.$route.name === "Menu" &&
+        this.item.qty > 1 &&
+        this.item.choiceSet.length === 0
+      );
+    },
     ...mapGetters(["language", "choiceSet"])
   },
   methods: {

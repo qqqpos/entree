@@ -135,22 +135,30 @@ export default {
     },
     setItemPrinter() {
       if (this.item.choiceSet.length === 0) {
-        if(this.item.hasOwnProperty("defaultPrinter")){
+        if (this.item.hasOwnProperty("defaultPrinter")) {
           this.item.printer = this.item.defaultPrinter;
-          delete this.item.defaultPrinter
+          delete this.item.defaultPrinter;
         }
         return;
       }
 
       let printer = new Set();
+      let printerSet = {};
       this.item.choiceSet.forEach(
         sub =>
           Array.isArray(sub.print) &&
           sub.print.forEach(name => printer.add(name))
       );
+      Array.from(printer).forEach(name => {
+        printerSet[name] = {
+          replace: false
+        };
+      });
       Object.assign(this.item, {
-        defaultPrinter: JSON.parse(JSON.stringify(this.item.printer)),
-        printer
+        defaultPrinter: this.item.hasOwnProperty("defaultPrinter")
+          ? this.item.defaultPrinter
+          : JSON.parse(JSON.stringify(this.item.printer)),
+        printer: printerSet
       });
     },
     confirm() {
@@ -205,6 +213,7 @@ export default {
       });
 
       this.template.dynamicPrint && this.setItemPrinter();
+      console.log(this.item);
       this.init.resolve();
     },
     ...mapActions([

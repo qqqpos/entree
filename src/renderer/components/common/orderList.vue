@@ -8,10 +8,29 @@
     <header v-else class="info">
       <div class="content">
         <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
-          <span class="table">{{order.table}} - {{order.guest}} - {{order.server}}</span>
+          <!-- <span class="table">{{order.table}} - {{order.guest}} - {{order.server}}</span>
           <span class="time">{{order.time | moment('YYYY-MM-DD HH:mm:ss')}}</span>
           <span class="corner" v-if="undoneItems">{{$t('text.progressTicket',undoneItems)}}</span>
-          <span class="corner" v-else>{{$t('text.doneTicket')}}</span>
+          <span class="corner" v-else>{{$t('text.doneTicket')}}</span> -->
+          <div class="detail">
+            <p>
+                <i class="fa fa-user"></i>
+                <span class="filed">{{order.server}}</span>
+                <i class="fa fa-clock-o"></i>
+                <span>{{order.time | moment('MMM DD HH:mm:ss')}}</span>
+              </p>
+              <p>
+                <i class="fa fa-eercast"></i>
+                <span class="filed">{{order.table}}</span>
+                <i class="fa fa-users"></i>
+                <span class="name">{{order.guest}}</span>
+              </p>
+              <p>
+                <i class="fa fa-bullhorn"></i>
+                <span v-if="undoneItems" class="status">{{$t('text.progressTicket',undoneItems)}}</span>
+                <span v-else class="status">{{$t('text.doneTicket')}}</span>
+              </p>
+          </div>
         </template>
         <template v-else>
           <template v-if="order.customer">
@@ -687,13 +706,14 @@ header.info {
 }
 
 .bar {
-  height: 26px;
-  background: #607d8b;
+  height: 25px;
+  background: #009688;
   display: flex;
   align-items: center;
   color: #fafafa;
   position: relative;
   text-shadow: 0 1px 1px #333;
+  border-bottom: 1px solid #00897b;
 }
 
 .table {
@@ -867,7 +887,7 @@ header.info {
 }
 
 .detail i {
-  color: #b0bec5;
+  color: #607d8b;
   width: 25px;
   text-align: center;
 }
@@ -885,13 +905,9 @@ header.info {
   font-weight: bold;
 }
 
-.content .corner {
-  position: absolute;
-  right: 5px;
-  bottom: 26px;
+.status {
   color: #e06d40;
   font-size: 14px;
-  font-style: italic;
   font-weight: bold;
 }
 

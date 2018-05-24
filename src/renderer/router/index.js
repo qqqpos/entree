@@ -114,6 +114,11 @@ export default new Router({
                       component: require("../components/setting/store/sub/delivery")
                     },
                     {
+                      path: "thirdParty",
+                      name: "Setting.store.thirdParty",
+                      component: require("../components/setting/store/sub/thirdParty")
+                    },
+                    {
                       path: "dinein",
                       name: "Setting.store.dinein",
                       component: require("../components/setting/store/dinein")

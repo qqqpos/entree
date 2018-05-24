@@ -29,9 +29,7 @@
         <template v-if="tab === 'overview'">
           <div class="wrap" :key="0">
             <div class="statistics">
-              <div class="chart">
-                <!-- <line-chart :chart-data="collection"></line-chart> -->
-              </div>
+              <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
             </div>
           </div>
         </template>
@@ -328,11 +326,17 @@ export default {
       return new Promise(next => {
         this.setDate = document.querySelector("#calendar .text").innerHTML;
 
-        if(this.setDate !== this.today){
+        if (this.setDate !== this.today) {
           this.dateRange = {
-            from:+moment(this.setDate,"YYYY-MM-DD",true).set({ hour: 4, minute: 0, second: 0 }),
-            to:+moment(this.setDate,"YYYY-MM-DD",true).add(1,'days').set({ hour: 4, minute: 0, second: 0 })
-          }
+            from: +moment(this.setDate, "YYYY-MM-DD", true).set({
+              hour: 4,
+              minute: 0,
+              second: 0
+            }),
+            to: +moment(this.setDate, "YYYY-MM-DD", true)
+              .add(1, "days")
+              .set({ hour: 4, minute: 0, second: 0 })
+          };
         }
 
         this.$socket.emit("[REPORT] INITIAL_DATA", this.dateRange, data => {
@@ -425,11 +429,13 @@ export default {
         let tax = 0;
         let total = 0;
         Object.keys(department).forEach(key => {
-          if (department[key].hasOwnProperty("subtotal")) subtotal += department[key].subtotal;
+          if (department[key].hasOwnProperty("subtotal"))
+            subtotal += department[key].subtotal;
 
           if (department[key].hasOwnProperty("tax")) tax += department[key].tax;
 
-          if (department[key].hasOwnProperty("total")) total += department[key].total;
+          if (department[key].hasOwnProperty("total"))
+            total += department[key].total;
         });
 
         Object.assign(department, { subtotal, tax, total });
@@ -483,31 +489,85 @@ export default {
         }
       });
 
-      let data = [];
-      const labels = Object.keys(hours).map(
-        hour => `${("0" + hour).slice(-2)}:00`
-      );
+      let dataProvider = [];
 
       Object.keys(hours).forEach(hour =>
-        data.push(toFixed(hours[hour].value, 2))
+        dataProvider.push({
+          time: `${("0" + hour).slice(-2)}:00`,
+          count: hours[hour].count,
+          amount: hours[hour].value.toFixed(2)
+        })
       );
-
-      this.collection = {
-        labels,
-        datasets: [
+      const chart = AmCharts.makeChart(this.$refs.chart, {
+        path:
+          process.env.NODE_ENV === "development"
+            ? "dist/electron/amcharts/"
+            : undefined,
+        type: "serial",
+        addClassNames: true,
+        autoMargins: true,
+        valueAxes: [
           {
-            backgroundColor: "rgba(255, 99, 132, 0.1)",
-            borderColor: "rgb(255, 99, 132)",
-            data,
-            fill: "start",
-            label: this.$t("report.hourlyReport"),
-            cubicInterpolationMode: "monotone",
-            borderWidth: 4,
-            pointHoverRadius: 10,
-            pointStyle: "none"
+            id: "amountAxis",
+            axisAlpha: 0,
+            gridAlpha: 0,
+            position: "left",
+            title: "Sales"
+          },
+          {
+            id: "countAxis",
+            axisAlpha: 0,
+            gridAlpha: 0,
+            position: "right",
+            title: "Ticket Counts"
           }
-        ]
-      };
+        ],
+        graphs: [
+          {
+            alphaField: "alpha",
+            balloonText:
+              "<span style='font-size:12px;'>[[title]] at [[category]]<br><span style='font-size:18px;'>[[value]]</span></span>",
+            dashLengthField: "dashLength",
+            fillAlphas: 0.7,
+            legendPeriodValueText: "Sales Total: [[value]]",
+            legendValueText: "[[value]]",
+            title: "Sales total",
+            type: "column",
+            valueField: "amount",
+            valueAxis: "amountAxis"
+          },
+          {
+            bullet: "square",
+            balloonText:
+              "<span style='font-size:12px;'>[[title]] at [[category]]<br><span style='font-size:18px;'>[[value]]</span></span>",
+            bulletBorderAlpha: 1,
+            bulletBorderThickness: 1,
+            dashLengthField: "dashLength",
+            legendValueText: "[[value]] tickets",
+            title: "Ticket count",
+            fillAlphas: 0,
+            valueField: "count",
+            valueAxis: "countAxis"
+          }
+        ],
+        chartCursor: {
+          categoryBalloonDateFormat: "DD",
+          cursorAlpha: 0.1,
+          cursorColor: "#000000",
+          fullWidth: true,
+          valueBalloonsEnabled: false,
+          zoomable: false
+        },
+        categoryField: "time",
+        fontFamily: "Yuanti-SC",
+        startEffect: "easeOutSine",
+        startDuration: 1,
+        export: {
+          enabled: true,
+          fileName: this.setDate + " Hourly Sales"
+        },
+        dataProvider
+      });
     },
     transactionDetail(transactions) {
       let creditcards = [];

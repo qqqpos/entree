@@ -1,7 +1,8 @@
 <template>
   <div>
-    <external title="setting.tax" tooltip="tip.tax" @open="editTax"></external>
-    <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="editDelivery"></external>
+    <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
+    <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
+    <!-- <external title="setting.thirdParty" @open="$router.push({ name: 'Setting.store.thirdParty' })"></external> -->
     <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
     <text-list title="setting.defaultPaymentType" :opts="paymentTypes" v-model="store.defaultPaymentType" @update="updatePaymentType"></text-list>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
@@ -129,12 +130,6 @@ export default {
         key: 'store.defaultPaymentType',
         value
       })
-    },
-    editTax() {
-      this.$router.push({ name: "Setting.store.tax" });
-    },
-    editDelivery() {
-      this.$router.push({ name: 'Setting.store.delivery' });
     }
   }
 };

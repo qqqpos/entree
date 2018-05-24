@@ -30,3 +30,6 @@
         -修正了ALL YOU CAN EAT 子菜单打印错误
         -改进打卡屏幕编辑组件,现在可以调整日期 (HK JADE BUFFET)
         -改进定时组件，现在是12小时制，可以直接调整日期
+
+0.8.87 修正Dynamic Print 无法打印的错误
+        -Hourly Sales 图表已经可以在扎帐中查看
