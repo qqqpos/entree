@@ -2,8 +2,10 @@
     <div class="popupMask dark center setting" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <h3>{{$t('text.restriction')}}</h3>
-                <h5>{{$t('tip.itemRestrictionRules')}}</h5>
+                <div>
+                    <h3>{{$t('text.restriction')}}</h3>
+                    <h5>{{$t('tip.itemRestrictionRules')}}</h5>
+                </div>
             </header>
             <div class="wrap">
                 <selector title="text.from" v-model="init.restrict.from" :opts="hours"></selector>

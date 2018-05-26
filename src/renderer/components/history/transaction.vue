@@ -111,10 +111,19 @@ export default {
       return this.filteredTransactions.reduce((a, c) => a + c.tip, 0);
     },
     totalAmount() {
-      return this.filteredTransactions.reduce((a, c) => a + c.actual, 0);
+      return this.filteredTransactions.reduce((a, c) => {
+        switch (c.for) {
+          case "Order":
+            return a + c.actual;
+          case "Payout":
+            return a - c.actual;
+          default:
+            return a + c.acutal;
+        }
+      }, 0);
     },
-    reportable(){
-      return true//(!this.cashier && !this.server)
+    reportable() {
+      return true; //(!this.cashier && !this.server)
     },
     ...mapGetters(["op"])
   },
@@ -353,10 +362,10 @@ tfoot td {
 }
 
 td.name {
-    width: 99px;
-    height: 19px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  width: 99px;
+  height: 19px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

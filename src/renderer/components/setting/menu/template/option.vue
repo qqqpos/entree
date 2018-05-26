@@ -2,9 +2,10 @@
     <div class="popupMask setting center dark" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <h5 v-if="init.edit">{{$t('title.edit')}}</h5>
-                <h5 v-else>{{$t('title.create')}}</h5>
-                <h3>{{$t('button.option')}}</h3>
+                <div>
+                    <h5>{{$t(init.edit ? 'title.edit': 'title.create')}}</h5>
+                    <h3>{{$t('button.option')}}</h3>
+                </div>
             </header>
             <div class="wrap">
                 <inputer title="text.alias" v-model="option.name" :autoFocus="true" :length="16"></inputer>

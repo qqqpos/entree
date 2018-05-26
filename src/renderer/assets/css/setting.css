@@ -297,9 +297,8 @@ td.amount {
   border-bottom: 1px solid #eee;
   padding: 5px 25px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   height: 40px;
+  align-items: center;
 }
 
 header.tab {

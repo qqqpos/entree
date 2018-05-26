@@ -2,8 +2,10 @@
   <div class="popupMask dark center">
     <div class="editor">
       <header>
-        <h5>{{$t('title.create')}}</h5>
-        <h3>{{$t('title.split')}}</h3>
+        <div>
+          <h5>{{$t('title.create')}}</h5>
+          <h3>{{$t('title.split')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="wrap">

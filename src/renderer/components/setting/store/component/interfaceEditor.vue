@@ -2,8 +2,10 @@
   <div class="popupMask setting center dark" @click.self="init.reject">
     <div class="editor">
       <header>
-        <h5></h5>
-        <h3>{{$t('title.interface')}}</h3>
+        <div>
+          <h5></h5>
+          <h3>{{$t('title.interface')}}</h3>
+        </div>
       </header>
       <div class="wrap">
         <inputer v-model.trim="grid.head" title="text.title"></inputer>

@@ -2,8 +2,10 @@
     <div class="popupMask setting dark center" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <h5></h5>
-                <h3>{{$t('title.template')}}</h3>
+                <div>
+                    <h5></h5>
+                    <h3>{{$t('title.template')}}</h3>
+                </div>
             </header>
             <div class="wrap">
                 <inputer title="text.primary" v-model="item.usEN" :autoFocus="true" @keydown.enter.native="confirm"></inputer>

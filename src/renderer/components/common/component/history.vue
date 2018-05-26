@@ -2,8 +2,10 @@
     <div class="popupMask dark center" @click.self="init.reject">
         <div class="editor">
             <header>
-                <h5></h5>
-                <h3>{{$t('title.purchaseHistory')}}</h3>
+                <div>
+                    <h5></h5>
+                    <h3>{{$t('title.purchaseHistory')}}</h3>
+                </div>
             </header>
             <table class="event">
                 <thead>

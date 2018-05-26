@@ -2,7 +2,9 @@
   <div class="popupMask dark center setting" @click.self="init.reject">
       <div class="editor">
           <header>
-              <h3>{{$t('title.timer')}}</h3>
+              <div>
+                  <h3>{{$t('title.timer')}}</h3>
+              </div>
             </header>
             <div class="banner"></div>
             <div class="timer">

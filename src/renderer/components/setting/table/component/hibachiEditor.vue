@@ -2,21 +2,23 @@
   <div class="popupMask dark center" @click.self="init.reject(false)">
     <div class="editor">
       <header>
-        <h5 v-if="init.edit">{{$t('title.create')}}</h5>
-        <h5 v-else>{{$t('title.modify')}}</h5>
-        <h3>{{$t('title.hibachiTable')}}</h3>
+        <div>
+          <h5 v-if="init.edit">{{$t('title.create')}}</h5>
+          <h5 v-else>{{$t('title.modify')}}</h5>
+          <h3>{{$t('title.hibachiTable')}}</h3>
+        </div>
       </header>
       <div class="wrap">
         <inputer title="text.alias" v-model="init.group"></inputer>
         <div class="layout">
           <div class="left" @click="setLayout('left')">
-            <div class="seat" v-for="(seat,index) in left">
+            <div class="seat" v-for="(seat,index) in left" :key="index">
               <span>{{seat.name}}</span>
             </div>
           </div>
           <div class="middle"></div>
           <div class="right" @click="setLayout('right')">
-            <div class="seat" v-for="(seat,index) in right">
+            <div class="seat" v-for="(seat,index) in right" :key="index">
               <span>{{seat.name}}</span>
             </div>
           </div>

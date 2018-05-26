@@ -96,7 +96,7 @@ export default {
       this.order.settled
         ? this.handleSettledInvoice()
         : this.order.source === "POS"
-          ? this.$p("payment")
+          ? this.$open("payment")
           : this.askSettleType();
     },
     handleSettledInvoice() {
@@ -120,8 +120,8 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() => this.$p("paymentMarker"))
-        .catch(() => this.$p("payment", { regular: true }));
+        .then(() => this.$open("paymentMarker"))
+        .catch(() => this.$open("payment", { regular: true }));
     },
     discount() {
       this.$socket.emit("[COUPON] LIST", coupons => {

@@ -1,9 +1,11 @@
 <template>
-    <div class="popupMask dark center" @click.self="init.reject">
+    <div class="popupMask dark center setting" @click.self="init.reject">
         <div class="editor">
             <header>
-                <h5>{{$t('title.edit')}}</h5>
-                <h3>{{$t('print.printStyle')}}</h3>
+                <div>
+                    <h5>{{$t('title.edit')}}</h5>
+                    <h3>{{$t('print.printStyle')}}</h3>
+                </div>
             </header>
             <div class="wrap">
                 <selector title="print.fontFamily" v-model="language.fontFamily" :opts="fonts"></selector>

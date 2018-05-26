@@ -2,8 +2,10 @@
     <div class="popupMask dark center">
         <div class="editor">
             <header>
-                <h5>{{$t('title.create')}}</h5>
-                <h3>{{$t('dialog.temporaryTable')}}</h3>
+                <div>
+                    <h5>{{$t('title.create')}}</h5>
+                    <h3>{{$t('dialog.temporaryTable')}}</h3>
+                </div>
             </header>
             <div class="wrap">
                 <inputer title="text.alias" v-model="name" :autoFocus="true" @keydown.enter.native="confirm"></inputer>

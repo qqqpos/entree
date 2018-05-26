@@ -3,8 +3,10 @@
     <template v-if="results.length === 0">
       <div class="editor">
         <header>
-          <h5></h5>
-          <h3>{{$t('title.search')}}</h3>
+          <div>
+            <h5></h5>
+            <h3>{{$t('title.search')}}</h3>
+          </div>
         </header>
         <div class="banner"></div>
         <div class="wrap">
@@ -23,8 +25,10 @@
     <template v-else>
       <div class="editor">
         <header>
-          <h3>{{$t('card.giftCard')}}</h3>
-          <h5>{{$t('tip.foundRecords',results.length)}}</h5>
+          <div>
+            <h3>{{$t('card.giftCard')}}</h3>
+            <h5>{{$t('tip.foundRecords',results.length)}}</h5>
+          </div>
         </header>
         <div class="banner"></div>
         <div class="wrap">

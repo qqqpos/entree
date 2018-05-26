@@ -2,8 +2,10 @@
     <div class="popupMask dark center setting">
         <div class="editor">
             <header>
-                <h5></h5>
-                <h3></h3>
+                <div>
+                    <h5></h5>
+                    <h3></h3>
+                </div>
             </header>
             <div class="wrap">
 

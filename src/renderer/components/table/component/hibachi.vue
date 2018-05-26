@@ -2,14 +2,16 @@
   <div class="popupMask dark center" @click.self="init.reject">
     <div class="editor">
       <header>
-        <h5>{{$t('button.select')}}</h5>
-        <h3>{{$t('title.hibachiTable')}}</h3>
+        <div>
+          <h5>{{$t('button.select')}}</h5>
+          <h3>{{$t('title.hibachiTable')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="wrap">
         <div class="hibachi">
           <div class="left">
-            <div class="seat" v-for="(seat,index) in left" @click="select('left',seat)" @contextmenu="reset(seat)" :data-id="seat._id">
+            <div class="seat" v-for="(seat,index) in left" @click="select('left',seat)" @contextmenu="reset(seat)" :data-id="seat._id" :key="index">
               <span>{{seat.name}}</span>
               <template v-if="seat.session">
                 <span class="server">{{seat.server}}</span>
@@ -19,7 +21,7 @@
           </div>
           <div class="middle"></div>
           <div class="right">
-            <div class="seat" v-for="(seat,index) in right" @click="select('right',seat)" @contextmenu="reset(seat)" :data-id="seat._id">
+            <div class="seat" v-for="(seat,index) in right" @click="select('right',seat)" @contextmenu="reset(seat)" :data-id="seat._id" :key="index">
               <span>{{seat.name}}</span>
               <template v-if="seat.session">
                 <span class="server">{{seat.server}}</span>

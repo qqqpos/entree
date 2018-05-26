@@ -2,8 +2,10 @@
   <div class="popupMask setting dark center" @click.self="init.reject(false)">
     <div class="editor">
       <header>
-        <h5>{{$t('title.edit')}}</h5>
-        <h3>{{$t('title.table')}}</h3>
+        <div>
+          <h5>{{$t('title.edit')}}</h5>
+          <h3>{{$t('title.table')}}</h3>
+        </div>
       </header>
       <div class="wrap">
         <inputer title="table.name" v-model="init.table.name" :autoFocus="true"></inputer>

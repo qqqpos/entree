@@ -8,16 +8,12 @@
     <header v-else class="info">
       <div class="content">
         <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
-          <!-- <span class="table">{{order.table}} - {{order.guest}} - {{order.server}}</span>
-          <span class="time">{{order.time | moment('YYYY-MM-DD HH:mm:ss')}}</span>
-          <span class="corner" v-if="undoneItems">{{$t('text.progressTicket',undoneItems)}}</span>
-          <span class="corner" v-else>{{$t('text.doneTicket')}}</span> -->
           <div class="detail">
             <p>
                 <i class="fa fa-user"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fa fa-clock-o"></i>
-                <span>{{order.time | moment('MMM DD HH:mm:ss')}}</span>
+                <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
                 <i class="fa fa-eercast"></i>
@@ -39,7 +35,7 @@
                 <i class="fa fa-user"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fa fa-clock-o"></i>
-                <span>{{order.time | moment('MMM DD HH:mm')}}</span>
+                <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
                 <i class="fa fa-phone"></i>
@@ -212,16 +208,19 @@ export default {
 
       const taxFree =
         typeof this.order.taxFree === "boolean" ? this.order.taxFree : false;
-      const { deliveryFree = false, gratuityFree = false } = this.order;
+      const {
+        deliveryFree = false,
+        gratuityFree = false,
+        plasticBag = 1
+      } = this.order;
       const { menuID } = this.config.display;
-      const { seatOrder } = this.dinein;
 
       this.$p("config", {
         taxFree,
         deliveryFree,
         gratuityFree,
         menuID,
-        seatOrder
+        plasticBag
       });
     },
     getShortCutItems() {
@@ -707,13 +706,12 @@ header.info {
 
 .bar {
   height: 25px;
-  background: #009688;
+  background: #607d8b;
   display: flex;
   align-items: center;
   color: #fafafa;
   position: relative;
   text-shadow: 0 1px 1px #333;
-  border-bottom: 1px solid #00897b;
 }
 
 .table {

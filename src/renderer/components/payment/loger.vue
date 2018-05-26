@@ -2,8 +2,10 @@
   <div class="popupMask dark center">
     <div class="record">
       <header>
-        <h3>{{$t('title.payLog')}}</h3>
-        <h5>{{$t('tip.paidRecords',init.number,init.logs.length)}}</h5>
+        <div>
+          <h3>{{$t('title.payLog')}}</h3>
+          <h5>{{$t('tip.paidRecords',init.number,init.logs.length)}}</h5>
+        </div>
       </header>
       <table class="event">
         <thead>

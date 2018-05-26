@@ -2,8 +2,10 @@
     <div class="popupMask dark center setting" @click.self="init.resolve">
         <div class="editor">
             <header>
+              <div>
                 <h5>{{$t('nav.cashFlow')}}</h5>
                 <h3>{{$t('title.paymentHistory')}}</h3>
+              </div>
             </header>
             <table class="event">
                 <thead>
@@ -18,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(log,index) in logs">
+                    <tr v-for="(log,index) in logs" :key="index">
                         <td>{{log.time | moment('HH:mm:ss')}}</td>
                         <td>{{$t('flow.'+log.type)}}</td>
                         <td :class="{zero:log.inflow===0,in:log.inflow>0}">{{log.inflow | decimal}}</td>
@@ -69,8 +71,8 @@ export default {
     setPage(num) {
       this.page = num;
     },
-    print(){
-        Printer.printCashOutReport(this.init.log,false)
+    print() {
+      Printer.printCashOutReport(this.init.log, false);
     }
   }
 };

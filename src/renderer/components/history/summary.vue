@@ -104,6 +104,7 @@ export default {
   },
   computed: {
     summary() {
+      const server = this.op.name;
       const sum = (a, b) => a + b;
       let driver = {};
 
@@ -126,7 +127,7 @@ export default {
 
       const invoices = this.allInvoices
         ? this.data
-        : this.data.filter(t => t.server === this.op.name);
+        : this.data.filter(t => t.server === server);
 
       invoices.forEach(invoice => {
         const { tip, delivery, due } = invoice.payment;

@@ -37,13 +37,12 @@
             <span></span>
           </label>
         </div>
-        <!-- <div class="option">
-          <label class="f1" for="seat">{{$t('setting.seatOrder')}}</label>
-          <label class="input-toggle" @change="toggleSeatOrder">
-            <input type="checkbox" v-model="init.seatOrder" :disabled="true" id="seat">
-            <span></span>
-          </label>
-        </div> -->
+        <div class="option number" v-if="config.tax.plasticPenalty">
+          <label class="f1">{{$t('text.plasticBag')}}</label>
+          <i class="fa fa-minus-square" @click="lessBag"></i>
+          <span class="count">{{init.plasticBag}}</span>
+          <i class="fa fa-plus-square" @click="moreBag"></i>
+        </div>
       <div class="btns">
         <button @click="setDelivery" :disabled="order.type !== 'DELIVERY'">{{$t('button.setDelivery')}}</button>
         <button @click="setGratuity" :disabled="!gratuitySettable">{{$t('button.setGratuity')}}</button>
@@ -56,9 +55,11 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import inputer from "../../component/inputer";
+import range from "../../setting/common/range";
+
 export default {
   props: ["init"],
-  components: { inputer },
+  components: { inputer, range },
   mounted() {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
@@ -107,9 +108,14 @@ export default {
         ? dom.classList.add("showCategory")
         : dom.classList.remove("showCategory");
     },
-    // toggleSeatOrder() {
-    //   this.init.seatOrder = false;
-    // },
+    lessBag() {
+      if (this.init.plasticBag === 0) return;
+
+      this.setOrder({ plasticBag: --this.init.plasticBag });
+    },
+    moreBag() {
+      this.setOrder({ plasticBag: ++this.init.plasticBag });
+    },
     setDelivery() {
       new Promise((resolve, reject) => {
         const title = "setting.delivery.charge";
@@ -152,7 +158,7 @@ export default {
         this.order.type === "DINE_IN" ||
         this.order.type === "BAR" ||
         this.order.type === "HIBACHI";
-        
+
       return !this.init.gratuityFree && correctType;
     },
     ...mapGetters(["config", "store", "order"])
@@ -190,6 +196,16 @@ export default {
   align-items: center;
   height: 40px;
   padding: 0 25px;
+}
+
+.option.number {
+  padding: 0 0 0 25px;
+}
+
+.option.number i {
+  padding: 12px 13px;
+  color: #333;
+  cursor: pointer;
 }
 
 .option:last-child {

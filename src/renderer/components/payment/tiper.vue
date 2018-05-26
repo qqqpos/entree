@@ -2,8 +2,10 @@
   <div class="popupMask center dark" @click.self="init.reject">
     <div class="editor">
         <header>
-          <h5></h5>
-          <h3>{{$t('title.tip')}}</h3>
+          <div>
+            <h5></h5>
+            <h3>{{$t('title.tip')}}</h3>
+          </div>
         </header>
         <div class="banner"></div>
         <div class="display">

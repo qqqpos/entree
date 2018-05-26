@@ -2,8 +2,10 @@
   <div class="popupMask center dark" @click.self="init.reject">
     <div class="editor" v-show="!component">
       <header>
-        <h5>{{reportRange.from | moment('YYYY-MM-DD HH:mm')}} ~ {{reportRange.to | moment('YYYY-MM-DD HH:mm')}}</h5>
-        <h3>{{$t('title.report')}}</h3>
+        <div>
+          <h5>{{reportRange.from | moment('YYYY-MM-DD HH:mm')}} ~ {{reportRange.to | moment('YYYY-MM-DD HH:mm')}}</h5>
+          <h3>{{$t('title.report')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="inner">
@@ -831,21 +833,21 @@ export default {
 
       return report;
     },
-    cashierReport(data) {
-      const { invoices, transactions } = data;
+    cashierReport({ invoices, transactions }) {
       let cashiers = new Set();
+
       invoices
-        .filter(invoice => invoice.status === 1 && invoice.cashier)
-        .forEach(invoice => {
-          cashiers.add(invoice.cashier);
-        });
+        .filter(i => i.status === 1 && i.cashier)
+        .forEach(invoice => cashiers.add(invoice.cashier));
 
       let report = [];
 
       Array.from(cashiers).forEach(cashier => {
         const handledInvoice = invoices.filter(
-          invoice => invoice.status === 1 && invoice.cashier === cashier
+          i => i.status === 1 && i.cashier === cashier
         );
+        const handledTrans = transactions.filter(t => t.cashier === cashier);
+
         report.push({
           text: this.$t("report.cashier"),
           style: "bold",
@@ -853,21 +855,24 @@ export default {
         });
 
         report.push({
+          text: this.$t("report.tips"),
+          style: "",
+          value: handledTrans.reduce((a, c) => a + c.tip, 0).toFixed(2)
+        });
+
+        report.push({
           text: this.$t("report.handleInvoice"),
-          style: "total",
+          style: "",
           value: handledInvoice.length
         });
 
         report.push({
           text: this.$t("report.expectTotal"),
-          style: "space",
+          style: "",
           value: handledInvoice
-            .map(i => i.payment.subtotal + i.payment.tax)
-            .reduce((a, b) => a + b, 0)
+            .reduce((a, c) => a + (c.payment.subtotal + c.payment.tax), 0)
             .toFixed(2)
         });
-
-        const handledTrans = transactions.filter(t => t.cashier === cashier);
 
         let types = new Set();
         let actualAmount = 0;
@@ -877,7 +882,9 @@ export default {
 
         Array.from(types).forEach(type => {
           const amount = handledTrans
-            .filter(t => t.subType === type || t.type === type)
+            .filter(
+              t => t.subType === type || (t.type === type && t.for === "Order")
+            )
             .map(t => t.actual)
             .reduce((a, b) => a + b, 0);
 
@@ -892,18 +899,29 @@ export default {
 
         report.push({
           text: this.$t("report.actualTotal"),
-          style: "bold total space",
+          style: "bold total",
           value: "$ " + actualAmount.toFixed(2)
         });
 
-        report.push({
-          text: this.$t("report.tips"),
-          style: "",
-          value: handledTrans
-            .map(t => t.tip)
-            .reduce((a, b) => a + b, 0)
-            .toFixed(2)
-        });
+        const payoutAmount = handledTrans
+          .filter(t => t.for === "Payout")
+          .reduce((a, c) => a + c.actual, 0);
+
+        payoutAmount > 0 &&
+          report.push({
+            text: this.$t("report.payout"),
+            style: "",
+            value: "- " + payoutAmount.toFixed(2)
+          });
+
+        const grandTotal = actualAmount - payoutAmount;
+
+        grandTotal !== actualAmount &&
+          report.push({
+            text: this.$t("report.total"),
+            style: "space total",
+            value: "$ " + grandTotal.toFixed(2)
+          });
       });
       return report;
     },

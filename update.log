@@ -33,3 +33,6 @@
 
 0.8.87 修正Dynamic Print 无法打印的错误
         -Hourly Sales 图表已经可以在扎帐中查看
+        -塑料袋数量现在可以自行调整
+        -改进扎帐组件(改动中)
+        -修正cashier report的计算错误问题

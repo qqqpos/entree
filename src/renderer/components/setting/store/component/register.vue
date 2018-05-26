@@ -2,9 +2,12 @@
     <div class="popupMask dark center setting" @click.self="init.reject">
         <div class="editor">
             <header>
+              <div>
                 <h5></h5>
                 <h3>{{$t('title.registration')}}</h3>
+              </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <inputer title="text.storeName" v-model.trim="name"></inputer>
                 <inputer title="text.licenseKey" v-model.trim="key"></inputer>

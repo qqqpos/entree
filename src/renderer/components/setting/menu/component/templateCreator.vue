@@ -2,8 +2,10 @@
   <div class="popupMask setting center dark" @click.self="init.reject">
     <div class="editor">
       <header>
-        <h5>{{$t('title.create')}}</h5>
-        <h3>{{$t('title.template')}}</h3>
+        <div>
+          <h5>{{$t('title.create')}}</h5>
+          <h3>{{$t('title.template')}}</h3>
+        </div>
       </header>
       <div class="wrap">
         <inputer title="text.alias" v-model="init.template.name" :autoFocus="true" @keydown.enter.native="checkDuplicate"></inputer>

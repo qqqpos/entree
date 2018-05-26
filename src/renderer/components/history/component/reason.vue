@@ -2,8 +2,10 @@
   <div class="popupMask center dark">
     <div class="editor">
       <header>
-        <h5></h5>
-        <h3>{{$t('title.voidNote')}}</h3>
+        <div>
+          <h5></h5>
+          <h3>{{$t('title.voidNote')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <ul>

@@ -2,8 +2,10 @@
   <div class="popupMask dark center" @click.self="init.reject">
     <div class="editor">
       <header>
-        <h5>{{$t('button.select')}}</h5>
-        <h3>{{$t('dialog.switchOperator')}}</h3>
+        <div>
+          <h5>{{$t('button.select')}}</h5>
+          <h3>{{$t('dialog.switchOperator')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="wrap">

@@ -3,8 +3,7 @@
     <div class="editor">
       <header>
         <div>
-          <h5 v-if="init.edit">{{$t('title.edit')}}</h5>
-          <h5 v-else>{{$t('title.create')}}</h5>
+          <h5>{{$t(init.edit ? 'title.edit' : 'title.create')}}</h5>
           <h3>{{$t('title.coupon')}}</h3>
         </div>
         <nav class="tabs">

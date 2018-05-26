@@ -2,8 +2,10 @@
     <div class="popupMask setting dark center" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <h5>{{$t('title.create')}}</h5>
-                <h3>{{$t('text.presetItem')}}</h3>
+                <div>
+                    <h5>{{$t('title.create')}}</h5>
+                    <h3>{{$t('text.presetItem')}}</h3>
+                </div>
             </header>
             <div class="wrap">
                 <ul>

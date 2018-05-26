@@ -2,8 +2,10 @@
     <div class="popupMask dark center" @click.self="init.reject">
         <div class="editor">
             <header>
-                <h5>{{$t('title.edit')}}</h5>
-                <h3>{{$t('title.footer')}}</h3>
+                <div>
+                    <h5>{{$t('title.edit')}}</h5>
+                    <h3>{{$t('title.footer')}}</h3>
+                </div>
             </header>
             <div class="wrap">
                 <inputer type="textarea" v-model.trim="footer.content" title="text.content" :center="true"></inputer>

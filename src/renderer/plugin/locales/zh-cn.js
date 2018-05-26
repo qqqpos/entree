@@ -1110,7 +1110,7 @@ export default {
     wage: "工资 (${i} / 小时)",
     calcTips: "小费为: $ {i}",
     noReceipt: "不打印收据",
-    ignore: "忽略",
+    ignoreOptionText: "不显示副菜文本",
     receiver: "收款人",
     cashier: "收银员",
     signature: "签名",
@@ -1218,7 +1218,8 @@ export default {
     recommendItem: "推荐物品",
     distance: "距离",
     dynamicPrint: "动态打印",
-    printAhead: "提前{i}分钟打印"
+    printAhead: "提前{i}分钟打印",
+    plasticBag: "塑料袋"
   },
   nav: {
     store: "店面",

@@ -2,7 +2,9 @@
   <div class="popupMask center dark" @click.self="init.reject">
     <div class="editor">
       <header>
-        <h3>{{$t('title.scanner')}}</h3>
+        <div>
+          <h3>{{$t('title.scanner')}}</h3>
+        </div>
       </header>
       <div class="wrap">
         <div class="search">

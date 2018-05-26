@@ -2,7 +2,9 @@
   <div class="popupMask center dark">
     <div class="editor" v-show="!component">
       <header>
-        <h3>{{$t('title.markPaymentType')}}</h3>
+        <div>
+            <h3>{{$t('title.markPaymentType')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="inner">

@@ -474,7 +474,7 @@ export default {
 
       invoices.forEach(invoice => {
         if (invoice.status === 1) {
-          const hour = new Date(invoice.time).getHours();
+          const hour = new Date(invoice.create || invoice.time).getHours();
           const { due } = invoice.payment;
 
           if (hours.hasOwnProperty(hour)) {

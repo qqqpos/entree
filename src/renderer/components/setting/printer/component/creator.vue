@@ -2,9 +2,12 @@
     <div class="popupMask setting dark center" @click.self="init.reject">
         <div class="editor">
             <header>
-                <h5>{{$t('title.create')}}</h5>
-                <h3>{{$t('text.printer')}}</h3>
+                <div>
+                    <h5>{{$t('title.create')}}</h5>
+                    <h3>{{$t('text.printer')}}</h3>
+                </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <inputer v-model.trim="name" title="text.alias" :autoFocus="true" @keydown.enter.native="confirm"></inputer>
                 <selector title="text.type" v-model="type" :opts="printerOpts"></selector>

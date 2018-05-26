@@ -1146,7 +1146,7 @@ export default {
     wage: "Wage (${i} / Hour)",
     calcTips: "Current Tips: $ {i}",
     noReceipt: "No Receipt",
-    ignore: "Ignore",
+    ignoreOptionText: "Hide side option text",
     receiver: "Receiver",
     cashier: "Cashier",
     signature: "Signature",
@@ -1253,7 +1253,8 @@ export default {
     recommendItem: "Recommend",
     distance: "Distance",
     dynamicPrint: "Dynamic Print",
-    printAhead: "Print Ahead In {i} Minutes"
+    printAhead: "Print Ahead In {i} Minutes",
+    plasticBag: "Plastic Bags"
   },
   nav: {
     store: "Store",

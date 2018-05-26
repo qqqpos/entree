@@ -2,9 +2,10 @@
   <div class="popupMask setting dark center" @click.self="init.reject(false)">
     <div class="editor">
       <header>
-        <h5 v-if="category[language]">{{$t('title.edit')}}</h5>
-        <h5 v-else>{{$t('title.create')}}</h5>
-        <h3>{{$t(category[language])}}</h3>
+        <div>
+          <h5>{{$t(category[language] ? 'title.edit':'title.create')}}</h5>
+          <h3>{{$t(category[language])}}</h3>
+        </div>
       </header>
       <div class="wrap">
         <inputer title="text.primary" v-model.trim="category.usEN" length="19"></inputer>

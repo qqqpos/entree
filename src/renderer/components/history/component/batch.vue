@@ -2,8 +2,10 @@
   <div class="popupMask dark center">
     <div class="editor">
       <header>
-        <h5></h5>
-        <h3>{{$t('title.batch')}}</h3>
+        <div>
+          <h5></h5>
+          <h3>{{$t('title.batch')}}</h3>
+        </div>
       </header>
       <table class="setting">
         <thead>

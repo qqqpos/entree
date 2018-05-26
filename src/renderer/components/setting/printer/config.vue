@@ -5,7 +5,7 @@
         <i class="fa fa-chevron-left"></i>
       </router-link>
       <div class="title">
-        <h5>{{$t('print.type.'+config.type)}}</h5>
+        <h5 v-if="config.type">{{$t('print.type.'+config.type)}}</h5>
         <h3>{{printer}}</h3>
       </div>
       <nav>

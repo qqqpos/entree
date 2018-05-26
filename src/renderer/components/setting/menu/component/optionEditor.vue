@@ -2,8 +2,10 @@
   <div class="popupMask setting dark center" @click.self="init.reject(false)">
     <div class="editor">
       <header>
-        <h5>{{$t('title.edit')}}</h5>
-        <h3>{{$t('title.sideOption')}}</h3>
+        <div>
+          <h5>{{$t('title.edit')}}</h5>
+          <h3>{{$t('title.sideOption')}}</h3>
+        </div>
       </header>
       <div class="wrap" :class="{extend}">
         <aside class="setup">
@@ -26,7 +28,7 @@
       </div>
       <footer>
         <div class="opt">
-          <checkbox title="text.ignore" v-model="option.ignore"></checkbox>
+          <checkbox title="text.ignoreOptionText" v-model="option.ignore"></checkbox>
         </div>
         <button class="btn" @click="confirm">{{$t('button.done')}}</button>
       </footer>

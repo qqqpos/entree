@@ -2,8 +2,10 @@
   <div class="popupMask dark center" @click.self="init.reject">
     <div class="editor">
         <header>
+          <div>
             <h3>{{$t('text.weightScale')}}</h3>
             <h5>{{item[language]}}</h5>
+          </div>
         </header>
         <div class="banner"></div>
         <div class="input">

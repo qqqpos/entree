@@ -210,8 +210,8 @@ function createList(printer, setting, invoice, preview) {
         items = list.filter(
           item =>
             item.printer[printer] && !item.print && item.diffs !== "UNCHANGED" && item.diffs !== "MODIFIED"
-        ).map(item=>{
-          if(item.diffs === "NEW"){
+        ).map(item => {
+          if (item.diffs === "NEW") {
             item.zhCN = "★" + item.zhCN;
             item.usEN = "★" + item.usEN;
           }
@@ -227,8 +227,8 @@ function createList(printer, setting, invoice, preview) {
           item =>
             item.printer[printer] && !item.print &&
             (item.diffs === 'NEW' || (item.diffs === "DIFFERENT" && item.hasOwnProperty('originQty')) || item.diffs === "MODIFIED")
-        ).map(item=>{
-          if(item.diffs === "MODIFIED"){
+        ).map(item => {
+          if (item.diffs === "MODIFIED") {
             item.choiceSet = item.choiceSet.map(sub => {
               sub.zhCN = "★" + sub.zhCN;
               sub.usEN = "★" + sub.usEN;
@@ -310,7 +310,7 @@ function createList(printer, setting, invoice, preview) {
       .join("")
       .toString();
   }
-  const delay = invoice.delay ? `<h1 class="delay">${moment(invoice.delay).format('MM-DD HH:mm')}</h1>` : '';
+  const delay = invoice.delay ? `<h1 class="delay">${moment(invoice.delay).locale("en").format('MM-DD hh:mm A')}</h1>` : '';
   return `<section class="receipt">${delay + content}</section>`;
 
   function mockup(item, renderQty) {

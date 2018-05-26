@@ -2,8 +2,10 @@
   <div class="popupMask dark center" @click.self="init.reject">
     <div class="editor">
       <header>
-        <h5></h5>
-        <h3>{{$t('title.creditVault')}}</h3>
+        <div>
+          <h5></h5>
+          <h3>{{$t('title.creditVault')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="wrap">
@@ -26,8 +28,10 @@
           <template v-else>
             <div class="dialog">
               <header>
-                <h5>{{$t('title.create')}}</h5>
-                <h3>{{$t('button.newRecord')}}</h3>
+                <div>
+                  <h5>{{$t('title.create')}}</h5>
+                  <h3>{{$t('button.newRecord')}}</h3>
+                </div>
               </header>
               <div class="inner">
                 <p>{{$t('card.number')}}</p>

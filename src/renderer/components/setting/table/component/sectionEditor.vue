@@ -2,14 +2,16 @@
     <div class="popupMask dark center setting" @click.self="init.reject(false)">
         <div class="editor">
             <header>
-                <template v-if="init.edit">
-                    <h5>{{$t('title.edit')}}</h5>
-                    <h3>{{init.section.zone}}</h3>
-                </template>
-                <template v-else>
-                    <h5>{{$t('title.create')}}</h5>
-                    <h3>{{$t('table.zone')}}</h3>
-                </template>
+                <div>
+                    <template v-if="init.edit">
+                        <h5>{{$t('title.edit')}}</h5>
+                        <h3>{{init.section.zone}}</h3>
+                    </template>
+                    <template v-else>
+                        <h5>{{$t('title.create')}}</h5>
+                        <h3>{{$t('table.zone')}}</h3>
+                    </template>
+                </div>
             </header>
             <div class="wrap">
                 <inputer title="text.primary" v-model="init.section.usEN"></inputer>
@@ -29,7 +31,7 @@
 <script>
 import inputer from "../../common/inputer";
 export default {
-    props: ["init"],
-    components: { inputer }
+  props: ["init"],
+  components: { inputer }
 };
 </script>

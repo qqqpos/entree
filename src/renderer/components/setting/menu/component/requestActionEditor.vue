@@ -2,8 +2,10 @@
     <div class="popupMask setting dark center" @click.self="init.reject(false)">
         <div class="editor">
             <header>
+              <div>
                 <h5>{{$t('title.edit')}}</h5>
                 <h3>{{$t(action[language])}}</h3>
+              </div>
             </header>
             <div class="wrap">
                 <inputer title="text.primary" v-model.trim="action.usEN"></inputer>
