@@ -112,7 +112,7 @@ export default {
       this.$router.push({ path: "/main/menu" });
     },
     settle() {
-      this.$p("payment");
+      this.$open("payment");
     },
     print() {
       Printer.setTarget("Receipt").print(this.order);
@@ -120,7 +120,7 @@ export default {
       this.$socket.emit("[UPDATE] INVOICE", order, true);
     },
     split() {
-      this.$p("split");
+      this.$open("split");
     },
     voidTicket() {
       const prompt = {
@@ -138,8 +138,8 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(confirm => this.$p("reason"))
-        .catch(() => this.$q());
+        .then(confirm => this.$open("reason"))
+        .catch(this.exitComponent);
     },
     exit() {
       this.resetMenu();

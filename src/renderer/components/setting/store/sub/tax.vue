@@ -91,11 +91,11 @@ export default {
       })
         .then(_tax => {
           this.tax.class[name] = _tax;
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           del && this.$delete(this.tax.class, name);
-          this.$q();
+          this.exitComponent();
         });
     },
     update(data) {

@@ -81,7 +81,7 @@ export default {
             () => this.refreshData()
           );
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     editItem(item, group, index) {
       const categories = this.categories[this.categoryIndex].contain.map(
@@ -117,7 +117,7 @@ export default {
           );
         })
         .catch(del => {
-          del ? this.deleteItemConfirm(item, group, index) : this.$q();
+          del ? this.deleteItemConfirm(item, group, index) : this.exitComponent();
         });
     },
     deleteItemConfirm(item, group, index) {
@@ -143,7 +143,7 @@ export default {
             () => this.refreshData()
           );
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     copyLastItem(group, index) {
       let item;
@@ -206,7 +206,7 @@ export default {
       this.$nextTick(() => {
         this.categories = this.$store.getters.menu;
         this.getItems(this.categoryIndex);
-        this.$q();
+        this.exitComponent();
       });
     },
     copy(data) {

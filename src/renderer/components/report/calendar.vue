@@ -201,7 +201,7 @@ export default {
         buttons: [{ text: "CONFIRM", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     checkTime() {
       let from, to;

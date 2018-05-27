@@ -215,7 +215,7 @@ export default {
       } = this.order;
       const { menuID } = this.config.display;
 
-      this.$p("config", {
+      this.$open("config", {
         taxFree,
         deliveryFree,
         gratuityFree,
@@ -286,7 +286,7 @@ export default {
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
-        this.$dialog(prompt).then(() => this.$q());
+        this.$dialog(prompt).then(this.exitComponent);
       }
       this.spooler = [];
       this.$socket.emit("[UPDATE] INVOICE", this.order);
@@ -338,7 +338,7 @@ export default {
     },
     openKeyboard() {
       if (this.isEmptyTicket) return;
-      this.component === "entry" ? (this.component = null) : this.$p("entry");
+      this.component === "entry" ? (this.component = null) : this.$open("entry");
     },
     update(config) {
       this.setOrder(config);
@@ -346,7 +346,7 @@ export default {
     },
     openVault() {
       this.$socket.emit("[CUSTOMER] GET_CREDIT_CARD", this.customer._id, opts =>
-        this.$p("creditVault", { opts })
+        this.$open("creditVault", { opts })
       );
     },
     toggleTodoList() {

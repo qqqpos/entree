@@ -65,7 +65,7 @@ export default {
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     }
   }
 };

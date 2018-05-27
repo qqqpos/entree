@@ -151,7 +151,7 @@ export default {
               next();
             } else {
               next();
-              this.$q();
+              this.exitComponent();
             }
           }
         );
@@ -163,7 +163,7 @@ export default {
 
       this.$dialog(prompt)
         .then(() => this.countInitialCash(amount))
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     countInitialCash(amount) {
       if (isNumber(amount)) {
@@ -185,7 +185,7 @@ export default {
           this.component = "collector";
         })
           .then(this.countInitialCash)
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       }
     },
     initialized() {
@@ -229,7 +229,7 @@ export default {
         }
       })
         .then(() => {
-          this.$q();
+          this.exitComponent();
           this.go(route);
         })
         .catch(() => {
@@ -382,12 +382,12 @@ export default {
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     askSelfCashIn() {
       this.$dialog({ title: "dialog.selfCashIn", msg: "dialog.selfCashInTip" })
         .then(() => this.countSelfCash())
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     countSelfCash(amount) {
       if (isNumber(amount)) {
@@ -403,7 +403,7 @@ export default {
           this.component = "collector";
         })
           .then(this.countSelfCash)
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       }
     },
     acceptCashIn(amount) {
@@ -434,7 +434,7 @@ export default {
 
       this.$socket.emit("[CASHFLOW] INITIAL", record);
       Printer.printCashInReport(record);
-      this.$q();
+      this.exitComponent();
     },
     recordCashFlow(cashDrawer) {
       if (this.op.cashCtrl === "enable") {
@@ -456,7 +456,7 @@ export default {
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
-        this.$dialog(prompt).then(() => this.$q());
+        this.$dialog(prompt).then(this.exitComponent);
       }
     },
     initialCashFlow(name) {

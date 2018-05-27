@@ -125,12 +125,12 @@ export default {
       })
         .then(_amount => {
           this.setOrder({ deliveryFee: _amount });
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) delete this.order.deliveryFee;
 
-          this.$q();
+          this.exitComponent();
         });
     },
     setGratuity() {
@@ -142,12 +142,12 @@ export default {
       })
         .then(_amount => {
           this.setOrder({ gratuityFee: _amount });
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) delete this.order.gratuityFee;
 
-          this.$q();
+          this.exitComponent();
         });
     },
     ...mapActions(["setConfig", "setOrder"])

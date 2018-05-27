@@ -128,7 +128,7 @@ export default {
               this.remove(payment, index);
           }
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     getDetail(_id) {
       return new Promise((resolve, reject) => {
@@ -199,10 +199,10 @@ export default {
     remove(payment, index) {
       this.$socket.emit("[PAYMENT] REMOVE", payment);
       this.init.logs.splice(index, 1);
-      this.$q();
+      this.exitComponent();
     },
     voidFailed(error) {
-      this.$dialog(error).then(() => this.$q());
+      this.$dialog(error).then(this.exitComponent);
     },
     edit() {
       const invoice = JSON.parse(JSON.stringify(this.$store.getters.order));

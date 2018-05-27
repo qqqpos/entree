@@ -167,6 +167,13 @@ label .tooltip {
   border-bottom: none;
 }
 
+header.chart {
+  display: flex;
+  border-bottom: 1px solid #eeeeee;
+  padding: 10px;
+  background: #fafafa;
+}
+
 header.nav {
   display: flex;
   position: relative;
@@ -295,7 +302,7 @@ td.amount {
 
 .editor header {
   border-bottom: 1px solid #eee;
-  padding: 5px 25px;
+  padding: 5px 0 5px 25px;
   display: flex;
   height: 40px;
   align-items: center;
@@ -357,15 +364,16 @@ header.tab {
   padding: 13px;
   min-width: 60px;
   display: flex;
-  margin: 0 5px;
   justify-content: center;
   cursor: pointer;
   color: #656565;
+  transition: 0.3s ease;
   border-bottom: 3px solid transparent;
 }
 
 .editor nav.tabs input:checked + label {
   border-bottom: 3px solid #ff9800;
+  background: #fafafa;
   font-weight: bold;
   color: #0f1e29;
 }

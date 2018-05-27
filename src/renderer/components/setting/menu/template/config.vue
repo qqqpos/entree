@@ -58,12 +58,12 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.$q();
+          this.exitComponent();
           this.$socket.emit("[TEMPLATE] REMOVE", this.template._id, () =>
             this.$emit("reset")
           );
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

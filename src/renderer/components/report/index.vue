@@ -216,16 +216,16 @@ export default {
       })
         .then(date => {
           this.reportRange = date;
-          this.$q();
+          this.exitComponent();
         })
         .catch(() => {
           this.range = "today";
           this.getRange("today");
-          this.$q();
+          this.exitComponent();
         });
     },
     confirm() {
-      this.$p("processor", { timeout: 300000 });
+      this.$open("processor", { timeout: 300000 });
       this.daily
         ? this.printDailyReport()
         : this.fetchData()
@@ -1209,7 +1209,7 @@ export default {
     getTransactionsFromInvoices() {},
     reportError(error) {
       console.log(error);
-      this.$q();
+      this.exitComponent();
       this.$socket.emit("[SYS] RECORD", {
         type: "Software",
         event: "reportError",

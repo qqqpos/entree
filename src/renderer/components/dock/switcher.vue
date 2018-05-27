@@ -70,7 +70,7 @@ export default {
           this.switchType(type);
           this.init.resolve();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     switchType(type) {
       this.ticket.type === "DINE_IN" &&
@@ -113,7 +113,7 @@ export default {
           this.$bus.emit("FOOD_TOGO");
           this.init.resolve();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     applyPrice(type) {
       try {
@@ -149,7 +149,7 @@ export default {
           this.setOrder({ source, tradeMark: source });
           this.init.resolve();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     ...mapActions(["archiveOrder", "setOrder", "setTicket"])
   }

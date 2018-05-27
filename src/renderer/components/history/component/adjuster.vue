@@ -192,7 +192,7 @@ export default {
         this.next();
       } else {
         let record = this.transaction;
-        this.$p("processor", { timeout: 15000 });
+        this.$open("processor", { timeout: 15000 });
         this.initialParser(this.transaction.terminal)
           .then(this.executeTipAdjustment)
           .catch(this.executeFailed);
@@ -224,7 +224,7 @@ export default {
       const transaction = record.trace.trans;
 
       this.terminal.adjust(invoice, transaction, amount).then(response => {
-        this.$q();
+        this.exitComponent();
         const result = this.terminal.explainTransaction(response.data);
         if (result.code === "000000") {
           Object.assign(record, {
@@ -241,7 +241,7 @@ export default {
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
-          this.$dialog(data).then(() => this.$q());
+          this.$dialog(data).then(this.exitComponent);
         }
       });
     },

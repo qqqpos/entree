@@ -6,12 +6,12 @@
                     <h5>{{ledgerDate}}</h5>
                     <h3>{{$t('title.ledger')}}</h3>
                 </div>
-                <tab v-model="page" @switch="loadPage"></tab>
+                <tab @switch="loadComponent"></tab>
             </header>
             <div class="wrap relative">
                 <keep-alive>
                     <transition name="fade" mode="out-in">
-                        <component :is="page" :invoices="invoices" :transactions="transactions" @ready="loaded"></component>
+                        <component :is="component" :invoices="invoices" :transactions="transactions" @ready="loaded"></component>
                     </transition>
                 </keep-alive>
                 <loader :display="isLoading"></loader>
@@ -27,15 +27,16 @@
 import tab from "./helper/tab";
 import loader from "../common/loader";
 import chart from "./component/chart";
+import department from "./component/department";
 
 export default {
   props: ["init"],
-  components: { tab, loader, chart },
+  components: { tab, loader, chart, department },
   data() {
     return {
+      component: null,
       ledgerDate: null,
       isLoading: true,
-      page: null,
       invoices: [],
       transactions: []
     };
@@ -54,7 +55,7 @@ export default {
         .startOf("day")
         .add(1, "days")
         .hour(4);
-
+        
       this.$socket.emit(
         "[REPORT] INITIAL_DATA",
         { from, to },
@@ -62,16 +63,17 @@ export default {
           this.invoices = invoices;
           this.transactions = transactions;
 
-          this.loadPage("CHART");
+          this.loadComponent("CHART");
         }
       );
     },
-    loadPage(name) {
+    loadComponent(name) {
       switch (name) {
         case "CHART":
-          this.page = "chart";
+          this.component = "chart";
           break;
         case "DEPARTMENT":
+          this.component = "department";
           break;
         case "FILTER":
           break;
@@ -88,7 +90,7 @@ export default {
 .wrap {
   width: 900px;
   min-height: 450px;
-  overflow: hidden;
+  overflow-y: auto;
 }
 </style>
 

@@ -62,10 +62,10 @@ export default {
                 buttons: [{ text: "button.cancel", fn: 'reject' }, { text: "button.print", fn: 'resolve' }]
             };
 
-            this.$dialog(prompt).then(() => this.printFromSpooler(i)).catch(() => this.$q())
+            this.$dialog(prompt).then(() => this.printFromSpooler(i)).catch(this.exitComponent)
         },
         printFromSpooler(i) {
-            this.$q();
+            this.exitComponent();
 
             let items = [];
             const _id = this.spooler[i]._id;
@@ -98,8 +98,8 @@ export default {
 
             this.$dialog(prompt).then(() => {
                 this.removeSpooler(i);
-                this.$q();
-            }).catch(() => this.$q())
+                this.exitComponent();
+            }).catch(this.exitComponent)
 
         },
         ...mapActions(['removeSpooler'])

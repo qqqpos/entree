@@ -240,7 +240,7 @@ export default {
         case "outDatedVersion":
           this.$dialog(data).then(() => {
             this.disableAccess = true;
-            this.$q();
+            this.exitComponent();
           });
           break;
       }
@@ -290,9 +290,9 @@ export default {
       this.$dialog(data)
         .then(() => {
           this.$socket.emit("[CTRL] SHUTDOWN_ALL");
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     shutdown() {
       Electron.ipcRenderer.send("Shutdown");

@@ -69,10 +69,10 @@ export default {
         .then(_customer => {
           this.$socket.emit("[CUSTOMER] UPDATE", _customer, callback => {
             this.$emit("create");
-            this.$q();
+            this.exitComponent();
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     prev() {
       if (this.page === 0) return;

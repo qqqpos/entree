@@ -73,7 +73,7 @@ export default {
         });
       })
         .then(this.refreshData)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     editAction(action, index) {
       !action.multiplier &&
@@ -87,7 +87,7 @@ export default {
         this.component = "actionEditor";
       })
         .then(this.refreshData)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     editItem(item, groupIndex, index) {
       const categoryIndex = this.categoryIndex;
@@ -119,7 +119,7 @@ export default {
         this.component = "itemEditor";
       })
         .then(this.refreshData)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     updateSortedItem() {
       const items = [];
@@ -148,7 +148,7 @@ export default {
       this.request = this.$store.getters.request;
       this.actions = this.$store.getters.actions;
       this.getItems();
-      this.$q();
+      this.exitComponent();
     }
   }
 };

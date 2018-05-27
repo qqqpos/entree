@@ -128,9 +128,9 @@ export default {
             key: `printers.${this.printer}.control.footer`,
             value: _footer
           });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     removePrinter() {
       const content = {
@@ -145,7 +145,7 @@ export default {
 
       this.$dialog(content)
         .then(() => {
-          this.$q();
+          this.exitComponent();
           this.removed = true;
           this.$socket.emit("[PRINTER] REMOVE", this.printer);
           delete this.$store.getters.config.printers[this.printer];
@@ -158,7 +158,7 @@ export default {
 
           this.$router.push({ name: "Setting.printer" });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

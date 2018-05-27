@@ -94,9 +94,9 @@ export default {
         this.component = "viewer";
       })
         .then(() => {
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

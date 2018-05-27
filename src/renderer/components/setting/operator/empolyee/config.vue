@@ -105,13 +105,13 @@ export default {
 
       this.$dialog(content)
         .then(() => {
-          this.$q();
+          this.exitComponent();
           this.removed = true;
           this.$socket.emit("[OPERATOR] REMOVE", this.operator, () =>
             this.$router.push({ name: "Setting.operator" })
           );
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     swipe() {
       new Promise((resolve, reject) => {
@@ -127,15 +127,15 @@ export default {
             };
 
             exist
-              ? this.$dialog(prompt).then(() => this.$q())
+              ? this.$dialog(prompt).then(this.exitComponent)
               : this.register(card);
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     register(card) {
       this.operator = Object.assign(this.operator, { card });
-      this.$q();
+      this.exitComponent();
     },
     unregister() {
       const prompt = {
@@ -146,9 +146,9 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           delete this.operator.card;
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     ...mapActions(["setOp"])
   }

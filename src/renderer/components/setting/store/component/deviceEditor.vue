@@ -66,9 +66,9 @@ export default {
       })
         .then(result => {
           Object.assign(this.device, result);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

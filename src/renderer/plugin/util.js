@@ -1,5 +1,14 @@
 export default {
   install(Vue, options) {
+    Vue.mixin({
+      methods: {
+        exitComponent() {
+          this.component = null;
+          this.componentData = null;
+        }
+      }
+    });
+
     Vue.prototype.approval = function (credential, permit) {
       let approve = false;
 
@@ -23,22 +32,22 @@ export default {
       this.$socket.emit("[SYS] LOG", event);
     };
 
-    Vue.prototype.$p = function (component, args) {
-      return new Promise((resolve, reject) => {
-        this.componentData = Object.assign({ resolve, reject }, args);
-        this.component = component;
-      })
-        .then(() => this.$q())
-        .catch(() => this.$q());
-    };
+    // Vue.prototype.$p = function (component, args) {
+    //   return new Promise((resolve, reject) => {
+    //     this.componentData = Object.assign({ resolve, reject }, args);
+    //     this.component = component;
+    //   })
+    //     .then(this.exitComponent)
+    //     .catch(this.exitComponent);
+    // };
 
     Vue.prototype.$open = function (component, args) {
       return new Promise((resolve, reject) => {
         this.componentData = Object.assign({}, { resolve, reject }, args);
         this.component = component;
       })
-        .then(() => this.$q())
-        .catch(() => this.$q());
+        .then(this.exitComponent)
+        .catch(this.exitComponent);
     };
 
     Vue.prototype.$dialog = function (args) {
@@ -104,7 +113,7 @@ export default {
                   : _permission.includes(permit);
 
               if (_approve) {
-                this.$q();
+                this.exitComponent();
                 authorized();
                 this.$log({
                   eventID: 8000,
@@ -145,13 +154,13 @@ export default {
         buttons: [{ text: "button.confirm", fn: "reject" }]
       };
 
-      this.$dialog(prompt).catch(() => this.$q());
+      this.$dialog(prompt).catch(this.exitComponent);
     };
 
-    Vue.prototype.$q = function () {
-      this.component = null;
-      this.componentData = null;
-    };
+    // Vue.prototype.$q = function () {
+    //   this.component = null;
+    //   this.componentData = null;
+    // };
 
     Vue.prototype.$minifyCustomer = ({
       _id = undefined,

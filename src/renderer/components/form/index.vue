@@ -252,11 +252,11 @@ export default {
                   ? this.updateProfile(profile)
                   : this.$dialog(prompt)
                       .then(() => {
-                        this.$q();
+                        this.exitComponent();
                         this.updateProfile(profile);
                         next();
                       })
-                      .catch(() => this.$q());
+                      .catch(this.exitComponent);
               }
             } else {
             }

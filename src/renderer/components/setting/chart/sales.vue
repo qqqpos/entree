@@ -1,38 +1,23 @@
 <template>
   <div>
-    <range-tab @update="fetchData" initial="currentMonth"></range-tab>
+    <header class="chart">
+      <div class="f1">
+          <h3>{{$t('title.dailySaleSummary')}}</h3>
+          <p>Sales Summary</p>
+      </div>
+      <date-picker @update="fetchData" init="currentMonth"></date-picker>
+    </header>
     <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
-    <!-- <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>{{$t('thead.date')}}</th>
-          <th></th>
-          <th>{{$t('report.salesTotal')}}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(report,index) in reports" :key="index">
-          <td>{{report.title}}</td>
-          <td>{{report.date}}</td>
-          <td>{{report.week}}</td>
-          <td class="amount">$ {{report.value | decimal}}</td>
-          <td>{{report.note}}</td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
 </template>
 
 <script>
-import rangeTab from "../common/rangeTab";
+import datePicker from "../common/datePicker";
 
 export default {
-  components: { rangeTab },
+  components: { datePicker },
   data() {
     return {
-      option: {},
       reports: []
     };
   },
@@ -50,17 +35,17 @@ export default {
           .add(4, "h");
 
         this.$socket.emit("[CHART] RANGE", { from, to }, result =>
-          this.initialChartData(result)
+          this.drawChart(result)
         );
       } else {
-        const { from, to } = range;
+        const [from, to] = range;
 
-        this.$socket.emit("[CHART] RANGE", { from, to }, result =>
-          this.initialChartData(result)
+        this.$socket.emit("[CHART] RANGE", { from: +from, to: +to }, result =>
+          this.drawChart(result)
         );
       }
     },
-    initialChartData(dataProvider) {
+    drawChart(dataProvider) {
       const average = parseInt(
         dataProvider.reduce((a, c) => a + c.value, 0) / dataProvider.length
       );
@@ -156,55 +141,55 @@ export default {
       //this.analyzeData({ labels, data });
     },
 
-    analyzeData({ labels, data }) {
-      if (data.length === 0) {
-        this.reports = [];
-        return;
-      }
+    // analyzeData({ labels, data }) {
+    //   if (data.length === 0) {
+    //     this.reports = [];
+    //     return;
+    //   }
 
-      const highestSales = Math.max(...data);
-      const hIndex = data.findIndex(sales => sales === highestSales);
-      const highestSalesDate = labels[hIndex];
+    //   const highestSales = Math.max(...data);
+    //   const hIndex = data.findIndex(sales => sales === highestSales);
+    //   const highestSalesDate = labels[hIndex];
 
-      const lowestSales = Math.min(...data);
-      const lIndex = data.findIndex(sales => sales === lowestSales);
-      const lowestSalesDate = labels[lIndex];
+    //   const lowestSales = Math.min(...data);
+    //   const lIndex = data.findIndex(sales => sales === lowestSales);
+    //   const lowestSalesDate = labels[lIndex];
 
-      const average = data.reduce((a, b) => a + b, 0) / data.length;
-      const aboveAverage = data.filter(sales => sales >= average).length;
-      const belowAverage = data.filter(sales => sales < average).length;
+    //   const average = data.reduce((a, b) => a + b, 0) / data.length;
+    //   const aboveAverage = data.filter(sales => sales >= average).length;
+    //   const belowAverage = data.filter(sales => sales < average).length;
 
-      this.reports = [
-        {
-          title: this.$t("report.highestSales"),
-          date: highestSalesDate,
-          week: moment(highestSalesDate, "YYYY-MM-DD").format("ddd"),
-          value: highestSales,
-          note: ""
-        },
-        {
-          title: this.$t("report.lowestSales"),
-          date: lowestSalesDate,
-          week: moment(lowestSalesDate, "YYYY-MM-DD").format("ddd"),
-          value: lowestSales,
-          note: ""
-        },
-        {
-          title: this.$t("report.salesTotal"),
-          date: "",
-          week: "",
-          value: data.reduce((a, b) => a + b, 0),
-          note: ""
-        },
-        {
-          title: this.$t("report.averageSales"),
-          date: "",
-          week: "",
-          value: average,
-          note: this.$t("report.averageDetail", aboveAverage, belowAverage)
-        }
-      ];
-    }
+    //   this.reports = [
+    //     {
+    //       title: this.$t("report.highestSales"),
+    //       date: highestSalesDate,
+    //       week: moment(highestSalesDate, "YYYY-MM-DD").format("ddd"),
+    //       value: highestSales,
+    //       note: ""
+    //     },
+    //     {
+    //       title: this.$t("report.lowestSales"),
+    //       date: lowestSalesDate,
+    //       week: moment(lowestSalesDate, "YYYY-MM-DD").format("ddd"),
+    //       value: lowestSales,
+    //       note: ""
+    //     },
+    //     {
+    //       title: this.$t("report.salesTotal"),
+    //       date: "",
+    //       week: "",
+    //       value: data.reduce((a, b) => a + b, 0),
+    //       note: ""
+    //     },
+    //     {
+    //       title: this.$t("report.averageSales"),
+    //       date: "",
+    //       week: "",
+    //       value: average,
+    //       note: this.$t("report.averageDetail", aboveAverage, belowAverage)
+    //     }
+    //   ];
+    // }
   }
 };
 </script>

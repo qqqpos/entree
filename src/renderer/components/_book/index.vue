@@ -60,7 +60,7 @@ export default {
       });
     },
     create() {
-      this.$p("editor");
+      this.$open("editor");
     },
     seat(reservation) {
       this.init.resolve(reservation);

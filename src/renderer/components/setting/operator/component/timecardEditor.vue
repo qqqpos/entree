@@ -89,9 +89,9 @@ export default {
           });
           target === "clockIn" &&
             Object.assign(this.record, { date: time.format("YYYY-MM-DD") });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     confirm() {
       Object.assign(this.record, {

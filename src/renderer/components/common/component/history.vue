@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     view(ticket) {
-      this.$p("ticket", { ticket });
+      this.$open("ticket", { ticket });
     },
     copy(invoice) {
       let content = invoice.content.map(item => {

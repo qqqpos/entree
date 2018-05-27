@@ -40,9 +40,9 @@ export default {
             print: false
           });
           this.removeSpooler(i);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setItemStatus(i, status) {
       const { order } = this.spooler[i];
@@ -74,10 +74,10 @@ export default {
 
       this.$dialog(prompt)
         .then(() => this.printFromSpooler(i))
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     printFromSpooler(i) {
-      this.$q();
+      this.exitComponent();
 
       const { order, target } = this.spooler[i];
 

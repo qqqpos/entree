@@ -314,14 +314,14 @@ export default {
 
           this.$bus.emit("splitOut", _items);
 
-          this.$q();
+          this.exitComponent();
         })
         .catch(() => {
           this.$bus.emit(
             "restore",
             items.filter(i => i.parent).map(i => i.parent)
           );
-          this.$q();
+          this.exitComponent();
         });
     },
     splitList(items) {
@@ -335,7 +335,7 @@ export default {
           if (target.includes(item.unique)) item.split = true;
         });
         this.buffer = [];
-        this.$q();
+        this.exitComponent();
       });
     },
     ticketConfig() {
@@ -353,7 +353,7 @@ export default {
             type,
             isDiscount
           })
-        : this.$q();
+        : this.exitComponent();
     },
     applyConfig(params) {
       Object.assign(this.order, params);

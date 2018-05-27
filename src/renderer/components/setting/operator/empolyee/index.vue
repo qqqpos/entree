@@ -78,9 +78,9 @@ export default {
               (a, b) => (sort.indexOf(a.role) > sort.indexOf(b.role) ? 1 : -1)
             );
           });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setPage(num) {
       this.page = num;

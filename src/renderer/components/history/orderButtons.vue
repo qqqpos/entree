@@ -4,7 +4,7 @@
       <i class="fa fa-money"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
-    <button class="btn" @click="split" :disabled="disable">
+    <button class="btn" @contextmenu.stop="evenSplit" @click.stop="split" :disabled="disable">
       <i class="fa fa-clone"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
@@ -33,6 +33,7 @@ import { mapGetters, mapActions } from "vuex";
 import paymentMarker from "../payment/mark";
 import discount from "../payment/discount";
 import dialoger from "../common/dialoger";
+import inputer from "./component/inputer";
 import driver from "./component/driver";
 import payment from "../payment/index";
 import viewer from "../split/viewer";
@@ -45,6 +46,7 @@ export default {
     driver,
     viewer,
     payment,
+    inputer,
     dialoger,
     discount,
     paymentMarker
@@ -71,7 +73,7 @@ export default {
             this.component = "viewer";
           })
             .then(order => this.$open("paymentMarker", { order }))
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
         });
       } else {
         this.$open("paymentMarker");
@@ -79,6 +81,40 @@ export default {
     },
     split() {
       this.$open("split");
+    },
+    evenSplit() {
+      //console.log("event split");
+      new Promise((resolve, reject) => {
+        const config = {
+          title: "title.evenSplit",
+          type: "number",
+          amount: 1
+        };
+
+        this.componentData = { resolve, reject, config };
+        this.component = "inputer";
+      })
+        .then(this.confirmEvenSplit)
+        .catch(this.exitComponent);
+    },
+    confirmEvenSplit(number) {
+      if (number > 1) {
+        const prompt = {
+          type: "question",
+          title: "dialog.evenSplit",
+          msg: ["dialog.evenSplitConfirm", number]
+        };
+
+        this.$dialog(prompt)
+          .then(this.processEvenSplit.bind(null, number))
+          .catch(this.exitComponent);
+      } else {
+        this.exitComponent();
+      }
+    },
+    processEvenSplit(number) {
+      console.log(number);
+      this.exitComponent();
     },
     isSettled() {
       if (this.isEmptyTicket) return;
@@ -90,7 +126,7 @@ export default {
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
-        this.$dialog(prompt).then(() => this.$q());
+        this.$dialog(prompt).then(this.exitComponent);
         return;
       }
       this.order.settled
@@ -106,7 +142,7 @@ export default {
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     askSettleType() {
       const prompt = {
@@ -131,7 +167,7 @@ export default {
           this.component = "discount";
         })
           .then(this.updatePayment)
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       });
     },
     updatePayment({ discount, coupon }) {
@@ -144,7 +180,7 @@ export default {
 
       this.$calculatePayment(this.order.content);
       this.$socket.emit("[UPDATE] INVOICE", this.order);
-      this.$q();
+      this.exitComponent();
     },
     driver() {
       const date = document.querySelector("#calendar .text").innerText;

@@ -74,11 +74,11 @@ export default {
           isNaN(index)
             ? this.surcharge.rules.push(_rule)
             : this.surcharge.rules.splice(index, 1, _rule);
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           del && this.surcharge.rules.splice(index, 1);
-          this.$q();
+          this.exitComponent();
         });
     },
     save() {

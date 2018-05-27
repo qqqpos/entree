@@ -46,9 +46,9 @@ export default {
                 component,
                 threadID
               });
-              this.$q();
+              this.exitComponent();
             })
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
           break;
         case "coupon":
           this.$socket.emit("[COUPON] LIST", coupons => {
@@ -70,9 +70,9 @@ export default {
                   component,
                   threadID
                 });
-                this.$q();
+                this.exitComponent();
               })
-              .catch(() => this.$q());
+              .catch(this.exitComponent);
           });
           break;
         case "dockMenu":
@@ -88,7 +88,7 @@ export default {
                     component,
                     threadID
                   });
-                  this.$q();
+                  this.exitComponent();
                 })
                 .catch(() => {
                   this.$bus.emit("__THREAD__CLOSE", {
@@ -96,7 +96,7 @@ export default {
                     component,
                     threadID
                   });
-                  this.$q();
+                  this.exitComponent();
                 });
             })
             .catch(() => {});

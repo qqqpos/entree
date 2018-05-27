@@ -40,7 +40,7 @@ export default {
           title: "dialog.cantExecute",
           msg: "dialog.apiIsMissing",
           buttons: [{ text: "button.confirm", fn: "resovle" }]
-        }).then(() => this.$q());
+        }).then(this.exitComponent);
         return;
       }
 

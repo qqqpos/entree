@@ -127,9 +127,9 @@ export default {
         .then(_rule => {
           this.store.deliver.rules.push(_rule);
           this.updateChargeRules();
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     edit(rule, index) {
       new Promise((resolve, reject) => {
@@ -139,14 +139,14 @@ export default {
         .then(_rule => {
           this.store.deliver.rules.splice(index, 1, _rule);
           this.updateChargeRules();
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) {
             this.store.deliver.rules.splice(index, 1);
             this.updateChargeRules();
           }
-          this.$q();
+          this.exitComponent();
         });
     }
   }

@@ -60,11 +60,11 @@ export default {
           this.$socket.emit("[HIBACHI] SAVE", _tables, () => {
             this.$socket.emit("[HIBACHI] GROUP", data => {
               this.tables = data;
-              this.$q();
+              this.exitComponent();
             });
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     edit(table) {
       this.$socket.emit("[HIBACHI] TABLES", table, tables => {
@@ -79,12 +79,12 @@ export default {
           this.component = "editor";
         })
           .then(_tables => {
-            this.$q();
+            this.exitComponent();
           })
           .catch(del => {
             if (del) {
             }
-            this.$q();
+            this.exitComponent();
           });
       });
     },

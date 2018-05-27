@@ -81,13 +81,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import tip from "./component/tipper";
+import inputer from "./component/inputer";
 import dropdown from "./component/dropdown";
 import pagination from "../common/pagination";
 
 export default {
   props: ["init"],
-  components: { tip, pagination, dropdown },
+  components: { inputer, pagination, dropdown },
   computed: {
     filteredTransactions() {
       let data = this.transactions;
@@ -213,16 +213,21 @@ export default {
     initialFailed() {},
     setTip(record) {
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, approve: record.tip };
-        this.component = "tip";
+        const config = {
+          title: "title.tip",
+          type: "decimal",
+          amount: "0.00"
+        };
+        this.componentData = { resolve, reject, config };
+        this.component = "inputer";
       })
         .then(tip => {
           const paid = record.actual + tip;
           Object.assign(record, { tip, paid });
           this.$socket.emit("[TRANSACTION] ADJUST_TIP", record);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setPage(number) {
       this.page = number;

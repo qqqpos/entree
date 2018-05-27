@@ -41,26 +41,26 @@ export default {
     methods: {
         getOption(book, e) {
             this.book = book;
-            this.$p("contextMenu", { left: e.pageX, top: e.pageY - 20, book })
+            this.$open("contextMenu", { left: e.pageX, top: e.pageY - 20, book })
         },
         seat() {
-            this.$q();
+            this.exitComponent();
             this.$emit('seat')
             this.$bus.emit('seat', this.book);
         },
         reprint() {
-            this.$q();
+            this.exitComponent();
             Printer.printReservationTicket(this.book)
         },
         active() {
             Object.assign(this.book, { status: 1 })
             this.$socket.emit("[RESV] UPDATE", this.book)
-            this.$q();
+            this.exitComponent();
         },
         inactive() {
             Object.assign(this.book, { status: 0 })
             this.$socket.emit("[RESV] UPDATE", this.book)
-            this.$q();
+            this.exitComponent();
         },
         cancel() {
             this.$dialog({
@@ -68,10 +68,10 @@ export default {
                 msg: ['dialog.reservationCancelTip', this.book.name],
                 buttons: [{ text: 'button.cancel', fn: 'reject' }, { text: 'button.confirm', fn: 'resolve' }]
             }).then(() => {
-                this.$q()
+                this.exitComponent()
                 Object.assign(this.book, { status: -1 })
                 this.$socket.emit("[RESV] UPDATE", this.book)
-            }).catch(() => { this.$q() })
+            }).catch(() => { this.exitComponent() })
         },
         checkSchedule() {
 

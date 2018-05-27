@@ -118,7 +118,7 @@ export default {
     setPrice(total) {
       total
         ? this.setPriceForChoiceSet({ total })
-        : this.$p("modify", {
+        : this.$open("modify", {
             item: {
               qty: 1,
               single: 0,

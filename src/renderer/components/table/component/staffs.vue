@@ -70,7 +70,7 @@ export default {
           this.$socket.emit("[STAFF] SWITCH", this.order);
           this.init.resolve();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

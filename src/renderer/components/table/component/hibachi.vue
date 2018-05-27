@@ -142,10 +142,10 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           this.$socket.emit("[HIBACHI] RESET", table.session, () => {
-            this.$q();
+            this.exitComponent();
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     ...mapActions(["setApp", "setTicket", "setViewOrder"])
   }

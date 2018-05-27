@@ -90,13 +90,13 @@ export default {
             this.$socket.emit("[TERMINAL] REMOVE", device._id);
             this.devices.splice(index, 1);
           }
-          this.$q();
+          this.exitComponent();
         });
     },
     refreshData() {
       this.$socket.emit("[TERMINAL] DEVICE", data => {
         this.devices = data;
-        this.$q();
+        this.exitComponent();
       });
     }
   }

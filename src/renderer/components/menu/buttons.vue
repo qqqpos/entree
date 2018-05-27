@@ -223,7 +223,7 @@ export default {
             msg: ["dialog.maxSubItem", this.item[this.language], max],
             timeout: { duration: 5000, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => this.$q());
+          }).then(this.exitComponent);
           return true;
         }
       }
@@ -233,7 +233,7 @@ export default {
       if (this.isEmptyTicket) return;
       let target = !!document.querySelector(".sub.target");
       target
-        ? this.$p("modify", {
+        ? this.$open("modify", {
             item: {
               qty: this.choiceSet ? this.choiceSet.qty : 1,
               single: this.choiceSet ? this.choiceSet.single : 0,
@@ -241,23 +241,23 @@ export default {
             },
             type: "choiceSet"
           })
-        : this.$p("modify", { item: this.item });
+        : this.$open("modify", { item: this.item });
     },
     courseTime() {
       if (this.isEmptyTicket) return;
-      this.$p("course");
+      this.$open("course");
     },
     settle() {
       this.ticket.type === "TO_GO"
-        ? this.$p("payment", { order: this.combineTogoItems() })
-        : this.$p("payment");
+        ? this.$open("payment", { order: this.combineTogoItems() })
+        : this.$open("payment");
     },
     request() {
       this.$emit("open", "request");
     },
     promotion() {
       this.$socket.emit("[COUPON] LIST", coupons => {
-        this.$p("coupon", {
+        this.$open("coupon", {
           coupons: coupons.map(coupon => {
             Object.assign(coupon, { redeem: false, enable: true });
             return coupon;
@@ -299,7 +299,7 @@ export default {
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     combineTogoItems() {
       //combine togo list to origin dineIn placed items
@@ -448,7 +448,7 @@ export default {
         ? this.abandon()
         : this.$dialog(prompt)
             .then(this.abandon)
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
     },
     combineOrderInfo(extra) {
       const customer = this.$minifyCustomer(this.customer);
@@ -602,7 +602,7 @@ export default {
         ? this.resetTableExit()
         : this.$dialog(prompt)
             .then(this.resetTableExit)
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
     },
     resetTableExit() {
       if (this.currentTable) {

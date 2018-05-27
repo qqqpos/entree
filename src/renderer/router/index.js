@@ -517,6 +517,11 @@ export default new Router({
                   component: require("../components/setting/chart/sales")
                 },
                 {
+                  path: "hourly",
+                  name: 'Setting.chart.hourly',
+                  component: require("../components/setting/chart/hourly")
+                },
+                {
                   path: "source",
                   name: "Setting.chart.source",
                   component: require("../components/setting/chart/source")

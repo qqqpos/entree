@@ -53,9 +53,9 @@ export default {
               key: "departments",
               value: this.departments
             });
-            this.$q();
+            this.exitComponent();
           })
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       });
     },
     edit(department, index) {
@@ -76,7 +76,7 @@ export default {
               key: "departments",
               value: this.departments
             });
-            this.$q();
+            this.exitComponent();
           })
           .catch(del => {
             if (del) {
@@ -87,7 +87,7 @@ export default {
               });
             }
 
-            this.$q();
+            this.exitComponent();
           });
       });
     }

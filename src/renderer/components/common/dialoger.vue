@@ -59,7 +59,7 @@ export default {
     },
     exit() {
       clearTimeout(this.timeout);
-      this.init.resolve() || this.$parent.$q();
+      this.init.resolve() || this.$openarent.$q();
     }
   },
   computed: {

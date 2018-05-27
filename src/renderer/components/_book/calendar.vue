@@ -167,7 +167,7 @@ export default {
             }).then(() => {
                 this.date = today();
                 this.tab = 'calendar'
-                this.$q()
+                this.exitComponent()
             })
         },
         checkTime() {

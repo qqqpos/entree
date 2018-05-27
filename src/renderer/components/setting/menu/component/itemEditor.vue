@@ -209,9 +209,9 @@ export default {
       })
         .then(_prices => {
           Object.assign(this.item, { prices: _prices });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     addOption() {
       if (this.item.option.length > 11) return;
@@ -228,9 +228,9 @@ export default {
       })
         .then(_option => {
           this.item.option.splice(index, 1, _option);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     render() {
       this.$forceUpdate();
@@ -243,9 +243,9 @@ export default {
       })
         .then(_preset => {
           Object.assign(this.item, { preset: _preset });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setRestriction() {
       const {
@@ -273,13 +273,13 @@ export default {
       })
         .then(_restrict => {
           Object.assign(this.item, { restrict: _restrict });
-          this.$q();
+          this.exitComponent();
         })
         .catch(remove => {
           if (remove) {
             delete this.item.restrict;
           }
-          this.$q();
+          this.exitComponent();
         });
     },
     save() {

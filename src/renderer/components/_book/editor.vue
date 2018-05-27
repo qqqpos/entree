@@ -185,9 +185,9 @@ export default {
                 this.date = moment(time).format("MM-DD HH:mm");
                 this.book.date = moment(time).format("YYYY-MM-DD");
                 this.book.reserve = time;
-                this.$q()
+                this.exitComponent()
             }).catch(() => {
-                this.$q()
+                this.exitComponent()
             })
         }
     },

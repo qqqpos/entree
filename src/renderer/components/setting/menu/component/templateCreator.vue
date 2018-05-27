@@ -63,7 +63,7 @@ export default {
       );
 
       found || !this.init.template.name
-        ? this.$dialog(prompt).then(() => this.$q())
+        ? this.$dialog(prompt).then(this.exitComponent)
         : this.confirm();
     },
     confirm() {

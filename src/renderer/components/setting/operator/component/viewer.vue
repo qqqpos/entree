@@ -86,10 +86,10 @@ export default {
       })
         .then(_record => {
           this.init.payroll.timecard.splice(index, 1, _record);
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
-          del ? this.remove(record, index) : this.$q();
+          del ? this.remove(record, index) : this.exitComponent();
         });
     },
     remove(record, index) {
@@ -104,9 +104,9 @@ export default {
             this.init.payroll.timecard.splice(index, 1);
             this.$emit("reload");
           });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

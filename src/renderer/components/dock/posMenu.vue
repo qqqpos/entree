@@ -219,9 +219,9 @@ export default {
         .then(() => {
           this.setOp({ clockIn: this.time, session: ObjectId() });
           this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     askClockOut() {
       const diff = moment().diff(moment(this.op.clockIn));
@@ -259,9 +259,9 @@ export default {
                 ? this.reportTip()
                 : this.clockOut();
             })
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     reportTip() {
       new Promise((resolve, reject) => {
@@ -279,10 +279,10 @@ export default {
             .then(() => this.clockOut(tip))
             .catch(this.reportTip);
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     clockOut(tip = 0) {
-      this.$q();
+      this.exitComponent();
       this.$socket.emit("[TIMECARD] CLOCK_OUT", { op: this.op, tip });
       this.setOp({ clockIn: null, session: null });
       this.$router.push({ path: "/main/lock" });
@@ -325,7 +325,7 @@ export default {
           this.$router.push({ path: "/main/lock" });
           this.init.resolve();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     endBreakTime() {
       const duration = moment
@@ -342,9 +342,9 @@ export default {
         .then(() => {
           this.$socket.emit("[TIMECARD] BREAK_END", this.op);
           this.setOp({ break: null });
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     askCashDrawerCashIn() {
       const amount = this.station.cashDrawer.initialAmount;
@@ -352,7 +352,7 @@ export default {
 
       this.$dialog(prompt)
         .then(this.countInitialCash)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     askCashDrawerCashOut() {
       const { name } = this.station.cashDrawer;
@@ -369,7 +369,7 @@ export default {
     askStaffCashIn() {
       this.$dialog({ title: "dialog.selfCashIn", msg: "dialog.selfCashInTip" })
         .then(this.countSelfCash)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     askStaffCashOut() {
       const { name } = this.op;
@@ -398,7 +398,7 @@ export default {
           this.component = "collector";
         })
           .then(this.countSelfCash)
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       }
     },
     countInitialCash(amount) {
@@ -422,7 +422,7 @@ export default {
           this.component = "collector";
         })
           .then(this.countInitialCash)
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       }
     },
     acceptCashIn(amount) {
@@ -454,10 +454,10 @@ export default {
       this.$socket.emit("[CASHFLOW] DEPOSIT", record);
       Printer.printCashInReport(record);
       this.isShow.deposit = true;
-      this.$q();
+      this.exitComponent();
     },
     cashOut(cashDrawer) {
-      this.$q();
+      this.exitComponent();
       this.$socket.emit("[CASHFLOW] SETTLE", cashDrawer, cashFlow =>
         this.reconciliation(cashFlow)
       );
@@ -516,17 +516,17 @@ export default {
     logout() {
       this.checkOpenTicket()
         .then(this.exit)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     exit() {
-      this.$q();
+      this.exitComponent();
       this.$router.push({ name: "Login" });
     },
     report() {
       this.checkOpenTicket()
         .then(this.askReport)
-        .then(() => this.$q())
-        .catch(() => this.$q());
+        .then(this.exitComponent)
+        .catch(this.exitComponent);
     },
     askReport() {
       return new Promise(next => {

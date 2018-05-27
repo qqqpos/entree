@@ -94,7 +94,7 @@ export default {
                       this.terminal
                         .adjust(0, transaction, tip)
                         .then(response => {
-                          this.$q();
+                          this.exitComponent();
                           const result = this.terminal.explainTransaction(
                             response.data
                           );

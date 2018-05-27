@@ -127,7 +127,7 @@ export default {
     setCalendar(date) {
       this.calendarDate = date;
       this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, invoices => {
-        this.$q();
+        this.exitComponent();
         this.prevHistory = invoices;
         this.resetViewOrder();
       });
@@ -147,7 +147,7 @@ export default {
       });
     },
     getConsole() {
-      this.$p("Maintenance");
+      this.$open("Maintenance");
     },
     ...mapActions(["setViewOrder"])
   },

@@ -91,9 +91,9 @@ export default {
       })
         .then(_item => {
           this.template.contain[this.index].contain.push(_item);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     edit(item, index) {
       new Promise((resolve, reject) => {
@@ -102,11 +102,11 @@ export default {
       })
         .then(_item => {
           this.template.contain[this.index].contain.splice(index, 1, _item);
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) this.template.contain[this.index].contain.splice(index, 1);
-          this.$q();
+          this.exitComponent();
         });
     },
     setOption() {
@@ -121,7 +121,7 @@ export default {
       })
         .then(_option => {
           Object.assign(this.template.contain[this.index], _option);
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) {
@@ -129,7 +129,7 @@ export default {
             this.index = 0;
             this.template.contain.splice(index, 1);
           }
-          this.$q();
+          this.exitComponent();
         });
     },
     newPage() {
@@ -142,9 +142,9 @@ export default {
         .then(_option => {
           Object.assign(_option, { contain: [] });
           this.template.contain.push(_option);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

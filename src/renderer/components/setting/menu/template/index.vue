@@ -63,10 +63,10 @@ export default {
         .then(_template => {
           this.$socket.emit("[TEMPLATE] SAVE", _template, () => {
             this.list = this.$store.getters.templates;
-            this.$q();
+            this.exitComponent();
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setPage(num) {
       this.page = num;

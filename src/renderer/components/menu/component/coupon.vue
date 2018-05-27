@@ -91,7 +91,7 @@ export default {
         this.component = "giftcard";
       })
         .then(card => {
-          this.$q();
+          this.exitComponent();
           if (card.vip) {
             this.setOrder({ __vip__: card });
             card.holder && this.setCustomer({});
@@ -101,10 +101,10 @@ export default {
               msg: "card.notVipCard",
               buttons: [{ text: "button.confirm", fn: "resolve" }]
             };
-            this.$dialog(prompt).then(() => this.$q());
+            this.$dialog(prompt).then(this.exitComponent);
           }
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     confirm() {
       const coupons = this.coupons.filter(coupon => coupon.redeem);

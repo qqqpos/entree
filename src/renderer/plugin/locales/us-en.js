@@ -433,13 +433,14 @@ export default {
     address: "Address Info",
     sideOption: "Side Option",
     ledger: "Sales Ledger",
-    department: "Department",
+    departments: "Departments",
     hibachiTable: "Hibachi Table",
     customerProfile: "Customer Info",
     ticketProfile: "Ticket Info",
     reportTip: "Report Tips",
     giftcardStats: "Gift Card Stats",
-    departments: "Departments"
+    dailySaleSummary: "Daily Sales Summary",
+    hourlySaleSummary: "Hourly Sales Summary"
   },
   dialog: {
     maintenance: "Maintenance",
@@ -734,7 +735,9 @@ export default {
     removeTimecardConfirm: "Are you sure to remove timecard record on {i}?",
     releasePayroll: "Payment Confirm",
     payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?",
-    discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal."
+    discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal.",
+    evenSplit: "Ticket Even Split",
+    evenSplitConfirm: "Are you sure to even split ticket into {i} ?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1310,6 +1313,7 @@ export default {
     hibachi: "Hibachi",
     item: "Item",
     daily: "Daily",
+    hourly: "Hourly",
     compare: "Compare"
   },
   setting: {

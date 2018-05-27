@@ -89,9 +89,9 @@ export default {
       caller
         ? this.$socket.emit("[PHONE] RING", caller, customer => {
             this.newPhoneCall(customer);
-            this.$p("caller", { customer });
+            this.$open("caller", { customer });
           })
-        : this.$q();
+        : this.exitComponent();
     },
     time(tick) {
       this.app.autoLock &&
@@ -161,13 +161,13 @@ export default {
         this.setApp({ autoLock: false });
         this.$dialog(prompt)
           .then(() => {
-            this.$q();
+            this.exitComponent();
             this.doubleCheck();
             this.resetAll();
             this.$router.push({ path: "/main/lock" });
           })
           .catch(() => {
-            this.$q();
+            this.exitComponent();
             this.setApp({ lastActivity: +new Date(), autoLock: true });
           });
       }
@@ -215,8 +215,8 @@ export default {
 
       this.$socket.emit("[CUSTOMER] PROFILE", this.customer._id, customer => {
         customer
-          ? this.$p("profiles", { customer })
-          : this.$p("profiles", { customer: this.customer });
+          ? this.$open("profiles", { customer })
+          : this.$open("profiles", { customer: this.customer });
       });
     },
     ...mapActions([
@@ -251,7 +251,7 @@ export default {
   },
   sockets: {
     connect() {
-      this.component === "disc" && this.$q();
+      this.component === "disc" && this.exitComponent();
       this.setApp({ database: true });
 
       this.station &&
@@ -353,7 +353,7 @@ export default {
     },
     disconnect() {
       this.setApp({ database: false });
-      this.$p("disc");
+      this.$open("disc");
     }
   }
 };

@@ -188,7 +188,7 @@ export default {
       this.tab = "info";
       this.$socket.emit("[GIFTCARD] HISTORY", card.number, logs => {
         this.logs = logs;
-        this.$q();
+        this.exitComponent();
       });
     },
     initialFailed(exception) {
@@ -232,7 +232,7 @@ export default {
             expiration: null
           };
           this.activation = true;
-          this.$q();
+          this.exitComponent();
         })
         .catch(() => this.init.reject());
     },
@@ -279,11 +279,11 @@ export default {
 
         this.$dialog(prompt)
           .then(() => next())
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       });
     },
     charge() {
-      this.$q();
+      this.exitComponent();
 
       this.payment === "CASH" ? this.chargeCash() : this.chargeCreditCard();
     },
@@ -342,7 +342,7 @@ export default {
         this.component = "creditCard";
       })
         .then(data => {
-          this.$q();
+          this.exitComponent();
 
           const date = today();
           const time = +new Date();
@@ -386,13 +386,13 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.$q();
+          this.exitComponent();
         });
     },
     reloadFailed(error) {
       typeof error === "object"
-        ? this.$dialog(error).then(() => this.$q())
-        : this.$q();
+        ? this.$dialog(error).then(this.exitComponent)
+        : this.exitComponent();
     },
     activateCard() {
       Object.assign(this.giftcard, {
@@ -541,7 +541,7 @@ export default {
             this.$dialog(prompt).then(() => this.init.resolve());
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     applyCard(){
       this.init.resolve(this.giftcard);

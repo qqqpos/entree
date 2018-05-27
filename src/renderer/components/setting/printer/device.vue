@@ -58,9 +58,9 @@ export default {
 
           assign && this.$socket.emit("[MENU] ASSIGN_PRINTER", name);
 
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setPage(num) {
       this.page = num;

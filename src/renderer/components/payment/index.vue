@@ -419,12 +419,12 @@ export default {
         .catch(this.unableToPaySplit);
     },
     payAsWhole() {
-      this.$q();
+      this.exitComponent();
       this.payInFull = true;
       this.initialized();
     },
     getSplitOrder() {
-      this.$q();
+      this.exitComponent();
       return new Promise((next, stop) => {
         this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
           this.splits = splits;
@@ -607,8 +607,8 @@ export default {
       });
 
       error && error.hasOwnProperty("title")
-        ? this.$dialog(error).then(() => this.$q())
-        : this.$q();
+        ? this.$dialog(error).then(this.exitComponent)
+        : this.exitComponent();
     },
     setPaymentType(type, vip) {
       this.paymentType = type;
@@ -626,7 +626,7 @@ export default {
             this.giftCard = "";
             this.swipeGiftCard()
               .then(this.checkGiftCard)
-              .catch(() => this.$q());
+              .catch(this.exitComponent);
           }
           this.paid = this.payment.remain.toFixed(2);
           break;
@@ -663,13 +663,13 @@ export default {
               this.paid = (this.paid - extra).toFixed(2);
               this.tip = extra.toFixed(2);
 
-              this.$q();
+              this.exitComponent();
               this.recalculatePayment();
               next(true);
             })
             .catch(() => {
               this.tip = "0.00";
-              this.$q();
+              this.exitComponent();
             });
         } else {
           next(false);
@@ -756,10 +756,10 @@ export default {
     queryGiftCard() {
       this.swipeGiftCard(this.giftCard.replace(/\D/g, ""))
         .then(this.checkGiftCard)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     checkGiftCard(card) {
-      this.$q();
+      this.exitComponent();
       return new Promise((resolve, reject) => {
         if (typeof card === "object") {
           this.giftCard = card;
@@ -811,7 +811,7 @@ export default {
             this.component = "thirdParty";
           })
             .then(charge)
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
         }
       });
     },
@@ -1097,7 +1097,7 @@ export default {
               break;
             case "never":
               this.$dialog(tenderWithoutDialog).then(() => {
-                this.$q();
+                this.exitComponent();
                 next();
               });
               break;
@@ -1108,7 +1108,7 @@ export default {
                   next();
                 })
                 .catch(() => {
-                  this.$q();
+                  this.exitComponent();
                   next();
                 });
           }
@@ -1158,13 +1158,13 @@ export default {
       }
     },
     checkBalance() {
-      this.$q();
+      this.exitComponent();
       if (this.payInFull) {
         this.$socket.emit("[PAYMENT] CHECK", this.order._id, paid => {
           const remain = Math.max(0, toFixed(this.payment.balance - paid, 2));
 
           if (remain > 0) {
-            this.$q();
+            this.exitComponent();
             this.setPaymentType("CASH");
             this.poleDisplay("Balance Due:", `$ ${remain.toFixed(2)}`);
           } else {
@@ -1203,12 +1203,12 @@ export default {
         if (this.giftCard.balance < this.paid) {
           this.$dialog(insufficientError)
             .then(() => {
-              this.$q();
+              this.exitComponent();
               this.paid = this.giftCard.balance.toFixed(2);
               resolve();
             })
             .catch(() => {
-              this.$q();
+              this.exitComponent();
               reject();
             });
         } else {
@@ -1291,7 +1291,7 @@ export default {
 
             this.$dialog(prompt)
               .then(this.setDiscount)
-              .catch(() => this.$q());
+              .catch(this.exitComponent);
             return;
           }
 
@@ -1310,9 +1310,9 @@ export default {
             ["Discount:", -discount.toFixed(2)],
             ["Due:", this.payment.remain.toFixed(2)]
           );
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     preview(index) {
       const ticket = JSON.parse(JSON.stringify(this.splits[index]));
@@ -1320,7 +1320,7 @@ export default {
       ticket.print = false;
       ticket.content.forEach(item => (item.print = false));
 
-      this.$p("ticket", { ticket, exit: true });
+      this.$open("ticket", { ticket, exit: true });
     },
     roundUp() {
       const rounded = Math.ceil(this.payment.remain);
@@ -1481,9 +1481,9 @@ export default {
           this.tip = tip.toFixed(2);
           Object.assign(this.payment, { tip });
           this.setOrder(Object.assign(this.order, { payment: this.payment }));
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     exit() {
       this.init.reject();

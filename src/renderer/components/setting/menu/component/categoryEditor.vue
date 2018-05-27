@@ -155,13 +155,13 @@ export default {
       })
         .then(rule => {
           this.restrictions[group] = rule;
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) {
             this.restrictions[group] = null;
           }
-          this.$q();
+          this.exitComponent();
         });
     },
     apply() {

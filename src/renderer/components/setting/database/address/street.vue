@@ -47,14 +47,14 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.$q();
+          this.exitComponent();
           this.$socket.emit("[ADDRESS] REMOVE", this.address._id, callback => {
             this.$emit("reset");
             this.$emit("refresh");
             this.$router.push({ name: "Setting.database.address" });
           });
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     save() {
       this.$socket.emit("[ADDRESS] UPDATE", this.address, callback => {

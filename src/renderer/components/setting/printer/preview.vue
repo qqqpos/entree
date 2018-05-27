@@ -33,7 +33,7 @@ export default {
     refresh() {
       this.$socket.emit("[PRINTER] PREVIEW", ticket => {
         this.ticket = ticket;
-        this.$p("preview", { ticket, printer: this.printer });
+        this.$open("preview", { ticket, printer: this.printer });
       });
     },
     buzzer() {

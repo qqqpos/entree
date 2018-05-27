@@ -105,7 +105,7 @@ export default {
             this.coupons.splice(index, 1, data);
             this.$socket.emit("[COUPON] LIST", coupons => {
               this.coupons = coupons;
-              this.$q();
+              this.exitComponent();
             })
           });
         })
@@ -115,7 +115,7 @@ export default {
               this.coupons.splice(index, 1);
             });
           }
-          this.$q();
+          this.exitComponent();
         });
     }
   }

@@ -42,6 +42,7 @@
 
 <script>
 export default {
+  props:["init"],
   data() {
     return {
       range: "today",
@@ -63,6 +64,7 @@ export default {
     };
   },
   created() {
+    this.range = this.init || "today";
     this.initialCalendar();
   },
   mounted() {

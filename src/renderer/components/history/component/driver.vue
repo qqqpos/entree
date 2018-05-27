@@ -179,9 +179,9 @@ export default {
           this.order.payment.balance = balance;
           this.order.payment.remain = toFixed(balance - paid, 2);
           this.$socket.emit("[UPDATE] INVOICE", this.order, false);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     next(number) {
       if (number) {
@@ -208,8 +208,8 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() => this.$socket.emit("[DRIVER] SETTLE", this.init.date, () => this.$q()))
-        .catch(() => this.$q());
+        .then(() => this.$socket.emit("[DRIVER] SETTLE", this.init.date, this.exitComponent))
+        .catch(this.exitComponent);
     }
   },
   watch: {

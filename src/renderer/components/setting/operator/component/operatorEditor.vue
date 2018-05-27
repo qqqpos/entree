@@ -122,7 +122,7 @@ export default {
           break;
       }
 
-      this.$dialog(content).then(() => this.$q())
+      this.$dialog(content).then(this.exitComponent)
     }
   }
 };

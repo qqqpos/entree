@@ -56,9 +56,9 @@ export default {
       })
         .then(name => {
           this.list.push(name);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setPage(num) {
       this.page = num;

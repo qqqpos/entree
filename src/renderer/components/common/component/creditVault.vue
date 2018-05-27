@@ -179,9 +179,9 @@ export default {
           );
           this.opts.splice(index, 1);
           this.entry = "";
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     confirm() {
       const { unlock, number, exp, cvc } = this.select;

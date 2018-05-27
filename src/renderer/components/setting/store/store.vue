@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     register() {
-      this.$p("register");
+      this.$open("register");
     },
     update(data) {
       this.$socket.emit("[CONFIG] UPDATE", data);

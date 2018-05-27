@@ -40,9 +40,9 @@ export default {
       })
         .then(_grid => {
           this.station.interface.splice(index, 1, _grid);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

@@ -289,12 +289,12 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.$p("processor", { timeout: 30000 });
+          this.$open("processor", { timeout: 30000 });
           this.initialParser(record.terminal)
             .then(this.executeVoidSale.bind(null, record))
             .catch(this.executeFailed);
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     askRefund(record) {
       const amount = record.amount.approve;
@@ -309,14 +309,14 @@ export default {
 
       this.$dialog(prompt)
         .then(() => this.refund(record))
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     refund(record) {
       const amount = record.amount.approve;
       const order = record.order || {};
       const number = order.number || "";
 
-      this.$p("processor", { timeout: 60000 });
+      this.$open("processor", { timeout: 60000 });
       this.initialParser(this.station.terminal).then(() => {
         this.terminal.refund(amount, number).then(response => {
           let result = this.terminal.explainTransaction(response.data);
@@ -355,7 +355,7 @@ export default {
 
             this.$socket.emit("[TERMINAL] SAVE", result);
             this.$socket.emit("[TRANSACTION] SAVE", transaction);
-            this.$q();
+            this.exitComponent();
 
             Printer.printCreditCard(result, {});
           } else {
@@ -365,7 +365,7 @@ export default {
               buttons: [{ text: "button.confirm", fn: "resolve" }]
             };
 
-            this.$dialog(prompt).then(() => this.$q());
+            this.$dialog(prompt).then(this.exitComponent);
           }
         });
       });
@@ -411,7 +411,7 @@ export default {
             console.log(payment);
             //this.$socket.emit("[PAYMENT] REMOVE", payment);
           });
-          this.$q();
+          this.exitComponent();
         } else {
           const prompt = {
             type: "error",
@@ -420,7 +420,7 @@ export default {
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
-          this.$dialog(prompt).then(() => this.$q());
+          this.$dialog(prompt).then(this.exitComponent);
         }
       });
     },
@@ -432,7 +432,7 @@ export default {
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     accessAdjuster() {
       this.$checkPermission("modify", "transaction")
@@ -448,7 +448,7 @@ export default {
         this.component = "adjuster";
       })
         .then(this.preBatch)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     preBatch() {
       const prompt = {
@@ -462,10 +462,10 @@ export default {
 
       this.$dialog(prompt)
         .then(this.batch)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     batch() {
-      this.$p("batch", {
+      this.$open("batch", {
         devices: this.devices,
         transactions: this.transactions
       });

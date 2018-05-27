@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     view(ticket) {
-      this.$p("ticket", { ticket, exit: true });
+      this.$open("ticket", { ticket, exit: true });
     },
     todo(content) {
       return content
@@ -127,7 +127,7 @@ export default {
         .reduce((a, b) => a + b, 0);
     },
     settle(order) {
-      this.$p("payment", { order });
+      this.$open("payment", { order });
     },
     queued(number) {
       return this.combineOrders.includes(number);
@@ -192,10 +192,10 @@ export default {
             console.log(e);
           }
           this.combineOrders = [];
-          this.$q();
+          this.exitComponent();
         })
         .catch(() => {
-          this.$q();
+          this.exitComponent();
         });
     }
   },

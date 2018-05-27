@@ -154,13 +154,13 @@ export default {
         };
         this.$dialog(prompt)
           .then(() => this.startBatch(device, index))
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       } else {
         this.startBatch(device, index);
       }
     },
     startBatch(device, index) {
-      this.$q();
+      this.exitComponent();
       if (device.status === 4) return;
       this.batch(device).then(response => {
         const result = device.terminal.explainBatch(response.data);

@@ -1,53 +1,92 @@
 <template>
-    <div class="chart" ref="chart" style="width: 100%; height: 450px;"></div>
+  <div>
+    <header class="chart">
+      <div class="f1">
+          <h3>{{$t('title.hourlySaleSummary')}}</h3>
+          <p>Hourly sales Summary</p>
+      </div>
+      <date-picker @update="fetchData" init="today"></date-picker>
+    </header>
+    <div class="relative">
+        <div class="chart relative" ref="chart" style="width: 100%; height: 450px;"></div>        
+        <loader :display="isLoading"></loader>
+    </div>
+  </div>
 </template>
 
 <script>
+import loader from "../../common/loader";
+import datePicker from "../common/datePicker";
+
 export default {
-  props: ["invoices"],
-  created() {
-    this.process();
-  },
-  mounted() {
-    this.draw();
-  },
+  components: { datePicker, loader },
   data() {
     return {
-      dataProvider: []
+      isLoading: false
     };
   },
+  created() {
+    this.fetchData();
+  },
   methods: {
-    process() {
+    fetchData(range) {
+      if (!range) {
+        const from = +moment(today(), "YYYY-MM-DD", true)
+          .startOf("day")
+          .hour(4);
+        const to = +moment(today(), "YYYY-MM-DD", true)
+          .startOf("day")
+          .add(1, "days")
+          .hour(4);
+
+        this.$socket.emit("[CHART] HOURLY", { from, to }, invoices =>
+          this.process(invoices)
+        );
+      } else {
+        const [from, to] = range;
+
+        this.$socket.emit(
+          "[CHART] HOURLY",
+          { from: +from, to: +to },
+          invoices => this.process(invoices)
+        );
+      }
+
+      this.isLoading = true;
+    },
+    process(invoices) {
       let hours = {};
 
-      this.invoices.forEach(invoice => {
-        if (invoice.status === 1) {
-          const hour = new Date(invoice.create || invoice.time).getHours();
-          const { due } = invoice.payment;
+      invoices.forEach(invoice => {
+        const hour = new Date(invoice.create || invoice.time).getHours();
+        const { due } = invoice.payment;
 
-          if (hours.hasOwnProperty(hour)) {
-            hours[hour].value += due;
-            hours[hour].count++;
-          } else {
-            hours[hour] = {
-              count: 1,
-              value: due
-            };
-          }
+        if (hours.hasOwnProperty(hour)) {
+          hours[hour].value += due;
+          hours[hour].count++;
+        } else {
+          hours[hour] = {
+            count: 1,
+            value: due
+          };
         }
       });
 
-      this.dataProvider = [];
+      let chart = [];
 
       Object.keys(hours).forEach(hour =>
-        this.dataProvider.push({
+        chart.push({
           time: `${("0" + hour).slice(-2)}:00`,
           count: hours[hour].count,
           amount: hours[hour].value.toFixed(2)
         })
       );
+
+      this.draw(chart);
     },
-    draw() {
+    draw(dataProvider) {
+      this.isLoading = false;
+
       AmCharts.makeChart(this.$refs.chart, {
         path:
           process.env.NODE_ENV === "development"
@@ -116,15 +155,9 @@ export default {
           enabled: true,
           fileName: this.setDate + " Hourly Sales"
         },
-        dataProvider: this.dataProvider
+        dataProvider
       });
-      
-      this.$emit("ready");
     }
   }
 };
 </script>
-
-<style scoped>
-</style>
-

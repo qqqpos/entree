@@ -137,7 +137,7 @@ export default {
         //   };
 
         //   table.invoice.length === 0
-        //     ? this.$dialog(prompt).then(() => this.$q())
+        //     ? this.$dialog(prompt).then(this.exitComponent)
         //     : this.checkPermission(table)
         //         .then(this.viewTicket)
         //         .catch(this.exceptionHandler);
@@ -266,7 +266,7 @@ export default {
 
                 this.$dialog(prompt)
                   .then(() => {
-                    this.$q();
+                    this.exitComponent();
                     const language = _operator.language || "usEN";
                     moment.locale(language === "usEN" ? "en" : "zh-cn");
                     this.$setLanguage(language);
@@ -315,11 +315,11 @@ export default {
         : this.$dialog(prompt)
             .then(() => {
               this.$socket.emit("[SYNC] ORDER_LIST");
-              this.$q();
+              this.exitComponent();
             })
             .catch(() => {
               this.$socket.emit("[TABLE] RESET", { _id: table._id });
-              this.$q();
+              this.exitComponent();
             });
     },
     swapTable(tables) {
@@ -441,7 +441,7 @@ export default {
       this.$router.push({ path: "/main/menu" });
     },
     createTableFailed(reason) {
-      this.$q();
+      this.exitComponent();
       let prompt = null;
       switch (reason) {
         case "PASSWORD_REQUIRED":
@@ -466,7 +466,7 @@ export default {
           };
           break;
       }
-      prompt && this.$dialog(prompt).then(() => this.$q());
+      prompt && this.$dialog(prompt).then(this.exitComponent);
     },
     option(table, index) {
       table._id && !table.temporary
@@ -496,9 +496,9 @@ export default {
           .then(() => {
             this.$socket.emit("[TABLE] RESET", { _id });
             this.resetMenu();
-            this.$q();
+            this.exitComponent();
           })
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       }
     },
     collapseTable(table, index) {
@@ -510,9 +510,9 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     temporaryTable(table, index) {
       return;
@@ -524,14 +524,14 @@ export default {
 
       this.$dialog(prompt)
         .then(() => this.setTableName(table, index))
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     setTableName(table, index) {
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject };
         this.component = "creator";
       }).then(name => {
-        this.$q();
+        this.exitComponent();
         Object.assign(table, {
           _id: String().random(),
           temporary: true,

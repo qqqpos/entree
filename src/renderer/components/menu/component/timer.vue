@@ -162,9 +162,9 @@ export default {
           this.timer.month(date[1] - 1);
           this.timer.date(~~date[2]);
           this.generate();
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     combineTime() {
       return new Promise(next => {
@@ -198,7 +198,7 @@ export default {
       this.$dialog(prompt)
         .then(this.save.bind(null, false))
         .then(this.delay)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     promptPrint() {
       const duration = moment.duration(this.timer.diff(this.now)).humanize();
@@ -214,7 +214,7 @@ export default {
       this.$dialog(prompt)
         .then(this.save.bind(null, true))
         .then(this.print)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     print(order) {
       Printer.setTarget("All").print(
@@ -224,10 +224,10 @@ export default {
       this.$router.push({ path: "/main" });
     },
     failed(prompt) {
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     save(print) {
-      this.$q();
+      this.exitComponent();
 
       return new Promise(next => {
         if (this.app.newTicket) {

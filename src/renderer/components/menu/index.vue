@@ -454,7 +454,7 @@ export default {
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
-          this.$dialog(prompt).then(() => this.$q());
+          this.$dialog(prompt).then(this.exitComponent);
           break;
         default:
       }
@@ -544,7 +544,7 @@ export default {
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
-          this.$dialog(prompt).then(() => this.$q());
+          this.$dialog(prompt).then(this.exitComponent);
           return;
         } else if (overCharge > 0) {
           content.single += overCharge;

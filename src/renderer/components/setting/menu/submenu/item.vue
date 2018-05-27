@@ -55,9 +55,9 @@ export default {
         .then(_item => {
           this.items.push(Object.assign({}, _item, { clickable: true }));
           this.$socket.emit("[SUBMENU] ADD", _item);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     edit(item, index) {
       new Promise((resolve, reject) => {
@@ -66,7 +66,7 @@ export default {
       })
         .then(_item => {
           this.$socket.emit("[SUBMENU] UPDATE", _item);
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) {
@@ -74,7 +74,7 @@ export default {
             this.items.splice(index, 1);
           }
 
-          this.$q();
+          this.exitComponent();
         });
     },
     option() {}

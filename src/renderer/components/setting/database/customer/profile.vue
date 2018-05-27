@@ -86,14 +86,14 @@ export default {
             };
             this.$dialog(prompt)
                 .then(() => {
-                    this.$q();
+                    this.exitComponent();
                     this.$socket.emit("[CUSTOMER] DELETE", this.profile, callback => {
                         this.$emit("reset");
                         this.$emit("refresh");
                         this.$router.push({ name: "Setting.database.customer" });
                     });
                 })
-                .catch(() => this.$q());
+                .catch(this.exitComponent);
         },
         save() {
             this.$emit("reset");

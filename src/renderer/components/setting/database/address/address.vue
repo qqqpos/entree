@@ -65,9 +65,9 @@ export default {
         this.$socket.emit("[ADDRESS] SAVE", _address, callback => {
           this.$emit("reset");
           this.$emit("refresh");
-          this.$q();
+          this.exitComponent();
         })
-      }).catch(() => this.$q());
+      }).catch(this.exitComponent);
     },
     prev() {
       if (this.page === 0) return;

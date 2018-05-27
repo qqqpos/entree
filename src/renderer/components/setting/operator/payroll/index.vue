@@ -5,7 +5,7 @@
           <h3>{{$t('nav.payroll')}}</h3>
           <p>Payroll summary</p>
       </div>
-      <calendar @update="fetchData"></calendar>
+      <date-picker @update="fetchData"></date-picker>
     </header>
     <div class="payrolls">
       <section class="list">
@@ -65,13 +65,13 @@
 </template>
 
 <script>
+import datePicker from "../../common/datePicker";
 import dialoger from "../../../common/dialoger";
-import calendar from "../component/calendar";
 import payroll from "../component/payroll";
 import viewer from "../component/viewer";
 
 export default {
-  components: { calendar, payroll, viewer, dialoger },
+  components: { datePicker, payroll, viewer, dialoger },
   data() {
     return {
       config: this.$store.getters.store.timecard,
@@ -152,10 +152,10 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.$q();
+          this.exitComponent();
           Printer.printTimecardReport([payroll]);
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     printAll() {
       const prompt = {
@@ -165,10 +165,10 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
-          this.$q();
+          this.exitComponent();
           Printer.printTimecardReport(this.payables);
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     payAll() {},
     pay(payroll) {
@@ -190,9 +190,9 @@ export default {
           this.$socket.emit("[TIMECARD] SETTLED", timecards, () =>
             this.fetchData()
           );
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     fetchData(range) {
       range = range || this.range;

@@ -346,7 +346,9 @@ export default {
     customerProfile: "客户信息",
     ticketProfile: "订单信息",
     reportTip: "上报本次小费",
-    giftcardStats: "礼物卡数据"
+    giftcardStats: "礼物卡数据", 
+    dailySaleSummary: "每日销售总数",
+    hourlySaleSummary: "每小时销售总数"
   },
   dialog: {
     maintenance: "维护",
@@ -617,7 +619,9 @@ export default {
     removeTimecardConfirm: "您确定要移除 {i} 的打卡记录吗",
     releasePayroll: "工资结算",
     payrollPaymentConfirm: "您确定要支付 $ {i} 给 {i} 吗？",
-    discountAmountNotAllow: "您输入的折扣信息无效，折扣不能大于订单本身价值"
+    discountAmountNotAllow: "您输入的折扣信息无效，折扣不能大于订单本身价值",
+    evenSplit: "均分订单",
+    evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1275,6 +1279,7 @@ export default {
     hibachi: "铁板",
     item: "物品",
     daily: "每日",
+    hourly: "时段",
     compare: "对比"
   },
   setting: {

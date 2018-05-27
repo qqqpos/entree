@@ -172,9 +172,9 @@ export default {
       })
         .then(_language => {
           this.layout.languages.splice(index, 1, _language);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     }
   }
 };

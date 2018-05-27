@@ -79,11 +79,11 @@ export default {
     },
     chargeFailed(error) {
       typeof error === "object"
-        ? this.$dialog(error).then(() => this.$q())
-        : this.$q();
+        ? this.$dialog(error).then(this.exitComponent)
+        : this.exitComponent();
     },
     charge() {
-      this.$q();
+      this.exitComponent();
       this.payment === "CASH" ? this.chargeCash() : this.chargeCreditCard();
     },
     chargeCash() {
@@ -217,7 +217,7 @@ export default {
           this.$socket.emit("[TRANSACTION] SAVE", transaction);
           this.init.resolve();
         })
-        .catch(error => this.$q());
+        .catch(error => this.exitComponent());
     }
   }
 };

@@ -124,20 +124,20 @@ export default {
       switch (error) {
         case "receiver":
           prompt.msg = "dialog.payoutReceiverRequired";
-          this.$dialog(prompt).then(() => this.$q());
+          this.$dialog(prompt).then(this.exitComponent);
           break;
         case "amount":
           prompt.type = "question";
           prompt.msg = "dialog.payoutAmountIncorrect";
-          this.$dialog(prompt).then(() => this.$q());
+          this.$dialog(prompt).then(this.exitComponent);
           break;
         case "signature":
           prompt.type = "alert";
           prompt.msg = "dialog.payoutSignatureRequired";
-          this.$dialog(prompt).then(() => this.$q());
+          this.$dialog(prompt).then(this.exitComponent);
           break;
         default:
-          this.$q();
+          this.exitComponent();
       }
     },
     saveSignature() {

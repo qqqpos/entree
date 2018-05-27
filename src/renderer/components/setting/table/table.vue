@@ -93,9 +93,9 @@ export default {
             return section;
           });
           this.$socket.emit("[TABLE] SAVE_SECTION", sections);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     editSection(section, index) {
       new Promise((resolve, reject) => {
@@ -108,14 +108,14 @@ export default {
             return section;
           });
           this.$socket.emit("[TABLE] SAVE_SECTION", sections);
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           if (del) {
             this.$socket.emit("[TABLE] REMOVE_ZONE", index);
             this.$store.getters.tables.splice(index, 1);
           }
-          this.$q();
+          this.exitComponent();
         });
     },
     editTable(table, index) {
@@ -135,11 +135,11 @@ export default {
             table: _table,
             section: this.sectionIndex
           });
-          this.$q();
+          this.exitComponent();
         })
         .catch(del => {
           del && this.removeTable(table, index);
-          this.$q();
+          this.exitComponent();
         });
     },
     removeTable(table, index) {
@@ -157,7 +157,7 @@ export default {
         zone: ""
       });
 
-      this.$q();
+      this.exitComponent();
     },
     updateSortedSection() {
       const sections = this.sections.map(section => {

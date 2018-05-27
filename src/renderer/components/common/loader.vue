@@ -33,7 +33,6 @@ export default {
   bottom: 0;
   left: 0;
   transition: opacity 0.3s;
-  border-radius: 4px;
 }
 
 .spinner {

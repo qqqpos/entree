@@ -84,7 +84,7 @@ export default {
         title: "dialog.cannotModify",
         msg: ["dialog.noRightToModify", this.order.server],
         buttons: [{ text: "button.confirm", fn: "resolve" }]
-      }).then(() => this.$q());
+      }).then(this.exitComponent);
     },
     handleSettledOrder() {
       this.$dialog({
@@ -99,10 +99,10 @@ export default {
         ]
       })
         .then(() => this.removeOrderPayment())
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     removeOrderPayment() {
-      this.$q();
+      this.exitComponent();
       this.$dialog({
         title: "dialog.paymentRemoveConfirm",
         msg: [
@@ -111,12 +111,12 @@ export default {
         ]
       })
         .then(() => {
-          this.$q();
+          this.exitComponent();
           this.removePayment();
           this.$socket.emit("[UPDATE] INVOICE", this.order);
           this.askEditOrder();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     askEditOrder() {
       this.$dialog({
@@ -128,7 +128,7 @@ export default {
         ]
       })
         .then(this.editOrder)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     switchTable() {
       if (!this.currentTable) return;
@@ -138,15 +138,15 @@ export default {
       })
         .then(() => {
           this.$emit("switch", this.currentTable);
-          this.$q();
+          this.exitComponent();
         })
         .catch(() => {
           this.$emit("switch", false);
-          this.$q();
+          this.exitComponent();
         });
     },
     combineTicket() {
-      this.$p("list", { combineMode: true });
+      this.$open("list", { combineMode: true });
     },
     prePayment() {
       if (this.isEmptyTicket) return;
@@ -163,14 +163,14 @@ export default {
           ]
         })
           .then(() => {
-            this.$q();
+            this.exitComponent();
             this.$nextTick(() => {
               this.order.split
                 ? this.askSplitPrePayment()
                 : this.printPrePayment();
             });
           })
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       } else {
         let remain = this.order.content.filter(item => !item.print).length;
         this.$dialog({
@@ -182,11 +182,11 @@ export default {
           ]
         })
           .then(this.printPrePayment)
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       }
     },
     printPrePayment() {
-      this.$q();
+      this.exitComponent();
 
       const type = "PRE_PAYMENT";
       const cashier = this.op.name;
@@ -215,7 +215,7 @@ export default {
         .catch(this.printPrePayment);
     },
     splitPrint() {
-      this.$q();
+      this.exitComponent();
       this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
         splits.forEach(ticket => {
           Object.assign(ticket, {
@@ -238,7 +238,7 @@ export default {
         this.settledOrder();
         return;
       }
-      this.$p("payment");
+      this.$open("payment");
     },
     settledOrder() {
       const prompt = {
@@ -247,7 +247,7 @@ export default {
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt).then(() => this.$q());
+      this.$dialog(prompt).then(this.exitComponent);
     },
     switchStaff() {
       if (this.isEmptyTicket) return;
@@ -288,16 +288,16 @@ export default {
           .then(() => {
             this.resetMenu();
             this.$socket.emit("[TABLE] RESET", { _id: this.currentTable._id });
-            this.$q();
+            this.exitComponent();
           })
-          .catch(() => this.$q());
+          .catch(this.exitComponent);
       } else {
         this.$dialog({
           type: "info",
           title: "dialog.tableClearFailed",
           msg: ["dialog.tableClearFailedTip", this.currentTable.name],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
-        }).then(() => this.$q());
+        }).then(this.exitComponent);
       }
     },
     ...mapActions([

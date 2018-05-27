@@ -57,7 +57,7 @@ import transaction from "./transaction";
 import Reason from "./component/reason";
 import reporter from "../report/index";
 import unlock from "../common/unlock";
-import ledger from "../ledger/index";
+import ledger from "../ledger/new";
 import loger from "../payment/loger";
 import Terminal from "./terminal";
 
@@ -65,13 +65,13 @@ export default {
   props: ["date"],
   components: {
     transaction,
-    ledger,
     Calendar,
     Dialoger,
     Terminal,
+    reporter,
+    ledger,
     unlock,
     Reason,
-    reporter,
     loger
   },
   data() {
@@ -182,7 +182,7 @@ export default {
         this.$dialog(prompt)
           .then(this.removeRecordFromList)
           .catch(() => {
-            this.$q();
+            this.exitComponent();
             this.edit();
           });
       } else {
@@ -199,7 +199,7 @@ export default {
       reason.hasOwnProperty("title")
         ? this.$dialog(reason)
             .then(this.removeRecordFromList)
-            .catch(() => this.$q())
+            .catch(this.exitComponent)
         : this.edit();
     },
     voidTicket() {
@@ -220,15 +220,15 @@ export default {
       this.$checkPermission("modify", "void")
         .then(() => {
           this.$dialog(prompt)
-            .then(confirm => this.$p("Reason"))
-            .catch(() => this.$q());
+            .then(confirm => this.$open("Reason"))
+            .catch(this.exitComponent);
         })
         .catch(() => {});
     },
     voidFailed(reason) {
       this.$dialog(reason)
         .then(this.removeRecordFromList)
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     removeRecordFromList() {
       new Promise((resolve, reject) => {
@@ -239,7 +239,7 @@ export default {
           this.component = "loger";
         });
       }).then(() => {
-        this.$q();
+        this.exitComponent();
         this.$socket.emit("[UPDATE] INVOICE", this.order);
       });
     },
@@ -264,9 +264,9 @@ export default {
               order.status = 1;
               delete order.void;
               this.updateInvoice(order);
-              this.$q();
+              this.exitComponent();
             })
-            .catch(() => this.$q());
+            .catch(this.exitComponent);
         })
         .catch(() => {});
     },
@@ -277,9 +277,9 @@ export default {
       })
         .then(date => {
           this.$emit("change", date);
-          this.$q();
+          this.exitComponent();
         })
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     combine() {},
     print() {
@@ -318,7 +318,7 @@ export default {
           () =>
             order.split ? this.askSplitPrint(order) : this.printTicket(order)
         )
-        .catch(() => this.$q());
+        .catch(this.exitComponent);
     },
     receipt() {
       if (this.isEmptyTicket) return;
@@ -359,7 +359,7 @@ export default {
         .catch(() => this.printTicket(order, true));
     },
     printTicket(order, receipt) {
-      this.$q();
+      this.exitComponent();
       this.updateInvoice(order);
       order.content.forEach(item => (item.diffs = "UNCHANGED"));
       receipt
@@ -367,7 +367,7 @@ export default {
         : Printer.setTarget("All").print(order);
     },
     splitPrint(order, receipt) {
-      this.$q();
+      this.exitComponent();
       this.updateInvoice(order);
 
       this.$socket.emit("[SPLIT] GET", order.children, splits => {
