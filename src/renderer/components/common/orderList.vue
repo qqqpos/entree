@@ -338,7 +338,9 @@ export default {
     },
     openKeyboard() {
       if (this.isEmptyTicket) return;
-      this.component === "entry" ? (this.component = null) : this.$open("entry");
+      this.component === "entry"
+        ? (this.component = null)
+        : this.$open("entry");
     },
     update(config) {
       this.setOrder(config);
@@ -892,6 +894,10 @@ header.info {
 
 .detail p {
   color: #3c3c3c;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 285px;
+  text-overflow: ellipsis;
 }
 
 .content .time {
@@ -930,9 +936,6 @@ header.info {
 .name {
   color: #009688;
   white-space: nowrap;
-  width: 113px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .content .value {

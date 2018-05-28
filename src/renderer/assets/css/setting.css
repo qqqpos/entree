@@ -212,15 +212,18 @@ header.nav nav {
   right:5px;
 }
 
-header.nav nav > span {
+header.nav nav > span, .editor header button.remove {
   padding: 10px 20px;
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
+  border:none;
+  outline:none;
+  font-family: 'Yuanti-SC'
 }
 
-header.nav nav .remove {
+header.nav nav .remove,.editor header button.remove {
   background: linear-gradient(to bottom, #ff5722 0%, #d32f2f 100%);
   color: #fff;
   text-shadow: 0 1px 1px #333;
@@ -302,7 +305,7 @@ td.amount {
 
 .editor header {
   border-bottom: 1px solid #eee;
-  padding: 5px 0 5px 25px;
+  padding: 5px 10px 5px 25px;
   display: flex;
   height: 40px;
   align-items: center;

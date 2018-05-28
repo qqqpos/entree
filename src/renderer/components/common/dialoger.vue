@@ -59,16 +59,14 @@ export default {
     },
     exit() {
       clearTimeout(this.timeout);
-      this.init.resolve() || this.$openarent.$q();
+      this.init.resolve() || this.$parent.exitComponent();
     }
   },
   computed: {
     ...mapGetters(["time"])
   },
   watch: {
-    "init.title"(n) {
-      this.initial();
-    },
+    "init.title": "initial",
     time(n) {
       if (this.init.timeout && this.pct > 0) {
         this.pct = this.pct - this.step;

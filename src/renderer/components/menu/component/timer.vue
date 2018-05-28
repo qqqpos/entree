@@ -274,7 +274,7 @@ export default {
               this.order.type = type;
               this.order.content = content;
 
-              this.$calculatePayment(content);
+              this.$calculatePayment(this.order, { selfAssign: true });
 
               this.$socket.emit("[UPDATE] INVOICE", this.order);
               next(order);

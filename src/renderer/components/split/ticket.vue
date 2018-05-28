@@ -114,7 +114,7 @@ export default {
     }
   },
   mounted() {
-    this.$calculatePayment(this.order.content);
+    this.$calculatePayment(this.order, { selfAssign: true });
     //register scroll event
     const dom = this.$refs[this.unique];
     if (dom) {
@@ -279,15 +279,14 @@ export default {
           let _items = [];
 
           items.forEach(item => {
+            item.__split__ = true;
             item.lock = false;
             item.deno = qty;
 
             if (item.qty === qty) {
-              item.__split__ = true;
               item.qty = 1;
               item.total = item.single.toFixed(2);
             } else {
-              item.__split__ = true;
               item.single = toFixed(item.single / qty, 2);
               item.total = (item.single * item.qty).toFixed(2);
             }
@@ -357,7 +356,7 @@ export default {
     },
     applyConfig(params) {
       Object.assign(this.order, params);
-      this.$calculatePayment(this.order.content);
+      this.$calculatePayment(this.order, { selfAssign: true });
     },
     setDiscount() {
       this.$bus.emit("__THREAD__OPEN", {
@@ -370,7 +369,7 @@ export default {
     },
     resetDiscount() {
       this.order.coupons = [];
-      this.$calculatePayment(this.order.content);
+      this.$calculatePayment(this.order, { selfAssign: true });
     },
     setCoupon() {
       this.$bus.emit("__THREAD__OPEN", {
@@ -427,7 +426,7 @@ export default {
           }
           break;
       }
-      this.$calculatePayment(this.order.content);
+      this.$calculatePayment(this.order,{ selfAssign: true });
 
       if (this.componentData)
         this.componentData.isDiscount = this.order.payment.discount > 0;
@@ -492,7 +491,7 @@ export default {
         dom && dom.classList.add("picked");
       });
     },
-    "order.content": "$calculatePayment"
+    "order": "$calculatePayment"
   }
 };
 </script>

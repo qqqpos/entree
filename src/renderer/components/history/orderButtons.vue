@@ -83,19 +83,26 @@ export default {
       this.$open("split");
     },
     evenSplit() {
-      //console.log("event split");
-      new Promise((resolve, reject) => {
-        const config = {
-          title: "title.evenSplit",
-          type: "number",
-          amount: 1
-        };
+      const prompt = {
+        title: "dialog.cantExecute",
+        msg: "dialog.ticketAlreadySplit",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
 
-        this.componentData = { resolve, reject, config };
-        this.component = "inputer";
-      })
-        .then(this.confirmEvenSplit)
-        .catch(this.exitComponent);
+      this.order.split
+        ? this.$dialog(prompt).then(this.exitComponent)
+        : new Promise((resolve, reject) => {
+            const config = {
+              title: "title.evenSplit",
+              type: "number",
+              amount: 1
+            };
+
+            this.componentData = { resolve, reject, config };
+            this.component = "inputer";
+          })
+            .then(this.confirmEvenSplit)
+            .catch(this.exitComponent);
     },
     confirmEvenSplit(number) {
       if (number > 1) {
@@ -113,7 +120,52 @@ export default {
       }
     },
     processEvenSplit(number) {
-      console.log(number);
+      //deep copy target & assign parent id
+      const parent = this.order._id;
+      const ticketNumber = this.order.number;
+
+      const splited = JSON.parse(JSON.stringify(this.order));
+      splited.parent = parent;
+
+      splited.content.forEach(item => {
+        if (item.qty === number) {
+          item.qty = 1;
+          item.deno = item.qty;
+          item.total = item.single.toFixed(2);
+        } else {
+          item.single = toFixed(item.single / number, 2);
+          item.total = (item.single * item.qty).toFixed(2);
+        }
+
+        item.choiceSet.forEach(set => {
+          set.single = toFixed(set.single / number, 2);
+          set.price = toFixed(set.single * set.qty, 2);
+        });
+      });
+
+      let splits = [];
+
+      for (let i = 1; i <= number; i++) {
+        splits.push(
+          Object.assign({}, splited, {
+            _id: ObjectId(),
+            number: ticketNumber + "-" + i,
+            payment: this.$calculatePayment(splited, {
+              selfAssign: false,
+              callback: true
+            })
+          })
+        );
+      }
+
+      this.$socket.emit("[SPLIT] SAVE", { splits, parent });
+
+      this.order.content.forEach(item => (item.split = true));
+      this.order.children = splits.map(i => i._id);
+      this.order.split = true;
+
+      this.setOrder(this.order);
+      this.$socket.emit("[UPDATE] INVOICE", this.order);
       this.exitComponent();
     },
     isSettled() {
@@ -178,7 +230,7 @@ export default {
       discount > 0 && coupons.push(coupon);
       this.order.coupons = coupons;
 
-      this.$calculatePayment(this.order.content);
+      this.$calculatePayment(this.order, { selfAssign: true });
       this.$socket.emit("[UPDATE] INVOICE", this.order);
       this.exitComponent();
     },
@@ -198,7 +250,7 @@ export default {
       this.resetMenu();
       this.$router.push({ path: "/main" });
     },
-    ...mapActions(["resetMenu"])
+    ...mapActions(["resetMenu", "setOrder"])
   },
   computed: {
     disable() {
@@ -216,6 +268,7 @@ export default {
       "ticket",
       "dinein",
       "history",
+      "customer",
       "isEmptyTicket"
     ])
   }

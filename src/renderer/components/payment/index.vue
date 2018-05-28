@@ -1,22 +1,17 @@
 <template>
   <div class="popupMask center dark">
     <transition-group name="fadeIn" mode="out-in" appear>
-      <div class="window" v-show="!component" :key="0">
-        <header class="title">
-          <span>{{$t('title.payment')}}</span>
-          <div v-if="!payInFull && splits.length > 1" class="viewer">
-            <label v-for="(split,index) in splits" :key="index">
-              <input type="radio" name="split" :id="'split_'+index" :value="index" v-model="current" @change="switchInvoice(index)">
-              <label :for="'split_'+index" class="tag">{{index + 1}}</label>
-              <div class="preview" @click="preview(index)">
-                <i class="fa fa-wpforms"></i>
-                <span>{{$t('text.preview')}}</span>
-              </div>
-            </label>
+      <div class="editor" v-show="!component" :key="0">
+        <header class="relative">
+          <div>
+            <h3>{{$t('title.payment')}}</h3>
           </div>
+          <tickets :splits="splits" v-model="current" @preview="preview" @switch="switchInvoice" :mode="payInFull"></tickets>
           <i class="fa fa-times" @click="init.reject(false)"></i>
         </header>
-        <nav>
+        <div class="banner"></div>
+        <div class="wrap">
+          <nav>
           <div class="paymentTypes">
             <div class="type">
               <input type="radio" v-model="paymentType" name="paymentType" value="CASH" id="CASH" @change="setPaymentType('CASH')">
@@ -30,10 +25,6 @@
               <input type="radio" v-model="paymentType" name="paymentType" value="THIRD" id="THIRD" @change="setPaymentType('THIRD')">
               <label for="THIRD">{{$t('type.THIRD')}}</label>
             </div>
-            <!-- <div class="type" v-if="!order.hasOwnProperty('__vip__')">
-              <input type="radio" v-model="paymentType" name="paymentType" value="GIFT" id="GIFT" @change="setPaymentType('GIFT',false)">
-              <label for="GIFT">{{$t('type.GIFT')}}</label>
-            </div> -->
             <div class="type" v-if="store.giftcard.enable">
               <input type="radio" v-model="paymentType" name="paymentType" value="GIFT" id="GIFT" @change="setPaymentType('GIFT',true)">
               <label for="GIFT">{{$t('type.GIFT')}}</label>
@@ -224,6 +215,8 @@
             <div class="numKey" v-for="(num,index) in quickInput" @click="setQuickInput(num)" :key="index">{{num}}</div>
           </section>
         </article>
+        </div>
+        
       </div>
       <div :is="component" :init="componentData" :key="1"></div>
     </transition-group>
@@ -235,6 +228,7 @@ import { mapGetters, mapActions } from "vuex";
 import checkbox from "../setting/common/checkbox";
 import dialoger from "../common/dialoger";
 import capture from "../giftcard/capture";
+import tickets from "./component/tickets";
 import unlock from "../common/unlock";
 import ticket from "../common/ticket";
 import creditCard from "./creditCard";
@@ -252,6 +246,7 @@ export default {
     dialoger,
     discount,
     checkbox,
+    tickets,
     creditCard,
     thirdParty
   },
@@ -1539,87 +1534,30 @@ export default {
   },
   sockets: {
     TICKET_NUMBER(number) {
-      this.isNewTicket && this.ticketNumberUpdateable && Object.assign(this.order, { number });
+      this.isNewTicket &&
+        this.ticketNumberUpdateable &&
+        Object.assign(this.order, { number });
     }
   }
 };
 </script>
 
 <style scoped>
-.window {
-  width: 918px;
+.wrap {
+  padding: initial;
+  background: url(../../assets/image/block.png) #fcfcfc;
+}
+
+header > i.fa {
+  position: absolute;
+  right: 0;
+  padding: 18px 25px;
+  cursor: pointer;
 }
 
 nav {
   display: flex;
   margin-left: 4px;
-}
-
-.viewer {
-  display: inline-flex;
-  margin-left: 10px;
-}
-
-.viewer input:checked + label {
-  background: #3f51b5;
-}
-
-.viewer .tag {
-  width: 35px;
-  justify-content: center;
-  display: flex;
-  margin-right: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  border-radius: 4px;
-  background: #51aef5;
-}
-
-.viewer label {
-  position: relative;
-}
-
-.viewer input:checked ~ .preview {
-  animation: preview 0.5s 0.2s ease-out forwards;
-}
-
-.preview {
-  visibility: hidden;
-  position: absolute;
-  bottom: 40px;
-  left: -18px;
-  width: 75px;
-  height: 70px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  z-index: 1;
-  opacity: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.preview:after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-.preview span {
-  font-size: 16px;
-}
-
-.preview i {
-  font-size: 28px;
-  color: #eeeeee;
-  padding: 8px 2px;
 }
 
 .paymentTypes {
@@ -1698,6 +1636,7 @@ nav {
   border-radius: 4px;
   border: 2px solid #607d8b;
   color: #3c3c3c;
+  background: #f5f5f5;
   position: relative;
 }
 
@@ -1779,20 +1718,24 @@ section.field {
   height: 83px;
   border-radius: 2px;
   margin-bottom: 6px;
+  background: #fff;
   color: #4c4b4b;
   box-shadow: var(--shadow);
 }
+
 .input.active {
   background: #5c6bc0;
   color: #fff;
   text-shadow: 0 1px 1px #444;
 }
+
 .input .text {
   padding: 7px 10px;
   font-size: 22px;
   display: flex;
   align-items: center;
 }
+
 .input input {
   border: none;
   background: none;
@@ -1808,9 +1751,11 @@ section.field {
   font-weight: bold;
   color: #3c3c3c;
 }
+
 .input.active input {
   color: #fff;
 }
+
 .people {
   font-family: "Agency FB";
   font-weight: bold;
@@ -1849,7 +1794,7 @@ section.quickInput {
 }
 
 .disabled {
-  opacity: 0.5;
+  filter: brightness(1.3) grayscale(0.5);
   pointer-events: none;
 }
 

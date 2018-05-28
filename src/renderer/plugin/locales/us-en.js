@@ -440,7 +440,8 @@ export default {
     reportTip: "Report Tips",
     giftcardStats: "Gift Card Stats",
     dailySaleSummary: "Daily Sales Summary",
-    hourlySaleSummary: "Hourly Sales Summary"
+    hourlySaleSummary: "Hourly Sales Summary",
+    evenSplit: "Ticket Even Split"
   },
   dialog: {
     maintenance: "Maintenance",
@@ -737,7 +738,8 @@ export default {
     payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?",
     discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal.",
     evenSplit: "Ticket Even Split",
-    evenSplitConfirm: "Are you sure to even split ticket into {i} ?"
+    evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
+    ticketAlreadySplit: "This ticket already split."
   },
   terminal: {
     initial: "Initializing terminal {i}...",

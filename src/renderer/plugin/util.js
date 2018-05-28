@@ -210,15 +210,22 @@ export default {
     //     return new Proxy(object, handler)
     // }
 
-    Vue.prototype.$calculatePayment = function (items) {
+    Vue.prototype.$calculatePayment = function (order, params = {}) {
+      const {
+        selfAssign = true,
+        callback = false
+      } = params;
+
       const {
         type,
         guest,
         coupons,
         taxFree = false,
         deliveryFree = false,
-        gratuityFree = false
-      } = this.order;
+        gratuityFree = false,
+        plasticBag = 1
+      } = order;
+
       const { enable, rules } = this.dinein.surcharge;
 
       let delivery = 0;
@@ -228,30 +235,28 @@ export default {
           delivery = parseFloat(this.store.deliver.baseFee);
 
         if (this.store.deliver.surcharge) {
-          const duration = parseFloat(
-            this.customer.distance.replace(/[^\d.]/g, "")
-          );
-
+          const addressDistance = order.customer.distance || this.customer.distance;
+          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
           const distance = isNumber(duration) ? duration : 0;
           const surcharge = this.store.deliver.rules
             .sort((a, b) => a.distance < b.distance)
             .find(rule => rule.distance < distance);
 
-          if (surcharge) {
+          if (surcharge && isNumber(surcharge))
             delivery += parseFloat(surcharge.fee);
-          }
         }
 
-        if (this.order.hasOwnProperty("$delivery"))
-          delivery = this.order.$delivery;
+        if (order.hasOwnProperty("deliveryFee"))
+          delivery = order.deliveryFee;
       }
 
-      let { tip, gratuity, paid, rounding = 0 } = this.order.payment;
+      let { tip, gratuity, paid, rounding = 0, log } = order.payment;
+
       let subtotal = 0,
         tax = 0,
         discount = 0;
 
-      items.forEach(item => {
+      order.content.forEach(item => {
         if (item.void) return;
 
         const single = parseFloat(item.single);
@@ -302,10 +307,10 @@ export default {
       let plasticTax = 0;
       if (this.tax.plasticPenalty) {
         //calculate plastic bag penalty
-        const { plasticBag = 1 } = this.order;
         const fine = isNumber(this.tax.plasticCharge)
-          ? this.tax.plasticCharge
+          ? parseFloat(this.tax.plasticCharge)
           : 0.5;
+          
         plasticTax = toFixed(plasticBag * fine, 2);
       }
 
@@ -318,8 +323,8 @@ export default {
           gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
         } catch (e) { }
 
-        if (this.order.hasOwnProperty("$gratuity"))
-          gratuity = this.order.$gratuity;
+        if (order.hasOwnProperty("gratuityFee"))
+          gratuity = order.gratuityFee;
       } else {
         gratuity = 0;
       }
@@ -344,7 +349,7 @@ export default {
               switch (coupon.apply) {
                 case "category":
                   let _offer = 0;
-                  this.order.content.forEach(item => {
+                  order.content.forEach(item => {
                     if (reference.includes(item.category)) {
                       _offer += coupon.discount / 100 * item.single * item.qty;
                     }
@@ -398,8 +403,7 @@ export default {
 
       const balance = due + gratuity + rounding;
       const remain = balance - paid;
-
-      Object.assign(this.order.payment, {
+      const payment = {
         subtotal: toFixed(subtotal, 2),
         tax: toFixed(tax, 2),
         plasticTax: toFixed(plasticTax, 2),
@@ -412,8 +416,12 @@ export default {
         tip: toFixed(tip, 2),
         gratuity: toFixed(gratuity, 2),
         delivery: toFixed(delivery, 2),
-        rounding: toFixed(rounding, 2)
-      });
+        rounding: toFixed(rounding, 2),
+        log
+      }
+
+      selfAssign && Object.assign(order, { payment });
+      if (callback) return payment;
     };
 
     //polyfill

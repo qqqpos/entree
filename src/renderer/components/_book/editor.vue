@@ -86,7 +86,7 @@
                             </div>
                             <aside class="tables">
                                 <select v-model="section">
-                                    <option v-for="(section,index) in tables" :key="section" :value="section">{{section.usEN}}</option>
+                                    <option v-for="(section,index) in tables" :key="section" :value="section" :key="index">{{section.usEN}}</option>
                                 </select>
                                 <seat :section="section" :status="scheduled" @pick="pick"></seat>
                                 <p>You selected: {{selected}}</p>

@@ -2,10 +2,11 @@
   <div class="popupMask dark center">
     <div class="editor">
       <header>
-        <div>
+        <div class="f1">
           <h5>{{$t('title.create')}}</h5>
           <h3>{{$t('title.split')}}</h3>
         </div>
+        <button class="remove" v-show="order.split" @click="rollback">{{$t('button.restore')}}</button>
       </header>
       <div class="banner"></div>
       <div class="wrap">
@@ -212,6 +213,26 @@ export default {
         }
       });
     },
+    rollback() {
+      const parent = this.order._id;
+      const { payment } = this.$children[0].order;
+
+      this.$socket.emit("[SPLIT] SAVE", { splits: [], parent });
+
+      payment.discount = 0;
+      payment.paid = 0;
+
+      Object.assign(this.order, { payment });
+
+      this.order.content.forEach(item => (item.split = false));
+      this.order.split = false;
+      this.order.children = [];
+      this.order.coupons = [];
+
+      this.setOrder(this.order);
+      this.$socket.emit("[UPDATE] INVOICE", this.order);
+      this.init.resolve();
+    },
     print() {
       const { number } = this.order;
       this.$children
@@ -225,6 +246,8 @@ export default {
             Object.assign(ticket, { number: `${number}-${index + 1}` })
           )
         );
+
+      this.done && this.confirm();
     },
     confirm() {
       if (document.getElementsByClassName("evener").length > 0) return;
