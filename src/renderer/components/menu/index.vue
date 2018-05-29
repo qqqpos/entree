@@ -293,6 +293,7 @@ export default {
       !this.app.newTicket && Object.assign(item, { new: true });
 
       this.checkItemAvailable(item)
+        .then(this.checkAllergy)
         .then(this.conditionalPrice)
         .then(this.checkOption)
         .then(this.checkItemType)
@@ -318,6 +319,41 @@ export default {
             );
             const _to = moment(new Date(moment().format("YYYY-MM-DD ") + to));
             time.isBetween(_from, _to) ? next(item) : stop("timeRestricted");
+          }
+        } else {
+          next(item);
+        }
+      });
+    },
+    checkAllergy(item) {
+      return new Promise((next, stop) => {
+        if (
+          this.customer.hasOwnProperty("allergy") &&
+          item.hasOwnProperty("allergy")
+        ) {
+          const allergies = this.customer.allergy.filter(allergy =>
+            item.allergy.includes(allergy)
+          );
+          if (allergies.length > 0) {
+            const allergen = allergies
+              .map(text => this.$t("allergy." + text))
+              .join(", ");
+
+            const prompt = {
+              type: "warning",
+              title: "dialog.allergyAlert",
+              msg: ["dialog.foodAllergyFrom", allergen],
+              buttons: [
+                { text: "button.cancel", fn: "reject" },
+                { text: "button.processAnyway", fn: "resolve" }
+              ]
+            };
+
+            this.$dialog(prompt)
+              .then(() => next(item))
+              .catch(() => stop("foodAllergy"));
+          } else {
+            next(item);
           }
         } else {
           next(item);
@@ -457,6 +493,7 @@ export default {
           this.$dialog(prompt).then(this.exitComponent);
           break;
         default:
+          this.exitComponent();
       }
     },
     setOption(side, index) {

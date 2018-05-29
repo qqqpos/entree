@@ -82,6 +82,7 @@
             <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
             <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
             <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>
+            <external title="text.foodAllergy" @open="setAllergy" :defaultStyle="false"></external>
             <external title="text.restriction" @open="setRestriction" :defaultStyle="false"></external>
           </div>
           <div class="side">
@@ -125,6 +126,7 @@ import limitor from "./limitor";
 import prices from "./priceEditor";
 import editor from "./optionEditor";
 import draggable from "vuedraggable";
+import allergy from "./allergyEditor";
 import presetor from "./presetEditor";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
@@ -139,6 +141,7 @@ export default {
     prices,
     editor,
     toggle,
+    allergy,
     limitor,
     external,
     switches,
@@ -246,6 +249,26 @@ export default {
           this.exitComponent();
         })
         .catch(this.exitComponent);
+    },
+    setAllergy() {
+      const { allergy = [] } = this.item;
+
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, allergy };
+        this.component = "allergy";
+      })
+        .then(_allergy => {
+          _allergy.length === 0
+            ? delete this.item.allergy
+            : Object.assign(this.item, { allergy: _allergy });
+          this.exitComponent();
+        })
+        .catch(remove => {
+          if (remove) {
+            delete this.item.allergy;
+          }
+          this.exitComponent();
+        });
     },
     setRestriction() {
       const {

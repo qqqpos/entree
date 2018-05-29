@@ -84,6 +84,20 @@ export default {
     Worker: "员工",
     delay: "延迟出单"
   },
+  allergy: {
+    "MILK": "牛奶",
+    "EGG": "鸡蛋",
+    "PEANUT": "花生",
+    "NUTS": "坚果类",
+    "WHEAT": "小麦",
+    "SOY": "酱油",
+    "SHELLFISH": "壳类海鲜",
+    "FISH": "鱼类",
+    "SESAME SEED": "芝麻",
+    "AVOCADO": "奶油果",
+    "GARLIC": "咖喱",
+    "CELERY": "芹菜"
+  },
   filter: {
     cashier: "按收银员",
     server: "按服务员",
@@ -623,7 +637,9 @@ export default {
     discountAmountNotAllow: "您输入的折扣信息无效，折扣不能大于订单本身价值",
     evenSplit: "均分订单",
     evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
-    ticketAlreadySplit: "此订单已经被分单"
+    ticketAlreadySplit: "此订单已经被分单",
+    allergyAlert: "食物过敏",
+    foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1225,7 +1241,8 @@ export default {
     distance: "距离",
     dynamicPrint: "动态打印",
     printAhead: "提前{i}分钟打印",
-    plasticBag: "塑料袋"
+    plasticBag: "塑料袋",
+    foodAllergy: "食物过敏"
   },
   nav: {
     store: "店面",
@@ -1602,6 +1619,7 @@ export default {
     doNotPrintReceipt: "从不打印收据",
     alwaysPrintReceipt: "总是打印收据",
     sameItemName: "当两种语言相同时，只会打印第一语言文本",
+    foodAllergy: "设置物品过敏源",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

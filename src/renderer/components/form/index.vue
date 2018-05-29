@@ -153,7 +153,8 @@ export default {
         this.customer.favorite.length &&
         this.setFavorites(this.customer.favorite);
       this.$socket.emit("[CUSTOMER] UPDATE", this.customer, profile => {
-        this.emptyCustomerInfo(profile);
+        // this.emptyCustomerInfo(profile);
+        this.setCustomer(profile);
         this.setOrder({ type: this.ticket.type });
         this.$router.push({ path: "/main/menu" });
       });
@@ -359,8 +360,8 @@ export default {
       "resetAll",
       "setCustomer",
       "setFavorites",
-      "resetCustomer",
-      "emptyCustomerInfo"
+      "resetCustomer"
+      //"emptyCustomerInfo"
     ])
   },
   watch: {

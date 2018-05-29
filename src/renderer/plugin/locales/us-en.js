@@ -91,6 +91,20 @@ export default {
     Worker: "Worker",
     delay: "Delay"
   },
+  allergy: {
+    "MILK": "Milk",
+    "EGG": "Egg",
+    "PEANUT": "Peanut",
+    "NUTS": "Nuts",
+    "WHEAT": "Wheat",
+    "SOY": "Soy",
+    "SHELLFISH": "Shellfish",
+    "FISH": "Fish",
+    "SESAME SEED": "Sesame Seed",
+    "AVOCADO": "Avocado",
+    "GARLIC": "Garlic",
+    "CELERY": "Celery"
+  },
   filter: {
     cashier: "By Cashier",
     server: "By Server",
@@ -739,7 +753,9 @@ export default {
     discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal.",
     evenSplit: "Ticket Even Split",
     evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
-    ticketAlreadySplit: "This ticket already split."
+    ticketAlreadySplit: "This ticket already split.",
+    allergyAlert: "Food Allergy Alert",
+    foodAllergyFrom: "This item contains {i} may cause customer allergic reaction."
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1259,7 +1275,8 @@ export default {
     distance: "Distance",
     dynamicPrint: "Dynamic Print",
     printAhead: "Print Ahead In {i} Minutes",
-    plasticBag: "Plastic Bags"
+    plasticBag: "Plastic Bags",
+    foodAllergy: "Food Allergy"
   },
   nav: {
     store: "Store",
@@ -1634,6 +1651,7 @@ export default {
     doNotPrintReceipt: "Never print receipt",
     alwaysPrintReceipt: "Always print receipt",
     sameItemName: "Will only print primary text when both primary & secondary text are the same.",
+    foodAllergy: "Set food allergen",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

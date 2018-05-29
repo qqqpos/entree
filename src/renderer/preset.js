@@ -123,7 +123,7 @@ var Preset = function () {
           tableName: false,
           jobTime: false,
           tradeMark: false,
-          geo:false,
+          geo: false,
           content: [
             "Thank You Very Much"
           ]
@@ -139,7 +139,8 @@ var Preset = function () {
           enable: true,
           fontFamily: "QingYuan",
           fontSize: "21",
-          lineHeight:1,
+          lineHeight: 1,
+          subFontSize: 0.8,
           price: true,
           id: false
         }, {
@@ -147,7 +148,8 @@ var Preset = function () {
           enable: true,
           fontFamily: "Roboto Condensed",
           fontSize: "21",
-          lineHeight:1,
+          lineHeight: 1,
+          subFontSize: 0.8,
           price: true,
           id: false
         }]
@@ -198,8 +200,8 @@ var Preset = function () {
       distance: "",
       direction: "",
       coordinate: [],
-      firstDate: +new Date,
-      lastDate: +new Date,
+      firstDate: Date.now(),
+      lastDate: Date.now(),
       dob: "",
       email: "",
       carrier: "",
@@ -209,6 +211,7 @@ var Preset = function () {
       cancelCount: 0,
       cancelAmount: 0,
       favorite: [],
+      allergy: [],
       tags: [],
       profiles: [],
       creditCard: []
@@ -262,20 +265,20 @@ var Preset = function () {
       permission
     }
   };
-  this.giftCard = function (number, seller, amount, bouns) {
+  this.giftCard = function (number, seller, amount, bonus) {
     return {
       _id: ObjectId(),
       number,
       seller,
       customer: "",
       balance: amount,
-      activation: new Date,
+      activation: Date.now(),
       activity: [{
         date: today(),
-        time: +new Date,
+        time: Date.now(),
         amount: amount,
         balance: amount,
-        bouns: bouns || 0,
+        bonus: bonus || 0,
         type: 'ACTIVATION',
         op: seller
       }]
