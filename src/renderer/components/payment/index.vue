@@ -4,6 +4,7 @@
       <div class="editor" v-show="!component" :key="0">
         <header class="relative">
           <div>
+            <h5>{{'# '+order.number}}<span class="fn">{{$t('type.'+order.type)}}</span></h5>
             <h3>{{$t('title.payment')}}</h3>
           </div>
           <tickets :splits="splits" v-model="current" @preview="preview" @switch="switchInvoice" :mode="payInFull"></tickets>
@@ -1545,7 +1546,7 @@ export default {
 <style scoped>
 .wrap {
   padding: initial;
-  background: url(../../assets/image/block.png) #fcfcfc;
+  background: url(../../assets/image/slid.jpg) #fcfcfc;
 }
 
 header > i.fa {

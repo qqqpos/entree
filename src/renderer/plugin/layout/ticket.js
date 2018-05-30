@@ -228,7 +228,9 @@ function createList(printer, setting, invoice, preview) {
             item.printer[printer] && !item.print &&
             (item.diffs === 'NEW' || (item.diffs === "DIFFERENT" && item.hasOwnProperty('originQty')) || item.diffs === "MODIFIED")
         ).map(item => {
-          if (item.diffs === "MODIFIED") {
+          if (item.diffs === "DIFFERENT" && item.qty > item.originQty) {
+            item.qty = item.qty - item.originQty;
+          }else if (item.diffs === "MODIFIED") {
             item.choiceSet = item.choiceSet.map(sub => {
               sub.zhCN = "★" + sub.zhCN;
               sub.usEN = "★" + sub.usEN;

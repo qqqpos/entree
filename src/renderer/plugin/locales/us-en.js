@@ -100,7 +100,7 @@ export default {
     "SOY": "Soy",
     "SHELLFISH": "Shellfish",
     "FISH": "Fish",
-    "SESAME SEED": "Sesame Seed",
+    "SESAME": "Sesame Seed",
     "AVOCADO": "Avocado",
     "GARLIC": "Garlic",
     "CELERY": "Celery"
@@ -136,7 +136,7 @@ export default {
     opinion: "Opinion",
     place: "Place",
     other: "Other",
-    class: "Class"
+    allergy: "Allergy"
   },
   reason: {
     "Customer No-Show": "No-Show",

@@ -50,7 +50,7 @@
             </div>
         </div>
       </section>
-      <section>
+      <!-- <section>
         <label class="type">{{$t('tag.class')}}</label>
           <div class="tags">
             <div class="tag">
@@ -70,7 +70,7 @@
               <label for="mexican">{{$t('tag.mexican')}}</label>
             </div>
         </div>
-      </section>
+      </section> -->
       <section>
         <label class="type">{{$t('tag.other')}}</label>
           <div class="tag">
@@ -94,6 +94,55 @@
             <label for="prank">{{$t('tag.prank')}}</label>
           </div>
       </section>
+      <section>
+        <label class="type">{{$t('tag.allergy')}}</label>
+        <div class="tags">
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="MILK" id="milk">
+            <label for="milk">{{$t('allergy.MILK')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="EGG" id="egg">
+            <label for="egg">{{$t('allergy.EGG')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="NUTS" id="nuts">
+            <label for="nuts">{{$t('allergy.NUTS')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="WHEAT" id="wheat">
+            <label for="wheat">{{$t('allergy.WHEAT')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="SOY" id="soy">
+            <label for="soy">{{$t('allergy.SOY')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="SHELLFISH" id="shellfish">
+            <label for="shellfish">{{$t('allergy.SHELLFISH')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="FISH" id="fish">
+            <label for="fish">{{$t('allergy.FISH')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="SESAME" id="sesame">
+            <label for="sesame">{{$t('allergy.SESAME')}}</label>
+          </div> 
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="AVOCADO" id="avocado">
+            <label for="avocado">{{$t('allergy.AVOCADO')}}</label>
+          </div> 
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="GARLIC" id="garlic">
+            <label for="garlic">{{$t('allergy.GARLIC')}}</label>
+          </div> 
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="CELERY" id="celery">
+            <label for="celery">{{$t('allergy.CELERY')}}</label>
+          </div>                               
+        </div>          
+      </section>
     </div>
 </template>
 
@@ -103,30 +152,43 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      tags: []
+      tags: [],
+      allergy: [],
+      customer: this.$store.getters.customer
     };
   },
   created() {
-    this.tags = this.$store.getters.customer.tags || [];
+    this.tags = this.customer.tags || [];
+    this.allergy = this.customer.allergy || [];
   },
   methods: {
-    update(tags) {
-      const { customer } = this.$store.getters;
-
-      customer._id &&
+    updateTag(tags) {
+      this.customer._id &&
         this.$socket.emit(
           "[CUSTOMER] UPDATE_TAGS",
           {
-            _id: customer._id,
+            _id: this.customer._id,
             tags
           },
           () => this.setCustomer({ tags })
         );
     },
+    updateAllergy(allergy) {
+      this.customer._id &&
+        this.$socket.emit(
+          "[CUSTOMER] UPDATE_ALLERGY",
+          {
+            _id: this.customer._id,
+            allergy
+          },
+          () => this.setCustomer({ allergy })
+        );
+    },
     ...mapActions(["setCustomer"])
   },
   watch: {
-    tags: "update"
+    tags: "updateTag",
+    allergy: "updateAllergy"
   }
 };
 </script>
@@ -134,7 +196,7 @@ export default {
 <style scoped>
 section {
   display: flex;
-  padding: 5px 10px;
+  padding: 5px 10px 0 10px;
   border-bottom: 1px solid #eceff1;
 }
 
@@ -147,7 +209,7 @@ section:last-child {
   border: 1px solid #eee;
   border-radius: 2px;
   margin: 0px 5px 5px;
-  min-width: 65px;
+  min-width: 50px;
   text-align: center;
   cursor: pointer;
   background: #f5f5f5;

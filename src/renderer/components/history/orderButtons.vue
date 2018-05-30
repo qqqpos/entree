@@ -66,6 +66,8 @@ export default {
   },
   methods: {
     thirdParty() {
+      if (this.isEmptyTicket) return;
+
       if (this.order.split) {
         this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
           new Promise((resolve, reject) => {
@@ -80,9 +82,13 @@ export default {
       }
     },
     split() {
+      if (this.isEmptyTicket) return;
+
       this.$open("split");
     },
     evenSplit() {
+      if (this.isEmptyTicket) return;
+
       const prompt = {
         title: "dialog.cantExecute",
         msg: "dialog.ticketAlreadySplit",
@@ -212,6 +218,8 @@ export default {
         .catch(() => this.$open("payment", { regular: true }));
     },
     discount() {
+      if (this.isEmptyTicket) return;
+      
       this.$socket.emit("[COUPON] LIST", coupons => {
         new Promise((resolve, reject) => {
           const { payment } = this.order;

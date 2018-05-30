@@ -163,7 +163,7 @@ export default {
 i.fa {
   font-size: 96px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  margin: 20px 0 35px;
+  margin: 23px 0 32px;
 }
 
 .alert i::before {
@@ -197,6 +197,7 @@ i.fa {
 }
 
 footer {
+  border-top: 1px solid #dedede;
   background: #f5f5f5;
   display: flex;
   position: absolute;
@@ -218,7 +219,7 @@ h3 {
 
 h5 {
   color: #666;
-  margin-top: 5px;
+  margin-top: 7px;
   font-size: 13.3px;
   text-shadow: none;
   font-weight: normal;

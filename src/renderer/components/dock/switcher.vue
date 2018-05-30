@@ -157,13 +157,9 @@ export default {
 </script>
 
 <style scoped>
-.popupMask {
-  margin-top: 30px;
-}
-
 ul {
   position: absolute;
-  top: 5px;
+  top: 32px;
   left: 40px;
   padding: 5px 5px 0;
   color: #263238;
@@ -175,7 +171,7 @@ ul {
 
 li {
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
-  padding: 18px 10px 18px 15px;
+  padding: 20px 10px 20px 15px;
   width: 170px;
   text-shadow: none;
   border-radius: 4px;
@@ -189,6 +185,6 @@ li i {
 }
 
 li.thirdParty {
-  margin-top: 15px;
+  margin-top: 14px;
 }
 </style>

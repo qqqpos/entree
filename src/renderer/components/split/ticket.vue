@@ -491,7 +491,9 @@ export default {
         dom && dom.classList.add("picked");
       });
     },
-    "order": "$calculatePayment"
+    "order.content"(){
+      this.$calculatePayment(this.order, { selfAssign: true });
+    } 
   }
 };
 </script>

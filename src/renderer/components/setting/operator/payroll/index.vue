@@ -92,7 +92,7 @@ export default {
         .reduce((a, c) => a + c.hours, 0)
         .toPrecision(12)
         .toFloat();
-      const totalTip = payables.reduce((a, c) => a + c.tips, 0);
+      const totalTip = payables.reduce((a, c) => a + (c.tips || 0), 0);
       const paid = payables.reduce((a, c) => a + c.paid, 0);
 
       return {
@@ -258,7 +258,7 @@ export default {
           .toPrecision(12)
           .toFloat();
         const tips = valid
-          .reduce((a, c) => a + c.tip, 0)
+          .reduce((a, c) => a + (c.tip || 0), 0)
           .toPrecision(12)
           .toFloat();
         return Object.assign(op, { tips, hours, breakTime, paid, unpaid });

@@ -4,7 +4,7 @@
       <div class="profile" v-for="(profile,index) in init.customer.profiles" :key="index" @click="select(profile)">
         <i class="fa fa-pencil-square" @click.stop="edit(index)"></i>
         <div>
-          <h3 class="name">{{profile.name}}</h3>
+          <h3 class="name">{{profile.name}}<span class="extension">{{profile.extension}}</span></h3>
           <h5 class="address">{{profile.address}}</h5>
         </div>
         <i class="fa fa-trash" @click.stop="remove(index)"></i>
@@ -71,7 +71,7 @@ export default {
 <style scoped>
 .profiles {
   font-size: initial;
-  width: 300px;
+  width: 265px;
   position: absolute;
   top: 32px;
   left: 350px;
@@ -90,7 +90,7 @@ export default {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   margin-bottom: 4px;
-  height: 50px;
+  height: 55px;
   display: flex;
   align-items: center;
 }
@@ -103,9 +103,13 @@ export default {
 }
 
 .profile i {
-  padding: 15px;
+  padding: 20px 15px;
   cursor: pointer;
   color: #666;
+}
+
+.extension{
+  margin-left: 10px;
 }
 
 h5 {
@@ -115,6 +119,7 @@ h5 {
 
 h3 {
   color: #3c3c3c;
+  font-size: 16px;
 }
 
 .new {

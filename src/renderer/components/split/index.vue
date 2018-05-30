@@ -3,7 +3,7 @@
     <div class="editor">
       <header>
         <div class="f1">
-          <h5>{{$t('title.create')}}</h5>
+          <h5>{{$t(order.split ? 'title.edit' : 'title.create')}}</h5>
           <h3>{{$t('title.split')}}</h3>
         </div>
         <button class="remove" v-show="order.split" @click="rollback">{{$t('button.restore')}}</button>
@@ -31,7 +31,7 @@
         <ticket :data="order" :master="true" @acquire="restore" @done="setDone"></ticket>
       </div>
       <footer>
-        <div class="opt">
+        <!-- <div class="opt">
           <div class="switches">
             <label class="input-toggle">
               <input type="checkbox" v-model="swipeMode" :disabled="true">
@@ -39,7 +39,7 @@
             </label>
             <label class="label indent">{{$t("text.swipeMode")}}</label>
           </div>
-        </div>
+        </div> -->
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
         <button class="btn" @click="print">{{$t('button.printAll')}}</button>
         <button class="btn" @click="confirm" :disabled="!done">{{$t('button.confirm')}}</button>
@@ -60,7 +60,7 @@ export default {
     scroll() {
       return { transform: `translate3d(${this.offset}px,0,0)` };
     },
-    ...mapGetters(["app", "ticket"])
+    ...mapGetters(["app", "tax", "store", "ticket", "customer", "dinein"])
   },
   data() {
     return {
@@ -214,24 +214,17 @@ export default {
       });
     },
     rollback() {
-      const parent = this.order._id;
-      const { payment } = this.$children[0].order;
+        this.$socket.emit("[SPLIT] SAVE", { splits: [], parent:this.order._id });
+        this.order.coupons = [];
+        this.order.children = [];
+        this.order.split = false;
+        this.order.payment.discount = 0;
+        this.$calculatePayment(this.order, { selfAssign: true });
+        this.order.content.forEach(item => (item.split = false));
 
-      this.$socket.emit("[SPLIT] SAVE", { splits: [], parent });
-
-      payment.discount = 0;
-      payment.paid = 0;
-
-      Object.assign(this.order, { payment });
-
-      this.order.content.forEach(item => (item.split = false));
-      this.order.split = false;
-      this.order.children = [];
-      this.order.coupons = [];
-
-      this.setOrder(this.order);
-      this.$socket.emit("[UPDATE] INVOICE", this.order);
-      this.init.resolve();
+        this.setOrder(this.order);
+        this.$socket.emit("[UPDATE] INVOICE", this.order);
+        this.init.resolve();
     },
     print() {
       const { number } = this.order;
@@ -307,21 +300,6 @@ export default {
         this.order.payment.due = toFixed(due, 2);
         this.order.payment.balance = toFixed(balance, 2);
         this.order.payment.remain = toFixed(remain, 2);
-
-        // Object.assign(this.order, {
-        //   payment: {
-        //     tip: toFixed(tip, 2),
-        //     tax: toFixed(tax, 2),
-        //     subtotal: toFixed(subtotal, 2),
-        //     rounding: toFixed(rounding, 2),
-        //     total: toFixed(total, 2),
-        //     discount: toFixed(discount, 2),
-        //     delivery: toFixed(delivery, 2),
-        //     due: toFixed(due, 2),
-        //     balance: toFixed(balance, 2),
-        //     remain: toFixed(remain, 2)
-        //   }
-        // });
         this.order.content.forEach(item => (item.split = true));
         this.order.children = splits.map(i => i._id);
         this.order.split = true;
@@ -330,23 +308,7 @@ export default {
         this.$socket.emit("[UPDATE] INVOICE", this.order);
         this.init.resolve();
       } else {
-        this.$socket.emit("[SPLIT] SAVE", { splits: [], parent });
-
-        const { payment } = splits.find(order => order.content !== 0);
-
-        payment.discount = 0;
-        payment.paid = 0;
-
-        Object.assign(this.order, { payment });
-
-        this.order.content.forEach(item => (item.split = false));
-        this.order.split = false;
-        this.order.children = [];
-        this.order.coupons = [];
-
-        this.setOrder(this.order);
-        this.$socket.emit("[UPDATE] INVOICE", this.order);
-        this.init.resolve();
+        this.rollback();
       }
     },
     ...mapActions(["setApp", "setOrder"])

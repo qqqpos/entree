@@ -93,7 +93,7 @@ export default {
     "SOY": "酱油",
     "SHELLFISH": "壳类海鲜",
     "FISH": "鱼类",
-    "SESAME SEED": "芝麻",
+    "SESAME": "芝麻",
     "AVOCADO": "奶油果",
     "GARLIC": "咖喱",
     "CELERY": "芹菜"
@@ -129,7 +129,7 @@ export default {
     opinion: "评价",
     place: "位置",
     other: "其它",
-    class: "类"
+    allergy: "过敏"
   },
   reason: {
     "Customer No-Show": "客人没来",
