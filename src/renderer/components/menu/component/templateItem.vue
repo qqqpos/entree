@@ -235,11 +235,16 @@ export default {
 </script>
 
 <style scoped>
+.editor{
+  margin-top: -30px; 
+}
+
 .wrap {
   display: flex;
   align-items: flex-start;
   padding: 0px;
-  height: 533px;
+  min-height: 533px;
+  max-height: 600px;
   background: #f5f5f5;
 }
 

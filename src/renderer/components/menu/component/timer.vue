@@ -61,6 +61,7 @@
         <footer>
             <div class="f1">
               <button class="btn" @click="setDate">{{$t('button.calendar')}}</button>
+              <button class="btn" :disabled="true">{{$t('button.deposit')}}</button>
             </div>
             <button class="btn" @click="promptPrint">{{$t('button.print')}}</button>
             <button class="btn" @click="verify">{{$t('type.delay')}}</button>

@@ -293,7 +293,8 @@ export default {
     editInvoice: "Edit Order",
     settle: "Settle",
     view: "View",
-    retry: "Retry"
+    retry: "Retry",
+    deposit: "Deposit"
   },
   thead: {
     orderType: "Order Type",
@@ -643,7 +644,7 @@ export default {
     extraAmountSetAsTip: "Are you going to set the Extra ( ${i} ) as Tip?",
     invoiceNotFound: "Invoice Not Found",
     actionProcess: "How do you want to proceed?",
-    RemoveTemplate: "Remove Template",
+    removeTemplate: "Remove Template",
     removeTemplateConfirm: "Are you sure to remove this template?",
     unableAdd: "Unable to Add",
     maxSubItem: "{i} can only has {i} maximum subitems",

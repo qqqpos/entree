@@ -1,7 +1,7 @@
 <template>
     <div>
         <header class="nav">
-            <div class="back" @click="save">
+            <div class="back" @click="$router.push({ name: 'Setting.template' })">
                 <i class="fa fa-chevron-left"></i>
             </div>
             <div class="title" @click="disabled = false">
@@ -35,21 +35,21 @@ export default {
     return {
       componentData: null,
       component: null,
-      disabled:true
+      disabled: true,
+      removed: false
     };
   },
   beforeRouteLeave(to, from, next) {
-    this.$socket.emit("[TEMPLATE] SAVE", this.template, () => next());
+    this.removed
+      ? next()
+      : this.$socket.emit("[TEMPLATE] SAVE", this.template, () => next());
   },
   methods: {
-    save() {
-      this.$emit("reset");
-    },
     remove() {
       const prompt = {
         type: "question",
-        title: "removeTemplate",
-        msg: "removeTemplateConfirm",
+        title: "dialog.removeTemplate",
+        msg: "dialog.removeTemplateConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.remove", fn: "resolve" }
@@ -59,9 +59,11 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           this.exitComponent();
-          this.$socket.emit("[TEMPLATE] REMOVE", this.template._id, () =>
-            this.$emit("reset")
-          );
+
+          this.$socket.emit("[TEMPLATE] REMOVE", this.template._id, () => {
+            this.removed = true;
+            this.$router.push({ name: "Setting.template" });
+          });
         })
         .catch(this.exitComponent);
     }

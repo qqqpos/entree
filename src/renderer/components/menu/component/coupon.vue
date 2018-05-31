@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import offer from "./offer";
 import { mapActions } from "vuex";
+import offer from "./helper/offer";
 import giftcard from "../../giftcard/index";
 import dialoger from "../../common/dialoger";
 

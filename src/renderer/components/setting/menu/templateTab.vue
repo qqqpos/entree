@@ -24,8 +24,8 @@ export default {
       this.$router.push({ name: "Setting.template.config" });
     },
     resetTemplate() {
-      this.template = null;
       this.$router.push({ name: "Setting.template" });
+      this.template = null;
     }
   }
 };

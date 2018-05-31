@@ -31,7 +31,7 @@
           <inputer title="text.secondary" v-model.trim="category.zhCN" length="20"></inputer>
           <inputer title="text.contain" v-model="category.contain" v-if="manual"></inputer>
           <div class="checkboxes categories" v-else>
-            <checkbox :title="name" v-model="category.contain" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false"></checkbox>
+            <checkbox :title="name" v-model="category.contain" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false" :class="{missing:check(name)}"></checkbox>
           </div>
         </div>
       </template>
@@ -89,6 +89,7 @@ export default {
     return {
       tab: "basic",
       manual: false,
+      selected: [],
       categories: this.init.categories,
       category: JSON.parse(JSON.stringify(this.init.category)),
       printers: Object.keys(this.$store.getters.config.printers),
@@ -100,7 +101,18 @@ export default {
       print: []
     };
   },
+  created() {
+    const selected = new Set();
+
+    this.$store.getters.menu.forEach(category =>
+      category.contain.forEach(t => selected.add(t))
+    );
+    this.selected = Array.from(selected);
+  },
   methods: {
+    check(category){
+      return !this.selected.includes(category)
+    },
     confirm() {
       !Array.isArray(this.category.contain) &&
         (this.category.contain = this.category.contain.split(","));
@@ -185,5 +197,9 @@ header {
 .categories {
   max-height: 405px;
   overflow: auto;
+}
+
+.missing{
+  color: #F44336
 }
 </style>

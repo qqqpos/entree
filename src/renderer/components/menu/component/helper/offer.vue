@@ -1,5 +1,5 @@
 <template>
-  <div class="offer" :class="{invalid}">
+  <div class="offer" :class="{invalid}" @click.stop="toggle">
     <div class="header">
       <span>{{coupon.alias}}</span>
       <switches v-model="coupon.redeem" :disabled="unqualify || !coupon.enable" @input="$emit('change',coupon)"></switches>
@@ -16,7 +16,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import switches from "../../setting/common/switches";
+import switches from "../../../setting/common/switches";
+
 export default {
   props: ["promotion", "overstack"],
   components: { switches },
@@ -46,7 +47,7 @@ export default {
           if (exclude.length > 0) {
             items = items.filter(i => !exclude.includes(i.category));
           }
-          
+
           if (reference.length > 0) {
             items = items.filter(i => reference.includes(i.category));
           }
@@ -95,6 +96,10 @@ export default {
     this.$bus.off("Disable Coupon", this.disable);
   },
   methods: {
+    toggle(){
+      this.coupon.redeem = !this.coupon.redeem;
+      this.$emit('change',this.coupon)
+    },
     enable(coupon) {
       this.coupon.enable = true;
     },

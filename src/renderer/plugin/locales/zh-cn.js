@@ -286,7 +286,8 @@ export default {
     editInvoice: "修改订单",
     settle: "结账",
     view: "查看",
-    retry: "重试"
+    retry: "重试",
+    deposit: "押金"
   },
   title: {
     markPaymentType: "标记付款方式",
