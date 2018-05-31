@@ -1426,8 +1426,11 @@ export default {
       const due = toFixed(total + delivery - discount, 2);
       const surcharge = toFixed(tip + gratuity, 2);
       const balance = toFixed(due + gratuity + rounding, 2);
-      const remain = Math.max(0, toFixed(balance - paid, 2));
-      console.log(balance, paid);
+      const remain = Math.max(
+        0,
+        toFixed(balance - Math.round(paid * 100 + Number.EPSILON) / 100, 2)
+      );
+      console.log(balance, paid,remain);
 
       this.payment = Object.assign({}, this.payment, {
         total,

@@ -14,10 +14,10 @@
               <span v-show="customer.address">{{customer.address}}</span>
             </div>
           </div>
-          <div class="profile" v-show="isVisible">
+          <div class="profile" v-show="isVisible" @click="openPortal">
             <i class="fa fa-address-book"></i>
             <span v-if="customer.name" class="text">{{customer.name}}</span>
-            <span v-else>{{$t('title.profile')}}</span>
+            <span v-else>{{$t('text.viewProfile')}}</span>
           </div>
           <div class="operator text" @click="initialPanel">
             <i class="fa fa-user-circle"></i>
@@ -36,45 +36,7 @@
               <span class="shift">{{time | moment('A')}}</span>
             </div>
           </div>
-
-          
-          
         </header>
-        <!-- <header class="dock">
-          <span class="number">{{ticket.number}}</span>
-          <span class="type" v-show="ticket.type" @click="changeType">{{type}}</span>
-          <span class="waterMark" v-show="$route.name === 'Menu' && order.source !== 'POS'">{{order.source}}</span>
-          <div class="centerWrap" @click="editProfile">
-            <div class="customer" v-if="$route.name === 'Menu'">
-              <span v-show="customer.phone">{{customer.phone | phone}}</span>
-              <span v-show="customer.address">{{customer.address}}</span>
-            </div>
-          </div>
-          <div class="op" v-if="$route.name === 'Menu'">
-            <i class="fa fa-address-book"></i>
-            <span v-if="customer.name">{{customer.name}}</span>
-            <span v-else>{{$t('title.profile')}}</span>
-          </div>
-          <div class="op" @click="initialPanel" v-show="op._id">
-            <i class="fa fa-user-circle"></i>
-            <span>{{op.name}}</span>
-          </div>
-          <div class="misc">
-            <div class="status" v-if="$route.name === 'Dashboard'">
-              <i class="fa fa-phone-square" :class="{na:!device.callid}"></i>
-              <i class="fa fa-credit-card" :class="{na:!device.terminal}"></i>
-              <i class="fa fa-desktop" :class="{na:!device.poleDisplay}"></i>
-              <i class="fa fa-globe" :class="{na:!device.online}"></i>
-              <i class="fa fa-sitemap" :class="{na:!app.database}"></i>
-            </div>
-            <div class="clock" v-else>
-              <span class="time">{{time | moment('hh:mm')}}</span>
-              <span class="shift">{{time | moment('a')}}</span>
-            </div>
-          </div>
-          <div :is="component" :init="componentData"></div>
-        </header> -->
-        
     </transition>
     <div :is="component" :init="componentData"></div>
   </div>
@@ -86,11 +48,12 @@ import dialoger from "../common/dialoger";
 import { ipcRenderer } from "electron";
 import profiles from "./profiles";
 import switcher from "./switcher";
+import portal from "./portal";
 import caller from "./caller";
 import disc from "./disc";
 
 export default {
-  components: { caller, switcher, dialoger, disc, profiles },
+  components: { caller, switcher, dialoger, disc, profiles, portal },
   data() {
     return {
       componentData: null,
@@ -112,8 +75,8 @@ export default {
               : "")
         : this.$t(type, this.app.language);
     },
-    isVisible(){
-      return this.$route.name === "Menu"
+    isVisible() {
+      return this.$route.name === "Menu";
     },
     isTrademarkVisible() {
       return this.$route.name === "Menu" && this.order.source !== "POS";
@@ -269,6 +232,11 @@ export default {
           ? this.$open("profiles", { customer })
           : this.$open("profiles", { customer: this.customer });
       });
+    },
+    openPortal() {
+      if (this.$route.name !== "Menu") return;
+
+      this.$open("portal");
     },
     ...mapActions([
       "setApp",

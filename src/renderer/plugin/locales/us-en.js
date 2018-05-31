@@ -1235,6 +1235,7 @@ export default {
     firstDate: "First Date",
     lastDate: "Last Date",
     viewCustomer: "View Address Customer",
+    activity: "Activity",
     callCount: "Call Count",
     cancelCount: "Cancel Count",
     cancelAmount: "Cancel Amount",

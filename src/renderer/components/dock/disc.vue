@@ -8,6 +8,7 @@
                 <span>:</span>
                 <span>{{pass.second}}</span>
             </h5>
+            <div v-show="!autoFix" class="shutdown" @click="shutdown">{{$t('login.shutdown')}}</div>
             <footer>
                 <p v-if="autoFix">{{$t('dialog.attemptRecover')}}</p>
                 <template v-else>
@@ -20,31 +21,38 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import Electron from "electron";
+import { mapGetters } from "vuex";
+
 export default {
-    props: ['init'],
-    data() {
-        return {
-            happened: +new Date() - 1000,
-            autoFix: true
-        }
+  props: ["init"],
+  data() {
+    return {
+      happened: Date.now() - 1000,
+      autoFix: true
+    };
+  },
+  computed: {
+    pass() {
+      const diff = this.time - this.happened;
+
+      this.autoFix = diff < 30000;
+
+      const minute = Math.floor(diff / 1000 / 60);
+      const second = Math.floor((diff / 1000) % 60);
+      return {
+        minute: ("0" + minute).slice(-2),
+        second: ("0" + second).slice(-2)
+      };
     },
-    computed: {
-        pass() {
-            const diff = this.time - this.happened;
-
-            this.autoFix = diff < 60000;
-
-            const minute = Math.floor(diff / 1000 / 60);
-            const second = Math.floor(diff / 1000 % 60);
-            return {
-                minute: ("0" + minute).slice(-2),
-                second: ("0" + second).slice(-2)
-            }
-        },
-        ...mapGetters(['time'])
+    ...mapGetters(["time"])
+  },
+  methods: {
+    shutdown() {
+      Electron.ipcRenderer.send("Shutdown");
     }
-}
+  }
+};
 </script>
 
 <style scoped>
@@ -68,9 +76,19 @@ h3 {
 h5 {
   padding: 5px;
   font-family: "Agency FB";
+  font-size: 18px;
 }
+
+.shutdown {
+  margin: 50px auto;
+  padding: 10px;
+  border: 1px solid #eee;
+  background: rgba(255, 255, 255, 0.1);
+  width: 200px;
+}
+
 footer {
-  margin-top: 245px;
+  margin-top: 150px;
   font-size: 16px;
 }
 </style>

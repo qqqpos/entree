@@ -60,43 +60,45 @@
 import disk from "diskusage";
 
 export default {
-    props: ["space", "database", "server"],
-    filters: {
-        mb(value) {
-            return value ? (value / 1048576).toFixed(2) + " MB" : value;
-        },
-        kb(value) {
-            return value ? (value / 1024).toFixed(2) + " KB" : value;
-        }
+  props: ["space", "database", "server"],
+  filters: {
+    mb(value) {
+      return value ? (value / 1048576).toFixed(2) + " MB" : value;
     },
-    data() {
-        return {
-            isHost: true//window.isServer === true
-        }
-    },
-    methods: {
-        uptime(duration) {
-            const hh = ("00" + Math.floor(duration / 3600)).slice(-2);
-            const mm = ("00" + Math.floor(duration / 60 % 60)).slice(-2);
-            const ss = ("00" + Math.floor(duration % 60)).slice(-2);
-
-            return this.$t("text.hhmmss", hh, mm, ss);
-        },
-        backup() {
-            const { dialog } = require('electron').remote;
-
-            dialog.showOpenDialog({ title: "Save backup to...", properties: ["openDirectory"] },
-                directory => {
-                    // directory && dump({
-                    //     uri: "mongodb://localhost:27017/UnitedPOS",
-                    //     root: directory,
-                    //     metadata:true,
-                    //     result(e) {
-                    //         console.log("done")
-                    //     }
-                    // })
-                });
-        }
+    kb(value) {
+      return value ? (value / 1024).toFixed(2) + " KB" : value;
     }
-}
+  },
+  data() {
+    return {
+      isHost: true //window.isServer === true
+    };
+  },
+  methods: {
+    uptime(duration) {
+      const hh = ("00" + Math.floor(duration / 3600)).slice(-2);
+      const mm = ("00" + Math.floor((duration / 60) % 60)).slice(-2);
+      const ss = ("00" + Math.floor(duration % 60)).slice(-2);
+
+      return this.$t("text.hhmm", hh, mm);
+    },
+    backup() {
+      const { dialog } = require("electron").remote;
+
+      dialog.showOpenDialog(
+        { title: "Save backup to...", properties: ["openDirectory"] },
+        directory => {
+          // directory && dump({
+          //     uri: "mongodb://localhost:27017/UnitedPOS",
+          //     root: directory,
+          //     metadata:true,
+          //     result(e) {
+          //         console.log("done")
+          //     }
+          // })
+        }
+      );
+    }
+  }
+};
 </script>

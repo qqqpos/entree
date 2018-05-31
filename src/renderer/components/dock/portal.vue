@@ -6,20 +6,19 @@
 
 <script>
 export default {
-    data(){
+  data() {
+    return {};
+  },
+  created(){
 
-    },
-    created:{
-
-    },
-    methods:{
-
-    }
-}
+  },
+  methods: {
+      
+  }
+};
 </script>
 
 <style scoped>
-
 </style>
 
 

@@ -1196,7 +1196,7 @@ export default {
     bit: "{i} 位",
     viewTag: "查看标签",
     viewFavoriteItem: "查看常点物品",
-    viewProfile: "查看备用档案",
+    viewProfile: "查看档案",
     firstDate: "首次日期",
     lastDate: "最后日期",
     viewCustomer: "查看此地址客户",
