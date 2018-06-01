@@ -756,7 +756,8 @@ export default {
     evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
     ticketAlreadySplit: "This ticket already split.",
     allergyAlert: "Food Allergy Alert",
-    foodAllergyFrom: "This item contains {i} may cause customer allergic reaction."
+    foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
+    exceedAllowLimit : "Value exceeding allowed limit"
   },
   terminal: {
     initial: "Initializing terminal {i}...",

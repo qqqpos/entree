@@ -455,7 +455,7 @@ header.dock .text{
 }
 
 .dock .ticket-type{
-  width: 92px;
+  min-width: 92px;
   text-shadow: 0 1px 1px #fff;
   font-weight: bold;
   text-align: center;
@@ -531,92 +531,6 @@ header.dock .text{
 .dock .off {
   color: #9e9e9e;
 }
-/*
-
-
-
-.dock .customer span,
-.dock .op,
-.dock .time {
-  font-family: "Agency FB";
-  font-weight: bold;
-  text-shadow: 0 1px 1px #fff;
-  font-size: 18px;
-  text-align: center;
-}
-
-.dock .op {
-  min-width: 110px;
-  text-align: left;
-}
-
-.dock .type {
-  min-width: 80px;
-  text-shadow: 0 1px 1px #fff;
-  font-weight: bold;
-  text-align: center;
-}
-
-.dock > .info {
-  flex: 1;
-  display: flex;
-}
-
-.dock .customer {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.dock .customer span {
-  padding: 0 10px;
-  margin: 0 5px;
-  text-transform: uppercase;
-}
-
-.dock .corner {
-  padding: 0 10px;
-  min-width: 135px;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-
-.dock .status {
-  padding: 0 10px;
-  text-align: right;
-  text-shadow: 0 1px 1px #fff;
-}
-
-.dock .misc {
-  min-width: 150px;
-}
-
-.dock .na {
-  color: #9e9e9e;
-}
-
-.dock .centerWrap{
-  display: flex;
-  flex:1;
-  height: 22px;
-}
-
-.dock .shift {
-  text-shadow: 0 1px 1px #fff;
-  font-family: "Yuanti-SC";
-  font-size: 16px;
-  margin: 0 5px;
-  font-weight: bold;
-}
-
-.dock .clock {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 10px;
-  min-width: 100px;
-} */
 
 /*Define Tabs style*/
 

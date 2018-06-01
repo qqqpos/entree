@@ -640,7 +640,8 @@ export default {
     evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
     ticketAlreadySplit: "此订单已经被分单",
     allergyAlert: "食物过敏",
-    foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应"
+    foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应",
+    exceedAllowLimit: "超出限定值得范围"
   },
   terminal: {
     initial: "正在初始化 {i}...",

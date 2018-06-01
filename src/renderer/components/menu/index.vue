@@ -350,7 +350,10 @@ export default {
             };
 
             this.$dialog(prompt)
-              .then(() => next(item))
+              .then(() => {
+                next(item);
+                this.exitComponent();
+              })
               .catch(() => stop("foodAllergy"));
           } else {
             next(item);

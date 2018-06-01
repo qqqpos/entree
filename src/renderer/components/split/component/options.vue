@@ -2,12 +2,13 @@
   <transition appear name="fadeUp">
     <div class="option">
       <switches title="text.taxFree" v-model="init.taxFree" @update="$emit('config',{taxFree:init.taxFree})"></switches>
-      <switches title="text.deliveryFree" v-model="init.deliveryFree" @update="$emit('config',{deliveryFree:init.deliveryFree})"></switches>
-      <switches title="text.gratuityFree" v-model="init.gratuityFree" @update="$emit('config',{gratuityFree:init.gratuityFree})"></switches>
+      <switches title="text.deliveryFree" v-model="init.deliveryFree" v-if="deliveryOpt" @update="$emit('config',{deliveryFree:init.deliveryFree})"></switches>
+      <switches title="text.gratuityFree" v-model="init.gratuityFree" v-if="gratuityOpt" @update="$emit('config',{gratuityFree:init.gratuityFree})"></switches>
       <switches title="text.discounted" v-model="init.isDiscount" :disabled="!init.isDiscount" @update="$emit('resetDiscount')"></switches>
       <external title="button.setDiscount" :defaultStyle="false" @open="$emit('discount')"></external>
+      <external title="button.setGratuity" :defaultStyle="false" v-if="gratuityOpt" @open="$emit('gratuity')"></external>
+      <external title="text.deliveryFee" :defaultStyle="false" v-if="deliveryOpt" @open="$emit('delivery')"></external>
       <external title="button.setCoupon" :defaultStyle="false" @open="$emit('coupon')"></external>
-      <!-- <external title="text.deliveryFee" :defaultStyle="false" v-if="init.type === 'DELIVERY'"></external> -->
     </div>
   </transition>
 </template>
@@ -25,8 +26,17 @@ export default {
       component: null
     };
   },
-  methods: {
-
+  computed: {
+    gratuityOpt() {
+      return (
+        this.init.type === "DINE_IN" ||
+        this.init.type === "BAR" ||
+        this.init.type === "HIBACHI"
+      );
+    },
+    deliveryOpt() {
+      return this.init.type === "DELIVERY";
+    }
   }
 };
 </script>

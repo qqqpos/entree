@@ -263,6 +263,7 @@ export default {
       let subtotal = 0;
       let rounding = 0;
       let delivery = 0;
+      let gratuity = 0;
       let total = 0;
       let discount = 0;
       let balance = 0;
@@ -278,6 +279,7 @@ export default {
           tax += order.payment.tax;
           plasticTax += order.payment.plasticTax;
           subtotal += order.payment.subtotal;
+          gratuity += order.payment.gratuity;
           rounding += order.payment.rounding;
           delivery += order.payment.delivery;
           total += order.payment.total;
@@ -294,6 +296,7 @@ export default {
         this.order.payment.plasticTax = toFixed(plasticTax, 2);
         this.order.payment.subtotal = toFixed(subtotal, 2);
         this.order.payment.rounding = toFixed(rounding, 2);
+        this.order.payment.gratuity = toFixed(gratuity,2);
         this.order.payment.total = toFixed(total, 2);
         this.order.payment.discount = toFixed(discount, 2);
         this.order.payment.delivery = toFixed(delivery, 2);

@@ -4,8 +4,8 @@
             <input type="radio" name="split" :id="'split_'+index" :value="index" v-model="page" @change="$emit('switch',index)" @input="$emit('input',index)">
             <label :for="'split_'+index" class="tag">{{index + 1}}</label>
             <div class="preview" @click="$emit('preview',index)">
-            <i class="fa fa-wpforms"></i>
-            <span>{{$t('text.preview')}}</span>
+              <i class="fa fa-wpforms"></i>
+              <span>{{$t('text.preview')}}</span>
             </div>
         </label>
     </div>
@@ -68,19 +68,20 @@ export default {
 .preview {
   visibility: hidden;
   position: absolute;
-  bottom: 40px;
-  left: -18px;
-  width: 75px;
+  bottom: 34px;
+  left: -15px;
+  width: 70px;
   height: 70px;
-  background-color: #555;
+  background: #2196f3;
   color: #fff;
   text-align: center;
   padding: 5px 0;
-  border-radius: 6px;
+  border-radius: 12px;
   z-index: 1;
   opacity: 0;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .preview:after {
@@ -91,7 +92,7 @@ export default {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: #2196f3 transparent transparent transparent;
 }
 
 .preview span {
@@ -102,5 +103,17 @@ export default {
   font-size: 28px;
   color: #eeeeee;
   padding: 8px 2px;
+}
+
+@keyframes preview {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0, 0, 0);
+  }
 }
 </style>

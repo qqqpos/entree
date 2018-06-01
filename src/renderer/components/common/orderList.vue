@@ -426,6 +426,7 @@ export default {
         rounding = 0,
         log = []
       } = this.order.payment;
+ 
       let subtotal = 0,
         tax = 0,
         discount = 0;
@@ -487,17 +488,22 @@ export default {
         plasticTax = toFixed(plasticBag * fine, 2);
       }
 
-      if (type === "DINE_IN" && !gratuityFree && enable) {
-        //find rule
-        try {
-          const { fee, percentage } = rules
-            .sort((a, b) => a.guest < b.guest)
-            .find(r => guest >= r.guest);
-          gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
-        } catch (e) {}
+      if (type === "DINE_IN" && !gratuityFree) {
+        if (enable) {
+          //find rule
+          try {
+            const { fee, percentage } = rules
+              .sort((a, b) => a.guest < b.guest)
+              .find(r => guest >= r.guest);
+            gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
+          } catch (e) {}
+        }
 
-        if (this.order.hasOwnProperty("gratuityFee"))
+        if (this.order.hasOwnProperty("gratuityPercentage")) {
+          gratuity = toFixed(subtotal * this.order.gratuityPercentage / 100, 2);
+        } else if (this.order.hasOwnProperty("gratuityFee")) {
           gratuity = this.order.gratuityFee;
+        }
       } else {
         gratuity = 0;
       }

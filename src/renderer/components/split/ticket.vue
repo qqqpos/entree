@@ -48,7 +48,7 @@
         <i class="fa fa-bars" @click.stop="ticketConfig"></i>
       </div>
     </template>
-    <div :is="component" :init="componentData" @config="applyConfig" @discount="setDiscount" @coupon="setCoupon" @resetDiscount="resetDiscount" @pick="pickGroup"></div>
+    <div :is="component" :init="componentData" @config="applyConfig" @discount="setDiscount" @gratuity="setGratuity" @delivery="setDelivery" @coupon="setCoupon" @resetDiscount="resetDiscount" @pick="pickGroup"></div>
   </div>
 </template>
 
@@ -367,6 +367,33 @@ export default {
         }
       });
     },
+    setGratuity() {
+      const title = "button.setGratuity";
+      const amount = this.order.gratuityFee || 0;
+      const percentage = true;
+      const allowPercentage = true;
+
+      this.$bus.emit("__THREAD__OPEN", {
+        threadID: this.unique,
+        component: "gratuity",
+        args: {
+          title,
+          amount,
+          percentage,
+          allowPercentage
+        }
+      });
+    },
+    setDelivery() {
+      this.$bus.emit("__THREAD__OPEN", {
+        threadID: this.unique,
+        component: "delivery",
+        args: {
+          title: "setting.delivery.charge",
+          amount: this.order.deliveryFee || this.store.deliver.baseFee || 0
+        }
+      });
+    },
     resetDiscount() {
       this.order.coupons = [];
       this.$calculatePayment(this.order, { selfAssign: true });
@@ -394,6 +421,34 @@ export default {
 
           this.order.coupons = coupons;
           this.componentData.isDiscount = discount > 0;
+          break;
+        case "gratuity":
+          if (result.percentage && result.amount >= 100) return;
+          if (!result.percentage && result.amount > this.order.payment.subtotal)
+            return;
+
+          if (result.amount > 0) {
+            if (result.percentage) {
+              delete this.order.gratuityFee;
+              this.order.gratuityPercentage = result.amount;
+            } else {
+              delete this.order.gratuityPercentage;
+              this.order.gratuityFee = result.amount;
+            }
+          } else {
+            delete this.order.gratuityFee;
+            delete this.order.gratuityPercentage;
+            this.order.payment.gratuity = 0;
+          }
+
+          break;
+        case "delivery":
+          if (result.amount > 0) {
+            this.order.deliveryFee = result.amount;
+          } else {
+            delete this.order.deliveryFee;
+            this.order.payment.delivery = 0;
+          }
           break;
         case "coupon":
           const refs = result
@@ -426,7 +481,7 @@ export default {
           }
           break;
       }
-      this.$calculatePayment(this.order,{ selfAssign: true });
+      this.$calculatePayment(this.order, { selfAssign: true });
 
       if (this.componentData)
         this.componentData.isDiscount = this.order.payment.discount > 0;
@@ -491,9 +546,9 @@ export default {
         dom && dom.classList.add("picked");
       });
     },
-    "order.content"(){
+    "order.content"() {
       this.$calculatePayment(this.order, { selfAssign: true });
-    } 
+    }
   }
 };
 </script>

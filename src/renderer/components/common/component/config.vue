@@ -119,36 +119,80 @@ export default {
     setDelivery() {
       new Promise((resolve, reject) => {
         const title = "setting.delivery.charge";
-        const amount = this.store.deliver.baseFee;
+        const amount =
+          this.order.deliveryFee || this.store.deliver.baseFee || 0;
         this.componentData = { resolve, reject, title, amount };
         this.component = "inputer";
       })
-        .then(_amount => {
-          this.setOrder({ deliveryFee: _amount });
-          this.exitComponent();
-        })
-        .catch(del => {
-          if (del) delete this.order.deliveryFee;
+        .then(({ amount }) => {
+          if (amount > 0) {
+            this.setOrder({ deliveryFee: amount });
+            this.exitComponent();
+          } else {
+            delete this.order.deliveryFee;
+            this.order.payment.delivery = 0;
 
-          this.exitComponent();
-        });
+            this.recalculatePayment();
+          }
+        })
+        .catch(this.exitComponent);
     },
     setGratuity() {
       new Promise((resolve, reject) => {
-        const title = "setting.delivery.charge";
-        const amount = this.store.deliver.baseFee;
-        this.componentData = { resolve, reject, title, amount };
+        const title = "button.setGratuity";
+        const amount = this.order.gratuityFee || 0;
+        const percentage = true;
+        const allowPercentage = true;
+        this.componentData = {
+          resolve,
+          reject,
+          title,
+          amount,
+          percentage,
+          allowPercentage
+        };
         this.component = "inputer";
       })
-        .then(_amount => {
-          this.setOrder({ gratuityFee: _amount });
-          this.exitComponent();
-        })
-        .catch(del => {
-          if (del) delete this.order.gratuityFee;
+        .then(({ amount, percentage }) => {
+          const prompt = {
+            type: "warning",
+            title: "dialog.cantExecute",
+            msg: "dialog.exceedAllowLimit",
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+
+          //invalid checking
+
+          if (percentage && amount >= 100) {
+            this.$dialog(prompt).then(this.exitComponent);
+          } else if (!percentage && amount > this.order.payment.subtotal) {
+            this.$dialog(prompt).then(this.exitComponent);
+          } else if (amount > 0) {
+            if (percentage) {
+              delete this.order.gratuityFee;
+              this.setOrder({ gratuityPercentage: amount });
+            } else {
+              delete this.order.gratuityPercentage;
+              this.setOrder({ gratuityFee: amount });
+            }
+          } else {
+            delete this.order.gratuityFee;
+            delete this.order.gratuityPercentage;
+            this.order.payment.gratuity = 0;
+
+            this.recalculatePayment();
+          }
 
           this.exitComponent();
-        });
+        })
+        .catch(this.exitComponent);
+    },
+    recalculatePayment() {
+      const payment = this.$calculatePayment(this.order, {
+        selfAssign: false,
+        callback: true
+      });
+      this.setOrder({ payment });
     },
     ...mapActions(["setConfig", "setOrder"])
   },
@@ -161,7 +205,7 @@ export default {
 
       return !this.init.gratuityFree && correctType;
     },
-    ...mapGetters(["config", "store", "order"])
+    ...mapGetters(["config", "tax", "store", "dinein", "order"])
   }
 };
 </script>
