@@ -263,7 +263,7 @@ export default {
       "setTemporaryTable",
       "newReservation",
       "updateReservation",
-      "resetCurrentTable",
+      "setCurrentTable",
       "setReservation",
       "setLastSync"
     ])
@@ -298,8 +298,8 @@ export default {
       Printer.initial(CLODOP, this.config, data);
     },
     UPDATE_TABLE_STATUS(data) {
-      console.log(data);
       this.updateTable(data);
+      data.assign && this.setCurrentTable(data.table);
     },
     INSERT_ORDER(data) {
       data.refresh = this.$route.name !== "Menu";

@@ -369,7 +369,7 @@ export default {
     },
     setGratuity() {
       const title = "button.setGratuity";
-      const amount = this.order.gratuityFee || 0;
+      const amount = this.order.gratuityPercentage || this.order.gratuityFee || 0;
       const percentage = true;
       const allowPercentage = true;
 

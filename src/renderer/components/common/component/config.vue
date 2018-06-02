@@ -54,12 +54,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import dialoger from "../dialoger";
 import inputer from "../../component/inputer";
 import range from "../../setting/common/range";
 
 export default {
   props: ["init"],
-  components: { inputer, range },
+  components: { inputer, range, dialoger },
   mounted() {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
@@ -127,20 +128,20 @@ export default {
         .then(({ amount }) => {
           if (amount > 0) {
             this.setOrder({ deliveryFee: amount });
-            this.exitComponent();
           } else {
             delete this.order.deliveryFee;
             this.order.payment.delivery = 0;
 
             this.recalculatePayment();
           }
+          this.init.resolve();
         })
         .catch(this.exitComponent);
     },
     setGratuity() {
       new Promise((resolve, reject) => {
         const title = "button.setGratuity";
-        const amount = this.order.gratuityFee || 0;
+        const amount = this.order.gratuityPercentage || this.order.gratuityFee || 0;
         const percentage = true;
         const allowPercentage = true;
         this.componentData = {
@@ -156,7 +157,7 @@ export default {
         .then(({ amount, percentage }) => {
           const prompt = {
             type: "warning",
-            title: "dialog.cantExecute",
+            title: "dialog.entryInvalid",
             msg: "dialog.exceedAllowLimit",
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
@@ -175,15 +176,16 @@ export default {
               delete this.order.gratuityPercentage;
               this.setOrder({ gratuityFee: amount });
             }
+
+            this.init.resolve();
           } else {
             delete this.order.gratuityFee;
             delete this.order.gratuityPercentage;
             this.order.payment.gratuity = 0;
 
             this.recalculatePayment();
+            this.exitComponent();
           }
-
-          this.exitComponent();
         })
         .catch(this.exitComponent);
     },

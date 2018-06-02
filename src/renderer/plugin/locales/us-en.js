@@ -291,6 +291,7 @@ export default {
     ledger: "Ledger",
     processAnyway: "Process Anyway",
     editInvoice: "Edit Order",
+    missItem: "Miss Item",
     settle: "Settle",
     view: "View",
     retry: "Retry",

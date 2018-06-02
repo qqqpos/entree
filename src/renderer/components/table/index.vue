@@ -333,6 +333,7 @@ export default {
         guest,
         type = "regular"
       } = t1;
+
       Object.assign(t2, {
         server,
         status,
@@ -351,7 +352,7 @@ export default {
         guest: 0
       });
 
-      this.$socket.emit("[TABLE] UPDATE", t1);
+      this.$socket.emit("[TABLE] UPDATE", { table: t1, assign: false });
 
       let order = this.history.find(i => i._id === invoice[0]);
 
@@ -376,7 +377,7 @@ export default {
         this.$socket.emit("[UPDATE] INVOICE", order);
       }
 
-      this.$socket.emit("[TABLE] UPDATE", t2);
+      this.$socket.emit("[TABLE] UPDATE", { table: t2, assign: true });
     },
     selectHibachiTable(table) {
       return new Promise((resolve, reject) => {
@@ -509,9 +510,7 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() => {
-          this.exitComponent();
-        })
+        .then(this.exitComponent)
         .catch(this.exitComponent);
     },
     temporaryTable(table, index) {
@@ -543,7 +542,6 @@ export default {
       });
     },
     exceptionHandler(error) {
-      console.log(error);
       switch (error) {
         case "UNABLE_VIEW_OTHER_TABLE":
           console.log("trigger");

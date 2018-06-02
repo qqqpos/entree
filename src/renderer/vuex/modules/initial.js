@@ -9,8 +9,8 @@ const state = {
     spooler: [],
     templates: [],
     reservation: [],
-    sync: +new Date(),
-    time: +new Date(),
+    sync: Date.now(),
+    time:  Date.now(),
     ticket: {
         number: 1,
         type: ""

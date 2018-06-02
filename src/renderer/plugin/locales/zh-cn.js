@@ -284,6 +284,7 @@ export default {
     ledger: "轧账",
     processAnyway: "依然执行",
     editInvoice: "修改订单",
+    missItem: "遗落物品",
     settle: "结账",
     view: "查看",
     retry: "重试",

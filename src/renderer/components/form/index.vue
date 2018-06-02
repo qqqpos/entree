@@ -18,6 +18,7 @@
       </div>
       <div class="edit" v-show="status.exist">
         <button @click="editInvoice" :disabled="!status.editable">{{$t('button.editInvoice')}}</button>
+        <!-- <button @click="showInvoice" v-show="status.makeNote">{{$t('button.missItem')}}</button> -->
       </div>
       <i class="fa fa-times cancel" @click="cancel"></i>
     </header>
@@ -39,7 +40,6 @@ import switchType from "./component/switchType";
 export default {
   components: { switchType, keyboard, dialoger, pageTab, unlock },
   computed: {
-    checkOrder() {},
     ...mapGetters([
       "op",
       "app",
@@ -61,7 +61,8 @@ export default {
       component: null,
       status: {
         exist: false,
-        editable: false
+        editable: false,
+        makeNote: false
       }
     };
   },
@@ -84,6 +85,16 @@ export default {
       });
     },
     checkIfOrderToday() {
+      if (this.customer.phone.length !== 10) {
+        this.status = {
+          exist: false,
+          editable: false,
+          makeNote: false
+        };
+
+        return;
+      }
+
       this.$socket.emit("[CUSTOMER] INTEGRITY", this.customer._id, flags => {
         this.flags = flags;
       });
@@ -95,7 +106,8 @@ export default {
       if (ticket) {
         this.status = {
           exist: true,
-          editable: !ticket.settled && ticket.status === 1
+          editable: !ticket.settled && ticket.status === 1,
+          makeNote: Date.now() - ticket.create > 9e5
         };
       }
     },
@@ -153,7 +165,6 @@ export default {
         this.customer.favorite.length &&
         this.setFavorites(this.customer.favorite);
       this.$socket.emit("[CUSTOMER] UPDATE", this.customer, profile => {
-        // this.emptyCustomerInfo(profile);
         this.setCustomer(profile);
         this.setOrder({ type: this.ticket.type });
         this.$router.push({ path: "/main/menu" });
@@ -340,6 +351,9 @@ export default {
           .catch(this.editFailed);
       }
     },
+    showInvoice() {
+
+    },
     editFailed() {},
     stringify(logs) {
       return logs
@@ -361,7 +375,6 @@ export default {
       "setCustomer",
       "setFavorites",
       "resetCustomer"
-      //"emptyCustomerInfo"
     ])
   },
   watch: {

@@ -1,11 +1,12 @@
 <template>
-    <div class="popupMask dark center">
+    <div class="popupMask dark center" @click.self="init.reject">
         
     </div>
 </template>
 
 <script>
 export default {
+  props:["init"],
   data() {
     return {};
   },

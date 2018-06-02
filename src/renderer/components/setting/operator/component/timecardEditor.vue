@@ -11,12 +11,14 @@
             <div class="wrap">
                 <inputer title="text.date" v-model="record.date" placeholder="YYYY-MM-DD"></inputer>
                 <inputer title="text.clockIn" v-model="record.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
-                  <i class="fa fa fa-calendar" @click="edit('clockIn',record.clockIn)"></i>
+                  <i class="fa fa-calendar" @click="editTimestamp('clockIn',record.clockIn)"></i>
                 </inputer>
                 <inputer title="text.clockOut" v-model="record.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
-                  <i class="fa fa fa-calendar" @click="edit('clockOut',record.clockOut)"></i>
+                  <i class="fa fa-calendar" @click="editTimestamp('clockOut',record.clockOut)"></i>
                 </inputer>
-                <inputer title="text.tip" v-model.number="record.tip"></inputer>
+                <inputer title="text.tip" v-model.number="record.tip">
+                  <i class="fa fa-pencil-square-o" @click="editTip(record.tip)"></i>
+                </inputer>
                 <inputer title="text.salary" v-model.number="record.wage" :placeholder="init.operator.wage"></inputer>
                 <inputer title="text.note" v-model="record.note" type="textarea"></inputer>
                 <toggle title="text.validRecord" v-model="record.valid" :defaultStyle="false"></toggle>
@@ -36,10 +38,11 @@
 import clock from "./clock";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
+import entry from "../../../component/inputer";
 
 export default {
   props: ["init"],
-  components: { clock, toggle, inputer },
+  components: { clock, toggle, inputer, entry },
   computed: {
     valid() {
       const { wage, date, clockIn, clockOut } = this.record;
@@ -78,7 +81,7 @@ export default {
       });
   },
   methods: {
-    edit(target, time) {
+    editTimestamp(target, time) {
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, time };
         this.component = "clock";
@@ -89,6 +92,20 @@ export default {
           });
           target === "clockIn" &&
             Object.assign(this.record, { date: time.format("YYYY-MM-DD") });
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
+    },
+    editTip(tip) {
+      new Promise((resolve, reject) => {
+        const title = "title.setTips";
+        const amount = tip;
+
+        this.componentData = { resolve, reject, title, amount };
+        this.component = "entry";
+      })
+        .then(({ amount }) => {
+          Object.assign(this.record, { tip: amount });
           this.exitComponent();
         })
         .catch(this.exitComponent);

@@ -80,14 +80,16 @@ export default {
       this.$router.push({ path: "/main/menu" });
     },
     editDenied() {
-      this.$dialog({
+      const prompt = {
         title: "dialog.cannotModify",
         msg: ["dialog.noRightToModify", this.order.server],
         buttons: [{ text: "button.confirm", fn: "resolve" }]
-      }).then(this.exitComponent);
+      };
+
+      this.$dialog(prompt).then(this.exitComponent);
     },
     handleSettledOrder() {
-      this.$dialog({
+      const prompt = {
         title: ["dialog.settledOrderReopen", this.order.number],
         msg: [
           "dialog.settledOrderReopenTip",
@@ -97,8 +99,10 @@ export default {
           { text: "button.removePayment", fn: "resolve" },
           { text: "button.cancel", fn: "reject" }
         ]
-      })
-        .then(() => this.removeOrderPayment())
+      };
+
+      this.$dialog()
+        .then(this.removeOrderPayment)
         .catch(this.exitComponent);
     },
     removeOrderPayment() {
@@ -119,31 +123,34 @@ export default {
         .catch(this.exitComponent);
     },
     askEditOrder() {
-      this.$dialog({
+      const prompt = {
         title: "dialog.paymentRemoved",
         msg: ["dialog.paymentRemovedTip", this.order.number],
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.edit", fn: "resolve" }
         ]
-      })
+      };
+
+      this.$dialog(prompt)
         .then(this.editOrder)
         .catch(this.exitComponent);
     },
     switchTable() {
       if (!this.currentTable) return;
-      this.$dialog({
+
+      const prompt = {
         title: ["dialog.switchTable", this.currentTable.name],
         msg: "dialog.switchTableTip"
-      })
-        .then(() => {
-          this.$emit("switch", this.currentTable);
-          this.exitComponent();
-        })
-        .catch(() => {
-          this.$emit("switch", false);
-          this.exitComponent();
-        });
+      };
+
+      this.$dialog(prompt)
+        .then(this.processTableSwitch.bind(null, this.currentTable))
+        .catch(this.processTableSwitch.bind(null, false));
+    },
+    processTableSwitch(table) {
+      this.$emit("switch", table);
+      this.exitComponent();
     },
     combineTicket() {
       this.$open("list", { combineMode: true });
@@ -226,7 +233,10 @@ export default {
         });
       });
 
-      this.$socket.emit("[TABLE] STATUS", {_id: this.order.tableID,status: 3});
+      this.$socket.emit("[TABLE] STATUS", {
+        _id: this.order.tableID,
+        status: 3
+      });
     },
     settle() {
       if (this.isEmptyTicket) return;

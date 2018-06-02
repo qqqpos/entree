@@ -60,7 +60,7 @@
         </div>
       </section>
     </div>
-    <div :is="component" :init="componentData" @reload="fetchData"></div>
+    <div :is="component" :init="componentData" @reload="fetchData" @refresh="fetchData"></div>
   </div>
 </template>
 

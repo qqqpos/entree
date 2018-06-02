@@ -49,7 +49,7 @@
           </tr>
         </tfoot>
       </table>
-      <div :is="component" :init="componentData"></div>
+      <div :is="component" :init="componentData" @refresh="$emit('refresh')"></div>
   </div>
 </template>
 
