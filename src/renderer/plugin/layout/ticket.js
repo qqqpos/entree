@@ -230,7 +230,7 @@ function createList(printer, setting, invoice, preview) {
         ).map(item => {
           if (item.diffs === "DIFFERENT" && item.qty > item.originQty) {
             item.qty = item.qty - item.originQty;
-          }else if (item.diffs === "MODIFIED") {
+          } else if (item.diffs === "MODIFIED") {
             item.choiceSet = item.choiceSet.map(sub => {
               sub.zhCN = "★" + sub.zhCN;
               sub.usEN = "★" + sub.usEN;
@@ -464,17 +464,14 @@ function createStyle(setting) {
               h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${fontFamily}";}\
               .delay{border:1px dashed #000;margin:10px 0;text-align:center;}
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
-              footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}\
-              .ticketNumber{right:10px;}.table{left:10px;}\
+              footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}.ticketNumber{right:10px;}\
               div.time span{display:inline-block;margin:0 10px;font-size:1em;}\
               div.time{border-bottom:1px solid #000;position:relative;margin-top:10px;}\
               .server{border-bottom:1px solid #000;padding-bottom:1px;text-align:left;}\
-              .server .wrap{display:flex;padding:0 10px;}\
-              .server .text{flex:2;}.server .value{flex:3;}\
+              .server .wrap{display:flex;padding:0 10px;}.server .text{flex:2;}.server .value{flex:3;}\
               .customer {${customer ? "" : "display:none;"}font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
               .customer p:last-child{border-bottom:1px solid #000;}\
-              .tel{letter-spacing:2px;}.ext{margin-left:10px;}\
-              .pt{font-size:0.8em;}
+              .tel{letter-spacing:2px;}.ext{margin-left:10px;}.pt{font-size:0.8em;}
               section.receipt{width:100%;margin:5px 0;}\
               .main{display:flex;position:relative;width:100%;}\
               .main .wrap,.empty{flex:1;}\

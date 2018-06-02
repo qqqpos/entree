@@ -4,7 +4,7 @@
       <span class="bold">{{invoice.driver}}</span>
     </span>
     <span class="type" v-else>{{$t('type.'+invoice.type)}}</span>
-    <div class="info customer" v-if="invoice.type ==='DELIVERY'">
+    <div class="info list" v-if="invoice.type ==='DELIVERY'">
       <span class="data">{{invoice.customer.address}}</span>
       <span>{{invoice.customer.phone | phone}}</span>
     </div>
@@ -78,7 +78,7 @@ export default {
   flex-direction: column;
 }
 
-.customer {
+.list {
   display: flex;
   flex-direction: column;
   line-height: 14px;

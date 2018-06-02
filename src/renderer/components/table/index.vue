@@ -16,7 +16,7 @@
           </button>
         </div>
       </aside>
-      <div class="tables">
+      <div class="view">
         <div class="table" v-for="(table,index) in viewSection" @click="tap(table)" @contextmenu="option(table,index)" :key="index" :class="getTableStatus(table.status)">
           <span :class="[table.shape]" class="icon"></span>
           <span class="name">{{table.name}}</span>
@@ -598,7 +598,7 @@ aside {
   padding: 3px 3px 0;
 }
 
-.tables {
+.view {
   padding: 3px 0;
   display: flex;
   flex-direction: row;
