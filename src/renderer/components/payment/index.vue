@@ -1479,7 +1479,7 @@ export default {
         .then(tip => {
           this.tip = tip.toFixed(2);
           Object.assign(this.payment, { tip });
-          this.setOrder(Object.assign(this.order, { payment: this.payment }));
+          //this.setOrder(Object.assign(this.order, { payment: this.payment }));
           this.exitComponent();
         })
         .catch(this.exitComponent);

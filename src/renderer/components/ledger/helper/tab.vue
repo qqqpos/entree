@@ -8,14 +8,14 @@
             <input type="radio" v-model="tab" value="DEPARTMENT" name="tab" id="DEPARTMENT">
             <label for="DEPARTMENT">{{$t('nav.department')}}</label>
         </div>
-        <div>
+        <!-- <div>
             <input type="radio" v-model="tab" value="STAFF" name="tab" id="STAFF">
             <label for="STAFF">{{$t('nav.staff')}}</label>
         </div>
         <div>
             <input type="radio" v-model="tab" value="TERMINAL" name="tab" id="TERMINAL">
             <label for="TERMINAL">{{$t('nav.terminal')}}</label>
-        </div>
+        </div> -->
     </nav>
 </template>
 

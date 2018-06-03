@@ -496,6 +496,8 @@ export default {
     reservationCancelTip: "您确定要取消 {i} 的预约吗？",
     removeClient: "删除客户资料",
     removeClientTip: "您确定要删除 {i} 的所有资料吗？",
+    printScheduleItems: "打印已定时的物品",
+    schedulePrintTaskOngoing: "列表中的某些物品处于定时打印, 您确定要将这些物品打印出来吗?",
     unableSent: "无法发送",
     errorCode: "错误代码 {i}",
     remainPrintItem: "剩余 {i} 个物品未打印",

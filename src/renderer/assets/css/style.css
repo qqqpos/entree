@@ -1059,3 +1059,7 @@ thead.title td {
   width: 100px;
   margin-left: 10px;
 }
+
+.missing{
+  color: #F44336
+}

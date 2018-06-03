@@ -70,7 +70,7 @@ export default {
   props: ["init"],
   data() {
     return {
-      list: JSON.parse(JSON.stringify(this.$store.getters.order.content)),
+      list: [],
       component: null,
       componentData: null,
       steps: ["starter", "appetizer", "entree", "dessert"].map(name => ({
@@ -83,6 +83,9 @@ export default {
       hour: "00",
       minute: "00"
     };
+  },
+  created() {
+    this.list = this.$store.getters.order.content.filter(item => !item.print);
   },
   methods: {
     jumpStep(index) {

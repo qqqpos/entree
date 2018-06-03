@@ -601,6 +601,8 @@ export default {
       "Are you sure you are going to cancel {i}'s reservation?",
     removeClient: "Remove Client Confirm",
     removeClientTip: "Are you sure you are going to delete {i} information?",
+    printScheduleItems: "Print Scheduled Item",
+    schedulePrintTaskOngoing: "Some items is in schedule print, Are you sure to print it now?",
     unableSent: "Unable Sent",
     errorCode: "Error Code {i}",
     remainPrintItem: "Remain {i} items unprinted",
@@ -758,7 +760,7 @@ export default {
     ticketAlreadySplit: "This ticket already split.",
     allergyAlert: "Food Allergy Alert",
     foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
-    exceedAllowLimit : "Value exceeding allowed limit"
+    exceedAllowLimit: "Value exceeding allowed limit"
   },
   terminal: {
     initial: "Initializing terminal {i}...",

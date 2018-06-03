@@ -15,12 +15,12 @@
                     <i class="fa fa-percent icon"></i>
                 </inputer>
                 <div class="checkboxes">
-                    <checkbox v-model="department.contain" v-for="(category,index) in categories" :title="category" :key="index" :val="category" :multiple="true" :translate="false"></checkbox>
+                    <checkbox v-model="department.contain" v-for="(category,index) in categories" :title="category" :key="index" :val="category" :multiple="true" :translate="false" :class="{missing:check(category)}"></checkbox>
                 </div>
             </div>
             <footer>
                 <div class="opt">
-                    <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
+                    <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.remove')}}</span>
                 </div>
                 <button class="btn" @click="confirm" :disabled="department.contain.length === 0">{{$t( init.edit ? 'button.save':'button.create')}}</button>
             </footer>
@@ -38,10 +38,23 @@ export default {
   data() {
     return {
       department: clone(this.init.department),
-      categories: this.init.categories.sort()
+      categories: this.init.categories.sort(),
+      selected: []
     };
   },
+  created() {
+    const selected = new Set();
+
+    this.$store.getters.departments.forEach(dep =>
+      dep.contain.forEach(category => selected.add(category))
+    );
+
+    this.selected = Array.from(selected);
+  },
   methods: {
+    check(category) {
+      return !this.selected.includes(category);
+    },
     confirm() {
       this.init.resolve(this.department);
     }
@@ -50,6 +63,11 @@ export default {
 </script>
 
 <style scoped>
+.checkboxes {
+  max-height: 389px;
+  overflow: auto;
+}
+
 div.checkbox {
   min-width: 120px;
 }

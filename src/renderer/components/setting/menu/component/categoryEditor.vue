@@ -198,8 +198,4 @@ header {
   max-height: 405px;
   overflow: auto;
 }
-
-.missing{
-  color: #F44336
-}
 </style>

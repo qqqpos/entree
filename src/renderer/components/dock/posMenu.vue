@@ -682,6 +682,7 @@ export default {
         departments.push({
           usEN: "Others",
           zhCN: "Others",
+          contain: [],
           count: 0,
           subtotal: 0,
           tax: 0,

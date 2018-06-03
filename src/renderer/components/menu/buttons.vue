@@ -279,27 +279,30 @@ export default {
     done(print) {
       if (this.isEmptyTicket) return;
 
-      this.initialPrint(print)
+      this.checkPendingItem(print)
+        .then(this.initialPrint)
         .then(this.save.bind(null, print))
-        .then(this.exit);
-      //.catch(this.placeFailed);
+        .then(this.exit)
+        .catch(this.placeFailed);
     },
     placeFailed(error) {
-      this.$log({
-        eventID: 9005,
-        type: "bug",
-        data: this.order._id,
-        note: `An error occurred when save the order. \n\nError Message:\n${error}`
-      });
+      if (error) {
+        this.$log({
+          eventID: 9005,
+          type: "bug",
+          data: this.order._id,
+          note: `An error occurred when save the order. \n\nError Message:\n${error}`
+        });
 
-      const prompt = {
-        type: "error",
-        title: "dialog.somethingWrong",
-        msg: "dialog.somethingWrongTip",
-        buttons: [{ text: "button.confirm", fn: "resolve" }]
-      };
+        const prompt = {
+          type: "error",
+          title: "dialog.somethingWrong",
+          msg: "dialog.somethingWrongTip",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
 
-      this.$dialog(prompt).then(this.exitComponent);
+        this.$dialog(prompt).then(this.exitComponent);
+      }
     },
     combineTogoItems() {
       //combine togo list to origin dineIn placed items
@@ -321,15 +324,52 @@ export default {
       archiveOrder.payment.remain += total;
       return archiveOrder;
     },
+    checkPendingItem(print) {
+      return new Promise((next, stop) => {
+        const pendingItems = this.order.content.filter(item => item.pending);
+
+        if (print && pendingItems.length > 0) {
+          const prompt = {
+            title: "dialog.printScheduleItems",
+            msg: "dialog.schedulePrintTaskOngoing",
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.processAnyway", fn: "resolve" }
+            ]
+          };
+
+          this.$dialog(prompt)
+            .then(() => {
+              this.removeItemsFromSpooler(pendingItems);
+              next(print);
+            })
+            .catch(() => {
+              this.exitComponent();
+              stop();
+            });
+        } else {
+          next(print);
+        }
+      });
+    },
+    removeItemsFromSpooler(items) {
+      const ids = items.map(i => i._id);
+
+      this.spooler.forEach(task => {
+        task.order.content = task.order.content.filter(
+          item => !ids.includes(item._id)
+        );
+      });
+    },
     initialPrint(print) {
-      return new Promise(resolve => {
+      return new Promise(next => {
         if (this.ticket.type === "TO_GO" && this.order.content.length > 0) {
           //save togo items
-          let order = this.combineTogoItems();
+          const order = this.combineTogoItems();
           this.$socket.emit("[UPDATE] INVOICE", order, print);
-          resolve();
+          next();
         } else {
-          resolve();
+          next();
         }
       });
     },
@@ -650,6 +690,7 @@ export default {
       "dinein",
       "ticket",
       "station",
+      "spooler",
       "customer",
       "language",
       "archivedOrder",

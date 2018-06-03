@@ -25,7 +25,7 @@ export default {
     appSocket.emit("[PRINTER] PREVIEW", ticket =>
       next(vm => {
         vm.ticket = ticket;
-        vm.$p("preview", { ticket, printer: vm.printer });
+        vm.$open("preview", { ticket, printer: vm.printer });
       })
     );
   },
@@ -40,6 +40,11 @@ export default {
       Printer.buzzer(this.printer);
     },
     preview() {
+      this.ticket.print = false;
+      this.ticket.content.forEach(item =>
+        Object.assign(item, { print: false })
+      );
+
       Printer.setTarget(this.printer).print(this.ticket);
     }
   }
@@ -49,7 +54,7 @@ export default {
 <style scoped>
 .preview {
   width: 949px;
-  margin:initial;
+  margin: initial;
   background: transparent;
   box-shadow: initial;
   height: 677px;
