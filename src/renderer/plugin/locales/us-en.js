@@ -910,6 +910,7 @@ export default {
     giftCard: "Gift Card",
     creditCardTip: "Credit Card Tips",
     tax: "Tax",
+    plasticTax: "Plastic Tax",
     deliveryFee: "Delivery Fee",
     gratuity: "Gratuity",
     thirdParty: "Third Party",
@@ -1380,6 +1381,7 @@ export default {
     others: "Others",
     rounding: "Penny Rounding",
     defaultPaymentType: "Default Payment Type",
+    defaultDiscount: "Default Discount Unit",
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Disc",
     taxBeforeCredit: "Tax Before Credit",
@@ -1481,7 +1483,8 @@ export default {
       setting: "Back Office Setting",
       report: "Print Report",
       terminal: "View Terminal Records",
-      history: "History Invoice"
+      history: "History Invoice",
+      exit: "Exit Program"
     },
     modify: {
       discount: "Bill Discount",
@@ -1658,6 +1661,8 @@ export default {
     alwaysPrintReceipt: "Always print receipt",
     sameItemName: "Will only print primary text when both primary & secondary text are the same.",
     foodAllergy: "Set food allergen",
+    dollarDiscount: "Giving dollar discount",
+    percentageDiscount: "Percentage discount of the subtotal",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

@@ -1,6 +1,6 @@
 <template>
     <div v-if="!mode && splits.length > 1" class="viewer">
-        <label v-for="(split,index) in splits" :key="index">
+        <label v-for="(split,index) in splits" :key="index" :class="{hidden:split.payment.remain === 0}">
             <input type="radio" name="split" :id="'split_'+index" :value="index" v-model="page" @change="$emit('switch',index)" @input="$emit('input',index)">
             <label :for="'split_'+index" class="tag">{{index + 1}}</label>
             <div class="preview" @click="$emit('preview',index)">
@@ -33,7 +33,7 @@ export default {
 <style scoped>
 .viewer {
   display: inline-flex;
-  margin-left: 25px;
+  margin-left: 20px;
   max-width: 765px;
 }
 
@@ -63,6 +63,10 @@ export default {
 
 .viewer input:checked ~ .preview {
   animation: preview 0.5s 0.2s ease-out forwards;
+}
+
+.hidden {
+  display: none;
 }
 
 .preview {

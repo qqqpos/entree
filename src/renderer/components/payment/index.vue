@@ -520,7 +520,6 @@ export default {
             Object.assign(this.payment, {
               tip: (val.slice(0, -1) / 10).toFixed(2).toFloat()
             });
-            this.setOrder(Object.assign(this.order, { payment: this.payment }));
           }
           break;
         case "number":
@@ -541,7 +540,6 @@ export default {
 
           if (anchor === "tip" && this.isThirdPartyPayment) {
             Object.assign(this.payment, { tip: 0 });
-            this.setOrder(Object.assign(this.order, { payment: this.payment }));
           }
           break;
         case "number":
@@ -628,7 +626,6 @@ export default {
           break;
       }
 
-      this.tip = "0.00";
       this.thirdPartyType = null;
 
       this.setAnchor("paid");
@@ -1215,16 +1212,18 @@ export default {
     switchInvoice(index) {
       if (!isNumber(index))
         index = this.splits.findIndex(order => order.payment.remain > 0);
+
       if (index === -1) {
         this.settled();
       } else {
         this.current = index;
-        this.payment = Object.assign({}, this.splits[index].payment);
+        this.payment = this.splits[index].payment;
         this.setPaymentType("CASH");
         this.getQuickInput(this.payment.remain);
         this.$nextTick(() => {
           this.paid = "0.00";
           this.tip = "0.00";
+          this.splits.splice();
         });
       }
     },
@@ -1243,7 +1242,6 @@ export default {
             Object.assign(this.payment, {
               tip: (value / 100).toPrecision(12).toFloat()
             });
-            this.setOrder(Object.assign(this.order, { payment: this.payment }));
           }
           break;
         case "number":
@@ -1430,7 +1428,7 @@ export default {
         0,
         toFixed(balance - Math.round(paid * 100 + Number.EPSILON) / 100, 2)
       );
-      console.log(balance, paid,remain);
+      console.log(balance, paid, remain);
 
       this.payment = Object.assign({}, this.payment, {
         total,
@@ -1479,7 +1477,6 @@ export default {
         .then(tip => {
           this.tip = tip.toFixed(2);
           Object.assign(this.payment, { tip });
-          //this.setOrder(Object.assign(this.order, { payment: this.payment }));
           this.exitComponent();
         })
         .catch(this.exitComponent);

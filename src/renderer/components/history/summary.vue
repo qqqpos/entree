@@ -130,36 +130,36 @@ export default {
         : this.data.filter(t => t.server === server);
 
       invoices.forEach(invoice => {
-        const { tip, delivery, due } = invoice.payment;
+        const { tip, delivery, due, balance } = invoice.payment;
 
         if (invoice.status === 1) {
           totalCount++;
-          totalAmount += due;
+          totalAmount += balance;
 
           switch (invoice.type) {
             case "WALK_IN":
               walkInCount++;
-              walkInAmount += due;
+              walkInAmount += balance;
               break;
             case "PICK_UP":
               pickUpCount++;
-              pickUpAmount += due;
+              pickUpAmount += balance;
               break;
             case "DELIVERY":
               deliveryCount++;
-              deliveryAmount += due;
+              deliveryAmount += balance;
 
               if (invoice.driver) {
                 if (driver.hasOwnProperty(invoice.driver)) {
                   const name = invoice.driver;
 
                   driver[name].count++;
-                  driver[name].total += due;
+                  driver[name].total += balance;
                   driver[name].tip += tip;
                 } else {
                   driver[invoice.driver] = {
                     count: 1,
-                    total: due,
+                    total: balance,
                     tip
                   };
                 }
@@ -167,21 +167,21 @@ export default {
               break;
             case "HIBACHI":
               hibachiCount++;
-              hibachiAmount += due;
+              hibachiAmount += balance;
               break;
             case "DINE_IN":
               dineInCount++;
-              dineInAmount += due;
+              dineInAmount += balance;
               break;
             case "BUFFET":
               buffetCount++;
-              buffetAmount += due;
+              buffetAmount += balance;
               break;
           }
 
           if (!invoice.settled) {
             unsettledCount++;
-            unsettledAmount += due;
+            unsettledAmount += balance;
           }
         }
       });

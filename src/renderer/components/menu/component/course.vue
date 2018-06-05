@@ -85,7 +85,10 @@ export default {
     };
   },
   created() {
-    this.list = this.$store.getters.order.content.filter(item => !item.print);
+    const content = JSON.parse(
+      JSON.stringify(this.$store.getters.order.content)
+    );
+    this.list = content.filter(item => !item.print);
   },
   methods: {
     jumpStep(index) {
@@ -171,26 +174,42 @@ export default {
     },
     exit() {
       let order = this.$store.getters.order;
-      const customer = this.customer;
+      const customer = this.$minifyCustomer(this.customer);
 
-      Object.assign(order, {
-        type: this.app.newTicket ? this.ticket.type : order.type,
-        number: this.app.newTicket ? this.ticket.number : order.number,
-        modify: this.app.newTicket ? 0 : order.modify++,
-        status: 1,
-        settle: false,
-        customer,
-        date: today(),
-        time: +new Date(),
-        content: order.content.map(item => {
-          item.pending = true;
+      if (this.app.newTicket) {
+        Object.assign(order, {
+          type: this.ticket.type,
+          number: this.ticket.number,
+          modify: 0,
+          status: 1,
+          settle: false,
+          customer,
+          date: today(),
+          time: Date.now(),
+          content: order.content.map(item => {
+            item.pending = true;
+            return item;
+          })
+        });
+
+        this.$socket.emit("[TABLE] INVOICE", order);
+      } else {
+        const pending = this.list.map(item => item.unique);
+        const content = order.content.map(item => {
+          pending.includes(item.unique) &&
+            Object.assign(item, { pending: true });
+
           return item;
-        })
-      });
-
-      this.app.newTicket
-        ? this.$socket.emit("[TABLE] INVOICE", order)
-        : this.$socket.emit("[UPDATE] INVOICE", order);
+        });
+        Object.assign(order, {
+          modify: order.modify + 1,
+          settle: false,
+          date: today(),
+          time: Date.now(),
+          content
+        });
+        this.$socket.emit("[UPDATE] INVOICE", order);
+      }
 
       this.resetAll();
 

@@ -41,7 +41,10 @@ export default {
   },
   created() {
     this.operators = this.init.operators.filter(
-      o => o.role !== "Owner" && o.name !== this.order.server
+      o =>
+        o.role !== "Owner" &&
+        o.role !== "Worker" &&
+        o.name !== this.order.server
     );
   },
   methods: {
@@ -103,6 +106,7 @@ export default {
 
 .name {
   font-weight: bold;
+  text-align: center;
 }
 
 .role {
@@ -110,7 +114,8 @@ export default {
 }
 
 .select {
-  border: 2px solid #009688;
+  border: 2px solid #26a69a;
+  background: #f5f5f5;
   opacity: 1;
 }
 </style>

@@ -5,6 +5,7 @@
     <!-- <external title="setting.thirdParty" @open="$router.push({ name: 'Setting.store.thirdParty' })"></external> -->
     <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
     <text-list title="setting.defaultPaymentType" :opts="paymentTypes" v-model="store.defaultPaymentType" @update="updatePaymentType"></text-list>
+    <toggle title="setting.defaultDiscount" v-model="store.defaultDiscountUnit" trueTooltip="tip.dollarDiscount" falseTooltip="tip.percentageDiscount" @update="updateDiscountType" :conditionalTooltip="true"></toggle>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
       <transition name="dropdown">
         <div v-if="store.tipSuggestion.enable" class="fees">
@@ -25,7 +26,6 @@ import options from "../common/options";
 import external from "../common/external";
 import textList from "../common/textList";
 import textInput from "../common/textInput";
-
 
 export default {
   components: { options, toggle, inputer, textInput, textList, external },
@@ -52,47 +52,57 @@ export default {
           value: "always"
         }
       ],
-      roundingOption: [{
-        label: "text.noRounding",
-        tooltip: "tip.rounding.disable",
-        value: "disable"
-      }, {
-        label: 'text.autoSelect',
-        tooltip: 'tip.rounding.auto',
-        value: 'auto'
-      }, {
-        label: "text.roundToQuarter",
-        tooltip: "tip.rounding.quarter",
-        value: "quarter"
-      }, {
-        label: "text.alwaysRoundUp",
-        tooltip: "tip.rounding.up",
-        value: "roundUp"
-      }, {
-        label: "text.alwaysRoundDown",
-        tooltip: "tip.rounding.down",
-        value: "roundDown"
-      }],
-      paymentTypes: [{
-        label: 'text.cash',
-        tooltip: '',
-        value: 'CASH'
-      }, {
-        label: 'text.creditCard',
-        tooltip: '',
-        value: 'CREDIT'
-      }]
+      roundingOption: [
+        {
+          label: "text.noRounding",
+          tooltip: "tip.rounding.disable",
+          value: "disable"
+        },
+        {
+          label: "text.autoSelect",
+          tooltip: "tip.rounding.auto",
+          value: "auto"
+        },
+        {
+          label: "text.roundToQuarter",
+          tooltip: "tip.rounding.quarter",
+          value: "quarter"
+        },
+        {
+          label: "text.alwaysRoundUp",
+          tooltip: "tip.rounding.up",
+          value: "roundUp"
+        },
+        {
+          label: "text.alwaysRoundDown",
+          tooltip: "tip.rounding.down",
+          value: "roundDown"
+        }
+      ],
+      paymentTypes: [
+        {
+          label: "text.cash",
+          tooltip: "",
+          value: "CASH"
+        },
+        {
+          label: "text.creditCard",
+          tooltip: "",
+          value: "CREDIT"
+        }
+      ]
     };
   },
   created() {
     //patch
     this.store = Object.assign({}, this.config.store);
-    !this.store.hasOwnProperty('tipSuggestion') && Object.assign(this.store, {
-      tipSuggestion: {
-        enable: false,
-        percentages: "15,18,20"
-      }
-    })
+    !this.store.hasOwnProperty("tipSuggestion") &&
+      Object.assign(this.store, {
+        tipSuggestion: {
+          enable: false,
+          percentages: "15,18,20"
+        }
+      });
   },
   methods: {
     update(data) {
@@ -121,15 +131,21 @@ export default {
     },
     updateRounding(value) {
       this.update({
-        key: 'store.rounding',
+        key: "store.rounding",
         value
-      })
+      });
     },
     updatePaymentType(value) {
       this.update({
-        key: 'store.defaultPaymentType',
+        key: "store.defaultPaymentType",
         value
-      })
+      });
+    },
+    updateDiscountType(value) {
+      this.update({
+        key: "store.defaultDiscountUnit",
+        value
+      });
     }
   }
 };

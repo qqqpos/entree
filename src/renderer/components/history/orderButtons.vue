@@ -126,6 +126,18 @@ export default {
       }
     },
     processEvenSplit(number) {
+      if (number > 100) {
+        const prompt = {
+          type: "error",
+          title: "dialog.cantExecute",
+          msg: "dialog.exceedAllowLimit",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+
+        this.$dialog(prompt).then(this.exitComponent);
+        return;
+      }
+
       //deep copy target & assign parent id
       const parent = this.order._id;
       const ticketNumber = this.order.number;
@@ -219,7 +231,7 @@ export default {
     },
     discount() {
       if (this.isEmptyTicket) return;
-      
+
       this.$socket.emit("[COUPON] LIST", coupons => {
         new Promise((resolve, reject) => {
           const { payment } = this.order;

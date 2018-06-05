@@ -268,15 +268,15 @@ export default {
         this.componentData = { resolve, reject, title: "title.reportTip" };
         this.component = "inputer";
       })
-        .then(tip => {
+        .then(({ amount }) => {
           const prompt = {
             type: "question",
             title: "dialog.tipReport",
-            msg: ["dialog.tipReportConfirm", tip.toFixed(2)]
+            msg: ["dialog.tipReportConfirm", amount.toFixed(2)]
           };
 
           this.$dialog(prompt)
-            .then(() => this.clockOut(tip))
+            .then(() => this.clockOut(amount))
             .catch(this.reportTip);
         })
         .catch(this.exitComponent);
@@ -514,9 +514,13 @@ export default {
       this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });
     },
     logout() {
-      this.checkOpenTicket()
-        .then(this.exit)
-        .catch(this.exitComponent);
+      this.$checkPermission("access", "exit")
+        .then(() => {
+          this.checkOpenTicket()
+            .then(this.exit)
+            .catch(this.exitComponent);
+        })
+        .catch(() => {});
     },
     exit() {
       this.exitComponent();

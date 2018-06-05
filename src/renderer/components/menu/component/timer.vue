@@ -233,7 +233,7 @@ export default {
       return new Promise(next => {
         if (this.app.newTicket) {
           Object.assign(this.order, {
-            customer: this.customer,
+            customer: this.$minifyCustomer(this.customer),
             number: this.ticket.number,
             modify: 0,
             time: Date.now(),
@@ -241,9 +241,14 @@ export default {
             status: 1,
             date: today(),
             timer: true,
-            print: false,
+            print,
             content: this.order.content.map(item => {
-              item.pending = true;
+              if (!print) {
+                item.pending = true;
+              } else {
+                item.print = true;
+              }
+
               return item;
             })
           });

@@ -25,7 +25,7 @@ export default {
   props: ["init"],
   components: { numPad },
   computed: {
-    ...mapGetters(["order"])
+    ...mapGetters(["store", "order"])
   },
   data() {
     return {
@@ -37,12 +37,19 @@ export default {
     };
   },
   created() {
+    if(this.store.defaultDiscountUnit){
+      this.unit = "$";
+      this.type = "decimal";
+    }else{
+      this.unit = "%";
+      this.type = "number";
+    }
     this.placeholder = this.init.payment.discount.toFixed(2);
   },
   methods: {
     switchUnit() {
-      this.unit = this.unit === '%' ? '$' : '%';
-      this.type = this.unit === '%' ? 'number' : 'decimal';
+      this.unit = this.unit === "%" ? "$" : "%";
+      this.type = this.unit === "%" ? "number" : "decimal";
     },
     confirm() {
       let discount = parseFloat(this.discount);

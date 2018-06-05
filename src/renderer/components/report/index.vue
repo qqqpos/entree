@@ -363,6 +363,11 @@ export default {
             .toFixed(2)} )`
         });
 
+      const plasticTax = validInvoices.reduce(
+        (a, c) => a + (c.payment.plasticTax || 0),
+        0
+      );
+
       const tax = validInvoices.reduce(
         (a, c) => a + parseFloat(c.payment.tax),
         0
@@ -371,8 +376,15 @@ export default {
       report.push({
         text: this.$t("report.tax"),
         style: "",
-        value: tax.toFixed(2)
+        value: (tax + plasticTax).toFixed(2)
       });
+
+      plasticTax > 0 &&
+        report.push({
+          text: this.$t("report.plasticTax"),
+          style: "indent",
+          value: `( ${plasticTax.toFixed(2)} )`
+        });
 
       const discount = validInvoices.reduce(
         (a, c) => a + parseFloat(c.payment.discount),
@@ -386,7 +398,7 @@ export default {
           value: "- " + discount.toFixed(2)
         });
 
-      const salesTotal = foodSales + tax - discount;
+      const salesTotal = foodSales + tax + plasticTax - discount;
 
       report.push({
         text: this.$t("report.salesTotal"),

@@ -59,6 +59,7 @@
               <span class="void" @click="voidSale(record)">{{$t('button.void')}}</span>
             </td>
             <td v-else class="action">
+              <span class="print" @click="print(record)">{{$t('button.print')}}</span>
               <span class="refund" @click="askRefund(record)">{{$t('button.refund')}}</span>
             </td>
           </tr>

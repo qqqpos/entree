@@ -312,9 +312,12 @@ export default {
         item.diffs = "NEW";
         archiveOrder.content.push(item);
       });
+
       //recalculate price
-      let { subtotal, tax } = this.order.payment;
-      let total = toFixed(subtotal + tax, 2);
+      const { subtotal, tax, plasticTax = 0 } = this.order.payment;
+
+      const total = toFixed(subtotal + tax + plasticTax, 2);
+      //bug here
 
       archiveOrder.payment.subtotal += subtotal;
       archiveOrder.payment.tax += tax;
@@ -353,13 +356,17 @@ export default {
       });
     },
     removeItemsFromSpooler(items) {
-      const ids = items.map(i => i._id);
+      const uniques = items.map(i => i.unique);
 
       this.spooler.forEach(task => {
         task.order.content = task.order.content.filter(
-          item => !ids.includes(item._id)
+          item => !uniques.includes(item.unique)
         );
       });
+
+      this.order.content.forEach(item =>
+        Object.assign(item, { pending: false })
+      );
     },
     initialPrint(print) {
       return new Promise(next => {
@@ -499,6 +506,7 @@ export default {
           customer,
           type: this.ticket.type,
           number: this.ticket.number,
+          //receiptCount: 0,
           modify: 0,
           status: 1,
           time: Date.now(),

@@ -790,6 +790,7 @@ export default {
     giftCard: "礼物卡",
     creditCardTip: "信用卡小费",
     tax: "税",
+    plasticTax: "塑料袋税",
     itemSales: "物品销售",
     gratuity: "服务费",
     deliveryFee: "送餐费",
@@ -1345,6 +1346,7 @@ export default {
     others: "其它设置",
     rounding: "美分取整",
     defaultPaymentType: "默认付款类型",
+    defaultDiscount: "默认折扣单位",
     tax: "税率",
     taxBeforeDiscount: "折扣前征税",
     taxBeforeCredit: "积分前征税",
@@ -1449,7 +1451,8 @@ export default {
       setting: "后台设定",
       report: "报表打印",
       terminal: "刷卡历史记录",
-      history: "历史订单"
+      history: "历史订单",
+      exit: "退出软件"
     },
     modify: {
       discount: "订单折扣",
@@ -1625,6 +1628,8 @@ export default {
     alwaysPrintReceipt: "总是打印收据",
     sameItemName: "当两种语言相同时，只会打印第一语言文本",
     foodAllergy: "设置物品过敏源",
+    dollarDiscount: "按美元给予折扣",
+    percentageDiscount: "按订单总数的百分比折扣",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

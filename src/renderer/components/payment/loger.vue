@@ -13,7 +13,8 @@
             <th>{{$t('thead.time')}}</th>
             <th>{{$t('thead.paymentType')}}</th>
             <th>{{$t('thead.amount')}}</th>
-            <th>{{$t('thead.tip')}}<th></th>
+            <th>{{$t('thead.tip')}}</th>
+            <th class="action"></th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +38,7 @@
             </td>
             <td class="amount" :title="tenderDetail(log)">$ {{log.actual | decimal}}</td>
             <td class="amount" :class="{zero:log.tip === 0}">$ {{log.tip | decimal}}</td>
-            <td>
+            <td class="action">
               <button @click="removeConfirm(log,index)">{{$t("button.remove")}}</button>
               <span v-if="log.hasOwnProperty('splitPayment')" class="split">#{{log.splitPayment + 1}}</span>
             </td>
@@ -291,6 +292,10 @@ footer {
   font-style: italic;
   width: 40px;
   display: inline-block;
+}
+
+.action{
+  width:120px;
 }
 
 .zero {
