@@ -226,7 +226,7 @@ function createList(printer, setting, invoice, preview) {
         items = list.filter(
           item =>
             item.printer[printer] && !item.print &&
-            (item.diffs === 'NEW' || (item.diffs === "DIFFERENT" && item.hasOwnProperty('originQty')) || item.diffs === "MODIFIED")
+            (item.diffs === 'NEW' || (item.diffs === "DIFFERENT" && item.hasOwnProperty('originQty') && item.qty > item.originQty) || item.diffs === "MODIFIED")
         ).map(item => {
           if (item.diffs === "DIFFERENT" && item.qty > item.originQty) {
             item.qty = item.qty - item.originQty;

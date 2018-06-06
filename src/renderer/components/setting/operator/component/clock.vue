@@ -37,7 +37,7 @@
                 </div>
                 <div class="outer">
                     <i class="fa fa-angle-up" @click="addMin(1)"></i>
-                    <span class="time">{{time[3]}}</span>
+                    <span class="time">{{time[5]}}</span>
                     <i class="fa fa-angle-down" @click="subMin(1)"></i>
                 </div>
             </div>

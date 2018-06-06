@@ -41,7 +41,7 @@
           </div>
         </div> -->
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
-        <button class="btn" @click="print">{{$t('button.printAll')}}</button>
+        <button class="btn" @click="print" :disabled="!done">{{$t('button.printAll')}}</button>
         <button class="btn" @click="confirm" :disabled="!done">{{$t('button.confirm')}}</button>
       </footer>
     </div>
@@ -227,6 +227,12 @@ export default {
         this.init.resolve();
     },
     print() {
+      if (this.app.newTicket && this.$route.name === "Menu") {
+        const { number, type } = this.ticket;
+        Object.assign(this.order, { number, type, time: Date.now() });
+        this.setApp({ newTicket: false });
+      }
+
       const { number } = this.order;
       this.$children
         .filter(

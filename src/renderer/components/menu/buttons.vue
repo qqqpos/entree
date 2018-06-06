@@ -445,7 +445,7 @@ export default {
           if (this.ticket.type !== "TO_GO") {
             if (print) {
               const diffs = this.compare(order);
-              console.log(diffs);
+              //console.log(diffs);
 
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
