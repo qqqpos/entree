@@ -1,5 +1,5 @@
 <template>
-  <div class="ticket" :data-number="invoice.number" @click="view($event)" :class="{void:invoice.status === 0,settled:invoice.settled,split:invoice.split}">
+  <div class="ticket" :data-number="invoice.number" @click="setViewOrder(invoice)" :class="{void:invoice.status === 0,settled:invoice.settled,split:invoice.split}">
     <span class="type" v-if="invoice.type ==='DELIVERY'">{{$t('type.'+invoice.type)}}
       <span class="bold">{{invoice.driver}}</span>
     </span>
@@ -15,7 +15,7 @@
     </div>
     <span class="note" v-if="invoice.status === 0">{{$t('reason.'+invoice.void.note)}}</span>
     <span class="price">$ {{invoice.payment.due | decimal}}</span>
-    <span class="modifed" v-if="invoice.modify" :title="$t('text.invoiceEdit',invoice.editor)"></span>
+    <span class="modifed" v-if="invoice.modify" :title="$t('text.invoiceEdit',invoice.editor)" @click.self="$emit('recall',invoice._id)"></span>
   </div>
 </template>
 
@@ -25,9 +25,6 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["invoice"],
   methods: {
-    view(e) {
-      this.setViewOrder(this.invoice);
-    },
     ...mapActions(["setViewOrder"])
   }
 };
@@ -173,11 +170,12 @@ export default {
   position: absolute;
   width: 12px;
   height: 12px;
-  bottom: 5px;
-  left: 5px;
+  bottom: 0px;
+  left: 0px;
   background: linear-gradient(#ffcc80, #f57c00);
   border-radius: 50%;
   background-clip: padding-box;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.39);
+  margin: 7px;
 }
 </style>

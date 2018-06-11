@@ -10,7 +10,7 @@
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">
         <div class="inner">
-          <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice"></ticket>
+          <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall"></ticket>
         </div>
         <pagination :of="orders" @page="setPage" :contain="30" :max="12"></pagination>
       </section>
@@ -146,6 +146,11 @@ export default {
         }
       });
     },
+    recall(_id) {
+      this.$socket.emit("[INSTANCE] LIST", _id, results => {
+        console.log(results);
+      });
+    },
     getConsole() {
       this.$open("Maintenance");
     },
@@ -165,39 +170,39 @@ export default {
         case "BAR":
           return Array.isArray(this.prevHistory)
             ? this.prevHistory.filter(
-              invoice => invoice.type === this.filter && view(invoice.server)
-            )
+                invoice => invoice.type === this.filter && view(invoice.server)
+              )
             : this.history.filter(
-              invoice => invoice.type === this.filter && view(invoice.server)
-            );
+                invoice => invoice.type === this.filter && view(invoice.server)
+              );
         case "UNSETTLE":
           return Array.isArray(this.prevHistory)
             ? this.prevHistory.filter(
-              invoice =>
-                invoice.status === 1 &&
-                !invoice.settled &&
-                view(invoice.server)
-            )
+                invoice =>
+                  invoice.status === 1 &&
+                  !invoice.settled &&
+                  view(invoice.server)
+              )
             : this.history.filter(
-              invoice =>
-                invoice.status === 1 &&
-                !invoice.settled &&
-                view(invoice.server)
-            );
+                invoice =>
+                  invoice.status === 1 &&
+                  !invoice.settled &&
+                  view(invoice.server)
+              );
         case "DRIVER":
           return Array.isArray(this.prevHistory)
             ? this.prevHistory.filter(
-              invoice =>
-                (this.driver
-                  ? invoice.driver === this.driver
-                  : invoice.type === "DELIVERY") && view(invoice.server)
-            )
+                invoice =>
+                  (this.driver
+                    ? invoice.driver === this.driver
+                    : invoice.type === "DELIVERY") && view(invoice.server)
+              )
             : this.history.filter(
-              invoice =>
-                (this.driver
-                  ? invoice.driver === this.driver
-                  : invoice.type === "DELIVERY") && view(invoice.server)
-            );
+                invoice =>
+                  (this.driver
+                    ? invoice.driver === this.driver
+                    : invoice.type === "DELIVERY") && view(invoice.server)
+              );
         default:
           return Array.isArray(this.prevHistory)
             ? this.prevHistory.filter(invoice => view(invoice.server))

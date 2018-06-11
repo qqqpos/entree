@@ -167,6 +167,7 @@ var Preset = function () {
       option: [],
       category: "",
       spicy: false,
+      manual: true,
       num: 0,
       priority: 0,
       stock: 0,

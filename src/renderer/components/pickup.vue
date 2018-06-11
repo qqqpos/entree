@@ -117,7 +117,7 @@ export default {
     print() {
       Printer.setTarget("Receipt").print(this.order);
 
-      this.$socket.emit("[UPDATE] INVOICE", order, true);
+      this.$socket.emit("[INVOICE] UPDATE", order, true);
     },
     split() {
       this.$open("split");

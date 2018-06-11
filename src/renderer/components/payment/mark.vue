@@ -184,7 +184,7 @@ export default {
         this.order.cashier = this.op.name;
         this.order.payment.type = this.type;
         this.order.payment.log.push(transaction);
-        this.$socket.emit("[UPDATE] INVOICE", this.order, false);
+        this.$socket.emit("[INVOICE] UPDATE", this.order, false);
         this.init.resolve();
       });
     },

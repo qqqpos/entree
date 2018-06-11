@@ -93,7 +93,7 @@
                 </div>
                 <div class="input" @click="setAnchor($event)" data-anchor="evenly" data-format="number">
                   <span class="text">{{$t('text.separate')}}
-                    <span class="people">$ {{(payment.balance / evenly) | decimal}}</span>
+                    <span class="people">$ {{(payment.balance / (evenly || 1)) | decimal}}</span>
                   </span>
                   <span class="value">{{evenly}}</span>
                 </div>
@@ -217,7 +217,6 @@
           </section>
         </article>
         </div>
-        
       </div>
       <div :is="component" :init="componentData" :key="1"></div>
     </transition-group>
@@ -1024,7 +1023,7 @@ export default {
         if (this.isNewTicket) {
           Object.assign(this.order, {
             payment: this.payment,
-            customer: JSON.parse(JSON.stringify(this.customer)),
+            customer: this.$minifyCustomer(this.customer),
             type: this.ticket.type,
             station: this.station.alias,
             cashier: this.op.name,
@@ -1034,7 +1033,7 @@ export default {
             time: Date.now(),
             settled
           });
-          this.$socket.emit("[SAVE] INVOICE", this.order, false, order => {
+          this.$socket.emit("[INVOICE] SAVE", this.order, false, order => {
             this.ticketNumberUpdateable = false;
             this.order = order;
             resolve();
@@ -1048,7 +1047,7 @@ export default {
             settled
           });
 
-          this.$socket.emit("[UPDATE] INVOICE", order, false);
+          this.$socket.emit("[INVOICE] UPDATE", order, false);
           resolve();
         }
       });
@@ -1164,7 +1163,7 @@ export default {
             this.poleDisplay("Thank You", "Please Come Again!");
             if (this.isNewTicket) {
               Printer.setTarget("Order").print(this.order);
-              this.$socket.emit("[UPDATE] INVOICE", this.order, true);
+              this.$socket.emit("[INVOICE] UPDATE", this.order, true);
             }
             this.exitPayment();
           }
@@ -1454,19 +1453,14 @@ export default {
       );
     },
     settled() {
-      this.$socket.emit("[UPDATE] INVOICE", this.order, false);
+      this.$socket.emit("[INVOICE] UPDATE", this.order, false);
       this.exitPayment();
     },
     save() {
-      if (this.isNewTicket) {
-        this.setOrder(Object.assign(this.order, { payment: this.payment }));
-        this.exit();
-      } else {
-        let order = this.payInFull ? this.order : this.splits[this.current];
-        Object.assign(order, { payment: this.payment });
-        this.$socket.emit("[UPDATE] INVOICE", order, false);
-        this.exit();
-      }
+      let order = this.payInFull ? this.order : this.splits[this.current];
+      this.setOrder(Object.assign(order, { payment: this.payment }));
+      !this.isNewTicket && this.$socket.emit("[INVOICE] UPDATE", order, false);
+      this.exit();
     },
     setTip() {
       const { subtotal } = this.payment;
@@ -1490,7 +1484,13 @@ export default {
           const { done } = this.station.autoLock;
           if (this.ticket.type === "BUFFET") {
             this.resetMenu();
-            this.setOrder({ type: "BUFFET", create: Date.now() });
+            this.setApp({ newTicket: true });
+            this.setOrder({
+              type: "BUFFET",
+              create: Date.now(),
+              server: this.op.name,
+              customer:this.$minifyCustomer(this.customer)
+            });
             this.exit();
           } else {
             if (done) {
@@ -1526,12 +1526,12 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           this.order.settled = true;
-          this.$socket.emit("[UPDATE] INVOICE", this.order, false);
+          this.$socket.emit("[INVOICE] UPDATE", this.order, false);
           this.exit();
         })
         .catch(() => this.exit());
     },
-    ...mapActions(["setOp", "setOrder", "resetAll", "resetMenu"])
+    ...mapActions(["setOp", "setApp", "setOrder", "resetAll", "resetMenu"])
   },
   sockets: {
     TICKET_NUMBER(number) {

@@ -208,7 +208,7 @@ export default {
           time: Date.now(),
           content
         });
-        this.$socket.emit("[UPDATE] INVOICE", order);
+        this.$socket.emit("[INVOICE] UPDATE", order);
       }
 
       this.resetAll();

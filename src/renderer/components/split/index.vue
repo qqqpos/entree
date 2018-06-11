@@ -214,17 +214,17 @@ export default {
       });
     },
     rollback() {
-        this.$socket.emit("[SPLIT] SAVE", { splits: [], parent:this.order._id });
-        this.order.coupons = [];
-        this.order.children = [];
-        this.order.split = false;
-        this.order.payment.discount = 0;
-        this.$calculatePayment(this.order, { selfAssign: true });
-        this.order.content.forEach(item => (item.split = false));
+      this.$socket.emit("[SPLIT] SAVE", { splits: [], parent: this.order._id });
+      this.order.coupons = [];
+      this.order.children = [];
+      this.order.split = false;
+      this.order.payment.discount = 0;
+      this.$calculatePayment(this.order, { selfAssign: true });
+      this.order.content.forEach(item => (item.split = false));
 
-        this.setOrder(this.order);
-        this.$socket.emit("[UPDATE] INVOICE", this.order);
-        this.init.resolve();
+      this.setOrder(this.order);
+      this.$socket.emit("[INVOICE] UPDATE", this.order);
+      this.init.resolve();
     },
     print() {
       if (this.app.newTicket && this.$route.name === "Menu") {
@@ -279,6 +279,7 @@ export default {
       if (splits.length > 1) {
         splits.forEach((order, index) => {
           order.parent = parent;
+          order.time = order.time || this.order.time;
           order.number = `${this.order.number}-${index + 1}`;
 
           tip += order.payment.tip;
@@ -297,24 +298,27 @@ export default {
 
         this.$socket.emit("[SPLIT] SAVE", { splits, parent });
 
-        this.order.payment.tip = toFixed(tip, 2);
-        this.order.payment.tax = toFixed(tax, 2);
-        this.order.payment.plasticTax = toFixed(plasticTax, 2);
-        this.order.payment.subtotal = toFixed(subtotal, 2);
-        this.order.payment.rounding = toFixed(rounding, 2);
-        this.order.payment.gratuity = toFixed(gratuity,2);
-        this.order.payment.total = toFixed(total, 2);
-        this.order.payment.discount = toFixed(discount, 2);
-        this.order.payment.delivery = toFixed(delivery, 2);
-        this.order.payment.due = toFixed(due, 2);
-        this.order.payment.balance = toFixed(balance, 2);
-        this.order.payment.remain = toFixed(remain, 2);
         this.order.content.forEach(item => (item.split = true));
         this.order.children = splits.map(i => i._id);
         this.order.split = true;
 
+        Object.assign(this.order.payment, {
+          tip: toFixed(tip, 2),
+          tax: toFixed(tax, 2),
+          plasticTax: toFixed(plasticTax, 2),
+          subtotal: toFixed(subtotal, 2),
+          rounding: toFixed(rounding, 2),
+          gratuity: toFixed(gratuity, 2),
+          total: toFixed(total, 2),
+          discount: toFixed(discount, 2),
+          delivery: toFixed(delivery, 2),
+          due: toFixed(due, 2),
+          balance: toFixed(balance, 2),
+          remain: toFixed(remain, 2)
+        });
+
         this.setOrder(this.order);
-        this.$socket.emit("[UPDATE] INVOICE", this.order);
+        this.$socket.emit("[INVOICE] UPDATE", this.order);
         this.init.resolve();
       } else {
         this.rollback();

@@ -256,7 +256,6 @@ export default {
       if (this.spooler.length === 0) return;
 
       let error = false;
-      let sendItem = this.spooler.length;
       let order = JSON.parse(JSON.stringify(this.order));
       let items = order.content.map(item => {
         if (item.pending) item.print = true;
@@ -264,32 +263,36 @@ export default {
       });
 
       const remain = items.filter(item => !item.print).length;
+      const uniques = order.content.map(item => item.unique);
 
-      order.content = this.spooler;
-      order.schedule = +new Date();
+      order.content = this.spooler.filter(item =>
+        uniques.includes(item.unique)
+      );
+
+      order.schedule = Date.now();
       Printer.setTarget("Order").print(order);
-      this.spooler.forEach(item => {
-        item.print = true;
-      });
+
+      this.spooler.forEach(item => (item.print = true));
       if (remain === 0) {
         Object.assign(this.order, { print: true });
       } else {
-        const txt =
+        const remainItem =
           remain > 0
             ? this.$t("dialog.remainPrintItem", remain)
             : this.$t("dialog.noRemainItem");
 
         const prompt = {
           type: "info",
-          title: "dialog.itemSent",
-          msg: ["dialog.printResult", sendItem, txt],
+          title: ["dialog.itemSent", order.number],
+          msg: ["dialog.printResult", order.content.length, remainItem],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
         this.$dialog(prompt).then(this.exitComponent);
       }
+
       this.spooler = [];
-      this.$socket.emit("[UPDATE] INVOICE", this.order);
+      this.$socket.emit("[INVOICE] ITEM_PRINT", order);
     },
     move(e) {
       this.offset = this.lastDelta + e.deltaY;
@@ -426,7 +429,7 @@ export default {
         rounding = 0,
         log = []
       } = this.order.payment;
- 
+
       let subtotal = 0,
         tax = 0,
         discount = 0;
@@ -622,6 +625,9 @@ export default {
     ])
   },
   watch: {
+    "order._id"() {
+      this.spooler = [];
+    },
     "order.content": {
       handler(items) {
         this.display

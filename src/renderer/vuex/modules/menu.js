@@ -2,6 +2,7 @@ import * as types from "../mutation-types";
 
 const state = {
   order: {
+    customer: {},
     payment: {
       subtotal: 0,
       tax: 0,
@@ -35,6 +36,7 @@ const mutations = {
   [types.RESET_MENU](state) {
     state.order = {
       _id: ObjectId(),
+      customer: {},
       payment: {
         subtotal: 0,
         tax: 0,
@@ -144,7 +146,7 @@ const mutations = {
     state.order.content.splice(index, 1, item);
     state.item = item;
   },
-  [types.SPLIT_ITEM](state,item){
+  [types.SPLIT_ITEM](state, item) {
     state.item.total = (--state.item.qty * state.item.single).toFixed(2);
 
     //clone
@@ -153,8 +155,8 @@ const mutations = {
     _item.qty = 1;
     _item.total = _item.single.toFixed(2);
     _item.unique = String().random();
-    state.order.content.splice(index,0,_item);
-    
+    state.order.content.splice(index, 0, _item);
+
     state.item = _item;
 
     // setTimeout(() =>

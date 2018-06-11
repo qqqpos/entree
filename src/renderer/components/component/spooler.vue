@@ -55,7 +55,7 @@ export default {
           pendingItems.includes(item.unique) && Object.assign(item, status);
         });
 
-        this.$socket.emit("[UPDATE] INVOICE", invoice);
+        this.$socket.emit("[INVOICE] UPDATE", invoice);
       }
     },
     print(i) {

@@ -77,7 +77,7 @@
       <i class="fa fa-columns"></i>
       <span class="text">{{$t('button.split')}}</span>
     </div>
-    <div class="btn" @click="save(false)">
+    <div class="btn" @click="done(false)">
       <i class="fa fa-save"></i>
       <span class="text">{{$t('button.save')}}</span>
     </div>
@@ -373,7 +373,7 @@ export default {
         if (this.ticket.type === "TO_GO" && this.order.content.length > 0) {
           //save togo items
           const order = this.combineTogoItems();
-          this.$socket.emit("[UPDATE] INVOICE", order, print);
+          this.$socket.emit("[INVOICE] UPDATE", order, print);
           next();
         } else {
           next();
@@ -396,7 +396,7 @@ export default {
             });
 
             if (this.ticket.type !== "DINE_IN" && this.ticket.type !== "BAR") {
-              this.$socket.emit("[SAVE] INVOICE", order, false, content => {
+              this.$socket.emit("[INVOICE] SAVE", order, false, content => {
                 Printer.setTarget("Order").print(
                   Object.assign(order, { content: items })
                 );
@@ -409,7 +409,7 @@ export default {
                 this.$socket.emit("[TABLE] SETUP", this.currentTable);
               }
 
-              this.$socket.emit("[SAVE] INVOICE", order, false, content => {
+              this.$socket.emit("[INVOICE] SAVE", order, false, content => {
                 if (print) {
                   const ticket = Object.assign({}, order, { content: items });
 
@@ -423,7 +423,7 @@ export default {
             this.ticket.type !== "DINE_IN" &&
             this.ticket.type !== "BAR"
           ) {
-            this.$socket.emit("[SAVE] INVOICE", order, print, content => {
+            this.$socket.emit("[INVOICE] SAVE", order, print, content => {
               print && Printer.setTarget("All").print(content);
             });
           } else {
@@ -433,7 +433,7 @@ export default {
               this.$socket.emit("[TABLE] SETUP", this.currentTable);
             }
 
-            this.$socket.emit("[SAVE] INVOICE", order, print, content => {
+            this.$socket.emit("[INVOICE] SAVE", order, print, content => {
               if (print) {
                 printOnDone
                   ? Printer.setTarget("All").print(content)
@@ -445,7 +445,6 @@ export default {
           if (this.ticket.type !== "TO_GO") {
             if (print) {
               const diffs = this.compare(order);
-              //console.log(diffs);
 
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
@@ -455,7 +454,7 @@ export default {
                   : Printer.setTarget("Order").print(diffs);
               }
             }
-            this.$socket.emit("[UPDATE] INVOICE", order, print);
+            this.$socket.emit("[INVOICE] UPDATE", order, print);
           } else {
             Printer.setTarget("Order").print(this.order);
           }

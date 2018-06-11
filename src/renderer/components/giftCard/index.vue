@@ -237,7 +237,7 @@ export default {
         .catch(() => this.init.reject());
     },
     viewReceipt(id) {
-      this.$socket.emit("[VIEW] INVOICE", id, ticket =>
+      this.$socket.emit("[INVOICE] DETAIL", id, ticket =>
         this.$open("ticket", { ticket, exit: true })
       );
     },
@@ -357,7 +357,7 @@ export default {
             _id: ObjectId()
           });
 
-          Printer.printCreditCard(data,{});
+          Printer.printCreditCard(data, {});
 
           const transaction = {
             _id: ObjectId(),
@@ -543,7 +543,7 @@ export default {
         })
         .catch(this.exitComponent);
     },
-    applyCard(){
+    applyCard() {
       this.init.resolve(this.giftcard);
     }
   }

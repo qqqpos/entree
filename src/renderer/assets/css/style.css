@@ -803,6 +803,8 @@ section.sides {
   display: flex;
   flex-direction: column;
   margin-left: 1px;
+  max-width: 113px;
+  overflow: hidden;
 }
 .sides div {
   border: 1px solid #9e9e9e;

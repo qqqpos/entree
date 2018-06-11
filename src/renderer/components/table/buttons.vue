@@ -117,7 +117,7 @@ export default {
         .then(() => {
           this.exitComponent();
           this.removePayment();
-          this.$socket.emit("[UPDATE] INVOICE", this.order);
+          this.$socket.emit("[INVOICE] UPDATE", this.order);
           this.askEditOrder();
         })
         .catch(this.exitComponent);

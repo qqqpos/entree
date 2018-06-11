@@ -240,7 +240,7 @@ export default {
         });
       }).then(() => {
         this.exitComponent();
-        this.$socket.emit("[UPDATE] INVOICE", this.order);
+        this.$socket.emit("[INVOICE] UPDATE", this.order);
       });
     },
     reOpenOrder() {
@@ -400,7 +400,7 @@ export default {
       });
     },
     updateInvoice(ticket) {
-      this.$socket.emit("[UPDATE] INVOICE", ticket, true);
+      this.$socket.emit("[INVOICE] UPDATE", ticket, true);
     },
     getTransaction() {
       const date = document.querySelector("#calendar .text").innerText;

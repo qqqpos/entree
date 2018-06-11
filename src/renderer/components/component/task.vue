@@ -89,7 +89,7 @@ h3 {
 
 .type:before {
   content: "·";
-  margin: 0 8px;
+  margin: 0 5px;
   color: #9e9e9e;
 }
 

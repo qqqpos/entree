@@ -32,15 +32,6 @@ export default {
       this.$socket.emit("[SYS] LOG", event);
     };
 
-    // Vue.prototype.$p = function (component, args) {
-    //   return new Promise((resolve, reject) => {
-    //     this.componentData = Object.assign({ resolve, reject }, args);
-    //     this.component = component;
-    //   })
-    //     .then(this.exitComponent)
-    //     .catch(this.exitComponent);
-    // };
-
     Vue.prototype.$open = function (component, args) {
       return new Promise((resolve, reject) => {
         this.componentData = Object.assign({}, { resolve, reject }, args);
@@ -156,11 +147,6 @@ export default {
 
       this.$dialog(prompt).catch(this.exitComponent);
     };
-
-    // Vue.prototype.$q = function () {
-    //   this.component = null;
-    //   this.componentData = null;
-    // };
 
     Vue.prototype.$minifyCustomer = ({
       _id = undefined,
@@ -507,7 +493,7 @@ export default {
         return result;
       },
       formatAddress(address) {
-        const reg = /\d+(\s+\w+){1,}\s+(?:st(?:\.|reet)?|dr(?:\.|ive)?|pl(?:\.|ace)?|ave(?:\.|nue)?|rd|road|ln|lane|drive|way|court|plaza|square|run|parkway|point|pike|square|driveway|trace|park|terrace|circle|loop|blvd|broadway|trail|trl)/i;
+        const reg = /\d+(\s+\w+){1,}\s+(?:st(?:\.|reet)?|dr(?:\.|ive)?|pl(?:\.|ace)?|ave(?:\.|nue)?|rd|road|ln|lane|drive|way|court|plaza|square|run|parkway|point|pike|pkwy|square|driveway|trace|park|terrace|circle|loop|blvd|broadway|trail|trl)/i;
         const match = address.match(reg);
 
         return match ? match[0] : false;

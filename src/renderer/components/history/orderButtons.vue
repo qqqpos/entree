@@ -183,7 +183,7 @@ export default {
       this.order.split = true;
 
       this.setOrder(this.order);
-      this.$socket.emit("[UPDATE] INVOICE", this.order);
+      this.$socket.emit("[INVOICE] UPDATE", this.order);
       this.exitComponent();
     },
     isSettled() {
@@ -251,7 +251,7 @@ export default {
       this.order.coupons = coupons;
 
       this.$calculatePayment(this.order, { selfAssign: true });
-      this.$socket.emit("[UPDATE] INVOICE", this.order);
+      this.$socket.emit("[INVOICE] UPDATE", this.order);
       this.exitComponent();
     },
     driver() {

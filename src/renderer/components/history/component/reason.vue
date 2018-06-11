@@ -68,7 +68,7 @@ export default {
         }
       });
 
-      this.$socket.emit("[UPDATE] INVOICE", this.order);
+      this.$socket.emit("[INVOICE] UPDATE", this.order);
       this.init.resolve();
     }
   }

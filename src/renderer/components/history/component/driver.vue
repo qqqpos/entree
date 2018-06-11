@@ -147,13 +147,13 @@ export default {
       const dom = document.querySelector("ul.letters .active");
       dom && dom.classList.remove("active");
 
-      this.$socket.emit("[UPDATE] INVOICE", this.order, false);
+      this.$socket.emit("[INVOICE] UPDATE", this.order, false);
     },
     setDriver(letter) {
       if (!this.order) return;
 
       Object.assign(this.order, { driver: letter });
-      this.$socket.emit("[UPDATE] INVOICE", this.order, false);
+      this.$socket.emit("[INVOICE] UPDATE", this.order, false);
 
       this.loop && this.next();
     },
@@ -178,7 +178,7 @@ export default {
           this.order.payment.tip = tip;
           this.order.payment.balance = balance;
           this.order.payment.remain = toFixed(balance - paid, 2);
-          this.$socket.emit("[UPDATE] INVOICE", this.order, false);
+          this.$socket.emit("[INVOICE] UPDATE", this.order, false);
           this.exitComponent();
         })
         .catch(this.exitComponent);

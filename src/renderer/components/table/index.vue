@@ -374,7 +374,7 @@ export default {
           tableID: t2._id
         });
 
-        this.$socket.emit("[UPDATE] INVOICE", order);
+        this.$socket.emit("[INVOICE] UPDATE", order);
       }
 
       this.$socket.emit("[TABLE] UPDATE", { table: t2, assign: true });

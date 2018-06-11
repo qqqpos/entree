@@ -194,7 +194,7 @@ export default {
 
       if (this.order.pending) {
         Object.assign(this.order, { pending: false });
-        this.$socket.emit("[UPDATE] INVOICE", this.order);
+        this.$socket.emit("[INVOICE] UPDATE", this.order);
       }
     },
     printFromSpooler(i) {
@@ -221,7 +221,7 @@ export default {
           }
         });
 
-        this.$socket.emit("[UPDATE] INVOICE", order);
+        this.$socket.emit("[INVOICE] UPDATE", order);
       }
     },
     editProfile() {

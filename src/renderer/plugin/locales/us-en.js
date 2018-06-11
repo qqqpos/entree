@@ -607,7 +607,7 @@ export default {
     errorCode: "Error Code {i}",
     remainPrintItem: "Remain {i} items unprinted",
     noRemainItem: "All items are printed",
-    itemSent: "Item Sent",
+    itemSent: "Item Print From Ticket #{i}",
     printResult: "Send {i} items, {i}",
     tableSectionRemove: "Table Section Remove",
     tableSectionRemoveTip:
