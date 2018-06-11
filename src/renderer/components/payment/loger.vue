@@ -86,12 +86,10 @@ export default {
     setPage(number) {
       this.page = number;
     },
-    tenderDetail(log) {
-      return this.$t(
-        "text.tenderDetail",
-        log.paid.toFixed(2),
-        log.change.toFixed(2)
-      );
+    tenderDetail({ paid, change }) {
+      paid = paid || 0;
+      change = change || 0;
+      return this.$t("text.tenderDetail", paid.toFixed(2), change.toFixed(2));
     },
     removeConfirm(payment, index) {
       const data = {
@@ -294,8 +292,8 @@ footer {
   display: inline-block;
 }
 
-.action{
-  width:120px;
+.action {
+  width: 120px;
 }
 
 .zero {

@@ -4,7 +4,7 @@
       <div class="editor" v-show="!component" :key="0">
         <header class="relative">
           <div>
-            <h5>{{'# '+order.number}}<span class="fn">{{$t('type.'+order.type)}}</span></h5>
+            <h5>{{'# '+(order.number)}}<span class="fn">{{$t('type.'+order.type)}}</span></h5>
             <h3>{{$t('title.payment')}}</h3>
           </div>
           <tickets :splits="splits" v-model="current" @preview="preview" @switch="switchInvoice" :mode="payInFull"></tickets>
@@ -826,6 +826,8 @@ export default {
 
       const tip = parseFloat(this.tip);
 
+      console.log(actual, paid, tip);
+
       const _id = ObjectId();
       const date = this.order.date ? this.order.date : today();
       const time = Date.now();
@@ -842,10 +844,16 @@ export default {
       return new Promise((resolve, reject) => {
         switch (this.paymentType) {
           case "CASH":
+            const ticketPaid = toFixed(
+              parseFloat(this.paid) - parseFloat(this.tip),
+              2
+            );
+
             this.currentTender = change = Math.max(
               0,
-              toFixed(this.paid - parseFloat(this.tip) - this.payment.remain, 2)
+              toFixed(ticketPaid - this.payment.remain, 2)
             );
+
             transaction = {
               _id,
               date,
@@ -1487,9 +1495,10 @@ export default {
             this.setApp({ newTicket: true });
             this.setOrder({
               type: "BUFFET",
+              number: this.ticket.number,
               create: Date.now(),
               server: this.op.name,
-              customer:this.$minifyCustomer(this.customer)
+              customer: this.$minifyCustomer(this.customer)
             });
             this.exit();
           } else {

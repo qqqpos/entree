@@ -286,7 +286,6 @@ export default {
       if (this.isEmptyTicket) return;
 
       if (this.order.print) {
-        console.log(this.op);
         this.$checkPermission("permission", "reprint")
           .then(this.rePrint)
           .catch(() => {});
@@ -322,6 +321,8 @@ export default {
     },
     receipt() {
       if (this.isEmptyTicket) return;
+
+console.log(this.order)
 
       const order = JSON.parse(JSON.stringify(this.order));
       order.split
