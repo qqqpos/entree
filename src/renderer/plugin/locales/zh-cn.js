@@ -17,6 +17,13 @@ export default {
     exit: "退出"
   },
   type: {
+    ALL_INVOICES: "所有订单",
+    VOID_INVOICE: "取消订单",
+    EDIT_INVOICE: "修改订单",
+    DISCOUNT_INVOICE: "折扣订单",
+    SEARCH_INVOICE: "查找订单",
+    UNSETTLED: "未付款",
+    SETTLED: "已付款",
     WALK_IN: "外等",
     PICK_UP: "来取",
     DELIVERY: "送餐",
@@ -46,6 +53,7 @@ export default {
     buffetInvoice: "自助餐订单",
     unpaidInvoice: "未付款订单",
     driverInvoice: "司机订单",
+    voidInvoice: "取消订单",
     settled: "已结账",
     unsettled: "未结账",
     voided: "删除",

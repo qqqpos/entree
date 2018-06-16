@@ -1,11 +1,6 @@
 <template>
   <div class="history">
-    <header>
-      <div class="logo" @click.ctrl="getConsole">
-        <span>U</span>
-      </div>
-      <order-summary :data="Array.isArray(this.prevHistory) ? prevHistory : history" :date="calendarDate || today" @filter="setFilter"></order-summary>
-    </header>
+    <filter-bar :data="Array.isArray(this.prevHistory) ? prevHistory : history" :date="calendarDate || today" @filter="setFilter" @trigger="openComponent"></filter-bar>
     <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">
@@ -31,16 +26,16 @@ import orderList from "../common/orderList";
 import dialoger from "../common/dialoger";
 import orderButtons from "./orderButtons";
 import sideButtons from "./sideButtons";
-import orderSummary from "./summary";
 import ticket from "./component/ticket";
+import filterBar from "./filterBar";
 
 export default {
   components: {
     orderButtons,
     sideButtons,
-    orderSummary,
     Maintenance,
     pagination,
+    filterBar,
     orderList,
     dialoger,
     ticket
@@ -85,6 +80,7 @@ export default {
     setFilter(type, id) {
       this.driver = null;
       this.page = 0;
+
       switch (type) {
         case "WALK_IN":
         case "PICK_UP":
@@ -93,30 +89,34 @@ export default {
         case "BAR":
           this.filter = type;
           break;
-        case "UNSETTLE":
-          this.filter = "UNSETTLE";
+        case "UNSETTLED":
+        case "EDIT":
+        case "VOID":
+        case "DISCOUNT":
+          this.filter = type;
           break;
         case "DRIVER":
           this.filter = "DRIVER";
           this.driver = id;
           break;
+
         default:
           this.filter = type;
       }
       this.resetViewOrder();
     },
     resetViewOrder() {
-      let dom = document.querySelector(".ticket.active");
+      const dom = document.querySelector(".ticket.active");
       dom && dom.classList.remove("active");
 
       this.$nextTick(() => {
         this.orders.length && this.getInvoice(this.invoices[0]);
-        let dom = document.querySelector(".ticket");
+        const dom = document.querySelector(".ticket");
         dom && dom.classList.add("active");
       });
     },
     setPage(number) {
-      let dom = document.querySelector(".ticket.active");
+      const dom = document.querySelector(".ticket.active");
       dom && dom.classList.remove("active");
       this.page = number;
       this.resetViewOrder();
@@ -127,12 +127,12 @@ export default {
     setCalendar(date) {
       this.calendarDate = date;
       this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, invoices => {
-        this.exitComponent();
         this.prevHistory = invoices;
         this.resetViewOrder();
+        this.exitComponent();
       });
     },
-    highlightTicket(number) {
+    highlightTicket({ number }) {
       this.$nextTick(() => {
         let dom = document.querySelector(".ticket.active");
         dom && dom.classList.remove("active");
@@ -154,12 +154,23 @@ export default {
     getConsole() {
       this.$open("Maintenance");
     },
+    openComponent(name) {
+      console.log(name);
+      switch (name) {
+        case "SEARCH":
+          break;
+      }
+    },
     ...mapActions(["setViewOrder"])
   },
   computed: {
     orders() {
-      let operator = this.op.name;
-      let approval = this.approval(this.op.view, "invoices");
+      const { name } = this.op;
+      const approval = this.approval(this.op.view, "invoices");
+      const invoices = Array.isArray(this.prevHistory)
+        ? this.prevHistory.filter(invoice => view(invoice.server))
+        : this.history.filter(invoice => view(invoice.server));
+
       switch (this.filter) {
         case "WALK_IN":
         case "PICK_UP":
@@ -168,51 +179,37 @@ export default {
         case "HIBACHI":
         case "BUFFET":
         case "BAR":
-          return Array.isArray(this.prevHistory)
-            ? this.prevHistory.filter(
-                invoice => invoice.type === this.filter && view(invoice.server)
-              )
-            : this.history.filter(
-                invoice => invoice.type === this.filter && view(invoice.server)
-              );
-        case "UNSETTLE":
-          return Array.isArray(this.prevHistory)
-            ? this.prevHistory.filter(
-                invoice =>
-                  invoice.status === 1 &&
-                  !invoice.settled &&
-                  view(invoice.server)
-              )
-            : this.history.filter(
-                invoice =>
-                  invoice.status === 1 &&
-                  !invoice.settled &&
-                  view(invoice.server)
-              );
+          return invoices.filter(invoice => invoice.type === this.filter);
+        case "UNSETTLED":
+          return invoices.filter(
+            invoice => invoice.status === 1 && !invoice.settled
+          );
+        case "SETTLED":
+          return invoices.filter(
+            invoice => invoice.status === 1 && invoice.settled
+          );
+        case "VOIDED":
+          return invoices.filter(invoice => invoice.status === 0);
+        case "DISCOUNTED":
+          return invoices.filter(invoice => invoice.payment.discount > 0);
+        case "EDITED":
+          return invoices.filter(invoice => invoice.modify > 0);
         case "DRIVER":
-          return Array.isArray(this.prevHistory)
-            ? this.prevHistory.filter(
-                invoice =>
-                  (this.driver
-                    ? invoice.driver === this.driver
-                    : invoice.type === "DELIVERY") && view(invoice.server)
-              )
-            : this.history.filter(
-                invoice =>
-                  (this.driver
-                    ? invoice.driver === this.driver
-                    : invoice.type === "DELIVERY") && view(invoice.server)
-              );
+          return invoices.filter(
+            invoice =>
+              this.driver
+                ? invoice.driver === this.driver
+                : invoice.type === "DELIVERY"
+          );
         default:
-          return Array.isArray(this.prevHistory)
-            ? this.prevHistory.filter(invoice => view(invoice.server))
-            : this.history.filter(invoice => view(invoice.server));
+          return invoices;
       }
 
       function view(server) {
         if (!server) return true;
         if (approval) return true;
-        return server === operator;
+
+        return server === name;
       }
     },
     invoices() {
@@ -223,9 +220,7 @@ export default {
     ...mapGetters(["op", "sync", "ticket", "order", "history", "store"])
   },
   watch: {
-    order(ticket) {
-      this.highlightTicket(ticket.number);
-    }
+    order: "highlightTicket"
   }
 };
 </script>
@@ -238,27 +233,10 @@ export default {
   flex-direction: column;
 }
 
-header {
-  margin-top: 30px;
-  display: flex;
-  height: 63px;
-  background-image: linear-gradient(170deg, rgb(81, 103, 140) 0%, #234c75 100%);
-}
-
 article {
   flex: 1;
   display: flex;
   background: url(../../assets/image/grid.png) #ebeff1;
-}
-
-.logo {
-  margin: 7px 20px;
-}
-
-.summary {
-  flex: 1;
-  display: flex;
-  align-items: center;
 }
 
 section.ticket {

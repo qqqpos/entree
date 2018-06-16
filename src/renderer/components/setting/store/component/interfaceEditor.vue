@@ -7,6 +7,7 @@
           <h3>{{$t('title.interface')}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer v-model.trim="grid.head" title="text.title"></inputer>
         <inputer v-model.trim="grid.subhead" title="text.subtitle"></inputer>

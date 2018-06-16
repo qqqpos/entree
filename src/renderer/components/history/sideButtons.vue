@@ -322,8 +322,6 @@ export default {
     receipt() {
       if (this.isEmptyTicket) return;
 
-console.log(this.order)
-
       const order = JSON.parse(JSON.stringify(this.order));
       order.split
         ? this.askSplitPrintReceipt(order)

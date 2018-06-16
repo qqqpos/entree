@@ -2,8 +2,10 @@
   <div class="popupMask center dark" @click.self="exit">
     <div class="editor">
       <header class="title">
-        <h5>{{$t('title.create')}}</h5>
-        <h3>{{$t('text.openFood')}}</h3>
+        <div>
+          <h5>{{$t('title.create')}}</h5>
+          <h3>{{$t('text.openFood')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <div class="wrap">
@@ -46,11 +48,11 @@ export default {
       item: "",
       single: "",
       keyboard: false,
+      alphabet: true,
       printers: [],
       printer: [],
-      alphabet: true,
-      entry: "",
       comment: "",
+      entry: "",
       caret: 0
     };
   },
@@ -96,9 +98,9 @@ export default {
           value.substr(0, this.caret - 1) + value.substr(this.caret);
         this.caret--;
 
-        this.$nextTick(() => {
-          document.activeElement.setSelectionRange(this.caret, this.caret);
-        });
+        this.$nextTick(() =>
+          document.activeElement.setSelectionRange(this.caret, this.caret)
+        );
       }
     },
     setCaret(value) {

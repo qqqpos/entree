@@ -23,6 +23,13 @@ export default {
     exit: "Exit"
   },
   type: {
+    ALL_INVOICES: "All Invoices",
+    VOID_INVOICES: "Voided",
+    EDIT_INVOICE: "Edited",
+    DISCOUNT_INVOICE: "Discounted",
+    SEARCH_INVOICE: "Search",
+    UNSETTLED: "Unpaid",
+    SETTLED: "Paid",
     WALK_IN: "Walk In",
     PICK_UP: "Pick Up",
     DELIVERY: "Delivery",
@@ -53,6 +60,7 @@ export default {
     unpaidInvoice: "Unpaid",
     voidedInvoice: "Voided",
     driverInvoice: "Driver",
+    voidInvoice: "Voided",
     settled: "Settled",
     unsettled: "Unsettled",
     voided: "Voided",

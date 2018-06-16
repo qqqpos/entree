@@ -201,14 +201,16 @@ export default {
 
           return item;
         });
-        Object.assign(order, {
-          modify: order.modify + 1,
-          settle: false,
-          date: today(),
-          time: Date.now(),
-          content
-        });
-        this.$socket.emit("[INVOICE] UPDATE", order);
+
+        this.$socket.emit(
+          "[INVOICE] UPDATE",
+          Object.assign(order, {
+            settle: false,
+            date: today(),
+            time: Date.now(),
+            content
+          })
+        );
       }
 
       this.resetAll();

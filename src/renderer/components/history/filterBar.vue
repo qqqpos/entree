@@ -1,0 +1,413 @@
+<template>
+    <header>
+        <div class="logo">
+            <span class="main">E</span>
+            <span class="sub">ntrée</span>
+        </div>
+        <section class="filters" :class="{hide:!viewable}">
+            <div class="filter relative" v-for="(filter,index) in filters" :key="index" v-show="filter.amount > 0" @click="setFilter(filter.type,index,$event)" :class="{active:type === filter.type,more:showMore}">
+                <div class="text">{{filter.title}}<span class="count">{{filter.count}}</span></div>
+                <div class="value">$ {{filter.amount | decimal}}</div>
+                <transition name="dropdown">
+                    <ul v-if="filter.hasOwnProperty('subTypes') && showMore" class="subTypes">
+                        <li class="" v-for="(sub,index) in filter.subTypes" :key="index" @click.stop="setSubFilter(sub)">
+                            <template v-if="sub.fn">
+                                <div class="text">{{sub.title}}</div>
+                                <i class="fa fa-search"></i>
+                            </template>
+                            <template v-else>
+                                <div class="text">{{sub.title}}<span class="count">{{sub.count}}</span></div>
+                                <div class="value">$ {{sub.amount | decimal}}</div>
+                            </template>
+                        </li>
+                    </ul>
+                </transition>
+            </div>
+        </section>
+        <transition name="fadeDown" appear>
+            <div class="date relative" id="calendar">
+            <i class="fa fa-angle-left" @click="prev" v-show="displayBtn"></i>
+            <span class="text" @click="displayBtn = !displayBtn">{{date}}</span>
+            <i class="fa fa-angle-right" @click="next" v-show="displayBtn"></i>
+            </div>
+        </transition>
+    </header>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+export default {
+  props: ["data", "date"],
+  data() {
+    return {
+      filters: [],
+      viewable: false,
+      viewAllInvoices: false,
+      displayBtn: false,
+      showMore: false,
+      type: "ALL_INVOICES"
+    };
+  },
+  computed: {
+    ...mapGetters(["op"])
+  },
+  created() {
+    this.viewable = this.approval(this.op.view, "summary");
+    this.viewAllInvoices = this.approval(this.op.view, "invoices");
+
+    this.initialData();
+  },
+  mounted() {
+    document.querySelector(".filters .filter").classList.add("active");
+  },
+  methods: {
+    setFilter(type, index, e) {
+      this.$emit("filter", type);
+      if (type !== this.type) {
+        this.showMore = false;
+        this.type = type;
+      } else if (Array.isArray(this.filters[index].subTypes)) {
+        this.showMore = !this.showMore;
+      } else {
+        this.showMore = false;
+        this.type = type;
+      }
+    },
+    setSubFilter({ type, fn }) {
+      if (fn) {
+        this.$emit("trigger", fn);
+      } else {
+        this.$emit("filter", type);
+      }
+
+      this.showMore = false;
+    },
+    initialData() {
+      const invoices = this.viewAllInvoices
+        ? this.data
+        : this.data.filter(t.server === server);
+
+      const sort = [
+        "ALL_INVOICES",
+        "WALK_IN",
+        "PICK_UP",
+        "DELIVERY",
+        "DINE_IN",
+        "UNSETTLED"
+      ];
+
+      let filters = {
+        ALL_INVOICES: {
+          type: "ALL_INVOICES",
+          count: 0,
+          amount: 0,
+          title: this.$t("type.ALL_INVOICES")
+        },
+        UNSETTLED: {
+          type: "UNSETTLED",
+          count: 0,
+          amount: 0,
+          title: this.$t("type.UNSETTLED")
+        }
+      };
+
+      let subTypes = {};
+
+      invoices.forEach(({ type, modify, status, settled, payment }) => {
+        const { balance } = payment;
+        if (status === 1) {
+          //if not void
+          filters["ALL_INVOICES"].count++;
+          filters["ALL_INVOICES"].amount += balance;
+
+          if (filters[type]) {
+            filters[type].count++;
+            filters[type].amount += balance;
+          } else {
+            filters[type] = {
+              type,
+              count: 1,
+              amount: balance,
+              title: this.$t("type." + type)
+            };
+          }
+
+          if (!settled) {
+            filters["UNSETTLED"].count++;
+            filters["UNSETTLED"].amount += balance;
+          } else {
+            if (subTypes.hasOwnProperty("SETTLED")) {
+              subTypes["SETTLED"].count++;
+              subTypes["SETTLED"].amount += balance;
+            } else {
+              subTypes["SETTLED"] = {
+                type: "SETTLED",
+                count: 1,
+                amount: balance
+              };
+            }
+          }
+
+          if (payment.discount > 0) {
+            if (subTypes.hasOwnProperty("DISCOUNT_INVOICE")) {
+              subTypes["DISCOUNT_INVOICE"].count++;
+              subTypes["DISCOUNT_INVOICE"].amount += balance;
+            } else {
+              subTypes["DISCOUNT_INVOICE"] = {
+                type: "DISCOUNTED",
+                count: 1,
+                amount: balance
+              };
+            }
+          }
+
+          if (modify > 0) {
+            if (subTypes.hasOwnProperty("EDIT_INVOICE")) {
+              subTypes["EDIT_INVOICE"].count++;
+              subTypes["EDIT_INVOICE"].amount += balance;
+            } else {
+              subTypes["EDIT_INVOICE"] = {
+                type: "EDITED",
+                count: 1,
+                amount: balance
+              };
+            }
+          }
+        } else {
+          if (subTypes.hasOwnProperty("VOID_INVOICE")) {
+            subTypes["VOID_INVOICE"].count++;
+            subTypes["VOID_INVOICE"].amount += balance;
+          } else {
+            subTypes["VOID_INVOICE"] = {
+              type: "VOIDED",
+              count: 1,
+              amount: balance
+            };
+          }
+        }
+      });
+
+      if (filters.hasOwnProperty("BAR")) {
+        Array.isArray(filters["DINE_IN"].subTypes)
+          ? filters["DINE_IN"].subTypes.push(filters["BAR"])
+          : (filters["DINE_IN"].subTypes = [filters["BAR"]]);
+      }
+
+      if (filters.hasOwnProperty("HIBACHI")) {
+        Array.isArray(filters["DINE_IN"].subTypes)
+          ? filters["DINE_IN"].subTypes.push(filters["HIBACHI"])
+          : (filters["DINE_IN"].subTypes = [filters["HIBACHI"]]);
+      }
+
+      if (filters.hasOwnProperty("BUFFET")) {
+        Array.isArray(filters["DINE_IN"].subTypes)
+          ? filters["DINE_IN"].subTypes.push(filters["BUFFET"])
+          : (filters["DINE_IN"].subTypes = [filters["BUFFET"]]);
+      }
+
+      if (subTypes.hasOwnProperty("SETTLED")) {
+        filters["UNSETTLED"].subTypes = [
+          Object.assign(subTypes["SETTLED"], {
+            title: this.$t("type.SETTLED")
+          })
+        ];
+      }
+
+      this.filters = Object.keys(filters)
+        .filter(type => sort.includes(type))
+        .sort((a, b) => (sort.indexOf(a) > sort.indexOf(b) ? 1 : -1))
+        .map(type =>
+          Object.assign({}, filters[type], {
+            title: this.$t("type." + type)
+          })
+        );
+
+      const otherTypes = Object.keys(subTypes).filter(type =>
+        ["VOID_INVOICE", "EDIT_INVOICE", "DISCOUNT_INVOICE"].includes(type)
+      );
+
+      this.filters[0].subTypes = [];
+
+      otherTypes.forEach(type =>
+        this.filters[0].subTypes.push(
+          Object.assign(subTypes[type], {
+            title: this.$t("type." + type)
+          })
+        )
+      );
+
+      //push search invoice function
+      this.filters[0].subTypes.push({
+        type: "SEARCH",
+        title: this.$t("type.SEARCH_INVOICE"),
+        fn: "SEARCH"
+      });
+    },
+    prev() {
+      const date = moment(this.date, "YYYY-MM-DD")
+        .subtract(1, "d")
+        .format("YYYY-MM-DD");
+      this.$bus.emit("CALENDAR", date);
+    },
+    next() {
+      const date = moment(this.date, "YYYY-MM-DD")
+        .add(1, "d")
+        .format("YYYY-MM-DD");
+      this.$bus.emit("CALENDAR", date);
+    }
+  },
+  watch: {
+    data: "initialData"
+  }
+};
+</script>
+
+<style scoped>
+header {
+  margin-top: 30px;
+  display: flex;
+  height: 63px;
+  background-image: linear-gradient(170deg, rgb(81, 103, 140) 0%, #234c75 100%);
+}
+
+.logo {
+  width: 55px;
+  line-height: 60px;
+  background: skyblue;
+  border-radius: 4px;
+  box-shadow: 0px 2px 10px #163b4e;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin: 7px 20px;
+  font-family: "Agency FB";
+  color: #fafafa;
+}
+
+span.main {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 2px;
+  text-shadow: 2px 1px 0px #607d8b;
+}
+
+span.sub {
+  font-weight: normal;
+  text-shadow: 1px 0px 1px rgba(0, 0, 0, 0.75);
+}
+
+.filters {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.filter {
+  padding: 0 10px;
+  height: 62px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  justify-content: center;
+  text-align: center;
+  color: #fafafa;
+  min-width: 70px;
+  transition: background 0.22s linear;
+}
+
+.filter:first-child {
+  min-width: 109px;
+}
+
+.filter.active {
+  background: #fff;
+  font-weight: bold;
+  border-bottom: 2px solid #ff9800;
+  color: #263238;
+  z-index: 1;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.filters.hide .value {
+  visibility: hidden;
+}
+
+.count {
+  font-family: "Agency FB";
+}
+
+.count:before {
+  content: "∙";
+  margin: 0 5px;
+}
+
+.value {
+  font-family: "Agency FB";
+  font-weight: bold;
+  font-size: 28px;
+}
+
+ul.subTypes {
+  display: none;
+  position: absolute;
+  top: 62px;
+  left: 0;
+  background: #fff;
+  width: 100%;
+  box-shadow: 0 5px 9px -1px rgba(0, 0, 0, 0.5);
+}
+
+.active.more ul.subTypes {
+  display: block;
+}
+
+.subTypes li {
+  padding: 5px 0;
+  height: 53px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  filter: opacity(0.8);
+}
+
+.subTypes li:nth-child(odd) {
+  background: #f5f5f5;
+}
+
+.date {
+  min-width: 240px;
+  line-height: 66px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-shadow: 1px 1px 1px rgb(25, 25, 25);
+}
+
+.date .text {
+  font-size: 3em;
+  font-style: italic;
+  font-family: "Agency FB";
+  color: #fff;
+  font-weight: bold;
+  min-width: 200px;
+  padding-right: 10px;
+}
+
+.date i {
+  position: absolute;
+  top: 0;
+}
+
+i.fa-angle-left {
+  left: -5px;
+  padding: 24px 60px 24px 15px;
+}
+
+i.fa-angle-right {
+  right: -5px;
+  padding: 24px 15px 24px 60px;
+}
+</style>
+

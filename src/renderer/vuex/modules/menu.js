@@ -112,7 +112,7 @@ const mutations = {
 
     if (state.item) {
       //if item has no options 
-      if (item._id === state.item._id && item.option.length === 0 && state.item.choiceSet.length === 0) {
+      if (item._id === state.item._id && !item.temporary && item.option.length === 0 && state.item.choiceSet.length === 0) {
         state.item.total = (++state.item.qty * state.item.single).toFixed(2);
         return;
       }

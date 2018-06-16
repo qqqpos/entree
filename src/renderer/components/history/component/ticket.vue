@@ -57,6 +57,7 @@ export default {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   font-family: "Agency FB";
   font-size: 30px;
+  border-radius: 4px;
 }
 
 .type {
@@ -68,7 +69,7 @@ export default {
   font-size: 14px;
   text-align: center;
   color: gray;
-  height: 40px;
+  height: 42px;
   display: flex;
   justify-content: center;
   align-items: center;

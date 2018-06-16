@@ -178,7 +178,7 @@ var Preset = function () {
       },
       taxClass: null,
       disable: false,
-      openFood: false,
+      temporary: false,
       marketPrice: false,
       weightItem: {
         enable: false,

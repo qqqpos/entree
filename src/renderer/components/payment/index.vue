@@ -836,7 +836,8 @@ export default {
       const split = this.payInFull ? null : this.splits[this.current]._id;
       const ticket = {
         number: this.order.number || this.ticket.number,
-        type: this.order.type || this.ticket.type
+        type: this.order.type || this.ticket.type,
+        table: this.order.table || null
       };
 
       let change, transaction;

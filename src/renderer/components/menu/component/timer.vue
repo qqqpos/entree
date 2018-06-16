@@ -262,8 +262,7 @@ export default {
               customer: this.$minifyCustomer(this.customer),
               lastEdit: Date.now(),
               editor: this.op.name,
-              schedule: +this.timer,
-              modify: isNumber(this.order.modify) ? this.order.modify + 1 : 1
+              schedule: +this.timer
             });
 
             if (this.order.type === "TO_GO") {

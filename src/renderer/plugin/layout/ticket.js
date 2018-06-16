@@ -48,9 +48,8 @@ const ticket = function (raw, receipt) {
     this.plugin.PRINT();
 
     if (raw.hasOwnProperty("__creditPayment__") && /cashier/i.test(printer)) {
-      this.plugin.PRINT_INIT("Ticket Credit Payment");
+      this.plugin.PRINT_INITA(0, 0, 270, 500, "Ticket Credit Payment");
       this.plugin.SET_PRINTER_INDEX(printer);
-      this.plugin.PRINT_INITA(0, 0, 270, 500, "");
       this.plugin.ADD_PRINT_TEXT(0, 35, 100, 21, "# " + raw.number);
       this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
       this.plugin.SET_PRINT_STYLEA(0, "FontSize", 18);
@@ -677,9 +676,7 @@ function createFooter(config, setting, printer, ticket) {
       ? `<p class="tm"><span class="tradeMark">${ticket.tradeMark}</span></p>`
       : "";
   const _time = jobTime
-    ? `<p class="printTime">${printer} print @ ${moment().format(
-      "hh:mm:ss"
-    )}</p>`
+    ? `<p class="printTime">${printer} ${ticket.printCount > 1 ? 'reprint ' + ticket.printCount : 'print'} @ ${moment().format("hh:mm:ss")}</p>`
     : "";
   const _number = ticketNumber
     ? `<div class="ticketNumber">${number}</div>`

@@ -17,7 +17,8 @@
         <thead>
           <tr>
             <th class="num">{{$t('thead.ticket')}}</th>
-            <th class="type">{{$t('thead.orderType')}}</th>
+            <th class="type" @click="toggleType" v-if="!showTable">{{$t('thead.orderType')}}</th>
+            <th class="type" @click="toggleType" v-else>{{$t('thead.table')}}</th>
             <th>{{$t('thead.time')}}</th>
             <th>{{$t('thead.cashier')}}</th>
             <th>{{$t('thead.server')}}</th>
@@ -32,7 +33,8 @@
           <tr v-for="(record,index) in records" :key="index">
             <template v-if="record.for === 'Order'">
               <td class="num">{{record.ticket.number}}</td>
-              <td class="type">{{$t('type.'+record.ticket.type)}}</td>
+              <td class="type" v-if="!showTable">{{$t('type.'+record.ticket.type)}}</td>
+              <td class="type" v-else>{{record.ticket.table || $t('type.'+record.ticket.type)}}</td>
             </template>
             <template v-else>
               <td class="num"></td>
@@ -93,9 +95,11 @@ export default {
       let data = this.transactions;
       if (this.cashier) data = data.filter(t => t.cashier === this.cashier);
       if (this.server) data = data.filter(t => t.server === this.server);
-      if (this.type) data = data.filter(t => t.ticket.type === this.type);
+      if (this.type)
+        data = data.filter(t => t.ticket && t.ticket.type === this.type);
       if (this.payment)
         data = data.filter(t => this.payment === (t.subType || t.type));
+
       return data;
     },
     records() {
@@ -112,18 +116,16 @@ export default {
     },
     totalAmount() {
       return this.filteredTransactions.reduce((a, c) => {
+        const amount = isNumber(c.actual) ? parseFloat(c.actual) : 0;
         switch (c.for) {
           case "Order":
-            return a + c.actual;
+            return a + amount;
           case "Payout":
-            return a - c.actual;
+            return a - amount;
           default:
-            return a + c.acutal;
+            return a + amount;
         }
       }, 0);
-    },
-    reportable() {
-      return true; //(!this.cashier && !this.server)
     },
     ...mapGetters(["op"])
   },
@@ -133,11 +135,13 @@ export default {
       component: null,
       transactions: [],
       editable: false,
+      reportable: false,
       cashiers: [],
       servers: [],
       payments: [],
       types: [],
       showPaid: false,
+      showTable: false,
       cashier: null,
       server: null,
       payment: null,
@@ -159,6 +163,7 @@ export default {
     checkPermission() {
       return new Promise(next => {
         this.editable = this.approval(this.op.modify, "tip");
+        this.reportable = true;
         next();
       });
     },
@@ -202,9 +207,7 @@ export default {
         };
       });
     },
-    applyFilter(data) {
-      const { value, type } = data;
-
+    applyFilter({ value, type }) {
       this[type] = value;
       this.page = 0;
 
@@ -234,6 +237,9 @@ export default {
     },
     togglePaid() {
       this.showPaid = !this.showPaid;
+    },
+    toggleType(){
+      this.showTable = !this.showTable;
     }
   }
 };

@@ -37,8 +37,11 @@ function createWindow() {
     autoHideMenuBar: true,
     show: false
   })
-  mainWindow.loadURL(winURL)
-  process.argv.slice(1).some(arg => arg.includes("debug")) && mainWindow.webContents.openDevTools()
+  mainWindow.loadURL(winURL);
+
+  const appParams = process.argv.slice(1);
+
+  appParams.some(args => args.includes("debug")) && mainWindow.webContents.openDevTools()
 
   splashWindow = new BrowserWindow({
     width: 460,
@@ -52,8 +55,8 @@ function createWindow() {
   })
   splashWindow.loadURL(splashURL);
 
-  let electronScreen = require('electron').screen;
-  let displays = electronScreen.getAllDisplays();
+  const electronScreen = require('electron').screen;
+  const displays = electronScreen.getAllDisplays();
   let externalDisplay = null;
 
   for (let i in displays) {
@@ -62,24 +65,23 @@ function createWindow() {
       break;
     }
   }
-  // if (externalDisplay) {
-  //   presentationWindow = new BrowserWindow({
-  //     x: externalDisplay.bounds.x + 50,
-  //     y: externalDisplay.bounds.y + 50,
-  //     autoHideMenuBar: true,
-  //     //alwaysOnTop: true,
-  //     skipTaskbar: true,
-  //     frame: false,
-  //     width: 1024,
-  //     height: 768,
-  //     //fullscreen: true
-  //   })
-  //   presentationWindow.loadURL(presentUrl)
-  // }
 
-  splashWindow.once('ready-to-show', () => {
-    splashWindow.show();
-  })
+  if (appParams.some(args => args.includes("dual")) && externalDisplay) {
+    presentationWindow = new BrowserWindow({
+      x: externalDisplay.bounds.x + 50,
+      y: externalDisplay.bounds.y + 50,
+      autoHideMenuBar: true,
+      //alwaysOnTop: true,
+      skipTaskbar: true,
+      frame: false,
+      width: 1024,
+      height: 768,
+      //fullscreen: true
+    })
+    presentationWindow.loadURL(presentUrl)
+  }
+
+  splashWindow.once('ready-to-show', () => splashWindow.show())
 
   mainWindow.on('closed', () => {
     mainWindow = null;

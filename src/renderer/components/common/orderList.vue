@@ -10,7 +10,7 @@
         <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
           <div class="detail">
             <p>
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user-circle"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fa fa-clock-o"></i>
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
@@ -32,7 +32,7 @@
           <template v-if="order.customer">
             <div class="detail">
               <p>
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user-circle"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fa fa-clock-o"></i>
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
@@ -54,7 +54,7 @@
       <div class="bar">
         <template v-if="!isEmptyTicket">
           <span class="number">{{order.number}}</span>
-          <span class="type">{{$t('type.' + order.type)}}</span>
+          <span>{{$t('type.' + order.type)}}</span>
           <span class="provider" v-show="order.source !== 'POS'">{{order.source}}</span>
           <span class="time">{{order.time | fromNow}}</span>
         </template>
@@ -690,17 +690,18 @@ header.info {
   text-align: center;
   font-family: "Agency FB";
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .bar {
-  height: 25px;
-  background: #607d8b;
+  height: 30px;
+  background: #127db1;
   display: flex;
   align-items: center;
   color: #fafafa;
   position: relative;
   text-shadow: 0 1px 1px #333;
+  font-size: 16px;
 }
 
 .table {
@@ -827,7 +828,6 @@ header.info {
   flex: 1;
   text-align: right;
   padding: 0 10px;
-  font-size: 14px;
 }
 
 .print .itemWrap {
@@ -911,7 +911,7 @@ header.info {
 
 .content {
   flex: 1;
-  padding: 6px 0 0 0;
+  padding: 5px 0 0 0;
   background: #fff;
 }
 

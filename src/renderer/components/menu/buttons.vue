@@ -382,7 +382,9 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
-        let order = this.combineOrderInfo();
+        let order = this.combineOrderInfo({
+          printCount: print ? 1 : 0
+        });
 
         if (this.app.newTicket) {
           const todo = !!document.querySelector(".item.todo");
@@ -443,9 +445,8 @@ export default {
           }
         } else {
           if (this.ticket.type !== "TO_GO") {
+            const diffs = this.compare(order);
             if (print) {
-              const diffs = this.compare(order);
-
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
               } else {
@@ -455,6 +456,16 @@ export default {
               }
             }
             this.$socket.emit("[INVOICE] UPDATE", order, print);
+
+            //save diffs
+            this.$socket.emit("[INSTANCE] SAVE", {
+              date: today(),
+              time: Date.now(),
+              action: "MODIFY",
+              operator: this.op.name,
+              order: diffs,
+              isPrint: print
+            });
           } else {
             Printer.setTarget("Order").print(this.order);
           }
@@ -516,7 +527,6 @@ export default {
           customer,
           lastEdit: Date.now(),
           editor: this.op.name,
-          modify: isNumber(this.order.modify) ? this.order.modify + 1 : 1
         });
       }
       return Object.assign({}, order, extra);
@@ -549,14 +559,20 @@ export default {
           if (item.qty !== oldItem.qty) {
             //mark old item as removed
             //suggested by most of users
-            oldItem.diffs = "REMOVED";
-            oldItem.print = false;
-            items.push(oldItem);
+            items.push(
+              Object.assign(oldItem, {
+                diffs: "REMOVED",
+                print: false,
+                void: true
+              })
+            );
 
             //item quantaty changes
-            item.originQty = oldItem.qty;
-            item.diffs = "DIFFERENT";
-            item.print = false;
+            Object.assign(item, {
+              originQty: oldItem.qty,
+              diffs: "DIFFERENT",
+              print: false
+            });
           } else {
             //compare item's subitem
             const newSet = item.choiceSet

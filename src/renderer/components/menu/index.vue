@@ -176,6 +176,7 @@ export default {
         });
       } else {
         const order = JSON.parse(JSON.stringify(this.order));
+        order.modify++;
         this.saveForDiffs(order.content);
         this.setOrder(order);
       }

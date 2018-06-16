@@ -3,18 +3,18 @@
     <transition name="slideDown" appear>
         <header class="dock">
           <div class="ticket-number text">{{ticket.number}}</div>
-          <div class="ticket-type" @click="changeType">{{type}}</div>
+          <div class="ticket-type" @click="changeType">{{orderType}}</div>
           <div class="trademark">
             <span v-show="isTrademarkVisible">{{order.source}}</span>
             <!-- <span class="waterMark" v-show="$route.name === 'Menu' && order.hasOwnProperty('__vip__')">VIP</span> -->
           </div>
           <div class="center-wrap text" @click="editProfile">
-            <div class="customer" v-show="isVisible">
+            <div class="customer" v-show="isMenuPage">
               <span v-show="customer.phone">{{customer.phone | phone}}</span>
               <span v-show="customer.address">{{customer.address}}</span>
             </div>
           </div>
-          <div class="profile" v-show="isVisible" @click="openPortal">
+          <div class="profile" v-show="isMenuPage" @click="openPortal">
             <i class="fa fa-address-book"></i>
             <span v-if="customer.name" class="text">{{customer.name}}</span>
             <span v-else>{{$t('text.viewProfile')}}</span>
@@ -61,26 +61,29 @@ export default {
     };
   },
   computed: {
-    type() {
-      let type = this.order.type
-        ? "type." + this.order.type
-        : "type." + this.ticket.type;
-
-      return this.ticket.type === "DINE_IN" || this.ticket.type === "BAR"
-        ? this.$t(type, this.app.language) +
-            (this.order.table
-              ? " - " +
-                this.order.table +
-                (this.order.guest > 0 ? " - " + this.order.guest : "")
-              : "")
-        : this.$t(type, this.app.language);
-    },
-    isVisible() {
+    isMenuPage() {
       return this.$route.name === "Menu";
     },
     isTrademarkVisible() {
-      return this.$route.name === "Menu" && this.order.source !== "POS";
+      return this.isMenuPage && this.order.source !== "POS";
     },
+    orderType() {
+      if (this.isMenuPage) {
+        let type = "type." + this.order.type;
+
+        return this.order.type === "DINE_IN" || this.order.type === "BAR"
+          ? this.$t(type, this.app.language) +
+              (this.order.table
+                ? " - " +
+                  this.order.table +
+                  (this.order.guest > 0 ? " - " + this.order.guest : "")
+                : "")
+          : this.$t(type, this.app.language);
+      } else {
+        return this.$t("type." + this.ticket.type, this.app.language);
+      }
+    },
+
     ...mapGetters([
       "op",
       "app",
