@@ -47,7 +47,7 @@
       </table>
       <footer>
         <div class="f1">
-          <pagination :of="init.logs" @page="setPage" :contain="10" :max="6"></pagination>
+          <paginator :of="init.logs" @page="setPage" :contain="10" :max="6"></paginator>
         </div>
         <button class="btn" @click="edit">{{$t(logs.length === 0 ? 'button.edit' : 'button.new')}}</button>
         <button class="btn" @click="close">{{$t('button.close')}}</button>
@@ -60,11 +60,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import dialoger from "../common/dialoger";
-import pagination from "../common/pagination";
+import paginator from "../common/paginator";
 
 export default {
   props: ["init"],
-  components: { dialoger, pagination },
+  components: { dialoger, paginator },
   computed: {
     logs() {
       let min = this.page * 10;

@@ -31,7 +31,7 @@
           <ul v-if="toggleMenu">
             <li @click="shutdownStations" v-if="isHost">
               <i class="fa fa-plug"></i>
-              <span>{{$t('login.massiveShutdown')}}</span>
+              <span>{{$t('login.shutdownAll')}}</span>
             </li>
             <li @click="shutdown">
               <i class="fa fa-desktop"></i>

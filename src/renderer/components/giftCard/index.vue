@@ -108,7 +108,7 @@
                 </tr>
               </tbody>
             </table>
-            <pagination :of="logs" @page="setPage" :max="10" :contain="15"></pagination>
+            <paginator :of="logs" @page="setPage" :max="10" :contain="15"></paginator>
           </div>
         </template>
       </transition>
@@ -124,7 +124,7 @@ import capture from "./capture";
 import ticket from "../common/ticket";
 import numPad from "../common/numpad";
 import dialoger from "../common/dialoger";
-import pagination from "../common/pagination";
+import paginator from "../common/paginator";
 import creditCard from "../payment/creditCard";
 import inputer from "../setting/common/inputer";
 import switches from "../setting/common/switches";
@@ -139,7 +139,7 @@ export default {
     capture,
     switches,
     dialoger,
-    pagination,
+    paginator,
     creditCard
   },
   data() {

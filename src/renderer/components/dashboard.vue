@@ -119,7 +119,7 @@ export default {
           this.$dialog({
             type: "question",
             title: "dialog.endBreakTime",
-            msg: ["dialog.endBreakTimeTip", duration]
+            msg: ["dialog.endBreakTimeConfirm", duration]
           })
             .then(() => {
               this.$socket.emit("[TIMECARD] BREAK_END", this.op);

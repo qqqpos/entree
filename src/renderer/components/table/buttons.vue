@@ -262,11 +262,11 @@ export default {
     switchStaff() {
       if (this.isEmptyTicket) return;
       this.$checkPermission("modify", "server")
-        .then(() => {
+        .then(() =>
           this.$socket.emit("[OPERATOR] LIST", operators =>
             this.$open("staff", { operators })
-          );
-        })
+          )
+        )
         .catch(() => {});
     },
     split() {
@@ -287,14 +287,16 @@ export default {
         this.currentTable.status === 4 ||
         this.currentTable.invoice.length === 0
       ) {
-        this.$dialog({
+        const prompt = {
           title: "dialog.tableClear",
           msg: ["dialog.tableClearTip", this.currentTable.name],
           buttons: [
             { text: "button.cancel", fn: "reject" },
             { text: "button.clear", fn: "resolve" }
           ]
-        })
+        };
+
+        this.$dialog(prompt)
           .then(() => {
             this.resetMenu();
             this.$socket.emit("[TABLE] RESET", { _id: this.currentTable._id });
@@ -302,12 +304,14 @@ export default {
           })
           .catch(this.exitComponent);
       } else {
-        this.$dialog({
+        const prompt = {
           type: "info",
           title: "dialog.tableClearFailed",
           msg: ["dialog.tableClearFailedTip", this.currentTable.name],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
-        }).then(this.exitComponent);
+        };
+
+        this.$dialog(prompt).then(this.exitComponent);
       }
     },
     ...mapActions([

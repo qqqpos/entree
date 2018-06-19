@@ -150,7 +150,7 @@ export default {
       if (device.tip === 0) {
         const prompt = {
           title: "dialog.NoTip",
-          msg: "dialog.transactionNoTip"
+          msg: "dialog.transactionHasNoTip"
         };
         this.$dialog(prompt)
           .then(() => this.startBatch(device, index))

@@ -17,7 +17,7 @@ export default {
     printerServerError: "Printer Server Error"
   },
   login: {
-    massiveShutdown: "SHDN All",
+    shutdownAll: "SHDN All",
     shutdown: "Shutdown",
     restart: "Restart",
     exit: "Exit"
@@ -465,7 +465,8 @@ export default {
     giftcardStats: "Gift Card Stats",
     dailySaleSummary: "Daily Sales Summary",
     hourlySaleSummary: "Hourly Sales Summary",
-    evenSplit: "Ticket Even Split"
+    evenSplit: "Ticket Even Split",
+    searchTicket: "Search Ticket"
   },
   dialog: {
     maintenance: "Maintenance",
@@ -653,7 +654,7 @@ export default {
       "You need to Cash-In First before you can use the cash drawer",
     paidAmountGreaterThanDue: "Extra Tender Amount",
     extraAmountSetAsTip: "Are you going to set the Extra ( ${i} ) as Tip?",
-    invoiceNotFound: "Invoice Not Found",
+    ticketNotFound: "Invoice Not Found",
     actionProcess: "How do you want to proceed?",
     removeTemplate: "Remove Template",
     removeTemplateConfirm: "Are you sure to remove this template?",
@@ -682,12 +683,12 @@ export default {
     itemNotAvailable: "This item is not available on {i}",
     itemNotAvailableNow: "This item can only be ordered between {i} to {i}.",
     addressMismatch: "Address Mismatch",
-    replaceAddress: "Are you wish to replace address {i} with {i} ?",
+    replaceAddressConfirm: "Are you wish to replace address {i} with {i} ?",
     invalidDate: "Invalid Date",
-    reserveDateIsPassed: "Reserve Date is passed!",
+    reserveDateInvalid: "Reserve Date is passed!",
     paymentFailed: "Payment Failed",
-    canNotPayZeroAmount: "Paid amount must grater than $ 0.00",
-    canNotPayPrevTicket: "You can not pay a previous ticket",
+    mustPayGraterThanZero: "Paid amount must grater than $ 0.00",
+    cantPayPastDueTicket: "You can not pay a previous ticket",
     balanceDueAmountIncorrect: "Balance due amount format incorrect!",
     invalidCreditCard: "Invalid Credit Card",
     creditCardLengthIncorrect: "Credit card length incorrect",
@@ -706,9 +707,9 @@ export default {
     versionRequirement:
       "Server requires minimum version is {i}, but your current version is {i}.",
     startBreakTime: "Start Break Time",
-    startBreakTimeTip: "Are you wish to take a break?",
+    startBreakTimeConfirm: "Are you wish to take a break?",
     endBreakTime: "End Break Time",
-    endBreakTimeTip: "Are you sure to go back to work? (Break Time: {i})",
+    endBreakTimeConfirm: "Are you sure to go back to work? (Break Time: {i})",
     payoutFailed: "Payout Failed",
     payoutReceiverRequired: "Payout receiver is required",
     payoutAmountIncorrect: "Payout amount is incorrect",
@@ -745,9 +746,9 @@ export default {
     switchServer: "Switch Server",
     switchServerConfirm: "Are you sure to switch server from {i} to {i}?",
     NoTip: "No Tip Entered",
-    transactionNoTip:
+    transactionHasNoTip:
       "There is no tips on any transactions. Are you wish to continue?",
-    tipReport: "Tips Confirm",
+    tipConfirm: "Tips Confirm",
     tipReportConfirm: "Are you sure to report ${i} as tips?",
     ticketUnsettleAlert: "You still have ticket unsettled. Please close them first.",
     printReport: "Print Report",
@@ -768,7 +769,8 @@ export default {
     ticketAlreadySplit: "This ticket already split.",
     allergyAlert: "Food Allergy Alert",
     foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
-    exceedAllowLimit: "Value exceeding allowed limit"
+    exceedAllowLimit: "Value exceeding allowed limit",
+    handlePastDuePayment: "How would you like to handle this past due payment?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1700,8 +1702,7 @@ export default {
     timecard: {
       forOne: "Enable Clock in/out",
       forAll: "All employees clock in/out",
-      tipReport: "Report tip when clock out",
-      isoWeek: "Set Monday as start of weekday"
+      tipReport: "Report tip when clock out"
     },
     dinein: {
       useTableLayout: "Use table to place order",

@@ -258,7 +258,7 @@ export default {
               } else {
                 const prompt = {
                   title: "dialog.addressMismatch",
-                  msg: ["dialog.replaceAddress", this.customer.address, address]
+                  msg: ["dialog.replaceAddressConfirm", this.customer.address, address]
                 };
                 this.store.matrix.autoCorrect
                   ? this.updateProfile(profile)

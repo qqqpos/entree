@@ -1,13 +1,13 @@
 <template>
   <div class="history">
-    <filter-bar :data="Array.isArray(this.prevHistory) ? prevHistory : history" :date="calendarDate || today" @filter="setFilter" @trigger="openComponent"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" @filter="setFilter" @trigger="openComponent"></filter-bar>
     <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">
         <div class="inner">
           <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall"></ticket>
         </div>
-        <pagination :of="orders" @page="setPage" :contain="30" :max="12"></pagination>
+        <paginator :of="orders" @page="setPage" :contain="30" :max="12"></paginator>
       </section>
       <section class="ticket">
         <order-list layout="display" :display="true"></order-list>
@@ -21,12 +21,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Maintenance from "../dock/maintenance";
-import pagination from "../common/pagination";
+import paginator from "../common/paginator";
 import orderList from "../common/orderList";
 import dialoger from "../common/dialoger";
 import orderButtons from "./orderButtons";
-import sideButtons from "./sideButtons";
+import inputer from "./component/inputer";
 import ticket from "./component/ticket";
+import sideButtons from "./sideButtons";
 import filterBar from "./filterBar";
 
 export default {
@@ -34,10 +35,11 @@ export default {
     orderButtons,
     sideButtons,
     Maintenance,
-    pagination,
+    paginator,
     filterBar,
     orderList,
     dialoger,
+    inputer,
     ticket
   },
   data() {
@@ -155,21 +157,74 @@ export default {
       this.$open("Maintenance");
     },
     openComponent(name) {
-      console.log(name);
       switch (name) {
         case "SEARCH":
+          new Promise((resolve, reject) => {
+            const config = {
+              title: "title.searchTicket",
+              type: "number",
+              amount: "0"
+            };
+
+            this.componentData = { resolve, reject, config };
+            this.component = "inputer";
+          })
+            .then(this.searchTicket)
+            .catch(this.exitComponent);
           break;
       }
+    },
+    searchTicket(number) {
+      this.exitComponent();
+      //search invoices
+      const target = this.targetInvoices.findIndex(
+        invoice => invoice.number === number
+      );
+
+      if (target === -1) {
+        const prompt = {
+          title: "dialog.ticketNotFound",
+          msg: "dialog.actionProcess",
+          buttons: [
+            { text: "button.cancel", fn: "reject" },
+            { text: "button.retry", fn: "resolve" }
+          ]
+        };
+
+        this.$dialog(prompt)
+          .then(this.openComponent.bind(null, "SEARCH"))
+          .catch(this.exitComponent);
+      } else {
+        const index = this.findTicketPage(number);
+        this.$bus.emit("SET_CURRENT_PAGE", index);
+        this.$nextTick(() => this.setViewOrder(this.targetInvoices[target]));
+      }
+    },
+    findTicketPage(target) {
+      const pages = Math.ceil(this.targetInvoices.length / 30);
+      let index = this.targetInvoices.length;
+      let page = 1;
+      let count = 0;
+      while (index !== target) {
+        count++;
+        if (count === 30) {
+          count = 0;
+          page++;
+        }
+        index--;
+      }
+      return page;
     },
     ...mapActions(["setViewOrder"])
   },
   computed: {
+    targetInvoices() {
+      return Array.isArray(this.prevHistory) ? this.prevHistory : this.history;
+    },
     orders() {
       const { name } = this.op;
       const approval = this.approval(this.op.view, "invoices");
-      const invoices = Array.isArray(this.prevHistory)
-        ? this.prevHistory.filter(invoice => view(invoice.server))
-        : this.history.filter(invoice => view(invoice.server));
+      const invoices = this.targetInvoices.filter(({ server }) => view(server));
 
       switch (this.filter) {
         case "WALK_IN":

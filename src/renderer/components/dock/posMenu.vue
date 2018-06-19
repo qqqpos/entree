@@ -271,12 +271,12 @@ export default {
         .then(({ amount }) => {
           const prompt = {
             type: "question",
-            title: "dialog.tipReport",
+            title: "dialog.tipConfirm",
             msg: ["dialog.tipReportConfirm", amount.toFixed(2)]
           };
 
           this.$dialog(prompt)
-            .then(() => this.clockOut(amount))
+            .then(this.clockOut)
             .catch(this.reportTip);
         })
         .catch(this.exitComponent);
@@ -315,7 +315,7 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.startBreakTime",
-        msg: "dialog.startBreakTimeTip"
+        msg: "dialog.startBreakTimeConfirm"
       };
 
       this.$dialog(prompt)
@@ -335,7 +335,7 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.endBreakTime",
-        msg: ["dialog.endBreakTimeTip", duration]
+        msg: ["dialog.endBreakTimeConfirm", duration]
       };
 
       this.$dialog(prompt)

@@ -72,7 +72,7 @@
       <footer>
         <button class="btn" :disabled="reportable">{{$t('button.report')}}</button>
         <div class="f1">
-          <pagination :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></pagination>
+          <paginator :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></paginator>
         </div>
         <div class="btn" @click="init.resolve">{{$t('button.exit')}}</div>
       </footer>
@@ -85,11 +85,11 @@
 import { mapGetters } from "vuex";
 import inputer from "./component/inputer";
 import dropdown from "./component/dropdown";
-import pagination from "../common/pagination";
+import paginator from "../common/paginator";
 
 export default {
   props: ["init"],
-  components: { inputer, pagination, dropdown },
+  components: { inputer, paginator, dropdown },
   computed: {
     filteredTransactions() {
       let data = this.transactions;

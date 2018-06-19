@@ -10,7 +10,7 @@
     </header>
     <external :title="table" v-for="(table,index) in list" :key="index" @open="edit(table)"></external>
     <div class="pages" v-if="tables.length === 12">
-      <pagination :of="tables" :max="5" :contain="12" @page="setPage" class="f1"></pagination>
+      <paginator :of="tables" :max="5" :contain="12" @page="setPage" class="f1"></paginator>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>

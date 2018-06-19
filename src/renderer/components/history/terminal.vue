@@ -82,7 +82,7 @@
       <footer>
         <button class="btn" @click="openAdjuster">{{$t('button.adjustTips')}}</button>
         <div class="f1">
-          <pagination :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></pagination>
+          <paginator :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></paginator>
         </div>
         <button class="btn" @click="exit">{{$t('button.exit')}}</button>
       </footer>
@@ -96,13 +96,13 @@ import { mapGetters } from "vuex";
 import batch from "./component/batch";
 import dialoger from "../common/dialoger";
 import dropdown from "./component/dropdown";
-import pagination from "../common/pagination";
+import paginator from "../common/paginator";
 import processor from "../common/processor";
 import adjuster from "./component/adjuster";
 
 export default {
   props: ["init"],
-  components: { dialoger, dropdown, pagination, processor, adjuster, batch },
+  components: { dialoger, dropdown, paginator, processor, adjuster, batch },
   computed: {
     filteredTransactions() {
       let records = this.transactions;

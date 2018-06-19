@@ -24,7 +24,7 @@
             </div>
           </li>
         </ul>
-        <pagination :of="invoices" @page="setPage" :contain="14" :max="10"></pagination>
+        <paginator :of="invoices" @page="setPage" :contain="14" :max="10"></paginator>
       </article>
       <article v-else>
         <div class="placeholder">
@@ -69,7 +69,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import pagination from "./common/pagination";
+import paginator from "./common/paginator";
 import reason from "./history/component/reason";
 import orderList from "./common/orderList";
 import dialoger from "./common/dialoger";
@@ -77,7 +77,7 @@ import payment from "./payment/index";
 import split from "./split/index";
 
 export default {
-  components: { orderList, payment, split, reason, dialoger, pagination },
+  components: { orderList, payment, split, reason, dialoger, paginator },
   data() {
     return {
       componentData: null,
@@ -276,13 +276,13 @@ li.active {
   filter: none;
 }
 
-.pagination {
+.paginator {
   justify-content: center;
   margin: 0px 12px 0 6px;
   display: flex;
 }
 
-.pagination .page {
+.paginator .page {
   margin: 5px 5px 10px;
   width: 20px;
   text-align: center;

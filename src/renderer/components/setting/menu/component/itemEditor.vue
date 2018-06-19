@@ -26,8 +26,8 @@
           <div class="item relative">
             <inputer title="text.menuID" v-model="item.menuID"></inputer>
             <selector title="text.category" v-model="item.category" :opts="init.categories" :editable="false"></selector>
-            <inputer title="text.primary" v-model.trim="item.usEN" :autoFocus="true" @keydown.enter.native="save"></inputer>
-            <inputer title="text.secondary" v-model.trim="item.zhCN"></inputer>
+            <inputer title="text.primary" v-model="item.usEN" :autoFocus="true" @keydown.enter.native="save"></inputer>
+            <inputer title="text.secondary" v-model="item.zhCN"></inputer>
             <i class="fa fa-link" v-show="item.usEN === item.zhCN" :title="$t('tip.sameItemName')"></i>
             <inputer title="text.price" v-model="item.price" @keydown.enter.native="save">
               <i class="fa fa-ellipsis-v price" @click="openPriceEditor"></i>
@@ -307,6 +307,11 @@ export default {
     },
     save() {
       this.item.zhCN = this.item.zhCN || this.item.usEN;
+
+      //correcting 
+      this.item.usEN = this.item.usEN.trim().replace(/\s\s+/g, ' ');
+      this.item.zhCN = this.item.zhCN.trim().replace(/\s\s+/g, ' ');
+
       this.item.price = Array.isArray(this.item.price)
         ? this.item.price
         : this.item.price.toString().split(",");

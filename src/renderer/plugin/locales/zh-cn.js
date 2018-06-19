@@ -11,7 +11,7 @@ export default {
     printerServerError: "打印机服务错误"
   },
   login: {
-    massiveShutdown: "集体关机",
+    shutdownAll: "集体关机",
     shutdown: "关机",
     restart: "重启软件",
     exit: "退出"
@@ -373,7 +373,8 @@ export default {
     giftcardStats: "礼物卡数据",
     dailySaleSummary: "每日销售总数",
     hourlySaleSummary: "每小时销售总数",
-    evenSplit: "订单均分"
+    evenSplit: "订单均分",
+    searchTicket: "查找订单"
   },
   dialog: {
     maintenance: "维护",
@@ -543,7 +544,7 @@ export default {
     cashInRequiredTip: "您需要先执行 CASH IN 才可以使用钱箱",
     paidAmountGreaterThanDue: "额外支付",
     extraAmountSetAsTip: "您是否需要将余出的款项 ( ${i} ) 设为小费？",
-    invoiceNotFound: "无法找到订单",
+    ticketNotFound: "无法找到订单",
     actionProcess: "您要如何处理这个情况?",
     removeTemplate: "移除模版",
     removeTemplateConfirm: "您确定要移除这个模版吗?",
@@ -571,12 +572,12 @@ export default {
     itemNotAvailable: "此物品无法在 {i} 使用",
     itemNotAvailableNow: "此物品只能在 {i} 到 {i} 之间使用",
     addressMismatch: "地址不一致",
-    replaceAddress: "是否要将地址 {i} 替换成 {i} ?",
+    replaceAddressConfirm: "是否要将地址 {i} 替换成 {i} ?",
     invalidDate: "日期错误",
-    reserveDateIsPassed: "选定的预约日期无效",
+    reserveDateInvalid: "选定的预约日期无效",
     paymentFailed: "付款失败",
-    canNotPayZeroAmount: "支付数额必须大于 $ 0.00 ",
-    canNotPayPrevTicket: "您无法支付过期的订单",
+    mustPayGraterThanZero: "支付数额必须大于 $ 0.00 ",
+    cantPayPastDueTicket: "您无法支付逾期的订单",
     balanceDueAmountIncorrect: "此订单的支付数额存在问题",
     invalidCreditCard: "无效的信用卡",
     creditCardLengthIncorrect: "信用卡号码长度不正确",
@@ -593,9 +594,9 @@ export default {
     updateNeeded: "软件需要升级",
     versionRequirement: "伺服器要求最低版本为 {i}, 您当前使用的版本是 {i}",
     startBreakTime: "开始休息",
-    startBreakTimeTip: "您确定要开始休息时间吗？",
+    startBreakTimeConfirm: "您确定要开始休息时间吗？",
     endBreakTime: "结束休息",
-    endBreakTimeTip: "您确定要结束休息时间吗？ (休息时长: {i})",
+    endBreakTimeConfirm: "您确定要结束休息时间吗？ (休息时长: {i})",
     payoutFailed: "支付失败",
     payoutReceiverRequired: "需要提供一个收款人的名字",
     payoutAmountIncorrect: "支付数额格式不正确",
@@ -630,8 +631,8 @@ export default {
     switchServer: "切换服务员",
     switchServerConfirm: "您确定要将此座位的服务员由 {i} 换成 {i} 吗？",
     NoTip: "没有小费",
-    transactionNoTip: "即将过账的交易中没有输入任何小费, 您确定要继续?",
-    tipReport: "确定小费",
+    transactionHasNoTip: "即将过账的交易中没有输入任何小费, 您确定要继续?",
+    tipConfirm: "确定小费",
     tipReportConfirm: "请再次确定您本次上报的小费为 {i} ?",
     ticketUnsettleAlert: "您还有订单尚未结账，请先处理订单",
     printReport: "打印报表",
@@ -652,7 +653,8 @@ export default {
     ticketAlreadySplit: "此订单已经被分单",
     allergyAlert: "食物过敏",
     foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应",
-    exceedAllowLimit: "超出限定值得范围"
+    exceedAllowLimit: "超出限定值得范围",
+    handlePastDuePayment: "您要如何记录这个逾期订单的付款?"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1381,7 +1383,7 @@ export default {
     animation: "动画效果",
     saveLog: "保存记录",
     timecard: {
-      tipReport: "上报小费",
+      tipReport: "小费上报",
       excludeBreak: "休息不计时",
       isoWeek: "国际标准时间"
     },
@@ -1667,8 +1669,7 @@ export default {
     timecard: {
       forOne: "记录上下班打卡情况",
       forAll: "全体员工打卡上下班",
-      tipReport: "打卡下班时上报小费信息",
-      isoWeek: "设定星期一为周的开始"
+      tipReport: "打卡下班时上报小费信息"
     },
     dinein: {
       useTableLayout: "使用座位下单",

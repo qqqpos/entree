@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination" v-show="totalPage > 1">
+  <div class="paginator" v-show="totalPage > 1">
     <div class="page direction" @click="prev">
       <i class="fa fa-angle-left"></i>
     </div>
@@ -41,6 +41,10 @@ export default {
   },
   created() {
     this.format(this.page);
+    this.$bus.on("SET_CURRENT_PAGE", this.setPage);
+  },
+  beforeDestroy() {
+    this.$bus.off("SET_CURRENT_PAGE", this.setPage);
   },
   methods: {
     first(pages) {
@@ -104,13 +108,13 @@ export default {
 </script>
 
 <style scoped>
-.pagination {
+.paginator {
   justify-content: center;
   align-items: center;
   display: flex;
 }
 
-.pagination .page {
+.paginator .page {
   margin: 5px;
   flex: 1;
   max-width: 35px;

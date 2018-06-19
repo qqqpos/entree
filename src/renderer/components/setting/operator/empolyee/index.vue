@@ -11,7 +11,7 @@
     </header>
     <external :title="op.name" :tooltip="'type.'+op.role" v-for="(op,index) in operators" :key="index" @open="$emit('set',op)" :disabled="op.role === 'Owner' && !authorized" :translate="false"></external>
     <div class="pages" v-if="list.length > 12">
-      <pagination :of="list" :max="5" :contain="12" @page="setPage" class="f1"></pagination>
+      <paginator :of="list" :max="5" :contain="12" @page="setPage" class="f1"></paginator>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>
@@ -20,10 +20,10 @@
 <script>
 import external from "../../common/external";
 import editor from "../component/operatorEditor";
-import pagination from "../../../common/pagination";
+import paginator from "../../../common/paginator";
 
 export default {
-  components: { editor, external, pagination },
+  components: { editor, external, paginator },
   data() {
     return {
       authorized: this.$store.getters.authorized,

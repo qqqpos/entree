@@ -45,7 +45,6 @@ import counter from "./component/counter";
 import creator from "./component/creator";
 import unlock from "../common/unlock";
 import buttons from "./buttons";
-import { stringify } from "querystring";
 
 export default {
   props: ["reserved"],
@@ -302,7 +301,7 @@ export default {
         i => i._id === table.invoice[0] || i.session === table.session
       );
       const prompt = {
-        title: "dialog.invoiceNotFound",
+        title: "dialog.ticketNotFound",
         msg: "dialog.actionProcess",
         buttons: [
           { text: "button.resetTable", fn: "reject" },

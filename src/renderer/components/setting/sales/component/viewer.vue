@@ -33,7 +33,7 @@
             </table>
             <footer>
                 <div class="f1">
-                    <pagination :of="init.log.activity" @page="setPage" :contain="15" :max="6"></pagination>
+                    <paginator :of="init.log.activity" @page="setPage" :contain="15" :max="6"></paginator>
                 </div>
                 <button class="btn" @click="print">{{$t('button.print')}}</button>
             </footer>
@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import pagination from "../../../common/pagination";
+import paginator from "../../../common/paginator";
 
 export default {
   props: ["init"],
-  components: { pagination },
+  components: { paginator },
   computed: {
     logs() {
       const min = this.page * 15;

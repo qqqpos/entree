@@ -12,7 +12,7 @@
       </header>
       <external v-for="(submenu,index) in submenus" :key="index" :title="submenu" :translate="false" @open="$emit('set',submenu)"></external>
       <div class="pages" v-if="list.length > 12">
-        <pagination :of="list" :max="5" :contain="12" @page="setPage" class="f1"></pagination>
+        <paginator :of="list" :max="5" :contain="12" @page="setPage" class="f1"></paginator>
       </div>
       <div :is="component" :init="componentData" :group="submenu"></div>
     </div>

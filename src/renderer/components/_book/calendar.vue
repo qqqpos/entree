@@ -197,7 +197,7 @@ export default {
       this.$dialog({
         type: "error",
         title: "dialog.invalidDate",
-        msg: "dialog.reserveDateIsPassed",
+        msg: "dialog.reserveDateInvalid",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       }).then(() => {
         this.date = today();

@@ -480,7 +480,7 @@ export default {
           this.$dialog({
             type: "error",
             title: "dialog.paymentFailed",
-            msg: "dialog.canNotPayPrevTicket",
+            msg: "dialog.cantPayPastDueTicket",
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           }).then(() => this.exit());
       }
@@ -635,7 +635,7 @@ export default {
         const paidZeroError = {
           type: "error",
           title: "dialog.paymentFailed",
-          msg: "dialog.canNotPayZeroAmount",
+          msg: "dialog.mustPayGraterThanZero",
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
         if (this.paidTotal === 0) throw paidZeroError;
@@ -673,7 +673,7 @@ export default {
         const paidZeroError = {
           type: "error",
           title: "dialog.paymentFailed",
-          msg: "dialog.canNotPayZeroAmount",
+          msg: "dialog.mustPayGraterThanZero",
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
         const noCashDrawerError = {
