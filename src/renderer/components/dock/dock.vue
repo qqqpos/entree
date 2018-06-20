@@ -45,10 +45,10 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import dialoger from "../common/dialoger";
+import portal from "./component/portal";
 import { ipcRenderer } from "electron";
 import profiles from "./profiles";
 import switcher from "./switcher";
-import portal from "./portal";
 import caller from "./caller";
 import disc from "./disc";
 
@@ -239,7 +239,11 @@ export default {
     openPortal() {
       if (this.$route.name !== "Menu") return;
 
-      this.$open("portal");
+      return;
+      
+      this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
+        this.$open("portal", { invoices })
+      );
     },
     ...mapActions([
       "setApp",

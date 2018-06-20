@@ -770,7 +770,8 @@ export default {
     allergyAlert: "Food Allergy Alert",
     foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
     exceedAllowLimit: "Value exceeding allowed limit",
-    handlePastDuePayment: "How would you like to handle this past due payment?"
+    handlePastDuePayment: "How would you like to handle this past due payment?",
+    apiKeyRequired: "Please provide a valid API key."
   },
   terminal: {
     initial: "Initializing terminal {i}...",

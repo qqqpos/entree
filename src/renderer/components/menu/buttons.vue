@@ -382,9 +382,11 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
-        let order = this.combineOrderInfo({
-          printCount: print ? 1 : 0
-        });
+        const printCount = this.order.hasOwnProperty("printCount")
+          ? this.order.printCount + 1
+          : print ? 1 : 0;
+
+        let order = this.combineOrderInfo({ printCount });
 
         if (this.app.newTicket) {
           const todo = !!document.querySelector(".item.todo");
@@ -526,7 +528,7 @@ export default {
         Object.assign(order, {
           customer,
           lastEdit: Date.now(),
-          editor: this.op.name,
+          editor: this.op.name
         });
       }
       return Object.assign({}, order, extra);

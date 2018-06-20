@@ -654,7 +654,8 @@ export default {
     allergyAlert: "食物过敏",
     foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应",
     exceedAllowLimit: "超出限定值得范围",
-    handlePastDuePayment: "您要如何记录这个逾期订单的付款?"
+    handlePastDuePayment: "您要如何记录这个逾期订单的付款?",
+    apiKeyRequired: "请提供一个有效的 API 密钥"
   },
   terminal: {
     initial: "正在初始化 {i}...",

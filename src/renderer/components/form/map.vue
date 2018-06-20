@@ -36,11 +36,13 @@ export default {
       const { api } = matrix;
 
       if (!api) {
-        this.$dialog({
+        const prompt = {
           title: "dialog.cantExecute",
-          msg: "dialog.apiIsMissing",
+          msg: "dialog.apiKeyRequired",
           buttons: [{ text: "button.confirm", fn: "resovle" }]
-        }).then(this.exitComponent);
+        };
+
+        this.$dialog(prompt).then(this.exitComponent);
         return;
       }
 
@@ -55,14 +57,14 @@ export default {
         this.customer.zipCode || this.store.zipCode
       );
 
-      const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}`;
+      const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${api}`;
 
       this.$socket.emit("[GOOGLE] ADDRESS", url, raw => {
         const result = JSON.parse(raw);
         const polyline = result.routes[0].overview_polyline.points;
 
         this.guide = result.routes[0].legs[0].steps;
-        this.url = `https://maps.googleapis.com/maps/api/staticmap?scale=1&size=650x250&maptype=roadmap&format=png&path=enc:${polyline}`;
+        this.url = `https://maps.googleapis.com/maps/api/staticmap?scale=1&size=650x250&maptype=roadmap&format=png&path=enc:${polyline}&key=${api}`;
       });
     },
     parseAddress(address, city, zipCode) {

@@ -358,14 +358,19 @@ export default {
         .catch(() => this.printTicket(order, true));
     },
     printTicket(order, receipt) {
+      order.printCount++;
+
       this.exitComponent();
       this.updateInvoice(order);
+
       order.content.forEach(item => (item.diffs = "UNCHANGED"));
       receipt
         ? Printer.setTarget("Receipt").print(order, true)
         : Printer.setTarget("All").print(order);
     },
     splitPrint(order, receipt) {
+      order.printCount++;
+      
       this.exitComponent();
       this.updateInvoice(order);
 
