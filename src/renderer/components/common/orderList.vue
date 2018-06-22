@@ -16,7 +16,7 @@
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
-                <i class="fa fa-eercast"></i>
+                <i class="fas fa-tablets"></i>
                 <span class="filed">{{order.table}}</span>
                 <i class="fa fa-users"></i>
                 <span class="name">{{order.guest}}</span>

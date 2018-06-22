@@ -1634,7 +1634,7 @@ nav {
 
 .type input:checked + label:after {
   position: absolute;
-  content: '✓';
+  content: "✓";
   bottom: -17px;
   right: 5px;
   transform: rotate(20deg);
@@ -1675,10 +1675,8 @@ nav {
 
 .symbol {
   font-size: 26px;
-  margin-right: 1px;
-  font-weight: normal;
+  font-weight: bold;
   color: #009688;
-  text-shadow: 0 1px 1px #ddd;
 }
 
 .addition {

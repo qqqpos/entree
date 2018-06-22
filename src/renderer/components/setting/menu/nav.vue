@@ -15,7 +15,7 @@
                     <span class="text">{{$t('nav.submenu')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.template'}">
-                    <i class="fa fa-clone"></i>
+                    <i class="far fa-list-alt"></i>
                     <span class="text">{{$t('nav.template')}}</span>
                 </router-link>
             </div>

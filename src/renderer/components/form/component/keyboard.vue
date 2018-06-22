@@ -38,7 +38,7 @@
                 <div @mousedown.prevent="input('#')">#</div>
             </section>
             <section class="alphabetic">
-                <i class="fas fa-search" @mousedown.prevent="$emit('search')"></i>
+                <i class="fas fa-map-marked-alt" @mousedown.prevent="$emit('search')"></i>
                 <div @mousedown.prevent="input('|')">|</div>
                 <div class="space" @mousedown.prevent="input(' ')"></div>
                 <i class="far fa-keyboard" @mousedown.prevent="$emit('hide')"></i>

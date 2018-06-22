@@ -5,7 +5,7 @@
       <span class="text">{{$t('button.payment')}}</span>
     </button>
     <button class="btn" @contextmenu.stop="evenSplit" @click.stop="split" :disabled="disable">
-      <i class="fa fa-clone"></i>
+      <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
     <button class="btn" @click="thirdParty" :disabled="disable">
@@ -13,7 +13,7 @@
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
     <button class="btn" @click="discount" :disabled="disable || !discountable">
-      <i class="fa fa-tag"></i>
+      <i class="fa fa-tags"></i>
       <span class="text">{{$t('button.discount')}}</span>
     </button>
     <button class="btn" @click="exit">

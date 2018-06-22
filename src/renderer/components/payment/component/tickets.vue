@@ -4,7 +4,7 @@
             <input type="radio" name="split" :id="'split_'+index" :value="index" v-model="page" @change="$emit('switch',index)" @input="$emit('input',index)">
             <label :for="'split_'+index" class="tag">{{index + 1}}</label>
             <div class="preview" @click="$emit('preview',index)">
-              <i class="fa fa-wpforms"></i>
+              <i class="fas fa-file-invoice"></i>
               <span>{{$t('text.preview')}}</span>
             </div>
         </label>
@@ -73,19 +73,18 @@ export default {
   visibility: hidden;
   position: absolute;
   bottom: 34px;
-  left: -15px;
-  width: 70px;
+  left: -12px;
+  width: 65px;
   height: 70px;
   background: #2196f3;
   color: #fff;
   text-align: center;
-  padding: 5px 0;
-  border-radius: 12px;
+  border-radius: 4px;
   z-index: 1;
   opacity: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .preview:after {

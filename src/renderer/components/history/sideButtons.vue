@@ -5,15 +5,15 @@
       <span class="text">{{$t('button.edit')}}</span>
     </button>
     <button class="btn" @click="reOpenOrder" v-if="this.order && this.order.status !== 1">
-      <i class="fa fa-ban"></i>
+      <i class="fas fa-redo-alt"></i>
       <span class="text">{{$t('button.recover')}}</span>
     </button>
     <button class="btn" @click="voidOrder" v-else>
-      <i class="fa fa-ban"></i>
+      <i class="fab fa-creative-commons-nc"></i>
       <span class="text">{{$t('button.void')}}</span>
     </button>
     <button class="btn" @click="receipt">
-      <i class="fas fa-receipt"></i>
+      <i class="fas fa-file-invoice"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
     <button class="btn" @click="combine" :disabled="true">

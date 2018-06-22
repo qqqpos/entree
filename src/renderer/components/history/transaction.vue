@@ -70,7 +70,6 @@
         </tfoot>
       </table>
       <footer>
-        <button class="btn" :disabled="reportable">{{$t('button.report')}}</button>
         <div class="f1">
           <paginator :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></paginator>
         </div>

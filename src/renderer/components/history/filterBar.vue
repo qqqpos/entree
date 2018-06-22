@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="logo">
-            <span class="main">E</span>
+            <span class="cap">E</span>
             <span class="sub">ntrée</span>
         </div>
         <section class="filters" :class="{hide:!viewable}">
@@ -296,7 +296,7 @@ header {
   color: #fafafa;
 }
 
-span.main {
+span.cap {
   font-size: 24px;
   font-weight: bold;
   margin-right: 2px;

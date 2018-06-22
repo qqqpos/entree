@@ -169,8 +169,9 @@ li {
 }
 
 .item.print:after {
-  content: "\f256";
+  content: "\F04C";
   font-family: fontAwesome;
+  font-weight: 600;
   position: absolute;
   right: 10px;
   color: #ff9800;

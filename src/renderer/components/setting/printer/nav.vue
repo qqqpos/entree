@@ -4,7 +4,7 @@
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.printer'}">
                     <i class="fa fa-print"></i>
-                    <span class="text">{{$t('nav.overview')}}</span>
+                    <span class="text">{{$t('nav.list')}}</span>
                 </router-link>
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>

@@ -32,7 +32,7 @@
         <span class="text">{{$t('button.coupon')}}</span>
       </div>
       <div class="btn" @click="done(false)">
-        <i class="fa fa-save"></i>
+        <i class="fas fa-pause"></i>
         <span class="text">{{$t('button.hold')}}</span>
       </div>
       <button class="btn" @click="modify">
@@ -74,7 +74,7 @@
       <span class="text">{{$t('button.payment')}}</span>
     </button>
     <div class="btn split" @click="openSplit">
-      <i class="fa fa-columns"></i>
+      <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
     </div>
     <div class="btn" @click="done(false)">
@@ -121,7 +121,7 @@
       <span class="text">{{$t('button.payment')}}</span>
     </button>
     <div class="btn" @click="openSplit">
-      <i class="fa fa-columns"></i>
+      <i class="fa fa-copy"></i>
       <span class="text">{{$t("button.split")}}</span>
     </div>
     <button class="btn" @click="done(false)" :disabled="ticket.type === 'TO_GO'">

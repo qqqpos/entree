@@ -502,6 +502,11 @@ header.tab {
   color: #656565;
 }
 
+.statistic h5 span:first-child {
+  min-width: 60px;
+  display: inline-block;
+}
+
 .pages {
   height: 48px;
   border-bottom: none;
