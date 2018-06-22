@@ -3,7 +3,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { ipcRenderer } from "electron";
+//import { ipcRenderer } from "electron";
 import serialport from "serialport";
 import Print from "../plugin/print";
 import Magic from "wake_on_lan";
@@ -36,7 +36,7 @@ export default {
       // window.addEventListener("offline", this.setDevice({ online: false }));
 
       this.setDevice({ online: navigator.onLine });
-      ipcRenderer.send("Loading", this.$t("initial.findHost"));
+      this.$electron.ipcRenderer.send("Loading", this.$t("initial.findHost"));
     },
     setEnvironment({
       config,
@@ -51,10 +51,14 @@ export default {
     }) {
       try {
         this.setConfig(config);
+        this.setExternalDisplay(config);
         this.setMenu(menu);
         this.setSubmenu(submenu);
         this.setRequest(request);
-        ipcRenderer.send("Loading", this.$t("initial.applyConfiguration"));
+        this.$electron.ipcRenderer.send(
+          "Loading",
+          this.$t("initial.applyConfiguration")
+        );
         this.setTable(table);
         this.setTemplates(template);
         this.setReservation({ reservations, sync });
@@ -75,7 +79,10 @@ export default {
       return new Promise((use, register) => {
         Mac.getMac((error, mac) => {
           if (error || !mac) {
-            ipcRenderer.send("Loading", this.$t("initial.hardwareIssue"));
+            this.$electron.ipcRenderer.send(
+              "Loading",
+              this.$t("initial.hardwareIssue")
+            );
 
             this.$log({
               eventID: 9001,
@@ -104,20 +111,35 @@ export default {
         .then(() => {
           const { alias, mac } = data;
           this.$socket.emit("[STATION] CONNECTED", { alias, mac });
-          ipcRenderer.send("Initialized");
+          this.$electron.ipcRenderer.send("Initialized");
           this.$router.push("Login");
         })
         .catch(() => {
-          ipcRenderer.send("Loading", this.$t("initial.printerServerError"));
+          this.$electron.ipcRenderer.send(
+            "Loading",
+            this.$t("initial.printerServerError")
+          );
         });
     },
     registration(data) {
-      ipcRenderer.send("Initialized");
+      this.$electron.ipcRenderer.send("Initialized");
       this.$router.push({ name: "Station", params: { reg: data } });
+    },
+    setExternalDisplay(config) {
+      if (!config.CFD) return;
+
+      config.CFD.enable &&
+        this.$electron.ipcRenderer.send(
+          "External::playlist",
+          config.CFD.playlist
+        );
     },
     awakeStation() {
       if (window.isServer) {
-        ipcRenderer.send("Loading", this.$t("initial.awakeClients"));
+        this.$electron.ipcRenderer.send(
+          "Loading",
+          this.$t("initial.awakeClients")
+        );
         this.$socket.emit("[AWAKEN] STATIONS", data => {
           data && data.foreach(station => Magic.wake(station));
         });
@@ -126,9 +148,9 @@ export default {
     initialDevice() {
       try {
         this.station.callid.enable && this.initCallerId(this.station.callid);
-        this.station.pole.enable && this.initPoleDisplay(this.station.pole.port);
         this.station.scale.enable && this.initScale(this.station.scale.port);
         this.station.terminal && this.setDevice({ terminal: true });
+        this.initCustomerDisplay(this.station.customerDisplay);
       } catch (error) {
         this.$log({
           eventID: 9002,
@@ -199,8 +221,13 @@ export default {
         }
       });
     },
+    initCustomerDisplay({ poleDisplay = {}, ledDisplay = {} }) {
+      poleDisplay.enable && this.initPoleDisplay(poleDisplay.port);
+      ledDisplay.enable && this.initLedDisplay(ledDisplay.playlist);
+    },
     initPoleDisplay(port) {
-      let poleDisplay = new serialport(port, { autoOpen: false });
+      const poleDisplay = new serialport(port, { autoOpen: false });
+
       poleDisplay.open(err => {
         if (err) {
           this.setDevice({ poleDisplay: false });
@@ -212,6 +239,9 @@ export default {
         }
       });
     },
+    initLedDisplay(playlist) {
+      
+    },
     initScale(port) {
       // const SerialPort = require('serialport');
       // const Delimiter = SerialPort.parsers.Delimiter;
@@ -220,7 +250,10 @@ export default {
       // parser.on('data', console.log);
     },
     initialPrinter() {
-      ipcRenderer.send("Loading", this.$t("initial.connectPrinter"));
+      this.$electron.ipcRenderer.send(
+        "Loading",
+        this.$t("initial.connectPrinter")
+      );
       const config = this.config;
       const station = this.station;
 
@@ -260,12 +293,21 @@ export default {
   },
   sockets: {
     CONNECTED() {
-      ipcRenderer.send("Loading", this.$t("initial.hostConnected"));
+      this.$electron.ipcRenderer.send(
+        "Loading",
+        this.$t("initial.hostConnected")
+      );
       this.$socket.emit("[INITIAL] POS");
-      ipcRenderer.send("Loading", this.$t("initial.initialApplication"));
+      this.$electron.ipcRenderer.send(
+        "Loading",
+        this.$t("initial.initialApplication")
+      );
     },
     APP_RUNTIME_CONFIG(data) {
-      ipcRenderer.send("Loading", this.$t("initial.loadConfiguration"));
+      this.$electron.ipcRenderer.send(
+        "Loading",
+        this.$t("initial.loadConfiguration")
+      );
       this.setEnvironment(data);
     }
   },

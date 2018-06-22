@@ -6,7 +6,7 @@
     <template v-if="style==='full'">
       <div class="page" v-for="i in pages" :key="i" :class="{active:i === page}" @click="setPage(i)">{{i}}</div>
     </template>
-    <template v-else-if="style==='side'">
+    <template v-else-if="style==='begin'">
       <div class="page" v-for="i in first(pages)" :key="i" :class="{active:i === page}" @click="setPage(i)">{{i}}</div>
       <div>......</div>
       <div class="page" v-for="i in last(pages)" :key="i" :class="{active:i === page}" @click="setPage(i)">{{i}}</div>
@@ -34,9 +34,9 @@ export default {
   props: ["of", "contain", "max"],
   data() {
     return {
+      style: "full",
       pages: [],
-      page: 1,
-      style: "full"
+      page: 1
     };
   },
   created() {
@@ -48,12 +48,10 @@ export default {
   },
   methods: {
     first(pages) {
-      const min = 0;
-      const max = 10;
-      return pages.slice(min, max);
+      return pages.slice(0, 10);
     },
     last(pages) {
-      const length = pages.length - 1;
+      const length = pages.length;
       return pages.slice(length - 1, length);
     },
     middle(pages) {
@@ -73,8 +71,8 @@ export default {
 
       if (this.totalPage <= this.max) {
         this.style = "full";
-      } else if (page <= 6) {
-        this.style = "side";
+      } else if (page < 6) {
+        this.style = "begin";
       } else if (page > this.totalPage - 6) {
         this.style = "end";
       } else {

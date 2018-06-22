@@ -434,6 +434,7 @@ i.avatar {
 .cancel {
   padding: 15px 23px;
   cursor: pointer;
+  color:#fff;
 }
 
 .flags {

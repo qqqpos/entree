@@ -20,7 +20,7 @@
             <span v-else>{{$t('text.viewProfile')}}</span>
           </div>
           <div class="operator text" @click="initialPanel">
-            <i class="fa fa-user-circle"></i>
+            <i class="fas fa-user-tie"></i>
             <span>{{op.name}}</span>
           </div>
           <div class="misc">
@@ -238,12 +238,11 @@ export default {
     },
     openPortal() {
       if (this.$route.name !== "Menu") return;
-
-      return;
-      
-      this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
-        this.$open("portal", { invoices })
-      );
+      this.customer._id
+        ? this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
+            this.$open("portal", { invoices })
+          )
+        : this.$open("portal", { invoices: [] });
     },
     ...mapActions([
       "setApp",

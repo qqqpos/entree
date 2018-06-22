@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="btn" @click="isSettled" :disabled="order.settled">
-      <i class="fa fa-money"></i>
+      <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
     <button class="btn" @contextmenu.stop="evenSplit" @click.stop="split" :disabled="disable">
@@ -9,7 +9,7 @@
       <span class="text">{{$t('button.split')}}</span>
     </button>
     <button class="btn" @click="thirdParty" :disabled="disable">
-      <i class="fa fa-google-wallet"></i>
+      <i class="fab fa-google-wallet"></i>
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
     <button class="btn" @click="discount" :disabled="disable || !discountable">
@@ -21,7 +21,7 @@
       <span class="text">{{$t('button.exit')}}</span>
     </button>
     <button class="btn" @click="driver" :disabled="!assignable">
-      <i class="fa fa-id-card-o"></i>
+      <i class="far fa-id-card"></i>
       <span class="text">{{$t('button.driver')}}</span>
     </button>
     <div :is="component" :init="componentData"></div>

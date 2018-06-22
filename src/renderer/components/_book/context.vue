@@ -2,7 +2,7 @@
     <div class="popupMask" @click.self="init.reject">
         <ul :style="pos">
             <li class="divider" @click="$emit('seat')">
-                <i class="fa fa-cutlery"></i>
+                <i class="fa fa-utensils"></i>
                 <span class="text">{{$t('reservation.seat')}}<span class="name">{{init.book.name}}</span></span>
             </li>
             <li>

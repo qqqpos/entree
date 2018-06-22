@@ -24,10 +24,9 @@ export default {
   },
   type: {
     ALL_INVOICES: "All Invoices",
-    VOID_INVOICES: "Voided",
+    VOID_INVOICE: "Voided",
     EDIT_INVOICE: "Edited",
     DISCOUNT_INVOICE: "Discounted",
-    SEARCH_INVOICE: "Search",
     UNSETTLED: "Unpaid",
     SETTLED: "Paid",
     WALK_IN: "Walk In",
@@ -465,8 +464,7 @@ export default {
     giftcardStats: "Gift Card Stats",
     dailySaleSummary: "Daily Sales Summary",
     hourlySaleSummary: "Hourly Sales Summary",
-    evenSplit: "Ticket Even Split",
-    searchTicket: "Search Ticket"
+    evenSplit: "Ticket Even Split"
   },
   dialog: {
     maintenance: "Maintenance",
@@ -1294,7 +1292,8 @@ export default {
     dynamicPrint: "Dynamic Print",
     printAhead: "Print Ahead In {i} Minutes",
     plasticBag: "Plastic Bags",
-    foodAllergy: "Food Allergy"
+    foodAllergy: "Food Allergy",
+    searchTicket: "Search Ticket"
   },
   nav: {
     store: "Store",
@@ -1381,7 +1380,7 @@ export default {
     tool: "Tool",
     troubleshooting: "Debug · Feedback Troubleshooting",
     exit: "Exit",
-    exitTip: "Exit setting",
+    exitTip: "Exit Setting",
     host: "Host",
     version: "Version",
     buildTime: "Build Time: ",
@@ -1432,7 +1431,11 @@ export default {
     station: "Station Setting",
     staffBank: "Staff Bank",
     terminal: "Terminal",
+    customerDisplay: "Customer Display",
     poleDisplay: "Pole Display",
+    ledDisplay: "Customer Facing Display",
+    advertisement: "Advertisement",
+    gallery: "Gallery",
     weightScale: "Weight Scale",
     callerId: "Caller ID",
     security: "Security",

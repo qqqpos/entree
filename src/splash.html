@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <title>United POS</title>
-  <style>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>United POS</title>
+    <style>
     * {
       margin: 0;
       padding: 0;
@@ -118,40 +118,43 @@
       color: #f1f1f1;
       font-family: monospace;
     }
-  </style>
-</head>
+    </style>
+  </head>
 
-<body>
-  <div class="splashScreen">
-    <i class="close" onclick="exit()">&times;</i>
-    <span class="product">United POS
-      <span class="version"></span>
-    </span>
-    <span id="load"></span>
-    <span class="copyright">© 2017-2018 United POS Inc.</span>
-    <div class="triangles">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+  <body>
+    <div class="splashScreen">
+      <i class="close" onclick="exit()">&times;</i>
+      <span class="product">United POS
+        <span class="version"></span>
+      </span>
+      <span id="load"></span>
+      <span class="copyright">© 2017-2018 United POS Inc.</span>
+      <div class="triangles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
-  </div>
-</body>
-<script>
+  </body>
+  <script>
   const Electron = require('electron');
+  const progress = document.getElementById("load");
+
   document.querySelector("span.version").innerHTML = Electron.remote.app.getVersion();
-  Electron.ipcRenderer.on("Processing", (e, m) => {
-    document.getElementById("load").innerHTML = m
-  })
+
+  Electron.ipcRenderer.on("Processing", (e, text) => progress.innerHTML = text)
+
   setTimeout(() => {
-    let dom = document.querySelector("i.close");
+    const dom = document.querySelector("i.close");
     dom && dom.classList.add("show");
-    document.getElementById("load").innerHTML = "Application load failed, please try again.";
+
+    progress.innerHTML = "Application load failed, please try again.";
   }, 30000);
-  const exit = function () {
-    Electron.ipcRenderer.send("Exit");
-  }
-</script>
+
+  const exit = () => Electron.ipcRenderer.send("Exit");
+  
+  </script>
 
 </html>

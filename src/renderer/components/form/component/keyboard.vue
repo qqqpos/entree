@@ -11,7 +11,7 @@
                 <div id="U" @mousedown.prevent="input('U')">U</div>
                 <div id="I" @mousedown.prevent="input('I')">I</div>
                 <div id="O" @mousedown.prevent="input('O')">O</div>
-                <i class="fa fa-reply-all" @mousedown.prevent="$emit('reset')"></i>
+                <i class="fas fa-eraser" @mousedown.prevent="$emit('reset')"></i>
             </section>
             <section class="alphabetic">
                 <div id="A" @mousedown.prevent="input('A')">A</div>
@@ -23,7 +23,7 @@
                 <div id="J" @mousedown.prevent="input('J')">J</div>
                 <div id="K" @mousedown.prevent="input('K')">K</div>
                 <div id="L" @mousedown.prevent="input('L')">L</div>
-                <i class="fa fa-long-arrow-left" @mousedown.prevent="$emit('backspace')"></i>
+                <i class="fas fa-backspace" @mousedown.prevent="$emit('backspace')"></i>
             </section>
             <section class="alphabetic">
                 <div id="Z" @mousedown.prevent="input('Z')">Z</div>
@@ -38,10 +38,10 @@
                 <div @mousedown.prevent="input('#')">#</div>
             </section>
             <section class="alphabetic">
-                <i class="fa fa-search" @mousedown.prevent="$emit('search')"></i>
+                <i class="fas fa-search" @mousedown.prevent="$emit('search')"></i>
                 <div @mousedown.prevent="input('|')">|</div>
                 <div class="space" @mousedown.prevent="input(' ')"></div>
-                <i class="fa fa-keyboard-o" @mousedown.prevent="$emit('hide')"></i>
+                <i class="far fa-keyboard" @mousedown.prevent="$emit('hide')"></i>
                 <div class="" @mousedown.prevent="$emit('cancel')">{{$t('button.cancel')}}</div>
                 <div class="double" @mousedown.prevent="$emit('create')">{{$t('button.create')}}</div>
             </section>

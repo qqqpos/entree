@@ -7,11 +7,11 @@
                     <span class="text">{{$t('nav.overview')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.operator.shift'}">
-                    <i class="fa fa-braille"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span class="text">{{$t('nav.schedule')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.operator.payroll'}">
-                    <i class="fa fa-id-badge"></i>
+                    <i class="fas fa-money-check-alt"></i>
                     <span class="text">{{$t('nav.payroll')}}</span>
                 </router-link>
             </div>

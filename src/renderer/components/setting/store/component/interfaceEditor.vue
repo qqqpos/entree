@@ -120,13 +120,13 @@ export default {
           label: "Card",
           tooltip: "",
           plainText: true,
-          value: "fa-card"
+          value: "far fa-credit-card"
         },
         {
-          label: "Cutlery",
+          label: "Utensils",
           tooltip: "",
           plainText: true,
-          value: "fa-cutlery"
+          value: "fa-utensils"
         },
         {
           label: "List",
@@ -135,10 +135,16 @@ export default {
           value: "fa-list"
         },
         {
-          label: "Inbox",
+          label: "History",
           tooltip: "",
           plainText: true,
-          value: "fa-inbox"
+          value: "fas fa-history"
+        },
+        {
+          label: "Cash Drawer",
+          tooltip: "",
+          plainText: true,
+          value: "fas fa-donate"
         },
         {
           label: "Cog",
@@ -150,19 +156,19 @@ export default {
           label: "Internet",
           tooltip: "",
           plainText: true,
-          value: "fa-globe"
+          value: "fas fa-globe-americas"
         },
         {
           label: "Lock",
           tooltip: "",
           plainText: true,
-          value: "fa-lock"
+          value: "fas fa-user-lock"
         },
         {
           label: "Cash",
           tooltip: "",
           plainText: true,
-          value: "fa-money"
+          value: "far fa-money-bill-alt"
         }
       ]
     };

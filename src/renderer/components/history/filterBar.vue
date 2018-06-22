@@ -10,15 +10,22 @@
                 <div class="value">$ {{filter.amount | decimal}}</div>
                 <transition name="dropdown">
                     <ul v-if="filter.hasOwnProperty('subTypes') && showMore" class="subTypes">
-                        <li class="" v-for="(sub,index) in filter.subTypes" :key="index" @click.stop="setSubFilter(sub)">
-                            <template v-if="sub.fn">
-                                <div class="text">{{sub.title}}</div>
-                                <i class="fa fa-search"></i>
-                            </template>
-                            <template v-else>
-                                <div class="text">{{sub.title}}<span class="count">{{sub.count}}</span></div>
-                                <div class="value">$ {{sub.amount | decimal}}</div>
-                            </template>
+                        <li v-for="(sub,index) in filter.subTypes" :key="index" @click.stop="setSubFilter(sub)">
+                            <div class="text">{{sub.title}}<span class="count">{{sub.count}}</span></div>
+                            <div class="value">$ {{sub.amount | decimal}}</div>
+                        </li>
+                        <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices">
+                          <div class="text">{{$t('filter.server')}}</div>
+                          <i class="fas fa-user-tie"></i>
+                          <transition name="slideFromLeft">
+                            <ul v-if="showServer" class="server">
+                              <li v-for="(name,index) in servers" :key="index" @click.stop="filterByServer(name)">{{name}}</li>
+                            </ul>
+                          </transition>
+                        </li>
+                        <li @click.stop="search">
+                          <div class="text" >{{$t('text.searchTicket')}}</div>
+                          <i class="fas fa-search"></i>
                         </li>
                     </ul>
                 </transition>
@@ -45,7 +52,9 @@ export default {
       viewAllInvoices: false,
       displayBtn: false,
       showMore: false,
-      type: "ALL_INVOICES"
+      showServer: false,
+      type: "ALL_INVOICES",
+      servers: []
     };
   },
   computed: {
@@ -73,16 +82,20 @@ export default {
         this.type = type;
       }
     },
-    setSubFilter({ type, fn }) {
-      if (fn) {
-        this.$emit("trigger", fn);
-      } else {
-        this.$emit("filter", type);
-      }
-
+    setSubFilter({ type }) {
+      this.$emit("filter", type);
       this.showMore = false;
     },
+    filterByServer(name) {
+      this.$emit("filter", "SERVER", name);
+      this.showMore = false;
+    },
+    search() {
+      this.showMore = false;
+      this.$emit("search");
+    },
     initialData() {
+      const servers = new Set();
       const invoices = this.viewAllInvoices
         ? this.data
         : this.data.filter(t.server === server);
@@ -113,7 +126,8 @@ export default {
 
       let subTypes = {};
 
-      invoices.forEach(({ type, modify, status, settled, payment }) => {
+      invoices.forEach(({ type, modify, status, settled, payment, server }) => {
+        servers.add(server);
         const { balance } = payment;
         if (status === 1) {
           //if not void
@@ -236,12 +250,7 @@ export default {
         )
       );
 
-      //push search invoice function
-      this.filters[0].subTypes.push({
-        type: "SEARCH",
-        title: this.$t("type.SEARCH_INVOICE"),
-        fn: "SEARCH"
-      });
+      this.servers = Array.from(servers);
     },
     prev() {
       const date = moment(this.date, "YYYY-MM-DD")
@@ -254,6 +263,9 @@ export default {
         .add(1, "d")
         .format("YYYY-MM-DD");
       this.$bus.emit("CALENDAR", date);
+    },
+    toggleServers() {
+      this.showServer = !this.showServer;
     }
   },
   watch: {
@@ -367,7 +379,6 @@ ul.subTypes {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  filter: opacity(0.8);
 }
 
 .subTypes li:nth-child(odd) {
@@ -397,6 +408,7 @@ ul.subTypes {
 
 .date i {
   position: absolute;
+  color: #fff;
   top: 0;
 }
 
@@ -408,6 +420,33 @@ i.fa-angle-left {
 i.fa-angle-right {
   right: -5px;
   padding: 24px 15px 24px 60px;
+}
+
+li.extend:after {
+  content: "\f0da";
+  font-family: FontAwesome;
+  position: absolute;
+  right: 10px;
+  opacity: 0.5;
+}
+
+ul.server {
+  position: absolute;
+  top: 0;
+  left: 129px;
+  background: #fff;
+  width: auto;
+  max-height: 315px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.server li {
+  width: 130px;
+  background: #fff;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
 }
 </style>
 

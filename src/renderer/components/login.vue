@@ -30,11 +30,11 @@
         <transition name="menu">
           <ul v-if="toggleMenu">
             <li @click="shutdownStations" v-if="isHost">
-              <i class="fa fa-plug"></i>
+              <i class="fas fa-power-off"></i>
               <span>{{$t('login.shutdownAll')}}</span>
             </li>
             <li @click="shutdown">
-              <i class="fa fa-desktop"></i>
+              <i class="fas fa-power-off"></i>
               <span>{{$t('login.shutdown')}}</span>
             </li>
             <li @click="restart">
@@ -42,7 +42,7 @@
               <span>{{$t('login.restart')}}</span>
             </li>
             <li @click="exit">
-              <i class="fa fa-window-close-o"></i>
+              <i class="fas fa-window-close"></i>
               <span>{{$t('login.exit')}}</span>
             </li>
           </ul>
@@ -53,6 +53,194 @@
     </div>
   </transition>
 </template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+import dialoger from "./common/dialoger";
+import _debounce from "lodash.debounce";
+
+export default {
+  components: { dialoger },
+  data() {
+    return {
+      isHost: false,
+      reset: false,
+      component: null,
+      toggleMenu: false,
+      componentData: null,
+      disableAccess: false
+    };
+  },
+  created() {
+    this.checkVersion()
+      .then(this.checkActivation)
+      .then(this.initialized)
+      .catch(this.initialFailed);
+  },
+  beforeRouteEnter(to, from, next) {
+    switch (from.name) {
+      case "Dashboard":
+        appSocket.emit("[STATION] LOCK", {
+          eventID: 1103,
+          type: "information",
+          note: `Operator manually lock the station.`
+        });
+        break;
+      case "Menu":
+        appSocket.emit("[STATION] LOCK", {
+          eventID: 1103,
+          type: "information",
+          note: `Station is auto locked due to software setting.`
+        });
+        break;
+    }
+    next();
+  },
+  mounted() {
+    window.addEventListener("keydown", this.entry, false);
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.entry, false);
+  },
+  methods: {
+    checkVersion() {
+      return new Promise((next, stop) => {
+        this.$socket.emit("[SYS] GET_VERSION", requireVersion => {
+          const appVersion = this.$electron.remote.app.getVersion();
+          const fulfilled = appVersion >= requireVersion;
+          const error = {
+            reason: "outDatedVersion",
+            prompt: {
+              type: "warning",
+              title: "dialog.updateNeeded",
+              msg: ["dialog.versionRequirement", requireVersion, appVersion],
+              buttons: [{ text: "button.confirm", fn: "resolve" }]
+            }
+          };
+
+          process.env.NODE_ENV !== "development" && !fulfilled
+            ? stop(error)
+            : next();
+        });
+      });
+    },
+    checkActivation() {
+      return new Promise((next, stop) => {
+        next();
+      });
+    },
+    initialized() {
+      this.isHost = window.isServer === true;
+    },
+    initialFailed({ reason, prompt }) {
+      switch (reason) {
+        case "outDatedVersion":
+          this.$dialog(prompt).then(() => {
+            this.disableAccess = true;
+            this.exitComponent();
+          });
+          break;
+      }
+    },
+    entry(e) {
+      e.preventDefault();
+      switch (e.key) {
+        case "Enter":
+          this.access();
+          break;
+        case "Escape":
+          this.setPin();
+          break;
+        case "Backspace":
+          this.delPin();
+          break;
+        default:
+          e.key.length === 1 &&
+            /[a-zA-Z0-9]/i.test(e.key) &&
+            this.setPin(e.key);
+      }
+    },
+    access() {
+      if (this.disableAccess) return;
+
+      this.reset = true;
+      this.$socket.emit("[ACCESS] PIN", this.password.join(""));
+    },
+    autoAccess: _debounce(function() {
+      if (this.$route.name === "Login" || this.$route.name === "Lock") {
+        const password = this.password.join("");
+        password && this.access();
+        this.reset = false;
+      }
+    }, 300),
+    shutdownStations() {
+      const prompt = {
+        type: "question",
+        title: "dialog.shutdownStations",
+        msg: "dialog.shutdownStationsConfirm",
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.confirm", fn: "resolve", load: true }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.$socket.emit("[CTRL] SHUTDOWN_ALL");
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
+    },
+    shutdown() {
+      this.$electron.ipcRenderer.send("Shutdown");
+    },
+    restart() {
+      this.$electron.ipcRenderer.send("Relaunch");
+    },
+    exit() {
+      this.$electron.ipcRenderer.send("Exit");
+    },
+    ...mapActions(["setPin", "delPin", "setOp", "setApp"])
+  },
+  watch: {
+    password(n) {
+      this.store.autoLogin && this.autoAccess();
+    }
+  },
+  computed: {
+    ...mapGetters(["sync", "store", "password", "station"])
+  },
+  sockets: {
+    AUTHORIZATION(data) {
+      const { auth, op } = data;
+      if (auth) {
+        document.querySelector(".ctrl").classList.add("hide");
+
+        const language = op.language || "usEN";
+        moment.locale(language === "usEN" ? "en" : "zh-cn");
+
+        this.$setLanguage(language);
+        this.setApp({ language, newTicket: true, mode: "create" });
+        this.setOp(op);
+        this.setPin();
+
+        this.$router.push({ path: "/main" });
+        this.$socket.emit("[SYNC] POS", sync => {
+          if (this.sync !== sync) {
+            this.$socket.emit("[SYNC] ORDER_LIST");
+            this.$socket.emit("[SYNC] TABLE_LIST");
+          }
+        });
+      } else {
+        this.reset && this.setPin();
+      }
+    },
+    SHUTDOWN() {
+      this.shutdown();
+    }
+  }
+};
+</script>
 
 <style scoped>
 .ctrl {
@@ -156,191 +344,3 @@
   background: #f44336;
 }
 </style>
-
-<script>
-import { mapActions, mapGetters } from "vuex";
-import dialoger from "./common/dialoger";
-import _debounce from "lodash.debounce";
-import Electron from "electron";
-export default {
-  components: { dialoger },
-  data() {
-    return {
-      isHost: false,
-      reset: false,
-      component: null,
-      toggleMenu: false,
-      componentData: null,
-      disableAccess: false
-    };
-  },
-  created() {
-    this.checkVersion()
-      .then(this.checkActivation)
-      .then(this.initialized)
-      .catch(this.initialFailed);
-  },
-  beforeRouteEnter(to, from, next) {
-    switch (from.name) {
-      case "Dashboard":
-        appSocket.emit("[STATION] LOCK", {
-          eventID: 1103,
-          type: "information",
-          note: `Operator manually lock the station.`
-        })
-        break;
-      case "Menu":
-        appSocket.emit("[STATION] LOCK", {
-          eventID: 1103,
-          type: "information",
-          note: `Station is auto locked due to software setting.`
-        })
-        break;
-    }
-    next();
-  },
-  mounted() {
-    window.addEventListener("keydown", this.entry, false);
-  },
-  beforeDestroy() {
-    window.removeEventListener("keydown", this.entry, false);
-  },
-  methods: {
-    checkVersion() {
-      return new Promise((next, stop) => {
-        this.$socket.emit("[SYS] GET_VERSION", requireVersion => {
-          const appVersion = Electron.remote.app.getVersion();
-          const fulfilled = appVersion >= requireVersion;
-          const error = {
-            reason: "outDatedVersion",
-            data: {
-              type: "warning",
-              title: "dialog.updateNeeded",
-              msg: ["dialog.versionRequirement", requireVersion, appVersion],
-              buttons: [{ text: "button.confirm", fn: "resolve" }]
-            }
-          };
-
-          process.env.NODE_ENV !== "development" && !fulfilled
-            ? stop(error)
-            : next();
-        });
-      });
-    },
-    checkActivation() {
-      return new Promise((next, stop) => {
-        next();
-      });
-    },
-    initialized() {
-      this.isHost = window.isServer === true;
-    },
-    initialFailed({ data, reason }) {
-      switch (reason) {
-        case "outDatedVersion":
-          this.$dialog(data).then(() => {
-            this.disableAccess = true;
-            this.exitComponent();
-          });
-          break;
-      }
-    },
-    entry(e) {
-      e.preventDefault();
-      switch (e.key) {
-        case "Enter":
-          this.access();
-          break;
-        case "Escape":
-          this.setPin();
-          break;
-        case "Backspace":
-          this.delPin();
-          break;
-        default:
-          e.key.length === 1 &&
-            /[a-zA-Z0-9]/i.test(e.key) &&
-            this.setPin(e.key);
-      }
-    },
-    access() {
-      if (this.disableAccess) return;
-
-      this.reset = true;
-      this.$socket.emit("[ACCESS] PIN", this.password.join(""));
-    },
-    autoAccess: _debounce(function () {
-      if (this.$route.name === "Login" || this.$route.name === "Lock") {
-        const password = this.password.join("");
-        password && this.access();
-        this.reset = false;
-      }
-    }, 300),
-    shutdownStations() {
-      const data = {
-        type: "question",
-        title: "dialog.shutdownStations",
-        msg: "dialog.shutdownStationsConfirm",
-        buttons: [
-          { text: "button.cancel", fn: "reject" },
-          { text: "button.confirm", fn: "resolve", load: true }
-        ]
-      };
-
-      this.$dialog(data)
-        .then(() => {
-          this.$socket.emit("[CTRL] SHUTDOWN_ALL");
-          this.exitComponent();
-        })
-        .catch(this.exitComponent);
-    },
-    shutdown() {
-      Electron.ipcRenderer.send("Shutdown");
-    },
-    restart() {
-      Electron.ipcRenderer.send("Relaunch");
-    },
-    exit() {
-      Electron.ipcRenderer.send("Exit");
-    },
-    ...mapActions(["setPin", "delPin", "setOp", "setApp"])
-  },
-  watch: {
-    password(n) {
-      this.store.autoLogin && this.autoAccess();
-    }
-  },
-  computed: {
-    ...mapGetters(["sync", "store", "password", "station"])
-  },
-  sockets: {
-    AUTHORIZATION(data) {
-      const { auth, op } = data;
-      if (auth) {
-        document.querySelector(".ctrl").classList.add("hide");
-
-        const language = op.language || "usEN";
-        moment.locale(language === "usEN" ? "en" : "zh-cn");
-
-        this.$setLanguage(language);
-        this.setApp({ language, newTicket: true, mode: "create" });
-        this.setOp(op);
-        this.setPin();
-
-        this.$router.push({ path: "/main" });
-        this.$socket.emit("[SYNC] POS", sync => {
-          if (this.sync !== sync) {
-            this.$socket.emit("[SYNC] ORDER_LIST");
-            this.$socket.emit("[SYNC] TABLE_LIST");
-          }
-        });
-      } else {
-        this.reset && this.setPin();
-      }
-    },
-    SHUTDOWN() {
-      this.shutdown();
-    }
-  }
-};
-</script>

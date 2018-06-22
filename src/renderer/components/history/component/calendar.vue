@@ -8,7 +8,7 @@
                 </div>
                 <nav>
                     <i class="fa fa-angle-left" @click="prev" @contextmenu="prevYear"></i>
-                    <h5>{{date | moment('MMMM')}}</h5>
+                    <h5 class="center">{{date | moment('MMMM')}}</h5>
                     <i class="fa fa-angle-right" @click="next" @contextmenu="nextYear"></i>
                 </nav>
             </header>
@@ -110,7 +110,7 @@ export default {
       return this.today.format("YYYY-MM-DD") === day.format("YYYY-MM-DD");
     },
     select(day) {
-      this.init.resolve(day.format('YYYY-MM-DD'));
+      this.init.resolve(day.format("YYYY-MM-DD"));
     }
   }
 };
@@ -172,6 +172,7 @@ nav i {
   font-weight: bold;
   font-size: 32px;
   opacity: 0.75;
+  border-radius: 4px;
 }
 
 .day.diff {
@@ -186,5 +187,9 @@ nav i {
 .week .day.today {
   background: #009688;
   color: #fff;
+}
+
+.center{
+  text-align: center;
 }
 </style>

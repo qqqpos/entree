@@ -4,15 +4,11 @@
           <ul class="invoices">
             <li v-for="(invoice,index) in invoices" :key="index">
               <div class="info">
-                <p>
-                  <span># {{invoice.number}}</span>
-                  <span>{{$t('type.'+invoice.type)}}</span>
-                  <span>{{countItem(invoice.content)}} Items</span>
-                  <span>$ {{invoice.payment.balance}}</span></p>
-                <p>
-                  <span>{{invoice.time | moment('MM-DD ddd HH:mm:ss')}}</span>
-                  <span>{{invoice.time | fromNow}}</span>
-                </p>
+                <i :class="getOrderType(invoice.type)"></i>
+                <div>
+                  <h5>{{getOrderTime(invoice.time)}}</h5>
+                  <p></p>
+                </div>
               </div>
               <i class="fa fa-search icon"></i>
               <i class="fa fa-clone icon"></i>
@@ -38,6 +34,28 @@ export default {
     this.invoices = this.init.invoices;
   },
   methods: {
+    getOrderType(type) {
+      switch (type) {
+        case "WALK_IN":
+          return "fa fa-user";
+        case "PICK_UP":
+          return "fa fa-phone";
+        case "DELIVERY":
+          return "fa fa-car";
+          break;
+        case "DINE_IN":
+        case "BUFFET":
+          return "fa fa-utensils";
+        case "BAR":
+          return "fa fa-wine";
+          break;
+        case "HIBACHI":
+          break;
+      }
+    },
+    getOrderTime(time) {
+
+    },
     countItem(invoice) {
       return invoice.reduce((a, c) => a + c.qty, 0);
     }
@@ -86,8 +104,8 @@ export default {
   background: var(--green);
 }
 
-.fa-clone{
-  background: var(--deepBlue)
+.fa-clone {
+  background: var(--deepBlue);
 }
 </style>
 

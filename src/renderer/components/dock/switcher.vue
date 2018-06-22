@@ -14,7 +14,7 @@
         <span>{{$t('type.DELIVERY')}}</span>
       </li>
       <li v-show="type !=='DINE_IN'" @click="change('DINE_IN')">
-        <i class="fa fa-cutlery"></i>
+        <i class="fa fa-utensils"></i>
         <span>{{$t('type.DINE_IN')}}</span>
       </li>
       <li v-show="(type === 'DINE_IN' || type === 'HIBACHI') && !app.newTicket" @click="togo">
@@ -22,7 +22,7 @@
         <span>{{$t('type.TO_GO')}}</span>
       </li>
       <li @click="thirdParty" class="thirdParty">
-        <i class="fa fa-edge"></i>
+        <i class="fab fa-edge"></i>
         <span>{{$t('type.THIRD')}}</span>
       </li>
     </ul>

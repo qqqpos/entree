@@ -7,7 +7,7 @@
                     <span class="text">{{$t('nav.menu')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.request'}">
-                    <i class="fa fa-commenting-o"></i>
+                    <i class="far fa-comment-dots"></i>
                     <span class="text">{{$t('nav.request')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.submenu'}">

@@ -41,9 +41,9 @@ export default {
 </script>
 
 <style>
-@import url(./assets/css/font-awesome.min);
 @import url(./assets/css/icon.css);
 @import url(./assets/css/style.css);
 @import url(./assets/css/setting.css);
 @import url(./assets/css/animation.css);
+@import url(./assets/fontAwesome/css/all.css);
 </style>

@@ -17,7 +17,7 @@
         <li v-for="(ip,index) in results" :key="index">
           <input type="radio" name="ip" v-model="target" :id="'ip'+index" :value="ip">
           <label :for="'ip'+index">
-            <i class="fa fa-tablet"></i>
+            <i class="fa fa-tablet-alt"></i>
             <span>{{ip}}</span>
           </label>
         </li>

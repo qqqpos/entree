@@ -9,7 +9,7 @@
     <external title="setting.printerGroup" @open="$router.push({name:'Setting.station.printers'})" :tooltip="$t('text.stationPrinters',station.printers.length)"></external>
     <text-list title="setting.terminal" v-model="station.terminal" :opts="terminals" @update="updateTerminal"></text-list>
     <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callid.enable ? 'text.enable':'text.disable'"></external>
-    <external title="setting.poleDisplay" :tooltip="station.cashDrawer.enable ? 'text.enable':'text.disable'" @open="$router.push({name:'Setting.station.poleDisplay'})"></external>
+    <external title="setting.customerDisplay" @open="$router.push({name:'Setting.station.customerDisplay'})"></external>
     <external title="setting.weightScale" @open="editScale"></external>
     <toggle title="setting.autoLock" tooltip="tip.autoLock" v-model="station.autoLock.enable" @update="updateAutoLock">
       <transition name="dropdown">

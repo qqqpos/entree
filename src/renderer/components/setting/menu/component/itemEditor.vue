@@ -36,7 +36,7 @@
             <div class="options">
               <label class="title">{{$t('setting.print')}}</label>
               <div class="inner">
-                <checkbox v-for="(name,index) in printers" :key="index" v-model="printer" :title="name" :val="name" :multiple="true" @input="updatePrint" :translate="false"></checkbox>
+                <checkbox v-for="(name,index) in printerList" :key="index" v-model="printer" :title="name" :val="name" :multiple="true" @input="updatePrint" :translate="false" v-show="isShowPrinter(name)"></checkbox>
               </div>
             </div>
             <switches title="text.manualSideOption" v-model="item.manual"></switches>
@@ -158,7 +158,7 @@ export default {
       mode: "basic",
       deprecated: false,
       language: this.$store.getters.language,
-      printers: Object.keys(this.$store.getters.config.printers),
+      printerList: Object.keys(this.$store.getters.config.printers),
       printer: [],
       item: JSON.parse(JSON.stringify(this.init.item)),
       taxes: Object.keys(this.$store.getters.tax.class).map(name => ({
@@ -312,14 +312,33 @@ export default {
       this.item.usEN = this.item.usEN.trim().replace(/\s\s+/g, ' ');
       this.item.zhCN = this.item.zhCN.trim().replace(/\s\s+/g, ' ');
 
+      this.updateItemPrinter();
+
       this.item.price = Array.isArray(this.item.price)
         ? this.item.price
         : this.item.price.toString().split(",");
 
       this.init.resolve(this.item);
     },
-    isShowPrinter(device) {
-      return !/cashier/i.test(device);
+    updateItemPrinter(){
+      let printer = {};
+
+      this.printerList.filter(name=>/cashier/i.test(name)).map(name=>{
+        printer[name] = {
+          replace:false
+        }
+      });
+
+      this.item.printer = Object.assign(printer,this.item.printer);
+
+      Object.keys(this.item.printer).forEach(name=>{
+        if(!this.printerList.includes(name)){
+          delete this.item.printer[name]
+        }
+      })
+    },
+    isShowPrinter(name) {
+      return !/cashier/i.test(name);
     },
     patchItem() {
       //update commission
@@ -489,7 +508,7 @@ p i {
 }
 
 .wrap.print {
-  width: 550px;
+  width: 555px;
 }
 
 .config input {

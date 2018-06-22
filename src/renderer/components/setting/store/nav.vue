@@ -11,7 +11,7 @@
                     <span class="text">{{$t('nav.station')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.terminal'}">
-                    <i class="fa fa-tablet"></i>
+                    <i class="fa fa-tablet-alt"></i>
                     <span class="text">{{$t('nav.terminal')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.promotion'}">

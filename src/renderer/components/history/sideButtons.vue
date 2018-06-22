@@ -1,7 +1,7 @@
 <template>
   <aside>
     <button class="btn" @click="editOrder">
-      <i class="fa fa-pencil-square-o"></i>
+      <i class="fas fa-edit"></i>
       <span class="text">{{$t('button.edit')}}</span>
     </button>
     <button class="btn" @click="reOpenOrder" v-if="this.order && this.order.status !== 1">
@@ -13,7 +13,7 @@
       <span class="text">{{$t('button.void')}}</span>
     </button>
     <button class="btn" @click="receipt">
-      <i class="fa fa-file-text"></i>
+      <i class="fas fa-receipt"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
     <button class="btn" @click="combine" :disabled="true">
@@ -25,23 +25,23 @@
       <span class="text">{{$t('button.print')}}</span>
     </button>
     <button class="btn" @click="calendar">
-      <i class="fa fa-calendar"></i>
+      <i class="fas fa-calendar-alt"></i>
       <span class="text">{{$t('button.calendar')}}</span>
     </button>
     <button class="btn" @click="terminal">
-      <i class="fa fa-tablet"></i>
+      <i class="fa fa-tablet-alt"></i>
       <span class="text">{{$t('button.terminal')}}</span>
     </button>
     <button class="btn" @click="report">
-      <i class="fa fa-file-text"></i>
+      <i class="fas fa-clipboard-check"></i>
       <span class="text">{{$t('button.report')}}</span>
     </button>
     <button class="btn" @click="getTransaction" :disabled="!reportable">
-      <i class="fa fa-bar-chart"></i>
+      <i class="fas fa-list-ol"></i>
       <span class="text">{{$t('button.stats')}}</span>
     </button>
     <button class="btn" @click="getLedger">
-      <i class="fa fa-check-square-o"></i>
+      <i class="fas fa-check-double"></i>
       <span class="text">{{$t('button.ledger')}}</span>
     </button>
     <div :is="component" :init="componentData"></div>

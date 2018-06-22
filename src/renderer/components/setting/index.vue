@@ -13,7 +13,7 @@
         <p>{{$t('setting.menuTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.table'}">
-        <i class="fa fa-2x fa-cutlery"></i>
+        <i class="fa fa-2x fa-tablets"></i>
         <figcaption>{{$t('setting.seat')}}</figcaption>
         <p>{{$t('setting.seatTip')}}</p>
       </router-link>
@@ -33,12 +33,12 @@
         <p>{{$t('setting.databaseTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.sales'}">
-        <i class="fa fa-2x fa-line-chart"></i>
+        <i class="fas fa-2x fa-chart-line"></i>
         <figcaption>{{$t('setting.sales')}}</figcaption>
         <p>{{$t('setting.salesTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.chart'}">
-        <i class="fa fa-2x fa-pie-chart"></i>
+        <i class="fas fa-2x fa-chart-pie"></i>
         <figcaption>{{$t('setting.chart')}}</figcaption>
         <p>{{$t('setting.chartTip')}}</p>
       </router-link>
@@ -48,7 +48,7 @@
         <p>{{$t('setting.troubleshooting')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Dashboard'}">
-        <i class="fa fa-2x fa-external-link"></i>
+        <i class="fas fa-2x fa-sign-out-alt"></i>
         <figcaption>{{$t('setting.exit')}}</figcaption>
         <p>{{$t('setting.exitTip')}}</p>
       </router-link>

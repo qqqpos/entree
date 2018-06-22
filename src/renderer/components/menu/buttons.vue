@@ -10,7 +10,7 @@
         <span class="text">{{$t('button.more')}}</span>
       </div>
       <div class="btn" @click="$emit('open', 'request')">
-        <i class="fa fa-commenting-o"></i>
+        <i class="fas fa-comment-dots"></i>
         <span class="text">{{$t('button.request')}}</span>
       </div>
     </div>
@@ -24,7 +24,7 @@
         <span class="text">{{$t('button.split')}}</span>
       </div>
       <div class="btn" @click="courseTime">
-        <i class="fa fa-clock-o"></i>
+        <i class="fas fa-user-clock"></i>
         <span class="text">{{$t('button.timer')}}</span>
       </div>
       <div class="btn" @click="promotion">
@@ -70,7 +70,7 @@
       <span class="text">{{$t('button.modify')}}</span>
     </button>
     <button class="btn settle" @click="settle" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
-      <i class="fa fa-money"></i>
+      <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
     <div class="btn split" @click="openSplit">
@@ -101,7 +101,7 @@
       <span class="text">{{$t('button.more')}}</span>
     </div>
     <div class="btn" @click="$emit('open', 'request')">
-      <i class="fa fa-commenting-o"></i>
+      <i class="fas fa-comment-dots"></i>
       <span class="text">{{$t('button.request')}}</span>
     </div>
     <div class="btn" @click="promotion">
@@ -109,7 +109,7 @@
       <span class="text">{{$t("button.coupon")}}</span>
     </div>
     <div class="btn" @click="openTimer">
-      <i class="fa fa-clock-o"></i>
+      <i class="fas fa-user-clock"></i>
       <span class="text">{{$t('button.timer')}}</span>
     </div>
     <button class="btn" @click="done(true)">
@@ -117,7 +117,7 @@
       <span class="text">{{$t('button.print')}}</span>
     </button>
     <button class="btn" @click="settle" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
-      <i class="fa fa-money"></i>
+      <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
     <div class="btn" @click="openSplit">

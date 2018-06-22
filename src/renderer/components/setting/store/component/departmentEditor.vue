@@ -12,7 +12,7 @@
                 <inputer title="text.primary" v-model.trim="department.usEN" :autoFocus="true"></inputer>
                 <inputer title="text.secondary" v-model.trim="department.zhCN"></inputer>
                 <inputer title="text.commission" v-model="department.commission" type="number">
-                    <i class="fa fa-percent icon"></i>
+                    <i class="fas fa-percentage icon"></i>
                 </inputer>
                 <div class="checkboxes">
                     <checkbox v-model="department.contain" v-for="(category,index) in categories" :title="category" :key="index" :val="category" :multiple="true" :translate="false" :class="{missing:check(category)}"></checkbox>

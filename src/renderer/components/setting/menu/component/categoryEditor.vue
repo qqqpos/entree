@@ -40,7 +40,7 @@
           <div v-for="(category,index) in category.contain" :key="index">
             <h3>{{category}}</h3>
             <div class="checkboxes">
-              <checkbox v-model="print[index]" v-for="(printer,idx) in printers" :title="printer" :val="printer" :key="idx" :multiple="true"></checkbox>
+              <checkbox v-model="print[index]" v-for="(name,idx) in printers" :title="name" :val="name" :key="idx" :multiple="true" v-show="isShowPrinter(name)"></checkbox>
             </div>
           </div>
         </div>
@@ -110,8 +110,11 @@ export default {
     this.selected = Array.from(selected);
   },
   methods: {
-    check(category){
-      return !this.selected.includes(category)
+    check(category) {
+      return !this.selected.includes(category);
+    },
+    isShowPrinter(name) {
+      return !/cashier/i.test(name);
     },
     confirm() {
       !Array.isArray(this.category.contain) &&
@@ -122,8 +125,17 @@ export default {
     },
     update() {
       this.tab = "basic";
-      const printers = this.print;
+      const defaultPrinter = this.printers.filter(name =>
+        /cashier/i.test(name)
+      );
+      let printers = [];
       const categories = this.category.contain;
+
+      this.print.forEach((group, index) => {
+        group.length
+          ? printers.push(defaultPrinter.concat(...group))
+          : printers.push([]);
+      });
 
       this.$socket.emit("[CATEGORY] PRINTER", { categories, printers });
       this.allowExit = false;

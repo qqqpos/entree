@@ -185,9 +185,9 @@ export default new Router({
                       component: require("../components/setting/store/station/callid")
                     },
                     {
-                      path: "poleDisplay",
-                      name: "Setting.station.poleDisplay",
-                      component: require("../components/setting/store/station/poleDisplay")
+                      path: "customerDisplay",
+                      name: "Setting.station.customerDisplay",
+                      component: require("../components/setting/store/station/customerDisplay")
                     }
                   ]
                 },

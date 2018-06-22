@@ -3,11 +3,11 @@
         <ul class="nav">
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.chart'}" exact>
-                    <i class="fa fa-area-chart"></i>
+                    <i class="fas fa-chart-area"></i>
                     <span class="text">{{$t('nav.daily')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.chart.hourly'}" exact>
-                    <i class="fa fa-line-chart"></i>
+                    <i class="fas fa-chart-line"></i>
                     <span class="text">{{$t('nav.hourly')}}</span>
                 </router-link>                
                 <router-link tag="li" :to="{name:'Setting.chart.source'}" exact>
@@ -15,7 +15,7 @@
                     <span class="text">{{$t('nav.source')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.chart.items'}" exact>
-                    <i class="fa fa-pie-chart"></i>
+                    <i class="fas fa-chart-pie"></i>
                     <span class="text">{{$t('nav.item')}}</span>
                 </router-link>
             </div>

@@ -10,9 +10,9 @@
         <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
           <div class="detail">
             <p>
-                <i class="fa fa-user-circle"></i>
+                <i class="fas fa-user-tie"></i>
                 <span class="filed">{{order.server}}</span>
-                <i class="fa fa-clock-o"></i>
+                <i class="fas fa-clock"></i>
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
@@ -32,19 +32,19 @@
           <template v-if="order.customer">
             <div class="detail">
               <p>
-                <i class="fa fa-user-circle"></i>
+                <i class="fas fa-user-tie"></i>
                 <span class="filed">{{order.server}}</span>
-                <i class="fa fa-clock-o"></i>
+                <i class="fas fa-clock"></i>
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
                 <i class="fa fa-phone"></i>
                 <span class="filed">{{order.customer.phone | phone}}</span>
-                <i class="fa fa-id-card-o"></i>
+                <i class="fas fa-id-badge"></i>
                 <span class="name">{{order.customer.name}}</span>
               </p>
               <p>
-                <i class="fa fa-map-marker"></i>
+                <i class="fas fa-map-marker-alt"></i>
                 <span>{{order.customer.address}}</span>
               </p>
             </div>
@@ -78,11 +78,11 @@
     </div>
     <div class="middle">
       <div class="fnWrap">
-        <button class="fn fa fa-credit-card-alt" @click="openVault" :disabled="!customer._id"></button>
-        <button class="fn" @click="separator" :disabled="$route.name !== 'Menu'">-----</button>
+        <button class="fn fas fa-credit-card" @click="openVault" :disabled="!customer._id"></button>
+        <button class="fn fas fa-ellipsis-h" @click="separator" :disabled="$route.name !== 'Menu'"></button>
         <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'"></button>
-        <button class="fn fa fa-check-square-o" v-else @click="toggleTodoList" :disabled="!app.newTicket || order.type === 'HIBACHI'"></button>
-        <button class="fn fa fa-keyboard-o" @click="openKeyboard" :disabled="$route.name !== 'Menu'"></button>
+        <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="!app.newTicket || order.type === 'HIBACHI'"></button>
+        <button class="fn far fa-keyboard" @click="openKeyboard" :disabled="$route.name !== 'Menu'"></button>
       </div>
       <div class="settle" @click="openConfig">
         <template v-if="payment.discount === 0">
@@ -182,6 +182,7 @@ export default {
       todo: false,
       component: null,
       componentData: null,
+      externalDisplaySync: false,
       prevsItems: [],
       spooler: []
     };
@@ -192,6 +193,14 @@ export default {
       : this.calculator(this.order.content);
 
     this.$route.name === "Menu" && this.getShortCutItems();
+
+    if (
+      this.$route.name === "Menu" &&
+      this.config.CFD &&
+      this.config.CFD.enable
+    ) {
+      this.externalDisplaySync = true;
+    }
   },
   methods: {
     resetHighlight() {
@@ -602,14 +611,6 @@ export default {
 
       return this.prevsItems.filter(({ _id }) => !items.includes(_id));
     },
-    // viewHistory() {
-    //   return (
-    //     this.$route.name === "Menu" &&
-    //     this.order.content.length === 0 &&
-    //     this.app.newTicket &&
-    //     this.customer._id
-    //   );
-    // },
     ...mapGetters([
       "app",
       "tax",
@@ -633,6 +634,9 @@ export default {
         this.display
           ? (this.payment = this.order.payment)
           : this.calculator(items);
+
+        this.externalDisplaySync &&
+          this.$electron.ipcRenderer.send("External::update", this.order);
       },
       deep: true
     },

@@ -11,7 +11,7 @@
                 <div id="U" @click="input('U')">U</div>
                 <div id="I" @click="input('I')">I</div>
                 <div id="O" @click="input('O')">O</div>
-                <i class="fa fa-terminal" @click="clear"></i>
+                <i class="fas fa-eraser" @click="clear"></i>
             </section>
             <section class="alphabetic">
                 <div id="A" @click="input('A')">A</div>
@@ -23,7 +23,7 @@
                 <div id="J" @click="input('J')">J</div>
                 <div id="K" @click="input('K')">K</div>
                 <div id="L" @click="input('L')">L</div>
-                <i class="fa fa-long-arrow-left" @click="backspace"></i>
+                <i class="fas fa-backspace" @click="backspace"></i>
             </section>
             <section class="alphabetic">
                 <div id="Z" @click="input('Z')">Z</div>

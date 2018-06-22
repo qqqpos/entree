@@ -129,6 +129,7 @@ export default {
     });
     this.resetPointer();
     window.addEventListener("keydown", this.entry, false);
+    this.$electron.ipcRenderer.send("External::stage", "order");
   },
   mounted() {
     toggleClass(".category div", "active");
@@ -166,7 +167,7 @@ export default {
           type: this.ticket.type,
           number: this.ticket.number,
           date: today(),
-          create: +new Date(),
+          create: Date.now(),
           customer: this.customer,
           plasticBag,
           taxFree:

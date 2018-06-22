@@ -1634,10 +1634,10 @@ nav {
 
 .type input:checked + label:after {
   position: absolute;
-  content: "\f00c";
-  font-family: fontAwesome;
+  content: '✓';
   bottom: -17px;
-  right: 3px;
+  right: 5px;
+  transform: rotate(20deg);
 }
 
 .balanceDue {

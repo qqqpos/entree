@@ -147,7 +147,6 @@ div .fn {
   color: white;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
   border-top: 1px solid rgba(255, 255, 255, 0.45);
-  font-weight: normal;
 }
 
 .alphabetic.uppercase {

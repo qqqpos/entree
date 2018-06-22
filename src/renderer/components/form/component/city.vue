@@ -2,7 +2,7 @@
     <div class="field-entry">
         <h4>{{$t('text.city')}}</h4>
         <div class="wrap" id="city">
-            <i class="fa fa-map-marker icon"></i>
+            <i class="fas fa-map-marker-alt"></i>
             <input :value="value" @click="focus" @input="$emit('input',$event.target.value)">
         </div>
         <template v-if="dropdown === 'list'">

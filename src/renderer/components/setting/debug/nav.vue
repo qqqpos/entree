@@ -3,7 +3,7 @@
         <ul class="nav">
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.debug'}" exact>
-                    <i class="fa fa-code-fork"></i>
+                    <i class="fas fa-code-branch"></i>
                     <span class="text">{{$t('nav.analyze')}}</span>
                 </router-link>
             </div>

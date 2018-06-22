@@ -1,6 +1,6 @@
 <template>
   <div class="history">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" @filter="setFilter" @trigger="openComponent"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" @filter="setFilter" @search="searchInvoice"></filter-bar>
     <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">
@@ -53,7 +53,7 @@ export default {
       page: 0,
       view: "",
       filter: "",
-      driver: null
+      targetName: null
     };
   },
   created() {
@@ -79,29 +79,16 @@ export default {
     getInvoice(invoice) {
       this.setViewOrder(invoice);
     },
-    setFilter(type, id) {
-      this.driver = null;
+    setFilter(type, name) {
+      this.targetName = null;
       this.page = 0;
 
       switch (type) {
-        case "WALK_IN":
-        case "PICK_UP":
-        case "DELIVERY":
-        case "DINE_IN":
-        case "BAR":
-          this.filter = type;
-          break;
-        case "UNSETTLED":
-        case "EDIT":
-        case "VOID":
-        case "DISCOUNT":
-          this.filter = type;
-          break;
+        case "SERVER":
         case "DRIVER":
-          this.filter = "DRIVER";
-          this.driver = id;
+          this.filter = type;
+          this.targetName = name;
           break;
-
         default:
           this.filter = type;
       }
@@ -112,7 +99,7 @@ export default {
       dom && dom.classList.remove("active");
 
       this.$nextTick(() => {
-        this.orders.length && this.getInvoice(this.invoices[0]);
+        this.orders.length ? this.getInvoice(this.invoices[0]) : this.resetMenu();
         const dom = document.querySelector(".ticket");
         dom && dom.classList.add("active");
       });
@@ -156,23 +143,19 @@ export default {
     getConsole() {
       this.$open("Maintenance");
     },
-    openComponent(name) {
-      switch (name) {
-        case "SEARCH":
-          new Promise((resolve, reject) => {
-            const config = {
-              title: "title.searchTicket",
-              type: "number",
-              amount: "0"
-            };
+    searchInvoice() {
+      new Promise((resolve, reject) => {
+        const config = {
+          title: "text.searchTicket",
+          type: "number",
+          amount: "0"
+        };
 
-            this.componentData = { resolve, reject, config };
-            this.component = "inputer";
-          })
-            .then(this.searchTicket)
-            .catch(this.exitComponent);
-          break;
-      }
+        this.componentData = { resolve, reject, config };
+        this.component = "inputer";
+      })
+        .then(this.searchTicket)
+        .catch(this.exitComponent);
     },
     searchTicket(number) {
       this.exitComponent();
@@ -215,7 +198,7 @@ export default {
       }
       return page;
     },
-    ...mapActions(["setViewOrder"])
+    ...mapActions(["resetMenu","setViewOrder"])
   },
   computed: {
     targetInvoices() {
@@ -249,11 +232,13 @@ export default {
           return invoices.filter(invoice => invoice.payment.discount > 0);
         case "EDITED":
           return invoices.filter(invoice => invoice.modify > 0);
+        case "SERVER":
+          return invoices.filter(invoice => invoice.server === this.targetName);
         case "DRIVER":
           return invoices.filter(
             invoice =>
-              this.driver
-                ? invoice.driver === this.driver
+              this.targetName
+                ? invoice.driver === this.targetName
                 : invoice.type === "DELIVERY"
           );
         default:

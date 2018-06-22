@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow, splashWindow, presentationWindow;
+let mainWindow = false, splashWindow = false, externalWindow = false;
 
 powerSaveBlocker.start('prevent-display-sleep');
 
@@ -21,8 +21,8 @@ const splashURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080/splash.html`
   : `file://${__dirname}/splash.html`;
 const presentUrl = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/presentation.html`
-  : `file://${__dirname}/presentation.html`;
+  ? `http://localhost:9080/external.html`
+  : `file://${__dirname}/external.html`;
 
 function createWindow() {
   /**
@@ -67,19 +67,41 @@ function createWindow() {
   }
 
   if (appParams.some(args => args.includes("dual")) && externalDisplay) {
-    presentationWindow = new BrowserWindow({
+    externalWindow = new BrowserWindow({
       x: externalDisplay.bounds.x + 50,
       y: externalDisplay.bounds.y + 50,
       autoHideMenuBar: true,
-      //alwaysOnTop: true,
+      alwaysOnTop: true,
       skipTaskbar: true,
       frame: false,
       width: 1024,
       height: 768,
-      //fullscreen: true
+      fullscreen: true,
+      webPreferences: {
+        webSecurity: false
+      }
     })
-    presentationWindow.loadURL(presentUrl)
+    externalWindow.loadURL(presentUrl)
   }
+
+
+
+  //test
+  // externalWindow = new BrowserWindow({
+  //   autoHideMenuBar: true,
+  //   skipTaskbar: true,
+  //   frame: false,
+  //   width: 1024,
+  //   height: 768,
+  //   webPreferences: {
+  //     webSecurity: false
+  //   }
+  //   //fullscreen: true
+  // })
+  // externalWindow.loadURL(presentUrl)
+
+  //end test
+
 
   splashWindow.once('ready-to-show', () => splashWindow.show())
 
@@ -113,7 +135,13 @@ app.on('activate', () => {
 
 ipcMain.on("Exit", () => app.quit(0));
 
-ipcMain.on("Loading", (e, txt) => splashWindow.webContents.send("Processing", txt));
+ipcMain.on("Loading", (e, text) => splashWindow.webContents.send("Processing", text));
+
+if (externalWindow) {
+  ipcMain.on("External::stage", (e, stage) => externalWindow.webContents.send("External::stage", stage));
+  ipcMain.on("External:update", (e, order) => external.webContents.send("External::update", order));
+}
+
 
 ipcMain.on("Initialized", () => {
   process.argv.slice(1).some(arg => arg.includes("fullscreen")) && mainWindow.setFullScreen(true);

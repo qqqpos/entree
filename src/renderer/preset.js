@@ -58,7 +58,7 @@ var Preset = function () {
         "password": false,
         "enable": true
       }, {
-        "icon": "fa-cutlery",
+        "icon": "fa-utensils",
         "head": "堂吃",
         "subhead": "Dine In",
         "route": "table",

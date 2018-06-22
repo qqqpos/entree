@@ -1,15 +1,15 @@
 <template>
   <div>
     <button class="btn" @click="editOrder" :disabled="(!currentTable || order.content.length === 0)">
-      <i class="fa fa-list-alt"></i>
+      <i class="fa fa-edit"></i>
       <span class="text">{{$t('button.edit')}}</span>
     </button>
     <button class="btn" @click="$emit('switch',false)" v-if="transfer">
-      <i class="fa fa-ban"></i>
+      <i class="fas fa-ban"></i>
       <span class="text">{{$t("button.cancel")}}</span>
     </button>
     <button class="btn" @click="switchTable" v-else :disabled="!currentTable">
-      <i class="fa fa-exchange"></i>
+      <i class="fas fa-exchange-alt"></i>
       <span class="text">{{$t('button.switchTable')}}</span>
     </button>
     <button class="btn" @click="combineTicket">
@@ -17,7 +17,7 @@
       <span class="text">{{$t('button.combineTicket')}}</span>
     </button>
     <button class="btn" @click="settle" :disabled="!currentTable">
-      <i class="fa fa-money"></i>
+      <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>   
     <button class="btn" @click="split">
@@ -25,7 +25,7 @@
       <span class="text">{{$t('button.split')}}</span>
     </button> 
     <button class="btn" @click="prePayment">
-      <i class="fa fa-print"></i>
+      <i class="fas fa-file-invoice-dollar"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
     <button class="btn" @click="switchStaff">

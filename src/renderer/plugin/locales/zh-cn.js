@@ -21,7 +21,6 @@ export default {
     VOID_INVOICE: "取消订单",
     EDIT_INVOICE: "修改订单",
     DISCOUNT_INVOICE: "折扣订单",
-    SEARCH_INVOICE: "查找订单",
     UNSETTLED: "未付款",
     SETTLED: "已付款",
     WALK_IN: "外等",
@@ -373,8 +372,7 @@ export default {
     giftcardStats: "礼物卡数据",
     dailySaleSummary: "每日销售总数",
     hourlySaleSummary: "每小时销售总数",
-    evenSplit: "订单均分",
-    searchTicket: "查找订单"
+    evenSplit: "订单均分"
   },
   dialog: {
     maintenance: "维护",
@@ -1259,7 +1257,8 @@ export default {
     dynamicPrint: "动态打印",
     printAhead: "提前{i}分钟打印",
     plasticBag: "塑料袋",
-    foodAllergy: "食物过敏"
+    foodAllergy: "食物过敏",
+    searchTicket: "查找订单"
   },
   nav: {
     store: "店面",
@@ -1397,7 +1396,11 @@ export default {
     station: "工作站设定",
     staffBank: "虚拟钱箱设定",
     terminal: "信用卡终端",
-    poleDisplay: "客显设定",
+    customerDisplay: "客显设定",
+    poleDisplay: "价格显示器",
+    ledDisplay: "LED 客显屏",
+    advertisement: "广告设定",
+    gallery: "图片来源",
     weightScale: "磅秤设定",
     callerId: "来电显示",
     security: "安全设定",

@@ -122,7 +122,7 @@ export default {
   background: #ffcdd2;
   position: absolute;
   width: 100%;
-  bottom: 25px;
+  bottom: 22px;
   text-shadow: none;
 }
 

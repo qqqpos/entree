@@ -4,7 +4,7 @@
       <ul class="panel">
         <div v-if="op.timecard">
           <li v-if="op.clockIn" @click="askClockOut">
-            <i class="fa fa-2x fa-clock-o"></i>
+            <i class="fas fa-2x fa-user-clock"></i>
             <div>
               <h3>{{$t('dock.clockOut')}}</h3>
               <h5 class="clock">
@@ -13,11 +13,11 @@
               </h5>
             </div>
             <div class="extra" @click.stop="startBreakTime" v-if="!op.break">
-              <i class="fa fa-coffee"></i>
+              <i class="fas fa-coffee"></i>
               <span>{{$t('button.break')}}</span>
             </div>
             <div class="extra" @click.stop="endBreakTime" v-else>
-              <i class="fa fa-briefcase"></i>
+              <i class="fas fa-briefcase"></i>
               <span>{{$t('button.work')}}</span>
             </div>
           </li>
@@ -55,14 +55,14 @@
         <template v-if="isShow.cashCtrl">
           <template v-if="isShow.staffBank">
             <li @click="askStaffCashIn" v-if="!isShow.deposit">
-              <i class="fa fa-2x fa-money"></i>
+              <i class="fas fa-2x fa-donate"></i>
               <div>
                 <h3>{{$t('dock.staffCashIn')}}</h3>
                 <h5>{{$t('dock.staffCashInTip')}}</h5>
               </div>
           </li>
           <li @click="askStaffCashOut" v-else>
-            <i class="fa fa-2x fa-money"></i>
+            <i class="fas fa-2x fa-donate"></i>
             <div>
               <h3>{{$t('dock.staffCashOut')}}</h3>
               <h5>{{$t('dock.staffCashOutTip')}}</h5>
@@ -71,14 +71,14 @@
           </template>
           <template v-else>
              <li @click="askCashDrawerCashIn" v-if="!isShow.deposit">
-              <i class="fa fa-2x fa-money"></i>
+              <i class="fas fa-2x fa-donate"></i>
               <div>
                 <h3>{{$t('dock.cashDrawerCashIn')}}</h3>
                 <h5>{{$t('dock.cashInTip')}}</h5>
               </div>
               </li>
               <li @click="askCashDrawerCashOut" v-else>
-                <i class="fa fa-2x fa-money"></i>
+                <i class="fas fa-2x fa-donate"></i>
                 <div>
                   <h3>{{$t('dock.cashDrawerCashOut')}}</h3>
                   <h5>{{$t('dock.cashDrawerCashOutTip')}}</h5>
@@ -108,14 +108,14 @@
           </div>
         </li>
         <li @click="logout">
-          <i class="fa fa-2x fa-sign-out"></i>
+          <i class="fas fa-2x fa-sign-out-alt"></i>
           <div>
             <h3>{{$t('dock.logout')}}</h3>
             <h5>{{$t('dock.logoutTip')}}</h5>
           </div>
         </li>
         <li @click="checkUpdate" v-show="op.role === 'developer'">
-          <i class="fa fa-2x fa-refresh"></i>
+          <i class="fas fa-2x fa-sync-alt"></i>
           <div>
             <h3>{{$t('dock.update')}}</h3>
             <h5>{{$t('dock.updateApp')}}</h5>
@@ -772,7 +772,7 @@ ul.panel {
   width: 260px;
   position: absolute;
   top: 10px;
-  right: 90px;
+  right: 70px;
   padding: 4px 4px 0;
   border-radius: 4px;
   background: linear-gradient(

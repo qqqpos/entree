@@ -24,21 +24,21 @@
 import { mapActions, mapGetters } from "vuex";
 import collector from "./component/collector";
 import dialoger from "./common/dialoger";
+import noSales from "./component/noSale";
+import spooler from "./component/spooler";
 import toast from "./component/toast";
 import unlock from "./common/unlock";
 import provider from "./dock/source";
-import noSales from "./component/noSale";
-import spooler from "./component/spooler";
 
 export default {
   components: {
-    dialoger,
     collector,
-    toast,
-    unlock,
+    dialoger,
     provider,
     noSales,
-    spooler
+    spooler,
+    toast,
+    unlock
   },
   computed: {
     ...mapGetters([
@@ -67,6 +67,9 @@ export default {
       .then(this.checkCashCtrl)
       .then(this.initialized)
       .catch(this.initialFailed);
+  },
+  mounted() {
+    this.$electron.ipcRenderer.send("External::stage", "idle");
   },
   methods: {
     getTicketNumber() {
@@ -197,7 +200,7 @@ export default {
         : this.setApp({ autoLock: false });
     },
     initialFailed(error) {
-      console.log(error)
+      console.log(error);
       // this.$log({
       //   eventID: 9101,
       //   type: "failure",

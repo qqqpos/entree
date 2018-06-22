@@ -1,7 +1,7 @@
 <template>
     <div class="relative" v-outer-click="close">
         <div class="button" @click="toggle">
-            <i class="fa fa-calendar"></i>
+            <i class="far fa-calendar-alt"></i>
             <span class="text">{{$t('report.'+range)}}</span>
             <i class="fa fa-sort"></i>
         </div>

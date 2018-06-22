@@ -119,6 +119,17 @@
     transition: all 0.22s ease;
 }
 
+.slideFromLeft-enter,
+.slideFromLeft-leave-to{
+    opacity: 0;
+    transform: translateX(-5px);
+}
+
+.slideFromLeft-enter-active,
+.slideFromLeft-leave-active {
+    transition: all 0.22s ease;
+}
+
 @keyframes pop {
     0% {
         transform: scale(0);
