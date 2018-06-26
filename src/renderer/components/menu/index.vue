@@ -29,27 +29,28 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 import buttons from "./buttons";
 import modify from "./component/modify";
 import request from "./component/request";
-import dialoger from "../common/dialoger";
+import weightItem from "./component/scale";
 import queryBar from "./component/queryBar";
 import orderList from "../common/orderList";
-import weightItem from "./component/scale";
+import dialogModule from "../common/dialog";
 import templateItem from "./component/templateItem";
 import temporaryItem from "./component/temporaryItem";
 
 export default {
   components: {
+    dialogModule,
+    templateItem,
+    temporaryItem,
     modify,
     request,
     buttons,
-    dialoger,
     queryBar,
     orderList,
-    weightItem,
-    templateItem,
-    temporaryItem
+    weightItem
   },
   computed: {
     page() {

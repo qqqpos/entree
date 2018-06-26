@@ -26,14 +26,14 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
-import dialoger from "../../common/dialoger";
 import categoryEditor from "./component/requestCategoryEditor";
 import actionEditor from "./component/requestActionEditor";
 import itemEditor from "./component/requestItemEditor";
+import dialogModule from "../../common/dialog";
+import draggable from "vuedraggable";
 
 export default {
-  components: { dialoger, draggable, categoryEditor, actionEditor, itemEditor },
+  components: { dialogModule, draggable, categoryEditor, actionEditor, itemEditor },
   data() {
     return {
       language: this.$store.getters.language,

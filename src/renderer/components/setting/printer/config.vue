@@ -30,15 +30,15 @@
 </template>
 
 <script>
-import toggle from "../common/toggle";
-import options from "../common/options";
-import external from "../common/external";
-import dialoger from "../../common/dialoger";
+import dialogModule from "../../common/dialog";
 import editor from "./component/footerEditor";
+import external from "../common/external";
+import options from "../common/options";
+import toggle from "../common/toggle";
 
 export default {
   props: ["printer"],
-  components: { editor, toggle, options, external, dialoger },
+  components: { editor, toggle, options, external, dialogModule },
   data() {
     return {
       config: null,

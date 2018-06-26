@@ -65,13 +65,13 @@
 </template>
 
 <script>
+import dialogModule from "../../../common/dialog";
 import datePicker from "../../common/datePicker";
-import dialoger from "../../../common/dialoger";
 import payroll from "../component/payroll";
 import viewer from "../component/viewer";
 
 export default {
-  components: { datePicker, payroll, viewer, dialoger },
+  components: { datePicker, payroll, viewer, dialogModule },
   data() {
     return {
       config: this.$store.getters.store.timecard,
@@ -319,7 +319,7 @@ section.overview {
   display: flex;
 }
 
-p > button{
+p > button {
   margin: auto;
 }
 

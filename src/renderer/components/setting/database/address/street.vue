@@ -26,11 +26,11 @@
 import toggle from "../../common/toggle";
 import external from "../../common/external";
 import textInput from "../../common/textInput";
-import dialoger from "../../../common/dialoger";
+import dialogModule from "../../../common/dialog";
 
 export default {
   props: ["address"],
-  components: { toggle, external, textInput, dialoger },
+  components: { toggle, external, textInput, dialogModule },
   data() {
     return {
       componentData: null,

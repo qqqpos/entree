@@ -94,24 +94,24 @@
 <script>
 import { mapGetters } from "vuex";
 
-import batch from "./component/batch";
-import dialoger from "../common/dialoger";
+import inputModule from "../component/inputer";
+import dialogModule from "../common/dialog";
 import dropdown from "./component/dropdown";
 import paginator from "../common/paginator";
 import processor from "../common/processor";
 import adjuster from "./component/adjuster";
-import inputModule from "../component/inputer";
+import batch from "./component/batch";
 
 export default {
   props: ["init"],
   components: {
-    batch,
-    dialoger,
+    dialogModule,
+    inputModule,
     dropdown,
     paginator,
     processor,
     adjuster,
-    inputModule
+    batch
   },
   computed: {
     filteredTransactions() {

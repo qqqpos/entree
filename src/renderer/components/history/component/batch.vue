@@ -48,11 +48,12 @@
 </template>
 
 <script>
-import dialoger from "../../common/dialoger";
 import checkbox from "../../setting/common/checkbox";
+import dialogModule from "../../common/dialog";
+
 export default {
   props: ["init"],
-  components: { dialoger, checkbox },
+  components: { dialogModule, checkbox },
   data() {
     return {
       stationAlias: this.$store.getters.station.alias,
@@ -184,7 +185,7 @@ export default {
     },
     reprint(index) {
       const { report } = this.tasks[index];
-      this.print(report,this.tasks[index]);
+      this.print(report, this.tasks[index]);
     },
     print(report, device) {
       if (this.detail) {

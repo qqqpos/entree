@@ -38,11 +38,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import dialoger from "../../common/dialoger";
+import dialogModule from "../../common/dialog";
 
 export default {
   props: ["init"],
-  components: { dialoger },
+  components: { dialogModule },
   computed: {
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };

@@ -69,7 +69,7 @@ export default {
             { text: "button.cancel", fn: reject, load: false },
             { text: "button.confirm", fn: resolve, load: false }
           ]);
-        this.component = "dialoger";
+        this.component = "dialogModule";
       });
     };
 

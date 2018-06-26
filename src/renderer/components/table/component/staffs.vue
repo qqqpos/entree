@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import dialoger from "../../common/dialoger";
+import dialogModule from "../../common/dialog";
 
 export default {
   props: ["init"],
-  components: { dialoger },
+  components: { dialogModule },
   data() {
     return {
       order: this.$store.getters.order,

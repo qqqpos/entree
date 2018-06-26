@@ -59,12 +59,13 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import dialoger from "../common/dialoger";
+
+import dialogModule from "../common/dialog";
 import paginator from "../common/paginator";
 
 export default {
   props: ["init"],
-  components: { dialoger, paginator },
+  components: { dialogModule, paginator },
   computed: {
     logs() {
       let min = this.page * 10;

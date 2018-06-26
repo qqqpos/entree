@@ -56,14 +56,14 @@
 </template>
 
 <script>
-import numPad from "../../common/numpad";
-import dialoger from "../../common/dialoger";
-import processor from "../../common/processor";
 import checkbox from "../../setting/common/checkbox";
+import dialogModule from "../../common/dialog";
+import processor from "../../common/processor";
+import numPad from "../../common/numpad";
 
 export default {
   props: ["init"],
-  components: { numPad, dialoger, checkbox, processor },
+  components: { dialogModule, checkbox, processor, numPad },
   computed: {
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };

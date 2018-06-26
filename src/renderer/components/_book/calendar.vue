@@ -73,10 +73,11 @@
 <script>
 import moment from "moment";
 import checkbox from "../setting/common/checkbox";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
+
 export default {
   props: ["init"],
-  components: { checkbox, dialoger },
+  components: { checkbox, dialogModule },
   data() {
     return {
       date: null,

@@ -39,21 +39,20 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import orderList from "../common/orderList";
-import dialoger from "../common/dialoger";
 import hibachi from "./component/hibachi";
 import counter from "./component/counter";
 import creator from "./component/creator";
-
 import buttons from "./buttons";
 
 export default {
   props: ["reserved"],
   components: {
     unlockModule,
+    dialogModule,
     orderList,
-    dialoger,
     counter,
     buttons,
     creator,

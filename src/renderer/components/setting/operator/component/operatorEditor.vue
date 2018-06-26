@@ -26,11 +26,11 @@
 import Preset from "../../../../preset";
 import inputer from "../../common/inputer";
 import selector from "../../common/selector";
-import dialoger from "../../../common/dialoger";
+import dialogModule from "../../../common/dialog";
 
 export default {
   props: ["init"],
-  components: { inputer, selector, dialoger },
+  components: { inputer, selector, dialogModule },
   data() {
     return {
       componentData: null,

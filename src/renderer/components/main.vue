@@ -11,18 +11,18 @@ import { mapGetters } from "vuex";
 
 import inputModule from "./component/inputer";
 import coupon from "./menu/component/coupon";
+import dialogModule from "./common/dialog";
 import unlockModule from "./common/unlock";
-import dialoger from "./common/dialoger";
 import menuModule from "./dock/posMenu";
 import dockModule from "./dock/dock";
 
 export default {
   components: {
+    dialogModule,
     unlockModule,
     inputModule,
     menuModule,
     dockModule,
-    dialoger,
     coupon
   },
   data() {

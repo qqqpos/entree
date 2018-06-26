@@ -47,16 +47,16 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import paymentModule from "../payment/main";
 import unlockModule from "../common/unlock";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
 import staff from "./component/staffs";
-import payment from "../payment/main";
 import split from "../split/index";
 import list from "./list";
 
 export default {
   props: ["transfer"],
-  components: { dialoger, unlockModule, payment, split, list, staff },
+  components: { dialogModule, unlockModule, paymentModule, split, list, staff },
   data() {
     return {
       componentData: null,
@@ -241,15 +241,12 @@ export default {
     },
     settle() {
       if (this.isEmptyTicket) return;
-      if (this.op.cashCtrl !== "enable" && this.op.cashCtrl !== "staffBank") {
+
+      if (this.op.cashCtrl === "disable") {
         this.$accessDenied();
-        return;
+      } else {
+        this.order.settled ? this.settledOrder() : this.openPaymentModule();
       }
-      if (this.order.settled) {
-        this.settledOrder();
-        return;
-      }
-      this.$open("payment");
     },
     settledOrder() {
       const prompt = {
@@ -257,8 +254,23 @@ export default {
         msg: "dialog.invoiceSettledTip",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
-
       this.$dialog(prompt).then(this.exitComponent);
+    },
+    openPaymentModule(params) {
+      new Promise((resolve, reject) => {
+        this.componentData = Object.assign({}, { resolve, reject }, params);
+        this.component = "paymentModule";
+      })
+        .then(this.exitComponent)
+        .catch(exitParams => {
+          this.exitComponent();
+
+          if (exitParams && exitParams.reload === true) {
+            this.$splitEvenly(exitParams.split).then(() =>
+              this.openPaymentModule(Object.assign({}, params, exitParams))
+            );
+          }
+        });
     },
     switchStaff() {
       if (this.isEmptyTicket) return;

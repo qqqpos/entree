@@ -1,17 +1,18 @@
 <template>
     <div class="map">
-        <img :src="url" @load="loading = false">
+        <img :src="url" @load="loading = false" @error="exception">
         <div :is="component" :init="componentData" :display="loading"></div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
 import loader from "../common/loader";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
 
 export default {
-  components: { loader, dialoger },
+  components: { loader, dialogModule },
   computed: {
     ...mapGetters(["store", "customer"])
   },
@@ -76,6 +77,11 @@ export default {
       zipCode = zipCode ? `+${zipCode}` : "";
 
       return `${address},${city}+${this.store.state}${zipCode}`;
+    },
+    exception() {
+      this.loading = false;
+
+      
     }
   }
 };

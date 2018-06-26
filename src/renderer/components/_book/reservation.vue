@@ -24,9 +24,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import contextMenu from './context'
-import dialoger from '../common/dialoger'
+import dialogModule from '../common/dialog';
+
 export default {
-    components: { contextMenu, dialoger },
+    components: { contextMenu, dialogModule },
     data() {
         return {
             currentTimeFrame: moment().format('H'),

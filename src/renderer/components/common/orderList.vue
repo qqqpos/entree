@@ -140,20 +140,22 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import dialogModule from "../common/dialog";
 import creditVault from "./component/creditVault";
 import groupItem from "./component/groupItem";
 import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
 import shortcut from "./component/shortcut";
-import dialoger from "../common/dialoger";
+
 import config from "./component/config";
 
 export default {
   components: {
+    dialogModule,
     entry,
     config,
     shortcut,
-    dialoger,
     listItem,
     groupItem,
     creditVault

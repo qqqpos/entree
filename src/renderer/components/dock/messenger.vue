@@ -35,91 +35,103 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import dialoger from '../common/dialoger'
+import { mapGetters, mapActions } from "vuex";
+
+import dialogModule from "../common/dialog";
 
 export default {
-    props: ['init'],
-    components: { dialoger },
-    data() {
-        return {
-            componentData: null,
-            component: null,
-            tab: 'message'
+  props: ["init"],
+  components: { dialogModule },
+  data() {
+    return {
+      componentData: null,
+      component: null,
+      tab: "message"
+    };
+  },
+  created() {
+    this.init.view && (this.tab = "queue");
+  },
+  methods: {
+    printConfirm(i) {
+      const time = this.spooler[i].schedule;
+      const schedule = moment(time).format("hh:mm");
+      const toNow = moment(time).toNow(true);
+      const prompt = {
+        type: "question",
+        title: "dialog.printConfirm",
+        msg: ["dialog.printSpoolerTip", schedule, toNow],
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.print", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.printFromSpooler(i))
+        .catch(this.exitComponent);
+    },
+    printFromSpooler(i) {
+      this.exitComponent();
+
+      let items = [];
+      const _id = this.spooler[i]._id;
+
+      this.spooler[i].content.forEach(item => items.push(item.unique));
+      Printer.setTarget("All").print(this.spooler[0]);
+      this.removeSpooler(i);
+
+      const index = this.history.findIndex(order => order._id === _id);
+      let order = Object.assign({}, this.history[index]);
+
+      items.forEach(unique => {
+        for (let i = 0; i < order.content.length; i++) {
+          if (order.content[i].unique === unique) {
+            order.content[i].print = true;
+            order.content[i].pending = false;
+            break;
+          }
         }
+      });
+
+      this.$socket.emit("[INVOICE] UPDATE", order);
     },
-    created() {
-        this.init.view && (this.tab = 'queue')
+    remove(i) {
+      const prompt = {
+        type: "question",
+        title: "dialog.removeSpooler",
+        msg: "dialog.removeSpoolerConfirm"
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.removeSpooler(i);
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
     },
-    methods: {
-        printConfirm(i) {
-            const time = this.spooler[i].schedule;
-            const schedule = moment(time).format("hh:mm");
-            const toNow = moment(time).toNow(true);
-            const prompt = {
-                type: "question", title: "dialog.printConfirm",
-                msg: ["dialog.printSpoolerTip", schedule, toNow],
-                buttons: [{ text: "button.cancel", fn: 'reject' }, { text: "button.print", fn: 'resolve' }]
-            };
-
-            this.$dialog(prompt).then(() => this.printFromSpooler(i)).catch(this.exitComponent)
-        },
-        printFromSpooler(i) {
-            this.exitComponent();
-
-            let items = [];
-            const _id = this.spooler[i]._id;
-
-            this.spooler[i].content.forEach(item => items.push(item.unique));
-            Printer.setTarget('All').print(this.spooler[0])
-            this.removeSpooler(i);
-
-            const index = this.history.findIndex(order => order._id === _id);
-            let order = Object.assign({}, this.history[index]);
-
-            items.forEach(unique => {
-                for (let i = 0; i < order.content.length; i++) {
-                    if (order.content[i].unique === unique) {
-                        order.content[i].print = true;
-                        order.content[i].pending = false;
-                        break;
-                    }
-                }
-            });
-
-            this.$socket.emit("[INVOICE] UPDATE", order);
-        },
-        remove(i) {
-            const prompt = {
-                type: "question",
-                title: "dialog.removeSpooler",
-                msg: "dialog.removeSpoolerConfirm"
-            }
-
-            this.$dialog(prompt).then(() => {
-                this.removeSpooler(i);
-                this.exitComponent();
-            }).catch(this.exitComponent)
-
-        },
-        ...mapActions(['removeSpooler'])
+    ...mapActions(["removeSpooler"])
+  },
+  filters: {
+    tooltip(data, lang) {
+      return data.map(item => item.qty + " " + item[lang]).join("\n");
     },
-    filters: {
-        tooltip(data, lang) {
-            return data.map(item => (item.qty + ' ' + item[lang])).join("\n")
-        },
-        countDown(schedule, current) {
-            const duration = schedule - current;
-            const hh = ('00' + Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
-            const mm = ('00' + Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
-            const ss = ('00' + Math.floor((duration % (1000 * 60)) / 1000)).slice(-2);
-            return hh > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
-        }
-    },
-    computed: {
-        ...mapGetters(['time', 'config', 'history', 'spooler', 'language'])
+    countDown(schedule, current) {
+      const duration = schedule - current;
+      const hh = (
+        "00" + Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      ).slice(-2);
+      const mm = (
+        "00" + Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))
+      ).slice(-2);
+      const ss = ("00" + Math.floor((duration % (1000 * 60)) / 1000)).slice(-2);
+      return hh > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
     }
-}
+  },
+  computed: {
+    ...mapGetters(["time", "config", "history", "spooler", "language"])
+  }
+};
 </script>
 
 <style scoped>

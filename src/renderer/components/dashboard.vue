@@ -23,10 +23,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
+import dialogModule from "./common/dialog";
 import collector from "./component/collector";
 import unlockModule from "./common/unlock";
 import spooler from "./component/spooler";
-import dialoger from "./common/dialoger";
 import noSales from "./component/noSale";
 import toast from "./component/toast";
 import provider from "./dock/source";
@@ -34,8 +34,8 @@ import provider from "./dock/source";
 export default {
   components: {
     unlockModule,
+    dialogModule,
     collector,
-    dialoger,
     provider,
     noSales,
     spooler,
@@ -46,13 +46,13 @@ export default {
       "op",
       "time",
       "ring",
-      "callLog",
       "device",
       "config",
       "store",
       "dinein",
       "station",
       "history",
+      "callLog",
       "authorized"
     ])
   },
@@ -76,7 +76,6 @@ export default {
     getTicketNumber() {
       return new Promise(next => {
         this.$socket.emit("[INQUIRY] TICKET_NUMBER", number => {
-          console.log(number);
           this.setTicket({ number });
           next();
         });

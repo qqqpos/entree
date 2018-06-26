@@ -79,12 +79,12 @@
 </template>
 
 <script>
-import moment from "moment";
+import dialogModule from "../common/dialog";
 import checkbox from "../setting/common/checkbox";
-import dialoger from "../common/dialoger";
+
 export default {
   props: ["init"],
-  components: { checkbox, dialoger },
+  components: { checkbox, dialogModule },
   data() {
     return {
       date: null,

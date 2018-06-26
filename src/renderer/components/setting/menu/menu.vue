@@ -24,13 +24,19 @@
 <script>
 import Preset from "../../../preset";
 import draggable from "vuedraggable";
-import dialoger from "../../common/dialoger";
 import itemTrend from "./component/itemTrend";
 import itemEditor from "./component/itemEditor";
+import dialogModule from "../../common/dialog";
 import categoryEditor from "./component/categoryEditor";
 
 export default {
-  components: { dialoger, draggable, itemEditor, categoryEditor, itemTrend },
+  components: {
+    categoryEditor,
+    dialogModule,
+    itemEditor,
+    draggable,
+    itemTrend
+  },
   data() {
     return {
       language: this.$store.getters.language,
@@ -117,7 +123,9 @@ export default {
           );
         })
         .catch(del => {
-          del ? this.deleteItemConfirm(item, group, index) : this.exitComponent();
+          del
+            ? this.deleteItemConfirm(item, group, index)
+            : this.exitComponent();
         });
     },
     deleteItemConfirm(item, group, index) {

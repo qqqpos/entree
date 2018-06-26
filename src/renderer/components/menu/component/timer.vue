@@ -73,13 +73,14 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import dialoger from "../../common/dialoger";
+
 import calendar from "../../history/component/calendar";
+import dialogModule from "../../common/dialog";
 import slider from "../../setting/common/slider";
 
 export default {
   props: ["init"],
-  components: { dialoger, calendar, slider },
+  components: { dialogModule, calendar, slider },
   data() {
     return {
       componentData: null,

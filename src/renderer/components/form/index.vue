@@ -33,13 +33,13 @@
 import { mapGetters, mapActions } from "vuex";
 
 import switchType from "./component/switchType";
+import dialogModule from "../common/dialog";
 import keyboard from "./component/keyboard";
 import unlockModule from "../common/unlock";
-import dialoger from "../common/dialoger";
 import pageTab from "./component/pageTab";
 
 export default {
-  components: { switchType, keyboard, dialoger, pageTab, unlockModule },
+  components: { switchType, keyboard, dialogModule, unlockModule, pageTab },
   computed: {
     ...mapGetters([
       "op",

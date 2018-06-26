@@ -17,10 +17,11 @@
 </template>
 
 <script>
-import dialoger from "./dialoger";
+import dialogModule from "./dialog";
+
 export default {
   props: ["init"],
-  components: { dialoger },
+  components: { dialogModule },
   data() {
     return {
       componentData: null,

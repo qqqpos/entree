@@ -54,13 +54,14 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import dialoger from "../dialoger";
+
+import dialogModule from "../dialog";
 import inputer from "../../component/inputer";
 import range from "../../setting/common/range";
 
 export default {
   props: ["init"],
-  components: { inputer, range, dialoger },
+  components: { inputer, range, dialogModule },
   mounted() {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
@@ -141,7 +142,8 @@ export default {
     setGratuity() {
       new Promise((resolve, reject) => {
         const title = "button.setGratuity";
-        const amount = this.order.gratuityPercentage || this.order.gratuityFee || 0;
+        const amount =
+          this.order.gratuityPercentage || this.order.gratuityFee || 0;
         const percentage = true;
         const allowPercentage = true;
         this.componentData = {

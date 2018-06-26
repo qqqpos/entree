@@ -32,12 +32,13 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import dialoger from "../common/dialoger";
-import tpp from "./source";
+
+import dialogModule from "../common/dialog";
+import providerModule from "./source";
 
 export default {
   props: ["init"],
-  components: { dialoger, tpp },
+  components: { dialogModule, providerModule },
   computed: {
     ...mapGetters(["app", "tax", "store", "ticket", "order"])
   },
@@ -143,7 +144,7 @@ export default {
       new Promise((resolve, reject) => {
         const { source } = this.order;
         this.componentData = { resolve, reject, source };
-        this.component = "tpp";
+        this.component = "providerModule";
       })
         .then(source => {
           this.setOrder({ source, tradeMark: source });

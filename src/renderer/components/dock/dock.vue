@@ -48,7 +48,7 @@ import { mapGetters, mapActions } from "vuex";
 import offlineModule from "./component/offline";
 import portalModule from "./component/portal";
 import callerModule from "./component/caller";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
 import profiles from "./profiles";
 import switcher from "./switcher";
 
@@ -57,8 +57,8 @@ export default {
     offlineModule,
     callerModule,
     portalModule,
+    dialogModule,
     switcher,
-    dialoger,
     profiles
   },
   data() {

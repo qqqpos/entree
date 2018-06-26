@@ -24,10 +24,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import dialoger from "../common/dialoger";
+
+import dialogModule from "../common/dialog";
+
 export default {
   props: ["init"],
-  components: { dialoger },
+  components: { dialogModule },
   data() {
     return {
       options: [

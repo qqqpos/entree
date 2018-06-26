@@ -23,10 +23,11 @@
 
 <script>
 import inputer from "../../common/inputer";
-import dialoger from "../../../common/dialoger";
+import dialogModule from "../../../common/dialog";
+
 export default {
   props: ["init"],
-  components: { inputer, dialoger },
+  components: { inputer, dialogModule },
   computed: {
     valid() {
       const phone = this.customer.phone.replace(/\D/g, "").toString();

@@ -119,28 +119,29 @@
 
 <script>
 import { mapGetters } from "vuex";
-import search from "./search";
-import capture from "./capture";
+
+import switches from "../setting/common/switches";
+import inputer from "../setting/common/inputer";
+import creditCard from "../payment/creditCard";
+import dialogModule from "../common/dialog";
+import paginator from "../common/paginator";
 import ticket from "../common/ticket";
 import numPad from "../common/numpad";
-import dialoger from "../common/dialoger";
-import paginator from "../common/paginator";
-import creditCard from "../payment/creditCard";
-import inputer from "../setting/common/inputer";
-import switches from "../setting/common/switches";
+import capture from "./capture";
+import search from "./search";
 
 export default {
   props: ["init"],
   components: {
+    dialogModule,
+    creditCard,
+    paginator,
     search,
     ticket,
     numPad,
     inputer,
     capture,
-    switches,
-    dialoger,
-    paginator,
-    creditCard
+    switches
   },
   data() {
     return {

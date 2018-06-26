@@ -46,11 +46,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
 import * as SignaturePad from "signature_pad";
+
 export default {
   props: ["init"],
-  components: { dialoger },
+  components: { dialogModule },
   data() {
     return {
       componentData: null,

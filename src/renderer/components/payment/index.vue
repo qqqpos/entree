@@ -225,11 +225,12 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 import checkbox from "../setting/common/checkbox";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
+import unlockModule from "../common/unlock";
 import capture from "../giftcard/capture";
 import tickets from "./helper/splitor";
-import unlockModule from "../common/unlock";
 import ticket from "../common/ticket";
 import creditCard from "./creditCard";
 import discount from "./discount";
@@ -239,16 +240,16 @@ import tiper from "./tiper";
 export default {
   props: ["init"],
   components: {
-    tiper,
-    ticket,
     unlockModule,
-    capture,
-    dialoger,
+    dialogModule,
+    creditCard,
+    thirdParty,
     discount,
     checkbox,
+    capture,
+    ticket,
     tickets,
-    creditCard,
-    thirdParty
+    tiper
   },
   computed: {
     isNewTicket() {

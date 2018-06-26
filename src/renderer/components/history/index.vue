@@ -25,7 +25,7 @@ import inputModule from "../component/inputer";
 import Maintenance from "../dock/maintenance";
 import paginator from "../common/paginator";
 import orderList from "../common/orderList";
-import dialoger from "../common/dialoger";
+import dialogModule from "../common/dialog";
 import orderButtons from "./orderButtons";
 import ticket from "./component/ticket";
 import sideButtons from "./sideButtons";
@@ -33,6 +33,7 @@ import filterBar from "./filterBar";
 
 export default {
   components: {
+    dialogModule,
     inputModule,
     orderButtons,
     sideButtons,
@@ -40,7 +41,6 @@ export default {
     paginator,
     filterBar,
     orderList,
-    dialoger,
     ticket
   },
   data() {

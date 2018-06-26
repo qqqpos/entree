@@ -129,11 +129,13 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import dialogModule from "../common/dialog";
 import collector from "../component/collector";
 import unlockModule from "../common/unlock";
 import inputer from "../component/inputer";
 import terminal from "../history/terminal";
-import dialoger from "../common/dialoger";
+
 import giftcard from "../giftcard/index";
 
 import payout from "./payout";
@@ -142,7 +144,7 @@ export default {
   props: ["init"],
   components: {
     unlockModule,
-    dialoger,
+    dialogModule,
     terminal,
     giftcard,
     payout,

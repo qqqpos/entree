@@ -21,13 +21,14 @@
 
 <script>
 import { mapGetters } from "vuex";
-import numPad from "../common/numpad";
-import dialoger from "../common/dialoger";
+
+import dialogModule from "../common/dialog";
 import creditCard from "../payment/creditCard";
+import numPad from "../common/numpad";
 
 export default {
   props: ["init"],
-  components: { dialoger, creditCard, numPad },
+  components: { dialogModule, creditCard, numPad },
   computed: {
     ...mapGetters(["op", "station"])
   },

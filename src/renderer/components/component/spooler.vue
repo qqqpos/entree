@@ -9,12 +9,13 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import dialoger from "../common/dialoger";
+
+import dialogModule from "../common/dialog";
 import task from "./task";
 
 export default {
   props: ["init"],
-  components: { dialoger, task },
+  components: { dialogModule, task },
   computed: {
     ...mapGetters(["time", "spooler", "history", "language"])
   },

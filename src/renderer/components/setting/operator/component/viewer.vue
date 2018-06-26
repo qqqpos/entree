@@ -55,11 +55,11 @@
 
 <script>
 import editor from "./timecardEditor";
-import dialoger from "../../../common/dialoger";
+import dialogModule from "../../../common/dialog";
 
 export default {
   props: ["init"],
-  components: { editor, dialoger },
+  components: { editor, dialogModule },
   data() {
     return {
       op: this.$store.getters.op,

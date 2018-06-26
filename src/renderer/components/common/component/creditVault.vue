@@ -66,14 +66,15 @@
   </div>
 </template>
 
-<script>    
-import numPad from "../numpad";
-import dialoger from "../dialoger";
+<script>
 import { mapActions } from "vuex";
+
+import dialogModule from "../dialog";
+import numPad from "../numpad";
 
 export default {
   props: ["init"],
-  components: { numPad, dialoger },
+  components: { numPad, dialogModule },
   data() {
     return {
       componentData: null,
@@ -96,12 +97,18 @@ export default {
   },
   methods: {
     encrypt(plaintext, key) {
-      return new Promise(next => this.$socket.emit("[CRYPT] ENCRYPT", { plaintext, key }, result => next(result)));
+      return new Promise(next =>
+        this.$socket.emit("[CRYPT] ENCRYPT", { plaintext, key }, result =>
+          next(result)
+        )
+      );
     },
     decrypt(ciphertext, key) {
-      return new Promise((next,stop) => this.$socket.emit("[CRYPT] DECRYPT", { ciphertext, key }, json => {
-        json ? next(JSON.parse(json)) : stop()
-      }));
+      return new Promise((next, stop) =>
+        this.$socket.emit("[CRYPT] DECRYPT", { ciphertext, key }, json => {
+          json ? next(JSON.parse(json)) : stop();
+        })
+      );
     },
     unlock() {
       this.decrypt(this.select.cipher, this.entry)

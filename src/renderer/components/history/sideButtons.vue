@@ -52,9 +52,9 @@
 import { mapGetters, mapActions } from "vuex";
 
 import calendarModule from "./component/calendar";
+import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import reportModule from "../report/index";
-import Dialoger from "../common/dialoger";
 import transaction from "./transaction";
 import Reason from "./component/reason";
 import loger from "../payment/loger";
@@ -65,10 +65,10 @@ export default {
   props: ["date"],
   components: {
     calendarModule,
+    dialogModule,
     reportModule,
     unlockModule,
     transaction,
-    Dialoger,
     Terminal,
     ledger,
     Reason,

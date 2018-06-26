@@ -25,13 +25,14 @@
 
 <script>
 import { mapActions } from "vuex";
+
 import offer from "./helper/offer";
 import giftcard from "../../giftcard/index";
-import dialoger from "../../common/dialoger";
+import dialogModule from "../../common/dialog";
 
 export default {
   props: ["init"],
-  components: { offer, giftcard, dialoger },
+  components: { offer, giftcard, dialogModule },
   data() {
     return {
       componentData: null,

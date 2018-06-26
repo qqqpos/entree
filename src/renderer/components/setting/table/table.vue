@@ -22,12 +22,12 @@
 
 <script>
 import draggable from "vuedraggable";
-import dialoger from "../../common/dialoger";
+import dialogModule from "../../common/dialog";
 import tableEditor from "./component/tableEditor";
 import sectionEditor from "./component/sectionEditor";
 
 export default {
-  components: { draggable, dialoger, tableEditor, sectionEditor },
+  components: { draggable, dialogModule, tableEditor, sectionEditor },
   data() {
     return {
       language: this.$store.getters.language,

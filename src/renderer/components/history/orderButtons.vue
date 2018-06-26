@@ -32,10 +32,10 @@
 import { mapGetters, mapActions } from "vuex";
 
 import inputModule from "../component/inputer";
+import dialogModule from "../common/dialog";
 import paymentMarker from "../payment/mark";
-import dialoger from "../common/dialoger";
+import paymentModule from "../payment/main";
 import driver from "./component/driver";
-import payment from "../payment/main";
 import viewer from "../split/viewer";
 import split from "../split/index";
 
@@ -45,10 +45,10 @@ export default {
     split,
     driver,
     viewer,
-    payment,
-    dialoger,
     inputModule,
-    paymentMarker
+    dialogModule,
+    paymentMarker,
+    paymentModule
   },
   data() {
     return {
@@ -145,7 +145,7 @@ export default {
     openPaymentModule(params) {
       new Promise((resolve, reject) => {
         this.componentData = Object.assign({}, { resolve, reject }, params);
-        this.component = "payment";
+        this.component = "paymentModule";
       })
         .then(this.exitComponent)
         .catch(exitParams => {

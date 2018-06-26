@@ -56,11 +56,12 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import dialoger from "./common/dialoger";
+
 import _debounce from "lodash.debounce";
+import dialogModule from "./common/dialog";
 
 export default {
-  components: { dialoger },
+  components: { dialogModule },
   data() {
     return {
       isHost: false,

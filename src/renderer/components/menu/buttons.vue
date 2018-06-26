@@ -146,25 +146,26 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
-import dialoger from "../common/dialoger";
+import splitModule from "../split/index";
 import modify from "./component/modify";
 import coupon from "./component/coupon";
 import course from "./component/course";
 import timer from "./component/timer";
 import payment from "../payment/main";
-import splitor from "../split/index";
 
 export default {
   props: ["layout"],
   components: {
     unlockModule,
-    dialoger,
+    dialogModule,
+    splitModule,
     modify,
     payment,
     coupon,
     timer,
-    splitor,
     course
   },
   data() {
@@ -284,7 +285,7 @@ export default {
     },
     openSplit() {
       if (this.isEmptyTicket) return;
-      this.$open("splitor");
+      this.$open("splitModule");
     },
     switchGuest() {
       this.callComponent("guest");

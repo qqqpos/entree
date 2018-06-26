@@ -35,16 +35,17 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 import capture from "./capture";
 import toggle from "../../common/toggle";
 import textList from "../../common/textList";
 import external from "../../common/external";
 import textInput from "../../common/textInput";
-import dialoger from "../../../common/dialoger";
+import dialogModule from "../../../common/dialog";
 
 export default {
   props: ["operator"],
-  components: { capture, toggle, textList, external, textInput, dialoger },
+  components: { capture, toggle, textList, external, textInput, dialogModule },
   computed: {
     ...mapGetters(["authorized"])
   },

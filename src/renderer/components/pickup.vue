@@ -48,7 +48,7 @@
             <i class="fa fa-print"></i>
             <span class="text">{{$t("button.receipt")}}</span>
           </div>
-          <div class="btn" @click="settle">
+          <div class="btn" @click="openPaymentModule">
             <i class="fa fa-print"></i>
             <span class="text">{{$t("button.payment")}}</span>
           </div>
@@ -69,15 +69,23 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import paginator from "./common/paginator";
+
 import reason from "./history/component/reason";
+import dialogModule from "./common/dialog";
+import paginator from "./common/paginator";
 import orderList from "./common/orderList";
-import dialoger from "./common/dialoger";
-import payment from "./payment/main";
-import split from "./split/index";
+import paymentModule from "./payment/main";
+import splitModule from "./split/index";
 
 export default {
-  components: { orderList, payment, split, reason, dialoger, paginator },
+  components: {
+    paymentModule,
+    dialogModule,
+    splitModule,
+    paginator,
+    orderList,
+    reason
+  },
   data() {
     return {
       componentData: null,
@@ -93,7 +101,7 @@ export default {
   },
   methods: {
     display(ticket, e) {
-      let dom = document.querySelector("li.active");
+      const dom = document.querySelector("li.active");
       dom && dom.classList.remove("active");
       e.currentTarget.classList.add("active");
 
@@ -105,14 +113,27 @@ export default {
     edit() {
       const { type, number, customer } = this.order;
 
-      this.setApp({ newTicket: false });
       this.setCustomer(customer);
+      this.setApp({ newTicket: false });
       this.setTicket({ type, number });
 
       this.$router.push({ path: "/main/menu" });
     },
-    settle() {
-      this.$open("payment");
+    openPaymentModule(params) {
+      new Promise((resolve, reject) => {
+        this.componentData = Object.assign({}, { resolve, reject }, params);
+        this.component = "paymentModule";
+      })
+        .then(this.exitComponent)
+        .catch(exitParams => {
+          this.exitComponent();
+
+          if (exitParams && exitParams.reload === true) {
+            this.$splitEvenly(exitParams.split).then(() =>
+              this.openPaymentModule(Object.assign({}, params, exitParams))
+            );
+          }
+        });
     },
     print() {
       Printer.setTarget("Receipt").print(this.order);
@@ -147,10 +168,10 @@ export default {
     },
     ...mapActions([
       "setApp",
-      "setTicket",
       "setOrder",
-      "setCustomer",
-      "resetMenu"
+      "resetMenu",
+      "setTicket",
+      "setCustomer"
     ])
   },
   computed: {
@@ -167,7 +188,17 @@ export default {
       const max = min + 14;
       return this.invoices.slice(min, max);
     },
-    ...mapGetters(["order", "history"])
+    ...mapGetters([
+      "op",
+      "app",
+      "tax",
+      "store",
+      "order",
+      "ticket",
+      "dinein",
+      "station",
+      "history"
+    ])
   }
 };
 </script>

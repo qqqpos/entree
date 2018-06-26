@@ -55,10 +55,10 @@ import balanceDisplay from "./helper/balanceDisplay";
 import paymentOption from "./helper/paymentTypes";
 import numberInput from "./helper/numberInput";
 import inputModule from "../component/inputer";
+import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import shortcut from "./component/shortcut";
 import creditCardModule from "./creditCard";
-import dialoger from "../common/dialoger";
 import preview from "../common/ticket";
 import splitor from "./helper/splitor";
 
@@ -68,11 +68,11 @@ export default {
     creditCardModule,
     balanceDisplay,
     paymentOption,
+    dialogModule,
     paymentInput,
     unlockModule,
     inputModule,
     numberInput,
-    dialoger,
     shortcut,
     splitor,
     preview
