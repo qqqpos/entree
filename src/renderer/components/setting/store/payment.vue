@@ -2,10 +2,9 @@
   <div>
     <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
     <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
+    <external title="setting.default.setValue" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
     <!-- <external title="setting.thirdParty" @open="$router.push({ name: 'Setting.store.thirdParty' })"></external> -->
     <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
-    <text-list title="setting.defaultPaymentType" :opts="paymentTypes" v-model="store.defaultPaymentType" @update="updatePaymentType"></text-list>
-    <toggle title="setting.defaultDiscount" v-model="store.defaultDiscountUnit" trueTooltip="tip.dollarDiscount" falseTooltip="tip.percentageDiscount" @update="updateDiscountType" :conditionalTooltip="true"></toggle>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
       <transition name="dropdown">
         <div v-if="store.tipSuggestion.enable" class="fees">
@@ -77,18 +76,6 @@ export default {
           label: "text.alwaysRoundDown",
           tooltip: "tip.rounding.down",
           value: "roundDown"
-        }
-      ],
-      paymentTypes: [
-        {
-          label: "text.cash",
-          tooltip: "",
-          value: "CASH"
-        },
-        {
-          label: "text.creditCard",
-          tooltip: "",
-          value: "CREDIT"
         }
       ]
     };

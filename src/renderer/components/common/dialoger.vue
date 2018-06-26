@@ -3,10 +3,10 @@
     <div class="dialog" :class="[init.type,loader]">
       <header class="progress" :style="bar"></header>
       <i class="fa"></i>
-      <h3>{{title}}</h3>
-      <h5>{{msg}}</h5>
+      <h3>{{translate(init.title)}}</h3>
+      <h5>{{translate(init.msg)}}</h5>
       <footer>
-        <div class="btn" v-for="(button,index) in init.buttons" @click="trigger(button,$event)" :key="index">{{$t(button.text)}}</div>
+        <div class="btn" v-for="(button,index) in init.buttons" @click="trigger(button,$event)" :key="index">{{translate(button.text)}}</div>
       </footer>
     </div>
   </div>
@@ -19,38 +19,29 @@ export default {
   data() {
     return {
       loader: "",
-      title: "",
-      msg: "",
       bar: null,
       pct: 90,
       step: 0
     };
   },
   created() {
-    this.initial();
+    if (this.init.timeout) {
+      this.timeout = setTimeout(() => {
+        typeof this.init.timeout.fn === "function"
+          ? this.init.timeout.fn()
+          : eval(this.init.timeout.fn);
+      }, this.init.timeout.duration);
+
+      this.loader = "loader";
+      this.step = 90 / (this.init.timeout.duration / 1000);
+      this.bar = {
+        transform: `translate3d(-100%,0,0)`
+      };
+    }
   },
   methods: {
-    initial() {
-      this.title =
-        typeof this.init.title === "string"
-          ? this.$t(this.init.title)
-          : this.$t(...this.init.title);
-      this.msg =
-        typeof this.init.msg === "string"
-          ? this.$t(this.init.msg)
-          : this.$t(...this.init.msg);
-      if (this.init.timeout) {
-        this.timeout = setTimeout(() => {
-          typeof this.init.timeout.fn === "function"
-            ? this.init.timeout.fn()
-            : eval(this.init.timeout.fn);
-        }, this.init.timeout.duration);
-        this.loader = "loader";
-        this.step = 90 / (this.init.timeout.duration / 1000);
-        this.bar = {
-          transform: `translate3d(-100%,0,0)`
-        };
-      }
+    translate(text) {
+      return Array.isArray(text) ? this.$t(...text) : this.$t(text);
     },
     trigger(button, e) {
       button.load && e.currentTarget.classList.add("loading");

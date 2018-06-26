@@ -73,7 +73,7 @@ import paginator from "./common/paginator";
 import reason from "./history/component/reason";
 import orderList from "./common/orderList";
 import dialoger from "./common/dialoger";
-import payment from "./payment/index";
+import payment from "./payment/main";
 import split from "./split/index";
 
 export default {

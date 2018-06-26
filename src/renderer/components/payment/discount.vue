@@ -37,10 +37,10 @@ export default {
     };
   },
   created() {
-    if(this.store.defaultDiscountUnit){
+    if (this.store.defaultDiscountUnit) {
       this.unit = "$";
       this.type = "decimal";
-    }else{
+    } else {
       this.unit = "%";
       this.type = "number";
     }
@@ -55,35 +55,34 @@ export default {
       let discount = parseFloat(this.discount);
       let { payment } = this.init;
       let coupon;
+      let amount;
       if (this.unit === "%") {
         coupon = {
-          code: "UnitedPOS Inc",
+          code: "Entree POS",
           alias: `${this.discount} % OFF`,
           discount,
           stack: true,
-          expire: {
-            enable: false
-          },
+          expire: {},
           count: 0,
           type: "discount",
           apply: "order"
         };
+        amount = toFixed(payment.subtotal * discount / 100, 2);
       } else {
         coupon = {
-          code: "UnitedPOS Inc",
+          code: "Entree POS",
           alias: `$ ${this.discount} OFF`,
           discount,
           stack: true,
-          expire: {
-            enable: false
-          },
+          expire: {},
           count: 0,
           type: "voucher",
           apply: "order"
         };
+        amount = discount;
       }
 
-      this.init.resolve({ discount, coupon });
+      this.init.resolve({ discount, coupon, amount });
     }
   }
 };

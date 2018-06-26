@@ -146,20 +146,20 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import splitor from "../split/index";
-import unlock from "../common/unlock";
-import timer from "./component/timer";
-import payment from "../payment/index";
+import unlockModule from "../common/unlock";
+import dialoger from "../common/dialoger";
 import modify from "./component/modify";
 import coupon from "./component/coupon";
 import course from "./component/course";
-import dialoger from "../common/dialoger";
+import timer from "./component/timer";
+import payment from "../payment/main";
+import splitor from "../split/index";
 
 export default {
   props: ["layout"],
   components: {
+    unlockModule,
     dialoger,
-    unlock,
     modify,
     payment,
     coupon,
@@ -249,11 +249,24 @@ export default {
     },
     settle() {
       this.ticket.type === "TO_GO"
-        ? this.$open("payment", { order: this.combineTogoItems() })
-        : this.$open("payment");
+        ? this.openPaymentModule({ order: this.combineTogoItems() })
+        : this.openPaymentModule();
     },
-    request() {
-      this.$emit("open", "request");
+    openPaymentModule(params) {
+      new Promise((resolve, reject) => {
+        this.componentData = Object.assign({}, { resolve, reject }, params);
+        this.component = "payment";
+      })
+        .then(this.exitComponent)
+        .catch(exitParams => {
+          this.exitComponent();
+
+          if (exitParams && exitParams.reload === true) {
+            this.$splitEvenly(exitParams.split).then(() =>
+              this.openPaymentModule(Object.assign({}, params, exitParams))
+            );
+          }
+        });
     },
     promotion() {
       this.$socket.emit("[COUPON] LIST", coupons => {
@@ -708,6 +721,7 @@ export default {
     ...mapGetters([
       "op",
       "app",
+      "tax",
       "item",
       "diffs",
       "order",
@@ -718,10 +732,10 @@ export default {
       "spooler",
       "customer",
       "language",
-      "archivedOrder",
-      "isEmptyTicket",
+      "choiceSet",
       "currentTable",
-      "choiceSet"
+      "archivedOrder",
+      "isEmptyTicket"
     ])
   }
 };

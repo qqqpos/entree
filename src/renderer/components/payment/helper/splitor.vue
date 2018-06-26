@@ -1,7 +1,7 @@
 <template>
-    <div v-if="!mode && splits.length > 1" class="viewer">
-        <label v-for="(split,index) in splits" :key="index" :class="{hidden:split.payment.remain === 0}">
-            <input type="radio" name="split" :id="'split_'+index" :value="index" v-model="page" @change="$emit('switch',index)" @input="$emit('input',index)">
+    <div v-if="!disable && tickets.length > 1" class="viewer">
+        <label v-for="(split,index) in tickets" :key="index" :class="{hidden:split.payment.remain === 0}">
+            <input type="radio" name="split" :id="'split_'+index" :value="index" v-model="target" @change="$emit('switch',index)" @input="$emit('input',index)">
             <label :for="'split_'+index" class="tag">{{index + 1}}</label>
             <div class="preview" @click="$emit('preview',index)">
               <i class="fas fa-file-invoice"></i>
@@ -13,17 +13,17 @@
 
 <script>
 export default {
-  props: ["value", "splits", "mode"],
+  props: ["value", "tickets", "disable"],
   data() {
     return {
-      page: null
+      target: null
     };
   },
   watch: {
     value: {
       immediate: true,
-      handler: function(page) {
-        this.page = page;
+      handler: function(index) {
+        this.target = index;
       }
     }
   }
@@ -62,7 +62,7 @@ export default {
 }
 
 .viewer input:checked ~ .preview {
-  animation: preview 0.5s 0.2s ease-out forwards;
+  animation: preview 0.3s 0.2s ease-out forwards;
 }
 
 .hidden {
@@ -73,9 +73,10 @@ export default {
   visibility: hidden;
   position: absolute;
   bottom: 34px;
-  left: -12px;
+  left: -14px;
   width: 65px;
   height: 70px;
+  padding: 2px;
   background: #2196f3;
   color: #fff;
   text-align: center;

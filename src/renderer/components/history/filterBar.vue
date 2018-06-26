@@ -10,23 +10,25 @@
                 <div class="value">$ {{filter.amount | decimal}}</div>
                 <transition name="dropdown">
                     <ul v-if="filter.hasOwnProperty('subTypes') && showMore" class="subTypes">
-                        <li v-for="(sub,index) in filter.subTypes" :key="index" @click.stop="setSubFilter(sub)">
+                        <li v-for="(sub,subIndex) in filter.subTypes" :key="subIndex" @click.stop="setSubFilter(sub)">
                             <div class="text">{{sub.title}}<span class="count">{{sub.count}}</span></div>
                             <div class="value">$ {{sub.amount | decimal}}</div>
                         </li>
-                        <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices">
-                          <div class="text">{{$t('filter.server')}}</div>
-                          <i class="fas fa-user-tie"></i>
-                          <transition name="slideFromLeft">
-                            <ul v-if="showServer" class="server">
-                              <li v-for="(name,index) in servers" :key="index" @click.stop="filterByServer(name)">{{name}}</li>
-                            </ul>
-                          </transition>
-                        </li>
-                        <li @click.stop="search">
-                          <div class="text" >{{$t('text.searchTicket')}}</div>
-                          <i class="fas fa-search"></i>
-                        </li>
+                        <template v-if="index === 0">
+                          <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices">
+                            <div class="text">{{$t('filter.server')}}</div>
+                            <i class="fas fa-user-tie"></i>
+                            <transition name="slideFromLeft">
+                              <ul v-if="showServer" class="server">
+                                <li v-for="(name,index) in servers" :key="index" @click.stop="filterByServer(name)">{{name}}</li>
+                              </ul>
+                            </transition>
+                          </li>
+                          <li @click.stop="search">
+                            <div class="text" >{{$t('text.searchTicket')}}</div>
+                            <i class="fas fa-search"></i>
+                          </li>
+                        </template>
                     </ul>
                 </transition>
             </div>
@@ -67,7 +69,8 @@ export default {
     this.initialData();
   },
   mounted() {
-    document.querySelector(".filters .filter").classList.add("active");
+    const dom = document.querySelector(".filters .filter");
+    dom && dom.classList.add("active");
   },
   methods: {
     setFilter(type, index, e) {
@@ -98,7 +101,7 @@ export default {
       const servers = new Set();
       const invoices = this.viewAllInvoices
         ? this.data
-        : this.data.filter(t.server === server);
+        : this.data.filter(t => t.server === this.op.name);
 
       const sort = [
         "ALL_INVOICES",
@@ -315,7 +318,7 @@ span.sub {
 }
 
 .filter {
-  padding: 0 10px;
+  padding: 0 7px;
   height: 62px;
   display: flex;
   flex-direction: column;
@@ -357,6 +360,7 @@ span.sub {
   font-family: "Agency FB";
   font-weight: bold;
   font-size: 28px;
+  white-space: nowrap;
 }
 
 ul.subTypes {
@@ -386,7 +390,7 @@ ul.subTypes {
 }
 
 .date {
-  min-width: 240px;
+  min-width: 225px;
   line-height: 66px;
   text-align: center;
   display: flex;
@@ -414,12 +418,12 @@ ul.subTypes {
 
 i.fa-angle-left {
   left: -5px;
-  padding: 24px 60px 24px 15px;
+  padding: 24px 60px 24px 13px;
 }
 
 i.fa-angle-right {
   right: -5px;
-  padding: 24px 15px 24px 60px;
+  padding: 24px 8px 24px 60px;
 }
 
 li.extend:after {
@@ -433,7 +437,7 @@ li.extend:after {
 ul.server {
   position: absolute;
   top: 0;
-  left: 129px;
+  left: 123px;
   background: #fff;
   width: auto;
   max-height: 315px;

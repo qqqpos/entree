@@ -112,6 +112,10 @@ export default new Router({
                       path: "delivery",
                       name: "Setting.store.delivery",
                       component: require("../components/setting/store/sub/delivery")
+                    }, {
+                      path: "defaults",
+                      name: "Setting.store.defaults",
+                      component: require("../components/setting/store/sub/defaults")
                     },
                     {
                       path: "thirdParty",

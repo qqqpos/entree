@@ -1,8 +1,7 @@
 const giftcard = function(title, card, { bonus = 0, reload = 0 }) {
   const { name, address, city, state, zipCode, contact } = this.config;
 
-  this.plugin.PRINT_INIT("Gift Card");
-  this.plugin.PRINT_INITA(0, 0, 260, 2000, "");
+  this.plugin.PRINT_INITA(0, 0, 260, 2000, "Gift Card");
   this.plugin.ADD_PRINT_TEXT(3, 2, 262, 23, name);
   this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
   this.plugin.SET_PRINT_STYLEA(0, "FontSize", 14);

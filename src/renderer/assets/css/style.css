@@ -86,13 +86,13 @@ i.loader {
 i.loader:after {
   content: " ";
   position: absolute;
-  width: 82px;
-  height: 82px;
-  left: -2px;
-  top: 5px;
+  width: 88px;
+  height: 88px;
+  left: 2px;
+  top: 2px;
   border-radius: 50%;
   border: 2px solid transparent;
-  border-color: transparent #fff transparent #fff;
+  border-color: transparent #FFF transparent #fff;
   transform-origin: 50% 50%;
   animation: rotate 1.5s linear 0s infinite normal;
 }

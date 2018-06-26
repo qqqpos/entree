@@ -13,7 +13,7 @@
         </div>
       </transition>
     </toggle>
-    <text-list title="text.binding" v-model="cashDrawer.bind" :opts="printers"></text-list>
+    <text-list title="text.connectPrinter" v-model="cashDrawer.bind" :opts="printers"></text-list>
     <toggle title="setting.cashFlowRecord" v-model="cashDrawer.cashFlowCtrl">
       <transition name="dropdown">
         <div v-if="cashDrawer.cashFlowCtrl" class="opt">
@@ -34,12 +34,14 @@ export default {
   data() {
     return {
       cashDrawer: Object.assign({}, this.$store.getters.station.cashDrawer),
-      printers: Object.keys(this.$store.getters.config.printers).map(name => ({
-        label: name,
-        tooltip: "",
-        plainText: true,
-        value: name
-      }))
+      printers: Object.keys(this.$store.getters.config.printers)
+        .filter(name => /cashier/i.test(name))
+        .map(name => ({
+          label: name,
+          tooltip: "",
+          plainText: true,
+          value: name
+        }))
     };
   },
   beforeDestroy() {

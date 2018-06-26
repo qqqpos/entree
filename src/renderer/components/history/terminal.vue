@@ -93,16 +93,26 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 import batch from "./component/batch";
 import dialoger from "../common/dialoger";
 import dropdown from "./component/dropdown";
 import paginator from "../common/paginator";
 import processor from "../common/processor";
 import adjuster from "./component/adjuster";
+import inputModule from "../component/inputer";
 
 export default {
   props: ["init"],
-  components: { dialoger, dropdown, paginator, processor, adjuster, batch },
+  components: {
+    batch,
+    dialoger,
+    dropdown,
+    paginator,
+    processor,
+    adjuster,
+    inputModule
+  },
   computed: {
     filteredTransactions() {
       let records = this.transactions;
@@ -246,15 +256,15 @@ export default {
     ccType(card) {
       switch (card) {
         case "Visa":
-          return "fa fa-cc-visa";
+          return "fab fa-cc-visa";
         case "MasterCard":
-          return "fa fa-cc-mastercard";
+          return "fab fa-cc-mastercard";
         case "American Express":
-          return "fa fa-cc-amex";
+          return "fab fa-cc-amex";
         case "Discover":
-          return "fa fa-cc-discover";
+          return "fab fa-cc-discover";
         default:
-          return "fa fa-credit-card-alt";
+          return "fas fa-credit-card";
       }
     },
     setPage(num) {
@@ -299,76 +309,103 @@ export default {
     },
     askRefund(record) {
       const amount = record.amount.approve;
+      const order = record.order || {};
+      const number = order.number || "";
+
       const prompt = {
         title: "terminal.refundConfirm",
         msg: ["terminal.refundAmount", amount],
         buttons: [
-          { text: "button.cancel", fn: "reject" },
-          { text: "button.refund", fn: "resolve" }
+          { text: "button.partiallyRefund", fn: "reject" },
+          { text: ["button.fullRefund", amount], fn: "resolve" }
         ]
       };
 
       this.$dialog(prompt)
-        .then(() => this.refund(record))
+        .then(() => this.refund({ amount, order, number }))
+        .catch(() => this.partiallyRefund({ order, number }));
+    },
+    partiallyRefund({ order, number }) {
+      new Promise((resolve, reject) => {
+        const config = {
+          title: "title.refund",
+          percentage: false,
+          allowPercentage: false,
+          amount: "0.00"
+        };
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
+      })
+        .then(({ amount }) => {
+          this.exitComponent();
+          this.refund({ amount, order, number });
+        })
         .catch(this.exitComponent);
     },
-    refund(record) {
-      const amount = record.amount.approve;
-      const order = record.order || {};
-      const number = order.number || "";
-
+    refund({ amount, order, number }) {
       this.$open("processor", { timeout: 60000 });
       this.initialParser(this.station.terminal).then(() => {
-        this.terminal.refund(amount, number).then(response => {
-          let result = this.terminal.explainTransaction(response.data);
+        this.terminal
+          .refund(amount, number)
+          .then(response => {
+            let result = this.terminal.explainTransaction(response.data);
 
-          Object.assign(result, {
-            _id: ObjectId(),
-            date: today(),
-            for: "Refund"
-          });
-
-          if (result.code === "000000") {
-            const transaction = {
+            Object.assign(result, {
               _id: ObjectId(),
               date: today(),
-              time: +new Date(),
-              order: order._id || "",
-              ticket: {
-                number: order.number || "",
-                type: order.type || ""
-              },
-              paid: 0,
-              change: 0,
-              actual: -result.amount.approve,
-              tip: 0,
-              cashier: this.op.name,
-              server: null,
-              cashDrawer: null,
-              station: this.station.alias,
-              terminal: this.station.terminal,
-              type: "CREDIT",
               for: "Refund",
-              subType: result.account.type,
-              credential: result._id,
-              lfd: result.account.number
-            };
+              refund: result.amount.approve
+            });
 
-            this.$socket.emit("[TERMINAL] SAVE", result);
-            this.$socket.emit("[TRANSACTION] SAVE", transaction);
-            this.exitComponent();
+            if (result.code === "000000") {
+              const transaction = {
+                _id: ObjectId(),
+                date: today(),
+                time: +new Date(),
+                order: order._id || "",
+                ticket: {
+                  number: order.number || "",
+                  type: order.type || ""
+                },
+                paid: 0,
+                change: 0,
+                actual: -result.amount.approve,
+                tip: 0,
+                cashier: this.op.name,
+                server: null,
+                cashDrawer: null,
+                station: this.station.alias,
+                terminal: this.station.terminal,
+                type: "CREDIT",
+                for: "Refund",
+                subType: result.account.type,
+                credential: result._id,
+                lfd: result.account.number
+              };
 
-            Printer.printCreditCard(result, {});
-          } else {
+              this.$socket.emit("[TERMINAL] SAVE", result);
+              this.$socket.emit("[TRANSACTION] SAVE", transaction);
+              this.exitComponent();
+
+              Printer.printCreditCard(result, {});
+            } else {
+              const prompt = {
+                title: ["terminal.error", result.code],
+                msg: result.msg,
+                buttons: [{ text: "button.confirm", fn: "resolve" }]
+              };
+
+              this.$dialog(prompt).then(this.exitComponent);
+            }
+          })
+          .catch(() => {
             const prompt = {
-              title: ["terminal.error", result.code],
-              msg: result.msg,
+              title: "terminal.terminalError",
+              msg: "terminal.creditCard.aborted",
               buttons: [{ text: "button.confirm", fn: "resolve" }]
             };
-
             this.$dialog(prompt).then(this.exitComponent);
-          }
-        });
+          });
       });
     },
     initialParser(terminal) {
@@ -552,6 +589,11 @@ tfoot tr {
 
 tbody td {
   padding: 10px 0;
+}
+
+td.card {
+  text-align: left;
+  padding: 10px 0 10px 8px;
 }
 
 tbody tr {

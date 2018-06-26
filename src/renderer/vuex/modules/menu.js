@@ -22,6 +22,8 @@ const state = {
     },
     content: [],
     coupons: [],
+    modify: 0,
+    printCount: 0,
     source: "POS",
     status: 1
   },
@@ -55,6 +57,8 @@ const mutations = {
       },
       content: [],
       coupons: [],
+      modify: 0,
+      printCount: 0,
       date: today(),
       source: "POS",
       status: 1,

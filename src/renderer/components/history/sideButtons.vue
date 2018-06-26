@@ -51,26 +51,26 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import Calendar from "./component/calendar";
+import calendarModule from "./component/calendar";
+import unlockModule from "../common/unlock";
+import reportModule from "../report/index";
 import Dialoger from "../common/dialoger";
 import transaction from "./transaction";
 import Reason from "./component/reason";
-import reporter from "../report/index";
-import unlock from "../common/unlock";
-import ledger from "../ledger/new";
 import loger from "../payment/loger";
+import ledger from "../ledger/new";
 import Terminal from "./terminal";
 
 export default {
   props: ["date"],
   components: {
+    calendarModule,
+    reportModule,
+    unlockModule,
     transaction,
-    Calendar,
     Dialoger,
     Terminal,
-    reporter,
     ledger,
-    unlock,
     Reason,
     loger
   },
@@ -169,6 +169,7 @@ export default {
         if (this.order.settled) throw ticketSettled;
 
         this.$socket.emit("[PAYMENT] COUNT", this.order._id, count => {
+          console.log(count);
           count > 0
             ? this.order.split
               ? resolve(splitTicketAction)
@@ -273,7 +274,7 @@ export default {
     calendar() {
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject };
-        this.component = "Calendar";
+        this.component = "calendarModule";
       })
         .then(date => {
           this.$emit("change", date);
@@ -370,7 +371,7 @@ export default {
     },
     splitPrint(order, receipt) {
       order.printCount++;
-      
+
       this.exitComponent();
       this.updateInvoice(order);
 
@@ -389,7 +390,7 @@ export default {
     },
     report() {
       this.$checkPermission("access", "report")
-        .then(() => this.$open("reporter"))
+        .then(() => this.$open("reportModule"))
         .catch(() => this.accessFailedLog("report"));
     },
     getLedger() {

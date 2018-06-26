@@ -141,14 +141,13 @@ export default {
         )
       );
     },
-    saveToDatabase(paid) {
+    saveToDatabase({ paid, tip }) {
       const cashDrawer =
         this.op.cashCtrl === "staffBank"
           ? this.op.name
           : this.station.cashDrawer.name;
 
       let { remain } = this.order.payment;
-      let tip = 0;
 
       const parent = this.order.hasOwnProperty("parent")
         ? this.order.parent

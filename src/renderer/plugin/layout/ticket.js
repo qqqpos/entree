@@ -466,7 +466,7 @@ function createStyle(setting) {
               footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}.ticketNumber{right:10px;}\
               div.time span{display:inline-block;margin:0 10px;font-size:1em;}\
               div.time{border-bottom:1px solid #000;position:relative;margin-top:10px;}\
-              .server{border-bottom:1px solid #000;padding-bottom:1px;text-align:left;}\
+              .server{border-bottom:1px solid #000;padding:1px 0 0;text-align:left;}\
               .server .wrap{display:flex;padding:0 10px;}.server .text{flex:2;}.server .value{flex:3;}\
               .customer {${customer ? "" : "display:none;"}font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
               .customer p:last-child{border-bottom:1px solid #000;}\

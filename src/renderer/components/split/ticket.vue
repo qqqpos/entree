@@ -10,8 +10,8 @@
             <span class="side">{{item.side[language]}}</span>
           </span>
           <template v-if="master">
-            <i class="fa fa-clone" @click.stop="unsplit(index)" v-if="item.lock"></i>
-            <i class="fa fa-square-o" @click.stop="setSplit(index)" v-else></i>
+            <i class="far fa-clone" @click.stop="unsplit(index)" v-if="item.lock"></i>
+            <i class="far fa-square" @click.stop="setSplit(index)" v-else></i>
           </template>
           <template v-else>
             <span>{{item.total}}</span>
@@ -28,11 +28,9 @@
     </ul>
     <template v-if="master">
       <div class="toggle" v-if="buffer.length === 0" @click="selectAll">
-        <i class="fa fa-check-square-o"></i>
         <span>{{$t('button.selectAll')}}</span>
       </div>
       <div class="toggle" v-else @click="selectAll">
-        <i class="fa fa-square-o"></i>
         <span>{{$t('button.unset')}}</span>
       </div>
     </template>
@@ -42,7 +40,7 @@
         <span>{{reason}}</span>
       </div>
       <div class="settle" @click="tap">
-        <p class="total">$ {{order.payment.remain | decimal}}
+        <p class="total">$ {{order.payment.balance | decimal}}
           <span class="tip">( {{order.payment.tax | decimal}} )</span>
         </p>
         <i class="fa fa-bars" @click.stop="ticketConfig"></i>
@@ -58,7 +56,6 @@ import { mapGetters } from "vuex";
 import evener from "./component/evener";
 import options from "./component/options";
 import splitor from "./component/splitor";
-import { isArray } from "util";
 
 export default {
   props: ["data", "master", "index"],
@@ -369,7 +366,8 @@ export default {
     },
     setGratuity() {
       const title = "button.setGratuity";
-      const amount = this.order.gratuityPercentage || this.order.gratuityFee || 0;
+      const amount =
+        this.order.gratuityPercentage || this.order.gratuityFee || 0;
       const percentage = true;
       const allowPercentage = true;
 
@@ -415,7 +413,7 @@ export default {
           const { discount, coupon } = result;
 
           let coupons = this.order.coupons.filter(
-            coupon => coupon.code !== "UnitedPOS Inc"
+            coupon => coupon.code !== "Entree POS"
           );
           discount > 0 && coupons.push(coupon);
 
@@ -582,6 +580,10 @@ li {
 li.picked {
   background: #9e9e9e;
   text-shadow: 0 1px 1px #333;
+}
+
+li.picked i {
+  color: #fff;
 }
 
 .toggle {

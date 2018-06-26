@@ -17,7 +17,7 @@
   </li>
   <li class="item todo" v-else>
     <div class="main">
-      <checkbox v-model="item.pending" :title="item[language]" :disabled="item.print"></checkbox>
+      <checkbox v-model="item.pending" :title="item[language]" :disabled="item.print" :translate="false"></checkbox>
     </div>
   </li>
 </template>

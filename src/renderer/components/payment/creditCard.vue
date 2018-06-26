@@ -16,8 +16,8 @@ export default {
   props: ["init"],
   data() {
     return {
-      station: this.$store.getters.station.alias,
       attached: this.$store.getters.station.terminal,
+      station: this.$store.getters.station.alias,
       transacting: false,
       cancelable: false,
       terminal: null,

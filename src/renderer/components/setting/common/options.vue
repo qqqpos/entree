@@ -78,7 +78,8 @@ label:before {
   font-family: fontAwesome;
   left: 15px;
   top: 15px;
-  content: "\f05d";
+  font-weight: 500px;
+  content: "\f111";
   color: lightgray;
 }
 

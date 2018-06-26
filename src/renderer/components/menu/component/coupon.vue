@@ -109,7 +109,7 @@ export default {
     confirm() {
       const coupons = this.coupons.filter(coupon => coupon.redeem);
       const discount = this.order.coupons.filter(
-        coupon => coupon.code === "UnitedPOS Inc"
+        coupon => coupon.code === "Entree POS"
       );
       coupons.push(...discount);
 

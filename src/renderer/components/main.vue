@@ -1,23 +1,32 @@
 <template>
   <div class="container">
-    <dock></dock>
+    <dock-module></dock-module>
     <router-view></router-view>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>
 
 <script>
-import dock from "./dock/dock";
-import posMenu from "./dock/posMenu";
-import unlock from "./common/unlock";
-import dialoger from "./common/dialoger";
-import discount from "./payment/discount";
-import inputer from "./component/inputer";
-import coupon from "./menu/component/coupon";
 import { mapGetters } from "vuex";
 
+import unlockModule from "./common/unlock";
+import coupon from "./menu/component/coupon";
+import discount from "./payment/discount";
+import inputer from "./component/inputer";
+import dialoger from "./common/dialoger";
+import menuModule from "./dock/posMenu";
+import dockModule from "./dock/dock";
+
 export default {
-  components: { dock, coupon, unlock, discount, inputer, posMenu, dialoger },
+  components: {
+    unlockModule,
+    menuModule,
+    dockModule,
+    dialoger,
+    discount,
+    inputer,
+    coupon
+  },
   data() {
     return {
       componentData: null,
@@ -94,7 +103,7 @@ export default {
           });
           break;
         case "dockMenu":
-          this.$open("posMenu", { args });
+          this.$open("menuModule", { args });
           break;
         case "dialog":
           this.$checkPermission("modify", "item")

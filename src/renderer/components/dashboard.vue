@@ -23,22 +23,22 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import collector from "./component/collector";
+import unlockModule from "./common/unlock";
+import spooler from "./component/spooler";
 import dialoger from "./common/dialoger";
 import noSales from "./component/noSale";
-import spooler from "./component/spooler";
 import toast from "./component/toast";
-import unlock from "./common/unlock";
 import provider from "./dock/source";
 
 export default {
   components: {
+    unlockModule,
     collector,
     dialoger,
     provider,
     noSales,
     spooler,
-    toast,
-    unlock
+    toast
   },
   computed: {
     ...mapGetters([
@@ -221,7 +221,7 @@ export default {
         if (password) {
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject };
-            this.component = "unlock";
+            this.component = "unlockModule";
           })
             .then(_op => {
               _op._id === this.op._id ? next() : stop();

@@ -70,9 +70,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ticket from "../common/ticket";
-import payment from "../payment/index";
+
 import dialoger from "../common/dialoger";
+import payment from "../payment/main";
+import ticket from "../common/ticket";
+
 export default {
   props: ["init"],
   components: { ticket, payment, dialoger },

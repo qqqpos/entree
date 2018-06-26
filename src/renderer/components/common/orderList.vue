@@ -190,7 +190,7 @@ export default {
   mounted() {
     this.$route.name === "Table" && this.order.content.length > 0
       ? (this.payment = this.order.payment)
-      : this.calculator(this.order.content);
+      : this.calculate();
 
     this.$route.name === "Menu" && this.getShortCutItems();
 
@@ -356,7 +356,7 @@ export default {
     },
     update(config) {
       this.setOrder(config);
-      this.calculator(this.order.content);
+      this.calculate();
     },
     openVault() {
       this.$socket.emit("[CUSTOMER] GET_CREDIT_CARD", this.customer._id, opts =>
@@ -368,16 +368,9 @@ export default {
 
       !this.todo && this.order.content.forEach(item => (item.pending = false));
     },
-    calculator(items) {
-      if (items.length === 0) {
-        let delivery =
-          this.ticket.type === "DELIVERY" &&
-          this.store.delivery &&
-          !this.order.deliveryFree
-            ? parseFloat(this.store.deliveryCharge)
-            : 0;
-
-        this.payment = Object.assign(this.order.payment, {
+    calculate() {
+      if (this.order.content.length === 0) {
+        const payment = {
           subtotal: 0,
           tax: 0,
           plasticTax: 0,
@@ -389,202 +382,18 @@ export default {
           remain: 0, // balance - paid
           tip: 0,
           gratuity: 0,
-          delivery,
+          delivery: 0,
           rounding: 0,
           log: []
-        });
-        return;
-      }
+        };
 
-      const {
-        type,
-        guest,
-        coupons,
-        taxFree = false,
-        deliveryFree = false,
-        gratuityFree = false
-      } = this.order;
-      const { enable, rules } = this.dinein.surcharge;
-
-      let delivery = 0;
-
-      if (type === "DELIVERY" && !deliveryFree) {
-        if (this.store.deliver.charge)
-          delivery = parseFloat(this.store.deliver.baseFee);
-
-        if (this.store.deliver.surcharge) {
-          const duration = parseFloat(
-            this.customer.distance.replace(/[^\d.]/g, "")
-          );
-
-          const distance = isNumber(duration) ? duration : 0;
-          const surcharge = this.store.deliver.rules
-            .sort((a, b) => a.distance < b.distance)
-            .find(rule => rule.distance < distance);
-
-          if (surcharge) {
-            delivery += parseFloat(surcharge.fee);
-          }
-        }
-
-        if (this.order.hasOwnProperty("deliveryFee"))
-          delivery = this.order.deliveryFee;
-      }
-
-      let {
-        tip = 0,
-        gratuity = 0,
-        paid = 0,
-        rounding = 0,
-        log = []
-      } = this.order.payment;
-
-      let subtotal = 0,
-        tax = 0,
-        discount = 0;
-
-      items.forEach(item => {
-        if (item.void) return;
-
-        const single = parseFloat(item.single);
-        const qty = item.qty || 1;
-        const taxClass = this.tax.class[item.taxClass];
-
-        let amount = toFixed(single * qty, 2);
-        item.choiceSet.forEach(set => {
-          const _price = parseFloat(set.single);
-
-          if (_price !== 0) {
-            const _qty = set.qty || 1;
-            const _total = toFixed(_qty * _price, 2);
-            amount = toFixed(amount + _total, 2);
-          }
-        });
-
-        subtotal = toFixed(subtotal + amount, 2);
-
-        if (!taxFree && taxClass.apply[type])
-          tax += taxClass.rate / 100 * amount;
-      });
-
-      if (this.tax.deliveryTax) {
-        /*
-            is Delivery fee taxable?
-            Find out default tax rate and apply to delivery charge
-        */
-
-        let taxRate = 0;
-        Object.keys(this.tax.class).forEach(type => {
-          this.tax.class[type].default === true &&
-            (taxRate = this.tax.class[type].rate);
-        });
-        /**
-         * Tax apply Before Discount (For Example: 10% Tax Rate, 20% Discount)
-         *
-         * Subtotal: 10.00
-         * Tax:       1.00
-         * Discount:  2.00
-         * Total:     9.00
-         * ------------------------------------------------------------------
-         **/
-        tax += delivery * taxRate / 100;
-      }
-
-      let plasticTax = 0;
-      if (this.tax.plasticPenalty) {
-        //calculate plastic bag penalty
-        const { plasticBag = 1 } = this.order;
-        const fine = isNumber(this.tax.plasticCharge)
-          ? this.tax.plasticCharge
-          : 0.5;
-        plasticTax = toFixed(plasticBag * fine, 2);
-      }
-
-      if (type === "DINE_IN" && !gratuityFree) {
-        if (enable) {
-          //find rule
-          try {
-            const { fee, percentage } = rules
-              .sort((a, b) => a.guest < b.guest)
-              .find(r => guest >= r.guest);
-            gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
-          } catch (e) {}
-        }
-
-        if (this.order.hasOwnProperty("gratuityPercentage")) {
-          gratuity = toFixed(subtotal * this.order.gratuityPercentage / 100, 2);
-        } else if (this.order.hasOwnProperty("gratuityFee")) {
-          gratuity = this.order.gratuityFee;
-        }
+        this.payment = Object.assign(this.order.payment, payment);
       } else {
-        gratuity = 0;
-      }
-
-      if (coupons && coupons.length > 0) {
-        let offer = 0;
-        coupons.forEach(coupon => {
-          const { reference } = coupon;
-
-          switch (coupon.type) {
-            // 'rebate':        '满减券',
-            // 'giveaway':      '礼物券',
-            // 'voucher':       '现金券',
-            // 'discount':      '折扣券',
-            case "rebate":
-              offer += coupon.discount;
-              break;
-            case "voucher":
-              offer += coupon.discount;
-              break;
-            case "discount":
-              switch (coupon.apply) {
-                case "category":
-                  let _offer = 0;
-                  this.order.content.forEach(item => {
-                    if (reference.includes(item.category)) {
-                      _offer += coupon.discount / 100 * item.single * item.qty;
-                    }
-                  });
-                  offer += _offer;
-                  break;
-                case "item":
-                  break;
-                default:
-                  offer += coupon.discount / 100 * subtotal;
-              }
-              break;
-          }
+        this.payment = this.$calculatePayment(this.order, {
+          selfAssign: true,
+          callback: true
         });
-        discount += offer;
       }
-
-      const total = subtotal + plasticTax + toFixed(tax, 2);
-      const due = toFixed(Math.max(0, total + delivery - discount), 2);
-      const grandTotal = toFixed((due + gratuity) * 100, 2);
-
-      rounding = this.$rounding(grandTotal);
-
-      const balance = due + gratuity + rounding;
-      const remain = balance - paid;
-
-      this.payment = Object.assign({}, this.payment, {
-        subtotal: toFixed(subtotal, 2),
-        tax: toFixed(tax, 2),
-        plasticTax: toFixed(plasticTax, 2),
-        total: toFixed(total, 2),
-        discount: toFixed(discount, 2),
-        due: toFixed(due, 2),
-        balance: toFixed(balance, 2),
-        paid: toFixed(paid, 2),
-        remain: toFixed(remain, 2),
-        tip: toFixed(tip, 2),
-        gratuity: toFixed(gratuity, 2),
-        delivery: toFixed(delivery, 2),
-        rounding: toFixed(rounding, 2),
-        log
-      });
-
-      Object.assign(this.order, { payment: this.payment });
     },
     setSeat(seat) {
       this.$emit("update", seat);
@@ -631,18 +440,14 @@ export default {
     },
     "order.content": {
       handler(items) {
-        this.display
-          ? (this.payment = this.order.payment)
-          : this.calculator(items);
+        this.display ? (this.payment = this.order.payment) : this.calculate();
 
         this.externalDisplaySync &&
           this.$electron.ipcRenderer.send("External::update", this.order);
       },
       deep: true
     },
-    customer() {
-      this.calculator(this.order.content);
-    },
+    customer: "calculate",
     payment() {
       this.$nextTick(() => {
         const dom = document.querySelector(".order .inner");

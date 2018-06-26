@@ -106,8 +106,7 @@ const hibachi = function (printer, order, items) {
         }]
     };
 
-    this.plugin.PRINT_INIT('Ticket Hibachi');
-    this.plugin.PRINT_INITA(0, 0, 260, 2000, "");
+    this.plugin.PRINT_INITA(0, 0, 260, 2000, 'Ticket Hibachi');
     this.plugin.ADD_PRINT_TEXT(3, 2, 262, 23, name);
     this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
     this.plugin.SET_PRINT_STYLEA(0, "FontSize", 14);

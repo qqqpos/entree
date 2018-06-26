@@ -6,7 +6,7 @@
           </div>
           <nav></nav>
         </header>
-        <toggle title="setting.poleDisplay" v-model="customerDisplay.enable">
+        <toggle title="setting.poleDisplay" v-model="customerDisplay.poleDisplay.enable">
           <transition name="dropdown">
             <div class="opt" v-if="customerDisplay.poleDisplay.enable">
               <inputer title="text.firstLine" v-model="customerDisplay.poleDisplay.top"></inputer>
@@ -16,7 +16,7 @@
             </div>
           </transition>
         </toggle>
-        <toggle title="setting.ledDisplay" v-model="customerDisplay.enable">
+        <toggle title="setting.ledDisplay" v-model="customerDisplay.ledDisplay.enable">
         </toggle>
       </div>
 </template>
@@ -70,8 +70,8 @@ export default {
     save() {
       this.$socket.emit("[STATION] UPDATE", {
         _id: this.$store.getters.station._id,
-        key: "pole",
-        value: this.poleDisplay
+        key: "customerDisplay",
+        value: this.customerDisplay
       });
       this.$router.push({ name: "Setting.station" });
     }

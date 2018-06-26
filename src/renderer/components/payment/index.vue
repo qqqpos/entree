@@ -58,7 +58,7 @@
           </div>
           <div class="fn">
             <button class="btn" @click="setTip">{{$t('button.setTip')}}</button>
-            <button class="btn" @click="openDiscount" :disabled="!discountable || this.order.split">{{$t('button.setDiscount')}}</button>
+            <button class="btn" @click="openDiscount" :disabled="!discountable">{{$t('button.setDiscount')}}</button>
             <button class="btn" @click="save">{{$t('button.save')}}</button>
           </div>
         </nav>
@@ -228,8 +228,8 @@ import { mapGetters, mapActions } from "vuex";
 import checkbox from "../setting/common/checkbox";
 import dialoger from "../common/dialoger";
 import capture from "../giftcard/capture";
-import tickets from "./component/tickets";
-import unlock from "../common/unlock";
+import tickets from "./helper/splitor";
+import unlockModule from "../common/unlock";
 import ticket from "../common/ticket";
 import creditCard from "./creditCard";
 import discount from "./discount";
@@ -241,7 +241,7 @@ export default {
   components: {
     tiper,
     ticket,
-    unlock,
+    unlockModule,
     capture,
     dialoger,
     discount,
@@ -1026,38 +1026,56 @@ export default {
       });
     },
     postToDatabase() {
-      return new Promise((resolve, reject) => {
-        const settled = this.isTicketSettled();
+      return new Promise(next => {
+        if (this.payInFull) {
+          const settled = this.payment.remain === 0;
 
-        if (this.isNewTicket) {
-          Object.assign(this.order, {
-            payment: this.payment,
-            customer: this.$minifyCustomer(this.customer),
-            type: this.ticket.type,
-            station: this.station.alias,
-            cashier: this.op.name,
-            modify: 0,
-            status: 1,
-            date: today(),
-            time: Date.now(),
-            settled
-          });
-          this.$socket.emit("[INVOICE] SAVE", this.order, false, order => {
-            this.ticketNumberUpdateable = false;
-            this.order = order;
-            resolve();
-          });
+          if (this.isNewTicket) {
+            Object.assign(this.order, {
+              customer: this.$minifyCustomer(this.customer),
+              cashier: this.op.name,
+              date: today(),
+              time: Date.now(),
+              settled
+            });
+
+            this.$socket.emit("[INVOICE] SAVE", order, false, data => {
+              this.ticketNumberUpdateable = false;
+              this.order = data;
+              next();
+            });
+          } else {
+            Object.assign(order, {
+              cashier: this.op.name,
+              settled
+            });
+
+            this.$socket.emit("[INVOICE] UPDATE", order, false);
+          }
         } else {
-          let order = this.payInFull ? this.order : this.splits[this.current];
-          Object.assign(order, {
-            payment: this.payment,
-            cashier: this.op.name,
-            print: true,
-            settled
-          });
+          const settled = this.splits.every(
+            order => order.payment.remain === 0
+          );
 
-          this.$socket.emit("[INVOICE] UPDATE", order, false);
-          resolve();
+          if (this.isNewTicket) {
+            Object.assign(this.order, {
+              customer: this.$minifyCustomer(this.customer),
+              cashier: this.op.name,
+              date: today(),
+              time: Date.now(),
+              settled
+            });
+
+            this.$socket.emit("[INVOICE] SAVE", order, false, data => {
+              this.ticketNumberUpdateable = false;
+              this.order = data;
+
+              this.$socket.emit("[SPLIT] UPDATE", this.splits[this.current]);
+              next();
+            });
+          } else {
+            this.$socket.emit("[SPLIT] UPDATE", this.splits[this.current]);
+          }
         }
       });
     },
@@ -1275,46 +1293,93 @@ export default {
         this.componentData = { resolve, reject, payment: this.payment };
         this.component = "discount";
       })
-        .then(({ discount, coupon }) => {
-          if (coupon.type === "discount")
-            discount = toFixed(this.payment.subtotal * discount / 100, 2);
-
-          if (discount > this.payment.subtotal) {
-            //discount can not grater than subtotal
-            const prompt = {
-              type: "warning",
-              title: "dialog.cantExecute",
-              msg: "dialog.discountAmountNotAllow",
-              buttons: [
-                { text: "button.cancel", fn: "reject" },
-                { text: "button.retry", fn: "resolve" }
-              ]
-            };
-
-            this.$dialog(prompt)
-              .then(this.setDiscount)
-              .catch(this.exitComponent);
-            return;
-          }
-
-          Object.assign(this.payment, { discount });
-
-          let coupons = this.order.coupons.filter(
-            coupon => coupon.code !== "UnitedPOS Inc"
-          );
-
-          discount > 0 && coupons.push(coupon);
-          this.order.coupons = coupons;
-
-          this.recalculatePayment();
-          this.paid = "0.00";
-          this.poleDisplay(
-            ["Discount:", -discount.toFixed(2)],
-            ["Due:", this.payment.remain.toFixed(2)]
-          );
-          this.exitComponent();
-        })
+        .then(this.checkDiscount)
+        .then(this.applyDiscount)
         .catch(this.exitComponent);
+    },
+    checkDiscount(input) {
+      let { discount, coupon, amount } = input;
+
+      return new Promise((apply, unapply) => {
+        if (amount > this.payment.subtotal) {
+          const prompt = {
+            type: "warning",
+            title: "dialog.cantExecute",
+            msg: "dialog.discountAmountNotAllow",
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.retry", fn: "resolve" }
+            ]
+          };
+
+          this.$dialog(prompt)
+            .then(this.setDiscount)
+            .catch(() => unapply());
+        } else {
+          apply(input);
+        }
+      });
+    },
+    applyDiscount({ discount, coupon, amount }) {
+      Object.assign(this.payment, { discount: amount });
+      if (this.payInFull) {
+        let coupons = this.order.coupons.filter(
+          coupon => coupon.code !== "Entree POS"
+        );
+
+        amount > 0 && coupons.push(coupon);
+
+        this.order.coupons = coupons;
+
+        this.recalculatePayment();
+        this.paid = "0.00";
+        this.poleDisplay(
+          ["Discount:", -discount.toFixed(2)],
+          ["Due:", this.payment.remain.toFixed(2)]
+        );
+      } else {
+        let order = this.splits[this.current];
+        let coupons = order.coupons.filter(
+          coupon => coupon.code !== "Entree POS"
+        );
+
+        discount > 0 && coupons.push(coupon);
+        order.coupons = coupons;
+
+        this.recalculatePayment();
+
+        //apply discount to main ticket
+        this.order.payment.discount = this.splits.reduce(
+          (a, c => a + c.payment.discount),
+          0
+        );
+
+        const { gratuity } = this.order.payment;
+
+        const due = toFixed(
+          this.order.payment.total +
+            this.order.payment.delivery -
+            this.order.payment.discount,
+          2
+        );
+
+        const rounding = this.$rounding(toFixed((due + gratuity) * 100, 2));
+        const balance = toFixed(due + gratuity + rounding, 2);
+        const remain = toFixed(balance - paid, 2);
+
+        this.order.payment.due = due;
+        this.order.payment.rounding = rounding;
+        this.order.payment.balance = balance;
+        this.order.payment.remain = remain;
+
+        this.paid = "0.00";
+        this.poleDisplay(
+          ["Discount:", -discount.toFixed(2)],
+          ["Due:", this.payment.remain.toFixed(2)]
+        );
+      }
+
+      this.exitComponent();
     },
     preview(index) {
       const ticket = JSON.parse(JSON.stringify(this.splits[index]));
@@ -1436,7 +1501,6 @@ export default {
         0,
         toFixed(balance - Math.round(paid * 100 + Number.EPSILON) / 100, 2)
       );
-      console.log(balance, paid, remain);
 
       this.payment = Object.assign({}, this.payment, {
         total,

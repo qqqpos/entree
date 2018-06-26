@@ -227,9 +227,11 @@ export default {
       this.init.resolve();
     },
     print() {
+      const time = this.order.time || Date.now();
+
       if (this.app.newTicket && this.$route.name === "Menu") {
         const { number, type } = this.ticket;
-        Object.assign(this.order, { number, type, time: Date.now() });
+        Object.assign(this.order, { number, type, time });
         this.setApp({ newTicket: false });
       }
 
@@ -242,7 +244,7 @@ export default {
         .map(instance => instance.order)
         .forEach((ticket, index) =>
           Printer.setTarget("Receipt").print(
-            Object.assign(ticket, { number: `${number}-${index + 1}` })
+            Object.assign(ticket, { time, number: `${number}-${index + 1}` })
           )
         );
 
@@ -265,16 +267,12 @@ export default {
 
       let tip = 0;
       let tax = 0;
+      let paid = 0;
       let plasticTax = 0;
       let subtotal = 0;
-      let rounding = 0;
       let delivery = 0;
       let gratuity = 0;
-      let total = 0;
       let discount = 0;
-      let balance = 0;
-      let due = 0;
-      let remain = 0;
 
       if (splits.length > 1) {
         splits.forEach((order, index) => {
@@ -284,17 +282,20 @@ export default {
 
           tip += order.payment.tip;
           tax += order.payment.tax;
+          paid += order.payment.paid;
           plasticTax += order.payment.plasticTax;
           subtotal += order.payment.subtotal;
           gratuity += order.payment.gratuity;
-          rounding += order.payment.rounding;
           delivery += order.payment.delivery;
-          total += order.payment.total;
-          due += order.payment.due;
           discount += order.payment.discount;
-          balance += order.payment.balance;
-          remain += order.payment.remain;
         });
+
+        const total = toFixed(subtotal + plasticTax + tax, 2);
+        const due = toFixed(Math.max(0, total + delivery - discount), 2);
+        const grandTotal = toFixed((due + gratuity) * 100, 2);
+        const rounding = this.$rounding(grandTotal);
+        const balance = due + gratuity + rounding;
+        const remain = balance - paid;
 
         this.$socket.emit("[SPLIT] SAVE", { splits, parent });
 

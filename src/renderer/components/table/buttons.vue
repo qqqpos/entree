@@ -46,16 +46,17 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import unlockModule from "../common/unlock";
 import dialoger from "../common/dialoger";
 import staff from "./component/staffs";
-import payment from "../payment/index";
-import unlock from "../common/unlock";
+import payment from "../payment/main";
 import split from "../split/index";
 import list from "./list";
 
 export default {
   props: ["transfer"],
-  components: { dialoger, unlock, payment, split, list, staff },
+  components: { dialoger, unlockModule, payment, split, list, staff },
   data() {
     return {
       componentData: null,

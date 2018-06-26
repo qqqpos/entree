@@ -38,21 +38,23 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import unlockModule from "../common/unlock";
 import orderList from "../common/orderList";
 import dialoger from "../common/dialoger";
 import hibachi from "./component/hibachi";
 import counter from "./component/counter";
 import creator from "./component/creator";
-import unlock from "../common/unlock";
+
 import buttons from "./buttons";
 
 export default {
   props: ["reserved"],
   components: {
+    unlockModule,
     orderList,
     dialoger,
     counter,
-    unlock,
     buttons,
     creator,
     hibachi
@@ -661,8 +663,9 @@ aside {
 
 .prePay .icon:after {
   font-family: fontAwesome;
-  content: "\f298";
+  content: "\f554";
   font-size: 16px;
+  font-weight: 900;
   position: absolute;
   top: 3px;
   right: 3px;
@@ -675,12 +678,13 @@ aside {
 
 .table.occupy .icon {
   color: #ff5722;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .occupy .icon:after {
   font-family: fontAwesome;
-  content: "\f0c0";
+  content: "\f2e7";
+  font-weight: 900;
   font-size: 16px;
   position: absolute;
   top: 3px;
@@ -692,6 +696,7 @@ aside {
   font-family: fontAwesome;
   content: "\f1b8";
   font-size: 16px;
+  font-weight: 900;
   position: absolute;
   bottom: 15px;
   right: 5px;

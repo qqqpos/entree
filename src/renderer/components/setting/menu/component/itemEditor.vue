@@ -386,7 +386,7 @@ header {
 }
 
 .wrap.info {
-  min-width: 624px;
+  min-width: 756px;
 }
 
 .wrap.column {

@@ -107,30 +107,6 @@ export default {
       );
       tax.default = true;
     },
-    // updateTaxDiscount(value) {
-    //   this.update({
-    //     key: "tax.beforeDiscount",
-    //     value
-    //   });
-    // },
-    // updateTaxCredit(value) {
-    //   this.update({
-    //     key: "tax.beforeCredit",
-    //     value
-    //   });
-    // },
-    // updateTaxApply(value) {
-    //   this.update({
-    //     key: "tax.defaultTaxFree",
-    //     value
-    //   });
-    // },
-    // updatePlasticPenalty(value) {
-    //   this.update({
-    //     key: "tax.plasticPenalty",
-    //     value
-    //   });
-    // },
     save() {
       this.$socket.emit("[CONFIG] UPDATE", {
         key: "tax",

@@ -59,6 +59,7 @@ export default {
       if (!this.allowPercentage) return;
 
       this.percentage = !this.percentage;
+      this.type = this.percentage ? "number" : "decimal";
     },
     confirm() {
       this.init.resolve({

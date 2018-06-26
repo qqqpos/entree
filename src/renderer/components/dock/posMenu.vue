@@ -2,7 +2,7 @@
   <div class="popupMask dark" @click.self="init.resolve">
     <transition appear name="fadeDown">
       <ul class="panel">
-        <div v-if="op.timecard">
+        <div v-if="op.timecard || store.timecard.enable">
           <li v-if="op.clockIn" @click="askClockOut">
             <i class="fas fa-2x fa-user-clock"></i>
             <div>
@@ -46,7 +46,7 @@
           </div>
         </li>
         <li @click="openPayout" v-if="station.cashDrawer.enable">
-          <i class="fa fa-2x fa fa-hdd-o"></i>
+          <i class="fas fa-2x fa-hand-holding-usd"></i>
           <div>
             <h3>{{$t('dock.payout')}}</h3>
             <h5>{{$t('dock.payoutTip')}}</h5>
@@ -130,21 +130,22 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import collector from "../component/collector";
+import unlockModule from "../common/unlock";
 import inputer from "../component/inputer";
 import terminal from "../history/terminal";
 import dialoger from "../common/dialoger";
 import giftcard from "../giftcard/index";
-import unlock from "../common/unlock";
+
 import payout from "./payout";
 
 export default {
   props: ["init"],
   components: {
+    unlockModule,
     dialoger,
     terminal,
     giftcard,
     payout,
-    unlock,
     inputer,
     collector
   },
