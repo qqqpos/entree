@@ -992,6 +992,7 @@ export default {
     cash: "现金",
     creditCard: "信用卡",
     giftCard: "礼物卡",
+    thirdParty: "第三方",
     pay: "支付",
     paid: "已支付",
     unpaid: "未支付",

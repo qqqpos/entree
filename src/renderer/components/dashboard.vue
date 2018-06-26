@@ -22,6 +22,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 import collector from "./component/collector";
 import unlockModule from "./common/unlock";
 import spooler from "./component/spooler";
@@ -75,6 +76,7 @@ export default {
     getTicketNumber() {
       return new Promise(next => {
         this.$socket.emit("[INQUIRY] TICKET_NUMBER", number => {
+          console.log(number);
           this.setTicket({ number });
           next();
         });

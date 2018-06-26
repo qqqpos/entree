@@ -20,18 +20,20 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import inputModule from "../component/inputer";
 import Maintenance from "../dock/maintenance";
 import paginator from "../common/paginator";
 import orderList from "../common/orderList";
 import dialoger from "../common/dialoger";
 import orderButtons from "./orderButtons";
-import inputer from "./component/inputer";
 import ticket from "./component/ticket";
 import sideButtons from "./sideButtons";
 import filterBar from "./filterBar";
 
 export default {
   components: {
+    inputModule,
     orderButtons,
     sideButtons,
     Maintenance,
@@ -39,21 +41,20 @@ export default {
     filterBar,
     orderList,
     dialoger,
-    inputer,
     ticket
   },
   data() {
     return {
-      today: today(),
-      component: null,
       componentData: null,
       calendarDate: null,
       prevHistory: null,
+      targetName: null,
+      component: null,
+      today: today(),
       summary: {},
-      page: 0,
-      view: "",
       filter: "",
-      targetName: null
+      view: "",
+      page: 0
     };
   },
   created() {
@@ -99,7 +100,9 @@ export default {
       dom && dom.classList.remove("active");
 
       this.$nextTick(() => {
-        this.orders.length ? this.getInvoice(this.invoices[0]) : this.resetMenu();
+        this.orders.length
+          ? this.getInvoice(this.invoices[0])
+          : this.resetMenu();
         const dom = document.querySelector(".ticket");
         dom && dom.classList.add("active");
       });
@@ -148,20 +151,23 @@ export default {
         const config = {
           title: "text.searchTicket",
           type: "number",
+          percentage: false,
+          allowPercentage: false,
           amount: "0"
         };
 
-        this.componentData = { resolve, reject, config };
-        this.component = "inputer";
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
       })
         .then(this.searchTicket)
         .catch(this.exitComponent);
     },
-    searchTicket(number) {
+    searchTicket(input) {
+      const ticketNumber = input.amount;
       this.exitComponent();
       //search invoices
       const target = this.targetInvoices.findIndex(
-        invoice => invoice.number === number
+        invoice => invoice.number === ticketNumber
       );
 
       if (target === -1) {
@@ -178,7 +184,7 @@ export default {
           .then(this.openComponent.bind(null, "SEARCH"))
           .catch(this.exitComponent);
       } else {
-        const index = this.findTicketPage(number);
+        const index = this.findTicketPage(ticketNumber);
         this.$bus.emit("SET_CURRENT_PAGE", index);
         this.$nextTick(() => this.setViewOrder(this.targetInvoices[target]));
       }
@@ -198,7 +204,7 @@ export default {
       }
       return page;
     },
-    ...mapActions(["resetMenu","setViewOrder"])
+    ...mapActions(["resetMenu", "setViewOrder"])
   },
   computed: {
     targetInvoices() {

@@ -9,10 +9,9 @@
 <script>
 import { mapGetters } from "vuex";
 
-import unlockModule from "./common/unlock";
+import inputModule from "./component/inputer";
 import coupon from "./menu/component/coupon";
-import discount from "./payment/discount";
-import inputer from "./component/inputer";
+import unlockModule from "./common/unlock";
 import dialoger from "./common/dialoger";
 import menuModule from "./dock/posMenu";
 import dockModule from "./dock/dock";
@@ -20,11 +19,10 @@ import dockModule from "./dock/dock";
 export default {
   components: {
     unlockModule,
+    inputModule,
     menuModule,
     dockModule,
     dialoger,
-    discount,
-    inputer,
     coupon
   },
   data() {
@@ -48,7 +46,7 @@ export default {
         case "discount":
           new Promise((resolve, reject) => {
             this.componentData = Object.assign({}, { resolve, reject }, args);
-            this.component = component;
+            this.component = "inputModule";
           })
             .then(result => {
               this.$bus.emit("__THREAD__CLOSE", {
@@ -64,7 +62,7 @@ export default {
         case "delivery":
           new Promise((resolve, reject) => {
             this.componentData = Object.assign({}, { resolve, reject }, args);
-            this.component = "inputer";
+            this.component = "inputModule";
           })
             .then(result => {
               this.$bus.emit("__THREAD__CLOSE", {

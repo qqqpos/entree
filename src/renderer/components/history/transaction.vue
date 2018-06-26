@@ -82,13 +82,14 @@
 
 <script>
 import { mapGetters } from "vuex";
-import inputer from "./component/inputer";
+
+import inputModule from "../component/inputer";
 import dropdown from "./component/dropdown";
 import paginator from "../common/paginator";
 
 export default {
   props: ["init"],
-  components: { inputer, paginator, dropdown },
+  components: { inputModule, paginator, dropdown },
   computed: {
     filteredTransactions() {
       let data = this.transactions;
@@ -218,14 +219,17 @@ export default {
         const config = {
           title: "title.tip",
           type: "decimal",
+          percentage: false,
+          allowPercentage: false,
           amount: "0.00"
         };
-        this.componentData = { resolve, reject, config };
-        this.component = "inputer";
+
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
       })
-        .then(tip => {
-          const paid = record.actual + tip;
-          Object.assign(record, { tip, paid });
+        .then(({ amount }) => {
+          const paid = record.actual + amount;
+          Object.assign(record, { tip: amount, paid });
           this.$socket.emit("[TRANSACTION] ADJUST_TIP", record);
           this.exitComponent();
         })
@@ -237,7 +241,7 @@ export default {
     togglePaid() {
       this.showPaid = !this.showPaid;
     },
-    toggleType(){
+    toggleType() {
       this.showTable = !this.showTable;
     }
   }

@@ -1,7 +1,7 @@
 <template>
     <div>
       <section>
-        <label class="type">{{$t('tag.opinion')}}</label>
+        <label class="type"><i class="fas fa-user-tag"></i>{{$t('tag.opinion')}}</label>
         <div class="tags">
           <div class="tag">
             <input type="checkbox" name="tag" v-model="tags" value="goodCustomer" id="goodCustomer">
@@ -22,7 +22,7 @@
         </div>
       </section>
       <section>
-        <label class="type">{{$t('tag.place')}}</label>
+        <label class="type"><i class="fas fa-location-arrow"></i>{{$t('tag.place')}}</label>
         <div class="tags">
             <div class="tag">
               <input type="checkbox" name="tag" v-model="tags" value="bar" id="bar">
@@ -50,29 +50,16 @@
             </div>
         </div>
       </section>
-      <!-- <section>
-        <label class="type">{{$t('tag.class')}}</label>
-          <div class="tags">
-            <div class="tag">
-              <input type="checkbox" name="tag" v-model="tags" value="white" id="white">
-              <label for="white">{{$t('tag.white')}}</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" name="tag" v-model="tags" value="black" id="black">
-              <label for="black">{{$t('tag.black')}}</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" name="tag" v-model="tags" value="asian" id="asian">
-              <label for="asian">{{$t('tag.asian')}}</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" name="tag" v-model="tags" value="mexican" id="mexican">
-              <label for="mexican">{{$t('tag.mexican')}}</label>
-            </div>
-        </div>
-      </section> -->
       <section>
-        <label class="type">{{$t('tag.other')}}</label>
+        <label class="type"><i class="fab fa-adversal"></i>{{$t('tag.other')}}</label>
+          <div class="tag">
+            <input type="checkbox" name="tag" v-model="tags" value="ad" id="ad">
+            <label for="ad">{{$t('tag.ad')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="tag" v-model="tags" value="prank" id="prank">
+            <label for="prank">{{$t('tag.prank')}}</label>
+          </div>
           <div class="tag">
             <input type="checkbox" name="tag" v-model="tags" value="farAway" id="farAway">
             <label for="farAway">{{$t('tag.farAway')}}</label>
@@ -85,17 +72,9 @@
             <input type="checkbox" name="tag" v-model="tags" value="noService" id="noService">
             <label for="noService">{{$t('tag.noService')}}</label>
           </div>
-          <div class="tag">
-            <input type="checkbox" name="tag" v-model="tags" value="ad" id="ad">
-            <label for="ad">{{$t('tag.ad')}}</label>
-          </div>
-          <div class="tag">
-            <input type="checkbox" name="tag" v-model="tags" value="prank" id="prank">
-            <label for="prank">{{$t('tag.prank')}}</label>
-          </div>
       </section>
       <section>
-        <label class="type">{{$t('tag.allergy')}}</label>
+        <label class="type"><i class="fas fa-allergies"></i>{{$t('tag.allergy')}}</label>
         <div class="tags">
           <div class="tag">
             <input type="checkbox" name="allergy" v-model="allergy" value="MILK" id="milk">
@@ -110,12 +89,12 @@
             <label for="nuts">{{$t('allergy.NUTS')}}</label>
           </div>
           <div class="tag">
-            <input type="checkbox" name="allergy" v-model="allergy" value="WHEAT" id="wheat">
-            <label for="wheat">{{$t('allergy.WHEAT')}}</label>
-          </div>
-          <div class="tag">
             <input type="checkbox" name="allergy" v-model="allergy" value="SOY" id="soy">
             <label for="soy">{{$t('allergy.SOY')}}</label>
+          </div>
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="WHEAT" id="wheat">
+            <label for="wheat">{{$t('allergy.WHEAT')}}</label>
           </div>
           <div class="tag">
             <input type="checkbox" name="allergy" v-model="allergy" value="SHELLFISH" id="shellfish">
@@ -125,14 +104,7 @@
             <input type="checkbox" name="allergy" v-model="allergy" value="FISH" id="fish">
             <label for="fish">{{$t('allergy.FISH')}}</label>
           </div>
-          <div class="tag">
-            <input type="checkbox" name="allergy" v-model="allergy" value="SESAME" id="sesame">
-            <label for="sesame">{{$t('allergy.SESAME')}}</label>
-          </div> 
-          <div class="tag">
-            <input type="checkbox" name="allergy" v-model="allergy" value="AVOCADO" id="avocado">
-            <label for="avocado">{{$t('allergy.AVOCADO')}}</label>
-          </div> 
+
           <div class="tag">
             <input type="checkbox" name="allergy" v-model="allergy" value="GARLIC" id="garlic">
             <label for="garlic">{{$t('allergy.GARLIC')}}</label>
@@ -140,7 +112,15 @@
           <div class="tag">
             <input type="checkbox" name="allergy" v-model="allergy" value="CELERY" id="celery">
             <label for="celery">{{$t('allergy.CELERY')}}</label>
-          </div>                               
+          </div>   
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="AVOCADO" id="avocado">
+            <label for="avocado">{{$t('allergy.AVOCADO')}}</label>
+          </div> 
+          <div class="tag">
+            <input type="checkbox" name="allergy" v-model="allergy" value="SESAME" id="sesame">
+            <label for="sesame">{{$t('allergy.SESAME')}}</label>
+          </div>                                       
         </div>          
       </section>
     </div>
@@ -153,8 +133,7 @@ export default {
   data() {
     return {
       tags: [],
-      allergy: [],
-      customer: this.$store.getters.customer
+      allergy: []
     };
   },
   created() {
@@ -186,6 +165,9 @@ export default {
     },
     ...mapActions(["setCustomer"])
   },
+  computed: {
+    ...mapGetters(["customer"])
+  },
   watch: {
     tags: "updateTag",
     allergy: "updateAllergy"
@@ -214,6 +196,11 @@ section:last-child {
   cursor: pointer;
   background: #f5f5f5;
   color: #666;
+}
+
+i {
+  display: inline-block;
+  width: 25px;
 }
 
 .tag {

@@ -12,7 +12,7 @@
       <i class="fab fa-google-wallet"></i>
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
-    <button class="btn" @click="discount" :disabled="disable || !discountable">
+    <button class="btn" @click="openDiscountModule">
       <i class="fa fa-tags"></i>
       <span class="text">{{$t('button.discount')}}</span>
     </button>
@@ -30,10 +30,10 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import inputModule from "../component/inputer";
 import paymentMarker from "../payment/mark";
-import discount from "../payment/discount";
 import dialoger from "../common/dialoger";
-import inputer from "./component/inputer";
 import driver from "./component/driver";
 import payment from "../payment/main";
 import viewer from "../split/viewer";
@@ -46,9 +46,8 @@ export default {
     driver,
     viewer,
     payment,
-    inputer,
     dialoger,
-    discount,
+    inputModule,
     paymentMarker
   },
   data() {
@@ -61,7 +60,6 @@ export default {
     };
   },
   created() {
-    this.discountable = this.approval(this.op.modify, "discount");
     this.assignable = this.approval(this.op.modify, "driver");
   },
   methods: {
@@ -104,8 +102,8 @@ export default {
               amount: 1
             };
 
-            this.componentData = { resolve, reject, config };
-            this.component = "inputer";
+            this.componentData = Object.assign({ resolve, reject }, config);
+            this.component = "inputModule";
           })
             .then(this.confirmEvenSplit)
             .catch(this.exitComponent);
@@ -184,27 +182,96 @@ export default {
         .then(() => this.$open("paymentMarker"))
         .catch(() => this.openPaymentModule({ thirdPartyPayment: true }));
     },
-    discount() {
+    openDiscountModule() {
+      this.$checkPermission("modify", "discount")
+        .then(this.setDiscount)
+        .catch(() =>
+          this.$log({
+            eventID: 5000,
+            note: `${this.op.name} attempt to set discount on ticket # ${
+              this.order.number
+            } (Total: $${this.order.payment.balance})`
+          })
+        );
+    },
+    setDiscount() {
       if (this.isEmptyTicket) return;
 
-      this.$socket.emit("[COUPON] LIST", coupons => {
-        new Promise((resolve, reject) => {
-          const { payment } = this.order;
-          this.componentData = { payment, coupons, resolve, reject };
-          this.component = "discount";
-        })
-          .then(this.updatePayment)
-          .catch(this.exitComponent);
+      new Promise((resolve, reject) => {
+        const config = {
+          title: "title.discount",
+          type: "decimal",
+          percentage: false,
+          allowPercentage: true,
+          amount: "0.00"
+        };
+
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
+      })
+        .then(this.checkDiscount)
+        .then(this.applyDiscount)
+        .catch(this.exitComponent);
+    },
+    checkDiscount(input) {
+      const { amount, percentage } = input;
+
+      return new Promise((apply, unapply) => {
+        const ticketTotal = this.tax.beforeDiscount
+          ? this.order.payment.subtotal
+          : this.order.payment.total;
+
+        const discount = percentage
+          ? toFixed(amount * ticketTotal / 100, 2)
+          : amount;
+
+        if (discount > ticketTotal) {
+          const prompt = {
+            type: "warning",
+            title: "dialog.cantExecute",
+            msg: "dialog.discountAmountNotAllow",
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.retry", fn: "resolve" }
+            ]
+          };
+
+          this.$dialog(prompt)
+            .then(this.setDiscount)
+            .catch(() => unapply());
+        } else {
+          apply(Object.assign(input, { discount }));
+        }
       });
     },
-    updatePayment({ discount, coupon }) {
-      let coupons = this.order.coupons.filter(
-        coupon => coupon.code !== "Entree POS"
-      );
+    applyDiscount({ amount, percentage, discount }) {
+      const coupon = percentage
+        ? {
+            code: "Entree POS",
+            alias: `${amount} % OFF`,
+            discount: amount,
+            stack: true,
+            expire: {},
+            count: 0,
+            type: "discount",
+            apply: "order"
+          }
+        : {
+            code: "Entree POS",
+            alias: `$ ${amount} OFF`,
+            discount: amount,
+            stack: true,
+            expire: {},
+            count: 0,
+            type: "voucher",
+            apply: "order"
+          };
+
+      let coupons = this.order.coupons.filter(c => c.code !== "Entree POS");
 
       discount > 0 && coupons.push(coupon);
-      this.order.coupons = coupons;
 
+      this.order.coupons = coupons;
       this.$calculatePayment(this.order, { selfAssign: true });
       this.$socket.emit("[INVOICE] UPDATE", this.order);
       this.exitComponent();

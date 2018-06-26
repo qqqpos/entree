@@ -10,8 +10,10 @@
         <div class="banner"></div>
         <div class="display">
             <input type="text" v-model="amount" placeholder="0.00">
-            <span class="unit" v-if="percentage" @click="toggle">%</span>
-            <span class="unit" v-else @click="toggle">$</span>
+            <template v-if="allowPercentage">
+              <span class="unit" v-if="percentage" @click="toggle">%</span>
+              <span class="unit" v-else @click="toggle">$</span>
+            </template>
         </div>
         <num-pad v-model="amount" @enter="confirm" :type="type"></num-pad>
     </div>
@@ -36,20 +38,28 @@ export default {
   created() {
     const {
       title = "title.modify",
+      type = "decimal",
       percentage = false,
       allowPercentage = false,
       amount = "0.00"
     } = this.init;
 
     this.title = title;
-    this.type = percentage ? "number" : "decimal";
     this.percentage = percentage;
     this.allowPercentage = allowPercentage;
+    this.type = type || (percentage ? "number" : "decimal");
 
     if (isNumber(amount)) {
-      this.amount = percentage
-        ? parseFloat(amount)
-        : parseFloat(amount).toFixed(2);
+      switch (this.type) {
+        case "number":
+          this.amount = parseFloat(amount);
+          break;
+        case "decimal":
+          this.amount = parseFloat(amount).toFixed(2);
+          break;
+        default:
+          this.amount = parseFloat(amount).toFixed(2);
+      }
     } else {
       this.amount = "0.00";
     }

@@ -2,9 +2,10 @@
     <div class="relative">
         <div class="slider" :style="position"></div>
         <ul class="tab">
-            <li @click="move('Information',0)">{{$t('text.contactInfo')}}</li>
-            <li @click="move('Map',1)">{{$t('text.map')}}</li>
-            <li @click="move('Tag',2)">{{$t('text.tag')}}</li>
+            <li @click="move('Information',0)"><i class="fas fa-info-circle"></i>{{$t('text.contactInfo')}}</li>
+            <li @click="move('Map',1)"><i class="fas fa-map-marked-alt"></i>{{$t('text.map')}}</li>
+            <li @click="move('Tag',2)"><i class="fas fa-user-tag"></i>{{$t('text.tag')}}</li>
+            <li @click="move('Config',3)"><i class="fas fa-user-cog"></i>{{$t('setting.config')}}</li>
         </ul>
     </div>
 </template>
@@ -24,7 +25,7 @@ export default {
   },
   computed: {
     position() {
-      return { transform: `translate3d(${this.offset * 222.67}px,0,0)` };
+      return { transform: `translate3d(${this.offset * 167}px,0,0)` };
     }
   }
 };
@@ -33,6 +34,11 @@ export default {
 <style scoped>
 .relative {
   border-top: 2px solid #cfd8dc;
+}
+
+i {
+  margin-right: 5px;
+  color: #666;
 }
 
 ul.tab {
@@ -49,7 +55,7 @@ ul.tab li {
 
 .slider {
   position: absolute;
-  width: 222.67px;
+  width: 167px;
   height: 2px;
   background: #607d8b;
   top: -2px;
@@ -64,6 +70,6 @@ ul.tab li {
   border-right: 10px solid transparent;
   border-top: 10px solid #607d8b;
   position: absolute;
-  left: 100px;
+  left: 71px;
 }
 </style>

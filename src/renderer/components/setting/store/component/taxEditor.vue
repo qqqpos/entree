@@ -7,6 +7,7 @@
                 <h3>{{$t('title.tax')}}</h3>
               </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <div class="input">
                     <inputer title="text.alias" v-model.trim="tax.alias"></inputer>

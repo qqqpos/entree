@@ -51,8 +51,9 @@
 </template>
 
 <script>
-import hammer from "hammerjs";
 import { mapGetters } from "vuex";
+
+import hammer from "hammerjs";
 import evener from "./component/evener";
 import options from "./component/options";
 import splitor from "./component/splitor";
@@ -70,7 +71,7 @@ export default {
             !!this.component
         : true;
     },
-    ...mapGetters(["tax", "dinein", "store"])
+    ...mapGetters(["tax", "store", "config", "dinein"])
   },
   data() {
     return {
@@ -356,11 +357,24 @@ export default {
       this.$calculatePayment(this.order, { selfAssign: true });
     },
     setDiscount() {
+      const {
+        defaults = {
+          percentageDiscount: false
+        }
+      } = this.config;
+
+      const title = "title.discount";
+      const type = defaults.percentageDiscount ? "number" : "decimal";
+      const percentage = defaults.percentageDiscount;
+
       this.$bus.emit("__THREAD__OPEN", {
         threadID: this.unique,
         component: "discount",
         args: {
-          payment: this.order.payment
+          title,
+          type,
+          percentage,
+          allowPercentage: true
         }
       });
     },
@@ -369,7 +383,6 @@ export default {
       const amount =
         this.order.gratuityPercentage || this.order.gratuityFee || 0;
       const percentage = true;
-      const allowPercentage = true;
 
       this.$bus.emit("__THREAD__OPEN", {
         threadID: this.unique,
@@ -378,7 +391,7 @@ export default {
           title,
           amount,
           percentage,
-          allowPercentage
+          allowPercentage: true
         }
       });
     },
@@ -410,11 +423,40 @@ export default {
 
       switch (component) {
         case "discount":
-          const { discount, coupon } = result;
+          const { amount, percentage } = result;
 
-          let coupons = this.order.coupons.filter(
-            coupon => coupon.code !== "Entree POS"
-          );
+          const ticketTotal = this.tax.beforeDiscount
+            ? this.order.payment.subtotal
+            : this.order.payment.total;
+
+          const discount = percentage
+            ? toFixed(amount * ticketTotal / 100, 2)
+            : amount;
+
+          const coupon = percentage
+            ? {
+                code: "Entree POS",
+                alias: `${amount} % OFF`,
+                discount: amount,
+                stack: true,
+                expire: {},
+                count: 0,
+                type: "discount",
+                apply: "order"
+              }
+            : {
+                code: "Entree POS",
+                alias: `$ ${amount} OFF`,
+                discount: amount,
+                stack: true,
+                expire: {},
+                count: 0,
+                type: "voucher",
+                apply: "order"
+              };
+
+          let coupons = this.order.coupons.filter(c => c.code !== "Entree POS");
+
           discount > 0 && coupons.push(coupon);
 
           this.order.coupons = coupons;

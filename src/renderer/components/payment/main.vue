@@ -429,11 +429,11 @@ export default {
         //we should consider it as a shortcut of paid + tip
         //prompt a dialog to confirm
         if (this.paid > this.order.payment.remain) {
-          const extraAsTip = toFixed(this.paid - this.payment.remain, 2);
+          const extraAsTip = toFixed(this.paid - this.order.payment.remain, 2);
 
           const prompt = {
-            title: "dialog.paidAmountGreaterThanDue",
-            msg: ["dialog.extraAmountSetAsTip", extra.toFixed(2)],
+            title: "dialog.extraPayment",
+            msg: ["dialog.setExtraAmountAsTip", extraAsTip.toFixed(2)],
             buttons: [
               { text: "button.cancel", fn: "reject" },
               { text: "button.setTip", fn: "resolve" }
@@ -864,6 +864,7 @@ export default {
         } = this.config;
         const config = {
           title: "title.discount",
+          type: defaults.percentageDiscount ? "number" : "decimal",
           percentage: defaults.percentageDiscount,
           allowPercentage: true,
           amount: "0.00"
@@ -880,10 +881,15 @@ export default {
       const { amount, percentage } = input;
 
       return new Promise((apply, unapply) => {
+        const ticketTotal = this.tax.beforeDiscount
+          ? this.order.payment.subtotal
+          : this.order.payment.total;
+
         const discount = percentage
-          ? toFixed(amount * this.order.payment.subtotal / 100, 2)
+          ? toFixed(amount * ticketTotal / 100, 2)
           : amount;
-        if (discount > this.order.payment.subtotal) {
+
+        if (discount > ticketTotal) {
           const prompt = {
             type: "warning",
             title: "dialog.cantExecute",
@@ -1084,6 +1090,7 @@ export default {
       }
     },
     payFailed(prompt) {
+      console.log(prompt);
       isObject(prompt)
         ? this.$dialog(prompt)
             .then(this.exitComponent)

@@ -653,7 +653,7 @@ export default {
     cashInRequired: "Cash In Required",
     cashInRequiredTip:
       "You need to Cash-In First before you can use the cash drawer",
-    extraPayment: "Extra Tender Amount",
+    extraPayment: "Extra Amount",
     setExtraAmountAsTip: "Are you going to set the Extra ( ${i} ) as Tip?",
     ticketNotFound: "Invoice Not Found",
     actionProcess: "How do you want to proceed?",
@@ -1026,6 +1026,7 @@ export default {
     cash: "Cash",
     creditCard: "Credit Card",
     giftCard: "Gift Card",
+    thirdParty: "External Payment",
     pay: "Pay",
     paid: "Paid",
     unpaid: "Unpaid",
@@ -1395,7 +1396,7 @@ export default {
       tip: "Tip"
     },
     tax: "Tax",
-    taxBeforeDiscount: "Tax Before Disc",
+    taxBeforeDiscount: "Tax Before Discount",
     taxBeforeCredit: "Tax Before Credit",
     tipSuggestion: "Tips Suggestion",
     dinein: "Dine In",

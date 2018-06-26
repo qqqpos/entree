@@ -94,7 +94,7 @@
           </div>
         </li>
         <li @click="openSetting" v-show="authorized || op.role === 'Manager'">
-          <i class="fa fa-2x fa-cog"></i>
+          <i class="fas fa-2x fa-user-cog"></i>
           <div>
             <h3>{{$t('dock.setting')}}</h3>
             <h5>{{$t('dock.settingTip')}}</h5>

@@ -17,12 +17,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import phone from "./component/phone";
-import street from "./component/street";
-import extension from "./component/extension";
-import name from "./component/name";
-import city from "./component/city";
-import note from "./component/note";
+
+import phone from "./helper/phone";
+import name from "./helper/name";
+import city from "./helper/city";
+import note from "./helper/note";
+import street from "./helper/street";
+import extension from "./helper/extension";
 
 export default {
   components: { phone, street, extension, name, city, note },

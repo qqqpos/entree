@@ -44,16 +44,23 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
+import offlineModule from "./component/offline";
+import portalModule from "./component/portal";
+import callerModule from "./component/caller";
 import dialoger from "../common/dialoger";
-import portal from "./component/portal";
-import { ipcRenderer } from "electron";
 import profiles from "./profiles";
 import switcher from "./switcher";
-import caller from "./caller";
-import disc from "./disc";
 
 export default {
-  components: { caller, switcher, dialoger, disc, profiles, portal },
+  components: {
+    offlineModule,
+    callerModule,
+    portalModule,
+    switcher,
+    dialoger,
+    profiles
+  },
   data() {
     return {
       componentData: null,
@@ -106,7 +113,7 @@ export default {
       caller
         ? this.$socket.emit("[PHONE] RING", caller, customer => {
             this.newPhoneCall(customer);
-            this.$open("caller", { customer });
+            this.$open("callerModule", { customer });
           })
         : this.exitComponent();
     },
@@ -240,9 +247,9 @@ export default {
       if (this.$route.name !== "Menu") return;
       this.customer._id
         ? this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
-            this.$open("portal", { invoices })
+            this.$open("portalModule", { invoices })
           )
-        : this.$open("portal", { invoices: [] });
+        : this.$open("portalModule", { invoices: [] });
     },
     ...mapActions([
       "setApp",
@@ -276,7 +283,7 @@ export default {
   },
   sockets: {
     connect() {
-      this.component === "disc" && this.exitComponent();
+      this.component === "offlineModule" && this.exitComponent();
       this.setApp({ database: true });
 
       this.station &&
@@ -295,8 +302,7 @@ export default {
     TICKET_NUMBER(number) {
       this.app.newTicket && this.setTicket({ number });
     },
-    UPDATE_CONFIG(update) {
-      const { target, data } = update;
+    UPDATE_CONFIG({ target, data }) {
       Object.assign(this.config, { [target]: data });
     },
     UPDATE_STATION(data) {
@@ -317,26 +323,7 @@ export default {
         this.updateOrder(data);
       }
     },
-    SYNC_ORDERS(data) {
-      this.setTodayOrder(data);
-    },
-    SYNC_TABLES(data) {
-      this.syncTables(data);
-    },
-    MENU_CATEGORY_UPDATE(data) {
-      this.updateMenuCategory(data);
-    },
-    REQUEST_CATEGORY_UPDATE(data) {
-      this.updateRequestCategory(data);
-    },
-    REQUEST_ACTION_UPDATE(data) {
-      this.updateRequestAction(data);
-    },
-    REQUEST_ITEM_UPDATE(data) {
-      this.updateRequestItem(data);
-    },
-    MENU_ITEM_UPDATE(data) {
-      const { action, item, sequence } = data;
+    MENU_ITEM_UPDATE({ action, item, sequence }) {
       switch (action) {
         case "update":
           this.updateMenuItem({ item, sequence });
@@ -346,40 +333,28 @@ export default {
           break;
       }
     },
-    REQUEST_ITEM_REMOVE(data) {
-      this.removeRequestItem(data);
-    },
-    REPLACE_MENU(data) {
-      this.replaceMenu(data);
-    },
-    UPDATE_TABLE_SECTION(data) {
-      this.updateTableSection(data);
-    },
-    REPLACE_TABLE(data) {
-      this.replaceTable(data);
-    },
-    TEMPORARY_TABLE(data) {
-      this.setTemporaryTable(data);
-    },
-    NEW_RESERVATION(data) {
-      this.newReservation(data);
-    },
-    UPDATE_RESERVATION(data) {
-      this.updateReservation(data);
-    },
-    SYNC_RESERVATIONS(data) {
-      this.setReservation(data);
-    },
-    REPLACE_TEMPLATE(data) {
-      this.setTemplates(data);
-    },
     SHUTDOWN() {
-      ipcRenderer.send("Shutdown");
+      this.$electron.ipcRenderer.send("Shutdown");
     },
     disconnect() {
       this.setApp({ database: false });
-      this.$open("disc");
-    }
+      this.$open("offlineModule");
+    },
+    SYNC_ORDERS: "setTodayOrder",
+    SYNC_TABLES: "syncTables",
+    SYNC_RESERVATIONS: "setReservation",
+    MENU_CATEGORY_UPDATE: "updateMenuCategory",
+    REQUEST_CATEGORY_UPDATE: "updateRequestCategory",
+    REQUEST_ACTION_UPDATE: "updateRequestAction",
+    REQUEST_ITEM_UPDATE: "updateRequestItem",
+    REQUEST_ITEM_REMOVE: "removeRequestItem",
+    REPLACE_MENU: "replaceMenu",
+    UPDATE_TABLE_SECTION: "updateTableSection",
+    REPLACE_TABLE: "replaceTable",
+    TEMPORARY_TABLE: "setTemporaryTable",
+    NEW_RESERVATION: "newReservation",
+    UPDATE_RESERVATION: "updateReservation",
+    REPLACE_TEMPLATE: "setTemplates"
   }
 };
 </script>

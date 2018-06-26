@@ -197,202 +197,199 @@ export default {
     // }
 
     Vue.prototype.$calculatePayment = function (order, params = {}) {
-      try {
-        const {
-          selfAssign = true,
-          callback = false
-        } = params;
+      const {
+        selfAssign = true,
+        callback = false
+      } = params;
 
-        const {
-          type,
-          guest,
-          coupons,
-          taxFree = false,
-          deliveryFree = false,
-          gratuityFree = false,
-          plasticBag = 1
-        } = order;
+      const {
+        type,
+        guest,
+        coupons,
+        taxFree = false,
+        deliveryFree = false,
+        gratuityFree = false,
+        plasticBag = 1
+      } = order;
 
-        const { enable, rules } = this.dinein.surcharge;
+      const { enable, rules } = this.dinein.surcharge;
 
-        let delivery = 0;
+      let delivery = 0;
 
-        if (type === "DELIVERY" && !deliveryFree) {
-          if (this.store.deliver.charge)
-            delivery = parseFloat(this.store.deliver.baseFee);
+      if (type === "DELIVERY" && !deliveryFree) {
+        if (this.store.deliver.charge)
+          delivery = parseFloat(this.store.deliver.baseFee);
 
-          if (this.store.deliver.surcharge) {
-            const addressDistance = order.customer.distance || this.customer.distance;
-            const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
-            const distance = isNumber(duration) ? duration : 0;
-            const surcharge = this.store.deliver.rules
-              .sort((a, b) => a.distance < b.distance)
-              .find(rule => rule.distance < distance);
+        if (this.store.deliver.surcharge) {
+          const addressDistance = order.customer.distance || this.customer.distance;
+          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
+          const distance = isNumber(duration) ? duration : 0;
+          const surcharge = this.store.deliver.rules
+            .sort((a, b) => a.distance < b.distance)
+            .find(rule => rule.distance < distance);
 
-            if (surcharge && isNumber(surcharge))
-              delivery += parseFloat(surcharge.fee);
-          }
-
-          if (order.hasOwnProperty("deliveryFee"))
-            delivery = order.deliveryFee;
+          if (surcharge && isNumber(surcharge))
+            delivery += parseFloat(surcharge.fee);
         }
 
-        let { tip, gratuity, paid, rounding = 0, log } = order.payment;
-
-        let subtotal = 0,
-          tax = 0,
-          discount = 0;
-
-        order.content.forEach(item => {
-          if (item.void) return;
-
-          const single = parseFloat(item.single);
-          const qty = item.qty || 1;
-          const taxClass = this.tax.class[item.taxClass];
-
-          let amount = toFixed(single * qty, 2);
-
-          item.choiceSet.forEach(set => {
-            const _price = parseFloat(set.single);
-
-            if (_price !== 0) {
-              const _qty = set.qty || 1;
-              const _total = _qty * _price;
-              amount = toFixed(amount + _total, 2);
-            }
-          });
-
-          subtotal = toFixed(subtotal + amount, 2);
-
-          if (!taxFree && taxClass.apply[type])
-            (tax += taxClass.rate / 100 * amount), 2;
-        });
-
-        if (this.tax.deliveryTax) {
-          /*
-              is Delivery fee taxable?
-              Find out default tax rate and apply to delivery charge
-          */
-
-          let taxRate = 0;
-          Object.keys(this.tax.class).forEach(type => {
-            this.tax.class[type].default === true &&
-              (taxRate = this.tax.class[type].rate);
-          });
-          /**
-           * Tax apply Before Discount (For Example: 10% Tax Rate, 20% Discount)
-           *
-           * Subtotal: 10.00
-           * Tax:       1.00
-           * Discount:  2.00
-           * Total:     9.00
-           * ------------------------------------------------------------------
-           **/
-          tax += delivery * taxRate / 100;
-        }
-
-        let plasticTax = 0;
-        if (this.tax.plasticPenalty) {
-          //calculate plastic bag penalty
-          const fine = isNumber(this.tax.plasticCharge)
-            ? parseFloat(this.tax.plasticCharge)
-            : 0.5;
-
-          plasticTax = toFixed(plasticBag * fine, 2);
-        }
-
-        if (type === "DINE_IN" && !gratuityFree) {
-          if (enable) {
-            //find rule
-            try {
-              const { fee, percentage } = rules
-                .sort((a, b) => a.guest < b.guest)
-                .find(r => guest >= r.guest);
-              gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
-            } catch (e) { }
-          }
-
-          if (order.hasOwnProperty("gratuityPercentage")) {
-            gratuity = toFixed(subtotal * order.gratuityPercentage / 100, 2);
-          } else if (order.hasOwnProperty("gratuityFee")) {
-            gratuity = order.gratuityFee;
-          }
-        } else {
-          gratuity = 0;
-        }
-
-        if (coupons && coupons.length > 0) {
-          let offer = 0;
-          coupons.forEach(coupon => {
-            const { reference } = coupon;
-
-            switch (coupon.type) {
-              // 'rebate':        '满减券',
-              // 'giveaway':      '礼物券',
-              // 'voucher':       '现金券',
-              // 'discount':      '折扣券',
-              case "rebate":
-                offer += coupon.discount;
-                break;
-              case "voucher":
-                offer += coupon.discount;
-                break;
-              case "discount":
-                switch (coupon.apply) {
-                  case "category":
-                    let _offer = 0;
-                    order.content.forEach(item => {
-                      if (reference.includes(item.category)) {
-                        _offer += coupon.discount / 100 * item.single * item.qty;
-                      }
-                    });
-                    offer += _offer;
-                    break;
-                  case "item":
-                    break;
-                  default:
-                    offer += coupon.discount / 100 * subtotal;
-                }
-                break;
-            }
-          });
-
-          discount += offer;
-        }
-
-        const total = subtotal + plasticTax + toFixed(tax, 2);
-        const due = Math.max(0, total + delivery - discount)
-          .toPrecision(12)
-          .toFloat();
-        const grandTotal = toFixed((due + gratuity) * 100, 2);
-
-        rounding = this.$rounding(grandTotal);
-
-        const balance = due + gratuity + rounding;
-        const remain = balance - paid;
-        const payment = {
-          subtotal: toFixed(subtotal, 2),
-          tax: toFixed(tax, 2),
-          plasticTax: toFixed(plasticTax, 2),
-          total: toFixed(total, 2),
-          discount: toFixed(discount, 2),
-          due: toFixed(due, 2),
-          balance: toFixed(balance, 2),
-          paid: toFixed(paid, 2),
-          remain: toFixed(remain, 2),
-          tip: toFixed(tip, 2),
-          gratuity: toFixed(gratuity, 2),
-          delivery: toFixed(delivery, 2),
-          rounding: toFixed(rounding, 2),
-          log
-        }
-
-        selfAssign && Object.assign(order, { payment });
-        if (callback) return payment;
-      } catch (e) {
-        console.log(e)
+        if (order.hasOwnProperty("deliveryFee"))
+          delivery = order.deliveryFee;
       }
 
+      let { tip, gratuity, paid, log } = order.payment;
+
+      let subtotal = 0,
+        tax = 0,
+        discount = 0;
+
+      order.content.forEach(item => {
+        if (item.void) return;
+
+        const single = parseFloat(item.single);
+        const qty = item.qty || 1;
+        const taxClass = this.tax.class[item.taxClass];
+
+        let amount = toFixed(single * qty, 2);
+
+        item.choiceSet.forEach(set => {
+          const _price = parseFloat(set.single);
+
+          if (_price !== 0) {
+            const _qty = set.qty || 1;
+            const _total = _qty * _price;
+            amount = toFixed(amount + _total, 2);
+          }
+        });
+
+        subtotal = toFixed(subtotal + amount, 2);
+
+        if (!taxFree && taxClass.apply[type])
+          (tax += taxClass.rate / 100 * amount), 2;
+      });
+
+      if (this.tax.deliveryTax) {
+        /*
+            is Delivery fee taxable?
+            Find out default tax rate and apply to delivery charge
+        */
+
+        let taxRate = 0;
+        Object.keys(this.tax.class).forEach(type => {
+          this.tax.class[type].default === true &&
+            (taxRate = this.tax.class[type].rate);
+        });
+        /**
+         * Tax apply Before Discount (For Example: 10% Tax Rate, 20% Discount)
+         *
+         * Subtotal: 10.00
+         * Tax:       1.00
+         * Discount:  2.00
+         * Total:     9.00
+         * ------------------------------------------------------------------
+         **/
+        tax += delivery * taxRate / 100;
+      }
+
+      let plasticTax = 0;
+      if (this.tax.plasticPenalty) {
+        //calculate plastic bag penalty
+        const fine = isNumber(this.tax.plasticCharge)
+          ? parseFloat(this.tax.plasticCharge)
+          : 0.5;
+
+        plasticTax = toFixed(plasticBag * fine, 2);
+      }
+
+      if (type === "DINE_IN" && !gratuityFree) {
+        if (enable) {
+          //find rule
+          try {
+            const { fee, percentage } = rules
+              .sort((a, b) => a.guest < b.guest)
+              .find(r => guest >= r.guest);
+            gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
+          } catch (e) { }
+        }
+
+        if (order.hasOwnProperty("gratuityPercentage")) {
+          gratuity = toFixed(subtotal * order.gratuityPercentage / 100, 2);
+        } else if (order.hasOwnProperty("gratuityFee")) {
+          gratuity = order.gratuityFee;
+        }
+      } else {
+        gratuity = 0;
+      }
+
+      if (coupons && coupons.length > 0) {
+        let offer = 0;
+        coupons.forEach(coupon => {
+          const { reference } = coupon;
+
+          switch (coupon.type) {
+            // 'rebate':        '满减券',
+            // 'giveaway':      '礼物券',
+            // 'voucher':       '现金券',
+            // 'discount':      '折扣券',
+            case "rebate":
+              offer += coupon.discount;
+              break;
+            case "voucher":
+              offer += coupon.discount;
+              break;
+            case "discount":
+              switch (coupon.apply) {
+                case "category":
+                  let _offer = 0;
+                  order.content.forEach(item => {
+                    if (reference.includes(item.category)) {
+                      _offer += coupon.discount / 100 * item.single * item.qty;
+                    }
+                  });
+                  offer += _offer;
+                  break;
+                case "item":
+                  break;
+                case "order":
+                  const grandTotal = this.tax.beforeDiscount ? subtotal : subtotal + tax;
+                  offer += coupon.discount / 100 * grandTotal;
+                  break;
+                default:
+                  offer += coupon.discount / 100 * subtotal;
+              }
+              break;
+          }
+        });
+
+        discount += offer;
+      }
+
+      const total = subtotal + plasticTax + toFixed(tax, 2);
+      const totalCharge = total + delivery;
+      const due = toFixed(Math.max(0, totalCharge - discount), 2);
+      const grandTotal = toFixed((due + gratuity) * 100, 2);
+      const rounding = this.$rounding(grandTotal);
+      const balance = due + gratuity + rounding;
+      const remain = balance - paid;
+
+      const payment = {
+        subtotal: toFixed(subtotal, 2),
+        tax: toFixed(tax, 2),
+        plasticTax: toFixed(plasticTax, 2),
+        total: toFixed(total, 2),
+        discount: toFixed(discount, 2),
+        due: toFixed(due, 2),
+        balance: toFixed(balance, 2),
+        paid: toFixed(paid, 2),
+        remain: toFixed(remain, 2),
+        tip: toFixed(tip, 2),
+        gratuity: toFixed(gratuity, 2),
+        delivery: toFixed(delivery, 2),
+        rounding: toFixed(rounding, 2),
+        log
+      }
+
+      selfAssign && Object.assign(order, { payment });
+      if (callback) return payment;
     };
 
     Vue.prototype.$rounding = function (value) {

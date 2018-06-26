@@ -31,14 +31,15 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import unlock from "../common/unlock";
+
+import switchType from "./component/switchType";
+import keyboard from "./component/keyboard";
+import unlockModule from "../common/unlock";
 import dialoger from "../common/dialoger";
 import pageTab from "./component/pageTab";
-import keyboard from "./component/keyboard";
-import switchType from "./component/switchType";
 
 export default {
-  components: { switchType, keyboard, dialoger, pageTab, unlock },
+  components: { switchType, keyboard, dialoger, pageTab, unlockModule },
   computed: {
     ...mapGetters([
       "op",
@@ -258,7 +259,11 @@ export default {
               } else {
                 const prompt = {
                   title: "dialog.addressMismatch",
-                  msg: ["dialog.replaceAddressConfirm", this.customer.address, address]
+                  msg: [
+                    "dialog.replaceAddressConfirm",
+                    this.customer.address,
+                    address
+                  ]
                 };
                 this.store.matrix.autoCorrect
                   ? this.updateProfile(profile)
@@ -351,9 +356,7 @@ export default {
           .catch(this.editFailed);
       }
     },
-    showInvoice() {
-
-    },
+    showInvoice() {},
     editFailed() {},
     stringify(logs) {
       return logs
@@ -434,7 +437,7 @@ i.avatar {
 .cancel {
   padding: 15px 23px;
   cursor: pointer;
-  color:#fff;
+  color: #fff;
 }
 
 .flags {

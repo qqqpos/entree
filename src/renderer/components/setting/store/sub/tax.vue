@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="nav">
-      <div class="back" @click="save">
+      <div class="back" @click="$router.push({ name: 'Setting.store.payment' })">
         <i class="fa fa-chevron-left"></i>
       </div>
       <div class="title">{{$t('title.taxList')}}</div>
@@ -9,8 +9,8 @@
         <span @click="create">{{$t('button.new')}}</span>
       </nav>
     </header>
-    <toggle title="setting.taxBeforeDiscount" v-model="tax.beforeDiscount" :disabled="true"></toggle>
-    <toggle title="setting.taxBeforeCredit" v-model="tax.beforeCredit" :disabled="true"></toggle>
+    <toggle title="setting.taxBeforeDiscount" v-model="tax.beforeDiscount"></toggle>
+    <!-- <toggle title="setting.taxBeforeCredit" v-model="tax.beforeCredit" :disabled="true"></toggle> -->
     <toggle title="setting.plasticPenaltyTax" v-model="tax.plasticPenalty">
       <transition name="dropdown">
         <div class="opt" v-if="tax.plasticPenalty">
@@ -98,22 +98,20 @@ export default {
           this.exitComponent();
         });
     },
-    update(data) {
-      this.$socket.emit("[CONFIG] UPDATE", data);
-    },
     setDefault(tax) {
       Object.keys(this.tax.class).forEach(
         name => (this.tax.class[name].default = false)
       );
       tax.default = true;
-    },
-    save() {
-      this.$socket.emit("[CONFIG] UPDATE", {
-        key: "tax",
-        value: this.tax
-      });
-      this.$router.push({ name: "Setting.store.payment" });
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$socket.emit("[CONFIG] UPDATE", {
+      key: "tax",
+      value: this.tax
+    });
+
+    next();
   }
 };
 </script>

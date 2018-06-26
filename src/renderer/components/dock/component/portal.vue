@@ -53,9 +53,7 @@ export default {
           break;
       }
     },
-    getOrderTime(time) {
-
-    },
+    getOrderTime(time) {},
     countItem(invoice) {
       return invoice.reduce((a, c) => a + c.qty, 0);
     }
@@ -68,7 +66,8 @@ export default {
   position: fixed;
   right: 285px;
   top: 30px;
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 0 0 4px 4px;
   width: 340px;
   height: 470px;
 }

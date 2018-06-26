@@ -48,6 +48,11 @@ export default new Router({
               path: "tag",
               name: "Tag",
               component: require("../components/form/tag")
+            },
+            {
+              path: "config",
+              name: "Config",
+              component: require('../components/form/config')
             }
           ]
         },
