@@ -147,7 +147,6 @@ import groupItem from "./component/groupItem";
 import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
 import shortcut from "./component/shortcut";
-
 import config from "./component/config";
 
 export default {

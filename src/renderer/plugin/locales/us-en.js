@@ -1483,6 +1483,7 @@ export default {
     employeeCardRegistration: "Register employee card",
     settledReceipt: "Settle Payment Receipt",
     plasticPenaltyTax: "Plastic Bag Penalty Tax",
+    autoSaveCreditCard: "Auto Save Credit Card",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",

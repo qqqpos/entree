@@ -7,13 +7,13 @@ const Pax = function () {
   let terminal = null;
   const cardType = ['',
     'Visa',
-    'MasterCard',
-    'American Express',
+    'Master Card',
+    'AmEx',
     'Discover',
     'Diner Club',
     'enRoute',
     'JCB',
-    'RevolutionCard',
+    'Revolution',
     'VisaFleet',
     'MasterCardFleet',
     'FleetOne',
@@ -21,7 +21,7 @@ const Pax = function () {
     'Fuelman',
     'Gascard',
     'Voyager',
-    'WrightExpress'
+    'Wright Exp'
   ];
 
 

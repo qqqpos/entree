@@ -4,6 +4,7 @@
     <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
     <external title="setting.default.setValue" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
     <!-- <external title="setting.thirdParty" @open="$router.push({ name: 'Setting.store.thirdParty' })"></external> -->
+    <toggle title="setting.autoSaveCreditCard" v-model="store.autoSaveCard" v-show="authorized" @update="updateAutoSave"></toggle>
     <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
       <transition name="dropdown">
@@ -29,7 +30,7 @@ import textInput from "../common/textInput";
 export default {
   components: { options, toggle, inputer, textInput, textList, external },
   computed: {
-    ...mapGetters(["config", "tax"])
+    ...mapGetters(["tax", "config", "authorized"])
   },
   data() {
     return {
@@ -131,6 +132,12 @@ export default {
     updateDiscountType(value) {
       this.update({
         key: "store.defaultDiscountUnit",
+        value
+      });
+    },
+    updateAutoSave(value) {
+      this.update({
+        key: "store.autoSaveCard",
         value
       });
     }

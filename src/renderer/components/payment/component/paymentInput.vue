@@ -29,12 +29,18 @@
             <template v-else-if="type === 'CREDIT'">
                 <div class="field relative" id="creditCard" @click="$emit('changeAnchor','creditCard')" data-format="number" data-length="16">
                     <h3 class="text">{{$t('card.number')}}</h3>
-                    <i class="fas fa-history" @click="toggleCardList"></i>
+                    <i class="fas fa-history" @click="toggleCardList" v-show="creditCards.length"></i>
                     <input class="value" :value="creditCard" v-mask.card.check>
                     <i class="fas fa-exclamation-triangle check"></i>
                     <transition name="fadeUp">
-                        <ul v-show="isListVisible" class="cardList">
-                            <li></li>
+                        <ul v-show="showPrevsList" class="cardList">
+                            <v-touch tag="li" v-for="(log,index) in creditCards" :key="index" @press="decode(log)">
+                              <div class="number"><i class="far fa-credit-card"></i>{{log.card[0]}}</div>
+                              <div>
+                                <span><i class="far fa-calendar-alt"></i>{{log.card[1]}}</span>
+                                <span><i class="fab fa-expeditedssl"></i>{{log.card[2]}}</span>
+                              </div>
+                            </v-touch>
                         </ul>
                     </transition>
                 </div>  
@@ -45,10 +51,22 @@
                 </div>                  
             </template>
             <template v-else-if="type === 'THIRD'">
-
+              <div class="external">
+                <div class="type" v-for="(external,index) in externals" :key="index">
+                  <input type="radio" v-model="externalType" :value="external" :id="external" @change="$emit('updateExternalType',$event.target.value)">
+                  <label :for="external">{{external}}</label>
+                </div>
+              </div>
             </template>
             <template v-else>
-
+              <div class="field" id="giftCard" @click="$emit('changeAnchor','giftCard')" data-format="number" data-length="16">
+                <h3 class="text">{{$t('card.giftCard')}}</h3>
+                <input class="value" :value="creditCard" v-mask.card.check>
+              </div>  
+              <div class="field" id="balance">
+                <h3 class="text">{{$t('text.balance')}}</h3>
+                <span></span>
+            </div> 
             </template>
         </div>
         <aside class="padCtrl">
@@ -62,30 +80,52 @@
 <script>
 export default {
   props: [
-    "payment",
+    "tip",
     "type",
     "paid",
-    "tip",
     "split",
     "splitable",
-    "creditCard",
-    "expDate",
     "changeDue",
-    "anchor"
+    "creditCard",
+    "giftCard",
+    "expDate",
+    "anchor",
+    "payment",
+    "external",
+    "customer"
   ],
   data() {
     return {
-      isListVisible: false
+      showPrevsList: false,
+      externals: [],
+      externalType: "",
+      creditCards: []
     };
+  },
+  created() {
+    const {
+      defaults = {
+        externals: [
+          "Visa",
+          "Master Card",
+          "AmEx",
+          "Discover",
+          "Gift Card",
+          "Online Order"
+        ]
+      }
+    } = this.$store.getters.config.defaults;
+
+    this.externals = defaults.externals;
+    //this.externalType = defaults.externals[0];
+    this.getCreditCard();
   },
   mounted() {
     this.$nextTick(this.updateInputField);
   },
   methods: {
     less() {
-      if (this.split > 1) {
-        this.$emit("updateSplit", this.split - 1);
-      }
+      this.split > 1 && this.$emit("updateSplit", this.split - 1);
     },
     more() {
       this.$emit("updateSplit", this.split + 1);
@@ -100,11 +140,35 @@ export default {
       target && target.classList.add("active");
     },
     toggleCardList() {
-      this.isListVisible = !this.isListVisible;
+      this.showPrevsList = !this.showPrevsList;
+    },
+    getCreditCard() {
+      this.customer &&
+        this.$socket.emit(
+          "[CUSTOMER] GET_CREDIT_CARD",
+          this.customer,
+          creditCards => {
+            this.creditCards = creditCards;
+          }
+        );
+    },
+    decode(log) {
+      const ciphertext = log.cipher;
+      const key = "whoisyourdaddy";
+
+      this.$socket.emit("[CRYPT] DECRYPT", { ciphertext, key }, json => {
+        if (json) {
+          this.$emit("apply", JSON.parse(json));
+          this.showPrevsList = false;
+        }
+      });
     }
   },
   watch: {
-    anchor: "updateInputField"
+    anchor: "updateInputField",
+    external(newType) {
+      this.externalType = newType;
+    }
   }
 };
 </script>
@@ -213,12 +277,79 @@ input[type="text"],
 
 ul.cardList {
   position: absolute;
-  left: 0;
+  left: 7px;
   bottom: 83px;
-  background: #f5f5f5;
-  width: 100%;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  width: 264px;
+  box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.3);
+  border-radius: 4px 4px 0 0;
   z-index: 1;
+}
+
+.cardList li {
+  padding: 7px 5px;
+}
+
+.cardList i {
+  display: inline-block;
+  text-align: center;
+  width: 30px;
+}
+
+.cardList .number {
+  margin-bottom: 2px;
+}
+
+.cardList li:nth-child(even) {
+  background: #eceff1;
+}
+
+.external {
+  display: flex;
+  flex-wrap: wrap;
+  width: 279px;
+}
+
+.external label {
+  display: flex;
+  width: 131px;
+  height: 50px;
+  margin: 2px;
+  justify-content: center;
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  position: relative;
+  text-align: center;
+  align-items: center;
+  border-radius: 4px;
+  color: #bdbdbd;
+}
+
+.type input:checked + label {
+  background: #66bb6a;
+  color: #fafafa;
+  border: 2px solid #009688;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.type input:checked + label:before {
+  position: absolute;
+  content: " ";
+  width: 23px;
+  height: 15px;
+  background: #009688;
+  bottom: 0;
+  right: 0;
+  border-top-left-radius: 4px;
+}
+
+.type input:checked + label:after {
+  position: absolute;
+  content: "\2713";
+  bottom: -2px;
+  right: 5px;
+  transform: rotate(20deg);
 }
 </style>
 

@@ -7,13 +7,13 @@
                         <h5>{{'# ' + invoice.number}}<span class="orderType">&nbsp;&nbsp;{{$t('type.' + invoice.type)}}</span></h5>
                         <h3>{{$t('title.payment')}}</h3>
                     </div>
-                    <splitor :tickets="splits" v-model="splitIndex" @preview="previewTicket" @switch="switchInvoice" :disable="payWhole" :giftcard="store.giftcard.enable"></splitor>
+                    <splitor :tickets="splits" v-model="splitIndex" @preview="previewTicket" @switch="switchInvoice" :disable="payWhole"></splitor>
                     <i class="fa fa-times exit" @click="init.reject(false)"></i>
                 </header>
                 <div class="banner"></div>
                 <div class="wrap">
                     <section class="left">
-                        <payment-option @change="changePaymentType" :default="paymentType" :external="isThirdPartyPayment" :terminal="$store.getters.station.terminal"></payment-option>
+                        <payment-option @change="changePaymentType" v-model="paymentType" :external="isThirdPartyPayment" :giftcard="store.giftcard.enable" :terminal="$store.getters.station.terminal"></payment-option>
                         <number-input @input="setInput"></number-input>
                     </section>
                     <section class="right">
@@ -36,7 +36,13 @@
                                 :expDate="expDate" 
                                 :split="splitTarget" 
                                 :splitable="invoice.split" 
-                                @updateSplit="updateSplit" @excSplit="splitTicketConfirm" @changeAnchor="setAnchor" @delete="deleteInput" @clear="clearInput" @charge="charge"></payment-input>
+                                :external="externalPaymentType"
+                                :customer="invoice.customer._id"
+                                @updateSplit="setSplit" @excSplit="splitTicketConfirm" 
+                                @changeAnchor="setAnchor" @delete="deleteInput" 
+                                @clear="clearInput" @charge="charge"
+                                @updateExternalType="setExternalType"
+                                @apply="setCreditCard"></payment-input>
                             <shortcut :value="shortcutValue" @input="setPaid"></shortcut>
                         </div>
                     </section>
@@ -59,6 +65,7 @@ import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import shortcut from "./component/shortcut";
 import creditCardModule from "./creditCard";
+import capture from "../giftcard/capture";
 import preview from "../common/ticket";
 import splitor from "./helper/splitor";
 
@@ -74,6 +81,7 @@ export default {
     inputModule,
     numberInput,
     shortcut,
+    capture,
     splitor,
     preview
   },
@@ -91,7 +99,7 @@ export default {
       creditCard: "",
       expDate: "",
       paymentType: "CASH",
-      externalPaymentType: "Visa",
+      externalPaymentType: null,
       willTicketNumberUpdate: false,
       willResetFieldValue: true,
       isThirdPartyPayment: false,
@@ -229,6 +237,7 @@ export default {
           });
         } else {
           this.order = this.invoice;
+          next();
         }
       });
     },
@@ -260,6 +269,8 @@ export default {
       ) {
         //apply credit card info to payment module
       }
+
+      this.changePaymentType();
     },
     switchInvoice(index) {
       if (isNumber(index)) {
@@ -274,18 +285,28 @@ export default {
           this.tip = "0.00";
           this.splitIndex = next;
           this.order = this.splits[next];
-          this.changePaymentType("CASH");
+          this.changePaymentType();
         } else {
           this.closeTicket();
         }
       }
     },
     changePaymentType(newType) {
+      //apply default payment type
+      const {
+        defaults = {
+          paymentType: "CASH"
+        }
+      } = this.config;
+
+      newType = newType || defaults.paymentType;
+
       this.anchor = "paid";
       this.paymentType = newType;
-
       this.paid =
         newType === "CASH" ? "0.00" : this.order.payment.remain.toFixed(2);
+
+      this.externalPaymentType = null;
     },
     setAnchor(newAnchor) {
       this.anchor = newAnchor;
@@ -482,6 +503,95 @@ export default {
         });
       });
     },
+    swipeGiftCard(number) {
+      return new Promise((resolve, reject) => {
+        if (isObject(this.giftCard)) {
+          resolve(this.giftCard);
+        } else {
+          this.componentData = Object.assign({ resolve, reject }, { number });
+          this.component = "capture";
+        }
+      });
+    },
+    checkGiftCard(card) {
+      this.exitComponent();
+      return new Promise((resolve, reject) => {
+        if (typeof card === "object") {
+          this.giftCard = card;
+          this.setAnchor("paid");
+          this.$forceUpdate();
+          resolve();
+        } else {
+          const prompt = {
+            type: "error",
+            title: "dialog.giftCardActivation",
+            msg: ["dialog.giftCardNotActivated", card],
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+
+          this.$dialog(prompt).then(() => reject());
+        }
+      });
+    },
+    checkGiftCardBalance() {
+      return new Promise((resolve, reject) => {
+        const noBalanceError = {
+          type: "error",
+          title: "dialog.paymentFailed",
+          msg: "dialog.insufficientAmount",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+        const insufficientError = {
+          type: "warning",
+          title: "dialog.paymentFailed",
+          msg: "dialog.insufficientAmount",
+          buttons: [
+            { text: "button.cancel", fn: "reject" },
+            { text: "button.chargeRemain", fn: "resolve" }
+          ]
+        };
+
+        if (toFixed(this.giftCard.balance.toFixed(2), 2) <= 0)
+          throw noBalanceError;
+        if (this.giftCard.balance < this.paid) {
+          this.$dialog(insufficientError)
+            .then(() => {
+              this.exitComponent();
+              this.paid = this.giftCard.balance.toFixed(2);
+              resolve();
+            })
+            .catch(() => {
+              this.exitComponent();
+              reject();
+            });
+        } else {
+          resolve();
+        }
+      });
+    },
+    chargeGiftCard() {
+      return new Promise((resolve, reject) => {
+        const paid = parseFloat(this.paid);
+        this.giftCard.balance = toFixed(this.giftCard.balance - paid, 2);
+
+        const log = {
+          balance: this.giftCard.balance,
+          change: -paid,
+          date: today(),
+          time: Date.now(),
+          type: "Purchase",
+          cashier: this.op.name,
+          number: this.giftCard.number.replace(/\D/g, ""),
+          order: {
+            _id: this.order._id,
+            number: this.order.number || this.ticket.number,
+            type: this.order.type || this.ticket.type
+          }
+        };
+
+        this.$socket.emit("[GIFTCARD] ACTIVITY", log, _id => resolve(_id));
+      });
+    },
     saveTransaction(data) {
       const type =
         this.paymentType === "THIRD"
@@ -594,25 +704,34 @@ export default {
             delete this.order.__creditPayment__;
 
             //save credit card
-            if (this.saveCard) {
-              const { _id } = this.customer;
-              const card = [
-                this.creditCard.replace(" ", ""),
-                this.expiration,
-                ""
-              ];
+            if (this.store.autoSaveCard) {
+              const { _id } = this.invoice.customer;
+              const card = [this.creditCard, this.expDate, ""];
               const key = "whoisyourdaddy";
+              const unique = this.creditCard
+                .split("")
+                .map(Number)
+                .map((n, i) => n + i)
+                .reduce((a, c) => a + c, 0);
+
               this.encrypt(card, key).then(cipher => {
                 this.$socket.emit(
                   "[CUSTOMER] SAVE_CREDIT_CARD",
                   _id,
                   {
                     card: [
-                      this.creditCard.replace(" ", "").slice(0, 8),
-                      this.expiration,
+                      this.creditCard
+                        .split("")
+                        .map(
+                          (num, index) =>
+                            index >= 4 && index <= 11 ? "#" : num
+                        )
+                        .join(""),
+                      this.expDate,
                       ""
                     ],
                     cipher,
+                    unique,
                     lastUse: Date.now()
                   },
                   () => {}
@@ -948,7 +1067,7 @@ export default {
       this.setOrder(this.order);
       this.exitPaymentModule();
     },
-    updateSplit(number) {
+    setSplit(number) {
       this.splitTarget = number;
     },
     splitTicketConfirm() {
@@ -978,6 +1097,13 @@ export default {
     setPaid(value) {
       this.paid = value.toFixed(2);
       this.willResetFieldValue = true;
+    },
+    setExternalType(newType) {
+      this.externalPaymentType = newType;
+    },
+    setCreditCard([creditCard, expDate]) {
+      this.creditCard = creditCard;
+      this.expDate = expDate;
     },
     previewTicket(index) {
       const ticket = JSON.parse(JSON.stringify(this.splits[index]));

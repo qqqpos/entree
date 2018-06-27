@@ -169,7 +169,6 @@ export default {
         if (this.order.settled) throw ticketSettled;
 
         this.$socket.emit("[PAYMENT] COUNT", this.order._id, count => {
-          console.log(count);
           count > 0
             ? this.order.split
               ? resolve(splitTicketAction)

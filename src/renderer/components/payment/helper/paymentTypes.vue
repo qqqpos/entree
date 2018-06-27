@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  props: ["default", "terminal", "external", "giftcard"],
+  props: ["value", "terminal", "external", "giftcard"],
   data() {
     return {
       types: ["CASH", "CREDIT", "THIRD", "GIFT"],
@@ -17,16 +17,18 @@ export default {
     };
   },
   created() {
-    this.method = this.default;
-    
     if (!this.terminal || this.external)
       this.types = this.types.filter(type => type !== "CREDIT");
 
-    if (!this.giftcard && this.types.includes("CREDIT")) {
-      this.types = this.types.filter(type => type !== "GIFT");
-    }
+    if (!this.giftcard) this.types = this.types.filter(type => type !== "GIFT");
+
+    if (this.types.length > 3)
+      this.types = this.types.filter(type => type !== "THIRD");
   },
   watch: {
+    value(type) {
+      this.method = type;
+    },
     method(type) {
       this.$emit("change", type);
     }

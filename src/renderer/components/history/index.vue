@@ -1,6 +1,6 @@
 <template>
   <div class="history">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" @filter="setFilter" @search="searchInvoice"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" @filter="setFilter" @search="searchInvoice" :on="targetName"></filter-bar>
     <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">

@@ -45,8 +45,9 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
-  props: ["data", "date"],
+  props: ["data", "date", "on"],
   data() {
     return {
       filters: [],
@@ -75,6 +76,7 @@ export default {
   methods: {
     setFilter(type, index, e) {
       this.$emit("filter", type);
+
       if (type !== this.type) {
         this.showMore = false;
         this.type = type;
@@ -99,9 +101,12 @@ export default {
     },
     initialData() {
       const servers = new Set();
-      const invoices = this.viewAllInvoices
-        ? this.data
-        : this.data.filter(t => t.server === this.op.name);
+      const invoices =
+        this.viewAllInvoices && !this.on
+          ? this.data
+          : this.on
+            ? this.data.filter(t => t.server === this.on)
+            : this.data.filter(t => t.server === this.op.name);
 
       const sort = [
         "ALL_INVOICES",
@@ -272,7 +277,8 @@ export default {
     }
   },
   watch: {
-    data: "initialData"
+    data: "initialData",
+    on: "initialData"
   }
 };
 </script>
