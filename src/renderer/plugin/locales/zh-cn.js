@@ -1257,7 +1257,8 @@ export default {
     printAhead: "提前{i}分钟打印",
     plasticBag: "塑料袋",
     foodAllergy: "食物过敏",
-    searchTicket: "查找订单"
+    searchTicket: "查找订单",
+    placedItemFor: "点了 {i}个 单品"
   },
   nav: {
     store: "店面",

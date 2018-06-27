@@ -1292,7 +1292,8 @@ export default {
     printAhead: "Print Ahead In {i} Minutes",
     plasticBag: "Plastic Bags",
     foodAllergy: "Food Allergy",
-    searchTicket: "Search Ticket"
+    searchTicket: "Search Ticket",
+    placedItemFor: " has placed {i} items for "
   },
   nav: {
     store: "Store",

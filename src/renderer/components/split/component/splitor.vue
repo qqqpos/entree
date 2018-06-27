@@ -1,7 +1,7 @@
 <template>
-  <div class="splitor">
-    <div v-for="(split,index) in items" @click="setIndex(index)">
-      <p v-for="(item,idx) in split">
+  <div class="split-item-list">
+    <div v-for="(split,index) in items" @click="setIndex(index)" :key="index">
+      <p v-for="(item,idx) in split" :key="idx">
         <span class="qty">{{item.qty}}</span>
         <span>{{item[language]}}</span>
       </p>
@@ -31,17 +31,17 @@ export default {
     setIndex(index) {
       this.index = index;
 
-      const dom = document.querySelector(".splitor .selected");
+      const dom = document.querySelector(".split-item-list .selected");
       dom && dom.classList.remove("selected");
 
       document
-        .querySelectorAll(".splitor div")
+        .querySelectorAll(".split-item-list div")
         [index].classList.add("selected");
 
       this.$emit("pick", this.items[index]);
     },
     remove() {
-      const dom = document.querySelector(".splitor .selected");
+      const dom = document.querySelector(".split-item-list .selected");
       dom && dom.classList.remove("selected");
 
       if (isNumber(this.index)) {
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style scoped>
-.splitor {
+.split-item-list {
   position: absolute;
   top: 0;
   left: 0;
@@ -68,7 +68,7 @@ export default {
   height: 490px;
 }
 
-.splitor div {
+.split-item-list div {
   background: #fff;
   margin: 2px;
   display: flex;

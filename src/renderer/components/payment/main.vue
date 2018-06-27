@@ -1224,6 +1224,11 @@ export default {
         : this.exitComponent();
     },
     closeTicket() {
+      this.$socket.emit(
+        "[INVOICE] UPDATE",
+        Object.assign(this.invoice, { settled: true })
+      );
+
       switch (this.$route.name) {
         case "Menu":
           if (this.invoice.type === "BUFFET") {

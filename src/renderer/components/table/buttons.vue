@@ -330,15 +330,25 @@ export default {
     ...mapActions([
       "setOp",
       "setApp",
-      "resetMenu",
       "resetAll",
+      "setOrder",
       "setTicket",
+      "resetMenu",
       "removePayment",
       "setTableInfo"
     ])
   },
   computed: {
-    ...mapGetters(["op", "order", "isEmptyTicket", "currentTable"])
+    ...mapGetters([
+      "op",
+      "tax",
+      "order",
+      "store",
+      "dinein",
+      "station",
+      "isEmptyTicket",
+      "currentTable"
+    ])
   }
 };
 </script>

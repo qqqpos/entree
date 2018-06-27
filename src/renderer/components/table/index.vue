@@ -67,8 +67,8 @@ export default {
       "sync",
       "dinein",
       "tables",
-      "language",
       "history",
+      "language",
       "customer",
       "currentTable"
     ])
@@ -105,19 +105,53 @@ export default {
     },
     getTableStatus(status) {
       switch (status) {
+        case -2:
+          return { reserved: true };
+        case -1:
+          return { placing: true };
+        case 1:
+          return { idle: true };
         case 2:
-          return { occupy: true };
+          return { placed: true };
         case 3:
-          return { prePay: true };
+          return { receipted: true };
         case 4:
-          return { recycle: true };
+          return { settled: true };
       }
     },
     tap(table) {
       if (!table.hasOwnProperty("_id")) return;
       this.setCurrentTable(table);
 
+      let prompt;
+
       switch (table.status) {
+        case -2:
+          prompt = {
+            type: "question",
+            title: "dialog.tableReserved",
+            msg: "dialog.actionProcess",
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.create", fn: "resolve" }
+            ]
+          };
+
+          this.$dialog(prmopt)
+            .then(() =>
+              this.checkReservation(table)
+                .then(this.checkIfSwitch)
+                .then(this.checkAccessPin)
+                .then(this.countGuest.bind(null, table))
+                .then(this.checkTableType)
+                .then(this.createTable)
+                .catch(this.createTableFailed)
+            )
+            .catch(this.exitComponent);
+          break;
+        case -1:
+          this.resetMenu();
+          break;
         case 1:
           this.checkReservation(table)
             .then(this.checkIfSwitch)
@@ -127,21 +161,26 @@ export default {
             .then(this.createTable)
             .catch(this.createTableFailed);
           break;
-        // case 2:
-        //   const prompt = {
-        //     type: "warning",
-        //     title: "dialog.accessDenied",
-        //     msg: ["dialog.noRightToModify", table.server],
-        //     timeout: { duration: 5000, fn: "resolve" },
-        //     buttons: [{ text: "button.confirm", fn: "resolve" }]
-        //   };
+        case 4:
+          prompt = {
+            title: "dialog.tableClear",
+            msg: ["dialog.tableClearTip", this.currentTable.name],
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.clear", fn: "resolve" }
+            ]
+          };
 
-        //   table.invoice.length === 0
-        //     ? this.$dialog(prompt).then(this.exitComponent)
-        //     : this.checkPermission(table)
-        //         .then(this.viewTicket)
-        //         .catch(this.exceptionHandler);
-        //   break;
+          this.$dialog(prompt)
+            .then(() => {
+              this.resetMenu();
+              this.$socket.emit("[TABLE] RESET", {
+                _id: this.currentTable._id
+              });
+              this.exitComponent();
+            })
+            .catch(this.exitComponent);
+          break;
         default:
           this.checkPermission(table)
             .then(this.viewTicket)
@@ -431,7 +470,7 @@ export default {
 
       this.setCurrentTable(
         Object.assign(table, {
-          status: 2,
+          status: -1,
           session,
           server: this.op.name,
           time: Date.now()
@@ -651,54 +690,48 @@ aside {
   width: 285px;
 }
 
-.prePay {
-  box-shadow: 0 1px 3px #009688;
-}
-
-.table.prePay .icon {
-  color: #009688;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
-}
-
-.prePay .icon:after {
+.icon:after {
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
   font-family: fontAwesome;
-  content: "\f554";
   font-size: 16px;
   font-weight: 900;
   position: absolute;
   top: 3px;
   right: 3px;
-  color: #009688;
 }
 
-.occupy {
-  box-shadow: 0 1px 3px #ff9800;
+.placed {
+  box-shadow: 0 1px 3px #f25d30;
 }
 
-.table.occupy .icon {
-  color: #ff5722;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+.placed .icon {
+  color: #f25e31;
 }
 
-.occupy .icon:after {
-  font-family: fontAwesome;
+.placed .icon:after {
   content: "\f2e7";
-  font-weight: 900;
-  font-size: 16px;
-  position: absolute;
-  top: 3px;
-  right: 3px;
   color: #ff5722;
 }
 
-.recycle .icon:after {
-  font-family: fontAwesome;
+.receipted .icon:after {
+  content: "\f543";
+  color: #009688;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.placing .icon:after {
+  content: "\F508";
+  color: #ff5722;
+}
+
+.settled .icon:after {
   content: "\f1b8";
-  font-size: 16px;
-  font-weight: 900;
-  position: absolute;
-  bottom: 15px;
-  right: 5px;
   color: #4caf50;
+}
+
+.reserved .icon:after {
+  content: "\f073";
+  color: #009688;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 </style>

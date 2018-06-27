@@ -29,7 +29,26 @@ Vue.use(i18n);
 
 Vue.directive("mask", function (el, binding) {
   if (binding.expression) {
-    console.log(binding.expression)
+    // console.log(binding.expression)
+    // const mask = binding.expression;
+    // const value = el.value.split("");
+
+    // let index = 0;
+
+    // el.value = mask.split("").map((char, i) => {
+    //   if (char === '#') {
+    //     for (let i = 0; i < value.length; i++) {
+    //       if (isNumber(value[i])) {
+    //         index = i + 1;
+    //         return value[i]
+    //       }
+    //     }
+    //   } else {
+    //     return char
+    //   }
+    // }).join("");
+
+    // dispatch();
   }
 
   if (binding.modifiers.card) {

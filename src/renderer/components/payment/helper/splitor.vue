@@ -33,8 +33,13 @@ export default {
 <style scoped>
 .viewer {
   display: inline-flex;
-  margin-left: 20px;
-  max-width: 765px;
+  padding-left: 20px;
+  width: 765px;
+  height: 120px;
+  overflow: auto;
+  margin-bottom: 74px;
+  padding-bottom: 3px;
+  align-items: flex-end;
 }
 
 .viewer input:checked + label {

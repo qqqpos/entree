@@ -5,13 +5,16 @@
             <li v-for="(invoice,index) in invoices" :key="index">
               <div class="info">
                 <i :class="getOrderType(invoice.type)"></i>
-                <div>
-                  <h5>{{getOrderTime(invoice.time)}}</h5>
-                  <p></p>
+                <div class="description">
+                  <h5>
+                    <span class="ago">{{invoice.time | time(false)}}</span>
+                    <span class="time">{{invoice.time | time(true)}}</span>
+                  </h5>
+                  <p v-html="story(invoice)"></p>
                 </div>
               </div>
-              <i class="fa fa-search icon"></i>
-              <i class="fa fa-clone icon"></i>
+              <!-- <i class="fa fa-search icon"></i>
+              <i class="fa fa-clone icon"></i> -->
             </li>
           </ul>
         </div>
@@ -33,6 +36,13 @@ export default {
   created() {
     this.invoices = this.init.invoices;
   },
+  filters: {
+    time(value, boolean) {
+      return boolean
+        ? moment(value).fromNow()
+        : moment(value).format("MM-DD HH:mm:ss (ddd)");
+    }
+  },
   methods: {
     getOrderType(type) {
       switch (type) {
@@ -49,13 +59,21 @@ export default {
         case "BAR":
           return "fa fa-wine";
           break;
-        case "HIBACHI":
+        case "HIBACHI": 
           break;
       }
     },
-    getOrderTime(time) {},
-    countItem(invoice) {
-      return invoice.reduce((a, c) => a + c.qty, 0);
+    story(invoice) {
+      const name = invoice.customer.name || this.$t("nav.customer");
+      const type = this.$t("type." + invoice.type);
+      const items = this.$t("text.placedItemFor", this.count(invoice.content));
+      const total = invoice.payment.balance.toFixed(2);
+
+      return `<span class="heavy-text">${name}</span><span>${items}</span><span class="heavy-text">${type}</span>\
+              <p class="amount">${this.$t("text.total")} <i class="fas fa-dollar-sign"></i> ${total}</p>`;
+    },
+    count(items) {
+      return items.reduce((a, c) => a + c.qty, 0);
     }
   }
 };
@@ -69,16 +87,16 @@ export default {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 0 0 4px 4px;
   width: 340px;
-  height: 470px;
+  padding-bottom: 4px;
 }
 
 .invoices li {
-  border: 1px solid #e0e0e0;
   background: #fff;
-  margin: 6px 6px 0;
-  border-radius: 4px;
-  height: 65px;
+  margin: 4px 4px 0;
+  border-radius: 2px;
+  padding: 10px 0;
   display: flex;
+  box-shadow: 0 1px 2px #424242;
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -87,6 +105,8 @@ export default {
 .info {
   flex: 4;
   padding: 0 7px;
+  display: flex;
+  align-items: center;
 }
 
 .icon {
@@ -97,6 +117,40 @@ export default {
   align-items: center;
   height: 100%;
   color: #fff;
+}
+
+.info i {
+  background: #f5f5f5;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px #90a4ae;
+}
+
+h5 {
+  display: flex;
+  font-weight: normal;
+}
+
+.ago {
+  flex: 1;
+}
+
+.description {
+  flex: 1;
+  padding: 0 5px 0 10px;
+}
+
+.description p {
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.time {
+  color: #607d8b;
 }
 
 .fa-search {

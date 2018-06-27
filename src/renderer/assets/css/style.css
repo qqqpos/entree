@@ -1047,3 +1047,8 @@ thead.title td {
 .missing{
   color: #F44336
 }
+
+.heavy-text{
+  font-weight: bold;
+  color: #FF5722;
+}

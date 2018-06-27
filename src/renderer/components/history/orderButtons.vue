@@ -108,16 +108,16 @@ export default {
             .then(this.confirmEvenSplit)
             .catch(this.exitComponent);
     },
-    confirmEvenSplit(number) {
-      if (number > 1) {
+    confirmEvenSplit({ amount }) {
+      if (amount > 1) {
         const prompt = {
           type: "question",
           title: "dialog.evenSplit",
-          msg: ["dialog.evenSplitConfirm", number]
+          msg: ["dialog.evenSplitConfirm", amount]
         };
-
+        
         this.$dialog(prompt)
-          .then(this.$splitEvenly.bind(null, number))
+          .then(() => this.$splitEvenly(amount))
           .catch(this.exitComponent);
       } else {
         this.exitComponent();

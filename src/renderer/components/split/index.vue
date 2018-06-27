@@ -50,6 +50,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 import ticket from "./ticket";
 import Hammer from "hammerjs";
 
@@ -252,7 +253,7 @@ export default {
     },
     confirm() {
       if (document.getElementsByClassName("evener").length > 0) return;
-      if (document.getElementsByClassName("splitor").length > 0) return;
+      if (document.getElementsByClassName("split-item-list").length > 0) return;
 
       const parent = this.order._id;
       const splits = this.$children

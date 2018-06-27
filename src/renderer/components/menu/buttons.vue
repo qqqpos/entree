@@ -423,7 +423,10 @@ export default {
               const { printOnDone } = this.dinein;
 
               if (this.dinein.table) {
-                Object.assign(this.currentTable, { invoice: [order._id] });
+                Object.assign(this.currentTable, {
+                  invoice: [order._id],
+                  status: 2
+                });
                 this.$socket.emit("[TABLE] SETUP", this.currentTable);
               }
 
@@ -447,7 +450,11 @@ export default {
           } else {
             let { printOnDone } = this.dinein;
             if (this.dinein.table) {
-              Object.assign(this.currentTable, { invoice: [order._id] });
+              Object.assign(this.currentTable, {
+                invoice: [order._id],
+                status: 2
+              });
+              
               this.$socket.emit("[TABLE] SETUP", this.currentTable);
             }
 

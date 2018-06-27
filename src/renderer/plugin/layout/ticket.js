@@ -675,9 +675,11 @@ function createFooter(config, setting, printer, ticket) {
     tradeMark && ticket.tradeMark
       ? `<p class="tm"><span class="tradeMark">${ticket.tradeMark}</span></p>`
       : "";
-  const _time = jobTime
-    ? `<p class="printTime">${printer} ${ticket.printCount > 1 ? 'reprint ' + (ticket.printCount - 1) : 'print'} @ ${moment().format("hh:mm:ss")}</p>`
-    : "";
+  const printStatus = ticket.printCount > 1
+    ? `<p class="printTime">***** ${printer} reprint ${ticket.printCount - 1} @ ${moment().format("hh:mm:ss")} *****</p>`
+    : `<p class="printTime">${printer} print @ ${moment().format("hh:mm:ss")}</p>`;
+
+  const _time = jobTime ? printStatus : "";
   const _number = ticketNumber
     ? `<div class="ticketNumber">${number}</div>`
     : "";
