@@ -124,6 +124,7 @@ export default {
   width: 100%;
   bottom: 22px;
   text-shadow: none;
+  z-index: 1;
 }
 
 .active.void {

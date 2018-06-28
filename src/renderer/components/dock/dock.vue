@@ -129,6 +129,7 @@ export default {
   methods: {
     initialPanel() {
       if (this.$route.name === "Dashboard") {
+        console.log(this.op);
         switch (this.op.cashCtrl) {
           case "enable":
             this.station.cashDrawer.enable
@@ -340,21 +341,51 @@ export default {
       this.setApp({ database: false });
       this.$open("offlineModule");
     },
-    SYNC_ORDERS: "setTodayOrder",
-    SYNC_TABLES: "syncTables",
-    SYNC_RESERVATIONS: "setReservation",
-    MENU_CATEGORY_UPDATE: "updateMenuCategory",
-    REQUEST_CATEGORY_UPDATE: "updateRequestCategory",
-    REQUEST_ACTION_UPDATE: "updateRequestAction",
-    REQUEST_ITEM_UPDATE: "updateRequestItem",
-    REQUEST_ITEM_REMOVE: "removeRequestItem",
-    REPLACE_MENU: "replaceMenu",
-    UPDATE_TABLE_SECTION: "updateTableSection",
-    REPLACE_TABLE: "replaceTable",
-    TEMPORARY_TABLE: "setTemporaryTable",
-    NEW_RESERVATION: "newReservation",
-    UPDATE_RESERVATION: "updateReservation",
-    REPLACE_TEMPLATE: "setTemplates"
+    SYNC_ORDERS(data) {
+      this.setTodayOrder(data);
+    },
+    SYNC_TABLES(data) {
+      this.syncTables(data);
+    },
+    SYNC_RESERVATIONS(data) {
+      this.setReservation(data);
+    },
+    MENU_CATEGORY_UPDATE(data) {
+      this.updateMenuCategory(data);
+    },
+    REQUEST_CATEGORY_UPDATE(data) {
+      this.updateRequestCategory(data);
+    },
+    REQUEST_ACTION_UPDATE(data) {
+      this.updateRequestAction(data);
+    },
+    REQUEST_ITEM_UPDATE(data) {
+      this.updateRequestItem(data);
+    },
+    REQUEST_ITEM_REMOVE(data) {
+      this.removeRequestItem(data);
+    },
+    REPLACE_MENU(data) {
+      this.replaceMenu(data);
+    },
+    UPDATE_TABLE_SECTION(data) {
+      this.updateTableSection(data);
+    },
+    REPLACE_TABLE(data) {
+      this.replaceTable(data);
+    },
+    TEMPORARY_TABLE(data) {
+      this.setTemporaryTable(data);
+    },
+    NEW_RESERVATION(data) {
+      this.newReservation(data);
+    },
+    UPDATE_RESERVATION(data) {
+      this.updateReservation(data);
+    },
+    REPLACE_TEMPLATE(data) {
+      this.setTemplates(data);
+    }
   }
 };
 </script>

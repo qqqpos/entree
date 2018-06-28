@@ -9,11 +9,11 @@
 <script>
 import { mapGetters } from "vuex";
 
+import menuModule from "./dock/component/menu";
 import inputModule from "./component/inputer";
 import coupon from "./menu/component/coupon";
 import dialogModule from "./common/dialog";
 import unlockModule from "./common/unlock";
-import menuModule from "./dock/posMenu";
 import dockModule from "./dock/dock";
 
 export default {

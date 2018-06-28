@@ -114,7 +114,7 @@
             <h5>{{$t('dock.logoutTip')}}</h5>
           </div>
         </li>
-        <li @click="checkUpdate" v-show="op.role === 'developer'">
+        <li @click="checkUpdate" v-show="op.role === 'Developer'">
           <i class="fas fa-2x fa-sync-alt"></i>
           <div>
             <h3>{{$t('dock.update')}}</h3>
@@ -130,15 +130,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import dialogModule from "../common/dialog";
-import collector from "../component/collector";
-import unlockModule from "../common/unlock";
-import inputer from "../component/inputer";
-import terminal from "../history/terminal";
-
-import giftcard from "../giftcard/index";
-
-import payout from "./payout";
+import collector from "../../component/collector";
+import dialogModule from "../../common/dialog";
+import unlockModule from "../../common/unlock";
+import inputer from "../../component/inputer";
+import terminal from "../../history/terminal";
+import giftcard from "../../giftcard/index";
+import payout from "../payout";
 
 export default {
   props: ["init"],
@@ -575,7 +573,9 @@ export default {
           : next();
       });
     },
-    checkUpdate() {},
+    checkUpdate() {
+      
+    },
     printReport(transactions) {
       const { role, name } = this.op;
       let invoices = [];

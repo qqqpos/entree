@@ -184,7 +184,7 @@ export default {
     setting: "Setting",
     settingTip: "Software Setting",
     update: "Update",
-    updateApp: "Check & Update Latest Version"
+    updateApp: "Update Latest Version"
   },
   button: {
     new: "New",

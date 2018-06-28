@@ -69,7 +69,7 @@
                   <span></span>
                 </div> 
               </template>
-              <template>
+              <template v-else>
                 <div class="field">
                   <h3 class="text">{{$t('card.giftCard')}}</h3>
                   <span class="value">{{giftCard.number | card}}</span>
