@@ -186,7 +186,7 @@ export default {
     update: "Check Update",
     updateApp: "Check Latest Version",
     downloadUpdate: "Update Available",
-    downloadUpdateFile: "Download Ver. {i}",
+    downloadUpdateFile: "Download Ver.{i}",
     downloading: "Downloading...",
     downloadingFile: "Software is Downloading Files",
     applyUpdate: "Update Version",

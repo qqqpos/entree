@@ -135,11 +135,11 @@
             <h5>{{$t('dock.downloadingFile')}}</h5>
           </div>
         </li>    
-        <li @click="applyUpdate" v-else>
+        <li @click="applyUpdate" v-else-if="updateStatus === 'ready'">
           <i class="fas fa-2x fa-window-restore"></i>
           <div>
-            <h3>{{$t('dock.update')}}</h3>
-            <h5>{{$t('dock.updateApp')}}</h5>
+            <h3>{{$t('dock.applyUpdate')}}</h3>
+            <h5>{{$t('dock.updateVersion')}}</h5>
           </div>
         </li>           
       </ul>

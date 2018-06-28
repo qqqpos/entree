@@ -17,9 +17,8 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps",
     "rebuild": "electron-rebuild -f -w serialport",
-    "dist": "build",
     "publish": "publish",
-    "release": "npm run dist && npm run publish"
+    "release": "npm run build && npm run publish"
   },
   "updater": {
     "url": "https://raw.githubusercontent.com/huangxuewu/entree/master/updates.json"
