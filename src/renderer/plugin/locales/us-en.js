@@ -781,7 +781,8 @@ export default {
     handlePastDuePayment: "How would you like to handle this past due payment?",
     apiKeyRequired: "Please provide a valid API key.",
     updateFail: "Update Failed",
-    updateFailMessage: "Error Message: {i}"
+    updateFailMessage: "Error Message: {i}",
+    alreadyUpToDate: "There is no update available."
   },
   terminal: {
     initial: "Initializing terminal {i}...",

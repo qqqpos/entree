@@ -665,7 +665,8 @@ export default {
     handlePastDuePayment: "您要如何记录这个逾期订单的付款?",
     apiKeyRequired: "请提供一个有效的 API 密钥",
     updateFail: "无法更新",
-    updateFailMessage: "发生错误: {i}"
+    updateFailMessage: "发生错误: {i}",
+    alreadyUpToDate: "当前已经是最新版本"
   },
   terminal: {
     initial: "正在初始化 {i}...",
