@@ -153,7 +153,7 @@ export default {
     "Invalid Order": "Invalid Order",
     "Payment Issue": "Payment Issue",
     "Manager Redemption": "Manager Redemption",
-    "Order Combined": "Order Combined"
+    "Order Combined": "Combined To #{i}"
   },
   dock: {
     missInfo: "Miss Info",

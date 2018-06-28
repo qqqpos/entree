@@ -146,7 +146,7 @@ export default {
     "Invalid Order": "无效订单",
     "Payment Issue": "付款问题",
     "Manager Redemption": "经理免单",
-    "Order Combined": "订单被合并"
+    "Order Combined": "被合并至 #{i}"
   },
   dock: {
     missInfo: "缺少资料",
