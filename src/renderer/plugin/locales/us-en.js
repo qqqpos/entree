@@ -188,7 +188,7 @@ export default {
     downloadUpdate: "Update Available",
     downloadUpdateFile: "Download Ver.{i}",
     downloading: "Downloading...",
-    downloadingFile: "Software is Downloading Files",
+    downloadingFile: "This Will Take a While",
     applyUpdate: "Update Version",
     updateVersion: "Restart and Apply Update"
   },
@@ -779,7 +779,9 @@ export default {
     foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
     exceedAllowLimit: "Value exceeding allowed limit",
     handlePastDuePayment: "How would you like to handle this past due payment?",
-    apiKeyRequired: "Please provide a valid API key."
+    apiKeyRequired: "Please provide a valid API key.",
+    updateFail: "Update Failed",
+    updateFailMessage: "Error Message: {i}"
   },
   terminal: {
     initial: "Initializing terminal {i}...",

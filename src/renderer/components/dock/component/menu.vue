@@ -204,11 +204,26 @@ export default {
       this.updateMeta = meta;
       this.updateStatus = "available";
     });
+
+    this.updater.on("update-not-available", () => {});
+
     this.updater.on("update-downloading", () => {
       this.updateStatus = "download";
     });
+
     this.updater.on("update-downloaded", () => {
       this.updateStatus = "ready";
+    });
+
+    this.updater.on("error", log => {
+      const prompt = {
+        type: "error",
+        title: "dialog.updateFail",
+        msg: ["dialog.updateFailMessage", log],
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+      this.updateStatus = null;
+      this.$dialog(prompt).then(this.exitComponent);
     });
   },
   methods: {

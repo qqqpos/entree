@@ -61,7 +61,15 @@ export default {
     scroll() {
       return { transform: `translate3d(${this.offset}px,0,0)` };
     },
-    ...mapGetters(["app", "tax", "store", "ticket", "customer", "dinein"])
+    ...mapGetters([
+      "app",
+      "tax",
+      "store",
+      "ticket",
+      "customer",
+      "dinein",
+      "currentTable"
+    ])
   },
   data() {
     return {
@@ -264,6 +272,15 @@ export default {
         const { number, type } = this.ticket;
         Object.assign(this.order, { number, type, time: Date.now() });
         this.setApp({ newTicket: false });
+
+        if (this.dinein.table) {
+          Object.assign(this.currentTable, {
+            invoice: [this.order._id],
+            status: 2
+          });
+
+          this.$socket.emit("[TABLE] SETUP", this.currentTable);
+        }
       }
 
       let tip = 0;

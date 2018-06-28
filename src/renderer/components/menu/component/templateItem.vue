@@ -215,7 +215,6 @@ export default {
       });
 
       this.template.dynamicPrint && this.setItemPrinter();
-      console.log(this.item);
       this.init.resolve();
     },
     ...mapActions([
@@ -235,8 +234,8 @@ export default {
 </script>
 
 <style scoped>
-.editor{
-  margin-top: -30px; 
+.editor {
+  margin-top: -30px;
 }
 
 .wrap {

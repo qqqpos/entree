@@ -663,7 +663,9 @@ export default {
     foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应",
     exceedAllowLimit: "超出限定值得范围",
     handlePastDuePayment: "您要如何记录这个逾期订单的付款?",
-    apiKeyRequired: "请提供一个有效的 API 密钥"
+    apiKeyRequired: "请提供一个有效的 API 密钥",
+    updateFail: "无法更新",
+    updateFailMessage: "发生错误: {i}"
   },
   terminal: {
     initial: "正在初始化 {i}...",

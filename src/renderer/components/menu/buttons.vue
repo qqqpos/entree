@@ -454,7 +454,7 @@ export default {
                 invoice: [order._id],
                 status: 2
               });
-              
+
               this.$socket.emit("[TABLE] SETUP", this.currentTable);
             }
 
