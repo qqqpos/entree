@@ -1,6 +1,16 @@
 'use strict'
 
-import { app, BrowserWindow, ipcMain, powerSaveBlocker, remote } from 'electron'
+const updater = require('electron-simple-updater');
+import { app, BrowserWindow, ipcMain, powerSaveBlocker } from 'electron';
+
+
+//auto updater
+
+updater.init({
+  checkUpdateOnStart: true,
+  autoDownload: true
+})
+
 
 /**
  * Set `__static` path to static files in production

@@ -172,11 +172,10 @@ export default {
     };
   },
   created() {
-    try {
-      this.giftcardEnable = this.$store.getters.store.giftcard.enable;
-    } catch (e) {
-      this.giftcardEnable = false;
-    }
+    const { giftcard = {} } = this.$store.getters.store;
+    this.giftcardEnable = giftcard.enable;
+
+    this.op.role === "Developer" && this.checkUpdate();
   },
   methods: {
     changeLanguage() {
@@ -574,7 +573,11 @@ export default {
       });
     },
     checkUpdate() {
-      
+      const updater = this.$electron.remote.require("electron-simple-updater");
+
+      updater.on("update-available", console.log("update-avaliable"));
+      updater.on("update-downloading", console.log("update-downloading"));
+      updater.on("update-downloaded", console.log("update-downloaded"));
     },
     printReport(transactions) {
       const { role, name } = this.op;

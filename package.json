@@ -1,6 +1,6 @@
 {
   "name": "unitedpos",
-  "version": "0.8.92",
+  "version": "0.8.91",
   "stage": "Beta",
   "description": "UnitedPOS point of sale system",
   "author": "Xuewu Huang <UnitedPOS.service@gmail.com>",
@@ -22,7 +22,7 @@
     "release": "npm run dist && npm run publish"
   },
   "updater": {
-    "url": "https://github.com/huangxuewu/entree/master/updates.json"
+    "url": "https://raw.githubusercontent.com/huangxuewu/entree/master/updates.json"
   },
   "build": {
     "productName": "UnitedPOS",
@@ -38,7 +38,7 @@
       "target": "squirrel"
     },
     "squirrelWindows": {
-      "iconUrl": "https://raw.githubusercontent.com/megahertz/electron-simple-updater/master/example/build/icon.ico"
+      "iconUrl": "https://raw.githubusercontent.com/huangxuewu/entree/master/build/icons/icon.ico"
     },
     "dmg": {
       "contents": [
