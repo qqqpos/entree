@@ -59,14 +59,26 @@
               </div>
             </template>
             <template v-else>
-              <div class="field" id="giftCard" @click="$emit('changeAnchor','giftCard')" data-format="number" data-length="16">
-                <h3 class="text">{{$t('card.giftCard')}}</h3>
-                <input class="value" :value="creditCard" v-mask.card.check>
-              </div>  
-              <div class="field" id="balance">
-                <h3 class="text">{{$t('text.balance')}}</h3>
-                <span></span>
-            </div> 
+              <template v-if="typeof giftCard === 'string'">
+                <div class="field" id="giftCard" @click="$emit('changeAnchor','giftCard')" data-format="number" data-length="16">
+                  <h3 class="text">{{$t('card.giftCard')}}</h3>
+                  <input class="value" :value="giftCard" v-mask.card>
+                </div>  
+                <div class="field" id="balance">
+                  <h3 class="text">{{$t('text.balance')}}</h3>
+                  <span></span>
+                </div> 
+              </template>
+              <template>
+                <div class="field">
+                  <h3 class="text">{{$t('card.giftCard')}}</h3>
+                  <span class="value">{{giftCard.number | card}}</span>
+                </div>  
+                <div class="field" id="balance">
+                  <h3 class="text">{{$t('text.balance')}}</h3>
+                  <span class="value">{{giftCard.balance | decimal}}</span>
+                </div> 
+              </template>
             </template>
         </div>
         <aside class="padCtrl">
@@ -114,7 +126,7 @@ export default {
           "Online Order"
         ]
       }
-    } = this.$store.getters.config.defaults;
+    } = this.$store.getters.config;
 
     this.externals = defaults.externals;
     //this.externalType = defaults.externals[0];

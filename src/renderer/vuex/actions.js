@@ -102,7 +102,7 @@ export const delayPrint = ({ commit }, order) => commit(types.ADD_SPOOLER, order
 
 export const removeSpooler = ({ commit }, index) => commit(types.REMOVE_SPOOLER, index);
 
-export const addToOrder = ({ commit }, item) => commit(types.ADD_TO_ORDER, item);
+export const addToOrder = ({ commit, getters }, item) => commit(types.ADD_TO_ORDER, { item, autoStack: getters.store.autoStackItem });
 
 export const pushToOrder = ({ commit }, item) => commit(types.PUSH_TO_ORDER, item);
 
@@ -116,7 +116,7 @@ export const moreQty = ({ commit }) => commit(types.MORE_QTY);
 
 export const alterItem = ({ commit }, item) => commit(types.ALTER_ITEM, item);
 
-export const splitItem = ({ commit }, item) => commit(types.SPLIT_ITEM,item);
+export const splitItem = ({ commit }, item) => commit(types.SPLIT_ITEM, item);
 
 export const alterItemOption = ({ commit }, data) => {
   data.side.sub

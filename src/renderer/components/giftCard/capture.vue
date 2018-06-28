@@ -25,7 +25,7 @@ export default {
     };
   },
   created() {
-    this.init.hasOwnProperty("number") && this.parser(this.init.number);
+    isNumber(this.init.number) && this.parser(this.init.number);
     window.addEventListener("keydown", this.reader, false);
   },
   beforeDestroy() {

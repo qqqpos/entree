@@ -30,7 +30,7 @@
         <template v-if="tab === 'activation'">
           <div>
             <div class="wrap">
-              <inputer title="card.number" v-model="giftcard.number" :disabled="true" mask="#### #### #### ####"></inputer>
+              <inputer title="card.number" v-model="giftcard.number" :disabled="true"></inputer>
               <inputer title="card.holder" v-model="giftcard.holder"></inputer>
               <inputer title="card.phone" v-model="giftcard.phone" mask="### ### ####"></inputer>
               <inputer title="card.expirationDate" v-model="giftcard.expiration" mask="####-##-##"></inputer>
@@ -309,7 +309,7 @@ export default {
         date,
         time,
         order: null,
-        ticket: null,
+        ticket: {},
         paid: parseFloat(this.amount),
         change: 0,
         actual: parseFloat(this.amount),
@@ -557,11 +557,12 @@ export default {
 }
 
 .editor {
-  max-width: 600px;
+  max-width: 650px;
 }
 
 .table.wrap {
   padding: initial;
+  width: 650px;
 }
 
 .tab > div,

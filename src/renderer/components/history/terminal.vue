@@ -25,7 +25,7 @@
             <th>{{$t('thead.time')}}</th>
             <th>{{$t('thead.station')}}</th>
             <th>{{$t('thead.for')}}</th>
-            <th class="ticket">{{$t('thead.ticket')}}</th>
+            <th class="ticket" @click="sortBy('ticket')">{{$t('thead.ticket')}}</th>
             <th>{{$t('thead.card')}}</th>
             <th>{{$t('thead.auth')}}</th>
             <th>{{$t('thead.amount')}}</th>
@@ -526,6 +526,17 @@ export default {
         this.initializing(data)
       );
     },
+    sortBy(type) {
+      switch (type) {
+        case "ticket":
+          this.transactions.sort((a, b) => {
+            const _a = a.order && a.order.number ? a.order.number : 0;
+            const _b = b.order && b.order.number ? b.order.number : 0;
+            return _a < _b ? -1 : 1;
+          });
+          break;
+      }
+    },
     exit() {
       this.init.resolve();
     }
@@ -650,7 +661,7 @@ footer {
 }
 
 .ticket {
-  width: 105px;
+  width: 115px;
 }
 
 .ticket .number {

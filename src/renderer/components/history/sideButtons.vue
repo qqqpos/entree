@@ -55,10 +55,10 @@ import calendarModule from "./component/calendar";
 import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import reportModule from "../report/index";
+import ledgerModule from "../ledger/index";
 import transaction from "./transaction";
 import Reason from "./component/reason";
 import loger from "../payment/loger";
-import ledger from "../ledger/new";
 import Terminal from "./terminal";
 
 export default {
@@ -68,9 +68,9 @@ export default {
     dialogModule,
     reportModule,
     unlockModule,
+    ledgerModule,
     transaction,
     Terminal,
-    ledger,
     Reason,
     loger
   },
@@ -136,7 +136,7 @@ export default {
       });
     },
     checkSettlement() {
-      return new Promise((resolve, reject) => {
+      return new Promise((next, stop) => {
         const ticketSettled = {
           type: "question",
           title: "dialog.ticketClosed",
@@ -171,9 +171,9 @@ export default {
         this.$socket.emit("[PAYMENT] COUNT", this.order._id, count => {
           count > 0
             ? this.order.split
-              ? resolve(splitTicketAction)
-              : reject(paymentFoundError)
-            : resolve();
+              ? stop(splitTicketAction)
+              : stop(paymentFoundError)
+            : next();
         });
       });
     },
@@ -202,7 +202,7 @@ export default {
             .catch(this.exitComponent)
         : this.edit();
     },
-    voidTicket() {
+    voidTicket(p) {
       const prompt = {
         type: "warning",
         title: [
@@ -226,6 +226,7 @@ export default {
         .catch(() => {});
     },
     voidFailed(reason) {
+      console.log(reason);
       this.$dialog(reason)
         .then(this.removeRecordFromList)
         .catch(this.exitComponent);
@@ -394,12 +395,12 @@ export default {
     },
     getLedger() {
       this.$checkPermission("permission", "ledger")
-        .then(() => this.$open("ledger"))
+        .then(() => this.$open("ledgerModule"))
         .catch(() => this.accessFailedLog("ledger"));
     },
     accessFailedLog(component) {
       this.$log({
-        eventID: 9101,
+        eventID: 5000,
         note: `Permission Denied. Failed to access ${component}.`
       });
     },

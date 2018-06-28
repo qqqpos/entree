@@ -38,6 +38,7 @@
                                 :splitable="invoice.split" 
                                 :external="externalPaymentType"
                                 :customer="invoice.customer._id"
+                                :giftCard="giftCard"
                                 @updateSplit="setSplit" @excSplit="splitTicketConfirm" 
                                 @changeAnchor="setAnchor" @delete="deleteInput" 
                                 @clear="clearInput" @charge="charge"
@@ -99,6 +100,7 @@ export default {
       creditCard: "",
       expDate: "",
       paymentType: "CASH",
+      giftCard:"",
       externalPaymentType: null,
       willTicketNumberUpdate: false,
       willResetFieldValue: true,
@@ -307,6 +309,13 @@ export default {
         newType === "CASH" ? "0.00" : this.order.payment.remain.toFixed(2);
 
       this.externalPaymentType = null;
+
+      if (newType === "GIFT") {
+        this.giftCard = "";
+        this.swipeGiftCard()
+          .then(this.checkGiftCard)
+          .catch(this.exitComponent);
+      }
     },
     setAnchor(newAnchor) {
       this.anchor = newAnchor;
@@ -508,7 +517,7 @@ export default {
         if (isObject(this.giftCard)) {
           resolve(this.giftCard);
         } else {
-          this.componentData = Object.assign({ resolve, reject }, { number });
+          this.componentData = { resolve, reject, number };
           this.component = "capture";
         }
       });

@@ -96,7 +96,7 @@ const mutations = {
     state.order.content.push(item);
     state.item = state.order.content.last();
   },
-  [types.ADD_TO_ORDER](state, item) {
+  [types.ADD_TO_ORDER](state, { item, autoStack }) {
     delete item.clickable;
     delete item.like;
 
@@ -115,8 +115,11 @@ const mutations = {
     });
 
     if (state.item) {
-      //if item has no options 
-      if (item._id === state.item._id && !item.temporary && item.option.length === 0 && state.item.choiceSet.length === 0) {
+      //item qty auto stack function
+      
+      if (autoStack
+        && item._id === state.item._id && !item.temporary
+        && item.option.length === 0 && state.item.choiceSet.length === 0) {
         state.item.total = (++state.item.qty * state.item.single).toFixed(2);
         return;
       }

@@ -297,7 +297,8 @@ export default {
     settle: "结账",
     view: "查看",
     retry: "重试",
-    deposit: "押金"
+    deposit: "押金",
+    chargeRemain: "支付余额"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -1315,7 +1316,8 @@ export default {
     item: "物品",
     daily: "每日",
     hourly: "时段",
-    compare: "对比"
+    compare: "对比",
+    reconciliation: "对账"
   },
   setting: {
     softwareSetting: "后台设置",
@@ -1453,6 +1455,7 @@ export default {
     settledReceipt: "结账收据",
     plasticPenaltyTax: "塑料袋罚款税",
     autoSaveCreditCard: "自动保存信用卡信息",
+    autoStack: "自动叠加",
     delivery: {
       config: "送餐设定",
       charge: "送餐费",
@@ -1649,6 +1652,7 @@ export default {
     foodAllergy: "设置物品过敏源",
     dollarDiscount: "按美元给予折扣",
     percentageDiscount: "按订单总数的百分比折扣",
+    autoStackItemQty: "自动叠加相同物品的数量",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

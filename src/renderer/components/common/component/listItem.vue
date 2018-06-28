@@ -219,6 +219,7 @@ li.disable .side {
   border-radius: 4px;
   cursor: pointer;
   display: none;
+  color: #fff;
   box-shadow: 0 1px 1px #735448;
 }
 

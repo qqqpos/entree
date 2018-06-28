@@ -304,7 +304,8 @@ export default {
     settle: "Settle",
     view: "View",
     retry: "Retry",
-    deposit: "Deposit"
+    deposit: "Deposit",
+    chargeRemain: "Charge Remain Balance"
   },
   thead: {
     orderType: "Order Type",
@@ -1350,7 +1351,8 @@ export default {
     item: "Item",
     daily: "Daily",
     hourly: "Hourly",
-    compare: "Compare"
+    compare: "Compare",
+    reconciliation: "Reconc."
   },
   setting: {
     softwareSetting: "POS Setting",
@@ -1485,6 +1487,7 @@ export default {
     settledReceipt: "Settle Payment Receipt",
     plasticPenaltyTax: "Plastic Bag Penalty Tax",
     autoSaveCreditCard: "Auto Save Credit Card",
+    autoStack: "Auto Stack",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",
@@ -1682,6 +1685,7 @@ export default {
     foodAllergy: "Set food allergen",
     dollarDiscount: "Giving dollar discount",
     percentageDiscount: "Percentage discount of the subtotal",
+    autoStackItemQty: "Auto stacking item quantity",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

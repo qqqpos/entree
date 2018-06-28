@@ -185,6 +185,7 @@ export default {
           .catch(this.exitComponent);
       } else {
         const index = this.findTicketPage(ticketNumber);
+        console.log(index)
         this.$bus.emit("SET_CURRENT_PAGE", index);
         this.$nextTick(() => this.setViewOrder(this.targetInvoices[target]));
       }
@@ -194,7 +195,7 @@ export default {
       let index = this.targetInvoices.length;
       let page = 1;
       let count = 0;
-      while (index !== target) {
+      while (this.targetInvoices[index].number !== target) {
         count++;
         if (count === 30) {
           count = 0;

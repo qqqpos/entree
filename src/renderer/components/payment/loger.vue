@@ -146,23 +146,23 @@ export default {
     },
     initialParser(record) {
       return new Promise((next, stop) => {
-        const { alias } = this.station;
+        const station = this.station.alias;
 
         this.$socket.emit(
           "[TERMINAL] CONFIG",
           record.terminal,
-          ({ ip, port, sn, model, print = true }) => {
+          ({ alias, ip, port, sn, model, print = true }) => {
             this.terminal = this.getParser(model).default();
             this.printTicket = print;
 
             this.terminal
-              .initial(ip, port, sn, alias, record.terminal)
+              .initial(ip, port, sn, station, record.terminal)
               .then(response => {
                 const device = this.terminal.check(response.data);
                 const prompt = {
                   type: "error",
                   title: "terminal.connectError",
-                  msg: ["terminal.initialFailed", device.code],
+                  msg: ["terminal.initialFailed", alias, device.code],
                   buttons: [{ text: "button.confirm", fn: "resolve" }]
                 };
 
@@ -197,6 +197,7 @@ export default {
       });
     },
     remove(payment, index) {
+      console.log(payment);
       this.$socket.emit("[PAYMENT] REMOVE", payment);
       this.init.logs.splice(index, 1);
       this.exitComponent();
