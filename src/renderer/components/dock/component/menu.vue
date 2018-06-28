@@ -114,13 +114,34 @@
             <h5>{{$t('dock.logoutTip')}}</h5>
           </div>
         </li>
-        <li @click="checkUpdate" v-show="op.role === 'Developer'">
+        <li @click="checkUpdate" v-show="op.role === 'Developer' && !updateStatus">
           <i class="fas fa-2x fa-sync-alt"></i>
           <div>
             <h3>{{$t('dock.update')}}</h3>
             <h5>{{$t('dock.updateApp')}}</h5>
           </div>
         </li>
+        <li @click="downloadUpdate" v-if="updateStatus === 'available'">
+          <i class="fas fa-2x fa-bell"></i>
+          <div>
+            <h3>{{$t('dock.downloadUpdate')}}</h3>
+            <h5>{{$t('dock.downloadUpdateFile',updateMeta.version)}}</h5>
+          </div>
+        </li>        
+        <li v-else-if="updateStatus === 'download'">
+          <i class="fas fa-2x fa-download"></i>
+          <div>
+            <h3>{{$t('dock.downloading')}}</h3>
+            <h5>{{$t('dock.downloadingFile')}}</h5>
+          </div>
+        </li>    
+        <li @click="applyUpdate" v-else>
+          <i class="fas fa-2x fa-window-restore"></i>
+          <div>
+            <h3>{{$t('dock.update')}}</h3>
+            <h5>{{$t('dock.updateApp')}}</h5>
+          </div>
+        </li>           
       </ul>
     </transition>
     <div :is="component" :init="componentData"></div>
@@ -168,14 +189,27 @@ export default {
       componentData: null,
       component: null,
       isShow: this.init.args,
-      giftcardEnable: false
+      giftcardEnable: false,
+      updater: null,
+      updateStatus: null,
+      updateMeta: {}
     };
   },
   created() {
     const { giftcard = {} } = this.$store.getters.store;
     this.giftcardEnable = giftcard.enable;
+    this.updater = this.$electron.remote.require("electron-simple-updater");
 
-    this.op.role === "Developer" && this.checkUpdate();
+    this.updater.on("update-available", meta => {
+      this.updateMeta = meta;
+      this.updateStatus = "available";
+    });
+    this.updater.on("update-downloading", () => {
+      this.updateStatus = "download";
+    });
+    this.updater.on("update-downloaded", () => {
+      this.updateStatus = "ready";
+    });
   },
   methods: {
     changeLanguage() {
@@ -573,11 +607,13 @@ export default {
       });
     },
     checkUpdate() {
-      const updater = this.$electron.remote.require("electron-simple-updater");
-
-      updater.on("update-available", console.log("update-avaliable"));
-      updater.on("update-downloading", console.log("update-downloading"));
-      updater.on("update-downloaded", console.log("update-downloaded"));
+      this.updater.checkForUpdates();
+    },
+    downloadUpdate() {
+      this.updater.downloadUpdate();
+    },
+    applyUpdate() {
+      this.updater.quitAndInstall();
     },
     printReport(transactions) {
       const { role, name } = this.op;

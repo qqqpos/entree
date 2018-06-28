@@ -176,8 +176,14 @@ export default {
     logoutTip: "退出软件 · 关机",
     setting: "设置",
     settingTip: "软件后台设置",
-    update: "更新软件",
-    updateApp: "检查并更新软件"
+    update: "检查更新",
+    updateApp: "查询最新版本号",
+    downloadUpdate: "新版本已经推出",
+    downloadUpdateFile: "下载新版本 {i}",
+    downloading: "下载中...",
+    downloadingFile: "正在在后台下载更新",
+    applyUpdate: "更新版本",
+    updateVersion: "重启并更新软件"
   },
   button: {
     new: "新增",

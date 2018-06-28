@@ -183,8 +183,14 @@ export default {
     logoutTip: "Exit Program & Shutdown",
     setting: "Setting",
     settingTip: "Software Setting",
-    update: "Update",
-    updateApp: "Update Latest Version"
+    update: "Check Update",
+    updateApp: "Check Latest Version",
+    downloadUpdate: "Update Available",
+    downloadUpdateFile: "Download Ver. {i}",
+    downloading: "Downloading...",
+    downloadingFile: "Software is Downloading Files",
+    applyUpdate: "Update Version",
+    updateVersion: "Restart and Apply Update"
   },
   button: {
     new: "New",

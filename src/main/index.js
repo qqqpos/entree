@@ -5,10 +5,9 @@ import { app, BrowserWindow, ipcMain, powerSaveBlocker } from 'electron';
 
 
 //auto updater
-
 updater.init({
-  checkUpdateOnStart: true,
-  autoDownload: true
+  checkUpdateOnStart: false,
+  autoDownload: false
 })
 
 
