@@ -118,6 +118,7 @@ export default {
     order: "By Order Type",
     payment: "By Payment Type",
     station: "By Station",
+    terminal: "By Terminal",
     period: "Select Date Range"
   },
   tag: {
@@ -711,9 +712,12 @@ export default {
     togoConfirm: "Are you wish to create a new list for togo items?",
     somethingWrong: "Error Occurred",
     somethingWrongTip: "An unknown error occurred while saving this order.",
-    updateNeeded: "Software Update Needed",
-    versionRequirement:
-      "Server requires minimum version is {i}, but your current version is {i}.",
+    appUpdateNeeded: "Software Update Needed",
+    appVersionRequirement:
+      "Application required version is {i}, but current version is {i}.",
+    serverUpdateNeeded: "Server Update Needed",
+    serverVersionRequirement:
+      "Server requires version is {i}, but current version is {i}.",
     startBreakTime: "Start Break Time",
     startBreakTimeConfirm: "Are you wish to take a break?",
     endBreakTime: "End Break Time",

@@ -56,21 +56,21 @@ import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import reportModule from "../report/index";
 import ledgerModule from "../ledger/index";
+import terminalModule from "./terminal";
 import transaction from "./transaction";
 import Reason from "./component/reason";
 import loger from "../payment/loger";
-import Terminal from "./terminal";
 
 export default {
   props: ["date"],
   components: {
     calendarModule,
+    terminalModule,
     dialogModule,
     reportModule,
     unlockModule,
     ledgerModule,
     transaction,
-    Terminal,
     Reason,
     loger
   },
@@ -385,7 +385,11 @@ export default {
     },
     terminal() {
       this.$checkPermission("access", "terminal")
-        .then(() => this.$open("Terminal"))
+        .then(() =>
+          this.$socket.emit("[TERMINAL] TODAY", transactions =>
+            this.$open("terminalModule", { transactions })
+          )
+        )
         .catch(() => this.accessFailedLog("terminal"));
     },
     report() {

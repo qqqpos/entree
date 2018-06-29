@@ -41,8 +41,8 @@
           </div>
         </div> -->
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
-        <button class="btn" @click="print" :disabled="!done">{{$t('button.printAll')}}</button>
-        <button class="btn" @click="confirm" :disabled="!done">{{$t('button.confirm')}}</button>
+        <button class="btn" @click="call('print')" :disabled="!done">{{$t('button.printAll')}}</button>
+        <button class="btn" @click="call('confirm')" :disabled="!done">{{$t('button.confirm')}}</button>
       </footer>
     </div>
   </div>
@@ -235,16 +235,29 @@ export default {
       this.$socket.emit("[INVOICE] UPDATE", this.order);
       this.init.resolve();
     },
-    print() {
+    call(fn) {
       const time = this.order.time || Date.now();
 
       if (this.app.newTicket && this.$route.name === "Menu") {
         const { number, type } = this.ticket;
         Object.assign(this.order, { number, type, time });
         this.setApp({ newTicket: false });
+
+        if (this.dinein.table) {
+          Object.assign(this.currentTable, {
+            invoice: [this.order._id],
+            status: 2
+          });
+
+          this.$socket.emit("[TABLE] SETUP", this.currentTable);
+        }
       }
 
-      const { number } = this.order;
+      this[fn]();
+    },
+    print() {
+      const { number, time } = this.order;
+
       this.$children
         .filter(
           (instance, index) =>
@@ -268,21 +281,6 @@ export default {
         .map(vm => vm.order)
         .filter((order, index) => index !== 0 && order.content.length !== 0);
 
-      if (this.app.newTicket && this.$route.name === "Menu") {
-        const { number, type } = this.ticket;
-        Object.assign(this.order, { number, type, time: Date.now() });
-        this.setApp({ newTicket: false });
-
-        if (this.dinein.table) {
-          Object.assign(this.currentTable, {
-            invoice: [this.order._id],
-            status: 2
-          });
-
-          this.$socket.emit("[TABLE] SETUP", this.currentTable);
-        }
-      }
-
       let tip = 0;
       let tax = 0;
       let paid = 0;
@@ -300,7 +298,7 @@ export default {
 
           tip += order.payment.tip;
           tax += order.payment.tax;
-          paid += order.payment.paid;
+          paid += isNumber(order.payment.paid) ? order.payment.paid : 0;
           plasticTax += order.payment.plasticTax;
           subtotal += order.payment.subtotal;
           gratuity += order.payment.gratuity;

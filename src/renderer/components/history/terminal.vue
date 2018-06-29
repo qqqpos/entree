@@ -14,18 +14,20 @@
             <span class="date">{{date}}</span>
             <i class="fa fa-angle-right" @click="next"></i>
           </div>
-          <dropdown label="filter.station" :options="stations" filter="filterStation"></dropdown>
+          <dropdown label="filter.order" :options="types" filter="filterType"></dropdown>
+          <dropdown label="filter.cashier" :options="cashiers" filter="filterCashier"></dropdown>
+          <dropdown label="filter.terminal" :options="terminals" filter="filterTerminal"></dropdown>
         </nav>
       </header>
       <table>
         <thead>
           <tr>
-            <th class="index">ID</th>
+            <th class="index" @click="sortBy('id')">ID<i class="fas fa-sort"></i></th>
             <th>{{$t('thead.type')}}</th>
             <th>{{$t('thead.time')}}</th>
-            <th>{{$t('thead.station')}}</th>
+            <th>{{$t('thead.terminal')}}</th>
             <th>{{$t('thead.for')}}</th>
-            <th class="ticket" @click="sortBy('ticket')">{{$t('thead.ticket')}}</th>
+            <th class="ticket" @click="sortBy('ticket')">{{$t('thead.ticket')}}<i class="fas fa-sort"></i></th>
             <th>{{$t('thead.card')}}</th>
             <th>{{$t('thead.auth')}}</th>
             <th>{{$t('thead.amount')}}</th>
@@ -68,12 +70,16 @@
           <tr>
             <td>
               <div class="value">
+                <span class="text">{{$t('text.subtotal')}}</span>
+                <span class="amount">$ {{baseAmount | decimal}}</span>
+              </div>
+              <div class="value">
                 <span class="text">{{$t('text.tip')}}</span>
-                <span class="amount">($ {{totalTip}})</span>
+                <span class="amount">$ {{totalTip | decimal}}</span>
               </div>
               <div class="value">
                 <span class="text">{{$t('text.total')}}</span>
-                <span class="amount">$ {{totalAmount}}</span>
+                <span class="amount">$ {{totalAmount | decimal}}</span>
               </div>
             </td>
           </tr>
@@ -87,7 +93,7 @@
         <button class="btn" @click="exit">{{$t('button.exit')}}</button>
       </footer>
     </div>
-    <div :is="component" :init="componentData" @refresh="initialTodayData"></div>
+    <div :is="component" :init="componentData" @refresh="refetchData"></div>
   </div>
 </template>
 
@@ -117,31 +123,46 @@ export default {
     filteredTransactions() {
       let records = this.transactions;
 
-      if (this.filterStation)
-        records = records.filter(t => (t.station = this.station.alias));
+      if (this.filterType)
+        records = records.filter(
+          t => t.order && t.order.type === this.filterType
+        );
+
+      if (this.filterCashier)
+        records = records.filter(
+          t => t.order && t.order.cashier === this.filterCashier
+        );
+
+      if (this.filterTerminal)
+        records = records.filter(t => t.station === this.filterTerminal);
 
       return records;
     },
     records() {
-      let min = this.page * 13;
-      let max = min + 13;
+      const min = this.page * 13;
+      const max = min + 13;
 
       return this.filteredTransactions.slice(min, max);
     },
-    totalAmount() {
+    baseAmount() {
       return this.filteredTransactions
         .filter(i => i.transType === "SALE" && !i.close)
-        .map(i => parseFloat(i.amount.approve))
-        .reduce((a, b) => a + b, 0)
-        .toFixed(2);
+        .reduce(
+          (a, c) => a + parseFloat(c.amount.approve) - parseFloat(c.amount.tip),
+          0
+        );
     },
     totalTip() {
       return this.filteredTransactions
         .filter(i => i.transType === "SALE" && !i.close)
-        .map(i => parseFloat(i.amount.tip))
-        .reduce((a, b) => a + b, 0)
-        .toFixed(2);
+        .reduce((a, c) => a + parseFloat(c.amount.tip), 0);
     },
+    totalAmount() {
+      return this.filteredTransactions
+        .filter(i => i.transType === "SALE" && !i.close)
+        .reduce((a, c) => a + parseFloat(c.amount.approve), 0);
+    },
+
     ...mapGetters(["op", "station"])
   },
   data() {
@@ -152,8 +173,12 @@ export default {
       component: null,
       adjustable: false,
       portionDisplay: false,
-      filterStation: null,
-      stations: [],
+      filterTerminal: null,
+      filterCashier: null,
+      filterType: null,
+      terminals: [],
+      cashiers: [],
+      types: [],
       devices: [],
       terminal: null,
       date: today(),
@@ -162,43 +187,17 @@ export default {
     };
   },
   created() {
-    this.checkTerminal()
-      .then(this.checkOccupy)
-      .then(this.initialConfig)
-      .then(this.initialTodayData)
+    this.getConfig()
+      .then(this.initial)
       .catch(this.initialFailed);
+
     this.$bus.on("filter", this.applyFilter);
   },
   beforeDestroy() {
     this.$bus.off("filter", this.applyFilter);
   },
   methods: {
-    checkTerminal() {
-      return new Promise((next, stop) => {
-        this.$socket.emit("[TERMINAL] DEVICE", devices => {
-          const reason = {
-            title: "dialog.noTerminal",
-            msg: "dialog.missTerminalConfig",
-            timeout: { duration: 10000, fn: "resolve" },
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          };
-
-          devices.length > 0 ? next() : stop(reason);
-        });
-      });
-    },
-    checkOccupy() {
-      return new Promise((next, reject) => {
-        // let data = {
-        //   title: "dialog.accessDenied",
-        //   msg: "dialog.terminalBatching",
-        //   timeout: { duration: 10000, fn: "resolve" },
-        //   buttons: [{ text: "button.confirm", fn: "resolve" }]
-        // };
-        next();
-      });
-    },
-    initialConfig() {
+    getConfig() {
       return new Promise((next, stop) => {
         this.$socket.emit("[TERMINAL] DEVICE", devices => {
           const reason = {
@@ -214,32 +213,45 @@ export default {
         });
       });
     },
-    initialTodayData() {
-      this.$socket.emit("[TERMINAL] TODAY", data => this.initializing(data));
+    refetchData() {
+      this.$socket.emit("[TERMINAL] TODAY", data => this.initial(data));
     },
     initialFailed(content) {
       this.$dialog(content).then(() => this.init.resolve());
     },
-    initializing(transaction) {
-      let stations = new Set();
+    initial(data) {
+      let transactions = data || this.init.transactions;
+      const { name } = this.op;
+      const allowViewAll = this.approval(this.op.view, "invoices");
 
-      transaction.forEach(t => stations.add(t.station));
-      this.stations = Array.from(stations).map(t => ({ text: t, value: t }));
-
-      if (this.approval(this.op.view, "invoices")) {
-        this.transactions = transaction;
-        this.portionDisplay = false;
-      } else {
-        this.portionDisplay = true;
-
-        const { name } = this.op;
-
-        this.transactions = transaction.filter(
-          t =>
-            isObject(t.order) &&
-            (t.order.cashier === name || t.order.server === name)
+      if (!allowViewAll) {
+        transactions = transactions.filter(
+          t => t.order && (t.order.cashier === name || t.order.server === name)
         );
       }
+
+      this.transactions = transactions;
+      this.portionDisplay = !allowViewAll;
+
+      let terminals = new Set();
+      let cashiers = new Set();
+      let types = new Set();
+
+      transactions.forEach(t => {
+        terminals.add(t.station);
+
+        if (t.order) {
+          types.add(t.order.type);
+          t.order.cashier && cashiers.add(t.order.cashier);
+        }
+      });
+
+      this.terminals = Array.from(terminals).map(t => ({ text: t, value: t }));
+      this.cashiers = Array.from(cashiers).map(t => ({ text: t, value: t }));
+      this.types = Array.from(types).map(t => ({
+        text: this.$t("type." + t),
+        value: t
+      }));
     },
     getParser(model) {
       switch (model) {
@@ -258,8 +270,10 @@ export default {
         case "Visa":
           return "fab fa-cc-visa";
         case "MasterCard":
+        case "Master Card":
           return "fab fa-cc-mastercard";
         case "American Express":
+        case "AmEx":
           return "fab fa-cc-amex";
         case "Discover":
           return "fab fa-cc-discover";
@@ -529,11 +543,19 @@ export default {
     sortBy(type) {
       switch (type) {
         case "ticket":
-          this.transactions.sort((a, b) => {
-            const _a = a.order && a.order.number ? a.order.number : 0;
-            const _b = b.order && b.order.number ? b.order.number : 0;
-            return _a < _b ? -1 : 1;
-          });
+          this.transactions.sort((a, b) =>
+            String(b.order ? b.order.number : -1).localeCompare(
+              a.order ? a.order.number : -1,
+              undefined,
+              {
+                numeric: true,
+                sensitivity: "base"
+              }
+            )
+          );
+          break;
+        case "id":
+          this.transactions.sort((a, b) => a.index - b.index);
           break;
       }
     },
@@ -661,7 +683,7 @@ footer {
 }
 
 .ticket {
-  width: 115px;
+  width: 120px;
 }
 
 .ticket .number {
@@ -738,12 +760,17 @@ tbody tr.voided {
 }
 
 .picker i {
-  padding: 10px 30px;
+  padding: 10px 25px;
   cursor: pointer;
 }
 
 .fa-eye-slash {
   color: #e6190a;
   margin-left: 10px;
+}
+
+th .fas {
+  color: #fff;
+  margin-left: 5px;
 }
 </style>

@@ -111,6 +111,7 @@ export default {
     order: "按订单类别",
     payment: "按付款方式",
     station: "按工作站",
+    terminal: "按刷卡机",
     period: "选择时段"
   },
   tag: {
@@ -599,8 +600,10 @@ export default {
     togoConfirm: "您确定需要创建一个带走物品列表吗?",
     somethingWrong: "发生了一个错误",
     somethingWrongTip: "此订单在保存的过程中产生了一个错误，保存被取消",
-    updateNeeded: "软件需要升级",
-    versionRequirement: "伺服器要求最低版本为 {i}, 您当前使用的版本是 {i}",
+    appUpdateNeeded: "软件需要更新",
+    serverUpdateNeeded: "伺服器需要更新",
+    appVersionRequirement: "当前软件要求最低版本为 {i}, 您当前使用的版本是 {i}",
+    serverVersionRequirement: "当前伺服器要求最低版本为 {i}, 您当前使用的版本是 {i}",
     startBreakTime: "开始休息",
     startBreakTimeConfirm: "您确定要开始休息时间吗？",
     endBreakTime: "结束休息",

@@ -236,7 +236,7 @@ export default {
           delivery = order.deliveryFee;
       }
 
-      let { tip, gratuity, paid, log } = order.payment;
+      let { tip = 0, gratuity = 0, paid = 0, log = [] } = order.payment;
 
       let subtotal = 0,
         tax = 0,

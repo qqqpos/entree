@@ -3,13 +3,11 @@
 const updater = require('electron-simple-updater');
 import { app, BrowserWindow, ipcMain, powerSaveBlocker } from 'electron';
 
-
 //auto updater
 updater.init({
   checkUpdateOnStart: false,
   autoDownload: false
 })
-
 
 /**
  * Set `__static` path to static files in production

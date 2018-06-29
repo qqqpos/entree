@@ -106,18 +106,41 @@ export default {
   methods: {
     checkVersion() {
       return new Promise((next, stop) => {
-        this.$socket.emit("[SYS] GET_VERSION", requireVersion => {
-          const appVersion = this.$electron.remote.app.getVersion();
-          const fulfilled = appVersion >= requireVersion;
-          const error = {
-            reason: "outDatedVersion",
-            prompt: {
-              type: "warning",
-              title: "dialog.updateNeeded",
-              msg: ["dialog.versionRequirement", requireVersion, appVersion],
-              buttons: [{ text: "button.confirm", fn: "resolve" }]
-            }
-          };
+        this.$socket.emit("[SYS] GET_VERSION", ({ version, appRequire }) => {
+          const info = require("../../../package.json");
+          const serverRequire = info.require;
+          const appVersion = info.version;
+
+          let fulfilled = true;
+          let error;
+
+          if (appVersion < appRequire) {
+            error = {
+              reason: "outDatedVersion",
+              prompt: {
+                type: "warning",
+                title: "dialog.appUpdateNeeded",
+                msg: ["dialog.appVersionRequirement", appRequire, appVersion],
+                buttons: [{ text: "button.confirm", fn: "resolve" }]
+              }
+            };
+            fulfilled = false;
+          } else if (serverRequire > version) {
+            error = {
+              reason: "outDatedVersion",
+              prompt: {
+                type: "warning",
+                title: "dialog.serverUpdateNeeded",
+                msg: [
+                  "dialog.serverVersionRequirement",
+                  appRequire,
+                  appVersion
+                ],
+                buttons: [{ text: "button.confirm", fn: "resolve" }]
+              }
+            };
+            fulfilled = false;
+          }
 
           process.env.NODE_ENV !== "development" && !fulfilled
             ? stop(error)

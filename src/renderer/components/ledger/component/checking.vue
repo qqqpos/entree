@@ -8,7 +8,7 @@
         <div class="results">
             <ul>
                 <li v-for="(ticket,index) in passed" :key="index" :class="{verified:ticket.status === 1}">
-                    <span>#{{ticket.number}}</span>
+                    <span>#{{ticket.number}} ({{ticket.type}})</span>
                     <span> $ {{ticket.amount | decimal}}</span>
                     <span class="miss"> ( {{ticket.miss | decimal}} )</span>
                     <span>{{ticket.info}}</span>
@@ -39,13 +39,12 @@ export default {
   methods: {
     run() {
       this.invoices.forEach(invoice => {
-        const { subtotal, tax, discount, balance } = this.$calculatePayment(
-          invoice,
-          {
-            selfAssign: false,
-            callback: true
-          }
-        );
+        const payment = this.$calculatePayment(invoice, {
+          selfAssign: false,
+          callback: true
+        });
+
+        const { subtotal, tax, discount, balance } = payment;
 
         if (invoice.status === 1) {
           this.ticketAmount += balance;
@@ -63,6 +62,7 @@ export default {
 
           let record = {
             number: invoice.number,
+            type: this.$t("type." + invoice.type),
             status: 1,
             info: "PASS",
             amount: balance,
@@ -70,15 +70,15 @@ export default {
             server: invoice.server,
             cashier: invoice.cashier
           };
-          invoice.number === 215 && console.log(payments)
+
           if (paid !== balance) {
             Object.assign(record, {
               status: -1,
-              info: balance > paid ? "Paid less than due":"OverPaid",
+              info: balance > paid ? "Paid less" : "Over Paid",
               miss: Math.abs(balance - paid)
             });
-          }else{
-              this.verifyAmount += balance;
+          } else {
+            this.verifyAmount += balance;
           }
 
           this.passed.push(record);
@@ -86,8 +86,9 @@ export default {
           //no payment
           this.passed.push({
             number: invoice.number,
+            type: this.$t("type." + invoice.type),
             status: 0,
-            info: invoice.status === 0 ? "Ticket Voided" : "Payment Not Found",
+            info: invoice.status === 0 ? "Ticket Voided" : "Payment Missing",
             amount: balance,
             miss: balance,
             server: invoice.server,

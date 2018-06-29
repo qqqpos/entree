@@ -1,6 +1,7 @@
 {
   "name": "unitedpos",
   "version": "0.8.93",
+  "require": "0.8.93",
   "stage": "Beta",
   "description": "UnitedPOS point of sale system",
   "author": "Xuewu Huang <UnitedPOS.service@gmail.com>",
@@ -38,7 +39,8 @@
       "target": "squirrel"
     },
     "squirrelWindows": {
-      "iconUrl": "https://raw.githubusercontent.com/huangxuewu/entree/master/build/icons/icon.ico"
+      "iconUrl": "https://raw.githubusercontent.com/huangxuewu/entree/master/build/icons/icon.ico",
+      "loadingGif": "build/icons/install.gif"
     },
     "dmg": {
       "contents": [
