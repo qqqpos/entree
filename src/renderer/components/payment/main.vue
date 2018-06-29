@@ -69,6 +69,7 @@ import creditCardModule from "./creditCard";
 import capture from "../giftcard/capture";
 import preview from "../common/ticket";
 import splitor from "./helper/splitor";
+import thirdParty from "./mark";
 
 export default {
   props: ["init"],
@@ -81,6 +82,7 @@ export default {
     unlockModule,
     inputModule,
     numberInput,
+    thirdParty,
     shortcut,
     capture,
     splitor,
@@ -100,7 +102,7 @@ export default {
       creditCard: "",
       expDate: "",
       paymentType: "CASH",
-      giftCard:"",
+      giftCard: "",
       externalPaymentType: null,
       willTicketNumberUpdate: false,
       willResetFieldValue: true,
@@ -497,6 +499,18 @@ export default {
       return new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, card };
         this.component = "creditCardModule";
+      });
+    },
+    chargeThirdParty() {
+      return new Promise(charge => {
+        this.externalPaymentType
+          ? charge(this.externalPaymentType)
+          : new Promise((resolve, reject) => {
+              this.componentData = { resolve, reject, callback: true };
+              this.component = "thirdParty";
+            })
+              .then(charge)
+              .catch(this.exitComponent);
       });
     },
     checkEntryInput() {

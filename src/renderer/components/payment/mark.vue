@@ -249,9 +249,9 @@ input:checked + label:before {
 
 input:checked + label:after {
   position: absolute;
-  content: "\f00c";
-  font-family: fontAwesome;
-  bottom: 0;
-  right: 3px;
+  content: "✓";
+  bottom: -2px;
+  right: 5px;
+  transform: rotate(20deg);
 }
 </style>

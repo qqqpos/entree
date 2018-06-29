@@ -115,20 +115,17 @@ export default {
     };
   },
   created() {
-    const {
-      defaults = {
-        externals: [
-          "Visa",
-          "Master Card",
-          "AmEx",
-          "Discover",
-          "Gift Card",
-          "Online Order"
-        ]
-      }
-    } = this.$store.getters.config;
+    const { defaults = {} } = this.$store.getters.config;
 
-    this.externals = defaults.externals;
+    this.externals = defaults.externals || [
+      "Visa",
+      "Master Card",
+      "AmEx",
+      "Discover",
+      "Gift Card",
+      "Online Order"
+    ];
+    
     //this.externalType = defaults.externals[0];
     this.getCreditCard();
   },

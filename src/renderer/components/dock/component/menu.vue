@@ -22,7 +22,7 @@
             </div>
           </li>
           <li v-else @click="askClockIn">
-            <i class="fa fa-2x fa-clock-o"></i>
+            <i class="fas fa-2x fa-user-clock"></i>
             <div>
               <h3>{{$t('dock.clockIn')}}</h3>
               <h5 class="clock">

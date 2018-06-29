@@ -180,7 +180,7 @@ export default {
     edit(prompt) {
       if (isObject(prompt)) {
         this.$dialog(prompt)
-          .then(this.removeRecordFromList)
+          .then(this.removePaymentRecord)
           .catch(() => {
             this.exitComponent();
             this.edit();
@@ -198,7 +198,7 @@ export default {
     editFailed(reason) {
       reason.hasOwnProperty("title")
         ? this.$dialog(reason)
-            .then(this.removeRecordFromList)
+            .then(this.removePaymentRecord)
             .catch(this.exitComponent)
         : this.edit();
     },
@@ -226,16 +226,14 @@ export default {
         .catch(() => {});
     },
     voidFailed(reason) {
-      console.log(reason);
       this.$dialog(reason)
-        .then(this.removeRecordFromList)
+        .then(this.removePaymentRecord)
         .catch(this.exitComponent);
     },
-    removeRecordFromList() {
+    removePaymentRecord() {
       new Promise((resolve, reject) => {
-        this.$socket.emit("[PAYMENT] GET_LOG", this.order._id, logs => {
-          const { number } = this.order;
-
+        const { _id, number } = this.order;
+        this.$socket.emit("[PAYMENT] GET_LOG", _id, logs => {
           this.componentData = { resolve, reject, number, logs };
           this.component = "loger";
         });
