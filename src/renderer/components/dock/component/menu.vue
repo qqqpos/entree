@@ -207,8 +207,8 @@ export default {
 
     this.updater.on("update-not-available", () => {
       const prompt = {
-        title: "dialog.updateFail",
-        msg: "dialog.alreadyUpToDate",
+        title: "dialog.alreadyUpToDate",
+        msg: "dialog.latestVersion",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
@@ -227,7 +227,7 @@ export default {
       const prompt = {
         type: "error",
         title: "dialog.updateFail",
-        msg: ["dialog.updateFailMessage", log],
+        msg: ["dialog.message", log],
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
       this.updateStatus = null;

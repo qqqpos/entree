@@ -312,7 +312,9 @@ export default {
     view: "View",
     retry: "Retry",
     deposit: "Deposit",
-    chargeRemain: "Charge Remain Balance"
+    chargeRemain: "Charge Remain Balance",
+    copy: "Copy",
+    reimburse: "Reimburse"
   },
   thead: {
     orderType: "Order Type",
@@ -466,6 +468,7 @@ export default {
     address: "Address Info",
     sideOption: "Side Option",
     ledger: "Sales Ledger",
+    tableInfo: "Table Info",
     departments: "Departments",
     hibachiTable: "Hibachi Table",
     customerProfile: "Customer Info",
@@ -785,8 +788,13 @@ export default {
     handlePastDuePayment: "How would you like to handle this past due payment?",
     apiKeyRequired: "Please provide a valid API key.",
     updateFail: "Update Failed",
-    updateFailMessage: "Error Message: {i}",
-    alreadyUpToDate: "There is no update available."
+    message: "Message: {i}",
+    alreadyUpToDate: "Update Unavailable",
+    latestVersion: "You are on the latest version.",
+    orderContentReplace: "Item Replace Confirm",
+    existOrderContentReplace: "Are you sure to replace exist item?",
+    copyOrderContent: "Repeat Order Confirm",
+    copyOrderContentConfirm: "Are you sure to copy items from the record?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1258,7 +1266,7 @@ export default {
     bit: "{i} Bit",
     viewTag: "View Tags",
     viewFavoriteItem: "View Favorite Items",
-    viewProfile: "View Profiles",
+    viewRecords: "View Records",
     firstDate: "First Date",
     lastDate: "Last Date",
     viewCustomer: "View Address Customer",
@@ -1659,6 +1667,7 @@ export default {
   },
   table: {
     name: "Alias",
+    seats: "Seats",
     zone: "Zone",
     icon: "Icon",
     type: "Type",

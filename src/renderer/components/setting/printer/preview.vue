@@ -2,15 +2,16 @@
   <div class="preview">
     <div :is="component" :init="componentData"></div>
     <div class="fn">
-      <i class="fa fa-refresh" @click="refresh"></i>
+      <i class="fas fa-sync-alt" @click="refresh"></i>
       <i class="fa fa-volume-up" @click="buzzer"></i>
-      <i class="fa fa-print" @click="preview"></i>
+      <i class="fas fa-print" @click="print"></i>
     </div>
   </div>
 </template>
 
 <script>
 import preview from "../../common/ticket";
+
 export default {
   props: ["printer"],
   components: { preview },
@@ -39,7 +40,7 @@ export default {
     buzzer() {
       Printer.buzzer(this.printer);
     },
-    preview() {
+    print() {
       this.ticket.print = false;
       this.ticket.content.forEach(item =>
         Object.assign(item, { print: false })

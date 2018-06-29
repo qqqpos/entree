@@ -75,6 +75,7 @@ export default {
             .map((_, index) => ({
               feature: [],
               invoice: [],
+              seats: 4,
               name: "",
               server: null,
               session: null,

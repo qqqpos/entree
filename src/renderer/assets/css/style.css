@@ -96,6 +96,11 @@ i.loader:after {
   transform-origin: 50% 50%;
   animation: rotate 1.5s linear 0s infinite normal;
 }
+
+i.space{
+  margin-right:5px;
+}
+
 .relative {
   position: relative;
 }
@@ -470,15 +475,15 @@ header.dock .text{
   flex:1;
 }
 
-.dock .customer {
+.dock .client {
   display: flex;
   justify-content: center;
   flex: 1;
 }
 
-.dock .customer span{
+.dock .client span{
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   margin:0 5px;
 }
 

@@ -9,7 +9,7 @@
             <!-- <span class="waterMark" v-show="$route.name === 'Menu' && order.hasOwnProperty('__vip__')">VIP</span> -->
           </div>
           <div class="center-wrap text" @click="editProfile">
-            <div class="customer" v-show="isMenuPage">
+            <div class="client" v-show="isMenuPage">
               <span v-show="customer.phone">{{customer.phone | phone}}</span>
               <span v-show="customer.address">{{customer.address}}</span>
             </div>
@@ -17,7 +17,7 @@
           <div class="profile" v-show="isMenuPage" @click="openPortal">
             <i class="fa fa-address-book"></i>
             <span v-if="customer.name" class="text">{{customer.name}}</span>
-            <span v-else>{{$t('text.viewProfile')}}</span>
+            <span v-else>{{$t('text.viewRecords')}}</span>
           </div>
           <div class="operator text" @click="initialPanel">
             <i class="fas fa-user-tie"></i>
@@ -90,7 +90,6 @@ export default {
         return this.$t("type." + this.ticket.type, this.app.language);
       }
     },
-
     ...mapGetters([
       "op",
       "app",

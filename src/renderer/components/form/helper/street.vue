@@ -173,10 +173,6 @@ export default {
   margin-left: 5px;
   color: #adb5bd;
 }
-/* h4 {
-  display: flex;
-  flex-direction: column;
-} */
 
 ul.preset li {
   flex-direction: row;

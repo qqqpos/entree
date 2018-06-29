@@ -4,12 +4,14 @@
       <header>
         <div>
           <h5>{{$t('title.edit')}}</h5>
-          <h3>{{$t('title.table')}}</h3>
+          <h3>{{$t('title.tableInfo')}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer title="table.name" v-model="init.table.name" :autoFocus="true"></inputer>
         <inputer title="table.zone" v-model="init.table.zone" :disabled="true"></inputer>
+        <inputer title="table.seats" v-model.number="init.table.seats"></inputer>
         <selector title="table.icon" v-model="init.table.shape" :opts="iconOpts"></selector>
         <selector title="table.type" v-model="init.table.type" :opts="tableOpts"></selector>
         <div class="checkboxes" v-if="init.table.type === 'hibachi'">

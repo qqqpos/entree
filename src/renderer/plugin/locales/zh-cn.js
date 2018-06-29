@@ -305,7 +305,9 @@ export default {
     view: "查看",
     retry: "重试",
     deposit: "押金",
-    chargeRemain: "支付余额"
+    chargeRemain: "支付余额",
+    copy: "复制",
+    reimburse: "偿还"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -373,7 +375,7 @@ export default {
     address: "地址资料",
     sideOption: "副菜选项",
     ledger: "轧账",
-    table: "桌位",
+    tableInfo: "桌位信息",
     departments: "部门分类",
     hibachiTable: "铁板座位",
     customerProfile: "客户信息",
@@ -668,8 +670,13 @@ export default {
     handlePastDuePayment: "您要如何记录这个逾期订单的付款?",
     apiKeyRequired: "请提供一个有效的 API 密钥",
     updateFail: "无法更新",
-    updateFailMessage: "发生错误: {i}",
-    alreadyUpToDate: "当前已经是最新版本"
+    message: "信息: {i}",
+    alreadyUpToDate: "无需更新",
+    latestVersion: "您已经使用最新的版本",
+    orderContentReplace: "替换订单物品",
+    existOrderContentReplace: "您想要替换掉列表上已有的物品吗?",
+    copyOrderContent: "重复下单",
+    copyOrderContentConfirm: "您确定要复制旧订单的物品吗?"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1222,7 +1229,7 @@ export default {
     bit: "{i} 位",
     viewTag: "查看标签",
     viewFavoriteItem: "查看常点物品",
-    viewProfile: "查看档案",
+    viewRecords: "查看记录",
     firstDate: "首次日期",
     lastDate: "最后日期",
     viewCustomer: "查看此地址客户",
@@ -1625,7 +1632,8 @@ export default {
     resetTable: "还原座位"
   },
   table: {
-    name: "座位名称",
+    name: "别名",
+    seats: "座位",
     zone: "座位区",
     icon: "图标",
     type: "类型",

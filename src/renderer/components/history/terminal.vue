@@ -527,8 +527,9 @@ export default {
       this.date = moment(this.date, "YYYY-MM-DD")
         .subtract(1, "days")
         .format("YYYY-MM-DD");
+        
       this.$socket.emit("[TERMINAL] DATE", this.date, data =>
-        this.initializing(data)
+        this.initial(data)
       );
     },
     next() {
@@ -537,7 +538,7 @@ export default {
         .add(1, "days")
         .format("YYYY-MM-DD");
       this.$socket.emit("[TERMINAL] DATE", this.date, data =>
-        this.initializing(data)
+        this.initial(data)
       );
     },
     sortBy(type) {

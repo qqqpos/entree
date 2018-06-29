@@ -1,10 +1,14 @@
 <template>
-  <div class="popupMask center dark" @click.self="init.reject">
-    <div class="payout">
+  <div class="popupMask center dark">
+    <div class="editor">
       <header>
-        <h5>{{$t('title.payout')}}</h5>
-        <h2>{{$t('title.payoutRecord')}}</h2>
+        <div class="f1">
+          <h5>{{$t('title.payout')}}</h5>
+          <h3>{{$t('title.payoutRecord')}}</h3>
+        </div>
+        <i class="fas fa-times" @click="init.reject"></i>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <div class="textWrap">
           <textarea v-model="note"></textarea>
@@ -27,7 +31,7 @@
         </div>
       </div>
       <footer>
-        <div class="f1">
+        <div>
           <p>
             <span class="text">{{$t('text.cashier')}}:</span>
             <span class="value">{{op.name}}</span>
@@ -145,28 +149,29 @@ export default {
       return new Promise(next => {
         const data = {
           date: today(),
-          time: +new Date(),
+          time: Date.now(),
           for: "Payout",
           signature: this.signaturePad.toDataURL()
         };
         this.$socket.emit("[SIGNATURE] SAVE", data, _id => next(_id));
       });
     },
-    saveToDatabase(signature) {
+    saveToDatabase(credential) {
       Printer.openCashDrawer();
+
+      const amount = parseFloat(this.amount);
+      const ticket = { number: null, type: null };
       const cashDrawer = this.station.cashDrawer.name;
+
       const transaction = {
         _id: ObjectId(),
         date: today(),
-        time: +new Date(),
+        time: Date.now(),
         order: null,
-        ticket: {
-          number: null,
-          type: null
-        },
-        paid: parseFloat(this.amount),
+        ticket,
+        paid: amount,
         change: 0,
-        actual: parseFloat(this.amount),
+        actual: amount,
         tip: 0,
         cashier: this.op.name,
         server: null,
@@ -176,7 +181,7 @@ export default {
         type: "CASH",
         for: "Payout",
         subType: null,
-        credential: signature,
+        credential,
         lfd: null,
         note: this.note
       };
@@ -184,12 +189,9 @@ export default {
       const activity = {
         type: "CASHFLOW",
         inflow: 0,
-        outflow: parseFloat(this.amount),
-        time: +new Date(),
-        ticket: {
-          number: null,
-          type: null
-        },
+        outflow: amount,
+        ticket,
+        time: Date.now(),
         operator: this.op.name
       };
 
@@ -205,20 +207,18 @@ export default {
 </script>
 
 <style scoped>
-.payout {
+.editor {
   width: 650px;
   background: #fafafa;
 }
 
-header {
-  background: #fff;
-  padding: 10px 25px;
-  border-bottom: 1px solid #eee;
+header i {
+    padding: 18px 25px;
+    float: right;
 }
 
-header h5 {
-  margin: 3px;
-  font-weight: normal;
+.wrap {
+  padding: initial;
 }
 
 .textWrap {
@@ -232,8 +232,8 @@ textarea {
   resize: none;
   outline: none;
   width: calc(100% - 50px);
-  height: 45px;
-  padding: 25px;
+  height: 65px;
+  padding: 15px 25px;
   font-family: "Yuanti-SC";
   font-size: 18px;
 }
@@ -247,15 +247,12 @@ textarea {
 }
 
 footer {
-  display: flex;
   padding: 0 0 0 25px;
-  align-items: center;
-  border: 1px solid #e0e0e0;
-  background: #eeeeee;
 }
 
-.f1 {
+footer div {
   display: flex;
+  flex: 1;
 }
 
 p {

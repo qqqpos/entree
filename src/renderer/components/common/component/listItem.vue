@@ -1,7 +1,7 @@
 <template>
   <li class="item" :class="{disable:$route.name === 'Menu' && (item.split || item.pending)}" @click.prevent.stop="select(item,$event)" v-if="!checkbox">
     <div class="main">
-      <span class="qty">{{item.qty}}</span>
+      <span class="itemQty">{{item.qty}}</span>
       <div class="wrap">
         <span class="name">{{item[language]}}</span>
         <span class="side">{{item.side[language]}}</span>
@@ -10,7 +10,7 @@
       <span class="price">{{item.total | decimal}}</span>
     </div>
     <div class="sub" v-for="(set,index) in item.choiceSet" :key="index" @click.stop="adjustChoiceSet(set,$event)" :data-key="set.key">
-      <span class="qty" :class="{hide:set.qty === 1}">{{set.qty}}</span>
+      <span class="itemQty" :class="{hide:set.qty === 1}">{{set.qty}}</span>
       <span class="item">{{set[language]}}</span>
       <span class="price" :class="{hide:parseFloat(set.price) === 0}">({{set.price | decimal}})</span>
     </div>
@@ -104,7 +104,7 @@ li {
   position: relative;
 }
 
-.qty {
+.itemQty {
   width: 35px;
   text-align: center;
 }

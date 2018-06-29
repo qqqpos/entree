@@ -1,7 +1,7 @@
 <template>
   <div>
     <header v-if="layout === 'order'" class="simple">
-      <span class="qty">{{$t('text.qty')}}</span>
+      <span class="itemQty">{{$t('text.qty')}}</span>
       <span class="item">{{$t('text.item')}}</span>
       <span class="price">{{$t('text.price')}}</span>
     </header>
@@ -518,7 +518,7 @@ header.info {
   padding: 0 10px;
 }
 
-.simple .qty {
+.simple .itemQty {
   width: 35px;
   text-align: center;
 }
