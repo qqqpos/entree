@@ -676,7 +676,7 @@ export default {
     orderContentReplace: "替换订单物品",
     existOrderContentReplace: "您想要替换掉列表上已有的物品吗?",
     copyOrderContent: "重复下单",
-    copyOrderContentConfirm: "您确定要复制旧订单的物品吗?"
+    copyOrderContentConfirm: "您确定要从旧订单中复制所有的物品吗?"
   },
   terminal: {
     initial: "正在初始化 {i}...",

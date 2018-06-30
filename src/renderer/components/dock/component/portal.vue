@@ -42,29 +42,42 @@ export default {
     },
     preview(ticket) {
       new Promise((resolve, reject) => {
-        this.moduleData = { ticket, exit: true };
+        this.moduleData = { resolve, reject, ticket, exit: true };
         this.module = "ticket";
       })
-        .then(this.exitComponent)
-        .catch(this.exitComponent);
+        .then(this.exitModule)
+        .catch(this.exitModule);
     },
     copy(invoice) {
+      const { newTicket } = this.$store.getters.app;
       const contentExist = this.$store.getters.order.content.length > 0;
-      const prompt = contentExist
-        ? {
-            type: "warning",
-            title: "dialog.orderContentReplace",
-            msg: "dialog.existOrderContentReplace"
-          }
-        : {
-            type: "question",
-            title: "dialog.copyOrderContent",
-            msg: "dialog.copyOrderContentConfirm"
-          };
+      if (!newTicket && contentExist) {
+        const prompt = {
+          type: "question",
+          title: "dialog.addToOrderContent",
+          msg: "dialog.addToOrderContentConfirm"
+        };
 
-      this.$dialog(prompt)
-        .then(() => this.copyItem(invoice.content))
-        .catch(this.exitComponent);
+        this.$dialog(prompt)
+          .then(() => this.addItem(invoice.content))
+          .catch(this.exitComponent);
+      } else {
+        const prompt = contentExist
+          ? {
+              type: "warning",
+              title: "dialog.orderContentReplace",
+              msg: "dialog.existOrderContentReplace"
+            }
+          : {
+              type: "question",
+              title: "dialog.copyOrderContent",
+              msg: "dialog.copyOrderContentConfirm"
+            };
+
+        this.$dialog(prompt)
+          .then(() => this.copyItem(invoice.content))
+          .catch(this.exitComponent);
+      }
     },
     copyItem(content) {
       this.exitComponent();
@@ -81,7 +94,26 @@ export default {
 
       this.setOrder({ content });
     },
+    addItem(content) {
+      this.exitComponent();
+      this.view = null;
+
+      content.forEach(item =>
+        this.$store.getters.order.content.push(
+          Object.assign({}, item, {
+            unique: String().random(),
+            print: false,
+            pending: false,
+            void: false
+          })
+        )
+      );
+    },
     reimburse(invoice) {},
+    exitModule() {
+      this.module = null;
+      this.moduleData = null;
+    },
     ...mapActions(["setOrder"])
   }
 };
@@ -100,7 +132,7 @@ export default {
 
 .preview {
   position: fixed;
-  left: 40px;
+  left: 37px;
   top: 0;
 }
 </style>

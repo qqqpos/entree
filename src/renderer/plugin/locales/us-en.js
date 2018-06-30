@@ -794,7 +794,9 @@ export default {
     orderContentReplace: "Item Replace Confirm",
     existOrderContentReplace: "Are you sure to replace exist item?",
     copyOrderContent: "Repeat Order Confirm",
-    copyOrderContentConfirm: "Are you sure to copy items from the record?"
+    copyOrderContentConfirm: "Are you sure to copy items from the record?",
+    addToOrderContent: "Additional Item",
+    addToOrderContentConfirm: "Are you sure to copy item to the current list form the record?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",

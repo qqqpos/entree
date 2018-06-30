@@ -1,6 +1,8 @@
 'use strict'
 
+// const { exec } = require("child_process");
 const updater = require('electron-simple-updater');
+
 import { app, BrowserWindow, ipcMain, powerSaveBlocker } from 'electron';
 
 //auto updater
