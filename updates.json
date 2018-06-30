@@ -1,8 +1,8 @@
 {
     "win32-x64-prod": {
-        "readme": "v.8.93",
+        "readme": "v.8.94",
         "update": "https://github.com/huangxuewu/entree/releases/download/untagged-3468cb7b25d4c30adf5b/",
-        "install": "https://github.com/huangxuewu/entree/releases/download/untagged-3468cb7b25d4c30adf5b/UnitedPOS.Setup.0.8.93.exe",
-        "version": "0.8.93"
+        "install": "https://github.com/huangxuewu/entree/releases/download/untagged-3468cb7b25d4c30adf5b/UnitedPOS.Setup.0.8.94.exe",
+        "version": "0.8.94"
     }
 }
