@@ -396,9 +396,9 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
-        const printCount = this.order.hasOwnProperty("printCount")
-          ? this.order.printCount + 1
-          : print ? 1 : 0;
+        const printCount = this.app.newTicket
+          ? print ? 1 : 0
+          : this.order.printCount + 1;
 
         let order = this.combineOrderInfo({ printCount });
 

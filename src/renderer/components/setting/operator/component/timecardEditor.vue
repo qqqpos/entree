@@ -11,13 +11,13 @@
             <div class="wrap">
                 <inputer title="text.date" v-model="record.date" placeholder="YYYY-MM-DD"></inputer>
                 <inputer title="text.clockIn" v-model="record.clockIn" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
-                  <i class="fa fa-calendar" @click="editTimestamp('clockIn',record.clockIn)"></i>
+                  <i class="far fa-calendar-alt" @click="editTimestamp('clockIn',record.clockIn)"></i>
                 </inputer>
                 <inputer title="text.clockOut" v-model="record.clockOut" placeholder="YYYY-MM-DD HH:mm:ss" mask="####-##-## ##:##:##">
-                  <i class="fa fa-calendar" @click="editTimestamp('clockOut',record.clockOut)"></i>
+                  <i class="far fa-calendar-alt" @click="editTimestamp('clockOut',record.clockOut)"></i>
                 </inputer>
                 <inputer title="text.tip" v-model.number="record.tip">
-                  <i class="fa fa-pencil-square-o" @click="editTip(record.tip)"></i>
+                  <i class="fas fa-keyboard" @click="editTip(record.tip)"></i>
                 </inputer>
                 <inputer title="text.salary" v-model.number="record.wage" :placeholder="init.operator.wage"></inputer>
                 <inputer title="text.note" v-model="record.note" type="textarea"></inputer>

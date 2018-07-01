@@ -6,7 +6,7 @@
             <span class="ago">{{invoice.time | time(false)}}</span>
             <span class="time">{{invoice.time | time(true)}}</span>
             </h5>
-            <p v-html="story(invoice)"></p>
+            <div v-html="story(invoice)"></div>
         </div>
         <div class="mask" v-show="focus">
             <span @click.stop="$emit('preview')"><i class="fas fa-file-invoice space"></i>{{$t('button.view')}}</span>
@@ -55,12 +55,19 @@ export default {
       const name = invoice.customer.name || this.$t("nav.customer");
       const type = this.$t("type." + invoice.type);
       const items = this.$t("text.placedItemFor", this.count(invoice.content));
+      const reason = invoice.status === 0 ? this.getReason(invoice.void) : "";
       const total = invoice.payment.balance.toFixed(2);
+      const text = this.$t("text.total");
 
-      return `<span class="heavy-text">${name}</span><span>${items}</span><span class="heavy-text">${type}</span>\
-              <p class="amount">${this.$t(
-                "text.total"
-              )} <i class="fas fa-dollar-sign"></i> ${total}</p>`;
+      return `<span class="danger-text">${name}</span>${items}<span class="danger-text">${type}</span>\
+                ${reason}
+              <p class="amount">${text} <i class="fas fa-dollar-sign"></i> ${total}</p>`;
+    },
+    getReason({ by, time, note, flag, join = "" }) {
+      const reason = this.$t("reason." + note, join);
+      const text = this.$t("text.voidTicketFor");
+
+      return `<p><span class="danger-text">${by}</span>${text}<span class="danger-text">${reason}</span></p>`;
     },
     count(items) {
       return items.reduce((a, c) => a + c.qty, 0);
@@ -105,10 +112,10 @@ h5 {
 
 .description {
   flex: 1;
-  padding: 0 5px 0 10px;
+  padding: 0 0 0 10px;
 }
 
-.description p {
+.description div {
   font-size: 14px;
   margin-top: 2px;
 }

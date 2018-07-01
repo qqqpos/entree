@@ -103,10 +103,7 @@ export default {
               const confirm = {
                 type: "question",
                 title: "dialog.clockInConfirm",
-                msg: [
-                  "dialog.clockInTip",
-                  moment(this.time).format("hh:mm:ss a")
-                ],
+                msg: ["dialog.clockInTime",moment(this.time).format("hh:mm:ss a")],
                 buttons: [{ text: "button.confirm", fn: "resolve" }]
               };
 

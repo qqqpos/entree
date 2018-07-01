@@ -244,6 +244,9 @@ function createList(printer, setting, invoice, preview) {
       if (!invoice.print) {
         items = list.filter(item => item.printer[printer] && !item.print);
       } else {
+        const printBothText = languages[0].enable && languages[1].enable;
+        const firstLineChinese = languages[0].ref === "zhCN";
+        const firstLineEnglish = languages[0].ref === "usEN";
         items = list
           .filter(
             item =>
@@ -253,12 +256,22 @@ function createList(printer, setting, invoice, preview) {
           .map(item => {
             switch (item.diffs) {
               case "UNCHANGED":
-                item.zhCN = "☑ " + item.zhCN;
-                item.usEN = "☑ " + item.usEN;
+                if (printBothText) {
+                  item.zhCN = firstLineChinese ? "☑ " + item.zhCN : item.zhCN;
+                  item.usEN = firstLineEnglish ? "☑ " + item.usEN : item.usEN;
+                } else {
+                  item.zhCN = "☑ " + item.zhCN;
+                  item.usEN = "☑ " + item.usEN;
+                }
                 break;
               case "NEW":
-                item.zhCN = "☐ " + item.zhCN;
-                item.usEN = "☐ " + item.usEN;
+                if (printBothText) {
+                  item.zhCN = "☐ " + item.zhCN;
+                  item.usEN = "☐ " + item.usEN;
+                } else {
+                  item.zhCN = "☐ " + item.zhCN;
+                  item.usEN = "☐ " + item.usEN;
+                }
                 break;
               default:
             }
@@ -611,16 +624,10 @@ function createFooter(config, setting, printer, ticket) {
   });
 
   if (payment.paid > 0 && payment.remain > 0)
-    settle.push(
-      `<section class="details"><h3>Balance Due: $ ${payment.remain.toFixed(
-        2
-      )}</h3></section>`
-    );
+    settle.push(`<section class="details"><h3>Balance Due: $ ${payment.remain.toFixed(2)}</h3></section>`);
 
   if (ticket.status === 0) {
-    const voidNote = `Void by: ${ticket.void.by} @ ${moment(
-      ticket.void.time
-    ).format("HH:mm:ss")}`;
+    const voidNote = `Void by: ${ticket.void.by} @ ${moment(ticket.void.time).format("HH:mm:ss")}`;
 
     settle.push(`<section class="details">\
                     <h3>*** Ticket Voided ***</h3>\
@@ -675,7 +682,7 @@ function createFooter(config, setting, printer, ticket) {
     tradeMark && ticket.tradeMark
       ? `<p class="tm"><span class="tradeMark">${ticket.tradeMark}</span></p>`
       : "";
-  const printStatus = ticket.printCount > 1
+  const printStatus = ticket.printCount > 1 && /cashier/i.test(printer)
     ? `<p class="printTime">***** ${printer} reprint ${ticket.printCount - 1} @ ${moment().format("hh:mm:ss")} *****</p>`
     : `<p class="printTime">${printer} print @ ${moment().format("hh:mm:ss")}</p>`;
 

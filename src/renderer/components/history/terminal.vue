@@ -328,7 +328,7 @@ export default {
 
       const prompt = {
         title: "terminal.refundConfirm",
-        msg: ["terminal.refundAmount", amount],
+        msg: ["terminal.refundMethod", amount],
         buttons: [
           { text: "button.partiallyRefund", fn: "reject" },
           { text: ["button.fullRefund", amount], fn: "resolve" }

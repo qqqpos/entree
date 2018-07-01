@@ -57,7 +57,7 @@ export default {
     ...mapGetters(["time"])
   },
   watch: {
-    "init.title": "initial",
+    "init.title": "$forceUpdate",
     time(n) {
       if (this.init.timeout && this.pct > 0) {
         this.pct = this.pct - this.step;

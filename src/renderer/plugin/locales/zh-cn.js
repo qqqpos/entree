@@ -304,6 +304,7 @@ export default {
     settle: "结账",
     view: "查看",
     retry: "重试",
+    reenter: "重新输入",
     deposit: "押金",
     chargeRemain: "支付余额",
     copy: "复制",
@@ -404,7 +405,7 @@ export default {
     printConfirm: "打印确定",
     printSpoolerTip: "原计划 {i} 打印({i} 之后)，您确定要立刻打印吗？",
     clockInConfirm: "打卡上班",
-    clockInTip: "您的打卡时间 {i}",
+    clockInTime: "您的打卡时间 {i}",
     clockOutConfirm: "打卡下班",
     clockInRequire: "请先打卡",
     clockInRequireTip: "请在打卡后再进行操作",
@@ -1278,7 +1279,8 @@ export default {
     plasticBag: "塑料袋",
     foodAllergy: "食物过敏",
     searchTicket: "查找订单",
-    placedItemFor: "点了 {i}个 单品"
+    placedItemFor: "点了 {i}个 单品",
+    voidTicketFor: " 取消了订单, 原因是"
   },
   nav: {
     store: "店面",

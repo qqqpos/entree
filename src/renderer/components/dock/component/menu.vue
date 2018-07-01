@@ -152,9 +152,9 @@
 import { mapGetters, mapActions } from "vuex";
 
 import collector from "../../component/collector";
+import inputModule from "../../component/inputer";
 import dialogModule from "../../common/dialog";
 import unlockModule from "../../common/unlock";
-import inputer from "../../component/inputer";
 import terminal from "../../history/terminal";
 import giftcard from "../../giftcard/index";
 import payout from "../payout";
@@ -164,11 +164,11 @@ export default {
   components: {
     unlockModule,
     dialogModule,
+    inputModule,
+    collector,
     terminal,
     giftcard,
-    payout,
-    inputer,
-    collector
+    payout
   },
   computed: {
     ...mapGetters([
@@ -269,9 +269,9 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.clockInConfirm",
-        msg: ["dialog.clockInTip", moment(this.time).format("hh:mm:ss a")]
+        msg: ["dialog.clockInTime", moment(this.time).format("hh:mm:ss a")]
       };
-
+      
       this.$dialog(prompt)
         .then(() => {
           this.setOp({ clockIn: this.time, session: ObjectId() });
@@ -312,6 +312,7 @@ export default {
         .then(() => {
           this.$dialog(prompt)
             .then(() => {
+              console.log(this.store.timecard);
               this.store.timecard.tipReport
                 ? this.reportTip()
                 : this.clockOut();
@@ -322,18 +323,29 @@ export default {
     },
     reportTip() {
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, title: "title.reportTip" };
-        this.component = "inputer";
+        const config = {
+          title: "title.reportTip",
+          type: "decimal",
+          percentage: false,
+          allowPercentage: false,
+          amount: "0.00"
+        };
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
       })
         .then(({ amount }) => {
           const prompt = {
             type: "question",
             title: "dialog.tipConfirm",
-            msg: ["dialog.tipReportConfirm", amount.toFixed(2)]
+            msg: ["dialog.tipReportConfirm", amount.toFixed(2)],
+            buttons: [
+              { text: "button.reenter", fn: "reject" },
+              { text: "button.confirm", fn: "resolve" }
+            ]
           };
 
           this.$dialog(prompt)
-            .then(this.clockOut)
+            .then(this.clockOut.bind(null, amount))
             .catch(this.reportTip);
         })
         .catch(this.exitComponent);

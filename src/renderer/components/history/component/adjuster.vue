@@ -1,5 +1,5 @@
 <template>
-  <div class="popupMask dark center" @click.self="init.reject">
+  <div class="popupMask dark center">
     <div class="editor">
       <header>
         <div class="title">
@@ -13,13 +13,12 @@
           <v-touch tag="ul" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd" class="records">
             <li v-for="(record,idx) in transactions" :key="idx" @click.prevent.stop="index = record.index" :data-index="record.index">
               <div class="inner">
-                <i class="fa fa-check-circle-o gray" v-if="record.status === 1"></i>
-                <i class="fa fa-check-circle green" v-else></i>
-                <div class="index">
-                  <span class="sharp">#</span>{{record.index}}</div>
+                <i class="far fa-circle gray" v-if="record.status === 1"></i>
+                <i class="fas fa-check-circle green" v-else></i>
+                <div class="index">{{record.index}}</div>
                 <span class="tip" :class="{zero:record.amount.tip === '0.00'}">{{record.amount.tip}}</span>
                 <span class="amount">$ {{record.amount.approve}}</span>
-                <span class="card">{{record.account.type}}</span>
+                <span class="card">{{record.account.type}}<span class="number">{{record.account.number}}</span></span>
               </div>
             </li>
           </v-touch>
@@ -27,8 +26,7 @@
         <section class="entryWrap">
           <div class="header">
             <h3 v-if="transaction && transaction.order">
-              <span class="index">
-                <span class="sharp">#</span>{{transaction.order.number}}</span>
+              <span class="index">{{transaction.order.number}}</span>
               <span>{{$t('type.'+ transaction.order.type)}}</span>
             </h3>
             <h3 v-else></h3>
@@ -358,10 +356,10 @@ li .inner .index {
   color: #3c3c3c;
 }
 
-.index .sharp {
-  font-size: 0.8em;
+.index:before {
+  content: "#";
+  font-size: 0.75em;
   color: #666;
-  margin-right: 3px;
 }
 
 .inner i {
@@ -419,11 +417,14 @@ p {
   position: absolute;
   right: 0px;
   bottom: -2px;
-  font-family: fantasy;
   opacity: 0.75;
   text-shadow: 0 1px 1px #fff;
   color: rgba(27, 15, 49, 0.71);
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.number {
+  margin-left: 5px;
 }
 
 .amount {

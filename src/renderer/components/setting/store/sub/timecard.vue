@@ -13,8 +13,22 @@ export default {
   components: { toggle },
   data() {
     return {
-      timecard: JSON.parse(JSON.stringify(this.$store.getters.store.timecard))
+      timecard: {}
     };
+  },
+  created() {
+    //patch timecard
+    let { timecard } = this.$store.getters.store;
+
+    if (isObject(timecard)) {
+      this.timecard = timecard;
+    } else {
+      this.timecard = {
+        enable: false,
+        tipReport: false,
+        excludeBreak: false
+      };
+    }
   },
   beforeDestroy() {
     this.$socket.emit("[CONFIG] UPDATE", {

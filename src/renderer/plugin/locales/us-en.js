@@ -311,6 +311,7 @@ export default {
     settle: "Settle",
     view: "View",
     retry: "Retry",
+    reenter: "Re-enter",
     deposit: "Deposit",
     chargeRemain: "Charge Remain Balance",
     copy: "Copy",
@@ -499,7 +500,7 @@ export default {
     printSpoolerTip:
       "Are you sure you want to print right now? It was schedule to print at {i} ({i} later)",
     clockInConfirm: "Clock In Confirm",
-    clockInTip: "You were clock in at {i}",
+    clockInTime: "You were clock in at {i}",
     clockOutConfirm: "Clock Out Confirm",
     clockInRequire: "Clock In Required",
     clockInRequireTip: "Please Clock In first before all actions",
@@ -1317,7 +1318,8 @@ export default {
     plasticBag: "Plastic Bags",
     foodAllergy: "Food Allergy",
     searchTicket: "Search Ticket",
-    placedItemFor: " has placed {i} items for "
+    placedItemFor: " has placed {i} items for ",
+    voidTicketFor: " voided ticket for "
   },
   nav: {
     store: "Store",
