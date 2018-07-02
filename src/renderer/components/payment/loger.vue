@@ -93,10 +93,11 @@ export default {
       return this.$t("text.tenderDetail", paid.toFixed(2), change.toFixed(2));
     },
     removeConfirm(payment, index) {
+      const paid = (payment.actual || 0).toFixed(2)
       const data = {
         type: "warning",
         title: ["dialog.paymentRemoveConfirm", this.$t("type." + payment.type)],
-        msg: ["dialog.paymentRemoveConfirmTip", payment.actual.toFixed(2)],
+        msg: ["dialog.paymentRemoveConfirmTip", paid.toFixed(2)],
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.remove", fn: "resolve", load: true }

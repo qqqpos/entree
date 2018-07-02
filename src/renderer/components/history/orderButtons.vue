@@ -115,7 +115,7 @@ export default {
           title: "dialog.evenSplit",
           msg: ["dialog.evenSplitConfirm", amount]
         };
-        
+
         this.$dialog(prompt)
           .then(() => this.$splitEvenly(amount))
           .catch(this.exitComponent);
@@ -198,10 +198,16 @@ export default {
       if (this.isEmptyTicket) return;
 
       new Promise((resolve, reject) => {
+        const {
+          defaults = {
+            percentageDiscount: false
+          }
+        } = this.config;
+        
         const config = {
           title: "title.discount",
-          type: "decimal",
-          percentage: false,
+          type: defaults.percentageDiscount ? "number" : "decimal",
+          percentage: defaults.percentageDiscount,
           allowPercentage: true,
           amount: "0.00"
         };

@@ -104,7 +104,8 @@ export default {
     "anchor",
     "payment",
     "external",
-    "customer"
+    "customer",
+    "source"
   ],
   data() {
     return {
@@ -125,8 +126,10 @@ export default {
       "Gift Card",
       "Online Order"
     ];
-    
-    //this.externalType = defaults.externals[0];
+    if (this.source !== "POS") {
+      this.externals.splice(5, 1, this.source);
+      this.externalType = this.source;
+    }
     this.getCreditCard();
   },
   mounted() {

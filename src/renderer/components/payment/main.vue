@@ -37,6 +37,7 @@
                                 :split="splitTarget" 
                                 :splitable="invoice.split" 
                                 :external="externalPaymentType"
+                                :source="invoice.source"
                                 :customer="invoice.customer._id"
                                 :giftCard="giftCard"
                                 @updateSplit="setSplit" @excSplit="splitTicketConfirm" 
@@ -274,7 +275,12 @@ export default {
         //apply credit card info to payment module
       }
 
-      this.changePaymentType();
+      const defaultType = this.isThirdPartyPayment ? "THIRD" : undefined;
+      this.externalPaymentType = this.isThirdPartyPayment
+        ? this.order.source
+        : null;
+
+      this.changePaymentType(defaultType);
     },
     switchInvoice(index) {
       if (isNumber(index)) {
@@ -1239,7 +1245,6 @@ export default {
       }
     },
     payFailed(prompt) {
-      console.log(prompt);
       isObject(prompt)
         ? this.$dialog(prompt)
             .then(this.exitComponent)

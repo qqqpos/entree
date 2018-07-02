@@ -185,14 +185,13 @@ export default {
           .catch(this.exitComponent);
       } else {
         const index = this.findTicketPage(ticketNumber);
-        console.log(index)
         this.$bus.emit("SET_CURRENT_PAGE", index);
         this.$nextTick(() => this.setViewOrder(this.targetInvoices[target]));
       }
     },
     findTicketPage(target) {
       const pages = Math.ceil(this.targetInvoices.length / 30);
-      let index = this.targetInvoices.length;
+      let index = this.targetInvoices.length - 1;
       let page = 1;
       let count = 0;
       while (this.targetInvoices[index].number !== target) {
