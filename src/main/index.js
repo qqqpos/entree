@@ -59,7 +59,7 @@ function createWindow() {
     resizable: false,
     autoHideMenuBar: true,
     alwaysOnTop: true,
-    show: false,
+    show: true,
     skipTaskbar: true
   })
   splashWindow.loadURL(splashURL);

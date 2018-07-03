@@ -8,8 +8,3 @@ npm-debug.log
 npm-debug.log.*
 thumbs.db
 !.gitkeep
-.electron-vue/*
-.git/*
-.idea/*
-.electron-vue/*
-.vscode/*
