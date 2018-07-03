@@ -64,6 +64,7 @@
     }
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.51",
     "@tweenjs/tween.js": "^17.2.0",
     "amcharts3": "^3.21.12",
     "axios": "^0.17.1",
@@ -93,12 +94,12 @@
     "wake_on_lan": "0.0.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
     "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.51",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.3",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-0": "^6.5.0",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
+    "babel-loader": "^8.0.0-beta.4",
     "babel-register": "^6.26.0",
     "babili-webpack-plugin": "^0.1.1",
     "cfonts": "^1.1.3",

@@ -4,40 +4,42 @@
     "main": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
-              "node": 7
+              "node": "8"
             }
           }
-        ],
-        "stage-0"
+        ]
       ]
     },
     "renderer": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
-            "modules": false
+            "targets": {
+              "node": "8"
+            }
           }
-        ],
-        "stage-0"
+        ]
       ]
     },
     "web": {
       "presets": [
-        [
-          "env",
-          {
-            "modules": false
-          }
-        ],
-        "stage-0"
+        "@babel/preset-env"
       ]
     }
   },
   "plugins": [
-    "transform-runtime"
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "@babel/runtime"
+      }
+    ]
   ]
 }

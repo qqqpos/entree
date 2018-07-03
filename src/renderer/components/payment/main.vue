@@ -353,6 +353,7 @@ export default {
 
       this[this.anchor] = isNumber(length) ? value.slice(0, 16) : value;
       this.willResetFieldValue = false;
+      this.updateTip();
     },
     deleteInput() {
       const { format } = document.querySelector(".field.active").dataset;
@@ -368,6 +369,7 @@ export default {
       }
 
       this.willResetFieldValue = false;
+      this.updateTip();
     },
     clearInput() {
       const { format } = document.querySelector(".field.active").dataset;
@@ -383,6 +385,10 @@ export default {
       }
 
       this.willResetFieldValue = false;
+      this.updateTip();
+    },
+    updateTip() {
+      this.anchor === "tip" && Object.assign(this.order.payment, { tip: parseFloat(this.tip) });
     },
     charge() {
       switch (this.paymentType) {
