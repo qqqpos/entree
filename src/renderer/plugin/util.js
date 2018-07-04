@@ -214,33 +214,11 @@ export default {
 
       const { enable, rules } = this.dinein.surcharge;
 
-      let delivery = 0;
-
-      if (type === "DELIVERY" && !deliveryFree) {
-        if (this.store.deliver.charge)
-          delivery = parseFloat(this.store.deliver.baseFee);
-
-        if (this.store.deliver.surcharge) {
-          const addressDistance = order.customer.distance || this.customer.distance;
-          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
-          const distance = isNumber(duration) ? duration : 0;
-          const surcharge = this.store.deliver.rules
-            .sort((a, b) => a.distance < b.distance)
-            .find(rule => rule.distance < distance);
-
-          if (surcharge && isNumber(surcharge))
-            delivery += parseFloat(surcharge.fee);
-        }
-
-        if (order.hasOwnProperty("deliveryFee"))
-          delivery = order.deliveryFee;
-      }
-
+      let delivery = type === 'DELIVERY' && !deliveryFree ? getDeliveryCharge() : 0;
       let { tip = 0, gratuity = 0, paid = 0, log = [] } = order.payment;
-
-      let subtotal = 0,
-        tax = 0,
-        discount = 0;
+      let discount = 0;
+      let subtotal = 0;
+      let tax = 0;
 
       order.content.forEach(item => {
         if (item.void) return;
@@ -248,46 +226,32 @@ export default {
         const single = parseFloat(item.single);
         const qty = item.qty || 1;
         const taxClass = this.tax.class[item.taxClass];
-
         let amount = toFixed(single * qty, 2);
 
         item.choiceSet.forEach(set => {
-          const _price = parseFloat(set.single);
+          const setPrice = parseFloat(set.single);
 
-          if (_price !== 0) {
-            const _qty = set.qty || 1;
-            const _total = _qty * _price;
-            amount = toFixed(amount + _total, 2);
+          if (setPrice !== 0) {
+            const setQty = set.qty || 1;
+            const setTotal = setQty * setPrice;
+            amount = toFixed(amount + setTotal, 2);
           }
         });
 
         subtotal = toFixed(subtotal + amount, 2);
 
         if (!taxFree && taxClass.apply[type])
-          (tax += taxClass.rate / 100 * amount), 2;
+          tax += toFixed(taxClass.rate / 100 * amount, 2);
       });
 
       if (this.tax.deliveryTax) {
-        /*
-            is Delivery fee taxable?
-            Find out default tax rate and apply to delivery charge
-        */
-
-        let taxRate = 0;
+        let defaultTaxRate = 0;
         Object.keys(this.tax.class).forEach(type => {
-          this.tax.class[type].default === true &&
-            (taxRate = this.tax.class[type].rate);
+          if (this.tax.class[type].default)
+            defaultTaxRate = this.tax.class[type].rate;
         });
-        /**
-         * Tax apply Before Discount (For Example: 10% Tax Rate, 20% Discount)
-         *
-         * Subtotal: 10.00
-         * Tax:       1.00
-         * Discount:  2.00
-         * Total:     9.00
-         * ------------------------------------------------------------------
-         **/
-        tax += delivery * taxRate / 100;
+        
+        tax += delivery * defaultTaxRate / 100;
       }
 
       let plasticTax = 0;
@@ -390,6 +354,27 @@ export default {
 
       selfAssign && Object.assign(order, { payment });
       if (callback) return payment;
+
+      // private methods
+      function getDeliveryCharge() {
+        let delivery = this.store.deliver.charge ? parseFloat(this.store.deliver.baseFee) : 0;
+
+        if (this.store.deliver.surcharge) {
+          const addressDistance = order.customer.distance || this.customer.distance;
+          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
+          const distance = isNumber(duration) ? duration : 0;
+          const surcharge = this.store.deliver.rules
+            .sort((a, b) => a.distance < b.distance)
+            .find(rule => rule.distance < distance);
+
+          if (surcharge && isNumber(surcharge))
+            delivery += parseFloat(surcharge.fee);
+        }
+
+        delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliverFee) : delivery;
+
+        return delivery;
+      }
     };
 
     Vue.prototype.$rounding = function (value) {
@@ -614,6 +599,10 @@ export default {
     window.clone = target =>
       Object.assign(Object.create(Object.getPrototypeOf(target)), target);
     window.toFixed = (number, fractionSize) => +(Math.round(+(number.toString() + "e" + fractionSize)).toString() + "e" + -fractionSize);
+    // window.round = (number, precision = 2) => {
+    //   const factor = Math.pow(10, precision);
+    //   return Math.round(number * factor) / factor;
+    // }
     window.ObjectId = (
       m = Math,
       d = Date,

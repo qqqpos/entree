@@ -80,8 +80,6 @@ export default {
     },
     exception() {
       this.loading = false;
-
-      
     }
   }
 };

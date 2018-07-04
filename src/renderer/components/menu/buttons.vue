@@ -521,7 +521,7 @@ export default {
     quit() {
       const prompt = {
         title: "dialog.exitConfirm",
-        msg: "dialog.exitConfirmTip"
+        msg: "dialog.unsaveOrderWarning"
       };
 
       this.isEmptyTicket
@@ -681,7 +681,7 @@ export default {
     dineInQuit() {
       const prompt = {
         title: "dialog.exitConfirm",
-        msg: "dialog.exitConfirmTip"
+        msg: "dialog.unsaveOrderWarning"
       };
 
       this.isEmptyTicket

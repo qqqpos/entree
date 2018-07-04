@@ -5,7 +5,11 @@ import moment from "moment";
 import VueTouch from "vue-touch";
 import Electron from "vue-electron";
 import VueSocketio from "vue-socket.io";
-
+import AmCharts from 'amcharts3'
+import AmExport from "amcharts3/amcharts/plugins/export"
+import "amcharts3/amcharts/plugins/export/export.css"
+import AmSerial from 'amcharts3/amcharts/serial'
+import AmPie from "amcharts3/amcharts/pie"
 import App from "./App";
 import router from "./router";
 import i18n from "./plugin/dict";
@@ -13,11 +17,6 @@ import util from "./plugin/util";
 import VueBus from "./plugin/bus";
 import Trend from "vuetrend";
 import Bars from "vuebars";
-import AmCharts from 'amcharts3'
-import AmExport from "amcharts3/amcharts/plugins/export"
-import "amcharts3/amcharts/plugins/export/export.css"
-import AmSerial from 'amcharts3/amcharts/serial'
-import AmPie from "amcharts3/amcharts/pie"
 
 Vue.use(Electron);
 Vue.use(VueBus);
@@ -26,6 +25,9 @@ Vue.use(Bars);
 Vue.use(VueTouch, { name: "v-touch" });
 Vue.use(util);
 Vue.use(i18n);
+
+Vue.config.debug = true;
+window.moment = moment;
 
 Vue.directive("mask", function (el, binding) {
   if (binding.expression) {
@@ -154,9 +156,6 @@ Vue.directive("outer-click", {
   }
 });
 
-Vue.config.debug = true;
-window.moment = moment;
-
 //change moment default text
 moment.updateLocale("en", {
   relativeTime: {
@@ -205,9 +204,9 @@ new Promise((resolve, reject) => {
   let start = 0;
 
   while (start <= 255) {
-    let target = ip + start;
+    const target = ip + start;
     (function (target) {
-      let scanner = Net.connect(
+      const scanner = Net.connect(
         {
           host: target,
           port: 8888

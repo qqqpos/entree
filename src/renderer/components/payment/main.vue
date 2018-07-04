@@ -8,7 +8,7 @@
                         <h3>{{$t('title.payment')}}</h3>
                     </div>
                     <splitor :tickets="splits" v-model="splitIndex" @preview="previewTicket" @switch="switchInvoice" :disable="payWhole"></splitor>
-                    <i class="fa fa-times exit" @click="init.reject(false)"></i>
+                    <i class="fa fa-times exit" @click="safeExit"></i>
                 </header>
                 <div class="banner"></div>
                 <div class="wrap">
@@ -110,7 +110,8 @@ export default {
       isThirdPartyPayment: false,
       releaseComponentLock: true,
       componentData: null,
-      component: null
+      component: null,
+      payment: {}
     };
   },
   computed: {
@@ -388,7 +389,8 @@ export default {
       this.updateTip();
     },
     updateTip() {
-      this.anchor === "tip" && Object.assign(this.order.payment, { tip: parseFloat(this.tip) });
+      this.anchor === "tip" &&
+        Object.assign(this.order.payment, { tip: parseFloat(this.tip) });
     },
     charge() {
       switch (this.paymentType) {
@@ -1301,6 +1303,25 @@ export default {
           this.exitPaymentModule();
       }
     },
+    saveOriginalPayment() {
+      this.payment = JSON.parse(JSON.stringify(this.order.payment));
+    },
+    safeExit() {
+      const { tip, discount } = this.order.payment;
+
+      if (tip === this.payment.tip && discount === this.payment.discount) {
+        this.exitPaymentModule();
+      } else {
+        const prompt = {
+          title: "dialog.exitConfirm",
+          msg: "dialog.unsavePaymentWarning"
+        };
+
+        this.$dialog(prompt)
+          .then(this.exitPaymentModule)
+          .catch(this.exitComponent);
+      }
+    },
     reloadPaymentModule(params) {
       this.init.reject(Object.assign({ reload: true }, params));
     },
@@ -1308,6 +1329,9 @@ export default {
       this.init.resolve();
     },
     ...mapActions(["setOp", "setApp", "setOrder", "resetAll", "resetMenu"])
+  },
+  watch: {
+    "order._id": "saveOriginalPayment"
   },
   sockets: {
     TICKET_NUMBER(number) {

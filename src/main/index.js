@@ -5,33 +5,31 @@ const updater = require('electron-simple-updater');
 
 import { app, BrowserWindow, ipcMain, powerSaveBlocker } from 'electron';
 
+powerSaveBlocker.start('prevent-display-sleep');
+
 //auto updater
 updater.init({
   checkUpdateOnStart: false,
   autoDownload: false
 })
 
+let mainWindow = false;
+let winURL = `http://localhost:9080`;
+let splashWindow = false;
+let splashURL = `http://localhost:9080/splash.html`
+let externalWindow = false;
+let externalURL = `http://localhost:9080/external.html`;
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\');
+
+  winURL = `file://${__dirname}/index.html`;
+  splashURL = `file://${__dirname}/splash.html`;
+  externalURL = `file://${__dirname}/external.html`;
 }
-
-let mainWindow = false, splashWindow = false, externalWindow = false;
-
-powerSaveBlocker.start('prevent-display-sleep');
-
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
-  : `file://${__dirname}/index.html`;
-const splashURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/splash.html`
-  : `file://${__dirname}/splash.html`;
-const presentUrl = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/external.html`
-  : `file://${__dirname}/external.html`;
 
 function createWindow() {
   /**
@@ -59,10 +57,12 @@ function createWindow() {
     resizable: false,
     autoHideMenuBar: true,
     alwaysOnTop: true,
-    show: true,
+    show: false,
     skipTaskbar: true
   })
   splashWindow.loadURL(splashURL);
+
+  // external display setup
 
   const electronScreen = require('electron').screen;
   const displays = electronScreen.getAllDisplays();
@@ -90,7 +90,7 @@ function createWindow() {
         webSecurity: false
       }
     })
-    externalWindow.loadURL(presentUrl)
+    externalWindow.loadURL(externalURL)
   }
 
 
