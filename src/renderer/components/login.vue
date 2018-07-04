@@ -29,15 +29,15 @@
         </label>
         <transition name="menu">
           <ul v-if="toggleMenu">
-            <li @click="shutdownStations" v-if="isHost">
+            <li @click="shutdownAll" v-if="isHost">
               <i class="fas fa-power-off"></i>
               <span>{{$t('login.shutdownAll')}}</span>
             </li>
-            <li @click="shutdown">
+            <li @click.exact="shutdown" @click.ctrl="shutdownAll">
               <i class="fas fa-power-off"></i>
               <span>{{$t('login.shutdown')}}</span>
             </li>
-            <li @click="restart">
+            <li @click.exact="restart" @click.ctrl="restartAll">
               <i class="fa fa-retweet"></i>
               <span>{{$t('login.restart')}}</span>
             </li>
@@ -197,7 +197,7 @@ export default {
         this.reset = false;
       }
     }, 300),
-    shutdownStations() {
+    shutdownAll() {
       const prompt = {
         type: "question",
         title: "dialog.shutdownStations",
@@ -220,6 +220,9 @@ export default {
     },
     restart() {
       this.$electron.ipcRenderer.send("Relaunch");
+    },
+    restartAll() {
+      
     },
     exit() {
       this.$electron.ipcRenderer.send("Exit");

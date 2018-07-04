@@ -1,7 +1,13 @@
 <template>
     <div>
-        <button class="command" @click="open('Network Diagnostics')">Network Diagnostics</button>
-        <button class="command" @click="open('Add Printer')">Add Printer</button>
+        <button class="command" @click="open('Network Diagnostics')"><i class="fas fa-signal"></i>Network Diagnostics</button>
+        <button class="command" @click="open('Add Printer')"><i class="fas fa-print"></i>Add Printer</button>
+        <button class="command" @click="open('Task Scheduler')"><i class="fas fa-tasks"></i>Task Scheduler</button>        
+        <button class="command" @click="open('Disk Cleanup')"><i class="fas fa-hdd"></i>Disk Cleanup</button>  
+        <button class="command" @click="open('Disk Defragmenter')"><i class="fas fa-coins"></i>Disk Defragmenter</button>  
+        <button class="command" @click="open('Network Connections')"><i class="fas fa-bezier-curve"></i>Network Connections</button>          
+        <button class="command" @click="open('Battery')"><i class="fas fa-battery-three-quarters"></i>Battery</button>         
+        <button class="command" @click="open('Screen Saver')"><i class="fas fa-desktop"></i>Screen Saver</button> 
     </div>
 </template>
 
@@ -12,36 +18,41 @@ export default {
   },
   methods: {
     open(command) {
-      return;
-      const { exec } = this.$electron.remote.require("child_process");
+      const path = require("path");
+      const dir = path.dirname(process.env.COMSPEC);
+      const { exec, spawn } = this.$electron.remote.require("child_process");
 
       switch (command) {
         case "Network Diagnostics":
-          exec(
-            "%windir%system32Rundll32.exe ndfapi,NdfRunDllDiagnoseIncident",
-            err => {
-              console.log(err);
-            }
-          );
+          spawn(path.join(dir, "rundll32.exe"), [
+            "ndfapi,NdfRunDllDiagnoseIncident"
+          ]);
           break;
         case "Add Printer":
-          exec(
-            "%windir%system32\rundll32.exe printui.dll,PrintUIEntry /il",
-            err => {
-              console.log(err);
-            }
-          );
+          spawn(path.join(dir, "rundll32.exe"), [
+            "printui.dll,PrintUIEntry",
+            "/il"
+          ]);
+          break;
         case "Task Scheduler":
-          exec("%windir%system32mmc.exe %windir%system32\taskschd.msc");
+          spawn(path.join(dir, "control.exe"), ["schedtasks"]);
           break;
         case "Disk Cleanup":
-          exec("%windir%system32cleanmgr.exe");
+          spawn(path.join(dir, "cleanmgr.exe"));
           break;
         case "Disk Defragmenter":
-          exec("%windir%system32dfrgui.exe");
+          spawn(path.join(dir, "dfrgui.exe"));
           break;
-        case "System Properties":
-          exec("%windir%system32SystemPropertiesAdvanced.exe");
+        case "Network Connections":
+          spawn(path.join(dir, "control.exe"), ["netconnections"]);
+          break;
+        case "Battery":
+          spawn(path.join(dir, "control.exe"), ["powercfg.cpl,,3"]);
+          break;
+        case "Screen Saver":
+          spawn(path.join(dir, "control.exe"), [
+            "desk.cpl,screensaver,@screensaver"
+          ]);
           break;
       }
     }
@@ -53,7 +64,8 @@ export default {
 div {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 .command {
   padding: 15px 20px;
@@ -63,5 +75,10 @@ div {
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   border: none;
   box-shadow: 0 1px 3px #333;
+}
+
+i {
+  display: block;
+  margin-bottom: 10px;
 }
 </style>

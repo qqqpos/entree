@@ -673,7 +673,7 @@ export default {
         cashDrawer,
         cashier: this.op.name,
         station: this.station.alias,
-        server: this.order.server || this.op.name,
+        server: this.order.server,
         for: "Order",
         subType: null,
         credential: null,
@@ -718,7 +718,7 @@ export default {
                 cashier: this.op.name,
                 type: this.order.type || this.ticket.type,
                 number: this.order.number || this.ticket.number,
-                server: this.order.server || this.op.name
+                server: this.order.server
               }
             });
 

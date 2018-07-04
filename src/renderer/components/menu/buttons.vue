@@ -539,7 +539,6 @@ export default {
           customer,
           type: this.ticket.type,
           number: this.ticket.number,
-          //receiptCount: 0,
           modify: 0,
           status: 1,
           time: Date.now(),
@@ -548,6 +547,7 @@ export default {
       } else {
         Object.assign(order, {
           customer,
+          time: order.time || Date.now(),
           lastEdit: Date.now(),
           editor: this.op.name
         });
@@ -692,8 +692,10 @@ export default {
     },
     resetTableExit() {
       if (this.currentTable) {
-        const { _id } = this.currentTable;
-        this.app.newTicket && this.$socket.emit("[TABLE] RESET", { _id });
+        const { _id, status } = this.currentTable;
+
+        if (this.app.newTicket || status === -1)
+          this.$socket.emit("[TABLE] RESET", { _id });
       }
       this.abandon();
     },

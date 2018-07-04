@@ -171,7 +171,7 @@ export default {
         actual: remain,
         tip,
         cashier: this.op.name,
-        server: this.order.server || this.op.name,
+        server: this.order.server,
         cashDrawer,
         station: this.station.alias,
         type: "THIRD",
