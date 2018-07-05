@@ -9,14 +9,14 @@
           </h5>
         </div>
         <nav class="filter">
+          <dropdown label="filter.order" :options="types" filter="filterType"></dropdown>
+          <dropdown label="filter.cashier" :options="cashiers" filter="filterCashier"></dropdown>
+          <dropdown label="filter.terminal" :options="terminals" filter="filterTerminal"></dropdown>
           <div class="picker">
             <i class="fa fa-angle-left" @click="prev"></i>
             <span class="date">{{date}}</span>
             <i class="fa fa-angle-right" @click="next"></i>
           </div>
-          <dropdown label="filter.order" :options="types" filter="filterType"></dropdown>
-          <dropdown label="filter.cashier" :options="cashiers" filter="filterCashier"></dropdown>
-          <dropdown label="filter.terminal" :options="terminals" filter="filterTerminal"></dropdown>
         </nav>
       </header>
       <table>
@@ -57,6 +57,7 @@
             <td class="amount">$ {{record.amount.approve}}</td>
             <td class="amount" :class="{zero:record.amount.tip === '0.00'}">$ {{record.amount.tip}}</td>
             <td v-if="!record.close" class="action">
+              <span class="print" @click="adjustTip(record)">{{$t('button.adjust')}}</span>
               <span class="print" @click="print(record)">{{$t('button.print')}}</span>
               <span class="void" @click="voidSale(record)">{{$t('button.void')}}</span>
             </td>
@@ -88,7 +89,7 @@
       <footer>
         <button class="btn" @click="openAdjuster">{{$t('button.adjustTips')}}</button>
         <div class="f1">
-          <paginator :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></paginator>
+          <paginator :of="filteredTransactions" :max="12" :contain="10" @page="setPage"></paginator>
         </div>
         <button class="btn" @click="exit">{{$t('button.exit')}}</button>
       </footer>
@@ -105,8 +106,8 @@ import dialogModule from "../common/dialog";
 import dropdown from "./component/dropdown";
 import paginator from "../common/paginator";
 import processor from "../common/processor";
-import adjuster from "./component/adjuster";
-import batch from "./component/batch";
+import adjuster from "./helper/adjuster";
+import batch from "./helper/batch";
 
 export default {
   props: ["init"],
@@ -139,8 +140,8 @@ export default {
       return records;
     },
     records() {
-      const min = this.page * 13;
-      const max = min + 13;
+      const min = this.page * 10;
+      const max = min + 10;
 
       return this.filteredTransactions.slice(min, max);
     },
@@ -486,6 +487,67 @@ export default {
 
       this.$dialog(prompt).then(this.exitComponent);
     },
+    adjustTip(record) {
+      this.$checkPermission("modify", "transaction")
+        .then(() => {
+          // Operator has permission to adjust tip
+
+          const config = {
+            title: "title.setTips",
+            subtitle: `# ${record.index}`,
+            type: "decimal",
+            percentage: false,
+            allowPercentage: false,
+            amount: record.amount.tip
+          };
+
+          new Promise((resolve, reject) => {
+            this.componentData = Object.assign({ resolve, reject }, config);
+            this.component = "inputModule";
+          })
+            .then(({ amount }) => {
+              this.exitComponent();
+
+              amount = isNumber(amount) ? Math.round(amount * 100) : 0;
+
+              this.$open("processor", { timeout: 30000 });
+              this.initialParser(record.terminal).then(() => {
+                const invoice = record.order.number;
+                const transaction = record.trace.trans;
+
+                this.terminal
+                  .adjust(invoice, transaction, amount)
+                  .then(response => {
+                    this.exitComponent();
+                    const result = this.terminal.explainTransaction(
+                      response.data
+                    );
+                    if (result.code === "000000") {
+                      Object.assign(record, {
+                        amount: result.amount,
+                        status: 2
+                      });
+                      this.$socket.emit("[TERMINAL] ADJUST", record);
+                    } else {
+                      const prompt = {
+                        type: "error",
+                        title: "dialog.adjustTipFailed",
+                        msg: [
+                          "dialog.adjustTipFailedErrorMessage",
+                          result.code
+                        ],
+                        buttons: [{ text: "button.confirm", fn: "resolve" }]
+                      };
+
+                      this.$dialog(prompt).then(this.exitComponent);
+                    }
+                  });
+              });
+            })
+            .catch(this.exitComponent);
+        })
+        .catch(() => this.log());
+    },
     accessAdjuster() {
       this.$checkPermission("modify", "transaction")
         .then(this.openAdjuster)
@@ -527,7 +589,7 @@ export default {
       this.date = moment(this.date, "YYYY-MM-DD")
         .subtract(1, "days")
         .format("YYYY-MM-DD");
-        
+
       this.$socket.emit("[TERMINAL] DATE", this.date, data =>
         this.initial(data)
       );
@@ -603,13 +665,13 @@ thead tr {
 
 thead th {
   font-weight: normal;
-  padding: 3px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #eeeeee;
 }
 
 tbody {
   display: block;
-  height: 507px;
+  height: 500px;
   text-align: center;
 }
 
@@ -622,7 +684,7 @@ tfoot tr {
 }
 
 tbody td {
-  padding: 10px 0;
+  height: 30px;
 }
 
 td.card {
@@ -645,7 +707,7 @@ tfoot tr {
 
 tfoot td {
   padding: 5px 0;
-  background: #eeeeee;
+  background: #fafafa;
 }
 
 footer {
@@ -698,7 +760,7 @@ footer {
 }
 
 .action {
-  width: 150px;
+  width: 170px;
 }
 
 .auth span {
@@ -756,12 +818,16 @@ tbody tr.voided {
   display: flex;
   justify-content: center;
   align-items: baseline;
-  font-weight: bold;
-  color: #3c3c3c;
+  color: #9e9e9e;
+  background: #f5f5f5;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 1px;
+  margin-left: 15px;
 }
 
 .picker i {
-  padding: 10px 25px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 

@@ -30,6 +30,9 @@
             <td v-if="task.status === 5" class="action">
               <span class="print" @click="reprint(index)">{{$t('button.print')}}</span>
             </td>
+            <td v-else-if="task.status === 0" class="action">
+              <span class="retry" @click="initialTerminal(index)">{{$t('button.retry')}}</span>
+            </td>
             <td v-else class="action">
               <span class="batch" @click="beforeBatch(task,index)">{{$t('button.batch')}}</span>
             </td>
@@ -66,14 +69,14 @@ export default {
   },
   created() {
     this.initialData()
-      .then(this.initialTerminal)
+      .then(this.initialTerminals)
       .then(this.finalizing);
   },
   methods: {
     status(code, index) {
       /* device status code
         -1 : error
-        0  : occupy
+        0  : inuse
         1  : initial
         2  : ready
         3  : wait
@@ -98,7 +101,7 @@ export default {
       }
     },
     initialData() {
-      return new Promise((resolve, reject) => {
+      return new Promise(next => {
         let tasks = {};
         this.init.transactions.forEach(trans => {
           if (trans.close) return;
@@ -125,11 +128,15 @@ export default {
           const config = this.init.devices.find(c => c.alias === alias);
           config && Object.assign(tasks[alias], config);
         });
+
         Object.keys(tasks).forEach(alias => this.tasks.push(tasks[alias]));
-        resolve();
+
+        next();
       });
     },
-    initialTerminal() {
+    initialTerminals() {
+      // Method for all terminals
+
       return new Promise((resolve, reject) => {
         this.tasks.forEach(task => {
           const { ip, port, model, alias } = task;
@@ -143,6 +150,19 @@ export default {
             });
         });
       });
+    },
+    initialTerminal(index) {
+      // Method for single terminal
+
+      const { ip, port, model, alias } = task[index];
+      task.terminal = this.getParser(task.model).default();
+      task.terminal
+        .initial(ip, port, model, this.stationAlias, alias)
+        .then(response => {
+          const device = task.terminal.check(response.data);
+
+          task.status = device.code === "000000" ? 2 : 0;
+        });
     },
     finalizing() {},
 

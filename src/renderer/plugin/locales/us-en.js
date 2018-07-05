@@ -658,8 +658,8 @@ export default {
     pendingOrderAccessDenied: "Other cashier is processing...",
     tipAdjusted: "Tip Adjusted",
     tipAdjustedTip: "Tip adjusted to {i},Terminal return total {i}",
-    tipAdjustDenied: "Tip Adjust Denied",
-    tipAdjustDeniedTip: "Tip adjust failed. Error code {i}",
+    adjustTipFailed: "Tip Adjust Denied",
+    adjustTipFailedErrorMessage: "Tip adjust failed. Error code {i}",
     saveFailed: "Save Failed",
     splitItemNotComplete:
       "You need to split the rest of item before you can save",

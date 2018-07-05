@@ -144,12 +144,13 @@ export default {
       this.offset = this.lastDelta + e.deltaY;
     },
     panStart() {
-      let dom = document.querySelector(".records.scrollable");
-      dom && dom.classList.remove("scrollable");
+      document
+        .querySelector(".records.scrollable")
+        .classList.remove("scrollable");
     },
     panEnd(e) {
-      let dom = document.querySelector("ul.records");
-      dom && dom.classList.add("scrollable");
+      const dom = document.querySelector("ul.records");
+      dom.classList.add("scrollable");
 
       let { top, bottom, height } = dom.getBoundingClientRect();
       const offset = 170;
@@ -234,8 +235,8 @@ export default {
         } else {
           const data = {
             type: "error",
-            title: "dialog.tipAdjustDenied",
-            msg: ["dialog.tipAdjustDeniedTip", result.code],
+            title: "dialog.adjustTipFailed",
+            msg: ["dialog.adjustTipFailedErrorMessage", result.code],
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 

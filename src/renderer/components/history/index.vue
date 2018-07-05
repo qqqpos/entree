@@ -213,7 +213,7 @@ export default {
     orders() {
       const { name } = this.op;
       const approval = this.approval(this.op.view, "invoices");
-      const invoices = this.targetInvoices.filter(({ server }) => view(server));
+      let invoices = this.targetInvoices.filter(({ server }) => view(server));
 
       switch (this.filter) {
         case "WALK_IN":

@@ -197,6 +197,27 @@ export default {
     // }
 
     Vue.prototype.$calculatePayment = function (order, params = {}) {
+      // private methods
+      const getDeliveryCharge = () => {
+        let delivery = this.store.deliver.charge ? parseFloat(this.store.deliver.baseFee) : 0;
+
+        if (this.store.deliver.surcharge) {
+          const addressDistance = order.customer.distance || this.customer.distance;
+          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
+          const distance = isNumber(duration) ? duration : 0;
+          const surcharge = this.store.deliver.rules
+            .sort((a, b) => a.distance < b.distance)
+            .find(rule => rule.distance < distance);
+
+          if (surcharge && isNumber(surcharge))
+            delivery += parseFloat(surcharge.fee);
+        }
+
+        delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliverFee) : delivery;
+
+        return delivery;
+      }
+
       const {
         selfAssign = true,
         callback = false
@@ -250,7 +271,7 @@ export default {
           if (this.tax.class[type].default)
             defaultTaxRate = this.tax.class[type].rate;
         });
-        
+
         tax += delivery * defaultTaxRate / 100;
       }
 
@@ -354,27 +375,6 @@ export default {
 
       selfAssign && Object.assign(order, { payment });
       if (callback) return payment;
-
-      // private methods
-      function getDeliveryCharge() {
-        let delivery = this.store.deliver.charge ? parseFloat(this.store.deliver.baseFee) : 0;
-
-        if (this.store.deliver.surcharge) {
-          const addressDistance = order.customer.distance || this.customer.distance;
-          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
-          const distance = isNumber(duration) ? duration : 0;
-          const surcharge = this.store.deliver.rules
-            .sort((a, b) => a.distance < b.distance)
-            .find(rule => rule.distance < distance);
-
-          if (surcharge && isNumber(surcharge))
-            delivery += parseFloat(surcharge.fee);
-        }
-
-        delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliverFee) : delivery;
-
-        return delivery;
-      }
     };
 
     Vue.prototype.$rounding = function (value) {
