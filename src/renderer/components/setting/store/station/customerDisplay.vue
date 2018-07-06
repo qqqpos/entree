@@ -75,6 +75,10 @@ export default {
       );
     }
   },
+  beforeDestroy() {
+    const { gallery, duration } = this.customerDisplay.ledDisplay;
+    this.$electron.ipcRenderer.send("External::config", { gallery, duration });
+  },
   methods: {
     showDialog() {
       const { dialog } = this.$electron.remote;

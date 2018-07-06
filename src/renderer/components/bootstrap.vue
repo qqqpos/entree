@@ -36,6 +36,19 @@ export default {
 
       this.setDevice({ online: navigator.onLine });
       this.$electron.ipcRenderer.send("Loading", this.$t("initial.findHost"));
+
+      this.$socket.connected && this.socketConnected();
+    },
+    socketConnected() {
+      this.$electron.ipcRenderer.send(
+        "Loading",
+        this.$t("initial.hostConnected")
+      );
+      this.$socket.emit("[INITIAL] POS");
+      this.$electron.ipcRenderer.send(
+        "Loading",
+        this.$t("initial.initialApplication")
+      );
     },
     setEnvironment({
       config,
@@ -256,8 +269,7 @@ export default {
         "Loading",
         this.$t("initial.connectPrinter")
       );
-      const config = this.config;
-      const station = this.station;
+      const { config, station } = this;
 
       return new Promise((next, stop) => {
         let interval = null;
@@ -295,15 +307,7 @@ export default {
   },
   sockets: {
     CONNECTED() {
-      this.$electron.ipcRenderer.send(
-        "Loading",
-        this.$t("initial.hostConnected")
-      );
-      this.$socket.emit("[INITIAL] POS");
-      this.$electron.ipcRenderer.send(
-        "Loading",
-        this.$t("initial.initialApplication")
-      );
+      this.socketConnected();
     },
     APP_RUNTIME_CONFIG(data) {
       this.$electron.ipcRenderer.send(

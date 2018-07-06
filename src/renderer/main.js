@@ -224,16 +224,10 @@ new Promise((resolve, reject) => {
     })(target);
     start++;
   }
-}).then(ip => {
+}).then(async (ip) => {
   Vue.use(VueSocketio, `http://${ip}:8888`);
 
-  let printScript = document.createElement("script");
-  printScript.src = `http://${ip}:8000/CLodopfuncs.js?priority=1`;
-  let head =
-    document.head ||
-    document.getElementsByTagName("head")[0] ||
-    document.documentElement;
-  head.insertBefore(printScript, head.firstChild);
+  await connectPrinter(ip);
 
   Vue.filter("moment", (time, regEx) => time ? moment(Number(time)).format(regEx) : "");
   Vue.filter("decimal", value => isNumber(value) ? parseFloat(value).toFixed(2) : value);
@@ -280,3 +274,33 @@ new Promise((resolve, reject) => {
     template: "<App/>"
   }).$mount("#app");
 });
+
+
+function connectPrinter(ip) {
+  return new Promise((resolve, reject) => {
+    // failed when attempt 30 times
+    let attemptCount = 0;
+
+    const loadScript = (remove) => {
+      remove && document.head.removeChild(document.getElementById("printScript"));
+
+      const printScript = document.createElement("script");
+      printScript.id = "printScript";
+      printScript.type = "text/javascript";
+
+      printScript.onload = () => resolve();
+
+      printScript.onerror = function () {
+        attemptCount < 50 ? setTimeout(() => {
+          attemptCount++;
+          loadScript(true);
+        }, 5000) : reject()
+      }
+
+      printScript.src = `http://${ip}:8000/CLodopfuncs.js?priority=1`;
+      document.getElementsByTagName('head')[0].appendChild(printScript);
+    }
+
+    loadScript(false);
+  })
+}

@@ -11,11 +11,11 @@ export default {
   props: ["gallery", "duration"],
   data() {
     return {
-      now: Math.trunc(Date.now() / 1000),
       pictures: [],
       playIndex: 0,
       countdown: null,
-      animations: ["fade", "rotate"] //"move", "scale"
+      animation: "fade",
+      animations: ["fade", "rotate", "scale"]
     };
   },
   mounted() {
@@ -47,10 +47,15 @@ export default {
     },
     random() {
       return Math.floor(Math.random() * this.animations.length);
+    },
+    reset() {
+      clearInterval(this.countdown);
+      this.countdown = setInterval(this.next, this.duration);
     }
   },
   watch: {
-    gallery: "initial"
+    gallery: "initial",
+    duration: "reset"
   }
 };
 </script>
@@ -101,6 +106,38 @@ li {
 
 .rotate-leave-to {
   opacity: 0;
+}
+
+.scale-enter-active {
+  transition: all 1s linear;
+}
+.scale-leave-active {
+  animation: scale 3.5s linear;
+}
+
+.scale-enter {
+  opacity: 0;
+}
+
+.scale-enter-to {
+  opacity: 1;
+}
+
+@keyframes scale {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: ease-in;
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1.05);
+    animation-timing-function: ease-out;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
 }
 </style>
 
