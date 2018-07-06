@@ -75,41 +75,72 @@ function createWindow() {
     }
   }
 
-  if (appParams.some(args => args.includes("dual")) && externalDisplay) {
-    externalWindow = new BrowserWindow({
-      x: externalDisplay.bounds.x + 50,
-      y: externalDisplay.bounds.y + 50,
-      autoHideMenuBar: true,
-      alwaysOnTop: true,
-      skipTaskbar: true,
-      frame: false,
-      width: 1024,
-      height: 768,
-      fullscreen: true,
-      webPreferences: {
-        webSecurity: false
-      }
-    })
-    externalWindow.loadURL(externalURL)
-  }
+  // if (appParams.some(args => args.includes("dual")) && externalDisplay) {
+  //   externalWindow = new BrowserWindow({
+  //     x: externalDisplay.bounds.x + 50,
+  //     y: externalDisplay.bounds.y + 50,
+  //     autoHideMenuBar: true,
+  //     alwaysOnTop: true,
+  //     skipTaskbar: true,
+  //     frame: false,
+  //     width: 1024,
+  //     height: 768,
+  //     fullscreen: true,
+  //     webPreferences: {
+  //       webSecurity: false
+  //     }
+  //   })
+  //   externalWindow.loadURL(externalURL)
+  // }
 
 
 
   //test
-  // externalWindow = new BrowserWindow({
-  //   autoHideMenuBar: true,
-  //   skipTaskbar: true,
-  //   frame: false,
-  //   width: 1024,
-  //   height: 768,
-  //   webPreferences: {
-  //     webSecurity: false
-  //   }
-  //   //fullscreen: true
-  // })
-  // externalWindow.loadURL(presentUrl)
+  externalWindow = new BrowserWindow({
+    autoHideMenuBar: true,
+    skipTaskbar: true,
+    frame: false,
+    width: 1024,
+    height: 768,
+    webPreferences: {
+      webSecurity: false
+    }
+    //fullscreen: true
+  })
+  externalWindow.loadURL(externalURL)
 
   //end test
+
+
+  // add event listener
+
+  ipcMain.on("Exit", () => app.quit(0));
+  ipcMain.on("Loading", (e, text) => splashWindow.webContents.send("Processing", text));
+
+  if (externalWindow) {
+    ipcMain.on("External::config", (e, config) => externalWindow.webContents.send("External::config", config));
+    ipcMain.on("External::stage", (e, stage) => externalWindow.webContents.send("External::stage", stage));
+    ipcMain.on("External::update", (e, order) => externalWindow.webContents.send("External::update", order));
+  }
+
+  ipcMain.on("Initialized", () => {
+    process.argv.slice(1).some(arg => arg.includes("fullscreen")) && mainWindow.setFullScreen(true);
+    splashWindow.close();
+    mainWindow.show();
+    mainWindow.center();
+  });
+
+  ipcMain.on("Relaunch", () => {
+    app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) });
+    app.exit(0)
+  });
+
+  ipcMain.on("Shutdown", () => {
+    const exec = require('child_process').exec;
+    exec('shutdown -s -f -t 0');
+  });
+
+  //end of
 
 
   splashWindow.once('ready-to-show', () => splashWindow.show())
@@ -141,33 +172,6 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   mainWindow === null && createWindow()
 })
-
-ipcMain.on("Exit", () => app.quit(0));
-
-ipcMain.on("Loading", (e, text) => splashWindow.webContents.send("Processing", text));
-
-if (externalWindow) {
-  ipcMain.on("External::stage", (e, stage) => externalWindow.webContents.send("External::stage", stage));
-  ipcMain.on("External:update", (e, order) => external.webContents.send("External::update", order));
-}
-
-
-ipcMain.on("Initialized", () => {
-  process.argv.slice(1).some(arg => arg.includes("fullscreen")) && mainWindow.setFullScreen(true);
-  splashWindow.close();
-  mainWindow.show();
-  mainWindow.center();
-});
-
-ipcMain.on("Relaunch", () => {
-  app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) });
-  app.exit(0)
-});
-
-ipcMain.on("Shutdown", () => {
-  const exec = require('child_process').exec;
-  exec('shutdown -s -f -t 0');
-});
 
 /**
  * Auto Updater

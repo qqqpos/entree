@@ -62,7 +62,7 @@ export default {
         status: 0,
         void: {
           by: this.op.name,
-          time: +new Date(),
+          time: Date.now(),
           note: this.note.text,
           flag: this.note.flag
         }

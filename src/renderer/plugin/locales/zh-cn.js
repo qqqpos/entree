@@ -1281,7 +1281,8 @@ export default {
     foodAllergy: "食物过敏",
     searchTicket: "查找订单",
     placedItemFor: "点了 {i}个 单品",
-    voidTicketFor: " 取消了订单, 原因是"
+    voidTicketFor: " 取消了订单, 原因是",
+    gallery: "图片库"
   },
   nav: {
     store: "店面",
@@ -1478,6 +1479,7 @@ export default {
     plasticPenaltyTax: "塑料袋罚款税",
     autoSaveCreditCard: "自动保存信用卡信息",
     autoStack: "自动叠加",
+    playDuration: "播放时长",
     delivery: {
       config: "送餐设定",
       charge: "送餐费",

@@ -147,17 +147,17 @@ import groupItem from "./component/groupItem";
 import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
 import shortcut from "./component/shortcut";
-import config from "./component/config";
+import configModule from "./component/config";
 
 export default {
   components: {
     dialogModule,
-    entry,
-    config,
+    configModule,
     shortcut,
     listItem,
     groupItem,
-    creditVault
+    creditVault,
+    entry
   },
   props: ["layout", "group", "display", "seats", "seat"],
   data() {
@@ -193,17 +193,17 @@ export default {
       ? (this.payment = this.order.payment)
       : this.calculate();
 
-    this.$route.name === "Menu" && this.getShortCutItems();
-
-    if (
-      this.$route.name === "Menu" &&
-      this.config.CFD &&
-      this.config.CFD.enable
-    ) {
-      this.externalDisplaySync = true;
+    if (this.$route.name === "Menu") {
+      this.getShortCutItems();
+      this.getCustomerDisplay();
     }
   },
   methods: {
+    getCustomerDisplay() {
+      const { ledDisplay = {} } = this.station.customerDisplay;
+
+      this.externalDisplaySync = true//ledDisplay.enable;
+    },
     resetHighlight() {
       let dom = document.querySelector("li.item.active");
       dom && dom.classList.remove("active");
@@ -214,7 +214,8 @@ export default {
       this.resetPointer();
     },
     openConfig() {
-      if (this.component === "config" || this.$route.name !== "Menu") return;
+      if (this.component === "configModule" || this.$route.name !== "Menu")
+        return;
 
       const taxFree =
         typeof this.order.taxFree === "boolean" ? this.order.taxFree : false;
@@ -225,7 +226,7 @@ export default {
       } = this.order;
       const { menuID } = this.config.display;
 
-      this.$open("config", {
+      this.$open("configModule", {
         taxFree,
         deliveryFree,
         gratuityFree,
@@ -430,6 +431,7 @@ export default {
       "item",
       "order",
       "ticket",
+      "station",
       "language",
       "customer",
       "isEmptyTicket"

@@ -7,13 +7,8 @@ export default new Router({
     routes: [
         {
             path: "/",
-            name: "load",
-            component: require("./components/load")
-        },
-        {
-            path: "idle",
-            name: "idle",
-            component: require("./components/idle")
+            name: "index",
+            component: require("./components/index")
         },
         {
             path: "order",

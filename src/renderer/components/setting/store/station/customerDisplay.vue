@@ -17,18 +17,26 @@
           </transition>
         </toggle>
         <toggle title="setting.ledDisplay" v-model="customerDisplay.ledDisplay.enable">
+          <transition name="dropdown">
+            <div class="opt" v-if="customerDisplay.ledDisplay.enable">
+              <range title="setting.playDuration" :min="5" :max="30" :step="1" v-model.number="customerDisplay.ledDisplay.duration"></range>
+              <external title="text.gallery" @open="showDialog"></external>
+            </div>
+          </transition>
         </toggle>
       </div>
 </template>
 
 <script>
+import range from "../../common/range";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
+import external from "../../common/external";
 import textList from "../../common/textList";
 import textInput from "../../common/textInput";
 
 export default {
-  components: { toggle, inputer, textList, textInput },
+  components: { range, toggle, inputer, external, textList, textInput },
   data() {
     return {
       customerDisplay: {},
@@ -47,18 +55,19 @@ export default {
     //path config
     if (!this.$store.getters.station.hasOwnProperty("customerDisplay")) {
       this.customerDisplay = {
-        poleDisplay:{
-          enable:false,
-          top:"",
-          bot:"",
-          port:"",
-          animation:false
+        poleDisplay: {
+          enable: false,
+          top: "",
+          bot: "",
+          port: "",
+          animation: false
         },
-        ledDisplay:{
-          enable:false,
-          
+        ledDisplay: {
+          enable: false,
+          gallery: "",
+          duration: 5
         }
-      }
+      };
     } else {
       this.customerDisplay = Object.assign(
         {},
@@ -67,6 +76,15 @@ export default {
     }
   },
   methods: {
+    showDialog() {
+      const { dialog } = this.$electron.remote;
+
+      const directory = dialog.showOpenDialog({
+        properties: ["openFile", "openDirectory"]
+      });
+
+      Object.assign(this.customerDisplay.ledDisplay, { gallery: directory[0] });
+    },
     save() {
       this.$socket.emit("[STATION] UPDATE", {
         _id: this.$store.getters.station._id,

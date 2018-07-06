@@ -103,7 +103,10 @@ export default {
               const confirm = {
                 type: "question",
                 title: "dialog.clockInConfirm",
-                msg: ["dialog.clockInTime",moment(this.time).format("hh:mm:ss a")],
+                msg: [
+                  "dialog.clockInTime",
+                  moment(this.time).format("hh:mm:ss a")
+                ],
                 buttons: [{ text: "button.confirm", fn: "resolve" }]
               };
 
@@ -194,7 +197,7 @@ export default {
       const { enable, timeout } = this.station.autoLock;
 
       enable && timeout > 0
-        ? this.setApp({ autoLock: true, lastActivity: +new Date() })
+        ? this.setApp({ autoLock: true, lastActivity: Date.now() })
         : this.setApp({ autoLock: false });
     },
     initialFailed(error) {
@@ -208,9 +211,15 @@ export default {
       // });
     },
     welcomeScreen() {
-      const { top, bot } = this.station.pole;
-      poleDisplay.write("\f");
-      poleDisplay.write(line(top, bot));
+      const {
+        customerDisplay = { poleDisplay: {}, ledDisplay: {} }
+      } = this.station;
+
+      if (customerDisplay.poleDisplay && customerDisplay.poleDisplay.enable) {
+        const { top, bot } = customerDisplay.poleDisplay;
+        poleDisplay.write("\f");
+        poleDisplay.write(line(top, bot));
+      }
     },
     access(grid) {
       const { route, password } = grid;

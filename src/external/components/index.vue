@@ -1,7 +1,5 @@
 <template>
-    <div>
-        Loading
-    </div>
+    <div></div>
 </template>
 
 <script>
@@ -22,7 +20,7 @@ div {
     #5bb8dc 100%
   );
   overflow: hidden;
-  z-index: 2;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;

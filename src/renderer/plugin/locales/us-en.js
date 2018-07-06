@@ -1320,7 +1320,8 @@ export default {
     foodAllergy: "Food Allergy",
     searchTicket: "Search Ticket",
     placedItemFor: " has placed {i} items for ",
-    voidTicketFor: " voided ticket for "
+    voidTicketFor: " voided ticket for ",
+    gallery: "Gallery"
   },
   nav: {
     store: "Store",
@@ -1514,6 +1515,7 @@ export default {
     plasticPenaltyTax: "Plastic Bag Penalty Tax",
     autoSaveCreditCard: "Auto Save Credit Card",
     autoStack: "Auto Stack",
+    playDuration: "Duration",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",

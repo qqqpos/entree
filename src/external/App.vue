@@ -1,27 +1,38 @@
 <template>
   <div id="app">
-    <transition>
-      <router-view :config="currentPlayList" :order="order"></router-view>
-    </transition>
+      <background :gallery="gallery" :duration="duration"></background>
+      <router-view :order="order"></router-view>
   </div>
 </template>
 
 <script>
+import background from "./helper/background";
+
 export default {
+  components: { background },
   data() {
     return {
-      playlist: [],
-      order: {},
-      stage: "load"
+      stage: "index",
+      duration: 5000,
+      gallery: [],
+      order: {}
     };
   },
   created() {
-    this.$electron.ipcRenderer.on("External::playlist", (e, list) => {
-      this.playlist = list;
-    });
+    this.$electron.ipcRenderer.on(
+      "External::config",
+      (e, { gallery, duration }) => {
+        this.gallery = gallery;
+        this.duration = Math.trunc(duration * 1000);
+      }
+    );
 
     this.$electron.ipcRenderer.on("External::stage", (e, stage) => {
       this.stage = stage;
+
+      if (stage !== "order") {
+        this.order = {};
+      }
     });
 
     this.$electron.ipcRenderer.on("External::update", (e, order) => {
@@ -30,17 +41,13 @@ export default {
   },
   methods: {
     updateStage(name) {
-      console.log("trigger stage", this.stage);
-      this.$router.push({ name });
+      name === "order"
+        ? this.$router.push({ name })
+        : this.$router.push({ name: "index" });
     }
   },
   watch: {
     stage: "updateStage"
-  },
-  computed: {
-    currentPlayList() {
-      return this.playlist.filter(config => config.stage === this.stage);
-    }
   }
 };
 </script>

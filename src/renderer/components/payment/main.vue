@@ -317,7 +317,7 @@ export default {
       this.paid =
         newType === "CASH" ? "0.00" : this.order.payment.remain.toFixed(2);
 
-      this.externalPaymentType = null;
+      if (newType !== "THIRD") this.externalPaymentType = null;
 
       if (newType === "GIFT") {
         this.giftCard = "";
@@ -517,6 +517,7 @@ export default {
     },
     chargeThirdParty() {
       return new Promise(charge => {
+        console.log(this.externalPaymentType);
         this.externalPaymentType
           ? charge(this.externalPaymentType)
           : new Promise((resolve, reject) => {

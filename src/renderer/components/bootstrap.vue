@@ -222,7 +222,13 @@ export default {
     },
     initCustomerDisplay({ poleDisplay = {}, ledDisplay = {} }) {
       poleDisplay.enable && this.initPoleDisplay(poleDisplay.port);
-      ledDisplay.enable && this.initLedDisplay(ledDisplay.playlist);
+      if (ledDisplay.enable) {
+        const { gallery = "", duration = 5 } = ledDisplay;
+        this.$electron.ipcRenderer.send("External::config", {
+          gallery,
+          duration
+        });
+      }
     },
     initPoleDisplay(port) {
       const poleDisplay = new serialport(port, { autoOpen: false });
@@ -237,9 +243,6 @@ export default {
           window.poleDisplay = poleDisplay;
         }
       });
-    },
-    initLedDisplay(playlist) {
-      
     },
     initScale(port) {
       // const SerialPort = require('serialport');

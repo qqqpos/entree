@@ -161,6 +161,7 @@ label .tooltip {
 
 .toggle .opt > div {
   border-bottom: 1px dashed #ddd;
+  padding: 4px 0 4px 0!important;
 }
 
 .toggle .opt > div:last-child {
