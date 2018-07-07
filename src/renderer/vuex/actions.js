@@ -122,7 +122,7 @@ export const alterItemOption = ({ commit }, data) => {
   data.side.sub
     ? commit(types.SET_CHOICE_SET, {
       qty: 1,
-      single: data.side.price || 0,
+      single: isNumber(data.side.price) ? parseFloat(data.side.price) : 0,
       price: data.side.price || 0,
       usEN: data.side.usEN,
       zhCN: data.side.zhCN

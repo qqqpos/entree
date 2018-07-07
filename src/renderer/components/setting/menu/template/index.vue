@@ -23,6 +23,7 @@
 import external from "../../common/external";
 import creator from "../component/templateCreator";
 import paginator from "../../../common/paginator";
+
 export default {
   components: { external, creator, paginator },
   data() {

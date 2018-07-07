@@ -367,31 +367,54 @@ export default {
       });
     },
     checkOption(item) {
-      return new Promise((next, stop) => {
+      return new Promise(next => {
+        // assign seats to items
         this.seats.length > 0 && Object.assign(item, { seat: this.seat });
 
         item.option && this.setSides(this.fillOption(item.option));
-        Object.assign(item, { side: {}, optIndex: 0 });
+
+        // initial item params
+        Object.assign(item, { choiceSet: [], side: {}, optIndex: 0 });
 
         if (item.manual) {
+          // item is manual select side option skip
           next(item);
         } else {
           const { option } = item;
 
           if (option && option.length) {
-            const { zhCN = "", usEN = "", ignore } = option[0];
-            const replace = option[0].hasOwnProperty("replace")
-              ? option[0].replace
-              : option[0].overWrite;
+            const {
+              zhCN = "",
+              usEN = "",
+              ignore = false,
+              sub = false,
+              replace = false
+            } = option[0];
 
             if (replace) {
               Object.assign(item, { zhCN, usEN });
               next(item);
             } else {
-              !ignore &&
-                Object.assign(item, {
-                  side: { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` }
-                });
+              if (!ignore) {
+                if (sub) {
+                  const choiceSet = [
+                    {
+                      zhCN,
+                      usEN,
+                      qty: 1,
+                      single: 0,
+                      price: 0,
+                      unique: String().random()
+                    }
+                  ];
+
+                  item = Object.assign(item, { choiceSet });
+                } else {
+                  Object.assign(item, {
+                    side: { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` }
+                  });
+                }
+              }
               next(item);
             }
           } else {
@@ -418,7 +441,7 @@ export default {
           if (option[0].subMenu) stop("subMenu");
         }
 
-        if (item.preset) {
+        if (Array.isArray(item.preset) && item.preset.length) {
           item.choiceSet = item.preset.map(set => ({
             qty: set.qty,
             zhCN: set.zhCN,

@@ -210,7 +210,7 @@ header.nav .title h5 {
 header.nav nav {
   display: flex;
   position: absolute;
-  right:5px;
+  right:10px;
 }
 
 header.nav nav > span, .editor header button.remove {

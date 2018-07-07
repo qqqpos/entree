@@ -374,7 +374,7 @@ export default {
     operatorPin: "请输入您的密码",
     accessPin: "请输入经理的密码",
     address: "地址资料",
-    sideOption: "副菜选项",
+    sideOption: "配菜选项",
     ledger: "轧账",
     tableInfo: "桌位信息",
     departments: "部门分类",
@@ -678,7 +678,8 @@ export default {
     orderContentReplace: "替换订单物品",
     existOrderContentReplace: "您想要替换掉列表上已有的物品吗?",
     copyOrderContent: "重复下单",
-    copyOrderContentConfirm: "您确定要从旧订单中复制所有的物品吗?"
+    copyOrderContentConfirm: "您确定要从旧订单中复制所有的物品吗?",
+    templateMissing:"",
   },
   terminal: {
     initial: "正在初始化 {i}...",

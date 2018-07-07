@@ -75,39 +75,37 @@ function createWindow() {
     }
   }
 
-  // if (appParams.some(args => args.includes("dual")) && externalDisplay) {
-  //   externalWindow = new BrowserWindow({
-  //     x: externalDisplay.bounds.x + 50,
-  //     y: externalDisplay.bounds.y + 50,
-  //     autoHideMenuBar: true,
-  //     alwaysOnTop: true,
-  //     skipTaskbar: true,
-  //     frame: false,
-  //     width: 1024,
-  //     height: 768,
-  //     fullscreen: true,
-  //     webPreferences: {
-  //       webSecurity: false
-  //     }
-  //   })
-  //   externalWindow.loadURL(externalURL)
-  // }
-
-
+  if (appParams.some(args => args.includes("dual")) && externalDisplay) {
+    externalWindow = new BrowserWindow({
+      x: externalDisplay.bounds.x + 50,
+      y: externalDisplay.bounds.y + 50,
+      autoHideMenuBar: true,
+      alwaysOnTop: true,
+      skipTaskbar: true,
+      frame: false,
+      width: 1024,
+      height: 768,
+      fullscreen: true,
+      webPreferences: {
+        webSecurity: false
+      }
+    })
+    externalWindow.loadURL(externalURL)
+  }
 
   //test
-  externalWindow = new BrowserWindow({
-    autoHideMenuBar: true,
-    skipTaskbar: true,
-    frame: false,
-    width: 1024,
-    height: 768,
-    webPreferences: {
-      webSecurity: false
-    }
-    //fullscreen: true
-  })
-  externalWindow.loadURL(externalURL)
+  // externalWindow = new BrowserWindow({
+  //   autoHideMenuBar: true,
+  //   skipTaskbar: true,
+  //   frame: false,
+  //   width: 1024,
+  //   height: 768,
+  //   webPreferences: {
+  //     webSecurity: false
+  //   }
+  //   //fullscreen: true
+  // })
+  // externalWindow.loadURL(externalURL)
 
   //end test
 

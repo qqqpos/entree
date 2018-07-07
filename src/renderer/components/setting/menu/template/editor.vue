@@ -7,14 +7,15 @@
                     <h3>{{$t('title.template')}}</h3>
                 </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <inputer title="text.primary" v-model="item.usEN" :autoFocus="true" @keydown.enter.native="confirm"></inputer>
                 <inputer title="text.secondary" v-model="item.zhCN" @keydown.enter.native="confirm"></inputer>
                 <inputer title="text.price" v-model.number="item.price" @keydown.enter.native="confirm"></inputer>
-                <div class="printers">
+                <div class="printers" v-if="printers.length > 0">
                     <label>{{$t('text.printer')}}</label>
                     <div class="inner">
-                        <checkbox :title="name" v-model="item.print" :val="name" v-for="(name,index) in init.printers" :key="index" :multiple="true" :translate="false"></checkbox>
+                        <checkbox :title="name" v-model="printer" :val="name" v-for="(name,index) in printers" :key="index" :multiple="true" :translate="false"></checkbox>
                     </div>
                 </div>
             </div>
@@ -37,18 +38,23 @@ export default {
   components: { inputer, checkbox },
   data() {
     return {
-      item: JSON.parse(JSON.stringify(this.init.item))
+      item: JSON.parse(JSON.stringify(this.init.item)),
+      printers: this.init.printers.filter(name => !/cashier/i.test(name)),
+      printer: this.init.item.print || this.init.printers || []
     };
-  },
-  created() {
-    //patch
-    !this.item.hasOwnProperty("print") &&
-      Object.assign(this.item, { print: this.init.printers });
   },
   methods: {
     confirm() {
       if (!this.item.zhCN) this.item.zhCN = this.item.usEN;
-      this.init.resolve(this.item);
+      let printers = new Set();
+      this.init.printers
+        .filter(name => /cashier/i.test(name))
+        .forEach(name => printers.add(name));
+      this.printer.forEach(name => printers.add(name));
+
+      this.init.resolve(
+        Object.assign(this.item, { print: Array.from(printers) })
+      );
     }
   }
 };

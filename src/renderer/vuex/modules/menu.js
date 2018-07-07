@@ -97,8 +97,10 @@ const mutations = {
     state.item = state.order.content.last();
   },
   [types.ADD_TO_ORDER](state, { item, autoStack }) {
+    //remove necessary params
     delete item.clickable;
     delete item.like;
+    delete item.disable;
 
     Object.assign(item, {
       unique: String().random(),
@@ -106,7 +108,7 @@ const mutations = {
       pending: false,
       void: false,
       qty: item.qty || 1,
-      choiceSet: item.choiceSet ? item.choiceSet : [],
+      choiceSet: Array.isArray(item.choiceSet) ? item.choiceSet : [],
       side: item.side ? item.side : {},
       single: parseFloat(item.price[0]),
       total: item.hasOwnProperty("total")
@@ -116,7 +118,7 @@ const mutations = {
 
     if (state.item) {
       //item qty auto stack function
-      
+
       if (autoStack
         && item._id === state.item._id && !item.temporary
         && item.option.length === 0 && state.item.choiceSet.length === 0) {

@@ -1103,6 +1103,7 @@ export default {
     },
     save() {
       this.setOrder(this.order);
+      this.$socket.emit("[INVOICE] UPDATE", this.invoice, false);
       this.exitPaymentModule();
     },
     setSplit(number) {

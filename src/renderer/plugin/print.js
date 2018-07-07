@@ -97,19 +97,36 @@ const Printer = function (plugin, config, station) {
     this.target = "All";
   };
 
-  this.print = (raw, receipt) => Ticket.bind(this)(raw, receipt);
-  this.preview = (printer, ticket) => Preview.bind(this)(printer, ticket);
-  this.printReport = data => Report.bind(this)(data);
-  this.printLabel = (printer, order) => Label.bind(this)(printer, order);
-  this.printHibachi = (printer, order, items) => Hibachi.bind(this)(printer, order, items);
-  this.printGiftCard = (title, card, bonus) => Giftcard.bind(this)(title, card, bonus);
-  this.printCreditCard = (trans, config, reprint) => Creditcard.bind(this)(trans, config, reprint);
-  this.printBatchReport = (data, detail) => BatchReport.bind(this)(data, detail);
-  this.printTimecardReport = (data) => Timecard.bind(this)(data);
-  this.printCashInReport = data => CashIn.bind(this)(data);
-  this.printCashOutReport = (data, detail) => CashOut.bind(this)(data, detail);
-  this.printSessionReport = data => Session.bind(this)(data);
-  this.printReserveTicket = data => Reserve.bind(this)(data);
+  const self = this;
+
+  this.print = (raw, receipt) => checkStatus().then(() => Ticket.bind(self)(raw, receipt));
+  this.preview = (printer, ticket) => checkStatus().then(() => Preview.bind(self)(printer, ticket));
+  this.printReport = data => checkStatus().then(() => Report.bind(self)(data));
+  this.printLabel = (printer, order) => checkStatus().then(() => Label.bind(self)(printer, order));
+  this.printHibachi = (printer, order, items) => checkStatus().then(() => Hibachi.bind(self)(printer, order, items));
+  this.printGiftCard = (title, card, bonus) => checkStatus().then(() => Giftcard.bind(self)(title, card, bonus));
+  this.printCreditCard = (trans, config, reprint) => checkStatus().then(() => Creditcard.bind(self)(trans, config, reprint));
+  this.printBatchReport = (data, detail) => checkStatus().then(() => BatchReport.bind(self)(data, detail));
+  this.printTimecardReport = data => checkStatus().then(() => Timecard.bind(self)(data));
+  this.printCashInReport = data => checkStatus().then(() => CashIn.bind(self)(data));
+  this.printCashOutReport = (data, detail) => checkStatus().then(() => CashOut.bind(self)(data, detail));
+  this.printSessionReport = data => checkStatus().then(() => Session.bind(self)(data));
+  this.printReserveTicket = data => checkStatus().then(() => Reserve.bind(self)(data));
+
+  const checkStatus = () =>
+    new Promise((ready) => {
+      if (this.plugin.webskt.readyState === 1) {
+        ready()
+      } else {
+        const loop = setInterval(() => {
+          if (this.plugin.webskt.readyState === 1) {
+            clearInterval(loop);
+            ready();
+          }
+        }, 500)
+      }
+    })
+
 };
 
 export default Printer;

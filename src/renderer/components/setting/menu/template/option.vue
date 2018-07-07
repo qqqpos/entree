@@ -7,11 +7,12 @@
                     <h3>{{$t('button.option')}}</h3>
                 </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
-                <inputer title="text.alias" v-model="option.name" :autoFocus="true" :length="16"></inputer>
+                <inputer title="text.alias" v-model="option.name" :autoFocus="true" :length="16" v-if="option.hasOwnProperty('name')"></inputer>
                 <inputer title="text.maxItem" v-model.number="option.max"></inputer>
-                <inputer title="text.startAt" v-model="option.startAt"></inputer>
-                <inputer title="text.overCharge" v-model="option.addition"></inputer>
+                <inputer title="text.startAt" v-model.number="option.startAt"></inputer>
+                <inputer title="text.overCharge" v-model.number="option.addition"></inputer>
             </div>
             <footer>
                 <div class="opt">

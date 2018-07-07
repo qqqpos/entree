@@ -278,7 +278,7 @@ new Promise((resolve, reject) => {
 
 function connectPrinter(ip) {
   return new Promise((resolve, reject) => {
-    // failed when attempt 30 times
+    // failed when attempt 50 times
     let attemptCount = 0;
 
     const loadScript = (remove) => {

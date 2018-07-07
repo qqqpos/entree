@@ -200,9 +200,10 @@ export default {
   },
   methods: {
     getCustomerDisplay() {
-      const { ledDisplay = {} } = this.station.customerDisplay;
+      const { ledDisplay } = this.station.customerDisplay;
 
-      this.externalDisplaySync = true//ledDisplay.enable;
+      //if (this.order.type === "WALK_IN" || this.order.type === "PICK_UP")
+        this.externalDisplaySync = ledDisplay.enable;
     },
     resetHighlight() {
       let dom = document.querySelector("li.item.active");

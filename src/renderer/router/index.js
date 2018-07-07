@@ -271,6 +271,11 @@ export default new Router({
                       path: "item",
                       name: "Setting.template.item",
                       component: require("../components/setting/menu/template/item")
+                    },
+                    {
+                      path: "side",
+                      name: "Setting.template.side",
+                      component: require("../components/setting/menu/template/side")
                     }
                   ]
                 }

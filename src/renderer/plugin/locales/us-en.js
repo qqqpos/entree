@@ -798,7 +798,8 @@ export default {
     copyOrderContent: "Repeat Order Confirm",
     copyOrderContentConfirm: "Are you sure to copy items from the record?",
     addToOrderContent: "Additional Item",
-    addToOrderContentConfirm: "Are you sure to copy item to the current list form the record?"
+    addToOrderContentConfirm: "Are you sure to copy item to the current list form the record?",
+    templateMissing: "Template {i} configuration is missing."
   },
   terminal: {
     initial: "Initializing terminal {i}...",
