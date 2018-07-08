@@ -206,8 +206,8 @@ export const newReservation = ({ commit }, data) =>
 export const updateReservation = ({ commit }, data) =>
   commit(types.UPDATE_RESERVATION, data);
 
-export const saveForDiffs = ({ commit }, data) =>
-  commit(types.SAVE_FOR_DIFFS, data);
+export const createOrderInstance = ({ commit }, data) =>
+  commit(types.CREATE_ORDER_INSTANCE, data);
 
 export const archiveOrder = ({ commit }, data) =>
   commit(types.ARCHIVE_ORDER, data);

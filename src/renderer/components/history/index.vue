@@ -1,6 +1,6 @@
 <template>
   <div class="history">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" @filter="setFilter" @search="searchInvoice" :on="targetName"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
     <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">
@@ -23,6 +23,7 @@ import { mapGetters, mapActions } from "vuex";
 
 import inputModule from "../component/inputer";
 import Maintenance from "../dock/maintenance";
+import changeLog from "./component/changeLog";
 import paginator from "../common/paginator";
 import orderList from "../common/orderList";
 import dialogModule from "../common/dialog";
@@ -34,10 +35,11 @@ import filterBar from "./filterBar";
 export default {
   components: {
     dialogModule,
-    inputModule,
     orderButtons,
+    inputModule,
     sideButtons,
     Maintenance,
+    changeLog,
     paginator,
     filterBar,
     orderList,
@@ -81,7 +83,6 @@ export default {
       this.setViewOrder(invoice);
     },
     setFilter(type, name) {
-      this.targetName = null;
       this.page = 0;
 
       switch (type) {
@@ -93,6 +94,12 @@ export default {
         default:
           this.filter = type;
       }
+      this.resetViewOrder();
+    },
+    resetFilter() {
+      this.page = 0;
+      this.targetName = null;
+      this.filter = "ALL_INVOICES";
       this.resetViewOrder();
     },
     resetViewOrder() {
@@ -139,8 +146,17 @@ export default {
       });
     },
     recall(_id) {
-      this.$socket.emit("[INSTANCE] LIST", _id, results => {
-        console.log(results);
+      this.$socket.emit("[INSTANCE] LIST", _id, records => {
+        const prompt = {
+          type: "error",
+          title: "dialog.unableTraceRecord",
+          msg: "dialog.recordMissingOrDeleted",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+
+        records.length
+          ? this.$open("changeLog", { records })
+          : this.$dialog(prompt).then(this.exitComponent);
       });
     },
     getConsole() {
@@ -163,12 +179,10 @@ export default {
         .catch(this.exitComponent);
     },
     searchTicket(input) {
-      const ticketNumber = input.amount;
+      const ticket = input.amount;
       this.exitComponent();
       //search invoices
-      const target = this.targetInvoices.findIndex(
-        invoice => invoice.number === ticketNumber
-      );
+      const target = this.targetInvoices.findIndex(i => i.number === ticket);
 
       if (target === -1) {
         const prompt = {
@@ -184,7 +198,7 @@ export default {
           .then(this.openComponent.bind(null, "SEARCH"))
           .catch(this.exitComponent);
       } else {
-        const index = this.findTicketPage(ticketNumber);
+        const index = this.findTicketPage(ticket);
         this.$bus.emit("SET_CURRENT_PAGE", index);
         this.$nextTick(() => this.setViewOrder(this.targetInvoices[target]));
       }
@@ -213,7 +227,12 @@ export default {
     orders() {
       const { name } = this.op;
       const approval = this.approval(this.op.view, "invoices");
-      let invoices = this.targetInvoices.filter(({ server }) => view(server));
+      let invoices = this.targetInvoices.filter(
+        ({ server }) =>
+          this.targetName
+            ? this.targetName === server && view(server)
+            : view(server)
+      );
 
       switch (this.filter) {
         case "WALK_IN":

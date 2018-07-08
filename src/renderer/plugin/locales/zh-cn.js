@@ -91,6 +91,34 @@ export default {
     Worker: "员工",
     delay: "延迟出单"
   },
+  CHANGE: {
+    'UNCHANGED': '无改动',
+    'CHANGES': "订单有 {i} 处改动",
+    'CREATE_ORDER': '创建订单',
+    'ORDER_TYPE': '订单类别从|{i}|改成|{i}',
+    'SERVER': '服务员从 {i} 改成 {i}',
+    'TABLE': '桌位从 {i} 换至 {i}',
+    'GUEST': '客人数量从 {i} 改成 {i}',
+    'PHONE': '更改客人信息. 电话号码从|{i}|改成|{i}',
+    'ADDRESS': '更改客人信息. 地址从|{i}|改成|{i}',
+    'CITY': '更改客人信息. 地址城市从|{i}|改成|{i}',
+    'NAME': '更改客人信息. 客人名字从|{i}|改成|{i}',
+    'EXTENSION': '更改客人信息. 分机号码从|{i}|改成|{i}',
+    'TAX_FREE': '订单被设置成免税',
+    'TAXABLE': '订单免税被移除',
+    'ORDER_VOID': '订单被作废',
+    'ORDER_RESTORED': '订单被还原',
+    'ITEM_QTY_LESS': '减少|{i}|的数量, 从|{i} 个|减少至|{i} 个',
+    'ITEM_QTY_MORE': '增加|{i}|的数量, 从|{i} 个|增加至|{i} 个',
+    'ITEM_SIDE': '改动物品|{i}|的配菜, 从|{i}|改成|{i}',
+    'ITEM_PRICE': '修改物品|{i}|的价格, 从|$ {i}|改成|$ {i}',
+    'ITEM_CHOICE_SET': '修改物品|{i}|的子菜品',
+    'ITEM_ADD': '新增|{i} 个|物品|{i}',
+    'ITEM_REMOVE': '移除|{i} 个|物品|{i}',
+    'COUPON_APPLY': '新增订单折扣, 订单价格从|$ {i}|变成|$ {i}',
+    'COUPON_REMOVE': '移除订单折扣, 订单价格从|$ {i}|变成|$ {i}',
+    'DISCOUNT': '订单折扣变动, 折扣金额从|$ {i}|变成|$ {i}'
+  },
   allergy: {
     "MILK": "牛奶",
     "EGG": "鸡蛋",
@@ -112,7 +140,8 @@ export default {
     payment: "按付款方式",
     station: "按工作站",
     terminal: "按刷卡机",
-    period: "选择时段"
+    period: "选择时段",
+    allServers: "所有服务员"
   },
   tag: {
     goodCustomer: "好客人",
@@ -328,7 +357,7 @@ export default {
     subMenuItem: "子菜单物品",
     subMenuConfig: "子菜单设置",
     reload: "充值",
-    purchaseHistory: "历史记录",
+    historyLogs: "历史记录",
     orderList: "订单列表",
     baseSetting: "基本设定",
     salary: "工资",
@@ -386,7 +415,8 @@ export default {
     dailySaleSummary: "每日销售总数",
     hourlySaleSummary: "每小时销售总数",
     evenSplit: "订单均分",
-    refund: "退款金额"
+    refund: "退款金额",
+    changeLog: "改动日志"
   },
   dialog: {
     maintenance: "维护",
@@ -679,7 +709,9 @@ export default {
     existOrderContentReplace: "您想要替换掉列表上已有的物品吗?",
     copyOrderContent: "重复下单",
     copyOrderContentConfirm: "您确定要从旧订单中复制所有的物品吗?",
-    templateMissing:"",
+    templateMissing: "{i} 模版信息丢失!",
+    unableTraceRecord: "无法追溯",
+    recordMissingOrDeleted: "此订单的历史记录丢失或者已经被删除"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1679,6 +1711,7 @@ export default {
     dollarDiscount: "按美元给予折扣",
     percentageDiscount: "按订单总数的百分比折扣",
     autoStackItemQty: "自动叠加相同物品的数量",
+    marketPriceInUse: "物品使用市场价格",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

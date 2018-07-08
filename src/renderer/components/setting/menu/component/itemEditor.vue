@@ -27,11 +27,12 @@
             <inputer title="text.menuID" v-model="item.menuID"></inputer>
             <selector title="text.category" v-model="item.category" :opts="init.categories" :editable="false"></selector>
             <inputer title="text.primary" v-model="item.usEN" :autoFocus="true" @keydown.enter.native="save"></inputer>
-            <inputer title="text.secondary" v-model="item.zhCN"></inputer>
-            <i class="fa fa-link" v-show="item.usEN === item.zhCN" :title="$t('tip.sameItemName')"></i>
-            <inputer title="text.price" v-model="item.price" @keydown.enter.native="save">
+            <inputer title="text.secondary" v-model="item.zhCN" :class="{disable:item.usEN === item.zhCN}"></inputer>
+            <i class="fas fa-exclamation-circle tip1" v-show="item.usEN === item.zhCN" :title="$t('tip.sameItemName')"></i>
+            <inputer title="text.price" v-model="item.price" @keydown.enter.native="save" :class="{disable:item.marketPrice}">
               <i class="fa fa-ellipsis-v price" @click="openPriceEditor"></i>
             </inputer>
+            <i class="fas fa-exclamation-circle tip2" v-show="item.usEN === item.zhCN" :title="$t('tip.marketPriceInUse')"></i>
             <selector title="text.taxClass" v-model="item.taxClass" :opts="taxes" :editable="false"></selector>
             <div class="options">
               <label class="title">{{$t('setting.print')}}</label>
@@ -81,13 +82,6 @@
             <inputer title="text.priority" v-model.number="item.priority"></inputer>
             <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
             <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
-            <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>
-            <external title="text.foodAllergy" @open="setAllergy" :defaultStyle="false"></external>
-            <external title="text.restriction" @open="setRestriction" :defaultStyle="false"></external>
-          </div>
-          <div class="side">
-            <switches title="text.openFood" v-model="item.temporary"></switches>
-            <switches title="text.marketPrice" v-model="item.marketPrice"></switches>
             <toggle title="text.weightScale" v-model="item.weightItem.enable" :defaultStyle="false">
               <transition name="dropdown">
                 <div class="opt" v-if="item.weightItem.enable">
@@ -104,8 +98,17 @@
                 </div>
               </transition>
             </toggle>
+          </div>
+          <div class="side">
+            <switches title="text.openFood" v-model="item.temporary"></switches>
+            <switches title="text.marketPrice" v-model="item.marketPrice"></switches>
             <switches title="text.spicy" v-model="item.spicy"></switches>
             <switches title="text.disable" v-model="item.disable"></switches>
+          </div>
+          <div class="advance">
+            <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>
+            <external title="text.foodAllergy" @open="setAllergy" :defaultStyle="false"></external>
+            <external title="text.restriction" @open="setRestriction" :defaultStyle="false"></external>
           </div>
         </div>
       </template>
@@ -308,9 +311,9 @@ export default {
     save() {
       this.item.zhCN = this.item.zhCN || this.item.usEN;
 
-      //correcting 
-      this.item.usEN = this.item.usEN.trim().replace(/\s\s+/g, ' ');
-      this.item.zhCN = this.item.zhCN.trim().replace(/\s\s+/g, ' ');
+      //correcting
+      this.item.usEN = this.item.usEN.trim().replace(/\s\s+/g, " ");
+      this.item.zhCN = this.item.zhCN.trim().replace(/\s\s+/g, " ");
 
       this.updateItemPrinter();
 
@@ -320,22 +323,22 @@ export default {
 
       this.init.resolve(this.item);
     },
-    updateItemPrinter(){
+    updateItemPrinter() {
       let printer = {};
 
-      this.printerList.filter(name=>/cashier/i.test(name)).map(name=>{
+      this.printerList.filter(name => /cashier/i.test(name)).map(name => {
         printer[name] = {
-          replace:false
-        }
+          replace: false
+        };
       });
 
-      this.item.printer = Object.assign(printer,this.item.printer);
+      this.item.printer = Object.assign(printer, this.item.printer);
 
-      Object.keys(this.item.printer).forEach(name=>{
-        if(!this.printerList.includes(name)){
-          delete this.item.printer[name]
+      Object.keys(this.item.printer).forEach(name => {
+        if (!this.printerList.includes(name)) {
+          delete this.item.printer[name];
         }
-      })
+      });
     },
     isShowPrinter(name) {
       return !/cashier/i.test(name);
@@ -394,6 +397,7 @@ header {
 }
 
 .item {
+  flex: 1;
   border-right: 1px solid #ddd;
   padding-right: 25px;
 }
@@ -401,7 +405,14 @@ header {
 .side {
   flex: 1;
   border-left: 1px solid #fff;
+  border-right: 1px solid #ddd;
+  padding: 0 25px;
+}
+
+.advance {
+  flex: 1;
   padding-left: 25px;
+  border-left: 1px solid #fff;
 }
 
 div.options {
@@ -426,7 +437,7 @@ div.options .inner {
 
 ul.options li {
   border: 1px solid #eee;
-  padding: 5px;
+  padding: 5px 5px 5px 0;
   margin-bottom: 5px;
   border-radius: 4px;
   background: #eeeeee;
@@ -479,7 +490,7 @@ ul.options .inner i:hover {
 .index {
   font-weight: bold;
   font-family: "Agency FB";
-  width: 17px;
+  width: 21px;
   text-align: center;
 }
 
@@ -518,17 +529,28 @@ p i {
   margin: 0 5px;
 }
 
-.config {
-  margin-bottom: 5px;
-}
-
+.config,
 .config h3 {
   margin-bottom: 5px;
 }
 
-.fa-link {
+.fas {
   position: absolute;
-  right: 6px;
-  top: 101px;
+  color: var(--yellow);
+}
+
+i.tip1 {
+  right: 5px;
+  top: 122px;
+}
+
+i.tip2 {
+  right: 5px;
+  top: 158px;
+}
+
+.disable {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 </style>

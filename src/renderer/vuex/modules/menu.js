@@ -1,4 +1,5 @@
 import * as types from "../mutation-types";
+import { isNumber } from "util";
 
 const state = {
   order: {
@@ -27,7 +28,7 @@ const state = {
     source: "POS",
     status: 1
   },
-  diffs: null,
+  instance: null,
   archivedOrder: null,
   item: null,
   sides: [],
@@ -65,8 +66,8 @@ const mutations = {
       type: ""
     };
     state.item = null;
+    state.instance = null;
     state.choiceSetTarget = null;
-    state.diffs = null;
     state.sides = Array(11).fill({ zhCN: "", usEN: "", disable: true });
   },
   [types.SET_VIEW_ORDER](state, order) {
@@ -173,94 +174,81 @@ const mutations = {
     // );
   },
   [types.ALTER_ITEM_OPTION](state, data) {
-    const { index } = data;
     let { item } = state;
-
+    const { index, side, split } = data;
     const {
       disable,
       replace = false,
+      ignore = false,
       price,
       extra,
       zhCN,
-      usEN,
-      skip = false,
-      ignore = false
-    } = data.side;
+      usEN
+    } = side;
 
-    if (disable) return;
-    if (data.split) return;
-    if (index !== item.optIndex) item.unique = String().random();
+    if (disable || split) return;
 
-    const _zhCN = `[${zhCN}]`;
-    const _usEN = `[${usEN}]`;
+    let { single } = item;
+
+    if (isNumber(price)) {
+      single = parseFloat(price)
+    } else if (isNumber(item.price[index])) {
+      single = parseFloat(item.price[index]);
+    } else if (isNumber(extra)) {
+      single = parseFloat(item.price[0]) + parseFloat(extra);
+    }
 
     if (item.qty === 1) {
-      if (
-        item.side.zhCN === _zhCN &&
-        item.side.usEN === _usEN &&
-        !data.function
-      ) {
-        item.total = (++item.qty * item.single).toFixed(2);
+      if (index === item.sideIndex && !data.function) {
+        // stack item qty if same side
+        item.total = (++item.qty * item.single).toFixed(2)
       } else {
-        if (isNumber(price)) {
-          item.single = parseFloat(price);
-        } else if (isNumber(item.price[index])) {
-          item.single = parseFloat(item.price[index]);
-        } else if (isNumber(extra)) {
-          item.single = parseFloat(item.price[0]) + parseFloat(extra);
-        }
-        item.optIndex = index;
+        item.single = single;
         item.total = item.single.toFixed(2);
 
         if (replace) {
-          item.zhCN = zhCN;
-          item.usEN = usEN;
+          // replace item name
+          Object.assign(item, { zhCN, usEN });
           return;
         }
 
-        //if (data.function) item.side = {}; 
-
-        const assignSide = !(skip || ignore);
-
-        if (assignSide) item.side = { zhCN: _zhCN, usEN: _usEN };
+        if (!ignore) {
+          Object.assign(item.side, { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` })
+        }
       }
-    } else if (ignore) {
-
+      item.sideIndex = index;
     } else {
-      if (item.side.zhCN === _zhCN && item.side.usEN === _usEN) {
+      if (index === item.sideIndex) {
         item.total = data.function
           ? (item.qty * item.single).toFixed(2)
           : (++item.qty * item.single).toFixed(2);
       } else {
         item.total = (--item.qty * item.single).toFixed(2);
 
-        let _item = JSON.parse(JSON.stringify(item));
-        _item.unique = String().random();
-        _item.qty = 1;
-        _item.side = { zhCN: _zhCN, usEN: _usEN };
+        // copy item
+        let newItem = JSON.parse(JSON.stringify(item));
 
-        if (isNumber(price)) {
-          _item.single = parseFloat(price);
-        } else if (isNumber(item.price[index])) {
-          _item.single = parseFloat(item.price[index]);
-        } else if (isNumber(extra)) {
-          _item.single =
-            parseFloat(item.price[0]) + parseFloat(data.side.extra);
-        }
+        Object.assign(newItem, {
+          qty: 1,
+          single,
+          sideIndex: index,
+          total: single.toFixed(2),
+          unique: String.random(),
+          side: { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` },
+        });
 
-        _item.total = _item.single.toFixed(2);
+        //apply style
 
         const dom = document.querySelector("li.item.active");
         dom && dom.classList.remove("active");
 
-        const idx =
-          state.order.content.findIndex(i => i.unique === item.unique) + 1;
+        const itemIndex = state.order.content.findIndex(i => i.unique === item.unique) + 1;
+        state.order.content.splice(itemIndex, 0, newItem);
 
-        state.order.content.splice(idx, 0, _item);
-        state.item = _item;
+        state.item = newItem;
 
         setTimeout(() =>
-          document.querySelectorAll("li.item")[idx].classList.add("active")
+          document.querySelectorAll("li.item")[itemIndex].classList.add("active")
         );
       }
     }
@@ -407,8 +395,8 @@ const mutations = {
       }
     }
   },
-  [types.SAVE_FOR_DIFFS](state, data) {
-    state.diffs = JSON.parse(JSON.stringify(data));
+  [types.CREATE_ORDER_INSTANCE](state, data) {
+    state.instance = JSON.parse(JSON.stringify(data));
   },
   [types.ARCHIVE_ORDER](state, data) {
     state.archivedOrder = JSON.parse(JSON.stringify(data));

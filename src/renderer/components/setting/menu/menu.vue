@@ -9,7 +9,7 @@
       <div v-for="(group,groupIndex) in items" :key="groupIndex">
         <draggable :list="group" @sort="isItemSorted = true" :options="{animation:300,group:group.category,ghostClass:'itemGhost',draggable:'.draggable'}">
           <transition-group tag="section" class="items" :name="'drag'">
-            <div v-for="(item,index) in group" @contextmenu="editItem(item,groupIndex,index)" :class="{draggable:item.clickable,disable:!item.clickable}" :key="index" :data-menuid="item.menuID">{{item[language]}}</div>
+            <div v-for="(item,index) in group" @contextmenu="editItem(item,groupIndex,index)" :class="{draggable:item._id,disable:!item._id}" :key="index" :data-menuid="item.menuID">{{item[language]}}</div>
           </transition-group>
         </draggable>
       </div>
@@ -111,12 +111,16 @@ export default {
         };
         this.component = "itemEditor";
       })
-        .then(_item => {
-          let sequence = [this.categoryIndex, group, index];
+        .then(updatedItem => {
+          //remove unnessary params
+          delete updatedItem.clickable;
+
+          const sequence = [this.categoryIndex, group, index];
+
           this.$socket.emit(
             "[MENU] UPDATE",
             {
-              item: _item,
+              item: updatedItem,
               sequence
             },
             () => this.refreshData()
@@ -156,6 +160,7 @@ export default {
     copyLastItem(group, index) {
       let item;
       let lastItem = this.items[group][index - 1];
+      
       if (lastItem && lastItem.hasOwnProperty("_id")) {
         item = JSON.parse(JSON.stringify(lastItem));
         Object.assign(item, {

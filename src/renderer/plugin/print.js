@@ -100,7 +100,7 @@ const Printer = function (plugin, config, station) {
   const self = this;
 
   this.print = (raw, receipt) => checkStatus().then(() => Ticket.bind(self)(raw, receipt));
-  this.preview = (printer, ticket) => checkStatus().then(() => Preview.bind(self)(printer, ticket));
+  this.preview = (printer, ticket) => Preview.bind(self)(printer, ticket);
   this.printReport = data => checkStatus().then(() => Report.bind(self)(data));
   this.printLabel = (printer, order) => checkStatus().then(() => Label.bind(self)(printer, order));
   this.printHibachi = (printer, order, items) => checkStatus().then(() => Hibachi.bind(self)(printer, order, items));

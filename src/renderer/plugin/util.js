@@ -241,12 +241,17 @@ export default {
       let subtotal = 0;
       let tax = 0;
 
+      // double check paid params
+      // if it is illegal value then reset to 0
+      paid = isNumber(paid) ? parseFloat(paid) : 0;
+
       order.content.forEach(item => {
         if (item.void) return;
 
         const single = parseFloat(item.single);
         const qty = item.qty || 1;
         const taxClass = this.tax.class[item.taxClass];
+        const orderType = item.orderType || type;
         let amount = toFixed(single * qty, 2);
 
         item.choiceSet.forEach(set => {
@@ -261,7 +266,7 @@ export default {
 
         subtotal = toFixed(subtotal + amount, 2);
 
-        if (!taxFree && taxClass.apply[type])
+        if (!taxFree && taxClass.apply[orderType])
           tax += toFixed(taxClass.rate / 100 * amount, 2);
       });
 
@@ -563,6 +568,21 @@ export default {
         .toString(36)
         .replace(/[^a-zA-Z]+/g, "")
         .substr(0, length);
+    };
+
+    Number.prototype.toFixed = function (n) {
+      const power = Math.pow(10, n);
+      let fixed = (Math.round(this * power) / power).toString();
+      if (n == 0) return fixed;
+
+      if (fixed.indexOf('.') < 0) fixed += '.';
+      const padding = n + 1 - (fixed.length - fixed.indexOf('.'));
+
+      for (let i = 0; i < padding; i++) {
+        fixed += '0';
+      }
+
+      return fixed;
     };
 
     window.util = {

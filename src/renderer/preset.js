@@ -222,17 +222,17 @@ var Preset = function () {
     let access = [], modify = [], view = [], permission = [], cashCtrl;
     switch (role) {
       case "Manager":
-        access = ["setting", "cashdrawer", "report", "terminal", "history"];
+        access = ["setting", "cashdrawer", "report", "terminal", "history", "exit"];
         view = ["summary", "invoices", "tables"];
         modify = ["price", "item", "order", "table", "driver", "discount", "tip", "void", "transaction"];
-        permission = ["giftcard", "payout", "timecard"];
+        permission = ["giftcard", "payout", "timecard", "batch", "reprint", "ledger"];
         cashCtrl = "enable";
         break;
       case "Cashier":
-        access = ["cashdrawer", "terminal", "history"];
+        access = ["cashdrawer", "terminal", "history", "exit"];
         view = ["summary", "invoices", "tables"];
         modify = ["price", "item", "order", "table", "driver", "discount", "tip", "void", "transaction"];
-        permission = ["payout"];
+        permission = ["payout", "batch", "payout"];
         cashCtrl = "enable";
         break;
       case "Waitstaff":

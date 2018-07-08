@@ -4,13 +4,13 @@
       <div v-for="(category,index) in menu" @click="categoryIndex = index" :key="index">{{category[language]}}</div>
     </section>
     <section class="items" v-if="config.display.menuID" :class="{sub:openSubGroup}">
-      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item.clickable,like:item.like}" :key="index" :data-menuID="item.menuID">{{item[language]}}</div>
+      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item._id,like:item.like}" :key="index" :data-menuID="item.menuID">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
     </section>
     <section class="items" v-else :class="{sub:openSubGroup}">
-      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item.clickable,like:item.like}" :key="index">{{item[language]}}</div>
+      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item._id,like:item.like}" :key="index">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
@@ -105,7 +105,7 @@ export default {
     if (this.archivedOrder) {
       const { session, table, tableID } = this.order;
       this.setApp({ newTicket: false });
-      this.saveForDiffs(this.archivedOrder.content);
+      this.createOrderInstance(this.archivedOrder);
       this.setOrder({ ...this.archivedOrder, session, table, tableID });
       this.emptyArchiveOrder();
     }
@@ -178,8 +178,7 @@ export default {
         });
       } else {
         const order = JSON.parse(JSON.stringify(this.order));
-        order.modify++;
-        this.saveForDiffs(order.content);
+        this.createOrderInstance(order);
         this.setOrder(order);
       }
 
@@ -249,10 +248,6 @@ export default {
           });
       }
 
-      items.forEach(item => {
-        if (item.disable) item.clickable = false;
-      });
-
       this.items = items;
       console.timeEnd("Flatten");
     },
@@ -305,7 +300,7 @@ export default {
     },
     checkItemAvailable(item) {
       return new Promise((next, stop) => {
-        if (item.hasOwnProperty("clickable") && !item.clickable) {
+        if (item.disable) {
           stop("unavailable");
         } else if (item.hasOwnProperty("restrict")) {
           const { from, to, days, types } = item.restrict;
@@ -374,10 +369,11 @@ export default {
         item.option && this.setSides(this.fillOption(item.option));
 
         // initial item params
-        Object.assign(item, { choiceSet: [], side: {}, optIndex: 0 });
+        Object.assign(item, { choiceSet: [], side: {}, sideIndex: 0 });
 
         if (item.manual) {
           // item is manual select side option skip
+          item.sideIndex = null;
           next(item);
         } else {
           const { option } = item;
@@ -645,7 +641,7 @@ export default {
       "addToOrder",
       "resetPointer",
       "setChoiceSet",
-      "saveForDiffs",
+      "createOrderInstance",
       "archiveOrder",
       "alertChoiceSet",
       "alterItemOption",

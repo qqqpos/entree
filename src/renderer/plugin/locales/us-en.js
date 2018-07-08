@@ -98,6 +98,34 @@ export default {
     Worker: "Worker",
     delay: "Delay"
   },
+  CHANGE: {
+    'UNCHANGED': 'No changes',
+    'CHANGES': "Ticket has {i} changes",
+    'CREATE_ORDER': 'Create order',
+    'ORDER_TYPE': 'Ticket type changed from|{i}|to|{i}',
+    'SERVER': 'Server changed from|{i}|to|{i}',
+    'TABLE': 'Table changed from|{i}|to|{i}',
+    'GUEST': 'Guest count changed from|{i}|to|{i}',
+    'PHONE': 'Phone number changed from|{i}|to|{i}',
+    'ADDRESS': 'Address changed from|{i}|to|{i}',
+    'CITY': 'City changed from|{i}|to|{i}',
+    'NAME': 'Customer name changed from|{i}|to|{i}',
+    'EXTENSION': 'Extension changed from|{i}|to|{i}',
+    'TAX_FREE': 'Ticket has been set to tax free',
+    'TAXABLE': 'Ticket tax free was removed',
+    'ORDER_VOID': 'Ticket voided',
+    'ORDER_RESTORED': 'Ticket Restored',
+    'ITEM_QTY_LESS': 'Item|{i}|quantity is reduced from|{i}|to|{i}',
+    'ITEM_QTY_MORE': 'Item|{i}|quantity is increased from|{i}|to|{i}',
+    'ITEM_SIDE': 'Item|{i}|side order has changed from|{i}|to|{i}',
+    'ITEM_PRICE': 'Item|{i}|price has been modified from|$ {i}|to|$ {i}',
+    'ITEM_CHOICE_SET': 'The subitem of|{i}|is modified',
+    'ITEM_ADD': 'Add|{i}|of item|{i}',
+    'ITEM_REMOVE': 'Remove|{i}|of item|{i}',
+    'COUPON_APPLY': 'New coupon apply cause balance due change from|$ {i}|to|$ {i}',
+    'COUPON_REMOVE': 'Remove exist coupon cause balance due change from|$ {i}|to|$ {i}',
+    'DISCOUNT': 'Ticket discount has changed. Discount amount from|$ {i}|to|$ {i}'
+  },
   allergy: {
     "MILK": "Milk",
     "EGG": "Egg",
@@ -119,7 +147,8 @@ export default {
     payment: "By Payment Type",
     station: "By Station",
     terminal: "By Terminal",
-    period: "Select Date Range"
+    period: "Select Date Range",
+    allServers: "All Servers"
   },
   tag: {
     goodCustomer: "Good",
@@ -421,7 +450,7 @@ export default {
     subMenuItem: "SubMenu Item",
     subMenuConfig: "SubMenu Config",
     reload: "Reload",
-    purchaseHistory: "Purchase History",
+    historyLogs: "History Logs",
     orderList: "Order list",
     baseSetting: "Base Setting",
     salary: "Salary",
@@ -479,7 +508,8 @@ export default {
     dailySaleSummary: "Daily Sales Summary",
     hourlySaleSummary: "Hourly Sales Summary",
     evenSplit: "Ticket Even Split",
-    refund: "Refund Amount"
+    refund: "Refund Amount",
+    changeLog: "Change Log"
   },
   dialog: {
     maintenance: "Maintenance",
@@ -799,7 +829,9 @@ export default {
     copyOrderContentConfirm: "Are you sure to copy items from the record?",
     addToOrderContent: "Additional Item",
     addToOrderContentConfirm: "Are you sure to copy item to the current list form the record?",
-    templateMissing: "Template {i} configuration is missing."
+    templateMissing: "Template {i} configuration is missing.",
+    unableTraceRecord: "Unable Trace",
+    recordMissingOrDeleted: "The change log is missing or deleted."
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1716,6 +1748,7 @@ export default {
     dollarDiscount: "Giving dollar discount",
     percentageDiscount: "Percentage discount of the subtotal",
     autoStackItemQty: "Auto stacking item quantity",
+    marketPriceInUse: "Item use market price",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

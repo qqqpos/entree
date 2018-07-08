@@ -23,7 +23,7 @@ export const favorites = s => s.main.favorites;
 export const item = s => s.menu.item;
 export const sides = s => s.menu.sides;
 export const order = s => s.menu.order;
-export const diffs = s => s.menu.diffs;
+export const instance = s => s.menu.instance;
 export const choiceSet = s => s.menu.choiceSetTarget;
 export const menu = s => s.initial.config.layout.menu;
 export const archivedOrder = s => s.menu.archivedOrder;

@@ -320,26 +320,20 @@ export default {
     },
     combineTogoItems() {
       //combine togo list to origin dineIn placed items
-      let archiveOrder = this.archivedOrder;
+      const { type } = this.order;
 
       this.order.content.forEach(item => {
-        item.diffs = "NEW";
-        archiveOrder.content.push(item);
+        this.archiveOrder.content.push(
+          Object.assign(item, {
+            diffs: "NEW",
+            orderType: type
+          })
+        );
       });
 
-      //recalculate price
-      const { subtotal, tax, plasticTax = 0 } = this.order.payment;
+      this.$calculatePayment(this.archiveOrder);
 
-      const total = toFixed(subtotal + tax + plasticTax, 2);
-      //bug here
-
-      archiveOrder.payment.subtotal += subtotal;
-      archiveOrder.payment.tax += tax;
-      archiveOrder.payment.total += total;
-      archiveOrder.payment.due += total;
-      archiveOrder.payment.balance += total;
-      archiveOrder.payment.remain += total;
-      return archiveOrder;
+      return this.archiveOrder;
     },
     checkPendingItem(print) {
       return new Promise((next, stop) => {
@@ -396,9 +390,10 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
+        const { printOnDone, table } = this.dinein;
         const printCount = this.app.newTicket
           ? print ? 1 : 0
-          : this.order.printCount + 1;
+          : print ? this.order.printCount + 1 : this.order.printCount;
 
         let order = this.combineOrderInfo({ printCount });
 
@@ -420,9 +415,7 @@ export default {
                 );
               });
             } else {
-              const { printOnDone } = this.dinein;
-
-              if (this.dinein.table) {
+              if (table) {
                 Object.assign(this.currentTable, {
                   invoice: [order._id],
                   status: 2
@@ -448,8 +441,7 @@ export default {
               print && Printer.setTarget("All").print(content);
             });
           } else {
-            let { printOnDone } = this.dinein;
-            if (this.dinein.table) {
+            if (table) {
               Object.assign(this.currentTable, {
                 invoice: [order._id],
                 status: 2
@@ -473,22 +465,12 @@ export default {
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
               } else {
-                this.dinein.printOnDone
+                printOnDone
                   ? Printer.setTarget("All").print(diffs)
                   : Printer.setTarget("Order").print(diffs);
               }
             }
             this.$socket.emit("[INVOICE] UPDATE", order, print);
-
-            //save diffs
-            this.$socket.emit("[INSTANCE] SAVE", {
-              date: today(),
-              time: Date.now(),
-              action: "MODIFY",
-              operator: this.op.name,
-              order: diffs,
-              isPrint: print
-            });
           } else {
             Printer.setTarget("Order").print(this.order);
           }
@@ -554,13 +536,56 @@ export default {
       }
       return Object.assign({}, order, extra);
     },
+    createTogo() {
+      this.archiveOrder(this.order);
+      Object.assign(this.ticket, { type: "TO_GO" });
+      this.setOrder({ type: "TO_GO", content: [] });
+    },
+    dineInQuit() {
+      const prompt = {
+        title: "dialog.exitConfirm",
+        msg: "dialog.unsaveOrderWarning"
+      };
+
+      this.isEmptyTicket
+        ? this.resetTableExit()
+        : this.$dialog(prompt)
+            .then(this.resetTableExit)
+            .catch(this.exitComponent);
+    },
+    resetTableExit() {
+      if (this.currentTable) {
+        const { _id, status } = this.currentTable;
+
+        if (this.app.newTicket || status === -1)
+          this.$socket.emit("[TABLE] RESET", { _id });
+      }
+      this.abandon();
+    },
+    abandon() {
+      this.$log({
+        eventID: 4001,
+        data: this.order._id,
+        note: `#${this.ticket.number} Invoice was abandoned.`
+      });
+
+      this.resetAll();
+      this.$router.push({ path: "/main" });
+    },
+    switchLanguage() {
+      const language = this.app.language === "usEN" ? "zhCN" : "usEN";
+      this.$setLanguage(language);
+      this.setApp({ language });
+      moment.locale(language === "usEN" ? "en" : "zh-cn");
+      this.$forceUpdate();
+    },
     compare(current) {
-      if (!this.diffs) {
+      if (!this.instance) {
         //return if no need to compare
         return current;
       }
 
-      const oldContent = this.diffs;
+      const oldContent = this.instance.content;
       current = JSON.parse(JSON.stringify(current));
       current.print = true;
 
@@ -664,7 +689,8 @@ export default {
           removedItems.push(
             Object.assign(item, {
               diffs: "REMOVED",
-              print: false
+              print: false,
+              void: true
             })
           );
       });
@@ -672,49 +698,6 @@ export default {
       removedItems.length > 0 && items.unshift(...removedItems);
 
       return Object.assign(current, { content: items });
-    },
-    createTogo() {
-      this.archiveOrder(this.order);
-      Object.assign(this.ticket, { type: "TO_GO" });
-      this.setOrder({ type: "TO_GO", content: [] });
-    },
-    dineInQuit() {
-      const prompt = {
-        title: "dialog.exitConfirm",
-        msg: "dialog.unsaveOrderWarning"
-      };
-
-      this.isEmptyTicket
-        ? this.resetTableExit()
-        : this.$dialog(prompt)
-            .then(this.resetTableExit)
-            .catch(this.exitComponent);
-    },
-    resetTableExit() {
-      if (this.currentTable) {
-        const { _id, status } = this.currentTable;
-
-        if (this.app.newTicket || status === -1)
-          this.$socket.emit("[TABLE] RESET", { _id });
-      }
-      this.abandon();
-    },
-    abandon() {
-      this.$log({
-        eventID: 4001,
-        data: this.order._id,
-        note: `#${this.ticket.number} Invoice was abandoned.`
-      });
-
-      this.resetAll();
-      this.$router.push({ path: "/main" });
-    },
-    switchLanguage() {
-      const language = this.app.language === "usEN" ? "zhCN" : "usEN";
-      this.$setLanguage(language);
-      this.setApp({ language });
-      moment.locale(language === "usEN" ? "en" : "zh-cn");
-      this.$forceUpdate();
     },
     ...mapActions([
       "setOp",
@@ -733,7 +716,6 @@ export default {
       "app",
       "tax",
       "item",
-      "diffs",
       "order",
       "store",
       "dinein",
@@ -742,6 +724,7 @@ export default {
       "spooler",
       "customer",
       "language",
+      "instance",
       "choiceSet",
       "currentTable",
       "archivedOrder",

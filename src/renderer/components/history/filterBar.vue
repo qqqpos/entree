@@ -15,7 +15,7 @@
                             <div class="value">$ {{sub.amount | decimal}}</div>
                         </li>
                         <template v-if="index === 0">
-                          <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices">
+                          <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices" v-if="!target">
                             <div class="text">{{$t('filter.server')}}</div>
                             <i class="fas fa-user-tie"></i>
                             <transition name="slideFromLeft">
@@ -23,6 +23,10 @@
                                 <li v-for="(name,index) in servers" :key="index" @click.stop="filterByServer(name)">{{name}}</li>
                               </ul>
                             </transition>
+                          </li>
+                          <li @click.stop="resetFilter" v-else>
+                            <div class="text">{{$t('filter.allServers')}}</div>
+                            <i class="fas fa-users"></i>
                           </li>
                           <li @click.stop="search">
                             <div class="text" >{{$t('text.searchTicket')}}</div>
@@ -47,7 +51,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["data", "date", "on"],
+  props: ["target", "data", "date", "on"],
   data() {
     return {
       filters: [],
@@ -86,6 +90,11 @@ export default {
         this.showMore = false;
         this.type = type;
       }
+    },
+    resetFilter() {
+      this.showMore = false;
+      this.type = "ALL_INVOICES";
+      this.$emit("reset");
     },
     setSubFilter({ type }) {
       this.$emit("filter", type);
