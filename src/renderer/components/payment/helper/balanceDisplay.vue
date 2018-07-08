@@ -4,7 +4,7 @@
         <div class="values">
             <div class="f1"></div>
             <div class="due">
-                <span class="symbol">$</span>
+                <i class="fas fa-dollar-sign symbol"></i>
                 <span>{{remain + tip | decimal}}</span>
             </div>
             <div class="addition" v-show="discount > 0">

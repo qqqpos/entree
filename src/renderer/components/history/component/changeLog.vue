@@ -86,32 +86,17 @@ export default {
             .map(text => `<span>${text}</span>`)
             .join("");
         case "CHANGE.ITEM_SIDE":
-          return this.$t(type, value[0][this.language], value[1][this.language], value[2][this.language])
+          return this.$t(
+            type,
+            value[0][this.language],
+            value[1][this.language],
+            value[2][this.language]
+          )
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
         case "CHANGE.ITEM_CHOICE_SET":
           return this.$t(type, value[0][this.language])
-            .split("|")
-            .map(text => `<span>${text}</span>`)
-            .join("");
-        case "CHANGE.DISCOUNT":
-          return this.$t(type, value[0], value[1])
-            .split("|")
-            .map(text => `<span>${text}</span>`)
-            .join("");
-        case "CHANGE.COUPON_APPLY":
-        case "CHANGE.COUPON_REMOVE":
-          return this.$t(type, value[0], value[1])
-            .split("|")
-            .map(text => `<span>${text}</span>`)
-            .join("");
-          return;
-        case "CHANGE.NAME":
-        case "CHANGE.CITY":
-        case "CHANGE.ADDRESS":
-        case "CHANGE.EXTENSION":
-          return this.$t(type, value[0], value[1])
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
@@ -124,9 +109,28 @@ export default {
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
+        case "CHANGE.GUEST":
+        case "CHANGE.SERVER":
+          return this.$t(type, value[0], value[1])
+            .split("|")
+            .map(text => `<span>${text}</span>`)
+            .join("");
         case "CHANGE.ORDER_VOID":
         case "ORDER_RESTORED":
           return this.$t(type);
+        case "CHANGE.DISCOUNT":
+        case "CHANGE.DELIVERY_CHARGE":
+        case "CHANGE.GRATUITY":
+        case "CHANGE.COUPON_APPLY":
+        case "CHANGE.COUPON_REMOVE":
+        case "CHANGE.NAME":
+        case "CHANGE.CITY":
+        case "CHANGE.ADDRESS":
+        case "CHANGE.EXTENSION":
+          return this.$t(type, value[0], value[1])
+            .split("|")
+            .map(text => `<span>${text}</span>`)
+            .join("");
       }
     }
   }

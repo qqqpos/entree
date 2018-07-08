@@ -99,7 +99,7 @@
               </transition>
             </toggle>
           </div>
-          <div class="side">
+          <div class="others">
             <switches title="text.openFood" v-model="item.temporary"></switches>
             <switches title="text.marketPrice" v-model="item.marketPrice"></switches>
             <switches title="text.spicy" v-model="item.spicy"></switches>
@@ -403,6 +403,12 @@ header {
 }
 
 .side {
+  flex: 1;
+  padding: 0 25px;
+  border-left: 1px solid #fff;
+}
+
+.others {
   flex: 1;
   border-left: 1px solid #fff;
   border-right: 1px solid #ddd;

@@ -121,7 +121,7 @@ h5 {
 }
 
 .time {
-  color: #607d8b;
+  color: #795548;
 }
 
 .mask {

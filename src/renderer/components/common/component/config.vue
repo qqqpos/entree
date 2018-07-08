@@ -44,8 +44,18 @@
           <i class="fa fa-plus-square" @click="moreBag"></i>
         </div>
       <div class="btns">
-        <button @click="setDelivery" :disabled="order.type !== 'DELIVERY'">{{$t('button.setDelivery')}}</button>
-        <button @click="setGratuity" :disabled="!gratuitySettable">{{$t('button.setGratuity')}}</button>
+        <button @click="setDelivery" v-show="order.type === 'DELIVERY'">
+          <i class="fas fa-shipping-fast"></i>
+          {{$t('button.setDelivery')}}
+        </button>
+        <button @click="setGuest" v-show="gratuitySettable">
+          <i class="fas fa-user-plus"></i>
+          {{$t('text.setGuest')}}
+        </button>
+        <button @click="setGratuity" v-show="gratuitySettable">
+          <i class="fas fa-hand-holding-usd"></i>
+          {{$t('button.setGratuity')}}
+        </button>
       </div>
     </div>
     </transition>
@@ -56,12 +66,11 @@
 import { mapActions, mapGetters } from "vuex";
 
 import dialogModule from "../dialog";
-import inputer from "../../component/inputer";
-import range from "../../setting/common/range";
+import inputModule from "../../component/inputer";
 
 export default {
   props: ["init"],
-  components: { inputer, range, dialogModule },
+  components: { inputModule, dialogModule },
   mounted() {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
@@ -124,7 +133,7 @@ export default {
         const amount =
           this.order.deliveryFee || this.store.deliver.baseFee || 0;
         this.componentData = { resolve, reject, title, amount };
-        this.component = "inputer";
+        this.component = "inputModule";
       })
         .then(({ amount }) => {
           if (amount > 0) {
@@ -154,7 +163,7 @@ export default {
           percentage,
           allowPercentage
         };
-        this.component = "inputer";
+        this.component = "inputModule";
       })
         .then(({ amount, percentage }) => {
           const prompt = {
@@ -188,6 +197,26 @@ export default {
             this.recalculatePayment();
             this.exitComponent();
           }
+        })
+        .catch(this.exitComponent);
+    },
+    setGuest() {
+      new Promise((resolve, reject) => {
+        const config = {
+          type: "number",
+          title: "text.setGuest",
+          amount: this.order.guest || 1,
+          percentage: false,
+          allowPercentage: false
+        };
+
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
+      })
+        .then(({ amount }) => {
+          this.setOrder({ guest: amount });
+          this.recalculatePayment();
+          this.exitComponent();
         })
         .catch(this.exitComponent);
     },
@@ -272,19 +301,23 @@ export default {
 
 .btns {
   display: flex;
-  padding: 5px 10px;
   justify-content: center;
   background: #eee;
 }
 
 .btns button {
-  padding: 15px 10px;
-  margin: 0 5px;
+  padding: 8px 10px;
+  margin: 5px;
   font-family: "Yuanti-SC";
   background: linear-gradient(#fefefe, #cfd0d3);
   border-radius: 4px;
   box-shadow: 0 1px 3px #616161;
   border: none;
   outline: none;
+}
+
+.btns button i {
+  display: block;
+  margin-bottom: 2px;
 }
 </style>

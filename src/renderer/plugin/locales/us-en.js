@@ -124,7 +124,9 @@ export default {
     'ITEM_REMOVE': 'Remove|{i}|of item|{i}',
     'COUPON_APPLY': 'New coupon apply cause balance due change from|$ {i}|to|$ {i}',
     'COUPON_REMOVE': 'Remove exist coupon cause balance due change from|$ {i}|to|$ {i}',
-    'DISCOUNT': 'Ticket discount has changed. Discount amount from|$ {i}|to|$ {i}'
+    'DISCOUNT': 'Ticket discount has changed. Discount amount from|$ {i}|to|$ {i}',
+    'DELIVERY_CHARGE': 'Delivery charge has changed. Fees from|$ {i}|change to|$ {i}',
+    'GRATUITY': 'Gratuity Has changed. Fees from|$ {i}|change to|$ {i}'
   },
   allergy: {
     "MILK": "Milk",

@@ -96,9 +96,9 @@ export default {
     'CHANGES': "订单有 {i} 处改动",
     'CREATE_ORDER': '创建订单',
     'ORDER_TYPE': '订单类别从|{i}|改成|{i}',
-    'SERVER': '服务员从 {i} 改成 {i}',
-    'TABLE': '桌位从 {i} 换至 {i}',
-    'GUEST': '客人数量从 {i} 改成 {i}',
+    'SERVER': '服务员从|{i}|改成|{i}',
+    'TABLE': '桌位从|{i}|换至|{i}',
+    'GUEST': '客人数量从|{i}|改成|{i}',
     'PHONE': '更改客人信息. 电话号码从|{i}|改成|{i}',
     'ADDRESS': '更改客人信息. 地址从|{i}|改成|{i}',
     'CITY': '更改客人信息. 地址城市从|{i}|改成|{i}',
@@ -117,7 +117,9 @@ export default {
     'ITEM_REMOVE': '移除|{i} 个|物品|{i}',
     'COUPON_APPLY': '新增订单折扣, 订单价格从|$ {i}|变成|$ {i}',
     'COUPON_REMOVE': '移除订单折扣, 订单价格从|$ {i}|变成|$ {i}',
-    'DISCOUNT': '订单折扣变动, 折扣金额从|$ {i}|变成|$ {i}'
+    'DISCOUNT': '订单折扣变动, 折扣金额从|$ {i}|变成|$ {i}',
+    'DELIVERY_CHARGE': '送餐费变动, 收取的费用从|$ {i}|变成|$ {i}',
+    'GRATUITY': '服务费变动, 收取的服务费从|$ {i}|变成|$ {i}'
   },
   allergy: {
     "MILK": "牛奶",

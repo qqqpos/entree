@@ -44,7 +44,8 @@
                                 @changeAnchor="setAnchor" @delete="deleteInput" 
                                 @clear="clearInput" @charge="charge"
                                 @updateExternalType="setExternalType"
-                                @apply="setCreditCard"></payment-input>
+                                @apply="setCreditCard"
+                                @query="queryGiftCard"></payment-input>
                             <shortcut :value="shortcutValue" @input="setPaid"></shortcut>
                         </div>
                     </section>
@@ -540,6 +541,11 @@ export default {
           tip
         });
       });
+    },
+    queryGiftCard() {
+      this.swipeGiftCard(this.giftCard.replace(/\D/g, ""))
+        .then(this.checkGiftCard)
+        .catch(this.exitComponent);
     },
     swipeGiftCard(number) {
       return new Promise((resolve, reject) => {

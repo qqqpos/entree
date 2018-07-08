@@ -18,21 +18,20 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import dialogModule from "../../common/dialog";
+
 export default {
   propt: ["init"],
+  components: { dialogModule },
   data() {
-    return {
-
-    };
+    return {};
   },
-  computed: {
-
-  }
+  computed: {}
 };
 </script>
 
 <style scoped>
-
 </style>
 
 

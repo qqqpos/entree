@@ -306,7 +306,7 @@ td.amount {
 
 .editor header {
   border-bottom: 1px solid #eee;
-  padding: 5px 10px 5px 25px;
+  padding: 6px 10px 2px 25px;
   display: flex;
   height: 40px;
   align-items: center;

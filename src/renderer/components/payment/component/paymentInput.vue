@@ -3,16 +3,16 @@
         <div class="inner">
             <div class="field" id="paid" @click="$emit('changeAnchor','paid')" data-format="decimal">
                 <h3 class="text">{{$t('text.pay')}}</h3>
-                <span class="value">{{paid}}</span>
+                <span class="value"><i class="fas fa-dollar-sign space"></i>{{paid}}</span>
             </div>
             <div class="field" id="tip" @click="$emit('changeAnchor','tip')" data-format="decimal">
                 <h3 class="text">{{$t('text.tip')}}</h3>
-                <span class="value">{{tip}}</span>
+                <span class="value"><i class="fas fa-dollar-sign space"></i>{{tip}}</span>
             </div>  
             <template v-if="type === 'CASH'">
                 <div class="field">
                     <h3 class="text">{{$t('text.changeDue')}}</h3>
-                    <span class="value">{{changeDue | decimal}}</span>
+                    <span class="value"><i class="fas fa-dollar-sign space"></i>{{changeDue | decimal}}</span>
                 </div>    
                 <div class="field relative">
                     <h3 class="text">{{$t('title.evenSplit')}}</h3>
@@ -66,7 +66,7 @@
                 </div>  
                 <div class="field" id="balance">
                   <h3 class="text">{{$t('text.balance')}}</h3>
-                  <span></span>
+                  <span class="value"><i class="fas fa-dollar-sign space"></i>0.00</span>
                 </div> 
               </template>
               <template v-else>
@@ -76,7 +76,7 @@
                 </div>  
                 <div class="field" id="balance">
                   <h3 class="text">{{$t('text.balance')}}</h3>
-                  <span class="value">{{giftCard.balance | decimal}}</span>
+                  <span class="value"><i class="fas fa-dollar-sign space"></i>{{giftCard.balance | decimal}}</span>
                 </div> 
               </template>
             </template>
@@ -84,7 +84,8 @@
         <aside class="padCtrl">
             <div @click="$emit('delete')">&#8592;</div> 
             <div @click="$emit('clear')">C</div>
-            <div @click="$emit('charge')" :class="{disabled:paid === '0.00'}">&#8626;</div>
+            <div @click="$emit('query')" v-if="type === 'GIFT' && typeof giftCard === 'string'"><i class="fas fa-search"></i></div>
+            <div @click="$emit('charge')" :class="{disabled:paid === '0.00'}" v-else>&#8626;</div>
         </aside> 
     </div>
 </template>
@@ -274,6 +275,8 @@ input[type="text"],
   background: #3f51b5;
 }
 
+.fa-search,
+.field.active i,
 .field.active .value,
 .field.active .text,
 .field.active .fa-history {

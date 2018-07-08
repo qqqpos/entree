@@ -15,7 +15,7 @@
               <div class="customer relative">
                 <h3>{{ticket.customer.name}}</h3>
                 <h5>{{ticket.customer.phone | tel}}</h5>
-                <p>$ {{ticket.payment.due}}</p>
+                <p>$ {{ticket.payment.due | decimal}}</p>
               </div>
               <div class="info">
                 <span class="pass">{{ticket.time | fromNow}}</span>
@@ -141,7 +141,7 @@ export default {
       this.$socket.emit("[INVOICE] UPDATE", order, true);
     },
     split() {
-      this.$open("split");
+      this.$open("splitModule");
     },
     voidTicket() {
       const prompt = {
@@ -246,11 +246,11 @@ ul {
 
 li {
   display: flex;
-  width: 350px;
+  width: 340px;
   height: 68px;
   background: #fff;
   margin: 4px;
-  padding: 5px;
+  padding: 5px 14px 5px 5px;
   color: #666;
   filter: opacity(0.6) grayscale(0.8);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -276,10 +276,10 @@ li .wrap {
 }
 
 .customer {
-  height: 42px;
-  padding: 0 0 5px;
+  height: 34px;
+  padding: 5px 0 5px;
   color: #3c3c3c;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px dashed rgb(224, 224, 224);
 }
 
 .customer p {
