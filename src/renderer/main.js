@@ -17,144 +17,21 @@ import util from "./plugin/util";
 import VueBus from "./plugin/bus";
 import Trend from "vuetrend";
 import Bars from "vuebars";
+import { Mask, OuterClick } from "./plugin/directive"
 
 Vue.use(Electron);
 Vue.use(VueBus);
 Vue.use(Trend);
 Vue.use(Bars);
-Vue.use(VueTouch, { name: "v-touch" });
 Vue.use(util);
 Vue.use(i18n);
+Vue.use(VueTouch, { name: "v-touch" });
+
+Vue.directive('mask', Mask);
+Vue.directive('outer-click', OuterClick);
 
 Vue.config.debug = true;
 window.moment = moment;
-
-Vue.directive("mask", function (el, binding) {
-  if (binding.expression) {
-    // console.log(binding.expression)
-    // const mask = binding.expression;
-    // const value = el.value.split("");
-
-    // let index = 0;
-
-    // el.value = mask.split("").map((char, i) => {
-    //   if (char === '#') {
-    //     for (let i = 0; i < value.length; i++) {
-    //       if (isNumber(value[i])) {
-    //         index = i + 1;
-    //         return value[i]
-    //       }
-    //     }
-    //   } else {
-    //     return char
-    //   }
-    // }).join("");
-
-    // dispatch();
-  }
-
-  if (binding.modifiers.card) {
-    const card = el.value.replace(/\s/, "");
-    const group = card.match(/(\d{1,4})/g);
-    if (group) {
-      verify(card);
-
-      el.value = group.slice(0, 4).join(" ");
-
-      dispatch();
-    }
-  }
-
-  if (binding.modifiers.date) {
-    const date = el.value.replace(/D+/g, "");
-    const group = date.match(/(\d{1,2})/g);
-    if (group) {
-      el.value = group.slice(0, 2).join("/");
-
-      dispatch();
-
-      if (date.length === 4 && binding.modifiers.check) {
-        const [YY, MM] = moment().format("YY,MM").split(",");
-        const [mm, yy] = group;
-
-        (YY + MM < yy + mm) ? el.classList.remove("invalid") : el.classList.add("invalid");
-      } else {
-        el.classList.remove("invalid")
-      }
-    }
-  }
-
-  function verify(number) {
-    if (number.length >= 15) {
-      /**
-       * Luhn algorithm in JavaScript: validate credit card number supplied as string of numbers
-       * @author ShirtlessKirk. Copyright (c) 2012.
-       * @license WTFPL (http://www.wtfpl.net/txt/copying)
-       */
-      const valid = (function (arr) {
-        return function (card) {
-          var
-            len = card.length,
-            bit = 1,
-            sum = 0,
-            val;
-
-          while (len) {
-            val = parseInt(card.charAt(--len), 10);
-            sum += (bit ^= 1) ? arr[val] : val;
-          }
-
-          return sum && sum % 10 === 0;
-        };
-      }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]))(number);
-
-      el.dataset.valid = valid;
-
-      if (binding.modifiers.check)
-        valid ? el.classList.remove("invalid") : el.classList.add("invalid");
-
-    } else {
-      el.classList.remove("invalid");
-    }
-  }
-
-
-  function dispatch() {
-    setTimeout(() => {
-      const e = document.createEvent("HTMLEvents");
-      e.initEvent("input", true, true);
-      el.dispatchEvent(e);
-    }, 0)
-  }
-})
-
-Vue.directive("outer-click", {
-  bind: function (el, binding, vNode) {
-    if (typeof binding.value !== "function") {
-      const component = vNode.context.name;
-      let warn = `[Vue-outer-click:] provided expression '${
-        binding.expression
-        }' is not a function.`;
-      if (component) {
-        warn += `Found in component '${component}'`;
-      }
-      console.warn(warn);
-    }
-    const bubble = binding.modifiers.bubble;
-    const handler = e => {
-      if (bubble || (!el.contains(e.target) && el !== e.target)) {
-        binding.value(e);
-      }
-    };
-    el.__vueOuterClick__ = handler;
-    document.addEventListener("click", handler);
-  },
-
-  unbind: function (el, binding) {
-    document.removeEventListener("click", el.__vueOuterClick__);
-    el.__vueOuterClick__ = null;
-  }
-});
 
 //change moment default text
 moment.updateLocale("en", {

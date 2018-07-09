@@ -69,6 +69,7 @@ export default {
       switch (type) {
         case "CHANGE.ITEM_QTY_LESS":
         case "CHANGE.ITEM_QTY_MORE":
+        case "CHANGE.ITEM_PRICE":
           return this.$t(type, value[0][this.language], value[1], value[2])
             .split("|")
             .map(text => `<span>${text}</span>`)
@@ -80,11 +81,7 @@ export default {
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
-        case "CHANGE.ITEM_PRICE":
-          return this.$t(type, value[0][this.language], value[1], value[2])
-            .split("|")
-            .map(text => `<span>${text}</span>`)
-            .join("");
+
         case "CHANGE.ITEM_SIDE":
           return this.$t(
             type,
@@ -109,24 +106,25 @@ export default {
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
-        case "CHANGE.GUEST":
-        case "CHANGE.SERVER":
-          return this.$t(type, value[0], value[1])
-            .split("|")
-            .map(text => `<span>${text}</span>`)
-            .join("");
+        // case "CHANGE.GUEST":
+        // case "CHANGE.SERVER":
+        // case "CHANGE.DISCOUNT":
+        // case "CHANGE.DELIVERY_CHARGE":
+        // case "CHANGE.GRATUITY":
+        // case "CHANGE.COUPON_APPLY":
+        // case "CHANGE.COUPON_REMOVE":
+        // case "CHANGE.NAME":
+        // case "CHANGE.CITY":
+        // case "CHANGE.ADDRESS":
+        // case "CHANGE.EXTENSION":
+        //   return this.$t(type, value[0], value[1])
+        //     .split("|")
+        //     .map(text => `<span>${text}</span>`)
+        //     .join("");
         case "CHANGE.ORDER_VOID":
-        case "ORDER_RESTORED":
+        case "CHANGE.ORDER_RESTORED":
           return this.$t(type);
-        case "CHANGE.DISCOUNT":
-        case "CHANGE.DELIVERY_CHARGE":
-        case "CHANGE.GRATUITY":
-        case "CHANGE.COUPON_APPLY":
-        case "CHANGE.COUPON_REMOVE":
-        case "CHANGE.NAME":
-        case "CHANGE.CITY":
-        case "CHANGE.ADDRESS":
-        case "CHANGE.EXTENSION":
+        default:
           return this.$t(type, value[0], value[1])
             .split("|")
             .map(text => `<span>${text}</span>`)

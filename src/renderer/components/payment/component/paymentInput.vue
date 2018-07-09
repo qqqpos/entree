@@ -85,7 +85,7 @@
             <div @click="$emit('delete')">&#8592;</div> 
             <div @click="$emit('clear')">C</div>
             <div @click="$emit('query')" v-if="type === 'GIFT' && typeof giftCard === 'string'"><i class="fas fa-search"></i></div>
-            <div @click="$emit('charge')" :class="{disabled:paid === '0.00'}" v-else>&#8626;</div>
+            <div @click="$emit('charge')" :class="{disabled:ban}" v-else>&#8626;</div>
         </aside> 
     </div>
 </template>
@@ -115,6 +115,16 @@ export default {
       externalType: "",
       creditCards: []
     };
+  },
+  computed: {
+    ban() {
+      return (
+        this.paid === "0.00" ||
+        (this.type === "CREDIT" &&
+          this.creditCard.length > 0 &&
+          this.expDate.length !== 4)
+      );
+    }
   },
   created() {
     const { defaults = {} } = this.$store.getters.config;
@@ -242,7 +252,8 @@ input[type="text"],
 .check {
   position: absolute;
   bottom: 17px;
-  color: yellow;
+  left: 23px;
+  color: #ffc107;
   display: none;
 }
 
@@ -276,10 +287,10 @@ input[type="text"],
 }
 
 .fa-search,
-.field.active i,
 .field.active .value,
 .field.active .text,
-.field.active .fa-history {
+.field.active .fa-history,
+.field.active i.fa-dollar-sign {
   color: #fff;
 }
 
@@ -294,15 +305,17 @@ ul.cardList {
   position: absolute;
   left: 7px;
   bottom: 83px;
-  background: #fff;
-  width: 264px;
+  background: #fafafa;
+  width: 250px;
   box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.3);
   border-radius: 4px 4px 0 0;
   z-index: 1;
+  padding: 7px;
 }
 
 .cardList li {
   padding: 7px 5px;
+  border-radius: 6px;
 }
 
 .cardList i {

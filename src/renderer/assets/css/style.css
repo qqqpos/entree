@@ -18,16 +18,11 @@ ul {
 }
 
 #app {
-  background: url(../image/0.jpg) center center;
+  background: url(../image/1.jpg) center center;
   background-size: cover;
   width: 1024px;
   height: 768px;
   user-select: none;
-}
-
-#app.admin {
-  background: url(../image/17.jpg) center center;
-  background-size: cover;
 }
 
 button:disabled {

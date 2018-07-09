@@ -80,7 +80,7 @@ export default {
       componentData: null,
       component: null,
       opts: this.init.opts.map(opt => ({
-        number: (opt.card[0] + "********").replace(/(.{4})/g, "$1 ").trim(),
+        number: opt.card[0].replace(/(.{4})/g, "$1 ").trim(),
         exp: opt.card[1],
         cvc: opt.card[2],
         cipher: opt.cipher,
@@ -146,7 +146,7 @@ export default {
           {
             card: [this.card.replace(" ", "").slice(0, 8), this.exp, this.cvc],
             cipher,
-            lastUse: +new Date()
+            lastUse: Date.now()
           },
           () => {
             this.opts.push({
