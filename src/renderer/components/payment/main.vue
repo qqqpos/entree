@@ -268,7 +268,7 @@ export default {
     applyDefaultSetup() {
       this.isThirdPartyPayment = this.init.hasOwnProperty("thirdPartyPayment")
         ? this.init.thirdPartyPayment
-        : !this.station.terminal || this.order.source !== "POS";
+        : this.order.source !== "POS";
 
       if (
         this.station.terminal &&
@@ -277,7 +277,18 @@ export default {
         //apply credit card info to payment module
       }
 
-      const defaultType = this.isThirdPartyPayment ? "THIRD" : undefined;
+      const {
+        defaults = {
+          paymentType: "CASH"
+        }
+      } = this.config;
+
+      const defaultType = this.isThirdPartyPayment
+        ? "THIRD"
+        : defaults.paymentType === "CREDIT" && !this.station.terminal
+          ? "CASH"
+          : defaults.paymentType;
+
       this.externalPaymentType = this.isThirdPartyPayment
         ? this.order.source
         : null;
