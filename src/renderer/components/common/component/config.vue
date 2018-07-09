@@ -137,7 +137,7 @@ export default {
       })
         .then(({ amount }) => {
           if (amount > 0) {
-            this.setOrder({ deliveryFee: amount });
+            this.setOrder({ deliveryFee: parseFloat(amount) });
           } else {
             delete this.order.deliveryFee;
             this.order.payment.delivery = 0;

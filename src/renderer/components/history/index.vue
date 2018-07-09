@@ -195,26 +195,27 @@ export default {
         };
 
         this.$dialog(prompt)
-          .then(this.openComponent.bind(null, "SEARCH"))
+          .then(this.searchInvoice)
           .catch(this.exitComponent);
       } else {
         const index = this.findTicketPage(ticket);
         this.$bus.emit("SET_CURRENT_PAGE", index);
-        this.$nextTick(() => this.setViewOrder(this.targetInvoices[target]));
+        this.$nextTick(() => this.setViewOrder(this.orders[target]));
       }
     },
     findTicketPage(target) {
-      const pages = Math.ceil(this.targetInvoices.length / 30);
-      let index = this.targetInvoices.length - 1;
+      const pages = Math.ceil(this.orders.length / 30);
+      let index = 0;
       let page = 1;
       let count = 0;
-      while (this.targetInvoices[index].number !== target) {
+
+      while (this.orders[index].number !== target) {
         count++;
         if (count === 30) {
           count = 0;
           page++;
         }
-        index--;
+        index++;
       }
       return page;
     },

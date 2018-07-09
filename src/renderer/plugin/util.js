@@ -213,7 +213,7 @@ export default {
             delivery += parseFloat(surcharge.fee);
         }
 
-        delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliverFee) : delivery;
+        delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliveryFee) : delivery;
 
         return delivery;
       }
