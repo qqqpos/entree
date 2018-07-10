@@ -48,7 +48,7 @@
           </ul>
         </transition>
       </div>
-      <div id="drag"></div>
+      <div id="drag" v-if="$route.name ==='Login'"></div>
       <div :is="component" :init="componentData"></div>
     </div>
   </transition>

@@ -66,7 +66,7 @@ export const setCurrentTable = ({ commit }, info) => commit(types.SET_CURRENT_TA
 
 export const resetCurrentTable = ({ commit }) => commit(types.RESET_CURRENT_TABLE);
 
-export const setViewOrder = ({ commit }, order) => commit(types.SET_VIEW_ORDER, JSON.parse(JSON.stringify(order)));
+export const setViewOrder = ({ commit }, order) => commit(types.SET_VIEW_ORDER, order);
 
 export const setDevice = ({ commit }, data) => commit(types.SET_DEVICE, data);
 

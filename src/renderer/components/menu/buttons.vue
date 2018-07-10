@@ -339,7 +339,7 @@ export default {
       return new Promise((next, stop) => {
         const pendingItems = this.order.content.filter(item => item.pending);
 
-        if (print && pendingItems.length > 0) {
+        if (!this.app.newTicket && print && pendingItems.length > 0) {
           const prompt = {
             title: "dialog.printScheduleItems",
             msg: "dialog.schedulePrintTaskOngoing",
@@ -395,18 +395,23 @@ export default {
           ? print ? 1 : 0
           : print ? this.order.printCount + 1 : this.order.printCount;
 
+        const todo = !!document.querySelector(".item.todo");
         let order = this.combineOrderInfo({ printCount });
 
         if (this.app.newTicket) {
-          const todo = !!document.querySelector(".item.todo");
           if (todo) {
             let items = [];
-            order.content.forEach(item => {
-              if (item.pending) {
-                items.push(clone(item));
-                item.print = true;
-              }
-            });
+
+            print
+              ? order.content.forEach(item => {
+                  if (item.pending) {
+                    items.push(clone(item));
+                    item.print = true;
+                  }
+                })
+              : order.content.forEach(item =>
+                  Object.assign(item, { print: false, pending: false })
+                );
 
             if (this.ticket.type !== "DINE_IN" && this.ticket.type !== "BAR") {
               this.$socket.emit("[INVOICE] SAVE", order, false, content => {

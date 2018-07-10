@@ -11,7 +11,7 @@
         <nav class="filter">
           <dropdown label="filter.order" :options="types" filter="filterType"></dropdown>
           <dropdown label="filter.cashier" :options="cashiers" filter="filterCashier"></dropdown>
-          <dropdown label="filter.terminal" :options="terminals" filter="filterTerminal"></dropdown>
+          <dropdown label="filter.server" :options="servers" filter="filterServer"></dropdown>
           <div class="picker">
             <i class="fa fa-angle-left" @click="prev"></i>
             <span class="date">{{date}}</span>
@@ -134,8 +134,10 @@ export default {
           t => t.order && t.order.cashier === this.filterCashier
         );
 
-      if (this.filterTerminal)
-        records = records.filter(t => t.station === this.filterTerminal);
+      if (this.filterServer)
+        records = records.filter(
+          t => t.order && t.order.server === this.filterServer
+        );
 
       return records;
     },
@@ -174,11 +176,11 @@ export default {
       component: null,
       adjustable: false,
       portionDisplay: false,
-      filterTerminal: null,
+      filterServer: null,
       filterCashier: null,
       filterType: null,
-      terminals: [],
       cashiers: [],
+      servers: [],
       types: [],
       devices: [],
       terminal: null,
@@ -234,20 +236,19 @@ export default {
       this.transactions = transactions;
       this.portionDisplay = !allowViewAll;
 
-      let terminals = new Set();
       let cashiers = new Set();
+      let servers = new Set();
       let types = new Set();
 
       transactions.forEach(t => {
-        terminals.add(t.station);
-
         if (t.order) {
           types.add(t.order.type);
           t.order.cashier && cashiers.add(t.order.cashier);
+          t.order.server && servers.add(t.order.server);
         }
       });
 
-      this.terminals = Array.from(terminals).map(t => ({ text: t, value: t }));
+      this.servers = Array.from(servers).map(t => ({ text: t, value: t }));
       this.cashiers = Array.from(cashiers).map(t => ({ text: t, value: t }));
       this.types = Array.from(types).map(t => ({
         text: this.$t("type." + t),

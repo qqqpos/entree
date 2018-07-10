@@ -32,7 +32,7 @@
             <inputer title="text.price" v-model="item.price" @keydown.enter.native="save" :class="{disable:item.marketPrice}">
               <i class="fa fa-ellipsis-v price" @click="openPriceEditor"></i>
             </inputer>
-            <i class="fas fa-exclamation-circle tip2" v-show="item.usEN === item.zhCN" :title="$t('tip.marketPriceInUse')"></i>
+            <i class="fas fa-exclamation-circle tip2" v-show="item.marketPrice" :title="$t('tip.marketPriceInUse')"></i>
             <selector title="text.taxClass" v-model="item.taxClass" :opts="taxes" :editable="false"></selector>
             <div class="options">
               <label class="title">{{$t('setting.print')}}</label>

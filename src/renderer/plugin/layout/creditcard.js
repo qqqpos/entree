@@ -76,7 +76,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
     const due = parseFloat(trans.amount.due) > 0 ? `<p class="due"><span class="text">Due:</span><span class="value">$${trans.amount.due}</span></p>` : "";
     const ticketInfo = (trans.order && trans.order.hasOwnProperty("type") && trans.order.hasOwnProperty("number")) ?
       `<p><span class="text">Ticket</span><span class="value">( # ${trans.order.number} ) ${trans.order.type.replace("_", " ")}</span></p>\
-       <p><span class="text">Server</span><span class="value">${trans.order.server}</span></p>` : "";
+       <p><span class="text">${trans.order.server ? 'Server' : 'Cashier'}</span><span class="value">${trans.order.server || trans.order.cashier}</span></p>` : "";
 
     return `<section class="header">\
               <div class="store">\

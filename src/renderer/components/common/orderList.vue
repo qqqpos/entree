@@ -80,8 +80,8 @@
       <div class="fnWrap">
         <button class="fn fas fa-credit-card" @click="openVault" :disabled="!customer._id"></button>
         <button class="fn fas fa-ellipsis-h" @click="separator" :disabled="$route.name !== 'Menu'"></button>
-        <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'"></button>
-        <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="!app.newTicket || order.type === 'HIBACHI'"></button>
+        <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'" :disabled="spooler.length === 0"></button>
+        <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="disableTodo"></button>
         <button class="fn far fa-keyboard" @click="openKeyboard" :disabled="$route.name !== 'Menu'"></button>
       </div>
       <div class="settle" @click="openConfig">
@@ -203,7 +203,7 @@ export default {
       const { ledDisplay } = this.station.customerDisplay;
 
       //if (this.order.type === "WALK_IN" || this.order.type === "PICK_UP")
-        this.externalDisplaySync = ledDisplay.enable;
+      this.externalDisplaySync = ledDisplay.enable;
     },
     resetHighlight() {
       let dom = document.querySelector("li.item.active");
@@ -265,45 +265,39 @@ export default {
       this.spooler.push(item);
     },
     directPrint() {
+      if(this.order.date !== today()) return;
       if (this.spooler.length === 0) return;
 
       let error = false;
       let order = JSON.parse(JSON.stringify(this.order));
-      let items = order.content.map(item => {
-        if (item.pending) item.print = true;
-        return item;
-      });
 
-      const remain = items.filter(item => !item.print).length;
-      const uniques = order.content.map(item => item.unique);
+      const remain = order.content.filter(item => !item.print && !item.pending)
+        .length;
+      const pendings = order.content.filter(item => item.pending);
+      const uniques = pendings.map(item => item.unique);
 
-      order.content = this.spooler.filter(item =>
-        uniques.includes(item.unique)
+      Printer.setTarget("Order").print(
+        Object.assign(order, {
+          content: pendings,
+          schedule: Date.now()
+        })
       );
 
-      order.schedule = Date.now();
-      Printer.setTarget("Order").print(order);
+      this.spooler = []; 
 
-      this.spooler.forEach(item => (item.print = true));
-      if (remain === 0) {
-        Object.assign(this.order, { print: true });
-      } else {
-        const remainItem =
-          remain > 0
-            ? this.$t("dialog.remainPrintItem", remain)
-            : this.$t("dialog.noRemainItem");
+      const remainItem =
+        remain > 0
+          ? this.$t("dialog.remainPrintItem", remain)
+          : this.$t("dialog.noRemainItem");
 
-        const prompt = {
-          type: "info",
-          title: ["dialog.itemSent", order.number],
-          msg: ["dialog.printResult", order.content.length, remainItem],
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
-        };
+      const prompt = {
+        type: "info",
+        title: ["dialog.itemSent", order.number],
+        msg: ["dialog.printResult", order.content.length, remainItem],
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
 
-        this.$dialog(prompt).then(this.exitComponent);
-      }
-
-      this.spooler = [];
+      this.$dialog(prompt).then(this.exitComponent);
       this.$socket.emit("[INVOICE] ITEM_PRINT", order);
     },
     move(e) {
@@ -422,6 +416,12 @@ export default {
       const items = this.order.content.map(i => i._id);
 
       return this.prevsItems.filter(({ _id }) => !items.includes(_id));
+    },
+    disableTodo() {
+      return (
+        this.order.type === "HIBACHI" ||
+        this.undoneItems !== this.order.content.length
+      );
     },
     ...mapGetters([
       "app",

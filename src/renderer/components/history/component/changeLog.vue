@@ -13,19 +13,20 @@
                     <li v-for="(change,index) in init.records" :key="index" :data-time="change.time | moment('HH:mm')">
                         <p class="info"><i class="fas fa-user-edit space light"></i>{{change.operator}}</p>
                         <p class="changes" v-if="change.actions.length">
-                          <span class="f2"><i class="fas fa-print space light" v-show="change.isPrint"></i>{{$t('CHANGE.CHANGES',change.actions.length)}}</span>
+                          <span class="diff">{{$t('CHANGE.CHANGES',change.actions.length)}}</span>
                           <template v-if="change.priceChange !== 0">
-                            <span v-if="change.priceChange > 0" class="f3 gain"><i class="fas fa-sort-up space"></i>{{change.priceChange | decimal}}</span>
-                            <span v-if="change.priceChange < 0" class="f3 lose"><i class="fas fa-sort-down space"></i>{{change.priceChange | decimal}}</span>
+                            <span v-if="change.priceChange > 0" class="gain"><i class="fas fa-sort-up space"></i>{{change.priceChange | decimal}}</span>
+                            <span v-if="change.priceChange < 0" class="lose"><i class="fas fa-sort-down space"></i>{{change.priceChange | decimal}}</span>
                           </template>
                         </p>
-                        <p class="changes" v-else><i class="fas fa-print space light" v-show="change.isPrint"></i>{{$t(index === 0 ?'CHANGE.CREATE_ORDER' : 'CHANGE.UNCHANGED')}}</p>
+                        <p class="changes" v-else>{{$t(index === 0 ?'CHANGE.CREATE_ORDER' : 'CHANGE.UNCHANGED')}}</p>
                         <div class="link" @click="view(change.actions)" v-show="change.actions.length">
                             <i class="fas fa-list light"></i>
                             <span>{{$t('text.recordDetail')}}</span>
                         </div>
                         <div class="view" @click="preview(change.order)">
-                            <i class="fas fa-file-invoice light"></i>
+                            <i class="fas fa-print light" v-if="change.isPrint"></i>
+                            <i class="fas fa-file-invoice light" v-else></i>
                             <span>{{$t('text.preview')}}</span>
                         </div>
                     </li>
@@ -81,7 +82,6 @@ export default {
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
-
         case "CHANGE.ITEM_SIDE":
           return this.$t(
             type,
@@ -97,6 +97,11 @@ export default {
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
+        case "CHANGE.ITEM_PRINT":
+          return this.$t(type, value.length)
+            .split("|")
+            .map(text => `<span>${text}</span>`)
+            .join("") + '<ul>' +  value.map(item=>`<li><span>${item.qty} x </span><span>${item[this.language]}</span></li>`).join("") + '</ul>';
         case "CHANGE.ORDER_TYPE":
           return this.$t(
             type,
@@ -106,21 +111,6 @@ export default {
             .split("|")
             .map(text => `<span>${text}</span>`)
             .join("");
-        // case "CHANGE.GUEST":
-        // case "CHANGE.SERVER":
-        // case "CHANGE.DISCOUNT":
-        // case "CHANGE.DELIVERY_CHARGE":
-        // case "CHANGE.GRATUITY":
-        // case "CHANGE.COUPON_APPLY":
-        // case "CHANGE.COUPON_REMOVE":
-        // case "CHANGE.NAME":
-        // case "CHANGE.CITY":
-        // case "CHANGE.ADDRESS":
-        // case "CHANGE.EXTENSION":
-        //   return this.$t(type, value[0], value[1])
-        //     .split("|")
-        //     .map(text => `<span>${text}</span>`)
-        //     .join("");
         case "CHANGE.ORDER_VOID":
         case "CHANGE.ORDER_RESTORED":
           return this.$t(type);
@@ -249,5 +239,9 @@ li:nth-child(even) {
 .gain i {
   color: #4caf50;
   vertical-align: bottom;
+}
+
+.diff {
+  width: 140px;
 }
 </style>

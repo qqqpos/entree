@@ -118,8 +118,8 @@ export default {
           msg: "dialog.editPrevOrderTip",
           buttons: [{ text: "button.confirm", fn: "reject" }]
         };
-
-        this.date === this.today
+        
+        this.order.date === this.today
           ? next()
           : this.approval("permission", "anydate") ? next() : stop(prompt);
       });
@@ -186,11 +186,14 @@ export default {
             this.edit();
           });
       } else {
-        const { type, number, customer } = this.order;
+        const { _id, type, number, customer } = this.order;
+
+        const order = this.history.find(invoice => invoice._id === _id);
 
         this.setApp({ newTicket: false });
         this.setCustomer(customer);
         this.setTicket({ type, number });
+        this.setOrder(order);
 
         this.$router.push({ path: "/main/menu" });
       }
@@ -437,7 +440,7 @@ export default {
     ])
   },
   computed: {
-    ...mapGetters(["op", "order", "station", "isEmptyTicket"])
+    ...mapGetters(["op", "order", "station", "history", "isEmptyTicket"])
   }
 };
 </script>

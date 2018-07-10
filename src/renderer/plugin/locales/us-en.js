@@ -122,6 +122,7 @@ export default {
     'ITEM_CHOICE_SET': 'The subitem of|{i}|is modified',
     'ITEM_ADD': 'Add|{i}|of item|{i}',
     'ITEM_REMOVE': 'Remove|{i}|of item|{i}',
+    'ITEM_PRINT': 'Print|{i}|of Item',
     'COUPON_APPLY': 'New coupon apply cause balance due change from|$ {i}|to|$ {i}',
     'COUPON_REMOVE': 'Remove exist coupon cause balance due change from|$ {i}|to|$ {i}',
     'DISCOUNT': 'Ticket discount has changed. Discount amount from|$ {i}|to|$ {i}',
@@ -663,7 +664,7 @@ export default {
     remainPrintItem: "Remain {i} items unprinted",
     noRemainItem: "All items are printed",
     itemSent: "Item Print From Ticket #{i}",
-    printResult: "Send {i} items, {i}",
+    printResult: "Ticket has {i} items. {i}",
     tableSectionRemove: "Table Section Remove",
     tableSectionRemoveTip:
       "Are you sure you are going to remove this table section?",

@@ -1,7 +1,7 @@
 {
   "name": "unitedpos",
-  "version": "0.8.98",
-  "require": "0.8.97",
+  "version": "0.8.99",
+  "require": "0.8.99",
   "stage": "Beta",
   "description": "UnitedPOS point of sale system",
   "author": "Xuewu Huang <huangxuewu@gmail.com>",

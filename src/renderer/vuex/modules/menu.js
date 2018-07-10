@@ -190,13 +190,10 @@ const mutations = {
 
     let { single } = item;
 
-    if (isNumber(price)) {
-      single = parseFloat(price)
-    } else if (isNumber(item.price[index])) {
-      single = parseFloat(item.price[index]);
-    } else if (isNumber(extra)) {
-      single = parseFloat(item.price[0]) + parseFloat(extra);
-    }
+    single = parseFloat(price)
+      || parseFloat(item.price[index])
+      || parseFloat(item.price[0]) + parseFloat(extra)
+      || parseFloat(item.price[0]);
 
     if (item.qty === 1) {
       if (index === item.sideIndex && !data.function) {
@@ -233,7 +230,7 @@ const mutations = {
           single,
           sideIndex: index,
           total: single.toFixed(2),
-          unique: String.random(),
+          unique: String().random(),
           side: { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` },
         });
 
