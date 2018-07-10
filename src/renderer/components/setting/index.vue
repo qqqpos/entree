@@ -17,6 +17,12 @@
         <figcaption>{{$t('setting.seat')}}</figcaption>
         <p>{{$t('setting.seatTip')}}</p>
       </router-link>
+      <router-link tag="figure" :to="{name:'Setting.online'}">
+        <div class="ribbon red"><span>New</span></div>
+        <i class="fas fa-2x fa-globe-americas"></i>
+        <figcaption>{{$t('setting.onlineOrder')}}</figcaption>
+        <p>{{$t('setting.onlineOrderTip')}}</p>
+      </router-link>
       <router-link tag="figure" :to="{name:'Setting.printer'}">
         <i class="fa fa-2x fa-print"></i>
         <figcaption>{{$t('setting.print')}}</figcaption>
@@ -27,11 +33,6 @@
         <figcaption>{{$t('setting.operator')}}</figcaption>
         <p>{{$t('setting.operatorTip')}}</p>
       </router-link>
-      <router-link tag="figure" :to="{name:'Setting.database'}">
-        <i class="fa fa-2x fa-database"></i>
-        <figcaption>{{$t('setting.database')}}</figcaption>
-        <p>{{$t('setting.databaseTip')}}</p>
-      </router-link>
       <router-link tag="figure" :to="{name:'Setting.sales'}">
         <i class="fas fa-2x fa-chart-line"></i>
         <figcaption>{{$t('setting.sales')}}</figcaption>
@@ -41,6 +42,11 @@
         <i class="fas fa-2x fa-chart-pie"></i>
         <figcaption>{{$t('setting.chart')}}</figcaption>
         <p>{{$t('setting.chartTip')}}</p>
+      </router-link>
+      <router-link tag="figure" :to="{name:'Setting.database'}">
+        <i class="fa fa-2x fa-database"></i>
+        <figcaption>{{$t('setting.database')}}</figcaption>
+        <p>{{$t('setting.databaseTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.debug'}">
         <i class="fa fa-2x fa-bug"></i>
@@ -115,6 +121,7 @@ figure {
   width: 170px;
   border-radius: 4px;
   box-shadow: var(--shadow);
+  position: relative;
 }
 
 figure:active {
@@ -142,5 +149,82 @@ p {
 
 .spec {
   width: 97%;
+}
+
+.ribbon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
+}
+
+.ribbon span {
+  font-size: 10px;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  line-height: 20px;
+  transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #79a70a;
+  background: linear-gradient(#9bc90d 0%, #79a70a 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 19px;
+  right: -21px;
+  text-shadow: 0 1px 2px #333;
+}
+
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #79a70a;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79a70a;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0%;
+  top: 100%;
+  z-index: -1;
+  border-right: 3px solid #79a70a;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79a70a;
+}
+
+.red span {
+  background: linear-gradient(#f70505 0%, #8f0808 100%);
+}
+.red span::before {
+  border-left-color: #8f0808;
+  border-top-color: #8f0808;
+}
+.red span::after {
+  border-right-color: #8f0808;
+  border-top-color: #8f0808;
+}
+
+.blue span {
+  background: linear-gradient(#2989d8 0%, #1e5799 100%);
+}
+.blue span::before {
+  border-left-color: #1e5799;
+  border-top-color: #1e5799;
+}
+.blue span::after {
+  border-right-color: #1e5799;
+  border-top-color: #1e5799;
 }
 </style>

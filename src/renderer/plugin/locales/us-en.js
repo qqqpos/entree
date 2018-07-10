@@ -1858,5 +1858,13 @@ export default {
     shell: "Shell",
     platform: "Platform",
     servo: "Servo"
+  },
+  online: {
+    adWords: 'AdWords',
+    config: "Config",
+    performance: "Perf.",
+    history: "History",
+    bill: "Bill",
+    plan: "Plan"
   }
 };

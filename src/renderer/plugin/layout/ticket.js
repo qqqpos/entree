@@ -111,17 +111,7 @@ const preview = function (printer, ticket) {
 };
 
 function createHeader(store, setting, raw) {
-  const {
-    type,
-    time,
-    number,
-    server,
-    cashier,
-    station,
-    table,
-    guest,
-    customer
-  } = raw;
+  const { type, time, number, server, cashier, station, table, guest, customer } = raw;
   const phone = customer.phone
     ? customer.phone.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "$1.$2.$3")
     : null;
@@ -191,8 +181,8 @@ function createList(printer, setting, invoice, preview) {
   const primary = languages.find(t => t.ref === "usEN");
   const secondary = languages.find(t => t.ref === "zhCN");
 
-  let content = [],
-    items = [];
+  let content = [];
+  let items = [];
 
   if (preview) mode = "preview";
 
@@ -266,8 +256,8 @@ function createList(printer, setting, invoice, preview) {
                 break;
               case "NEW":
                 if (printBothText) {
-                  item.zhCN = "☐ " + item.zhCN;
-                  item.usEN = "☐ " + item.usEN;
+                  item.zhCN = firstLineChinese ? "☐ " + item.zhCN : item.zhCN;
+                  item.usEN = firstLineEnglish ? "☐ " + item.usEN : item.usEN;
                 } else {
                   item.zhCN = "☐ " + item.zhCN;
                   item.usEN = "☐ " + item.usEN;
@@ -282,16 +272,14 @@ function createList(printer, setting, invoice, preview) {
     default:
       items = !invoice.print
         ? list.filter(item => item.printer[printer])
-        : list.filter(
-          item => item.printer[printer] && item.diffs !== "REMOVED"
-        );
+        : list.filter(item => item.printer[printer] && item.diffs !== "REMOVED");
   }
 
   if (items.length === 0) return [];
 
   const renderQty = items.filter(i => i.qty > 1 || !isNumber(i.qty)).length > 0;
 
-  prioritize && items.sort((p, n) => (p.priority || 0) < (n.priority || 0));
+  prioritize && items.sort((p, n) => (p.priority || 0) < (n.priority || 0) ? 1 : -1);
 
   if (categorize) {
     let sorted = [];
@@ -309,9 +297,7 @@ function createList(printer, setting, invoice, preview) {
     }
     for (let category in sorted) {
       if (sorted.hasOwnProperty(category)) {
-        content += `<div class="category"><span class="zhCN">${
-          categoryMap[category]
-          }</span><span class="usEN">${category}</span></div>`;
+        content += `<div class="category"><span class="zhCN">${categoryMap[category]}</span><span class="usEN">${category}</span></div>`;
         content += sorted[category]
           .map(item => mockup(item, renderQty))
           .join("")
@@ -349,48 +335,29 @@ function createList(printer, setting, invoice, preview) {
       : "";
     const diffs = item.diffs || "";
 
-    let chineseItem = "",
-      englishItem = "",
-      chineseSub = "",
-      englishSub = "";
+    let chineseItem = "";
+    let englishItem = "";
+    let chineseSub = "";
+    let englishSub = "";
 
     item.choiceSet.forEach(set => {
       if (set.hasOwnProperty('print') && Array.isArray(set.print) && set.print.length > 0 && !set.print.includes(printer)) return;
       const _qty = set.qty !== 1 ? set.qty + " x " : "";
-      const _price =
-        Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
+      const _price = Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
 
       if (diffs === "REMOVED") {
         chineseSub += enableChinese
-          ? `<p>\
-                <del></del>\
-                <span>${_qty}</span>\
-                <span>${set.zhCN}</span>\
-                <span>${_price}</span>\
-            </p>`
+          ? `<p><del></del><span>${_qty}</span><span>${set.zhCN}</span><span>${_price}</span></p>`
           : "";
         englishSub += enableEnglish
-          ? `<p>\
-                <del></del>\
-                <span>${_qty}</span>\
-                <span>${set.usEN}</span>\
-                <span>${_price}</span>\
-            </p>`
+          ? `<p><del></del><span>${_qty}</span><span>${set.usEN}</span><span>${_price}</span></p>`
           : "";
       } else {
         chineseSub += enableChinese
-          ? `<p>\
-                <span>${_qty}</span>\
-                <span>${set.zhCN}</span>\
-                <span>${_price}</span>\
-            </p>`
+          ? `<p><span>${_qty}</span><span>${set.zhCN}</span><span>${_price}</span></p>`
           : "";
         englishSub += enableEnglish
-          ? `<p>\
-                <span>${_qty}</span>\
-                <span>${set.usEN}</span>\
-                <span>${_price}</span>\
-            </p>`
+          ? `<p><span>${_qty}</span><span>${set.usEN}</span><span>${_price}</span></p>`
           : "";
       }
     });
@@ -522,17 +489,9 @@ function createStyle(setting) {
 function createFooter(config, setting, printer, ticket) {
   if (!ticket.hasOwnProperty("payment")) return "";
 
-  const {
-    tipSuggestion,
-    ticketNumber,
-    tableName,
-    jobTime,
-    tradeMark,
-    geo,
-    content
-  } = setting.control.footer;
   const { enable, percentages } = config.tipSuggestion;
   const { type, payment, coupons, number, table, customer } = ticket;
+  const { tipSuggestion, ticketNumber, tableName, jobTime, tradeMark, geo, content } = setting.control.footer;
 
   let suggestions = "";
 
@@ -569,12 +528,8 @@ function createFooter(config, setting, printer, ticket) {
     .toString();
 
   let settle = [];
-  const applied = payment.applyCoupon || true;
 
-  if (coupons && applied)
-    coupons.forEach(coupon =>
-      settle.push(`<section class="details"><h3>${coupon.alias}</h3></section>`)
-    );
+  coupons.forEach(coupon => settle.push(`<section class="details"><h3>${coupon.alias}</h3><p>${coupon.slogan || ''}</p></section>`));
 
   payment.log.forEach(log => {
     const { type, subType, lfd, paid, change } = log;
@@ -672,9 +627,7 @@ function createFooter(config, setting, printer, ticket) {
           break;
       }
 
-      detail.push(
-        `<p class="${style}"><span class="text">${text}:</span><span class="value">${value}</span></p>`
-      );
+      detail.push(`<p class="${style}"><span class="text">${text}:</span><span class="value">${value}</span></p>`);
     }
   });
 
@@ -703,13 +656,9 @@ function createFooter(config, setting, printer, ticket) {
   return `<footer>\
             <section class="column">\
             <div class="empty">${_geo}</div>\
-            <div class="payment">\
-                ${detail.join("").toString()}
-            </div>\
+            <div class="payment">${detail.join("").toString()}</div>\
             </section>\
-            <div class="settle">\
-            ${suggestions + settle.join("").toString()}
-            </div>\
+            <div class="settle">${suggestions + settle.join("").toString()}</div>\
             <div class="slogan">\
             ${slogan}
             ${extraInfo}

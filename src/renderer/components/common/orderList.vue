@@ -10,19 +10,19 @@
         <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
           <div class="detail">
             <p>
-                <i class="fas fa-user-tie"></i>
+                <i class="fas fa-user-tie light"></i>
                 <span class="filed">{{order.server}}</span>
-                <i class="fas fa-clock"></i>
+                <i class="fas fa-clock light"></i>
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
-                <i class="fas fa-tablets"></i>
+                <i class="fas fa-tablets light"></i>
                 <span class="filed">{{order.table}}</span>
-                <i class="fa fa-users"></i>
+                <i class="fa fa-users light"></i>
                 <span class="name">{{order.guest}}</span>
               </p>
               <p>
-                <i class="fa fa-bullhorn"></i>
+                <i class="fa fa-bullhorn light"></i>
                 <span v-if="undoneItems" class="status">{{$t('text.progressTicket',undoneItems)}}</span>
                 <span v-else class="status">{{$t('text.doneTicket')}}</span>
               </p>
@@ -32,19 +32,19 @@
           <template v-if="order.customer">
             <div class="detail">
               <p>
-                <i class="fas fa-user-tie"></i>
+                <i class="fas fa-user-tie light"></i>
                 <span class="filed">{{order.server}}</span>
-                <i class="fas fa-clock"></i>
+                <i class="fas fa-clock light"></i>
                 <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
               </p>
               <p>
-                <i class="fa fa-phone"></i>
+                <i class="fa fa-phone light"></i>
                 <span class="filed">{{order.customer.phone | phone}}</span>
-                <i class="fas fa-id-badge"></i>
+                <i class="fas fa-id-badge light"></i>
                 <span class="name">{{order.customer.name}}</span>
               </p>
               <p>
-                <i class="fas fa-map-marker-alt"></i>
+                <i class="fas fa-map-marker-alt light"></i>
                 <span>{{order.customer.address}}</span>
               </p>
             </div>
@@ -687,7 +687,6 @@ header.info {
 }
 
 .detail i {
-  color: #607d8b;
   width: 25px;
   text-align: center;
 }

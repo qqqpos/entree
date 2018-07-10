@@ -298,6 +298,33 @@ export default new Router({
               ]
             },
             {
+              path: "online",
+              component: require("../components/setting/online/nav"),
+              children: [
+                {
+                  path: "/",
+                  name: "Setting.online",
+                  component: require("../components/setting/online/index")
+                }, {
+                  path: "config",
+                  name: "Setting.online.config",
+                  component: require("../components/setting/online/config")
+                }, {
+                  path: "adWords",
+                  name: "Setting.online.adWords",
+                  component: require("../components/setting/online/adWords")
+                }, {
+                  path: "history",
+                  name: "Setting.online.history",
+                  component: require("../components/setting/online/history")
+                }, {
+                  path: "bill",
+                  name: "Setting.online.bill",
+                  component: require("../components/setting/online/bill")
+                }
+              ]
+            },
+            {
               path: "printer",
               component: require("../components/setting/printer/nav"),
               children: [

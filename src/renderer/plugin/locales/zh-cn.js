@@ -1387,7 +1387,7 @@ export default {
     seat: "座位",
     seatTip: "座位编辑 · 排序修改",
     onlineOrder: "在线点餐",
-    onlineOrderTip: "网络点餐服务器配置",
+    onlineOrderTip: "网络点餐服务配置",
     print: "打印",
     printTip: "打印机设置 · 样式控制",
     operator: "员工",
@@ -1405,6 +1405,7 @@ export default {
     systemTip: "软件设置",
     tool: "工具",
     troubleshooting: "检测 · 排错 · 报告问题",
+
     exit: "退出",
     exitTip: "退出软件设置",
     host: "伺服器",
@@ -1815,5 +1816,13 @@ export default {
     shell: "程序壳",
     platform: "构架",
     servo: "伺服器"
+  },
+  online: {
+    adWords: '推广',
+    config: "配置",
+    performance: "表现",
+    history: "历史",
+    bill: "账单",
+    plan: "套餐"
   }
 };

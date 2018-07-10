@@ -1009,6 +1009,7 @@ export default {
 
         const config = {
           title: "title.tip",
+          type:defaults.percentageTip ? "number" : "decimal",
           percentage: defaults.percentageTip,
           allowPercentage: true,
           amount: "0.00"
