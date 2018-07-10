@@ -287,10 +287,10 @@ export default {
         if (this.dinein.passwordRequire) {
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject };
-            this.component = "unlock";
+            this.component = "unlockModule";
           })
-            .then(_operator => {
-              if (_operator._id === this.op._id) {
+            .then(operator => {
+              if (operator._id === this.op._id) {
                 next();
               } else {
                 const prompt = {
@@ -299,18 +299,13 @@ export default {
                   msg: [
                     "dialog.switchCurrentOperator",
                     this.op.name,
-                    _operator.name
+                    operator.name
                   ]
                 };
 
                 this.$dialog(prompt)
                   .then(() => {
-                    this.exitComponent();
-                    const language = _operator.language || "usEN";
-                    moment.locale(language === "usEN" ? "en" : "zh-cn");
-                    this.$setLanguage(language);
-                    this.setApp({ language, newTicket: true });
-                    this.setOp(_operator);
+                    this.switchOperator(operator);
                     next();
                   })
                   .catch(() => stop("PASSWORD_MISMATCH"));
@@ -321,6 +316,14 @@ export default {
           next();
         }
       });
+    },
+    switchOperator(op) {
+      this.exitComponent();
+      const language = op.language || "usEN";
+      moment.locale(language === "usEN" ? "en" : "zh-cn");
+      this.$setLanguage(language);
+      this.setApp({ language, newTicket: true });
+      this.setOp(op);
     },
     countGuest(table) {
       return new Promise((next, stop) => {

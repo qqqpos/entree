@@ -17,12 +17,12 @@
         <figcaption>{{$t('setting.seat')}}</figcaption>
         <p>{{$t('setting.seatTip')}}</p>
       </router-link>
-      <router-link tag="figure" :to="{name:'Setting.online'}">
+      <!-- <router-link tag="figure" :to="{name:'Setting.online'}">
         <div class="ribbon red"><span>New</span></div>
         <i class="fas fa-2x fa-globe-americas"></i>
         <figcaption>{{$t('setting.onlineOrder')}}</figcaption>
         <p>{{$t('setting.onlineOrderTip')}}</p>
-      </router-link>
+      </router-link> -->
       <router-link tag="figure" :to="{name:'Setting.printer'}">
         <i class="fa fa-2x fa-print"></i>
         <figcaption>{{$t('setting.print')}}</figcaption>

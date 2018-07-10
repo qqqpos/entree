@@ -72,7 +72,7 @@
                 <span class="balance">{{giftcard.balance | decimal}}</span>
               </span>
             </div>
-            <num-pad v-model="amount" type="number" @enter="reload"></num-pad>
+            <num-pad v-model="amount" type="decimal" @enter="reload"></num-pad>
           </div>
         </template>
         <template v-else>
@@ -152,7 +152,7 @@ export default {
       component: null,
       payment: "CASH",
       giftcard: {},
-      amount: 0,
+      amount: "0.00",
       page: 0,
       logs: []
     };
@@ -216,18 +216,19 @@ export default {
         title: "dialog.cardActivation",
         msg: ["dialog.cardActivationConfirm", number]
       };
-      const cashier = this.$store.getters.op.name;
+      const cashier = this.op.name;
+
       this.$dialog(prompt)
         .then(() => {
           this.giftcard = {
             number: card,
             date: today(),
-            time: +new Date(),
+            time: Date.now(),
             phone: "",
             name: "",
             cashier,
             balance: 0,
-            activation: +new Date(),
+            activation: Date.now(),
             transaction: 0,
             vip: false,
             expiration: null
@@ -235,7 +236,7 @@ export default {
           this.activation = true;
           this.exitComponent();
         })
-        .catch(() => this.init.reject());
+        .catch(this.init.reject);
     },
     viewReceipt(id) {
       this.$socket.emit("[INVOICE] DETAIL", id, ticket =>
@@ -293,7 +294,7 @@ export default {
       const cashDrawer =
         cashCtrl === "staffBank" ? name : this.station.cashDrawer.name;
       const date = today();
-      const time = +new Date();
+      const time = Date.now();
 
       const activity = {
         type: "CASHFLOW",
@@ -325,7 +326,6 @@ export default {
       };
 
       cashCtrl === "enable" && Printer.openCashDrawer();
-      console.log(transaction);
       this.$socket.emit("[TRANSACTION] SAVE", transaction);
       this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });
 
@@ -346,7 +346,7 @@ export default {
           this.exitComponent();
 
           const date = today();
-          const time = +new Date();
+          const time = Date.now();
           const { cashCtrl, name } = this.op;
           const cashDrawer =
             cashCtrl === "staffBank" ? name : this.station.cashDrawer.name;
@@ -385,10 +385,7 @@ export default {
 
           this.activation ? this.activateCard() : this.reloadBalance();
         })
-        .catch(error => {
-          console.log(error);
-          this.exitComponent();
-        });
+        .catch(this.exitComponent);
     },
     reloadFailed(error) {
       typeof error === "object"
@@ -418,7 +415,7 @@ export default {
 
       const reload = {
         date: today(),
-        time: +new Date(),
+        time: Date.now(),
         type: "Reload",
         cashier: this.op.name,
         number: this.giftcard.number.replace(/\D/g, ""),
@@ -445,7 +442,7 @@ export default {
 
           const reload = {
             date: today(),
-            time: +new Date(),
+            time: Date.now(),
             type: "Bonus",
             cashier: this.op.name,
             number: this.giftcard.number.replace(/\D/g, ""),
@@ -502,7 +499,7 @@ export default {
           const transaction = {
             _id: ObjectId(),
             date: today(),
-            time: +new Date(),
+            time: Date.now(),
             order: null,
             paid: -parseFloat(this.giftcard.balance),
             change: 0,
@@ -523,7 +520,7 @@ export default {
             type: "REFUND",
             inflow: 0,
             outflow: this.giftcard.balance,
-            time: +new Date(),
+            time: Date.now(),
             ticket: {},
             operator: this.op.name
           };
@@ -539,7 +536,7 @@ export default {
             };
 
             cashCtrl === "enable" && Printer.openCashDrawer();
-            this.$dialog(prompt).then(() => this.init.resolve());
+            this.$dialog(prompt).then(this.init.resolve);
           });
         })
         .catch(this.exitComponent);
