@@ -51,7 +51,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["target", "data", "date", "on"],
+  props: ["target", "reset", "data", "date", "on"],
   data() {
     return {
       filters: [],
@@ -80,14 +80,18 @@ export default {
   methods: {
     setFilter(type, index, e) {
       this.$emit("filter", type);
-
-      if (type !== this.type) {
-        this.showMore = false;
-        this.type = type;
-      } else if (Array.isArray(this.filters[index].subTypes)) {
-        this.showMore = !this.showMore;
-      } else {
-        this.showMore = false;
+      if (!this.reset) {
+        // if needed to reset don't drop down menu
+        if (type !== this.type) {
+          this.showMore = false;
+          this.type = type;
+        } else if (Array.isArray(this.filters[index].subTypes)) {
+          this.showMore = !this.showMore;
+        } else {
+          this.showMore = false;
+          this.type = type;
+        }
+      }else{
         this.type = type;
       }
     },

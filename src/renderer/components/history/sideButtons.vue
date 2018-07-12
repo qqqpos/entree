@@ -1,10 +1,10 @@
 <template>
   <aside>
-    <button class="btn" @click="editOrder">
+    <button class="btn" @click="editOrder" :disabled="order.split">
       <i class="fas fa-edit"></i>
       <span class="text">{{$t('button.edit')}}</span>
     </button>
-    <button class="btn" @click="reOpenOrder" v-if="this.order && this.order.status !== 1">
+    <button class="btn" @click="reOpenOrder" v-if="order && order.status !== 1">
       <i class="fas fa-redo-alt"></i>
       <span class="text">{{$t('button.recover')}}</span>
     </button>
@@ -118,7 +118,7 @@ export default {
           msg: "dialog.editPrevOrderTip",
           buttons: [{ text: "button.confirm", fn: "reject" }]
         };
-        
+
         this.order.date === this.today
           ? next()
           : this.approval("permission", "anydate") ? next() : stop(prompt);
@@ -235,8 +235,12 @@ export default {
     },
     removePaymentRecord() {
       new Promise((resolve, reject) => {
-        const { _id, number } = this.order;
-        this.$socket.emit("[PAYMENT] GET_LOG", _id, logs => {
+        const { _id, number, parent } = this.order;
+        const query = parent
+          ? "[PAYMENT] GET_CHILD_LOG"
+          : "[PAYMENT] GET_PARENT_LOG";
+
+        this.$socket.emit(query, _id, logs => {
           this.componentData = { resolve, reject, number, logs };
           this.component = "loger";
         });

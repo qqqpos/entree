@@ -587,8 +587,8 @@ export default {
     removePaymentRecordFirst: "Please remove payment record before all actions",
     splitTicketPaymentFound: "Partially Ticket Settled",
     whatNext: "What are you going to do?",
-    paymentRemoveConfirm: "{i} Payment Removal",
-    paymentRemoveConfirmTip:
+    removePayment: "{i} Payment Removal",
+    removePaymentConfirm:
       "Are you sure you want to remove this $ {i} record?",
     removeAllPaymentConfirm: "Remove All Payments",
     removeAllPaymentConfirmTip: "Are you sure to remove all payment records?",

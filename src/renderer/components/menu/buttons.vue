@@ -280,11 +280,11 @@ export default {
       });
     },
     openTimer() {
-      if (this.isEmptyTicket) return;
+      if (this.isEmptyTicket || this.order.hasOwnProperty('parent')) return;
       this.$open("timer");
     },
     openSplit() {
-      if (this.isEmptyTicket) return;
+      if (this.isEmptyTicket || this.order.hasOwnProperty('parent')) return;
       this.$open("splitModule");
     },
     switchGuest() {

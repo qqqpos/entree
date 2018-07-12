@@ -665,10 +665,14 @@ export default {
 
       const _id = ObjectId();
       const time = Date.now();
-      const order = this.invoice._id;
       const create = this.invoice.create;
       const date = this.invoice.date || today();
-      const split = this.payWhole ? null : this.splits[this.splitIndex]._id;
+      const split = this.payWhole
+        ? this.order.hasOwnProperty("parent") ? this.order._id : null
+        : this.splits[this.splitIndex]._id;
+      const order = this.invoice.hasOwnProperty("parent")
+        ? this.invoice.parent
+        : this.invoice._id;
       const ticket = {
         number: this.invoice.number || this.ticket.number,
         type: this.invoice.type || this.ticket.type,
@@ -949,7 +953,7 @@ export default {
       this.tip = "0.00";
       this.exitComponent();
 
-      if (this.payWhole) {
+      if (this.payWhole && !this.invoice.hasOwnProperty('parent')) {
         this.$socket.emit(
           "[PAYMENT] CHECK",
           this.invoice._id,
@@ -957,6 +961,8 @@ export default {
             const { balance } = this.order.payment;
             const remain = Math.max(0, toFixed(balance - paid, 2));
 
+            this.order.settled = remain === 0;
+            
             if (remain > 0) {
               this.changePaymentType("CASH");
               this.poleDisplay("Balance Due:", `$ ${remain.toFixed(2)}`);
@@ -1009,7 +1015,7 @@ export default {
 
         const config = {
           title: "title.tip",
-          type:defaults.percentageTip ? "number" : "decimal",
+          type: defaults.percentageTip ? "number" : "decimal",
           percentage: defaults.percentageTip,
           allowPercentage: true,
           amount: "0.00"

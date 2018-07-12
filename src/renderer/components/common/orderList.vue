@@ -499,7 +499,7 @@ header.info {
 }
 
 .number {
-  width: 40px;
+  min-width: 40px;
   text-align: center;
   font-family: "Agency FB";
   font-weight: bold;

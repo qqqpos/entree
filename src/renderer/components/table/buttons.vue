@@ -109,9 +109,9 @@ export default {
     removeOrderPayment() {
       this.exitComponent();
       this.$dialog({
-        title: "dialog.paymentRemoveConfirm",
+        title: "dialog.removePayment",
         msg: [
-          "dialog.paymentRemoveConfirmTip",
+          "dialog.removePaymentConfirm",
           this.$t("type." + this.order.payment.type)
         ]
       })

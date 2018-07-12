@@ -4,7 +4,7 @@
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
-    <button class="btn" @contextmenu.stop="evenSplit" @click.stop="split" :disabled="disable">
+    <button class="btn" @contextmenu.stop="evenSplit" @click.stop="split" :disabled="disableSplit">
       <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
@@ -203,7 +203,7 @@ export default {
             percentageDiscount: false
           }
         } = this.config;
-        
+
         const config = {
           title: "title.discount",
           type: defaults.percentageDiscount ? "number" : "decimal",
@@ -307,6 +307,9 @@ export default {
         this.today !== this.date ||
         this.order.status === 0
       );
+    },
+    disableSplit() {
+      return this.disable || this.order.hasOwnProperty("parent");
     },
     ...mapGetters([
       "op",

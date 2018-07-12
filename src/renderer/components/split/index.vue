@@ -31,15 +31,6 @@
         <ticket :data="order" :master="true" @acquire="restore" @done="setDone"></ticket>
       </div>
       <footer>
-        <!-- <div class="opt">
-          <div class="switches">
-            <label class="input-toggle">
-              <input type="checkbox" v-model="swipeMode" :disabled="true">
-              <span></span>
-            </label>
-            <label class="label indent">{{$t("text.swipeMode")}}</label>
-          </div>
-        </div> -->
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
         <button class="btn" @click="call('print')" :disabled="!done">{{$t('button.printAll')}}</button>
         <button class="btn" @click="call('confirm')" :disabled="!done">{{$t('button.confirm')}}</button>
@@ -236,24 +227,25 @@ export default {
       this.init.resolve();
     },
     call(fn) {
-      const time = this.order.time || Date.now();
-
       if (this.app.newTicket && this.$route.name === "Menu") {
-        const { number, type } = this.ticket;
-        Object.assign(this.order, { number, type, time });
-        this.setApp({ newTicket: false });
+        this.$socket.emit("[INVOICE] SAVE", this.order, false, order => {
+          Object.assign(this.order, order);
+          this.setApp({ newTicket: false });
 
-        if (this.dinein.table) {
-          Object.assign(this.currentTable, {
-            invoice: [this.order._id],
-            status: 2
-          });
+          if (this.dinein.table) {
+            Object.assign(this.currentTable, {
+              invoice: [this.order._id],
+              status: 2
+            });
 
-          this.$socket.emit("[TABLE] SETUP", this.currentTable);
-        }
+            this.$socket.emit("[TABLE] SETUP", this.currentTable);
+          }
+
+          this[fn]();
+        });
+      } else {
+        this[fn]();
       }
-
-      this[fn]();
     },
     print() {
       const { number, time } = this.order;

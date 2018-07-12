@@ -1,11 +1,11 @@
 <template>
   <div class="history">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
     <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
       <section class="tickets">
         <div class="inner">
-          <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall"></ticket>
+          <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
         </div>
         <paginator :of="orders" @page="setPage" :contain="30" :max="12"></paginator>
       </section>
@@ -52,6 +52,7 @@ export default {
       prevHistory: null,
       targetName: null,
       component: null,
+      splits: [],
       today: today(),
       summary: {},
       filter: "",
@@ -79,9 +80,6 @@ export default {
         time !== this.sync && this.$socket.emit("[SYNC] ORDER_LIST");
       });
     },
-    getInvoice(invoice) {
-      this.setViewOrder(invoice);
-    },
     setFilter(type, name) {
       this.page = 0;
 
@@ -91,6 +89,8 @@ export default {
           this.filter = type;
           this.targetName = name;
           break;
+        case "ALL_INVOICES":
+          this.splits = [];
         default:
           this.filter = type;
       }
@@ -98,18 +98,26 @@ export default {
     },
     resetFilter() {
       this.page = 0;
+      this.splits = [];
       this.targetName = null;
       this.filter = "ALL_INVOICES";
       this.resetViewOrder();
     },
     resetViewOrder() {
-      const dom = document.querySelector(".ticket.active");
-      dom && dom.classList.remove("active");
-
       this.$nextTick(() => {
-        this.orders.length
-          ? this.getInvoice(this.invoices[0])
-          : this.resetMenu();
+        if (this.splits.length) {
+          const ticket = this.splits.slice(
+            this.page * 30,
+            this.page * 30 + 30
+          )[0];
+
+          this.setViewOrder(ticket);
+        } else {
+          this.orders.length
+            ? this.setViewOrder(this.invoices[0])
+            : this.resetMenu();
+        }
+
         const dom = document.querySelector(".ticket");
         dom && dom.classList.add("active");
       });
@@ -117,6 +125,7 @@ export default {
     setPage(number) {
       const dom = document.querySelector(".ticket.active");
       dom && dom.classList.remove("active");
+
       this.page = number;
       this.resetViewOrder();
     },
@@ -127,6 +136,7 @@ export default {
       this.calendarDate = date;
       this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, invoices => {
         this.prevHistory = invoices;
+        this.splits = [];
         this.resetViewOrder();
         this.exitComponent();
       });
@@ -161,6 +171,13 @@ export default {
     },
     getConsole() {
       this.$open("Maintenance");
+    },
+    getSplits(invoice) {
+      invoice.split &&
+        this.$socket.emit("[SPLIT] GET", invoice.children, splits => {
+          this.splits = splits;
+          this.resetViewOrder();
+        });
     },
     searchInvoice() {
       new Promise((resolve, reject) => {
@@ -223,7 +240,9 @@ export default {
   },
   computed: {
     targetInvoices() {
-      return Array.isArray(this.prevHistory) ? this.prevHistory : this.history;
+      return this.splits.length
+        ? this.splits
+        : Array.isArray(this.prevHistory) ? this.prevHistory : this.history;
     },
     orders() {
       const { name } = this.op;
@@ -287,6 +306,12 @@ export default {
   },
   watch: {
     order: "highlightTicket"
+  },
+  sockets: {
+    UPDATE_SPLIT(order) {
+      const index = this.splits.findIndex(split => split._id === order._id);
+      index !== -1 && this.splits.splice(index, 1, order);
+    }
   }
 };
 </script>

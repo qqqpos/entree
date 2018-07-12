@@ -397,14 +397,13 @@ header {
 }
 
 .item {
-  flex: 1;
   border-right: 1px solid #ddd;
   padding-right: 25px;
 }
 
 .side {
   flex: 1;
-  padding: 0 25px;
+  padding: 0 0 0 25px;
   border-left: 1px solid #fff;
 }
 

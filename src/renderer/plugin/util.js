@@ -267,7 +267,7 @@ export default {
         subtotal = toFixed(subtotal + amount, 2);
 
         if (!taxFree && taxClass.apply[orderType])
-          tax += toFixed(taxClass.rate / 100 * amount, 2);
+          tax += taxClass.rate / 100 * amount;
       });
 
       if (this.tax.deliveryTax) {
@@ -352,7 +352,7 @@ export default {
 
         discount += offer;
       }
-
+      
       const total = subtotal + plasticTax + toFixed(tax, 2);
       const totalCharge = total + delivery;
       const due = toFixed(Math.max(0, totalCharge - discount), 2);
@@ -435,6 +435,8 @@ export default {
         const ticketNumber = this.order.number;
 
         const child = JSON.parse(JSON.stringify(this.order));
+        
+        delete child.children;
         child.parent = parent;
 
         child.content.forEach(item => {

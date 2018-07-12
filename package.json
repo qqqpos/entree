@@ -1,10 +1,10 @@
 {
   "name": "unitedpos",
-  "version": "0.8.99",
-  "require": "0.8.99",
+  "version": "0.9.0",
+  "require": "0.9.0",
   "stage": "Beta",
   "description": "UnitedPOS point of sale system",
-  "author": "Xuewu Huang <huangxuewu@gmail.com>",
+  "author": "United POS <huangxuewu@gmail.com>",
   "license": "Apache-2.0",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -24,9 +24,9 @@
     "url": "https://raw.githubusercontent.com/huangxuewu/entree/master/updates.json"
   },
   "build": {
-    "productName": "UnitedPOS",
+    "productName": "Entree POS",
     "appId": "unitedpos.software.pos.beta",
-    "copyright": "Copyright © 2017 United POS Inc.",
+    "copyright": "Copyright © 2017 ${author}",
     "directories": {
       "output": "build"
     },
