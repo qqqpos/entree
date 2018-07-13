@@ -238,22 +238,6 @@ export default new Router({
                   component: require("../components/setting/menu/request")
                 },
                 {
-                  path: "submenu",
-                  component: require("../components/setting/menu/submenuTab"),
-                  children: [
-                    {
-                      path: "/",
-                      name: "Setting.submenu",
-                      component: require("../components/setting/menu/submenu/index")
-                    },
-                    {
-                      path: "items",
-                      name: "Setting.submenu.item",
-                      component: require("../components/setting/menu/submenu/item")
-                    }
-                  ]
-                },
-                {
                   path: "template",
                   component: require("../components/setting/menu/templateTab"),
                   children: [
@@ -288,12 +272,12 @@ export default new Router({
                 {
                   path: "/",
                   name: "Setting.table",
-                  component: require("../components/setting/table/table")
+                  component: require("../components/setting/table/regular/index")
                 },
                 {
                   path: "hibachi",
                   name: "Setting.hibachi",
-                  component: require("../components/setting/table/hibachi")
+                  component: require("../components/setting/table/hibachi/index")
                 }
               ]
             },

@@ -276,7 +276,7 @@ export default {
       "newReservation",
       "updateReservation",
       "setCurrentTable",
-      "setReservation",
+      "setBook",
       "setLastSync"
     ])
   },
@@ -346,7 +346,7 @@ export default {
       this.syncTables(data);
     },
     SYNC_RESERVATIONS(data) {
-      this.setReservation(data);
+      this.setBook(data);
     },
     MENU_CATEGORY_UPDATE(data) {
       this.updateMenuCategory(data);

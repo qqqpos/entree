@@ -22,9 +22,9 @@
 
 <script>
 import draggable from "vuedraggable";
-import dialogModule from "../../common/dialog";
-import tableEditor from "./component/tableEditor";
-import sectionEditor from "./component/sectionEditor";
+import dialogModule from "../../../common/dialog";
+import tableEditor from "../component/tableEditor";
+import sectionEditor from "../component/sectionEditor";
 
 export default {
   components: { draggable, dialogModule, tableEditor, sectionEditor },

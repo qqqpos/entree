@@ -18,14 +18,6 @@
           <external title="button.option" @open="openTemplateOption" v-show="option.template" :defaultStyle="false"></external>
           <switches v-model="option.replace" title="text.replaceName"></switches>
           <switches v-model="option.sub" title="text.subItem"></switches>
-          <switches v-model="extend" title="button.setSubMenu" @input="toggleIgnore(extend)"></switches>
-        </aside>
-        <aside class="submenu" v-if="extend">
-          <inputer v-model.number="maxSubItem" title="text.maxItem"></inputer>
-          <inputer v-model.number="overCharge" title="text.overCharge" placeholder="0.00"></inputer>
-          <div class="option">
-            <checkbox :title="group" :val="group" v-for="(group,index) in groups" v-model="subMenu" :multiple="true" :key="index"></checkbox>
-          </div>
         </aside>
       </div>
       <footer>
@@ -53,7 +45,6 @@ export default {
   data() {
     return {
       option: JSON.parse(JSON.stringify(this.init.option)),
-      groups: Object.keys(this.$store.getters.submenu) || [],
       templates: this.$store.getters.templates.map(t => ({
         label: t.name,
         tooltip: t.note || this.$t("text.items", t.contain.length),
@@ -64,7 +55,6 @@ export default {
       component: null,
       maxSubItem: 0,
       overCharge: 0,
-      subMenu: [],
       extend: false
     };
   },
@@ -74,15 +64,6 @@ export default {
       tooltip: "",
       value: ""
     });
-
-    const { subMenu, maxSubItem, overCharge } = this.option;
-
-    if (Array.isArray(subMenu)) {
-      this.extend = true;
-      this.subMenu = subMenu;
-      this.maxSubItem = maxSubItem;
-      this.overCharge = overCharge;
-    }
   },
   methods: {
     toggleIgnore(boolean) {
@@ -113,8 +94,7 @@ export default {
       if (this.extend) {
         Object.assign(this.option, {
           maxSubItem: this.maxSubItem,
-          overCharge: this.overCharge,
-          subMenu: this.subMenu
+          overCharge: this.overCharge
         });
       } else {
         delete this.option.subMenu;
@@ -134,12 +114,6 @@ export default {
   padding: 0px 25px 0px 25px;
   margin: 15px 0;
   border-right: 1px solid #eee;
-}
-
-.extend aside.submenu {
-  padding: 0px 25px 0px 25px;
-  margin: 15px 0;
-  border-left: 1px solid #fff;
 }
 
 .option {

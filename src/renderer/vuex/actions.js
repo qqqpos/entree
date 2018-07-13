@@ -23,22 +23,17 @@ export const setConfig = ({ commit }, data) => commit(types.SET_CONFIG, data);
 
 export const setStation = ({ commit }, data) => commit(types.SET_STATION, data);
 
-export const setCategory = ({ commit }, category) =>
-  commit(types.SET_CATEGORY, category);
+export const setCategory = ({ commit }, category) => commit(types.SET_CATEGORY, category);
 
-export const setTemplates = ({ commit }, templates) =>
-  commit(types.SET_TEMPLATES, templates);
+export const setTemplates = ({ commit }, templates) => commit(types.SET_TEMPLATES, templates);
 
-export const setReservation = ({ commit }, data) => {
-  let { sync, reservations } = data;
-  commit(types.SET_RESERVATION, reservations);
-  commit(types.SET_LASTSYNC, sync);
-};
+export const setBook = ({ commit }, book) => commit(types.SET_BOOK, book);
+
 export const setLastSync = ({ commit }, time) => commit(types.SET_LASTSYNC, time);
 
 export const setMenu = ({ commit }, menu) => commit(types.SET_MENU, menu);
 
-export const setSubmenu = ({ commit }, submenu) => commit(types.SET_SUBMENU, submenu);
+export const setLayout = ({ commit }, layout) => commit(types.SET_LAYOUT, layout);
 
 export const setTable = ({ commit }, tables) => commit(types.SET_TABLE, tables);
 
@@ -167,7 +162,7 @@ export const updateMenuCategory = ({ commit }, data) => {
 export const setTodayOrder = ({ commit }, data) => {
   let { sync, orders } = data;
   commit(types.SET_LASTSYNC, sync);
-  commit(types.SET_TODAYORDER, orders);
+  commit(types.SET_TODAY_ORDER, orders);
 };
 export const syncTables = ({ commit }, data) => {
   let { sync, tables } = data;

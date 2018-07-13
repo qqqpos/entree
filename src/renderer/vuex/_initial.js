@@ -2,12 +2,16 @@ import * as types from '../mutation-types'
 
 const state = {
     app: {},
+    ring: null,
     config: {},
     layout: {},
     orders: [],
+    callLog: [],
     spooler: [],
     templates: [],
-    books: [],
+    reservation: [],
+    sync: Date.now(),
+    time: Date.now(),
     ticket: {
         number: 1,
         type: ""
@@ -32,20 +36,20 @@ const mutations = {
             }
         }
     },
-    [types.SET_CONFIG](state, data) {
-        state.config = Object.assign({}, state.config, data)
-    },
     [types.SET_TICKET](state, data) {
         state.ticket = Object.assign({}, state.ticket, data)
     },
     [types.SET_DEVICE](state, data) {
         state.device = Object.assign({}, state.device, data)
     },
-    [types.SET_TEMPLATES](state, templates) {
-        state.templates = templates;
+    [types.SET_CONFIG](state, data) {
+        state.config = Object.assign({}, state.config, data)
     },
-    [types.SET_BOOK](state, books) {
-        state.books = books
+    [types.SET_TEMPLATES](state, data) {
+        state.templates = data;
+    },
+    [types.SET_BOOK](state, data) {
+        state.reservation = data;
     },
     [types.SET_APP](state, data) {
         state.app = Object.assign({}, state.app, data)
@@ -56,18 +60,76 @@ const mutations = {
     [types.SET_LAYOUT](state, layout) {
         state.layout = layout;
     },
-    [types.SET_MENU](state, menu) {
+    [types.SET_MENU](state, data) {
         //state.config.layout.menu = flatten(state.config.layout.menu, data, true, alphabetical);
-        state.layout.menu = flatten(menu)
+        state.config.menu = data
     },
-    [types.SET_REQUEST](state, request) {
-        state.request = flatten(request)
+    [types.SET_SUBMENU](state, data) {
+        let submenu = {};
+        data = data || []
+        data.forEach(item => {
+            submenu.hasOwnProperty(item.group) ?
+                submenu[item.group].push(item) :
+                submenu[item.group] = [item];
+        })
+        // Object.keys(submenu).forEach(key => {
+        //     let group = submenu[key];
+        //     let length = group.length;
+        //     let align = 6 - length % 3;
+
+        //     align === 6 && (align = 3);
+        //     group.sort((a, b) => a.num - b.num);
+
+        //     Array(align).fill().forEach(_ => { group.push({ zhCN: "", usEN: "", clickable: false, group: null }) });
+        // })
+        state.config.layout.submenu = submenu;
     },
-    [types.SET_TABLE](state, table) {
-        state.layout.table = table
+    [types.SET_REQUEST](state, data) {
+        state.config.layout.request = flatten(state.config.layout.request, data, false)
     },
-    [types.SET_TODAY_ORDER](state, orders) {
-        state.orders = orders
+    [types.REMOVE_PRINTER](state, data) {
+        delete state.config.printer[data];
+        state.config.printer.splice();
+    },
+    [types.SET_TABLE](state, data) {
+        let layout = state.config.layout.table;
+        state.config.layout.table = layout.map(section => {
+            const { zone } = section;
+            let seat = Array(56).fill().map(() => ({
+                feature: [],
+                invoice: [],
+                name: "",
+                server: null,
+                session: null,
+                shape: "",
+                status: 0,
+                time: 0,
+                grid: 0,
+                zone
+            }));
+
+            data.forEach(table => {
+                if (table.zone === zone) seat[table.grid] = table;
+            });
+
+            section.item = seat;
+
+            return section;
+        });
+    },
+    [types.SET_TEMPORARY_TABLE](state, table) {
+        const { zone, grid } = table;
+        const index = state.config.layout.table.findIndex(section => section.zone === zone);
+
+        table.status === 0
+            ? state.config.layout.table[index].item.splice(grid, 1)
+            : state.config.layout.table[index].item.splice(grid, 1, table)
+    },
+    [types.SET_LASTSYNC](state, time) {
+        state.sync = time
+    },
+    [types.SET_TODAY_ORDER](state, data) {
+        state.orders = data
     },
     [types.ADD_SPOOLER](state, data) {
         state.spooler.push(data);
@@ -91,25 +153,6 @@ const mutations = {
         const index = state.orders.findIndex(ticket => ticket._id === invoice._id);
         index === -1 ? state.orders.unshift(invoice) : state.orders.splice(index, 1, invoice);
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    //update stuff
     [types.UPDATE_TABLE_STATUS](state, table) {
         if (!table) return;
 
@@ -208,6 +251,51 @@ export default {
     mutations
 }
 
-const flatten = function (target) {
-    return target
+function flatten(layout, data, page, sort) {
+    let group = {};
+    data = data || [];
+    data.map(item => {
+        !group.hasOwnProperty(item.category) && (group[item.category] = []);
+        group[item.category].push(item);
+    });
+    !Array.isArray(layout) && (layout = [layout]);
+    layout.forEach(layer => {
+        layer.contain.forEach(item => {
+            let items = group[item] || [];
+
+            if (sort && items.length > 0) {
+                const hanz = !!items[0].zhCN.match(/[\u3400-\u9FBF]/);
+
+                hanz ?
+                    items.sort((a, b) => a.zhCN.localeCompare(b.zhCN, 'zh-Hans-CN', {
+                        sensitivity: 'accent'
+                    })) :
+                    items.sort((a, b) => a.zhCN.localeCompare(b.zhCN));
+            }
+
+            let align = 6 - items.length % 3;
+            align === 6 && (align = 3);
+            Array(align).fill().forEach(_ => {
+                items.push({
+                    zhCN: "",
+                    usEN: "",
+                    clickable: false,
+                    category: "NA"
+                })
+            });
+            layer.item.push(group[item] || items);
+        });
+        let length = [].concat.apply([], layer.item).length;
+        let last = Math.max(0, layer.item.length - 1);
+        page = page ? Math.ceil(length / 33) : 1;
+        length = Math.max(0, (33 * page - length));
+        for (let i = 0; i < length; i++) {
+            layer.item[last] && layer.item[last].push({
+                zhCN: "",
+                usEN: "",
+                clickable: false
+            })
+        }
+    })
+    return layout;
 }

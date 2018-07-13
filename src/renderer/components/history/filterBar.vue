@@ -337,7 +337,7 @@ span.sub {
 }
 
 .filter {
-  padding: 0 7px;
+  padding: 0 5px;
   height: 62px;
   display: flex;
   flex-direction: column;
@@ -345,7 +345,7 @@ span.sub {
   justify-content: center;
   text-align: center;
   color: #fafafa;
-  min-width: 70px;
+  min-width: 100px;
   transition: background 0.22s linear;
 }
 
@@ -358,7 +358,7 @@ span.sub {
   font-weight: bold;
   border-bottom: 2px solid #ff9800;
   color: #263238;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 

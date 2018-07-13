@@ -299,6 +299,7 @@ export default {
       if (isNumber(index)) {
         this.splitIndex = index;
         this.order = this.splits[index];
+        this.changePaymentType();
       } else {
         const next = this.splits.findIndex(
           ticket => ticket.payment.remain !== 0

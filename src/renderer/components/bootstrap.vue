@@ -52,20 +52,20 @@ export default {
     },
     setEnvironment({
       config,
+      layout,
       menu,
-      submenu,
       request,
       orders,
       table,
       template,
-      reservations,
-      sync
+      book,
+      sync = Date.now()
     }) {
       try {
         this.setConfig(config);
         this.setExternalDisplay(config);
+        this.setLayout(layout);
         this.setMenu(menu);
-        this.setSubmenu(submenu);
         this.setRequest(request);
         this.$electron.ipcRenderer.send(
           "Loading",
@@ -73,18 +73,13 @@ export default {
         );
         this.setTable(table);
         this.setTemplates(template);
-        this.setReservation({ reservations, sync });
+        this.setBook({ book, sync });
         this.setTodayOrder({ orders, sync });
-        this.setLastSync(sync);
         this.setStationEnvironment()
           .then(this.initialized)
           .catch(this.registration);
       } catch (error) {
-        this.$log({
-          eventID: 9000,
-          type: "failure",
-          note: `Application was unable to start. It's probably because the database wasn't correctly setup. \n\nError Message:\n${error.toString()}`
-        });
+        console.log(error);
       }
     },
     setStationEnvironment() {
@@ -105,7 +100,7 @@ export default {
             const { username } = os.userInfo();
 
             this.$socket.emit(
-              "[INITIAL] STATION",
+              "[STATION] INITIAL",
               { mac, username },
               station => {
                 station ? use(station) : register({ mac, username });
@@ -152,9 +147,10 @@ export default {
           "Loading",
           this.$t("initial.awakeClients")
         );
-        this.$socket.emit("[AWAKEN] STATIONS", data => {
-          data && data.foreach(station => Magic.wake(station));
-        });
+        this.$socket.emit(
+          "[STATION] AWAKE_LIST",
+          data => data && data.foreach(station => Magic.wake(station))
+        );
       }
     },
     initialDevice() {
@@ -292,24 +288,24 @@ export default {
       "setApp",
       "setMenu",
       "setTable",
+      "setLayout",
       "phoneRing",
       "startTick",
       "setConfig",
       "setDevice",
-      "setSubmenu",
       "setStation",
       "setRequest",
       "setLastSync",
       "setTemplates",
       "setTodayOrder",
-      "setReservation"
+      "setBook"
     ])
   },
   sockets: {
     CONNECTED() {
       this.socketConnected();
     },
-    APP_RUNTIME_CONFIG(data) {
+    SETUP_APP_RUNTIME(data) {
       this.$electron.ipcRenderer.send(
         "Loading",
         this.$t("initial.loadConfiguration")

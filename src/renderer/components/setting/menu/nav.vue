@@ -10,10 +10,6 @@
                     <i class="far fa-comment-dots"></i>
                     <span class="text">{{$t('nav.request')}}</span>
                 </router-link>
-                <router-link tag="li" :to="{name:'Setting.submenu'}">
-                    <i class="fa fa-list"></i>
-                    <span class="text">{{$t('nav.submenu')}}</span>
-                </router-link>
                 <router-link tag="li" :to="{name:'Setting.template'}">
                     <i class="far fa-list-alt"></i>
                     <span class="text">{{$t('nav.template')}}</span>

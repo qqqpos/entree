@@ -27,7 +27,6 @@ export const instance = s => s.menu.instance;
 export const choiceSet = s => s.menu.choiceSetTarget;
 export const menu = s => s.initial.config.layout.menu;
 export const archivedOrder = s => s.menu.archivedOrder;
-export const submenu = s => s.initial.config.layout.submenu;
 export const actions = s => s.initial.config.layout.action;
 export const request = s => s.initial.config.layout.request;
 export const isEmptyTicket = s => s.menu.order.content.length === 0;

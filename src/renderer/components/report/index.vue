@@ -682,7 +682,7 @@ export default {
         }
       } else {
         report.push({
-          text: this.$t("report.tipTotal"),
+          text: this.$t("report.tipsTotal"),
           style: "space",
           value: tipTotal.toFixed(2)
         });
