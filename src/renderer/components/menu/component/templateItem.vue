@@ -64,7 +64,12 @@ export default {
       const saved = this.saved[index];
       this.items = this.template.contain[index].contain.map(item => {
         if (saved) {
-          const _item = saved.find(i => i.key === item.key);
+          const _item = saved.find(
+            i =>
+              Array.isArray(i.key)
+                ? i.key.includes(item.key)
+                : i.key === item.key
+          );
           return _item ? _item : Object.assign({}, item, { qty: 0 });
         } else {
           return Object.assign({}, item, { qty: 0 });
@@ -93,7 +98,9 @@ export default {
       this.template.contain.forEach((page, index) => {
         page.contain.forEach(item => {
           choiceSet.forEach(set => {
-            set.key === item.key &&
+            (Array.isArray(set.key)
+              ? set.key.includes(item.key)
+              : set.key === item.key) &&
               saved[index].push(Object.assign({}, item, { qty: set.qty }));
           });
         });
@@ -176,28 +183,59 @@ export default {
       });
 
       this.saved.forEach((page, index) => {
-        let { startAt, addition } = this.template.contain[index];
+        let { startAt, addition, inline = false } = this.template.contain[
+          index
+        ];
         let count = 0;
         startAt = isNumber(startAt) ? parseInt(startAt) : 0;
         addition = isNumber(addition) ? parseFloat(addition) : 0;
 
-        page.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
-          //make sure all price are decimal
-          price = isNumber(price) ? parseFloat(price) : 0;
+        if (inline) {
+          let primary = [];
+          let secondary = [];
+          let printer = new Set();
+          let total = 0;
+          let keys = [];
 
-          this.setChoiceSet({
-            qty,
-            key,
-            zhCN,
-            usEN,
-            print,
-            single: price,
-            price: (price * qty).toFixed(2),
-            _ti: this.template._id
+          page.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
+            qty = qty === 1 ? "" : `${qty} x `;
+            primary.push(qty + usEN);
+            secondary.push(qty + zhCN);
+            printer.add(...print);
+            total += parseFloat(price) || 0;
+            keys.push(key);
           });
 
-          count += qty;
-        });
+          this.setChoiceSet({
+            qty: 1,
+            key: keys,
+            zhCN: secondary.join(" & "),
+            usEN: primary.join(" & "),
+            print: Array.from(printer),
+            single: toFixed(total, 2),
+            price: toFixed(total, 2),
+            _ti: this.template._id
+          });
+        } else {
+          page.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
+            //make sure all price are decimal
+            price = isNumber(price) ? parseFloat(price) : 0;
+
+            this.setChoiceSet({
+              qty,
+              key,
+              zhCN,
+              usEN,
+              print,
+              single: price,
+              price: (price * qty).toFixed(2),
+              _ti: this.template._id
+            });
+
+            count += qty;
+          });
+        }
+
         if (startAt > 0 && count - startAt > 0) {
           const qty = count - startAt;
 

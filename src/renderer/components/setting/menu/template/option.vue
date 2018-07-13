@@ -13,6 +13,7 @@
                 <inputer title="text.maxItem" v-model.number="option.max"></inputer>
                 <inputer title="text.startAt" v-model.number="option.startAt"></inputer>
                 <inputer title="text.overCharge" v-model.number="option.addition"></inputer>
+                <switches title="text.itemInline" v-model="option.inline"></switches>
             </div>
             <footer>
                 <div class="opt">
@@ -26,9 +27,11 @@
 
 <script>
 import inputer from "../../common/inputer";
+import switches from "../../common/switches";
+
 export default {
   props: ["init"],
-  components: { inputer },
+  components: { inputer, switches },
   data() {
     return {
       option: JSON.parse(JSON.stringify(this.init.option))

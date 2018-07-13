@@ -118,8 +118,7 @@ export default {
             : this.resetMenu();
         }
 
-        const dom = document.querySelector(".ticket");
-        dom && dom.classList.add("active");
+        this.highlightTicket(this.invoices[0])
       });
     },
     setPage(number) {

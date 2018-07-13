@@ -110,10 +110,14 @@ export default {
         });
     },
     setOption() {
-      const { addition, startAt, max, name } = this.template.contain[
-        this.index
-      ];
-      const option = { addition, startAt, max, name };
+      const {
+        addition,
+        startAt,
+        max,
+        name,
+        inline = false
+      } = this.template.contain[this.index];
+      const option = { addition, startAt, max, name, inline };
 
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, option, edit: true };

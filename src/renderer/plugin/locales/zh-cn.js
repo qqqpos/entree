@@ -1318,7 +1318,8 @@ export default {
     searchTicket: "查找订单",
     placedItemFor: "点了 {i}个 单品",
     voidTicketFor: " 取消了订单, 原因是",
-    gallery: "图片库"
+    gallery: "图片库",
+    itemInline: "物品内联"
   },
   nav: {
     store: "店面",

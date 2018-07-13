@@ -1357,7 +1357,8 @@ export default {
     searchTicket: "Search Ticket",
     placedItemFor: " has placed {i} items for ",
     voidTicketFor: " voided ticket for ",
-    gallery: "Gallery"
+    gallery: "Gallery",
+    itemInline: "Items Inline"
   },
   nav: {
     store: "Store",

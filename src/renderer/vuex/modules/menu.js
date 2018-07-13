@@ -193,7 +193,7 @@ const mutations = {
     single = parseFloat(price)
       || parseFloat(item.price[index])
       || parseFloat(item.price[0]) + parseFloat(extra)
-      || parseFloat(item.price[0]);
+      || parseFloat(item.price[0]) || 0;
 
     if (item.qty === 1) {
       if (index === item.sideIndex && !data.function) {

@@ -280,11 +280,11 @@ export default {
       });
     },
     openTimer() {
-      if (this.isEmptyTicket || this.order.hasOwnProperty('parent')) return;
+      if (this.isEmptyTicket || this.order.hasOwnProperty("parent")) return;
       this.$open("timer");
     },
     openSplit() {
-      if (this.isEmptyTicket || this.order.hasOwnProperty('parent')) return;
+      if (this.isEmptyTicket || this.order.hasOwnProperty("parent")) return;
       this.$open("splitModule");
     },
     switchGuest() {
@@ -390,7 +390,7 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
-        const { printOnDone, table } = this.dinein;
+        const { printOnDone = false, table = true } = this.dinein;
         const printCount = this.app.newTicket
           ? print ? 1 : 0
           : print ? this.order.printCount + 1 : this.order.printCount;
