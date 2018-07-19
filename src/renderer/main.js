@@ -19,6 +19,7 @@ import Trend from "vuetrend";
 import Bars from "vuebars";
 import { Mask, OuterClick } from "./plugin/directive"
 
+
 Vue.use(Electron);
 Vue.use(VueBus);
 Vue.use(Trend);
@@ -32,6 +33,7 @@ Vue.directive('outer-click', OuterClick);
 
 Vue.config.debug = true;
 window.moment = moment;
+window.ObjectId = require("bson-objectid");
 
 //change moment default text
 moment.updateLocale("en", {

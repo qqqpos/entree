@@ -1,15 +1,15 @@
 <template>
   <div class="layout">
-    <draggable v-model="categories" @sort="isCategorySorted = true" :options="{animation: 300,group: 'category',ghostClass: 'categoryGhost'}">
+    <draggable v-model="layouts.menu" @sort="isCategorySorted = true" :options="categoryOpt" class="category-wrap">
       <transition-group tag="section" class="category">
-        <div v-for="(category,index) in categories" @click="setCategory(index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
+        <div v-for="(category,index) in layouts.menu" @click="setCategory(index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
       </transition-group>
     </draggable>
-    <div>
+    <div class="items-wrap">
       <div v-for="(group,groupIndex) in items" :key="groupIndex">
         <draggable :list="group" @sort="isItemSorted = true" :options="{animation:300,group:group.category,ghostClass:'itemGhost',draggable:'.draggable'}">
           <transition-group tag="section" class="items" :name="'drag'">
-            <div v-for="(item,index) in group" @contextmenu="editItem(item,groupIndex,index)" :class="{draggable:item._id,disable:!item._id}" :key="index" :data-menuid="item.menuID">{{item[language]}}</div>
+            <div v-for="(item,itemIndex) in group" @contextmenu="editItem(item,groupIndex,itemIndex)" :class="{draggable:item._id,disable:!item._id}" :key="itemIndex" :data-menuid="item.menuID">{{item[language]}}</div>
           </transition-group>
         </draggable>
       </div>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import Preset from "../../../preset";
 import draggable from "vuedraggable";
 import itemTrend from "./component/itemTrend";
@@ -39,26 +41,30 @@ export default {
   },
   data() {
     return {
-      language: this.$store.getters.language,
-      categories: this.$store.getters.menu,
+      categoryOpt: {
+        animation: 300,
+        group: "category",
+        ghostClass: "categoryGhost"
+      },
       isCategorySorted: false,
       isItemSorted: false,
       componentData: null,
       component: null,
-      categoryIndex: 0,
       clipboard: null,
       items: []
     };
+  },
+  computed: {
+    ...mapGetters(["language", "layouts", "menu"])
   },
   created() {
     this.getItems();
   },
   mounted() {
-    document.querySelector(".category div").classList.add("active");
-    window.addEventListener("keydown", this.entry, false);
+    //window.addEventListener("keydown", this.entry, false);
   },
   beforeDestroy() {
-    window.removeEventListener("keydown", this.entry, false);
+    //window.removeEventListener("keydown", this.entry, false);
 
     this.isCategorySorted && this.updateCategorySort();
     this.isItemSorted && this.updateItemSort();
@@ -71,7 +77,22 @@ export default {
     },
     getItems(index = 0) {
       this.categoryIndex = index;
-      this.items = this.categories[index].item.slice();
+
+      let menu = [];
+
+      this.layouts.menu[index].contain.forEach(category => {
+        let items = this.menu[category].slice();
+        let align = 6 - items.length % 3;
+        if (align === 6) align = 3;
+
+        Array(align)
+          .fill()
+          .forEach(() => items.push({ zhCN: "", usEN: "" }));
+
+        menu.push(items);
+      });
+
+      this.items = menu;
     },
     editCategory(category, index) {
       new Promise((resolve, reject) => {
@@ -80,17 +101,17 @@ export default {
           this.component = "categoryEditor";
         });
       })
-        .then(_category => {
+        .then(update => {
           this.$socket.emit(
             "[CATEGORY] UPDATE",
-            { category: _category, index },
+            { category: update, index },
             () => this.refreshData()
           );
         })
         .catch(this.exitComponent);
     },
     editItem(item, group, index) {
-      const categories = this.categories[this.categoryIndex].contain.map(
+      const categories = this.layouts.menu[this.categoryIndex].contain.map(
         category => ({
           label: category,
           tooltip: "",
@@ -99,40 +120,26 @@ export default {
         })
       );
 
-      if (!item.hasOwnProperty("_id")) item = this.copyLastItem(group, index);
+      if (!item._id) item = this.copyLastItem(group, index);
 
       new Promise((resolve, reject) => {
         this.componentData = {
+          edit: !!item._id,
+          categories,
           resolve,
           reject,
-          categories,
-          item,
-          edit: !!item._id
+          item
         };
         this.component = "itemEditor";
       })
-        .then(updatedItem => {
-          //remove unnessary params
-          delete updatedItem.clickable;
-
-          const sequence = [this.categoryIndex, group, index];
-
-          this.$socket.emit(
-            "[MENU] UPDATE",
-            {
-              item: updatedItem,
-              sequence
-            },
-            () => this.refreshData()
-          );
-        })
-        .catch(del => {
-          del
-            ? this.deleteItemConfirm(item, group, index)
-            : this.exitComponent();
+        .then(update =>
+          this.$socket.emit("[ITEM] UPDATE", update, () => this.refreshData())
+        )
+        .catch(deleteItem => {
+          deleteItem ? this.itemDeleteDialog(item) : this.exitComponent();
         });
     },
-    deleteItemConfirm(item, group, index) {
+    itemDeleteDialog(item) {
       const prompt = {
         title: "dialog.deleteItem",
         msg: ["dialog.deleteItemConfirm", item[this.language]],
@@ -143,28 +150,19 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() => {
-          const sequence = [this.categoryIndex, group, index];
-
-          this.$socket.emit(
-            "[MENU] REMOVE",
-            {
-              _id: item._id,
-              sequence
-            },
-            () => this.refreshData()
-          );
-        })
+        .then(() =>
+          this.$socket.emit("[ITEM] REMOVE", item, () => this.refreshData())
+        )
         .catch(this.exitComponent);
     },
     copyLastItem(group, index) {
       let item;
       let lastItem = this.items[group][index - 1];
-      
-      if (lastItem && lastItem.hasOwnProperty("_id")) {
+
+      if (lastItem && lastItem._id) {
         item = JSON.parse(JSON.stringify(lastItem));
         Object.assign(item, {
-          _id: undefined,
+          _id: null,
           menuID: "",
           usEN: "",
           zhCN: "",
@@ -173,11 +171,10 @@ export default {
           prices: {}
         });
       } else {
-        let taxClass = Object.keys(this.$store.getters.tax.class);
         let defaultTax = "";
-        taxClass.forEach(name => {
-          this.$store.getters.tax.class[name].default === true &&
-            (defaultTax = name);
+        Object.keys(this.$store.getters.tax.class).forEach(name => {
+          if (this.$store.getters.tax.class[name].default === true)
+            defaultTax = name;
         });
 
         item = Preset.item();
@@ -190,29 +187,37 @@ export default {
       return item;
     },
     search({ category, _id }) {
-      const categoryIndex = this.categories.findIndex(group =>
-        group.contain.includes(category)
-      );
-
-      if (categoryIndex !== -1) {
-        this.setCategory(categoryIndex);
-
-        this.items.forEach((group, index) => {
-          const _index = group.findIndex(i => i._id === _id);
-
-          if (_index !== -1) {
-            const item = this.items[index][_index];
-            this.editItem(item, index, _index);
-          }
-        });
-      }
+      // const categoryIndex = this.categories.findIndex(group =>
+      //   group.contain.includes(category)
+      // );
+      // if (categoryIndex !== -1) {
+      //   this.setCategory(categoryIndex);
+      //   this.items.forEach((group, index) => {
+      //     const _index = group.findIndex(i => i._id === _id);
+      //     if (_index !== -1) {
+      //       const item = this.items[index][_index];
+      //       this.editItem(item, index, _index);
+      //     }
+      //   });
+      // }
     },
     updateCategorySort() {
-      this.$socket.emit("[CATEGORY] SORT", this.categories);
+      this.$socket.emit("[CATEGORY] SORT", this.layouts.menu);
       this.isCategorySorted = false;
     },
     updateItemSort() {
-      this.$socket.emit("[MENU] SORT", this.items);
+      const items = [];
+
+      this.items.forEach((group, i) => {
+        let item = group.filter(item => item._id);
+
+        const category = this.layouts.menu[this.categoryIndex].contain[i];
+        this.menu[category] = item;
+
+        items.push(item.map(item => item._id));
+      });
+
+      this.$socket.emit("[ITEM] SORT", this.items);
       this.isItemSorted = false;
     },
     refreshData() {
@@ -224,16 +229,7 @@ export default {
     },
     copy(data) {
       this.clipboard = data;
-    },
-    updateStyle(index) {
-      const dom = document.querySelector(".category .active");
-      dom && dom.classList.remove("active");
-
-      document.querySelectorAll(".category div")[index].classList.add("active");
     }
-  },
-  watch: {
-    categoryIndex: "updateStyle"
   }
 };
 </script>
@@ -246,6 +242,15 @@ export default {
   overflow-y: auto;
 }
 
+.category-wrap {
+  position: fixed;
+  top: 31px;
+}
+
+.items-wrap {
+  margin-left: 284px;
+  margin-top: 1px;
+}
 .category {
   width: 284px;
   flex: none;
@@ -262,6 +267,9 @@ export default {
 }
 
 aside {
+  position: fixed;
+  right: 8px;
+  top: 32px;
   flex: 1;
 }
 </style>

@@ -1,109 +1,61 @@
 <template>
-  <div class="main">
-    <section class="layout">
-      <aside class="column">
-        <div class="sections column">
-          <button class="section btn" v-for="(section,index) in tables" @click="switchSection(index)" :key="index">{{section[language]}}</button>
+    <div class="table-outer">
+        <div class="table-layout">
+            <aside class="column">
+                <div class="table-section">
+                    <button class="btn relative" v-for="(section,index) in layouts.table" :key="index" @click="section = index">{{section[language]}}<span class="notify blue">{{countSeats(index)}}</span></button>
+                </div>
+                <div class="column">
+                    <button class="btn" @click="openBook">
+                        <i class="far fa-calendar-check"></i>
+                        <span class="text">{{$t('button.booking')}}</span>
+                    </button>
+                    <button class="btn" @click="viewList">
+                        <i class="fas fa-list-ol"></i>
+                        <span class="text">{{$t('button.viewList')}}</span>
+                    </button>
+                </div>
+            </aside>
+            <div class="tables">
+                <div class="table" v-for="(table,index) in tableSection" @click="tap(table)" @contextmenu="reset(table)" :key="index" :class="getTableStatus(table)">
+                <span :class="[table.shape]" class="icon"></span>
+                <span class="name">{{table.name}}</span>
+                <span class="staff" v-show="table.server">{{table.server}}</span>
+                </div>                
+            </div>
         </div>
-        <div class="column">
-          <button class="btn" @click="openReservation" :disabled="true">
-            <i class="fa fa-book"></i>
-            <span class="text">{{$t('button.reservation')}}</span>
-          </button>
-          <button class="btn" @click="viewDineInList" :disabled="true">
-            <i class="fa fa-list-alt"></i>
-            <span class="text">{{$t('button.viewList')}}</span>
-          </button>
+        <div class="ticket">
+            <div class="wrap">
+                <order-list layout="display" :display="true"></order-list>
+                <buttons class="buttons" :transfer="transfer" @switch="switchTable"></buttons>
+            </div>
         </div>
-      </aside>
-      <div class="view">
-        <div class="table" v-for="(table,index) in viewSection" @click="tap(table)" @contextmenu="option(table,index)" :key="index" :class="getTableStatus(table.status)">
-          <span :class="[table.shape]" class="icon"></span>
-          <span class="name">{{table.name}}</span>
-          <span class="staff" v-show="table.server">{{table.server}}</span>
-        </div>
-      </div>
-    </section>
-    <div class="ticket">
-      <div class="wrap">
-        <order-list layout="display" :display="true"></order-list>
-        <buttons class="grid" :transfer="transfer" @switch="switchTable"></buttons>
-      </div>
+        <div :is="component" :init="componentData"></div>
     </div>
-    <div class="popupMask center dark" v-show="component">
-      <div :is="component" :init="componentData"></div>
-    </div>
-  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import inputModule from "../component/inputer";
 import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import orderList from "../common/orderList";
-import hibachi from "./component/hibachi";
-import counter from "./component/counter";
-import creator from "./component/creator";
 import buttons from "./buttons";
 
 export default {
-  props: ["reserved"],
-  components: {
-    unlockModule,
-    dialogModule,
-    orderList,
-    counter,
-    buttons,
-    creator,
-    hibachi
-  },
-  computed: {
-    viewSection() {
-      return this.tables[this.view] ? this.tables[this.view].item : [];
-    },
-    ...mapGetters([
-      "op",
-      "sync",
-      "dinein",
-      "tables",
-      "history",
-      "language",
-      "customer",
-      "currentTable"
-    ])
-  },
+  components: { inputModule, dialogModule, unlockModule, orderList, buttons },
   data() {
     return {
       componentData: null,
       component: null,
       transfer: false,
       buffer: [],
-      view: 0
+      section: 0
     };
   },
-  created() {
-    this.checkSync();
-  },
   methods: {
-    checkSync() {
-      this.$socket.emit("[SYNC] POS", time => {
-        time !== this.sync && this.$socket.emit("[SYNC] TABLE_LIST");
-      });
-    },
-    switchSection(index) {
-      this.view = index;
-    },
-    switchTable(data) {
-      if (typeof data === "boolean") {
-        this.transfer = false;
-        this.buffer = [];
-      } else {
-        this.transfer = true;
-        this.buffer.push(data);
-      }
-    },
-    getTableStatus(status) {
+    getTableStatus({ status, session }) {
       switch (status) {
         case -2:
           return { reserved: true };
@@ -112,16 +64,25 @@ export default {
         case 1:
           return { idle: true };
         case 2:
-          return { placed: true };
+          const invoice = this.history.find(t => t.session === session);
+          return invoice && invoice.print
+            ? { placed: true }
+            : { preparing: true };
         case 3:
           return { receipted: true };
         case 4:
-          return { settled: true };
+          return { booked: true };
       }
     },
+    countSeats(section) {
+      const { zone } = this.layouts.table[section];
+      const tables = this.tables[zone];
+
+      return tables.filter(table => table._id && table.status === 1).length;
+    },
     tap(table) {
-      if (!table.hasOwnProperty("_id")) return;
-      this.setCurrentTable(table);
+      if (!table._id) return;
+      this.setViewTable(table);
 
       let prompt;
 
@@ -129,7 +90,7 @@ export default {
         case -2:
           prompt = {
             type: "question",
-            title: "dialog.tableReserved",
+            title: "dialog.tableBooked",
             msg: "dialog.actionProcess",
             buttons: [
               { text: "button.cancel", fn: "reject" },
@@ -137,135 +98,59 @@ export default {
             ]
           };
 
-          this.$dialog(prmopt)
-            .then(() =>
-              this.checkReservation(table)
-                .then(this.checkIfSwitch)
-                .then(this.checkAccessPin)
-                .then(this.countGuest.bind(null, table))
-                .then(this.checkTableType)
-                .then(this.createTable)
-                .catch(this.createTableFailed)
-            )
-            .catch(this.exitComponent);
+          this.$dialog(prompt).then();
           break;
         case -1:
-          this.resetMenu();
+          this.resetOrder();
           break;
         case 1:
-          this.checkReservation(table)
+          this.checkBooking(table)
             .then(this.checkIfSwitch)
             .then(this.checkAccessPin)
             .then(this.countGuest.bind(null, table))
             .then(this.checkTableType)
             .then(this.createTable)
             .catch(this.createTableFailed);
-          break;
         case 4:
-          prompt = {
-            title: "dialog.tableClear",
-            msg: ["dialog.tableClearTip", this.currentTable.name],
-            buttons: [
-              { text: "button.cancel", fn: "reject" },
-              { text: "button.clear", fn: "resolve" }
-            ]
-          };
-
-          this.$dialog(prompt)
-            .then(() => {
-              this.resetMenu();
-              this.$socket.emit("[TABLE] RESET", {
-                _id: this.currentTable._id
-              });
-              this.exitComponent();
-            })
-            .catch(this.exitComponent);
           break;
         default:
-          this.checkPermission(table)
+          this.$checkPermission("view", "tables")
             .then(this.viewTicket)
-            .catch(this.exceptionHandler);
+            .catch(this.unableViewTicketDialog);
       }
     },
-    checkPermission(table) {
-      return new Promise((next, stop) => {
-        table.server === this.op.name
-          ? next(table)
-          : this.$checkPermission("view", "tables")
-              .then(() => next(table))
-              .catch(() => stop("UNABLE_VIEW_OTHER_TABLE"));
-      });
-    },
-    checkTableType(table) {
-      return new Promise((next, stop) => {
-        switch (table.type) {
-          case "hibachi":
-            this.selectHibachiTable(table)
-              .then(({ seats, table }) => {
-                this.resetMenu();
+    viewTicket() {
+      const prompt = {
+        title: "dialog.ticketNotFound",
+        msg: "dialog.actionProcess",
+        buttons: [
+          { text: "button.resetTable", fn: "reject" },
+          { text: "button.sync", fn: "resolve", load: true }
+        ]
+      };
+      const { _id, invoice, session } = this.table;
+      const ticket = this.history.find(
+        i => i._id === invoice[0] || i.session === session
+      );
 
-                const session = ObjectId();
-                const layout = seats[0].direction;
-                seats.forEach(seat =>
-                  Object.assign(seat, {
-                    session,
-                    server: this.op.name,
-                    time: Date.now()
-                  })
-                );
-
-                this.setTicket({ type: "HIBACHI" });
-                this.setApp({ newTicket: true });
-                this.setOrder({
-                  seats,
-                  layout,
-                  table,
-                  session,
-                  guest: seats.length,
-                  type: "HIBACHI",
-                  server: this.op.name
-                });
-
-                this.$router.push({ path: "/main/menu" });
-                stop();
-              })
-              .catch(() => stop());
-            break;
-          case "bar":
-            const session = ObjectId();
-
-            this.resetMenu();
-            this.setTicket({ type: "BAR" });
-            this.setApp({ newTicket: true });
-            this.setOrder({
-              table: table.name,
-              tableID: table._id,
-              session,
-              guest: table.guest || 1,
-              type: "BAR",
-              server: this.op.name
+      ticket
+        ? this.setViewOrder(ticket)
+        : this.$dialog(prompt)
+            .then(() => {
+              this.$socket.emit("[ORDER] SYNC", orders => {
+                this.setTodayOrder(orders);
+                this.exitComponent();
+                this.viewTicket();
+              });
+            })
+            .catch(() => {
+              this.$socket.emit("[TABLE] RESET", { _id });
+              this.exitComponent();
             });
-
-            this.setCurrentTable(
-              Object.assign(table, {
-                status: 2,
-                session,
-                server: this.op.name,
-                time: Date.now()
-              })
-            );
-
-            this.$socket.emit("[TABLE] SETUP", this.currentTable);
-            this.$router.push({ path: "/main/menu" });
-            stop();
-            break;
-          default:
-            next(table);
-        }
-      });
     },
-    checkReservation(table) {
+    checkBooking(table) {
       return new Promise((next, stop) => {
+        //check this.books
         next(table);
       });
     },
@@ -285,12 +170,14 @@ export default {
     checkAccessPin() {
       return new Promise((next, stop) => {
         if (this.dinein.passwordRequire) {
+          // password required to create new table
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject };
             this.component = "unlockModule";
           })
             .then(operator => {
               if (operator._id === this.op._id) {
+                // move next if same person
                 next();
               } else {
                 const prompt = {
@@ -304,310 +191,193 @@ export default {
                 };
 
                 this.$dialog(prompt)
-                  .then(() => {
-                    this.switchOperator(operator);
-                    next();
-                  })
-                  .catch(() => stop("PASSWORD_MISMATCH"));
+                  .then(() => this.switchOperator(operator, next))
+                  .catch(() => stop("PASSWORD_REQUIRED"));
               }
             })
-            .catch(() => stop("PASSWORD_REQUIRED"));
+            .catch(this.pinIncorrectDialog);
         } else {
           next();
         }
       });
     },
-    switchOperator(op) {
+    pinIncorrectDialog(exit) {
+      const prompt = {
+        title: "dialog.accessDenied",
+        msg: "dialog.accessPinNotMatch",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+
+      exit
+        ? this.exitComponent()
+        : this.$dialog(prompt).then(this.exitComponent);
+    },
+    switchOperator(operator, next) {
       this.exitComponent();
-      const language = op.language || "usEN";
+      const language = operator.language || "usEN";
       moment.locale(language === "usEN" ? "en" : "zh-cn");
+
       this.$setLanguage(language);
       this.setApp({ language, newTicket: true });
-      this.setOp(op);
+      this.setOperator(operator);
+      next();
     },
     countGuest(table) {
+      const defaultGuest = table.seats || 1;
+
       return new Promise((next, stop) => {
         this.dinein.guestCount
           ? new Promise((resolve, reject) => {
-              this.componentData = { resolve, reject };
-              this.component = "counter";
+              const config = {
+                title: "text.setGuest",
+                subtitle: table.name,
+                type: "number",
+                percentage: false,
+                allowPercentage: false,
+                amount: defaultGuest
+              };
+              this.componentData = Object.assign({ resolve, reject }, config);
+              this.component = "inputModule";
             })
-              .then(guest => next(Object.assign(table, { guest })))
+              .then(({ amount }) =>
+                next(Object.assign(table, { guest: amount }))
+              )
               .catch(() => stop())
-          : next(Object.assign(table, { guest: 1 }));
+          : next(Object.assign(table, { guest: defaultGuest }));
       });
     },
-    viewTicket(table) {
-      !table.hasOwnProperty("invoice") && Object.assign(table, { invoice: [] });
-
-      const invoice = this.history.find(
-        i => i._id === table.invoice[0] || i.session === table.session
-      );
-      const prompt = {
-        title: "dialog.ticketNotFound",
-        msg: "dialog.actionProcess",
-        buttons: [
-          { text: "button.resetTable", fn: "reject" },
-          { text: "button.sync", fn: "resolve" }
-        ]
-      };
-
-      invoice
-        ? this.setViewOrder(invoice)
-        : this.$dialog(prompt)
-            .then(() => {
-              this.$socket.emit("[SYNC] ORDER_LIST");
-              this.exitComponent();
-            })
-            .catch(() => {
-              this.$socket.emit("[TABLE] RESET", { _id: table._id });
-              this.exitComponent();
-            });
+    checkTableType(table) {
+      return new Promise((next, stop) => {
+        switch (table.type) {
+          case "hibachi":
+            break;
+          case "bar":
+            break;
+          default:
+            next(table);
+        }
+      });
     },
-    swapTable(tables) {
-      let [t1, t2] = tables;
-      const {
-        server,
-        status,
-        session,
-        invoice,
-        time,
-        guest,
-        type = "regular"
-      } = t1;
+    createTable({ _id, name, guest }) {
+      const session = ObjectId().toString();
 
-      Object.assign(t2, {
-        server,
-        status,
+      this.resetOrder();
+      this.setTicket({ type: "DINE_IN" });
+      this.setApp({ newTicekt: true });
+      this.setOrder({
+        type: "DINE_IN",
+        tableID: _id,
+        table: name,
         session,
-        invoice,
-        time,
         guest
       });
 
-      Object.assign(t1, {
-        server: "",
-        status: 1,
-        session: "",
-        invoice: [],
-        time: null,
-        guest: 0
-      });
-
-      this.$socket.emit("[TABLE] UPDATE", { table: t1, assign: false });
-
-      let order = this.history.find(i => i._id === invoice[0]);
-
-      if (order) {
-        let orderType;
-        switch (t2.type) {
-          case "bar":
-            orderType = "BAR";
-            break;
-          case "hibachi":
-            orderType = "HIBACHI";
-            break;
-          default:
-            orderType = "DINE_IN";
-        }
-        Object.assign(order, {
-          type: orderType,
-          table: t2.name,
-          tableID: t2._id
-        });
-
-        this.$socket.emit("[INVOICE] UPDATE", order);
-      }
-
-      this.$socket.emit("[TABLE] UPDATE", { table: t2, assign: true });
-    },
-    selectHibachiTable(table) {
-      return new Promise((resolve, reject) => {
-        this.$socket.emit("[HIBACHI] SEATS", table.contain, data => {
-          const seats = this.initialHibachiTable(table.contain, data);
-          this.componentData = { resolve, reject, table, seats };
-          this.component = "hibachi";
-        });
-      });
-    },
-    initialHibachiTable(table, data) {
-      let layout = [];
-
-      data.forEach((group, index) => {
-        let seats = Array(11)
-          .fill()
-          .map((seat, index) => ({
-            group: "",
-            grid: index,
-            name: "",
-            session: ""
-          }));
-        group.forEach(table => Object.assign(seats[table.grid], table));
-        seats[10].name = table[index] || "";
-        layout.push(seats);
-      });
-
-      return layout;
-    },
-    selectBarTab() {
-      return new Promise((resolve, reject) => {
-        resolve();
-        // this.componentData = { resolve, reject };
-        // this.component = "barTab";
-      });
-    },
-    createTable(table) {
-      const { name, _id, guest } = table;
-      const session = ObjectId();
-
-      this.resetMenu();
-      this.setTicket({ type: "DINE_IN" });
-      this.setApp({ newTicket: true });
-      this.setOrder({
-        guest,
-        session,
-        table: name,
-        tableID: _id,
-        type: "DINE_IN"
-      });
-
-      this.setCurrentTable(
-        Object.assign(table, {
-          status: -1,
-          session,
+      this.setViewTable(
+        Object.assign(this.table, {
           server: this.op.name,
-          time: Date.now()
+          time: Date.now(),
+          status: -1,
+          session
         })
       );
 
-      this.$socket.emit("[TABLE] SETUP", this.currentTable);
+      this.$socket.emit("[TABLE] UPDATE", this.table);
       this.$router.push({ path: "/main/menu" });
     },
-    createTableFailed(reason) {
-      this.exitComponent();
-      let prompt = null;
-      switch (reason) {
-        case "PASSWORD_REQUIRED":
-          prompt = {
-            title: "dialog.unableAccess",
-            msg: "dialog.permissionDeniedTip",
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          };
-          break;
-        case "PASSWORD_MISMATCH":
-          prompt = {
-            title: "dialog.unableAccess",
-            msg: "dialog.accessPinNotMatch",
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          };
-          break;
-        case "TABLE_RESERVED":
-          prompt = {
-            title: "dialog.unableAccess",
-            msg: "dialog.tableReserved",
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
-          };
-          break;
-      }
-      prompt && this.$dialog(prompt).then(this.exitComponent);
+    swapTable([table1, table2]) {},
+    viewList() {},
+    openBook() {},
+    switchTable() {},
+    reset(table) {
+      table._id && this.resetTableDialog(table);
     },
-    option(table, index) {
-      table._id && !table.temporary
-        ? this.resetTableDialog(table)
-        : table.temporary
-          ? this.collapseTable(table, index)
-          : this.temporaryTable(table, index);
-    },
-    resetTableDialog(table, index) {
-      const { server, name, _id } = table;
+    resetTableDialog({ _id, name, server }) {
       const { role } = this.op;
 
-      let prompt = {
+      const prompt = {
         title: "dialog.forceClearTable",
+        msg: server
+          ? ["dialog.forceClearTableConfirm", server, name]
+          : "dialog.resetTableConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.clear", fn: "resolve" }
         ]
       };
 
-      prompt.msg = !server
-        ? "dialog.resetTableConfirm"
-        : ["dialog.forceClearTableConfirm", server, name];
-
       if (role === "Manager" || role === "Owner" || role === "Developer") {
         this.$dialog(prompt)
           .then(() => {
             this.$socket.emit("[TABLE] RESET", { _id });
-            this.resetMenu();
+            this.resetOrder();
             this.exitComponent();
           })
           .catch(this.exitComponent);
       }
     },
-    collapseTable(table, index) {
+    unableViewTicketDialog() {
       const prompt = {
-        type: "question",
-        title: "dialog.removeTemporaryTable",
-        msg: "dialog.removeTemporaryTableConfirm"
+        title: "dialog.insufficientPermission",
+        msg: "dialog.permission",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
-      this.$dialog(prompt)
-        .then(this.exitComponent)
-        .catch(this.exitComponent);
+      this.$dialog(prompt).then(this.exitComponent);
     },
-    temporaryTable(table, index) {
-      return;
-      const prompt = {
-        type: "question",
-        title: "dialog.temporaryTable",
-        msg: "dialog.createTemporaryTable"
-      };
-
-      this.$dialog(prompt)
-        .then(() => this.setTableName(table, index))
-        .catch(this.exitComponent);
-    },
-    setTableName(table, index) {
-      new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject };
-        this.component = "creator";
-      }).then(name => {
-        this.exitComponent();
-        Object.assign(table, {
-          _id: String().random(),
-          temporary: true,
-          grid: index,
-          status: 1,
-          name
-        });
-        this.$socket.emit("[TABLE] CREATE", table);
-      });
-    },
-    exceptionHandler(error) {
-      switch (error) {
-        case "UNABLE_VIEW_OTHER_TABLE":
-          console.log("trigger");
-          break;
-      }
-    },
-    openReservation() {},
-    viewDineInList() {},
     ...mapActions([
-      "setOp",
       "setApp",
       "setOrder",
-      "resetMenu",
+      "resetOrder",
       "setTicket",
       "resetTable",
+      "setOperator",
       "setViewOrder",
-      "setCurrentTable"
+      "setViewTable",
+      "setTodayOrder"
+    ])
+  },
+  computed: {
+    tableSection() {
+      const { zone } = this.layouts.table[this.section];
+      const tables = this.tables[zone];
+
+      let seats = Array(56)
+        .fill()
+        .map(() => ({
+          feature: [],
+          invoice: [],
+          name: "",
+          server: null,
+          session: null,
+          shape: "",
+          status: 0,
+          time: 0,
+          grid: 0,
+          status: 0,
+          zone
+        }));
+
+      tables.forEach(table => {
+        seats[table.grid] = table;
+      });
+      return seats;
+    },
+    ...mapGetters([
+      "op",
+      "table",
+      "dinein",
+      "tables",
+      "history",
+      "layouts",
+      "language",
+      "customer"
     ])
   }
 };
 </script>
 
 <style scoped>
-.main {
+.table-outer {
   display: flex;
   flex-direction: row;
   height: 771px;
@@ -616,14 +386,8 @@ export default {
   background: url(../../assets/image/floor.png) #ebeff1;
 }
 
-.layout {
-  width: 740px;
+.table-layout {
   display: flex;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
 }
 
 aside {
@@ -631,23 +395,29 @@ aside {
   height: 733px;
 }
 
-.sections {
-  text-align: center;
-  flex: 1;
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
-.grid {
+.buttons {
   padding: 3px 3px 0;
 }
 
-.view {
-  padding: 3px 0;
+.table-section {
+  flex: 1;
+  text-align: center;
+}
+
+.tables {
+  padding: 2px 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
   height: 737px;
+  flex: 1;
 }
 
 .table {
@@ -707,8 +477,14 @@ aside {
   box-shadow: 0 1px 3px #f25d30;
 }
 
-.placed .icon {
+.placed .icon,
+.preparing .icon {
   color: #f25e31;
+}
+
+.preparing .icon:after {
+  content: "\f06d";
+  color: #ff5722;
 }
 
 .placed .icon:after {
@@ -732,9 +508,31 @@ aside {
   color: #4caf50;
 }
 
-.reserved .icon:after {
+.booked .icon:after {
   content: "\f073";
   color: #009688;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
+
+.notify {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  line-height: 22px;
+  background-clip: padding-box;
+  font-size: 14px;
+  font-weight: lighter;
+  color: #fff;
+  text-shadow: 0 1px 0 #333;
+  border-radius: 50%;
+  box-shadow: 0 1px 1px #37474f;
+}
+
+.notify.blue {
+  background-image: linear-gradient(#54a3ff, #006eed);
+}
 </style>
+
+

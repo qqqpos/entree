@@ -113,7 +113,11 @@ export default {
         const prompt = {
           type: "question",
           title: "dialog.evenSplit",
-          msg: ["dialog.evenSplitConfirm", amount]
+          msg: ["dialog.evenSplitConfirm", amount],
+          buttons: [
+            { text: "button.cancel", fn: "reject" },
+            { text: "button.confirm", fn: "resolve", load: true }
+          ]
         };
 
         this.$dialog(prompt)
@@ -279,7 +283,7 @@ export default {
 
       this.order.coupons = coupons;
       this.$calculatePayment(this.order, { selfAssign: true });
-      this.$socket.emit("[INVOICE] UPDATE", this.order);
+      this.$socket.emit("[ORDER] UPDATE", this.order);
       this.exitComponent();
     },
     driver() {
@@ -295,10 +299,10 @@ export default {
       }
     },
     exit() {
-      this.resetMenu();
+      this.resetOrder();
       this.$router.push({ path: "/main" });
     },
-    ...mapActions(["resetMenu", "setOrder"])
+    ...mapActions(["resetOrder", "setOrder"])
   },
   computed: {
     disable() {

@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     query(keyword) {
-      this.$socket.emit("[MENU] SEARCH", keyword, items => {
+      this.$socket.emit("[ITEM] SEARCH", keyword, items => {
         this.itemOpts = items.map(item => ({
           label: item[this.language],
           tooltip: item.category,

@@ -1,20 +1,20 @@
 <template>
   <div class="layout">
-    <draggable v-model="request" @sort="isCategorySorted = true" :options="{animation:300,group:'category',ghostClass:'categoryGhost'}">
+    <draggable v-model="layouts.request" @sort="isCategorySorted = true" :options="categoryOpt">
       <transition-group tag="div" class="category">
-        <div v-for="(category,index) in request" @click="setCategory(index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
+        <div v-for="(category,index) in layouts.request" @click="setCategory(category.contain,index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
       </transition-group>
     </draggable>
-    <draggable v-model="actions" @sort="isActionSorted = true" :options="{animation:300,group:'action',ghostClass:'actionGhost'}">
+    <draggable v-model="layouts.action" @sort="isActionSorted = true" :options="{animation:300,group:'action',ghostClass:'actionGhost'}">
       <transition-group tag="div" class="prefix">
-        <div v-for="(action,index) in actions" @contextmenu="editAction(action,index)" :key="index">{{action[language]}}</div>
+        <div v-for="(action,index) in layouts.action" @contextmenu="editAction(action,index)" :key="index">{{action[language]}}</div>
       </transition-group>
     </draggable>
     <div class="itemWrap">
       <div v-for="(group,groupIndex) in items" :key="groupIndex" class="item">
-        <draggable :list="group" @sort="isItemSorted = true" :options="{animation:300,group:group.category,ghostClass:'itemGhost',draggable:'.draggable'}">
+        <draggable :list="group" @sort="isItemSorted = true" :options="{animation: 300, group: group.category,ghostClass: 'itemGhost',draggable: '.draggable'}">
           <transition-group tag="section">
-            <div v-for="(item,index) in group" @contextmenu="editItem(item,groupIndex,index)" :class="{draggable:item.clickable,disable:!item.clickable}" :key="index">{{item[language]}}</div>
+            <div v-for="(item,index) in group" @contextmenu="editItem(item,groupIndex,index)" :class="{draggable:item._id,disable:!item._id}" :key="index">{{item[language]}}</div>
           </transition-group>
         </draggable>
       </div>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import categoryEditor from "./component/requestCategoryEditor";
 import actionEditor from "./component/requestActionEditor";
 import itemEditor from "./component/requestItemEditor";
@@ -33,12 +35,20 @@ import dialogModule from "../../common/dialog";
 import draggable from "vuedraggable";
 
 export default {
-  components: { dialogModule, draggable, categoryEditor, actionEditor, itemEditor },
+  components: {
+    categoryEditor,
+    dialogModule,
+    actionEditor,
+    itemEditor,
+    draggable
+  },
   data() {
     return {
-      language: this.$store.getters.language,
-      request: this.$store.getters.request,
-      actions: this.$store.getters.actions,
+      categoryOpt: {
+        animation: 300,
+        group: "category",
+        ghostClass: "categoryGhost"
+      },
       isCategorySorted: false,
       isActionSorted: false,
       isItemSorted: false,
@@ -48,8 +58,11 @@ export default {
       items: []
     };
   },
+  computed: {
+    ...mapGetters(["language", "request", "layouts"])
+  },
   created() {
-    this.getItems();
+    this.getItems(this.layouts.request[0].contain);
   },
   beforeDestroy() {
     this.isItemSorted && this.updateSortedItem();
@@ -61,9 +74,27 @@ export default {
       this.isItemSorted && this.updateSortedItem();
       this.getItems(index);
     },
-    getItems(index = this.categoryIndex) {
+    getItems(categories, index = this.categoryIndex) {
       this.categoryIndex = index;
-      this.items = this.request[index].item.slice();
+      categories = categories || this.layouts.request[index].contain;
+
+      let request = [];
+
+      categories.forEach(category => {
+        let items = this.request[category]
+          ? this.request[category].slice()
+          : [];
+
+        let align = 6 - items.length % 3;
+        if (align === 6) align = 3;
+
+        Array(align)
+          .fill()
+          .forEach(() => items.push({ zhCN: "", usEN: "" }));
+        request.push(items);
+      });
+
+      this.items = request;
     },
     editCategory(category, index) {
       new Promise((resolve, reject) => {
@@ -91,16 +122,19 @@ export default {
     },
     editItem(item, groupIndex, index) {
       const categoryIndex = this.categoryIndex;
-      const categories = this.request[categoryIndex].contain.map(category => ({
-        label: category,
-        tooltip: "",
-        plainText: true,
-        value: category
-      }));
 
-      if (!item.clickable) {
+      const categories = this.layouts.request[categoryIndex].contain.map(
+        category => ({
+          label: category,
+          tooltip: "",
+          plainText: true,
+          value: category
+        })
+      );
+
+      if (!item._id) {
         Object.assign(item, {
-          category: this.request[categoryIndex].contain[groupIndex],
+          category: this.layouts.request[categoryIndex].contain[groupIndex],
           price: 0,
           affix: ""
         });
@@ -108,45 +142,50 @@ export default {
 
       new Promise((resolve, reject) => {
         this.componentData = {
-          resolve,
-          reject,
           categoryIndex,
           categories,
           groupIndex,
+          resolve,
+          reject,
           item,
           index
         };
         this.component = "itemEditor";
       })
-        .then(this.refreshData)
-        .catch(this.exitComponent);
+        .then(update => {
+          this.items[groupIndex].splice(index, 1, update);
+          this.refreshData();
+        })
+        .catch(removeItem => {
+          removeItem && this.items[groupIndex].splice(index, 1);
+          this.refreshData();
+        });
     },
     updateSortedItem() {
+      this.isItemSorted = false;
+
       const items = [];
-      this.items.forEach(group => {
-        const item = group.filter(item => item._id).map(item => item._id);
-        items.push(item);
+
+      this.items.forEach((group, i) => {
+        let item = group.filter(item => item._id);
+
+        const category = this.layouts.request[this.categoryIndex].contain[i];
+        this.request[category] = item;
+
+        items.push(item.map(item => item._id));
       });
 
       this.$socket.emit("[REQUEST] SORT_ITEM", items);
-      this.isItemSorted = false;
     },
     updateSortedAction() {
-      this.$socket.emit("[REQUEST] SORT_ACTION", this.actions);
       this.isActionSorted = false;
+      this.$socket.emit("[REQUEST] SORT_ACTION", this.layouts.action);
     },
     updateSortedCategory() {
-      Object.assign(this.$store.getters.request, this.request);
-
-      const categories = this.request.map(category =>
-        Object.assign({}, category, { item: [] })
-      );
-      this.$socket.emit("[REQUEST] SORT_CATEGORY", categories);
       this.isCategorySorted = false;
+      this.$socket.emit("[REQUEST] SORT_CATEGORY", this.layouts.request);
     },
     refreshData() {
-      this.request = this.$store.getters.request;
-      this.actions = this.$store.getters.actions;
       this.getItems();
       this.exitComponent();
     }
@@ -163,6 +202,12 @@ export default {
 .category,
 .prefix {
   width: 142px;
+  position: fixed;
+  top: 31px;
+}
+
+.prefix {
+  left: 217px;
 }
 
 .prefix div {
@@ -183,6 +228,7 @@ export default {
   width: 410px;
   display: flex;
   flex-direction: column;
+  margin: 1px 0 0 284px;
 }
 
 .item > div {

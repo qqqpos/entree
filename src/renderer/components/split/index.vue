@@ -32,8 +32,8 @@
       </div>
       <footer>
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
-        <button class="btn" @click="call('print')" :disabled="!done">{{$t('button.printAll')}}</button>
-        <button class="btn" @click="call('confirm')" :disabled="!done">{{$t('button.confirm')}}</button>
+        <button class="btn" @click="call('printTicket',true)" :disabled="!done">{{$t('button.printAll')}}</button>
+        <button class="btn" @click="call('confirmSplit',false)" :disabled="!done">{{$t('button.confirm')}}</button>
       </footer>
     </div>
   </div>
@@ -59,7 +59,7 @@ export default {
       "ticket",
       "customer",
       "dinein",
-      "currentTable"
+      "table"
     ])
   },
   data() {
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getSplitOrder() {
-      this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
+      this.$socket.emit("[SPLIT] GET", this.order._id, splits => {
         const orders = splits.filter(order => order);
         if (orders.length) {
           this.splits = orders;
@@ -94,7 +94,7 @@ export default {
       });
     },
     create() {
-      const _id = ObjectId();
+      const _id = ObjectId().toString();
       const order = JSON.parse(JSON.stringify(this.order));
 
       let content = [];
@@ -223,31 +223,31 @@ export default {
       this.order.content.forEach(item => (item.split = false));
 
       this.setOrder(this.order);
-      this.$socket.emit("[INVOICE] UPDATE", this.order);
+      this.$socket.emit("[ORDER] UPDATE", this.order);
       this.init.resolve();
     },
-    call(fn) {
+    call(fn, print) {
       if (this.app.newTicket && this.$route.name === "Menu") {
-        this.$socket.emit("[INVOICE] SAVE", this.order, false, order => {
+        this.$socket.emit("[ORDER] SAVE", this.order, print, order => {
           Object.assign(this.order, order);
           this.setApp({ newTicket: false });
 
-          if (this.dinein.table) {
-            Object.assign(this.currentTable, {
+          if (this.dinein.table && this.order.session) {
+            Object.assign(this.table, {
               invoice: [this.order._id],
               status: 2
             });
 
-            this.$socket.emit("[TABLE] SETUP", this.currentTable);
+            this.$socket.emit("[TABLE] SETUP", this.table);
           }
 
-          this[fn]();
+          this[fn](print);
         });
       } else {
-        this[fn]();
+        this[fn](print);
       }
     },
-    print() {
+    printTicket(print) {
       const { number, time } = this.order;
 
       this.$children
@@ -262,25 +262,27 @@ export default {
           )
         );
 
-      this.done && this.confirm();
+      this.done && this.confirmSplit(print);
     },
-    confirm() {
+    confirmSplit(print) {
       if (document.getElementsByClassName("evener").length > 0) return;
       if (document.getElementsByClassName("split-item-list").length > 0) return;
 
       const parent = this.order._id;
       const splits = this.$children
-        .map(vm => vm.order)
+        .map(vm => {
+          if (print) {
+            vm.order.content.forEach(item =>
+              Object.assign(item, { print: true })
+            );
+            vm.order.print = true;
+          }
+
+          return vm.order;
+        })
         .filter((order, index) => index !== 0 && order.content.length !== 0);
 
-      let tip = 0;
-      let tax = 0;
-      let paid = 0;
-      let plasticTax = 0;
-      let subtotal = 0;
-      let delivery = 0;
-      let gratuity = 0;
-      let discount = 0;
+      let payments = {};
 
       if (splits.length > 1) {
         splits.forEach((order, index) => {
@@ -288,22 +290,28 @@ export default {
           order.time = order.time || this.order.time;
           order.number = `${this.order.number}-${index + 1}`;
 
-          tip += order.payment.tip;
-          tax += order.payment.tax;
-          paid += isNumber(order.payment.paid) ? order.payment.paid : 0;
-          plasticTax += order.payment.plasticTax;
-          subtotal += order.payment.subtotal;
-          gratuity += order.payment.gratuity;
-          delivery += order.payment.delivery;
-          discount += order.payment.discount;
+          const { payment } = order;
+
+          Object.keys(payment).forEach(key => {
+            if (Number.isNaN(payment[key])) return;
+
+            if (payments.hasOwnProperty(key)) {
+              payments[key] += payment[key];
+            } else {
+              payments[key] = payment[key];
+            }
+          });
         });
 
-        const total = toFixed(subtotal + plasticTax + tax, 2);
-        const due = toFixed(Math.max(0, total + delivery - discount), 2);
-        const grandTotal = toFixed((due + gratuity) * 100, 2);
-        const rounding = this.$rounding(grandTotal);
-        const balance = due + gratuity + rounding;
-        const remain = balance - paid;
+        payments.rounding = this.$rounding(
+          toFixed((payments.due + payments.gratuity) * 100, 2)
+        );
+        payments.balance = payments.due + payments.gratuity + payments.rounding;
+        payments.remain = payments.balance - payments.paid;
+
+        Object.keys(payments).forEach(key => {
+          this.order.payment[key] = toFixed(payments[key], 2);
+        });
 
         this.$socket.emit("[SPLIT] SAVE", { splits, parent });
 
@@ -311,23 +319,12 @@ export default {
         this.order.children = splits.map(i => i._id);
         this.order.split = true;
 
-        Object.assign(this.order.payment, {
-          tip: toFixed(tip, 2),
-          tax: toFixed(tax, 2),
-          plasticTax: toFixed(plasticTax, 2),
-          subtotal: toFixed(subtotal, 2),
-          rounding: toFixed(rounding, 2),
-          gratuity: toFixed(gratuity, 2),
-          total: toFixed(total, 2),
-          discount: toFixed(discount, 2),
-          delivery: toFixed(delivery, 2),
-          due: toFixed(due, 2),
-          balance: toFixed(balance, 2),
-          remain: toFixed(remain, 2)
-        });
+        if (print) this.order.print = true;
+
+        Object.assign(this.order.payment, payments);
 
         this.setOrder(this.order);
-        this.$socket.emit("[INVOICE] UPDATE", this.order);
+        this.$socket.emit("[ORDER] UPDATE", this.order);
         this.init.resolve();
       } else {
         this.rollback();

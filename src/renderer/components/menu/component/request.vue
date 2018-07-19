@@ -2,25 +2,16 @@
   <div class="request">
     <section class="content">
       <div class="category">
-        <div v-for="(category,index) in request" @click="getItems(category)" :key="index">{{category[language]}}</div>
+        <div v-for="(category,index) in layouts.request" @click="getItems(category.contain)" :key="index">{{category[language]}}</div>
       </div>
       <div class="prefix">
-        <div v-for="(action,index) in actions" @click="getPrefix(action,$event)" :key="index">{{action[language]}}</div>
+        <div v-for="(action,index) in layouts.action" @click="getPrefix(action,$event)" :key="index">{{action[language]}}</div>
       </div>
       <div class="item">
-        <div v-for="(item,index) in items" @click="setChoice(item)" :class="{disable:!item.clickable}" :key="index">{{item[language]}}</div>
+        <div v-for="(item,index) in items" @click="setChoice(item)" :class="{disable:!item._id}" :key="index">{{item[language]}}</div>
       </div>
       <div class="shortCut">
-        <div @click="setPrice(0.50)">$ 0.50</div>
-        <div @click="setPrice(0.75)">$ 0.75</div>
-        <div @click="setPrice(1.00)">$ 1.00</div>
-        <div @click="setPrice(1.25)">$ 1.25</div>
-        <div @click="setPrice(1.50)">$ 1.50</div>
-        <div @click="setPrice(1.75)">$ 1.75</div>
-        <div @click="setPrice(2.00)">$ 2.00</div>
-        <div @click="setPrice(2.50)">$ 2.50</div>
-        <div @click="setPrice(3.00)">$ 3.00</div>
-        <div @click="setPrice(4.00)">$ 4.00</div>
+        <div v-for="(price,index) in prices" :key="index" @click="setPrice(price)"><i class="fas fa-dollar-sign space light"></i>{{price | decimal}}</div>
         <div @click="setPrice()">{{$t('button.inputPrice')}}</div>
       </div>
     </section>
@@ -31,6 +22,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import modify from "./modify";
+
 export default {
   components: { modify },
   data() {
@@ -38,15 +30,38 @@ export default {
       items: [],
       action: null,
       component: null,
-      componentData: null
+      componentData: null,
+      prices: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4]
     };
   },
-  mounted() {
-    this.items = [].concat.apply([], this.request[0].item);
+  created() {
+    this.getItems(this.layouts.request[0].contain);
   },
   methods: {
-    getItems(category) {
-      this.items = [].concat.apply([], category.item);
+    getItems(categories) {
+      let request = [];
+
+      categories.forEach(category => {
+        let items = Array.isArray(this.request[category])
+          ? JSON.parse(JSON.stringify(this.request[category]))
+          : [];
+
+        let fill = 6 - items.length % 3;
+        if (fill === 6) fill = 3;
+
+        Array(fill)
+          .fill()
+          .forEach(() => items.push({ zhCN: "", usEN: "" }));
+
+        request.push(...items);
+      });
+
+      request.length < 33 &&
+        Array(33 - request.length)
+          .fill()
+          .forEach(() => request.push({ zhCN: "", usEN: "" }));
+
+      this.items = request;
     },
     getPrefix(action, e) {
       const dom = document.querySelector(".acting");
@@ -101,7 +116,7 @@ export default {
         }
       }
 
-      let content = {
+      const content = {
         qty: 1,
         zhCN,
         usEN,
@@ -135,7 +150,7 @@ export default {
     ])
   },
   computed: {
-    ...mapGetters(["request", "language", "actions"])
+    ...mapGetters(["layouts", "request", "language"])
   }
 };
 </script>

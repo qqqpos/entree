@@ -1,29 +1,26 @@
 <template>
-  <div>
-    <transition class="fade" appear>
-          <ul v-show="trend.length > 0">
-              <li class="head">
-                  <h3 class="f1">{{$t('text.itemTrend')}}</h3>
-                  <i class="fa fa-sort" @click="reverse"></i>
-              </li>
-              <li class="stats" v-for="(item,index) in items" :key="index" @click="getTrend(item)">
-                  <h5 class="name">{{item[language] || item.usEN}}</h5>
-                  <div>
-                      <progress :max="max" :value="item.count"></progress>
-                      <span class="count">{{item.count}}</span>
-                  </div>
-              </li>
-              <li class="footer">
-                  <span class="total">{{$t('text.items',trend.length)}}</span>
-                  <div class="wrap">
-                      <i class="fa fa-angle-left page" @click="prev"></i>
-                      <i class="fa fa-angle-right page" @click="next"></i>
-                  </div>
-              </li>
-          </ul>
-      </transition>
-      <div :is="component" :init="componentData"></div>
-  </div>
+  <transition name="fade" appear>
+    <ul v-show="trend.length > 0">
+        <li class="head">
+            <h3 class="f1">{{$t('text.itemTrend')}}</h3>
+            <i class="fa fa-sort" @click="reverse"></i>
+        </li>
+        <li class="stats" v-for="(item,index) in items" :key="index" @click="getTrend(item)">
+            <h5 class="name">{{item[language] || item.usEN}}</h5>
+            <div>
+                <progress :max="max" :value="item.count"></progress>
+                <span class="count">{{item.count}}</span>
+            </div>
+        </li>
+        <li class="footer">
+            <span class="total">{{$t('text.items',trend.length)}}</span>
+            <div class="wrap">
+                <i class="fa fa-angle-left page" @click="prev"></i>
+                <i class="fa fa-angle-right page" @click="next"></i>
+            </div>
+        </li>
+    </ul>
+  </transition>
 </template>
 
 <script>
@@ -31,8 +28,6 @@ export default {
   data() {
     return {
       language: this.$store.getters.language,
-      componentData: null,
-      component: null,
       trend: [],
       max: 100,
       page: 0
@@ -83,10 +78,8 @@ export default {
       if (this.page === pages) return;
       this.page++;
     },
-    getTrend(item){
-      this.$socket.emit("[TREND] WEEKLY",item._id,data=>{
-        
-      })
+    getTrend(item) {
+      this.$socket.emit("[TREND] WEEKLY", item._id, data => {});
     }
   }
 };
@@ -94,7 +87,6 @@ export default {
 
 <style scoped>
 ul {
-  margin: 4px 2px 0 0;
   border: 1px solid #78909c;
   background: #fff;
 }
@@ -114,6 +106,7 @@ li.head {
 
 li.stats {
   padding: 5px 5px 0 10px;
+  width: 230px;
 }
 
 li.stats:hover {
@@ -152,7 +145,8 @@ progress {
 li.footer {
   display: flex;
   align-items: center;
-  height: 43px;
+  border-top: 1px solid #ddd;
+  height: 45px;
 }
 
 .page {

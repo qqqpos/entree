@@ -21,6 +21,8 @@ const state = {
       remain: 0,
       log: []
     },
+    settled:false,
+    print:false,
     content: [],
     coupons: [],
     modify: 0,
@@ -36,9 +38,9 @@ const state = {
   lastActionTime: Date.now()
 };
 const mutations = {
-  [types.RESET_MENU](state) {
+  [types.RESET_ORDER](state) {
     state.order = {
-      _id: ObjectId(),
+      _id: ObjectId().toString(),
       customer: {},
       payment: {
         subtotal: 0,
@@ -56,6 +58,8 @@ const mutations = {
         remain: 0,
         log: []
       },
+      settled:false,
+      print:false,
       content: [],
       coupons: [],
       modify: 0,

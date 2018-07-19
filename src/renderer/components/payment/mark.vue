@@ -157,7 +157,7 @@ export default {
       const split = this.order.hasOwnProperty("parent") ? this.order._id : null;
 
       const transaction = {
-        _id: ObjectId(),
+        _id: ObjectId().toString(),
         date: today(),
         time: +new Date(),
         order: parent,
@@ -181,13 +181,12 @@ export default {
         lfd: null
       };
 
-      this.$socket.emit("[TRANSACTION] SAVE", transaction, () => {
-        this.order.cashier = this.op.name;
-        this.order.payment.type = this.type;
-        this.order.payment.log.push(transaction);
-        this.$socket.emit("[INVOICE] UPDATE", this.order, false);
-        this.init.resolve();
-      });
+      this.order.cashier = this.op.name;
+      this.order.payment.type = this.type;
+      this.order.payment.log.push(transaction);
+      this.$socket.emit("[ORDER] UPDATE", this.order, false);
+      this.$socket.emit("[TRANSACTION] SAVE", transaction);
+      this.init.resolve();
     },
     exit() {
       this.init.resolve();

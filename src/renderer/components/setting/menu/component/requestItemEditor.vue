@@ -7,6 +7,7 @@
           <h3>{{$t(item[language])}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer title="text.primary" v-model.trim="item.usEN"></inputer>
         <inputer title="text.secondary" v-model.trim="item.zhCN"></inputer>
@@ -29,6 +30,7 @@ import inputer from "../../common/inputer";
 import switches from "../../common/switches";
 import checkbox from "../../common/checkbox";
 import selector from "../../common/selector";
+
 export default {
   props: ["init"],
   components: { inputer, switches, checkbox, selector },
@@ -41,13 +43,15 @@ export default {
     };
   },
   created() {
-    this.actions = this.$store.getters.actions.map(({ usEN, zhCN, key }) => ({
-      label: usEN,
-      tooltip: zhCN,
-      plainText: true,
-      value: key
-    }));
-    
+    this.actions = this.$store.getters.layouts.action
+      .filter(({ zhCN, usEN }) => zhCN && usEN)
+      .map(({ usEN, zhCN, key }) => ({
+        label: usEN,
+        tooltip: zhCN,
+        plainText: true,
+        value: key
+      }));
+
     this.actions.unshift({
       label: this.$t("text.noUse"),
       tooltip: "",
@@ -57,27 +61,13 @@ export default {
   },
   methods: {
     remove() {
-      this.$socket.emit(
-        "[REQUEST] REMOVE_ITEM",
-        {
-          item: this.item,
-          categoryIndex: this.init.categoryIndex,
-          groupIndex: this.init.groupIndex,
-          index: this.init.index
-        },
-        () => this.init.resolve()
+      this.$socket.emit("[REQUEST] REMOVE_ITEM", this.item, () =>
+        this.init.reject(true)
       );
     },
     confirm() {
-      this.$socket.emit(
-        "[REQUEST] UPDATE_ITEM",
-        {
-          item: this.item,
-          categoryIndex: this.init.categoryIndex,
-          groupIndex: this.init.groupIndex,
-          index: this.init.index
-        },
-        () => this.init.resolve()
+      this.$socket.emit("[REQUEST] UPDATE_ITEM", this.item, item =>
+        this.init.resolve(item)
       );
     }
   }

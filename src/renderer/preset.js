@@ -1,16 +1,24 @@
 var Preset = function () {
   this.station = function (mac, username) {
     return {
-      alias: "",
       mac,
       username,
+      alias: "",
       wol: false,
       terminal: "",
-      pole: {
-        enable: false,
-        port: 'COM4',
-        top: "",
-        btm: ""
+      customerDisplay: {
+        poleDisplay: {
+          enable: false,
+          top: "",
+          bot: "",
+          port: "",
+          animation: false
+        },
+        ledDisplay: {
+          enable: false,
+          gallery: "",
+          duration: 5
+        }
       },
       scale: {
         enable: false,
@@ -219,7 +227,7 @@ var Preset = function () {
     }
   };
   this.operator = function (name, role, pin, wage) {
-    let access = [], modify = [], view = [], permission = [], cashCtrl;
+    let access = [], modify = [], view = [], permission = [], cashCtrl = "disable";
     switch (role) {
       case "Manager":
         access = ["setting", "cashdrawer", "report", "terminal", "history", "exit"];
@@ -247,9 +255,6 @@ var Preset = function () {
         modify = ["item", "order", "table", "discount", "tip"];
         cashCtrl = "enable";
         break;
-      case "Worker":
-        cashCtrl = "disable";
-        break;
     }
 
     return {
@@ -268,7 +273,7 @@ var Preset = function () {
   };
   this.giftCard = function (number, seller, amount, bonus) {
     return {
-      _id: ObjectId(),
+      _id: ObjectId().toString(),
       number,
       seller,
       customer: "",

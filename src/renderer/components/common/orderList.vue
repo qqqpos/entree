@@ -13,7 +13,7 @@
                 <i class="fas fa-user-tie light"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fas fa-clock light"></i>
-                <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
+                <span>{{order.time | moment('MMM,DD HH:mm',time)}}</span>
               </p>
               <p>
                 <i class="fas fa-tablets light"></i>
@@ -35,7 +35,7 @@
                 <i class="fas fa-user-tie light"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fas fa-clock light"></i>
-                <span>{{order.time | moment('MMM,DD HH:mm')}}</span>
+                <span>{{order.time | moment('MMM,DD HH:mm',time)}}</span>
               </p>
               <p>
                 <i class="fa fa-phone light"></i>
@@ -141,8 +141,8 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import dialogModule from "../common/dialog";
 import creditVault from "./component/creditVault";
+import dialogModule from "../common/dialog";
 import groupItem from "./component/groupItem";
 import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
@@ -153,10 +153,10 @@ export default {
   components: {
     dialogModule,
     configModule,
+    creditVault,
     shortcut,
     listItem,
     groupItem,
-    creditVault,
     entry
   },
   props: ["layout", "group", "display", "seats", "seat"],
@@ -228,11 +228,11 @@ export default {
       const { menuID } = this.config.display;
 
       this.$open("configModule", {
-        taxFree,
-        deliveryFree,
-        gratuityFree,
         menuID,
-        plasticBag
+        taxFree,
+        plasticBag,
+        deliveryFree,
+        gratuityFree
       });
     },
     getShortCutItems() {
@@ -265,7 +265,7 @@ export default {
       this.spooler.push(item);
     },
     directPrint() {
-      if(this.order.date !== today()) return;
+      if (this.order.date !== today()) return;
       if (this.spooler.length === 0) return;
 
       let error = false;
@@ -283,7 +283,7 @@ export default {
         })
       );
 
-      this.spooler = []; 
+      this.spooler = [];
 
       const remainItem =
         remain > 0
@@ -298,7 +298,7 @@ export default {
       };
 
       this.$dialog(prompt).then(this.exitComponent);
-      this.$socket.emit("[INVOICE] ITEM_PRINT", order);
+      this.$socket.emit("[ORDER] PRINT", order);
     },
     move(e) {
       this.offset = this.lastDelta + e.deltaY;
@@ -426,11 +426,12 @@ export default {
     ...mapGetters([
       "app",
       "tax",
+      "item",
+      "time",
       "store",
+      "order",
       "config",
       "dinein",
-      "item",
-      "order",
       "ticket",
       "station",
       "language",

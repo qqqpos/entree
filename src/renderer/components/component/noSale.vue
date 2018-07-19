@@ -108,7 +108,7 @@ export default {
       };
 
       const transaction = {
-        _id: ObjectId(),
+        _id: ObjectId().toString(),
         date,
         time,
         order: null,
@@ -171,7 +171,7 @@ export default {
               : this.station.cashDrawer.name;
 
           Object.assign(data, {
-            _id: ObjectId(),
+            _id: ObjectId().toString(),
             for: "Order",
             date,
             order: {
@@ -191,7 +191,7 @@ export default {
           );
 
           const transaction = {
-            _id: ObjectId(),
+            _id: ObjectId().toString(),
             date,
             time,
             order: null,

@@ -1,0 +1,17 @@
+@media only screen and (max-width: 1920px) {
+
+    .category div {
+        width: 278px;
+        height: 91.5px;
+        font-size: 26px;
+    }
+
+    .items div {
+        height: 92px;
+        font-size: 26px;
+    }
+
+    div.pageButton {
+        width: 220.5px;
+    }
+}

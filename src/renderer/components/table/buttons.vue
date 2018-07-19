@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn" @click="editOrder" :disabled="(!currentTable || order.content.length === 0)">
+    <button class="btn" @click="editOrder" :disabled="(!table || order.content.length === 0)">
       <i class="fa fa-edit"></i>
       <span class="text">{{$t('button.edit')}}</span>
     </button>
@@ -8,7 +8,7 @@
       <i class="fas fa-ban"></i>
       <span class="text">{{$t("button.cancel")}}</span>
     </button>
-    <button class="btn" @click="switchTable" v-else :disabled="!currentTable">
+    <button class="btn" @click="switchTable" v-else :disabled="!table">
       <i class="fas fa-exchange-alt"></i>
       <span class="text">{{$t('button.switchTable')}}</span>
     </button>
@@ -16,15 +16,15 @@
       <i class="fa fa-link"></i>
       <span class="text">{{$t('button.combineTicket')}}</span>
     </button>
-    <button class="btn" @click="settle" :disabled="!currentTable">
+    <button class="btn" @click="invoke('settle')" :disabled="!table">
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>   
-    <button class="btn" @click="split">
+    <button class="btn" @click="invoke('split')">
       <i class="fa fa-clone"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button> 
-    <button class="btn" @click="prePayment">
+    <button class="btn" @click="invoke('prePayment')">
       <i class="fas fa-file-invoice-dollar"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
@@ -50,13 +50,12 @@ import { mapGetters, mapActions } from "vuex";
 import paymentModule from "../payment/main";
 import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
-import staff from "./component/staffs";
-import split from "../split/index";
-import list from "./list";
+import splitModule from "../split/index";
+import staff from "../component/staffs";
 
 export default {
+  components: { dialogModule, unlockModule, paymentModule, splitModule, staff },
   props: ["transfer"],
-  components: { dialogModule, unlockModule, paymentModule, split, list, staff },
   data() {
     return {
       componentData: null,
@@ -65,196 +64,79 @@ export default {
   },
   methods: {
     editOrder() {
-      if (this.order.settled) {
-        this.handleSettledOrder();
-        return;
-      }
-      this.currentTable.server !== this.op.name
-        ? this.$checkPermission("modify", "order")
-            .then(this.edit)
-            .catch(() => {})
-        : this.edit();
+      this.checkStatus()
+        .then(this.checkPremission)
+        .then(this.edit)
+        .catch(this.editFailed);
     },
     edit() {
       this.setApp({ newTicket: false });
       this.setTicket({ type: "DINE_IN", number: this.order.number });
       this.$router.push({ path: "/main/menu" });
     },
-    editDenied() {
-      const prompt = {
-        title: "dialog.cannotModify",
-        msg: ["dialog.noRightToModify", this.order.server],
-        buttons: [{ text: "button.confirm", fn: "resolve" }]
-      };
+    checkStatus() {
+      return new Promise((next, stop) => {
+        if (this.order.settled) {
+          const prompt = {
+            type: "question",
+            title: "dialog.ticketClosed",
+            msg: "dialog.whatNext",
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.clearTable", fn: "clearTable" },
+              { text: "button.additional", fn: "resolve" }
+            ]
+          };
 
-      this.$dialog(prompt).then(this.exitComponent);
-    },
-    handleSettledOrder() {
-      const prompt = {
-        title: ["dialog.settledOrderReopen", this.order.number],
-        msg: [
-          "dialog.settledOrderReopenTip",
-          this.$t("type." + this.order.payment.type)
-        ],
-        buttons: [
-          { text: "button.removePayment", fn: "resolve" },
-          { text: "button.cancel", fn: "reject" }
-        ]
-      };
-
-      this.$dialog()
-        .then(this.removeOrderPayment)
-        .catch(this.exitComponent);
-    },
-    removeOrderPayment() {
-      this.exitComponent();
-      this.$dialog({
-        title: "dialog.removePayment",
-        msg: [
-          "dialog.removePaymentConfirm",
-          this.$t("type." + this.order.payment.type)
-        ]
-      })
-        .then(() => {
-          this.exitComponent();
-          this.removePayment();
-          this.$socket.emit("[INVOICE] UPDATE", this.order);
-          this.askEditOrder();
-        })
-        .catch(this.exitComponent);
-    },
-    askEditOrder() {
-      const prompt = {
-        title: "dialog.paymentRemoved",
-        msg: ["dialog.paymentRemovedTip", this.order.number],
-        buttons: [
-          { text: "button.cancel", fn: "reject" },
-          { text: "button.edit", fn: "resolve" }
-        ]
-      };
-
-      this.$dialog(prompt)
-        .then(this.editOrder)
-        .catch(this.exitComponent);
-    },
-    switchTable() {
-      if (!this.currentTable) return;
-
-      const prompt = {
-        title: ["dialog.switchTable", this.currentTable.name],
-        msg: "dialog.switchTableTip"
-      };
-
-      this.$dialog(prompt)
-        .then(this.processTableSwitch.bind(null, this.currentTable))
-        .catch(this.processTableSwitch.bind(null, false));
-    },
-    processTableSwitch(table) {
-      this.$emit("switch", table);
-      this.exitComponent();
-    },
-    combineTicket() {
-      this.$open("list", { combineMode: true });
-    },
-    prePayment() {
-      if (this.isEmptyTicket) return;
-      if (this.order.settled) {
-        this.settledOrder();
-      } else if (this.order.print) {
-        this.$dialog({
-          type: "question",
-          title: "dialog.prePayment",
-          msg: ["dialog.prePaymentTip", this.order.table],
-          buttons: [
-            { text: "button.cancel", fn: "reject" },
-            { text: "button.print", fn: "resolve" }
-          ]
-        })
-          .then(() => {
-            this.exitComponent();
-            this.$nextTick(() => {
-              this.order.split
-                ? this.askSplitPrePayment()
-                : this.printPrePayment();
+          this.$dialog(prompt)
+            .then(next)
+            .catch(resetTable => {
+              resetTable &&
+                this.$socket.emit("[TABLE] RESET", { _id: this.table._id });
+              this.exitComponent();
+              stop();
             });
-          })
-          .catch(this.exitComponent);
-      } else {
-        let remain = this.order.content.filter(item => !item.print).length;
-        this.$dialog({
-          title: "dialog.prePaymentFailed",
-          msg: ["dialog.prePaymentFailedTip", remain],
-          buttons: [
-            { text: "button.cancel", fn: "reject" },
-            { text: "button.printAnyway", fn: "resolve" }
-          ]
-        })
-          .then(this.printPrePayment)
-          .catch(this.exitComponent);
-      }
-    },
-    printPrePayment() {
-      this.exitComponent();
-
-      const type = "PRE_PAYMENT";
-      const cashier = this.op.name;
-      const order = Object.assign(
-        Object.create(Object.getPrototypeOf(this.order)),
-        this.order,
-        { type, cashier }
-      );
-
-      Printer.setTarget("Receipt").print(order, true);
-      this.$socket.emit("[TABLE] STATUS", { _id: order.tableID, status: 3 });
-    },
-    askSplitPrePayment() {
-      const prompt = {
-        type: "question",
-        title: "dialog.printSplitTicket",
-        msg: "dialog.printSplitTicketTip",
-        buttons: [
-          { text: "button.combinePrint", fn: "reject" },
-          { text: "button.splitPrint", fn: "resolve" }
-        ]
-      };
-
-      this.$dialog(prompt)
-        .then(this.splitPrint)
-        .catch(this.printPrePayment);
-    },
-    splitPrint() {
-      this.exitComponent();
-      this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
-        splits.forEach(ticket => {
-          Object.assign(ticket, {
-            type: "PRE_PAYMENT",
-            cashier: this.op.name
-          });
-          Printer.setTarget("Receipt").print(ticket, true);
-        });
-      });
-
-      this.$socket.emit("[TABLE] STATUS", {
-        _id: this.order.tableID,
-        status: 3
+        } else {
+          next();
+        }
       });
     },
-    settle() {
-      if (this.isEmptyTicket) return;
-
-      if (this.op.cashCtrl === "disable") {
-        this.$accessDenied();
-      } else {
-        this.order.settled ? this.settledOrder() : this.openPaymentModule();
-      }
+    checkPremission() {
+      this.exitComponent();
+      return new Promise((pass, denied) => {
+        this.table.server !== this.op.name
+          ? this.$checkPermission("modify", "order")
+              .then(pass)
+              .catch(denied)
+          : pass();
+      });
+    },
+    editFailed(reason) {
+      console.log(reason);
     },
     settledOrder() {
       const prompt = {
-        title: "dialog.invoiceSettled",
-        msg: "dialog.invoiceSettledTip",
+        title: "dialog.ticketClosed",
+        msg: "dialog.removePaymentRecordFirst",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
       this.$dialog(prompt).then(this.exitComponent);
+    },
+    combineTicket() {},
+    invoke(fn) {
+      if (this.isEmptyTicket) return;
+      if (this.order.settled) {
+        this.settledOrder();
+      } else {
+        this[fn]();
+      }
+    },
+    settle() {
+      if (this.op.cashCtrl === "disable") {
+        this.$accessDenied();
+      } else {
+        this.openPaymentModule();
+      }
     },
     openPaymentModule(params) {
       new Promise((resolve, reject) => {
@@ -272,8 +154,90 @@ export default {
           }
         });
     },
+    split() {
+      this.$open("splitModule");
+    },
+    prePayment() {
+      const remain = this.order.content.filter(item => !item.print).length;
+      const prompt = this.order.print
+        ? {
+            type: "question",
+            title: "dialog.prePayment",
+            msg: ["dialog.prePaymentTip", this.order.table],
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.print", fn: "resolve" }
+            ]
+          }
+        : {
+            title: "dialog.prePaymentFailed",
+            msg: ["dialog.itemRemainUnprintBeforePayment", remain],
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.printAnyway", fn: "resolve" }
+            ]
+          };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.exitComponent();
+          this.order.split ? this.splitReceiptDialog() : this.printReceipt();
+        })
+        .catch(this.exitComponent);
+    },
+    splitReceiptDialog() {
+      const prompt = {
+        type: "question",
+        title: "dialog.printSplitTicket",
+        msg: "dialog.printSplitTicketTip",
+        buttons: [
+          { text: "button.combinePrint", fn: "reject" },
+          { text: "button.splitPrint", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(this.printSplitReceipt)
+        .catch(this.printReceipt);
+    },
+    printSplitReceipt() {
+      this.exitComponent();
+
+      this.$socket.emit("[SPLIT] GET", this.order._id, splits =>
+        splits.forEach(ticket =>
+          Printer.setTarget("Receipt").print(
+            Object.assign(ticket, {
+              type: "PRE_PAYMENT",
+              cashier: this.op.name
+            }),
+            true
+          )
+        )
+      );
+
+      this.$socket.emit("[TABLE] STATUS", {
+        session: this.order.session,
+        status: 3
+      });
+    },
+    printReceipt() {
+      this.exitComponent();
+
+      const order = clone(this.order);
+
+      Printer.setTarget("Receipt").print(
+        Object.assign(order, { cashier: this.op.name, type: "PRE_PAYMENT" }),
+        true
+      );
+
+      this.$socket.emit("[TABLE] STATUS", {
+        session: order.session,
+        status: 3
+      });
+    },
     switchStaff() {
       if (this.isEmptyTicket) return;
+
       this.$checkPermission("modify", "server")
         .then(() =>
           this.$socket.emit("[OPERATOR] LIST", operators =>
@@ -282,27 +246,15 @@ export default {
         )
         .catch(() => {});
     },
-    split() {
-      if (this.isEmptyTicket) return;
-      if (this.order.settled) {
-        this.settledOrder();
-        return;
-      }
-      this.$open("split");
-    },
-    exit() {
-      this.resetAll();
-      this.$router.push({ path: "/main" });
-    },
+    switchTable() {},
     clearTable() {
-      if (!this.currentTable) return;
-      if (
-        this.currentTable.status === 4 ||
-        this.currentTable.invoice.length === 0
-      ) {
+      if (!this.table) return;
+
+      const { _id, name, status, invoice } = this.table;
+      if (status === 4 || invoice.length === 0) {
         const prompt = {
           title: "dialog.tableClear",
-          msg: ["dialog.tableClearTip", this.currentTable.name],
+          msg: ["dialog.tableStatusClearConfirm", name],
           buttons: [
             { text: "button.cancel", fn: "reject" },
             { text: "button.clear", fn: "resolve" }
@@ -311,31 +263,35 @@ export default {
 
         this.$dialog(prompt)
           .then(() => {
-            this.resetMenu();
-            this.$socket.emit("[TABLE] RESET", { _id: this.currentTable._id });
+            this.resetOrder();
             this.exitComponent();
+            this.$socket.emit("[TABLE] RESET", { _id });
           })
           .catch(this.exitComponent);
       } else {
         const prompt = {
           type: "info",
           title: "dialog.tableClearFailed",
-          msg: ["dialog.tableClearFailedTip", this.currentTable.name],
+          msg: ["dialog.tableClearNotAllowed", name],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
         this.$dialog(prompt).then(this.exitComponent);
       }
     },
+    exit() {
+      this.resetAll();
+      this.$router.push({ path: "/main" });
+    },
     ...mapActions([
-      "setOp",
       "setApp",
       "resetAll",
       "setOrder",
       "setTicket",
-      "resetMenu",
-      "removePayment",
-      "setTableInfo"
+      "resetOrder",
+      "setOperator",
+      "setTableInfo",
+      "removePayment"
     ])
   },
   computed: {
@@ -343,11 +299,11 @@ export default {
       "op",
       "tax",
       "order",
+      "table",
       "store",
       "dinein",
       "station",
-      "isEmptyTicket",
-      "currentTable"
+      "isEmptyTicket"
     ])
   }
 };

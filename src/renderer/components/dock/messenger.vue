@@ -94,7 +94,7 @@ export default {
         }
       });
 
-      this.$socket.emit("[INVOICE] UPDATE", order);
+      this.$socket.emit("[ORDER] UPDATE", order);
     },
     remove(i) {
       const prompt = {

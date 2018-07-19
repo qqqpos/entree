@@ -90,7 +90,7 @@ export default {
       tab: "basic",
       manual: false,
       selected: [],
-      categories: this.init.categories,
+      categories: this.init.categories.sort((a, b) => a.localeCompare(b)),
       category: JSON.parse(JSON.stringify(this.init.category)),
       printers: Object.keys(this.$store.getters.config.printers),
       component: null,
@@ -104,7 +104,7 @@ export default {
   created() {
     const selected = new Set();
 
-    this.$store.getters.menu.forEach(category =>
+    this.$store.getters.layouts.menu.forEach(category =>
       category.contain.forEach(t => selected.add(t))
     );
     this.selected = Array.from(selected);
@@ -117,8 +117,10 @@ export default {
       return !/cashier/i.test(name);
     },
     confirm() {
-      !Array.isArray(this.category.contain) &&
-        (this.category.contain = this.category.contain.split(","));
+      if (!Array.isArray(this.category.contain))
+        this.category.contain = this.category.contain
+          .split(",")
+          .map(name => name.trim());
 
       this.category.item = [];
       this.init.resolve(this.category);

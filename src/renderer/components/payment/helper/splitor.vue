@@ -35,7 +35,7 @@ export default {
   display: inline-flex;
   padding-left: 20px;
   width: 765px;
-  height: 120px;
+  height: 115px;
   overflow: auto;
   margin-bottom: 74px;
   padding-bottom: 3px;

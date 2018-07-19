@@ -65,6 +65,12 @@ export default {
           value: "Bartender"
         },
         {
+          label: this.$t("type.Driver"),
+          tooltip: "",
+          plainText: true,
+          value: "Driver"
+        },
+        {
           label: this.$t("type.Worker"),
           tooltip: "",
           plainText: true,
@@ -88,24 +94,29 @@ export default {
       this.checkName()
         .then(this.checkPin)
         .then(this.addOperator)
-        .catch(this.addFailed)
+        .catch(this.addFailed);
     },
     checkName() {
       return new Promise((resolve, reject) => {
         this.$socket.emit("[OPERATOR] CHECK_NAME", this.name, exist => {
-          exist ? reject("name") : resolve()
-        })
-      })
+          exist ? reject("name") : resolve();
+        });
+      });
     },
     checkPin() {
       return new Promise((resolve, reject) => {
         this.$socket.emit("[OPERATOR] CHECK_PIN", { pin: this.pin }, exist => {
           exist ? reject("pin") : resolve();
-        })
-      })
+        });
+      });
     },
     addOperator() {
-      const operator = Preset.operator(this.name, this.role, this.pin, this.wage);
+      const operator = Preset.operator(
+        this.name,
+        this.role,
+        this.pin,
+        this.wage
+      );
       this.init.resolve(operator);
     },
     addFailed(error) {
@@ -122,7 +133,7 @@ export default {
           break;
       }
 
-      this.$dialog(content).then(this.exitComponent)
+      this.$dialog(content).then(this.exitComponent);
     }
   }
 };

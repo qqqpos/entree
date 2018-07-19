@@ -254,7 +254,7 @@ export default {
             })
           });
 
-          this.$socket.emit("[INVOICE] SAVE", this.order, false, order =>
+          this.$socket.emit("[ORDER] SAVE", this.order, false, order =>
             next(order)
           );
         } else {
@@ -282,10 +282,10 @@ export default {
 
               this.$calculatePayment(this.order, { selfAssign: true });
 
-              this.$socket.emit("[INVOICE] UPDATE", this.order);
+              this.$socket.emit("[ORDER] UPDATE", this.order);
               next(order);
             } else {
-              this.$socket.emit("[INVOICE] UPDATE", this.order);
+              this.$socket.emit("[ORDER] UPDATE", this.order);
               next(this.order);
             }
           } catch (e) {

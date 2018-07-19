@@ -7,6 +7,7 @@
           <h3>{{$t('title.template')}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer title="text.alias" v-model="init.template.name" :autoFocus="true" @keydown.enter.native="checkDuplicate"></inputer>
         <inputer title="text.note" v-model="init.template.note"></inputer>
@@ -32,24 +33,31 @@ export default {
     return {
       componentData: null,
       component: null,
-      templates: this.$store.getters.templates.map(t => ({
-        label: t.name,
-        tooltip: t.note,
-        plainText: true,
-        value: t.name
-      })),
+      templates: [],
       source: ""
     };
   },
   created() {
-    this.templates.unshift({
-      label: this.$t("text.noUse"),
-      tooltip: "",
-      plainText: true,
-      value: ""
-    });
+    this.initial();
   },
   methods: {
+    initial() {
+      let templates = this.$store.getters.templates.map(t => ({
+        label: t.name,
+        tooltip: t.note,
+        plainText: true,
+        value: t.name
+      }));
+
+      templates.unshift({
+        label: this.$t("text.noUse"),
+        tooltip: "",
+        plainText: true,
+        value: ""
+      });
+
+      this.templates = templates;
+    },
     checkDuplicate() {
       const prompt = {
         type: "error",
@@ -82,7 +90,7 @@ export default {
         });
 
         let template = Object.assign({}, source, {
-          _id: ObjectId(),
+          _id: ObjectId().toString(),
           name: this.init.template.name,
           note: this.init.template.note
         });

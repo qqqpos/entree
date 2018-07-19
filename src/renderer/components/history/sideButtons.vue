@@ -8,7 +8,7 @@
       <i class="fas fa-redo-alt"></i>
       <span class="text">{{$t('button.recover')}}</span>
     </button>
-    <button class="btn" @click="voidOrder" v-else>
+    <button class="btn" @click="voidOrder" v-else :disabled="splitMode">
       <i class="fab fa-creative-commons-nc"></i>
       <span class="text">{{$t('button.void')}}</span>
     </button>
@@ -62,7 +62,7 @@ import Reason from "./component/reason";
 import loger from "../payment/loger";
 
 export default {
-  props: ["date"],
+  props: ["date", "splitMode"],
   components: {
     calendarModule,
     terminalModule,
@@ -168,13 +168,20 @@ export default {
 
         if (this.order.settled) throw ticketSettled;
 
-        this.$socket.emit("[PAYMENT] COUNT", this.order._id, count => {
-          count > 0
-            ? this.order.split
-              ? stop(splitTicketAction)
-              : stop(paymentFoundError)
-            : next();
-        });
+        this.$socket.emit(
+          "[PAYMENT] COUNT",
+          {
+            order: this.order._id,
+            split: !!this.order.parent
+          },
+          count => {
+            count > 0
+              ? this.order.split
+                ? stop(splitTicketAction)
+                : stop(paymentFoundError)
+              : next();
+          }
+        );
       });
     },
     edit(prompt) {
@@ -244,10 +251,7 @@ export default {
           this.componentData = { resolve, reject, number, logs };
           this.component = "loger";
         });
-      }).then(() => {
-        this.exitComponent();
-        this.$socket.emit("[INVOICE] UPDATE", this.order);
-      });
+      }).then(this.exitComponent);
     },
     reOpenOrder() {
       if (this.isEmptyTicket) return;
@@ -414,7 +418,7 @@ export default {
       });
     },
     updateInvoice(ticket) {
-      this.$socket.emit("[INVOICE] UPDATE", ticket, true);
+      this.$socket.emit("[ORDER] UPDATE", ticket, true);
     },
     getTransaction() {
       const date = document.querySelector("#calendar .text").innerText;
@@ -438,7 +442,7 @@ export default {
       "setApp",
       "setOrder",
       "setTicket",
-      "resetMenu",
+      "resetOrder",
       "setCustomer",
       "removePayment"
     ])

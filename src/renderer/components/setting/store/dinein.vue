@@ -1,6 +1,6 @@
 <template>
   <div>
-    <toggle title="setting.table" true-tooltip="tip.dinein.useTableLayout" false-tooltip="tip.dinein.noTableLayout" v-model="dinein.table" :conditionalTooltip="true" @update="updateTable"></toggle>
+    <toggle title="setting.table" true-tooltip="tip.dinein.useTableLayout" false-tooltip="tip.dinein.noTableLayout" v-model="dinein.useTable" :conditionalTooltip="true" @update="updateTable"></toggle>
     <toggle title="setting.passwordRequire" tooltip="tip.dinein.passwordRequire" v-model="dinein.passwordRequire" @update="updatePasswordRequire"></toggle>
     <toggle title="setting.guestCount" v-model="dinein.guestCount" @update="updateGuestCount"></toggle>
     <toggle title="setting.seatOrder" v-model="dinein.seatOrder" @update="updateSeatOrder" :disabled="!dinein.guestCount"></toggle>
@@ -30,7 +30,7 @@ export default {
     },
     updateTable(value) {
       this.update({
-        key: "dinein.table",
+        key: "dinein.useTable",
         value
       });
     },

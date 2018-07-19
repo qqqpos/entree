@@ -59,10 +59,11 @@ export default {
         };
         args.hasOwnProperty("buttons")
           ? args.buttons.forEach(button => {
+            const fn = button.fn === "resolve" ? resolve : button.fn === "reject" ? reject : button.fn;
             this.componentData.buttons.push({
+              fn,
               text: button.text,
-              fn: button.fn === "resolve" ? resolve : reject,
-              load: !!button.load
+              load: button.load
             });
           })
           : (this.componentData.buttons = [
@@ -352,7 +353,7 @@ export default {
 
         discount += offer;
       }
-      
+
       const total = subtotal + plasticTax + toFixed(tax, 2);
       const totalCharge = total + delivery;
       const due = toFixed(Math.max(0, totalCharge - discount), 2);
@@ -435,7 +436,7 @@ export default {
         const ticketNumber = this.order.number;
 
         const child = JSON.parse(JSON.stringify(this.order));
-        
+
         delete child.children;
         child.parent = parent;
 
@@ -463,7 +464,7 @@ export default {
         let splits = [];
 
         for (let i = 1; i <= target; i++) {
-          const _id = ObjectId();
+          const _id = ObjectId().toString();
           const number = ticketNumber + "-" + i;
 
           splits.push(Object.assign({}, child, { _id, number, payment }));
@@ -471,54 +472,32 @@ export default {
 
         this.$socket.emit("[SPLIT] SAVE", { splits, parent }, () => {
           //recalculate parent ticket
-          let tip = 0;
-          let tax = 0;
-          let paid = 0;
-          let plasticTax = 0;
-          let subtotal = 0;
-          let delivery = 0;
-          let gratuity = 0;
-          let discount = 0;
+          console.time("split time")
+          let payments = {};
 
           splits.forEach(({ payment }) => {
-            tip += payment.tip;
-            tax += payment.tax;
-            paid += payment.paid;
-            plasticTax += payment.plasticTax;
-            subtotal += payment.subtotal;
-            gratuity += payment.gratuity;
-            delivery += payment.delivery;
-            discount += payment.discount;
-          });
+            Object.keys(payment).forEach(key => {
+              if (Number.isNaN(payment[key])) return;
 
-          const total = toFixed(subtotal + plasticTax + tax, 2);
-          const due = toFixed(Math.max(0, total + delivery - discount), 2);
-          const grandTotal = toFixed((due + gratuity) * 100, 2);
-          const rounding = this.$rounding(grandTotal);
-          const balance = due + gratuity + rounding;
-          const remain = balance - paid;
+              if (payments[key]) {
+                payments[key] += payment[key];
+              } else {
+                payments[key] = payment[key]
+              }
+            })
+          })
+
+          Object.keys(payments).forEach(key => {
+            this.order.payment[key] = toFixed(payments[key], 2)
+          });
 
           this.order.content.forEach(item => (item.split = true));
           this.order.children = splits.map(i => i._id);
           this.order.split = true;
 
-          Object.assign(this.order.payment, {
-            tip: toFixed(tip, 2),
-            tax: toFixed(tax, 2),
-            plasticTax: toFixed(plasticTax, 2),
-            subtotal: toFixed(subtotal, 2),
-            rounding: toFixed(rounding, 2),
-            gratuity: toFixed(gratuity, 2),
-            total: toFixed(total, 2),
-            discount: toFixed(discount, 2),
-            delivery: toFixed(delivery, 2),
-            due: toFixed(due, 2),
-            balance: toFixed(balance, 2),
-            remain: toFixed(remain, 2)
-          });
-
           this.setOrder(this.order);
-          this.$socket.emit("[INVOICE] UPDATE", this.order, false, () => {
+          this.$socket.emit("[ORDER] UPDATE", this.order, false, () => {
+            console.timeEnd("split time")
             this.exitComponent();
             resolve();
           });
@@ -625,13 +604,6 @@ export default {
     //   const factor = Math.pow(10, precision);
     //   return Math.round(number * factor) / factor;
     // }
-    window.ObjectId = (
-      m = Math,
-      d = Date,
-      h = 16,
-      s = s => m.floor(s).toString(h)
-    ) =>
-      s(d.now() / 1000) + " ".repeat(h).replace(/./g, () => s(m.random() * h));
     window.isObject = obj => obj === Object(obj);
     window.isNumber = n => /^-?[\d.]+(?:e-?\d+)?$/.test(n);
     window.today = function (offset = 0) {

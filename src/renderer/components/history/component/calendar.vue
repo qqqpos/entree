@@ -24,7 +24,10 @@
                 </div>
                 <div class="calendar">
                     <div class="week" v-for="(week,index) in calendar" :key="index">
-                        <div class="day" v-for="(day,idx) in week.days" :key="idx" :class="{diff:isDiff(day),today:isToday(day)}" @click="select(day)">{{day | moment('D')}}</div>
+                        <div class="day" v-for="(day,idx) in week.days" :key="idx" :class="{diff:isDiff(day),today:isToday(day)}" @click="select(day)">
+                          {{day | moment('D')}}
+                          <p>{{day | isHoliday}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,6 +36,8 @@
 </template>
 
 <script>
+import holiday from "moment-holiday";
+
 export default {
   props: ["init"],
   data() {
@@ -47,6 +52,11 @@ export default {
     this.initialCalendar();
 
     if (moment.isMoment(this.init.picked)) this.picked = this.init.picked;
+  },
+  filters: {
+    isHoliday(date) {
+      return holiday(date).isHoliday() || "";
+    }
   },
   methods: {
     initialCalendar() {
@@ -162,7 +172,7 @@ nav i {
   height: 75px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: column;
   cursor: pointer;
   background: #eceff1;
   position: relative;
@@ -173,10 +183,23 @@ nav i {
   font-size: 32px;
   opacity: 0.75;
   border-radius: 4px;
+  text-align: center;
+}
+
+.day p {
+  font-size: 12px;
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  font-family: "Yuanti-SC";
+  color: #ff5722;
+  line-height: 0.9;
+  font-weight: normal;
+  width: 100%;
 }
 
 .day.diff {
-  color: rgba(0, 0, 0, 0.4);
+  opacity: 0.4;
   background: #fff;
 }
 
@@ -189,7 +212,7 @@ nav i {
   color: #fff;
 }
 
-.center{
+.center {
   text-align: center;
 }
 </style>

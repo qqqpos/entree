@@ -32,10 +32,9 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 function createWindow() {
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
+  const appParams = process.argv.slice(1);
+
+  let option = {
     width: 1024,
     height: 768,
     resizable: false,
@@ -43,10 +42,12 @@ function createWindow() {
     frame: false,
     autoHideMenuBar: true,
     show: false
-  })
-  mainWindow.loadURL(winURL);
+  };
 
-  const appParams = process.argv.slice(1);
+  //appParams.some(args => args.includes("widescreen")) && Object.assign(option, { width: 1920, height: 1080 });
+
+  mainWindow = new BrowserWindow(option);
+  mainWindow.loadURL(winURL);
 
   appParams.some(args => args.includes("debug")) && mainWindow.webContents.openDevTools()
 
@@ -124,8 +125,8 @@ function createWindow() {
   ipcMain.on("Initialized", () => {
     process.argv.slice(1).some(arg => arg.includes("fullscreen")) && mainWindow.setFullScreen(true);
     splashWindow.close();
-    mainWindow.show();
     mainWindow.center();
+    mainWindow.show();
   });
 
   ipcMain.on("Relaunch", () => {
@@ -133,10 +134,7 @@ function createWindow() {
     app.exit(0)
   });
 
-  ipcMain.on("Shutdown", () => {
-    const exec = require('child_process').exec;
-    exec('shutdown -s -f -t 0');
-  });
+  ipcMain.on("Shutdown", () => require('child_process').exec('shutdown -s -f -t 0'));
 
   //end of
 
@@ -161,15 +159,9 @@ singleInstance && app.quit(0);
 
 app.on('ready', createWindow)
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit(0)
-  }
-})
+app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit(0));
 
-app.on('activate', () => {
-  mainWindow === null && createWindow()
-})
+app.on('activate', () => mainWindow === null && createWindow());
 
 /**
  * Auto Updater

@@ -60,7 +60,7 @@ export default {
 
       const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${api}`;
 
-      this.$socket.emit("[GOOGLE] ADDRESS", url, raw => {
+      this.$socket.emit("[SYS] REQUEST_URL", url, raw => {
         const result = JSON.parse(raw);
         const polyline = result.routes[0].overview_polyline.points;
 

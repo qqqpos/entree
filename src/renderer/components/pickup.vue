@@ -138,7 +138,7 @@ export default {
     print() {
       Printer.setTarget("Receipt").print(this.order);
 
-      this.$socket.emit("[INVOICE] UPDATE", order, true);
+      this.$socket.emit("[ORDER] UPDATE", order, true);
     },
     split() {
       this.$open("splitModule");
@@ -163,13 +163,13 @@ export default {
         .catch(this.exitComponent);
     },
     exit() {
-      this.resetMenu();
+      this.resetOrder();
       this.$router.push({ path: "/main" });
     },
     ...mapActions([
       "setApp",
       "setOrder",
-      "resetMenu",
+      "resetOrder",
       "setTicket",
       "setCustomer"
     ])

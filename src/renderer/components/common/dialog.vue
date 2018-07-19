@@ -46,7 +46,7 @@ export default {
     trigger(button, e) {
       button.load && e.currentTarget.classList.add("loading");
       clearTimeout(this.timeout);
-      typeof button.fn === "function" ? button.fn() : eval(button.fn);
+      typeof button.fn === "function" ? button.fn() : this.init.reject(true);
     },
     exit() {
       clearTimeout(this.timeout);

@@ -3,8 +3,8 @@
         <ul class="nav">
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.online'}" exact>
-                    <i class="fas fa-chart-line"></i>
-                    <span class="text">{{$t('online.performance')}}</span>
+                    <i class="fas fa-comment-alt"></i>
+                    <span class="text">{{$t('online.about')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.online.config'}">
                     <i class="fas fa-cogs"></i>

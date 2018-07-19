@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import dialogModule from "../../common/dialog";
+import dialogModule from "../common/dialog";
 
 export default {
   props: ["init"],
@@ -70,7 +70,7 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           Object.assign(this.order, { server: this.operator.name });
-          this.$socket.emit("[STAFF] SWITCH", this.order);
+          this.$socket.emit("[ORDER] CHANGE_SERVER", this.order);
           this.init.resolve();
         })
         .catch(this.exitComponent);

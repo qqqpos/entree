@@ -239,7 +239,7 @@ export default {
         .catch(this.init.reject);
     },
     viewReceipt(id) {
-      this.$socket.emit("[INVOICE] DETAIL", id, ticket =>
+      this.$socket.emit("[ORDER] DETAIL", id, ticket =>
         this.$open("ticket", { ticket, exit: true })
       );
     },
@@ -306,7 +306,7 @@ export default {
       };
 
       const transaction = {
-        _id: ObjectId(),
+        _id: ObjectId().toString(),
         date,
         time,
         order: null,
@@ -355,13 +355,13 @@ export default {
             order: null,
             for: "Reload",
             date: today(),
-            _id: ObjectId()
+            _id: ObjectId().toString()
           });
 
           Printer.printCreditCard(data, {});
 
           const transaction = {
-            _id: ObjectId(),
+            _id: ObjectId().toString(),
             date,
             time,
             order: null,
@@ -497,7 +497,7 @@ export default {
             cashCtrl === "staffBank" ? name : this.station.cashDrawer.name;
 
           const transaction = {
-            _id: ObjectId(),
+            _id: ObjectId().toString(),
             date: today(),
             time: Date.now(),
             order: null,

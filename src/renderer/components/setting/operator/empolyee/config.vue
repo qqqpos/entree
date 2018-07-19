@@ -22,13 +22,15 @@
     <text-input v-model.number="operator.wage" title="text.salary"></text-input>
     <toggle v-model="operator.timecard" title="text.timecard" tooltip="tip.timecard.forOne"></toggle>
     <toggle v-model="operator.sessionReport" title="text.sessionReport" tooltip="tip.sessionReport"></toggle>
-    <text-list v-model="operator.language" title="text.defaultLanguage" :opts="languages"></text-list>
-    <text-list v-model="operator.cashCtrl" title="setting.cashDrawer" :opts="ctrl"></text-list>
-    <external title="setting.permission.access" @open="$router.push({name:'Setting.operator.access',params:{operator}})"></external>
-    <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})"></external>
-    <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})"></external>
-    <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})"></external>
-    <toggle v-model="operator.restrict" title="text.restrict" true-tooltip="tip.restrictPermission" false-tooltip="tip.temporaryPermission" :conditionalTooltip="true"></toggle>
+    <template v-if="operator.role === 'Worker' || operator.role === 'Driver'">
+      <text-list v-model="operator.language" title="text.defaultLanguage" :opts="languages"></text-list>
+      <text-list v-model="operator.cashCtrl" title="setting.cashDrawer" :opts="ctrl"></text-list>
+      <external title="setting.permission.access" @open="$router.push({name:'Setting.operator.access',params:{operator}})"></external>
+      <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})"></external>
+      <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})"></external>
+      <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})"></external>
+      <toggle v-model="operator.restrict" title="text.restrict" true-tooltip="tip.restrictPermission" false-tooltip="tip.temporaryPermission" :conditionalTooltip="true"></toggle>
+    </template>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>
@@ -90,7 +92,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     if (!this.removed) {
-      this.op._id === this.operator._id && this.setOp(this.operator);
+      this.op._id === this.operator._id && this.setOperator(this.operator);
       this.$socket.emit("[OPERATOR] UPDATE", this.operator, () => next());
     } else {
       next();
@@ -120,7 +122,7 @@ export default {
         this.component = "capture";
       })
         .then(card => {
-          this.$socket.emit("[CHECK] EMPLOYEE_CARD", card, exist => {
+          this.$socket.emit("[OPERATOR] CHECK_CARD", card, exist => {
             const prompt = {
               title: "dialog.employeeCardRegisterFailed",
               msg: "dialog.employeeCardRegistered",
@@ -151,7 +153,7 @@ export default {
         })
         .catch(this.exitComponent);
     },
-    ...mapActions(["setOp"])
+    ...mapActions(["setOperator"])
   }
 };
 </script>

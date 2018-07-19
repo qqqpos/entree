@@ -1,22 +1,22 @@
 <template>
   <div class="menu">
     <section class="category">
-      <div v-for="(category,index) in menu" @click="categoryIndex = index" :key="index">{{category[language]}}</div>
+      <div v-for="(category,index) in layouts.menu" @click="categoryIndex = index" :key="index">{{category[language]}}</div>
     </section>
-    <section class="items" v-if="config.display.menuID" :class="{sub:openSubGroup}">
+    <section class="items" v-if="config.display.menuID">
       <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item._id,like:item.like}" :key="index" :data-menuID="item.menuID">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
     </section>
-    <section class="items" v-else :class="{sub:openSubGroup}">
+    <section class="items" v-else>
       <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item._id,like:item.like}" :key="index">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
     </section>
     <section class="sides">
-      <div v-for="(side,index) in sides" @click="setOption(side,index)" :key="index">{{side[language]}}</div>
+      <div v-for="(side,index) in sides" @click="setOperatortion(side,index)" :key="index">{{side[language]}}</div>
     </section>
     <section class="cart">
       <order-list layout="order" :seats="seats" @update="setSeat"></order-list>
@@ -68,17 +68,18 @@ export default {
       "tax",
       "menu",
       "item",
+      "order",
+      "sides",
+      "layouts",
       "device",
       "config",
-      "order",
       "ticket",
-      "sides",
       "dinein",
       "station",
       "language",
       "customer",
       "favorites",
-      "currentTable",
+      "table",
       "archivedOrder"
     ])
   },
@@ -86,10 +87,8 @@ export default {
     return {
       menuInstance: null,
       componentData: null,
-      openSubGroup: false,
       categoryIndex: 0,
       component: null,
-      saveItems: null,
       queriedItems: [],
       buffer: "",
       itemPage: 0,
@@ -109,24 +108,11 @@ export default {
       this.emptyArchiveOrder();
     }
 
-    this.$socket.emit("[INQUIRY] TICKET_NUMBER", number => {
-      if (this.app.newTicket) {
-        this.setTicket({ number });
-        this.$log({
-          eventID: 4000,
-          data: this.order._id,
-          note: `Initial create #${number} invoice for ${this.ticket.type
-            .replace("_", " ")
-            .toCapitalCase()}.`
-        });
-      } else {
-        this.$log({
-          eventID: 4005,
-          data: this.order._id,
-          note: `Edit #${this.order.number} invoice.`
-        });
-      }
-    });
+    this.$socket.emit(
+      "[ORDER] QUERY_TICKET_NUMBER",
+      number => this.app.newTicket && this.setTicket({ number })
+    );
+
     this.resetPointer();
     window.addEventListener("keydown", this.entry, false);
     this.$electron.ipcRenderer.send("External::stage", "order");
@@ -140,8 +126,7 @@ export default {
   methods: {
     initialData() {
       console.time("performance");
-      this.menuInstance = clone(this.menu);
-      this.flatten(this.menuInstance[0].item);
+      this.getItems(this.layouts.menu[0].contain);
       this.setSides(this.fillOption([]));
 
       if (this.order.hasOwnProperty("seats")) {
@@ -161,7 +146,7 @@ export default {
             : 0;
 
         this.setOrder({
-          _id: ObjectId(),
+          _id: ObjectId().toString(),
           server: this.op.name,
           station: this.station.alias,
           type: this.ticket.type,
@@ -229,25 +214,37 @@ export default {
           }
       }
     },
-    flatten(items) {
+    getItems(contain) {
       console.time("Flatten");
-      items = [].concat.apply([], items);
+      let menu = [];
+      contain.forEach(category => {
+        let items = this.menu[category].map(item => {
+          if (this.favorites.includes(item._id)) {
+            item = clone(item);
+            item.like = true;
+          }
 
-      const { favorite } = this.config.display;
+          return item;
+        });
 
-      if (favorite) {
-        const food = this.favorites;
-        if (food.length)
-          items = items.map(item => {
-            if (food.includes(item._id)) {
-              item = clone(item);
-              item.like = true;
-            }
-            return item;
-          });
+        let align = 6 - items.length % 3;
+        if (align === 6) align = 3;
+
+        Array(align)
+          .fill()
+          .forEach(() => items.push({ zhCN: "", usEN: "" }));
+
+        menu.push(...items);
+      });
+
+      while (33 - menu.length % 33 !== 33) {
+        const fill = 33 - menu.length % 33;
+
+        Array(fill)
+          .fill()
+          .forEach(() => menu.push({ zhCN: "", usEN: "" }));
       }
-
-      this.items = items;
+      this.items = menu;
       console.timeEnd("Flatten");
     },
     fillOption(side) {
@@ -256,14 +253,7 @@ export default {
 
       Array(11 - length)
         .fill()
-        .forEach(() => {
-          array.push({
-            usEN: "",
-            zhCN: "",
-            clickable: false,
-            disable: true
-          });
-        });
+        .forEach(() => array.push({ usEN: "", zhCN: "", disable: true }));
 
       return array;
     },
@@ -274,16 +264,14 @@ export default {
       }
     },
     setCategory(index = this.categoryIndex) {
-      this.openSubGroup = false;
       toggleClass(".category .active", "active");
       document
         .querySelectorAll("section.category div")
         [index].classList.add("active");
 
       this.itemPage = 0;
-      this.saveItems = null;
       this.categoryIndex = index;
-      this.flatten(this.menuInstance[index].item);
+      this.getItems(this.layouts.menu[index].contain);
     },
     pick(item) {
       item = JSON.parse(JSON.stringify(item));
@@ -508,7 +496,7 @@ export default {
           this.exitComponent();
       }
     },
-    setOption(side, index) {
+    setOperatortion(side, index) {
       const { skip, ignore } = side;
 
       side.template && this.specialItemHandler(null, "template", index);

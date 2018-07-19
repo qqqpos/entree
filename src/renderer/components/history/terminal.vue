@@ -367,7 +367,7 @@ export default {
             let result = this.terminal.explainTransaction(response.data);
 
             Object.assign(result, {
-              _id: ObjectId(),
+              _id: ObjectId().toString(),
               date: today(),
               for: "Refund",
               refund: result.amount.approve
@@ -375,7 +375,7 @@ export default {
 
             if (result.code === "000000") {
               const transaction = {
-                _id: ObjectId(),
+                _id: ObjectId().toString(),
                 date: today(),
                 time: +new Date(),
                 order: order._id || "",

@@ -19,7 +19,7 @@
             <span v-if="customer.name" class="text">{{customer.name}}</span>
             <span v-else>{{$t('text.viewRecords')}}</span>
           </div>
-          <div class="operator text" @click="initialPanel">
+          <div class="operator text" @click="initialPanel" @dblclick="switchServer">
             <i class="fas fa-user-tie"></i>
             <span>{{op.name}}</span>
           </div>
@@ -49,6 +49,7 @@ import offlineModule from "./component/offline";
 import portalModule from "./component/portal";
 import callerModule from "./component/caller";
 import dialogModule from "../common/dialog";
+import staff from "../component/staffs";
 import profiles from "./profiles";
 import switcher from "./switcher";
 
@@ -59,7 +60,8 @@ export default {
     portalModule,
     dialogModule,
     switcher,
-    profiles
+    profiles,
+    staff
   },
   data() {
     return {
@@ -96,6 +98,7 @@ export default {
       "time",
       "ring",
       "order",
+      "table",
       "config",
       "ticket",
       "device",
@@ -103,8 +106,7 @@ export default {
       "station",
       "spooler",
       "customer",
-      "language",
-      "currentTable"
+      "language"
     ])
   },
   watch: {
@@ -127,6 +129,7 @@ export default {
   },
   methods: {
     initialPanel() {
+      console.log(this.op);
       if (this.$route.name === "Dashboard") {
         switch (this.op.cashCtrl) {
           case "enable":
@@ -148,8 +151,17 @@ export default {
             break;
           case "disable":
             this.openPanel({ cashCtrl: false });
+          default:
+            this.openPanel({ cashCtrl: false });
         }
       }
+    },
+    switchServer() {
+      this.$route.name === "Menu" &&
+        this.approval(this.op.modify, "server") &&
+        this.$socket.emit("[OPERATOR] LIST", operators =>
+          this.$open("staff", { operators })
+        );
     },
     checkCashIn(cashDrawer) {
       return new Promise(resolve => {
@@ -191,19 +203,19 @@ export default {
           })
           .catch(() => {
             this.exitComponent();
-            this.setApp({ lastActivity: +new Date(), autoLock: true });
+            this.setApp({ lastActivity: Date.now(), autoLock: true });
           });
       }
     },
     doubleCheck() {
       if (this.$route.name === "Menu" && this.order.type === "DINE_IN") {
-        const { _id } = this.currentTable;
+        const { _id } = this.table;
         this.app.newTicket && this.$socket.emit("[TABLE] RESET", { _id });
       }
 
       if (this.order.pending) {
         Object.assign(this.order, { pending: false });
-        this.$socket.emit("[INVOICE] UPDATE", this.order);
+        this.$socket.emit("[ORDER] UPDATE", this.order);
       }
     },
     printFromSpooler(i) {
@@ -230,7 +242,7 @@ export default {
           }
         });
 
-        this.$socket.emit("[INVOICE] UPDATE", order);
+        this.$socket.emit("[ORDER] UPDATE", order);
       }
     },
     editProfile() {
@@ -252,32 +264,16 @@ export default {
     },
     ...mapActions([
       "setApp",
+      "setBook",
       "resetAll",
       "setTicket",
-      "syncTables",
+      "updateMenu",
       "updateTable",
       "insertOrder",
       "updateOrder",
       "newPhoneCall",
       "removeSpooler",
-      "setTodayOrder",
-      "setTemplates",
-      "updateRequestCategory",
-      "updateRequestAction",
-      "updateRequestItem",
-      "removeRequestItem",
-      "updateMenuCategory",
-      "replaceMenu",
-      "updateMenuItem",
-      "removeMenuItem",
-      "updateTableSection",
-      "replaceTable",
-      "setTemporaryTable",
-      "newReservation",
-      "updateReservation",
-      "setCurrentTable",
-      "setBook",
-      "setLastSync"
+      "setViewTable"
     ])
   },
   sockets: {
@@ -292,9 +288,7 @@ export default {
           operator: this.op.name
         });
 
-      this.$socket.emit("[SYNC] ORDER_LIST");
-      this.$socket.emit("[SYNC] TABLE_LIST");
-      this.$socket.emit("[INQUIRY] TICKET_NUMBER", number =>
+      this.$socket.emit("[ORDER] QUERY_TICKET_NUMBER", number =>
         this.setTicket({ number })
       );
     },
@@ -308,29 +302,23 @@ export default {
       Object.assign(this.station, data);
       Printer.initial(CLODOP, this.config, data);
     },
-    UPDATE_TABLE_STATUS(data) {
-      this.updateTable(data);
-      data.assign && this.setCurrentTable(data.table);
+    UPDATE_TABLE(table) {
+      this.updateTable(table);
+
+      this.table && this.table._id === table._id && this.setViewTable(table);
     },
-    INSERT_ORDER(data) {
-      data.refresh = this.$route.name !== "Menu";
-      this.insertOrder(data);
+    NEW_ORDER(order) {
+      const refresh = this.$route.name !== "Menu";
+      this.insertOrder({ order, refresh });
     },
-    UPDATE_ORDER(data) {
-      if (data.order.date === today()) {
-        data.refresh = this.$route.name !== "Menu";
-        this.updateOrder(data);
+    UPDATE_ORDER(order) {
+      if (order.date === today()) {
+        const refresh = this.$route.name !== "Menu";
+        this.updateOrder({ order, refresh });
       }
     },
-    MENU_ITEM_UPDATE({ action, item, sequence }) {
-      switch (action) {
-        case "update":
-          this.updateMenuItem({ item, sequence });
-          break;
-        case "remove":
-          this.removeMenuItem(sequence);
-          break;
-      }
+    UPDATE_MENU(data) {
+      this.updateMenu(data);
     },
     SHUTDOWN() {
       this.$electron.ipcRenderer.send("Shutdown");
@@ -338,51 +326,6 @@ export default {
     disconnect() {
       this.setApp({ database: false });
       this.$open("offlineModule");
-    },
-    SYNC_ORDERS(data) {
-      this.setTodayOrder(data);
-    },
-    SYNC_TABLES(data) {
-      this.syncTables(data);
-    },
-    SYNC_RESERVATIONS(data) {
-      this.setBook(data);
-    },
-    MENU_CATEGORY_UPDATE(data) {
-      this.updateMenuCategory(data);
-    },
-    REQUEST_CATEGORY_UPDATE(data) {
-      this.updateRequestCategory(data);
-    },
-    REQUEST_ACTION_UPDATE(data) {
-      this.updateRequestAction(data);
-    },
-    REQUEST_ITEM_UPDATE(data) {
-      this.updateRequestItem(data);
-    },
-    REQUEST_ITEM_REMOVE(data) {
-      this.removeRequestItem(data);
-    },
-    REPLACE_MENU(data) {
-      this.replaceMenu(data);
-    },
-    UPDATE_TABLE_SECTION(data) {
-      this.updateTableSection(data);
-    },
-    REPLACE_TABLE(data) {
-      this.replaceTable(data);
-    },
-    TEMPORARY_TABLE(data) {
-      this.setTemporaryTable(data);
-    },
-    NEW_RESERVATION(data) {
-      this.newReservation(data);
-    },
-    UPDATE_RESERVATION(data) {
-      this.updateReservation(data);
-    },
-    REPLACE_TEMPLATE(data) {
-      this.setTemplates(data);
     }
   }
 };

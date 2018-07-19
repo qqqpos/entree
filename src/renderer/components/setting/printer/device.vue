@@ -56,7 +56,7 @@ export default {
             value: printer
           });
 
-          assign && this.$socket.emit("[MENU] ASSIGN_PRINTER", name);
+          assign && this.$socket.emit("[ITEM] ASSIGN_PRINTER", name);
 
           this.exitComponent();
         })

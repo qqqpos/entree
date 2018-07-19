@@ -1,13 +1,18 @@
 import * as types from '../mutation-types'
 
 const state = {
+    time: Date.now(),
     app: {},
+    menu: {},
     config: {},
-    layout: {},
+    request: {},
+    layouts: {},
     orders: [],
+    tables: [],
     spooler: [],
     templates: [],
     books: [],
+    operator: {},
     ticket: {
         number: 1,
         type: ""
@@ -21,15 +26,19 @@ const state = {
 }
 
 const mutations = {
-    [types.START_TICK](state, tick) {
-        state.time = tick.time;
-        if (tick.date !== state.app.date) {
-            state.app.date = tick.date;
+    [types.START_TICK](state, { time, date }) {
+        state.time = time;
+        if (date !== state.app.date) {
+            state.app.date = date;
+            state.operator = {};
             state.orders = [];
+            state.order = {};
             state.ticket = {
                 number: 1,
                 type: ""
             }
+
+            location.href = "http://localhost:9080/#/main/lock";
         }
     },
     [types.SET_CONFIG](state, data) {
@@ -45,7 +54,7 @@ const mutations = {
         state.templates = templates;
     },
     [types.SET_BOOK](state, books) {
-        state.books = books
+        state.books = books;
     },
     [types.SET_APP](state, data) {
         state.app = Object.assign({}, state.app, data)
@@ -53,21 +62,48 @@ const mutations = {
     [types.SET_STATION](state, station) {
         state.config = Object.assign({}, state.config, { station })
     },
-    [types.SET_LAYOUT](state, layout) {
-        state.layout = layout;
+    [types.SET_LAYOUTS](state, layouts) {
+        state.layouts = Object.assign({}, state.layouts, layouts);
     },
     [types.SET_MENU](state, menu) {
-        //state.config.layout.menu = flatten(state.config.layout.menu, data, true, alphabetical);
-        state.layout.menu = flatten(menu)
+        const { alphabetical = false } = state.config.display;
+        const format = menu ? arrayToObject(menu) : state.menu;
+
+        Object.keys(format).forEach(key => {
+            format[key].sort((a, b) => {
+                if (alphabetical) {
+                    // sort by a-z
+                    const hanz = !!a.zhCN.match(/[\u3400-\u9FBF]/);
+
+                    return hanz ?
+                        a.zhCN.localeCompare(b.zhCN, 'zh-Hans-CN', {
+                            sensitivity: 'accent'
+                        }) :
+                        a.usEN.localeCompare(b.usEN)
+
+                } else {
+                    // sort by item num
+                    return a.num > b.num ? 1 : -1
+                }
+
+            })
+        })
+
+        state.menu = format;
     },
     [types.SET_REQUEST](state, request) {
-        state.request = flatten(request)
+        state.request = arrayToObject(request);
     },
-    [types.SET_TABLE](state, table) {
-        state.layout.table = table
+    [types.SET_TABLE](state, tables) {
+        state.tables = tables.reduce((obj, table) => {
+            obj[table.zone]
+                ? obj[table.zone].push(table)
+                : obj[table.zone] = [table];
+            return obj;
+        }, {});
     },
     [types.SET_TODAY_ORDER](state, orders) {
-        state.orders = orders
+        state.orders = orders;
     },
     [types.ADD_SPOOLER](state, data) {
         state.spooler.push(data);
@@ -75,6 +111,9 @@ const mutations = {
     },
     [types.REMOVE_SPOOLER](state, index) {
         state.spooler.splice(index, 1)
+    },
+    [types.SET_OPERATOR](state, operator) {
+        state.operator = operator;
     },
     [types.PHONE_RING](state, data) {
         if (data) {
@@ -88,102 +127,85 @@ const mutations = {
         }
     },
     [types.UPSERT_INVOICE](state, invoice) {
-        const index = state.orders.findIndex(ticket => ticket._id === invoice._id);
-        index === -1 ? state.orders.unshift(invoice) : state.orders.splice(index, 1, invoice);
-    },
+        if (invoice.date === today()) {
+            const index = state.orders.findIndex(ticket => ticket._id === invoice._id);
+            index === -1 ? state.orders.unshift(invoice) : state.orders.splice(index, 1, invoice);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    //update stuff
-    [types.UPDATE_TABLE_STATUS](state, table) {
-        if (!table) return;
-
-        const zone = table.zone;
-        let tables = state.config.layout.table;
-        for (let i = 0; i < tables.length; i++) {
-            if (tables[i].zone === zone) {
-                let items = tables[i].item;
-                for (let i = 0; i < items.length; i++) {
-                    if (items[i]._id === table._id) {
-                        items[i] = table;
-                        break;
-                    }
-                }
-                break;
-            }
+            state.ticket.number = state.orders[0].number + 1;
         }
-        state.config.layout.table.splice();
+    },
+    [types.UPDATE_TABLE](state, table) {
+        const { zone } = table;
+        const index = state.tables[zone].findIndex(t => t._id === table._id);
+
+        index !== -1 && state.tables[zone].splice(index, 1, table);
+    },
+    // new update methods
+    [types.UPDATE_MENU_ITEM](state, item) {
+        const { _id, category } = item;
+        const index = state.menu[category].findIndex(i => i._id === _id);
+
+        index === -1 ? state.menu[category].push(item) : state.menu[category].splice(index, 1, item);
+    },
+    [types.REMOVE_MENU_ITEM](state, { _id, category }) {
+        const index = state.menu[category].findIndex(i => i._id === _id);
+        index !== -1 && state.menu[category].splice(index, 1);
     },
     [types.UPDATE_MENU_CATEGORY](state, { category, items, index }) {
-        category = flatten(category, items)[0];
-        state.config.layout.menu.splice(index, 1, category);
-    },
-    [types.REPLACE_MENU](state, data) {
-        state.config.layout.menu = data;
-    },
-    [types.UPDATE_MENU_ITEM](state, { item, sequence }) {
-        const [g, s, i] = sequence;
-        item.clickable = true;
-        state.config.layout.menu[g]['item'][s].splice(i, 1, item);
-    },
-    [types.REMOVE_MENU_ITEM](state, [g, s, i]) {
-        const item = { zhCN: "", usEN: "", clickable: false, category: "" };
+        state.layouts.menu.splice(index, 1, category);
 
-        state.config.layout.menu[g]['item'][s].splice(i, 1);
-        state.config.layout.menu[g]['item'][s].push(item);
-    },
-    [types.REPLACE_REQUEST_ITEM](state, { index, items }) {
-        state.config.layout.request[index].item = items;
+        const group = arrayToObject(items);
+        Object.keys(group).forEach(category => {
+            state.menu[category] = group[category];
+        });
+
+        // remove unused category
+        // watch out for memory leak
+
+        // let categories = new Set();
+        // state.layouts.menu.forEach(category => {
+        //     categories.add(...category.contain)
+        // });
+
+        // categories = Array.from(categories);
+
+        // // Object.keys(state.menu).forEach(category => {
+        // //     if (!categories.includes(category))
+        // //         delete state.menu[category];
+        // // });
+        // console.log(state.menu,categories)
     },
     [types.UPDATE_REQUEST_CATEGORY](state, { category, items, index }) {
-        category = flatten(category, items, false)[0];
-        state.config.layout.request.splice(index, 1, category);
-    },
-    [types.UPDATE_REQUEST_ITEM](state, { categoryIndex, groupIndex, index, item }) {
-        item.clickable = true;
-        state.config.layout.request[categoryIndex]['item'][groupIndex].splice(index, 1, item)
+        state.layouts.request.splice(index, 1, category);
+
+        const group = arrayToObject(items);
+        Object.keys(group).forEach(category => {
+            state.request[category] = group[category];
+        });
     },
     [types.UPDATE_REQUEST_ACTION](state, { action, index }) {
-        state.config.layout.action.splice(index, 1, action)
+        state.layouts.action.splice(index, 1, action)
     },
-    [types.REMOVE_REQUEST_ITEM](state, { categoryIndex, groupIndex, index }) {
-        const item = { zhCN: "", usEN: "", clickable: false, category: "NA" }
+    [types.UPDATE_REQUEST_ITEM](state, item) {
+        const { _id, category } = item;
+        const index = state.request[category].findIndex(i => i._id === _id);
 
-        state.config.layout.request[categoryIndex]['item'][groupIndex].splice(index, 1);
-        state.config.layout.request[categoryIndex]['item'][groupIndex].push(item)
+        index === -1 ? state.request[category].push(item) : state.request[category].splice(index, 1, item);
     },
+    [types.REMOVE_REQUEST_ITEM](state, item) {
+        const { _id, category } = item;
+        const index = state.request[category].findIndex(i => i._id === _id);
+        index !== -1 && state.request[category].splice(index, 1);
+    },
+
+
     [types.NEW_PHONE_CALL](state, data) {
         state.callLog.unshift(data);
         state.callLog = state.callLog.slice(0, 10);
     },
-    [types.SET_PRINTER](state, data) {
-        state.config.printer = Object.assign({}, state.config.printer, data);
-    },
     [types.UPDATE_TABLE_SECTION](state, data) {
         let { section, index } = data;
         state.config.layout.table.splice(index, 1, section);
-    },
-    [types.SET_TABLE_SORT](state, data) {
-        let { tables, index } = data;
-        state.config.layout.table[index].item = tables;
-    },
-    [types.REPLACE_TABLE](state, { table, index, section }) {
-        state.config.layout.table[section].item.splice(index, 1, table);
     },
     [types.REMOVE_TABLE](state, { section, index }) {
         let table = state.config.layout.table[section].item[index];
@@ -208,6 +230,11 @@ export default {
     mutations
 }
 
-const flatten = function (target) {
-    return target
+function arrayToObject(array) {
+    return array.reduce((obj, item) => {
+        obj[item.category]
+            ? obj[item.category].push(item)
+            : obj[item.category] = [item];
+        return obj;
+    }, {});
 }

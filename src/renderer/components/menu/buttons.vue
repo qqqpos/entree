@@ -300,6 +300,7 @@ export default {
         .catch(this.placeFailed);
     },
     placeFailed(error) {
+      error && console.error(error);
       if (error) {
         this.$log({
           eventID: 9005,
@@ -381,7 +382,7 @@ export default {
         if (this.ticket.type === "TO_GO" && this.order.content.length > 0) {
           //save togo items
           const order = this.combineTogoItems();
-          this.$socket.emit("[INVOICE] UPDATE", order, print);
+          this.$socket.emit("[ORDER] UPDATE", order, print);
           next();
         } else {
           next();
@@ -390,98 +391,76 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
-        const { printOnDone = false, table = true } = this.dinein;
+        const { printOnDone = false, useTable = true } = this.dinein;
         const printCount = this.app.newTicket
           ? print ? 1 : 0
           : print ? this.order.printCount + 1 : this.order.printCount;
 
-        const todo = !!document.querySelector(".item.todo");
         let order = this.combineOrderInfo({ printCount });
+        const todo = !!document.querySelector(".item.todo");
 
         if (this.app.newTicket) {
-          if (todo) {
-            let items = [];
+          // handle new ticket
+          const items = todo ? todoPrintHandler(order, print) : order.content;
 
-            print
-              ? order.content.forEach(item => {
-                  if (item.pending) {
-                    items.push(clone(item));
-                    item.print = true;
-                  }
-                })
-              : order.content.forEach(item =>
-                  Object.assign(item, { print: false, pending: false })
-                );
+          if (this.isDineInTicket && useTable) {
+            Object.assign(this.table, {
+              invoice: [order._id],
+              status: 2
+            });
 
-            if (this.ticket.type !== "DINE_IN" && this.ticket.type !== "BAR") {
-              this.$socket.emit("[INVOICE] SAVE", order, false, content => {
-                Printer.setTarget("Order").print(
-                  Object.assign(order, { content: items })
-                );
-              });
-            } else {
-              if (table) {
-                Object.assign(this.currentTable, {
-                  invoice: [order._id],
-                  status: 2
-                });
-                this.$socket.emit("[TABLE] SETUP", this.currentTable);
-              }
+            this.$socket.emit("[TABLE] UPDATE", this.table);
 
-              this.$socket.emit("[INVOICE] SAVE", order, false, content => {
-                if (print) {
-                  const ticket = Object.assign({}, order, { content: items });
+            this.$socket.emit("[ORDER] SAVE", order, print, () => {
+              if (!print) return;
 
-                  printOnDone
-                    ? Printer.setTarget("All").print(ticket)
-                    : Printer.setTarget("Order").print(ticket);
-                }
-              });
-            }
-          } else if (
-            this.ticket.type !== "DINE_IN" &&
-            this.ticket.type !== "BAR"
-          ) {
-            this.$socket.emit("[INVOICE] SAVE", order, print, content => {
-              print && Printer.setTarget("All").print(content);
+              const ticket = Object.assign({}, order, { content: items });
+
+              printOnDone
+                ? Printer.setTarget("All").print(ticket)
+                : Printer.setTarget("Order").print(ticket);
             });
           } else {
-            if (table) {
-              Object.assign(this.currentTable, {
-                invoice: [order._id],
-                status: 2
-              });
-
-              this.$socket.emit("[TABLE] SETUP", this.currentTable);
-            }
-
-            this.$socket.emit("[INVOICE] SAVE", order, print, content => {
-              if (print) {
-                printOnDone
-                  ? Printer.setTarget("All").print(content)
-                  : Printer.setTarget("Order").print(content);
-              }
-            });
+            this.$socket.emit(
+              "[ORDER] SAVE",
+              order,
+              print,
+              ticket => print && Printer.print(ticket)
+            );
           }
         } else {
-          if (this.ticket.type !== "TO_GO") {
-            const diffs = this.compare(order);
-            if (print) {
-              if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
-                Printer.setTarget("All").print(diffs);
-              } else {
-                printOnDone
-                  ? Printer.setTarget("All").print(diffs)
-                  : Printer.setTarget("Order").print(diffs);
-              }
-            }
-            this.$socket.emit("[INVOICE] UPDATE", order, print);
-          } else {
-            Printer.setTarget("Order").print(this.order);
+          // handle edit ticket
+          const diffs = this.compare(order);
+
+          if (print) {
+            !this.isDineInTicket
+              ? Printer.setTarget("ALL").print(diffs)
+              : printOnDone
+                ? Printer.setTarget("ALL").print(diffs)
+                : Printer.setTarget("Order").print(diffs);
           }
+
+          this.$socket.emit("[ORDER] UPDATE", order, print);
         }
+
         resolve(false);
       });
+    },
+    todoPrintHandler(order, print) {
+      let items = [];
+
+      print
+        ? order.content.forEach(item => {
+            if (item.pending) {
+              items.push(clone(item));
+              item.print = true;
+            }
+          })
+        : order.content.forEach(item =>
+            Object.assign(item, { print: false, pending: false })
+          );
+
+      return items;
     },
     exit(quit) {
       const { done } = this.station.autoLock;
@@ -489,7 +468,7 @@ export default {
 
       if (this.order.type === "DINE_IN" && table) {
         if (lockOnDone || done) {
-          this.setOp(null);
+          this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
         } else {
           this.setOrder(this.order);
@@ -497,7 +476,7 @@ export default {
         }
       } else {
         if (done) {
-          this.setOp(null);
+          this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
         } else {
           this.$router.push({ path: "/main" });
@@ -559,10 +538,10 @@ export default {
             .catch(this.exitComponent);
     },
     resetTableExit() {
-      if (this.currentTable) {
-        const { _id, status } = this.currentTable;
+      if (this.table) {
+        const { _id, status } = this.table;
 
-        if (this.app.newTicket || status === -1)
+        (this.app.newTicket || status === -1) &&
           this.$socket.emit("[TABLE] RESET", { _id });
       }
       this.abandon();
@@ -705,23 +684,31 @@ export default {
       return Object.assign(current, { content: items });
     },
     ...mapActions([
-      "setOp",
       "setApp",
       "lessQty",
       "moreQty",
       "resetAll",
       "setOrder",
       "setTableInfo",
-      "archiveOrder"
+      "archiveOrder",
+      "setOperator"
     ])
   },
   computed: {
+    isDineInTicket() {
+      return (
+        this.order.type === "DINE_IN" ||
+        this.order.type === "BAR" ||
+        this.order.type === "HIBACHI"
+      );
+    },
     ...mapGetters([
       "op",
       "app",
       "tax",
       "item",
       "order",
+      "table",
       "store",
       "dinein",
       "ticket",
@@ -731,7 +718,6 @@ export default {
       "language",
       "instance",
       "choiceSet",
-      "currentTable",
       "archivedOrder",
       "isEmptyTicket"
     ])

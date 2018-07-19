@@ -13,6 +13,7 @@
                     </template>
                 </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <inputer title="text.primary" v-model="init.section.usEN"></inputer>
                 <inputer title="text.secondary" v-model="init.section.zhCN"></inputer>

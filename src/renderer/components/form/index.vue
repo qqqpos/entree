@@ -165,6 +165,7 @@ export default {
       Array.isArray(this.customer.favorite) &&
         this.customer.favorite.length &&
         this.setFavorites(this.customer.favorite);
+
       this.$socket.emit("[CUSTOMER] UPDATE", this.customer, profile => {
         this.setCustomer(profile);
         this.setOrder({ type: this.ticket.type });
@@ -216,7 +217,7 @@ export default {
           this.store.matrix.api
         }&language=en&units=imperial`;
 
-        this.$socket.emit("[GOOGLE] ADDRESS", url, raw => {
+        this.$socket.emit("[SYS] REQUEST_URL", url, raw => {
           const result = JSON.parse(raw);
 
           if (result.status === "OK") {
@@ -244,8 +245,14 @@ export default {
               const matrix = result.rows[0].elements[0];
               const distance = matrix.distance.text;
               const duration = matrix.duration.text;
+              const addressInProfile = this.customer.address.split("#");
+
               const profile = {
-                address,
+                address:
+                  address +
+                  (addressInProfile[1]
+                    ? " #" + addressInProfile[1].trim()
+                    : ""),
                 city,
                 distance,
                 duration,
@@ -253,7 +260,7 @@ export default {
                 note
               };
 
-              if (address.indexOf(this.customer.address.trim()) !== -1) {
+              if (address.indexOf(addressInProfile[0].trim()) !== -1) {
                 this.updateProfile(profile);
                 next();
               } else {
@@ -273,12 +280,15 @@ export default {
                         this.updateProfile(profile);
                         next();
                       })
-                      .catch(this.exitComponent);
+                      .catch(() => {
+                        stop();
+                        this.exitComponent();
+                      });
               }
             } else {
             }
           } else {
-            stop("No response from Google Matrix server");
+            stop(result.error_message);
           }
         });
       });
@@ -317,7 +327,7 @@ export default {
               this.setCustomer({ direction, coordinate: [lat, lng] });
               next();
             } else {
-              stop("No response from Google Matrix server");
+              stop(result.error_message);
             }
           });
       });
@@ -331,11 +341,9 @@ export default {
       const radians = getAtan2(y1 - y2, x1 - x2);
       const compassReading = radians * (180 / Math.PI);
       const direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
-      let index = Math.round(compassReading / 45);
 
-      if (index < 0) {
-        index = index + 8;
-      }
+      let index = Math.round(compassReading / 45);
+      index = index < 0 ? index + 8 : index;
 
       return direction[index];
     },

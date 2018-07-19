@@ -24,31 +24,19 @@ export default {
       const language = navigator.language === "zh-CN" ? "zhCN" : "usEN";
       moment.locale(language === "usEN" ? "en" : "zh-cn");
       this.$setLanguage(language);
-      this.setApp({
-        date: today(),
-        language,
-        printer: true,
-        database: true
-      });
+      this.setApp({ date: today(), language, printer: true, database: true });
       window.appSocket = this.$socket;
       // window.addEventListener("online", this.setDevice({ online: true }));
       // window.addEventListener("offline", this.setDevice({ online: false }));
-
       this.setDevice({ online: navigator.onLine });
-      this.$electron.ipcRenderer.send("Loading", this.$t("initial.findHost"));
 
+      this.progress("findHost");
       this.$socket.connected && this.socketConnected();
     },
     socketConnected() {
-      this.$electron.ipcRenderer.send(
-        "Loading",
-        this.$t("initial.hostConnected")
-      );
+      this.progress("hostConnected");
       this.$socket.emit("[INITIAL] POS");
-      this.$electron.ipcRenderer.send(
-        "Loading",
-        this.$t("initial.initialApplication")
-      );
+      this.progress("initialApplication");
     },
     setEnvironment({
       config,
@@ -56,25 +44,21 @@ export default {
       menu,
       request,
       orders,
-      table,
+      tables,
       template,
-      book,
-      sync = Date.now()
+      book
     }) {
       try {
         this.setConfig(config);
-        this.setExternalDisplay(config);
         this.setLayout(layout);
         this.setMenu(menu);
+        this.setTable(tables);
         this.setRequest(request);
-        this.$electron.ipcRenderer.send(
-          "Loading",
-          this.$t("initial.applyConfiguration")
-        );
-        this.setTable(table);
+        this.progress("applyConfiguration");
+        this.setExternalDisplay(config);
+        this.setTodayOrder(orders);
         this.setTemplates(template);
-        this.setBook({ book, sync });
-        this.setTodayOrder({ orders, sync });
+        this.setBook(book);
         this.setStationEnvironment()
           .then(this.initialized)
           .catch(this.registration);
@@ -86,16 +70,7 @@ export default {
       return new Promise((use, register) => {
         Mac.getMac((error, mac) => {
           if (error || !mac) {
-            this.$electron.ipcRenderer.send(
-              "Loading",
-              this.$t("initial.hardwareIssue")
-            );
-
-            this.$log({
-              eventID: 9001,
-              type: "failure",
-              event: `Station profile not found.\n\nError Message:\n${error.toString()}`
-            });
+            this.progress("hardwareIssue");
           } else {
             const { username } = os.userInfo();
 
@@ -111,22 +86,17 @@ export default {
       });
     },
     initialized(data) {
+      const { alias, mac } = data;
       this.setStation(data);
       this.awakeStation();
       this.initialDevice();
       this.initialPrinter()
         .then(() => {
-          const { alias, mac } = data;
           this.$socket.emit("[STATION] CONNECTED", { alias, mac });
           this.$electron.ipcRenderer.send("Initialized");
           this.$router.push("Login");
         })
-        .catch(() => {
-          this.$electron.ipcRenderer.send(
-            "Loading",
-            this.$t("initial.printerServerError")
-          );
-        });
+        .catch(() => this.progress("printerServerError"));
     },
     registration(data) {
       this.$electron.ipcRenderer.send("Initialized");
@@ -143,10 +113,7 @@ export default {
     },
     awakeStation() {
       if (window.isServer) {
-        this.$electron.ipcRenderer.send(
-          "Loading",
-          this.$t("initial.awakeClients")
-        );
+        this.progress("awakenStations");
         this.$socket.emit(
           "[STATION] AWAKE_LIST",
           data => data && data.foreach(station => Magic.wake(station))
@@ -261,10 +228,7 @@ export default {
       // parser.on('data', console.log);
     },
     initialPrinter() {
-      this.$electron.ipcRenderer.send(
-        "Loading",
-        this.$t("initial.connectPrinter")
-      );
+      this.progress("connectPrinter");
       const { config, station } = this;
 
       return new Promise((next, stop) => {
@@ -284,6 +248,9 @@ export default {
         }
       });
     },
+    progress(text) {
+      this.$electron.ipcRenderer.send("Loading", this.$t(`initial.${text}`));
+    },
     ...mapActions([
       "setApp",
       "setMenu",
@@ -295,7 +262,6 @@ export default {
       "setDevice",
       "setStation",
       "setRequest",
-      "setLastSync",
       "setTemplates",
       "setTodayOrder",
       "setBook"

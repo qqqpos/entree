@@ -164,7 +164,7 @@ export default {
       const cashDrawer = this.station.cashDrawer.name;
 
       const transaction = {
-        _id: ObjectId(),
+        _id: ObjectId().toString(),
         date: today(),
         time: Date.now(),
         order: null,

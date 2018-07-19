@@ -9,7 +9,7 @@
                 <div class="text">{{filter.title}}<span class="count">{{filter.count}}</span></div>
                 <div class="value">$ {{filter.amount | decimal}}</div>
                 <transition name="dropdown">
-                    <ul v-if="filter.hasOwnProperty('subTypes') && showMore" class="subTypes">
+                    <ul v-if="filter.subTypes && showMore" class="subTypes">
                         <li v-for="(sub,subIndex) in filter.subTypes" :key="subIndex" @click.stop="setSubFilter(sub)">
                             <div class="text">{{sub.title}}<span class="count">{{sub.count}}</span></div>
                             <div class="value">$ {{sub.amount | decimal}}</div>
@@ -29,7 +29,7 @@
                             <i class="fas fa-users"></i>
                           </li>
                           <li @click.stop="search">
-                            <div class="text" >{{$t('text.searchTicket')}}</div>
+                            <div class="text">{{$t('text.searchTicket')}}</div>
                             <i class="fas fa-search"></i>
                           </li>
                         </template>
@@ -40,6 +40,7 @@
         <transition name="fadeDown" appear>
             <div class="date relative" id="calendar">
             <i class="fa fa-angle-left" @click="prev" v-show="displayBtn"></i>
+            <p class="dateInfo">{{date | week}}<span class="holiday">{{date | event}}</span></p>
             <span class="text" @click="displayBtn = !displayBtn">{{date}}</span>
             <i class="fa fa-angle-right" @click="next" v-show="displayBtn"></i>
             </div>
@@ -49,6 +50,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import holiday from "moment-holiday";
 
 export default {
   props: ["target", "reset", "data", "date", "on"],
@@ -77,6 +79,14 @@ export default {
     const dom = document.querySelector(".filters .filter");
     dom && dom.classList.add("active");
   },
+  filters: {
+    week(date) {
+      return moment(date, "YYYY-MM-DD").format("dddd");
+    },
+    event(date) {
+      return holiday(moment(date, "YYYY-MM-DD")).isHoliday() || "";
+    }
+  },
   methods: {
     setFilter(type, index, e) {
       this.$emit("filter", type);
@@ -91,7 +101,7 @@ export default {
           this.showMore = false;
           this.type = type;
         }
-      }else{
+      } else {
         this.type = type;
       }
     },
@@ -410,7 +420,6 @@ ul.subTypes {
 
 .date {
   min-width: 225px;
-  line-height: 66px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -420,13 +429,15 @@ ul.subTypes {
 }
 
 .date .text {
-  font-size: 3em;
+  font-size: 46px;
   font-style: italic;
   font-family: "Agency FB";
   color: #fff;
   font-weight: bold;
   min-width: 200px;
   padding-right: 10px;
+  line-height: 1;
+  padding-top: 16px;
 }
 
 .date i {
@@ -435,14 +446,32 @@ ul.subTypes {
   top: 0;
 }
 
+.dateInfo {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  white-space: pre;
+  text-align: left;
+  width: 88%;
+  display: flex;
+}
+
+.holiday {
+  font-weight: lighter;
+  margin-right: 10px;
+  font-weight: lighter;
+  flex: 1;
+  text-align: right;
+}
+
 i.fa-angle-left {
   left: -5px;
-  padding: 24px 60px 24px 13px;
+  padding: 30px 60px 17px 13px;
 }
 
 i.fa-angle-right {
   right: -5px;
-  padding: 24px 8px 24px 60px;
+  padding: 30px 8px 17px 60px;
 }
 
 li.extend:after {
@@ -456,7 +485,7 @@ li.extend:after {
 ul.server {
   position: absolute;
   top: 0;
-  left: 123px;
+  left: 119px;
   background: #fff;
   width: auto;
   max-height: 315px;

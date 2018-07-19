@@ -33,7 +33,7 @@
                 </ul>
             </div>
         </div>
-        <ul class="log" v-show="actions">
+        <ul class="log relative" v-show="actions">
             <li v-for="(action,index) in actions" :key="index">
                 <p v-html="parse(action)" class="detail"></p>
             </li>
@@ -98,10 +98,22 @@ export default {
             .map(text => `<span>${text}</span>`)
             .join("");
         case "CHANGE.ITEM_PRINT":
-          return this.$t(type, value.length)
-            .split("|")
-            .map(text => `<span>${text}</span>`)
-            .join("") + '<ul>' +  value.map(item=>`<li><span>${item.qty} x </span><span>${item[this.language]}</span></li>`).join("") + '</ul>';
+          return (
+            this.$t(type, value.length)
+              .split("|")
+              .map(text => `<span>${text}</span>`)
+              .join("") +
+            "<ul>" +
+            value
+              .map(
+                item =>
+                  `<li><span>${item.qty} x </span><span>${
+                    item[this.language]
+                  }</span></li>`
+              )
+              .join("") +
+            "</ul>"
+          );
         case "CHANGE.ORDER_TYPE":
           return this.$t(
             type,
@@ -243,5 +255,28 @@ li:nth-child(even) {
 
 .diff {
   width: 140px;
+}
+
+ul.log:after {
+  left: calc(50% - 25px);
+  top: -25px;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+ul.log:before {
+  font-family: fontAwesome;
+  content: "\f4ff";
+  font-weight: 600;
+  position: absolute;
+  left: calc(50% - 8px);
+  top: -18px;
+  color: #3c3c3c;
 }
 </style>

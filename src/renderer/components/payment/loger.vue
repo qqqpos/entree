@@ -198,8 +198,8 @@ export default {
       });
     },
     remove(transaction, index) {
-      this.$socket.emit("[PAYMENT] REMOVE", transaction);
       this.init.logs.splice(index, 1);
+      this.$socket.emit("[PAYMENT] REMOVE", transaction);
       this.exitComponent();
     },
     voidFailed(error) {

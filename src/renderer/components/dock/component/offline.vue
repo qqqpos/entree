@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import Electron from "electron";
 import { mapGetters } from "vuex";
 
 export default {
@@ -35,7 +34,6 @@ export default {
   computed: {
     pass() {
       const diff = this.time - this.happened;
-
       this.autoFix = diff < 30000;
 
       const minute = Math.floor(diff / 1000 / 60);
@@ -49,7 +47,7 @@ export default {
   },
   methods: {
     shutdown() {
-      Electron.ipcRenderer.send("Shutdown");
+      this.$electron.ipcRenderer.send("Shutdown");
     }
   }
 };

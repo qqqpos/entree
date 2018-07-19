@@ -30,6 +30,7 @@
 import inputer from "../../common/inputer";
 import switches from "../../common/switches";
 import checkbox from "../../common/checkbox";
+
 export default {
   props: ["init"],
   components: { inputer, switches, checkbox },
@@ -50,8 +51,10 @@ export default {
       });
     },
     confirm() {
-      !Array.isArray(this.category.contain) &&
-        (this.category.contain = this.category.contain.split(","));
+      if (!Array.isArray(this.category.contain))
+        this.category.contain = this.category.contain
+          .split(",")
+          .map(name => name.trim());
 
       this.category.item = [];
       this.$socket.emit(

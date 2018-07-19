@@ -203,7 +203,7 @@ export default {
         });
 
         this.$socket.emit(
-          "[INVOICE] UPDATE",
+          "[ORDER] UPDATE",
           Object.assign(order, {
             settle: false,
             date: today(),
@@ -219,14 +219,14 @@ export default {
       const { lockOnDone } = this.dinein;
 
       if (lockOnDone || done) {
-        this.setOp(null);
+        this.setOperator(null);
         this.$router.push({ path: "/main/lock" });
       } else {
         this.setOrder(order);
         this.$router.push({ path: "/main/table" });
       }
     },
-    ...mapActions(["setOp", "setOrder", "resetAll", "delayPrint"])
+    ...mapActions(["setOperator", "setOrder", "resetAll", "delayPrint"])
   },
   computed: {
     ...mapGetters([

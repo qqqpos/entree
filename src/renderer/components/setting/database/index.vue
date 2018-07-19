@@ -83,9 +83,7 @@ export default {
       return this.$t("text.hhmm", hh, mm);
     },
     backup() {
-      const { dialog } = require("electron").remote;
-
-      dialog.showOpenDialog(
+      this.$electron.remote.dialog.showOpenDialog(
         { title: "Save backup to...", properties: ["openDirectory"] },
         directory => {
           // directory && dump({

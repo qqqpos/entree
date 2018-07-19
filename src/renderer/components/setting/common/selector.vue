@@ -2,7 +2,7 @@
   <div class="selector">
     <span class="title">{{$t(title)}}</span>
     <div class="inner">
-      <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOpts">
+      <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOperatorts">
       <template v-else>
         <span class="input" @click.stop="isDisplay = !isDisplay">{{label}}</span>
         <i class="fa fa-sort"></i>
@@ -65,7 +65,7 @@ export default {
       this.getLabel(value);
       this.value !== value && this.$emit("update", value);
     },
-    resetOpts() {
+    resetOperatorts() {
       this.isDisplay = false;
       Object.assign(this.opts, []);
     },

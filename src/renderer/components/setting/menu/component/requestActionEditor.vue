@@ -7,6 +7,7 @@
                 <h3>{{$t(action[language])}}</h3>
               </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <inputer title="text.primary" v-model.trim="action.usEN"></inputer>
                 <inputer title="text.secondary" v-model.trim="action.zhCN"></inputer>
@@ -33,6 +34,7 @@
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 import switches from "../../common/switches";
+
 export default {
   props: ["init"],
   components: { toggle, inputer, switches },

@@ -29,13 +29,6 @@ export default {
       this.setDevice({ online: true });
     },
     ...mapActions(["setApp", "setDevice"])
-  },
-  watch: {
-    op(n) {
-      n.role === "Developer"
-        ? document.getElementById("app").classList.add("developer")
-        : document.getElementById("app").classList.remove("developer");
-    }
   }
 };
 </script>

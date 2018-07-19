@@ -3,7 +3,7 @@
     <div class="editor">
       <header>
         <div>
-          <h5>{{currentTable.name}}</h5>
+          <h5>{{table.name}}</h5>
           <h3>{{$t("text.setGuest")}}</h3>
         </div>
       </header>
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       guest: 1,
-      currentTable: this.$store.getters.currentTable
+      table: this.$store.getters.table
     };
   }
 };

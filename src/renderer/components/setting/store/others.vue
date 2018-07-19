@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 import toggle from "../common/toggle";
 import inputer from "../common/inputer";
 import switches from "../common/switches";
@@ -40,9 +42,16 @@ export default {
   components: { toggle, switches, inputer, external },
   data() {
     return {
+      alphabetical: false,
       store: JSON.parse(JSON.stringify(this.$store.getters.store)),
       display: JSON.parse(JSON.stringify(this.$store.getters.config.display))
     };
+  },
+  created() {
+    this.alphabetical = this.display.alphabetical;
+  },
+  beforeDestroy() {
+    this.alphabetical !== this.display.alphabetical && this.setMenu();
   },
   methods: {
     update(data) {
@@ -116,12 +125,13 @@ export default {
         value
       });
     },
-    updateAutoStack(value){
+    updateAutoStack(value) {
       this.update({
-        key:"store.autoStackItem",
+        key: "store.autoStackItem",
         value
-      })
-    }
+      });
+    },
+    ...mapActions(["setMenu"])
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="popupMask center dark" @click.self="init.reject">
+  <div class="popupMask center dark" @click.self="init.reject(true)">
     <div class="accessor shadow">
       <template v-if="self">
         <h5>{{op.name}}</h5>
@@ -78,14 +78,12 @@ export default {
       }
     },
     access() {
-      this.$socket.emit("[ACCESS] CODE", this.pin.join(""), op => {
-        op ? this.init.resolve(op) : this.init.reject();
-      });
-    },
-    // autoAccess: _debounce(function() {
-    //   const password = this.pin.join("");
-    //   password && this.access();
-    // }, 300)
+      this.$socket.emit(
+        "[STATION] ACCESS",
+        this.pin.join(""),
+        op => (op ? this.init.resolve(op) : this.init.reject())
+      );
+    }
   }
 };
 </script>

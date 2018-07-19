@@ -3,7 +3,7 @@
     <header>
       <div class="f1">
           <h3>{{$t('nav.payroll')}}</h3>
-          <p>Payroll summary</p>
+          <p>{{$t('tip.payrolls')}}</p>
       </div>
       <date-picker @update="fetchData"></date-picker>
     </header>
@@ -199,7 +199,7 @@ export default {
       const [from, to] = (this.range = range);
 
       this.$socket.emit(
-        "[EMPLOYEE] PAYROLLS",
+        "[OPERATOR] PAYROLLS",
         {
           from: +from,
           to: +to

@@ -6,7 +6,7 @@ export default {
     loadConfiguration: "正在加载配置...",
     applyConfiguration: "应用程序设置...",
     connectPrinter: "正在检测打印机...",
-    awakeClients: "正在启动其它工作站...",
+    awakenStations: "正在启动其它工作站...",
     hardwareIssue: "硬件发生错误",
     printerServerError: "打印机服务错误"
   },
@@ -88,6 +88,7 @@ export default {
     Cashier: "收银员",
     Waitstaff: "企台",
     Bartender: "酒保",
+    Driver: "司机",
     Worker: "员工",
     delay: "延迟出单"
   },
@@ -269,7 +270,7 @@ export default {
     activation: "激活",
     back: "返回",
     viewMore: "查看更多",
-    reservation: "预约",
+    booking: "预约",
     viewList: "查看列表",
     switchTable: "换座",
     combineTicket: "合单",
@@ -281,6 +282,7 @@ export default {
     confirmPrint: "确定并打印",
     noReceipt: "不打印",
     printReceipt: "打印收据",
+    receiptOnly: "只打印收据",
     deleteOrder: "删除订单",
     paidInFull: "合单付款",
     splitPay: "分单付款",
@@ -339,7 +341,8 @@ export default {
     deposit: "押金",
     chargeRemain: "支付余额",
     copy: "复制",
-    reimburse: "偿还"
+    reimburse: "偿还",
+    additional: "追加物品"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -476,8 +479,6 @@ export default {
     forceClearTable: "强制还原",
     forceClearTableConfirm: "{i} 正在操作 {i} 桌, 您确定要还原状态吗",
     resetTableConfirm: "您确定要重置这个座位的状态吗？",
-    invoiceSettled: "此订单已经结账",
-    invoiceSettledTip: "您不能改动已经结账的订单",
     ticketClosed: "订单已经结账",
     paymentFound: "订单有付款记录",
     removePaymentRecordFirst: "请先移除此订单的付款记录",
@@ -498,11 +499,11 @@ export default {
     prePayment: "打印预结单",
     prePaymentTip: "您确定要打印 {i} 桌位的预结单",
     prePaymentFailed: "无法打印预结单",
-    prePaymentFailedTip: "您需要先打印出所有物品后才能打印预结单",
+    itemRemainUnprintBeforePayment: "您需要先打印出所有物品后才能打印预结单",
     tableClear: "清除座位",
-    tableClearTip: "您确定要清除 {i} 座位的信息吗？",
+    tableStatusClearConfirm: "您确定要清除 {i} 座位的信息吗？",
     tableClearFailed: "无法清除座位",
-    tableClearFailedTip: "您目前还不能清除 {i} 座位的信息",
+    tableClearNotAllowed: "您目前还不能清除 {i} 座位的信息",
     voidCreditSale: "取消信用卡订单",
     voidCreditInvoice: "同时也会移除 #{i}号 {i}订单的付款记录",
     voidCreditReload: "同时也会移除这次礼物卡充值数额",
@@ -556,7 +557,8 @@ export default {
     itemSent: "打印 #{i} 订单的物品",
     printResult: "订单中的 {i} 个物品, {i}",
     tableSectionRemove: "区域移除",
-    tableSectionRemoveTip: "您确定要移除这个区域吗？",
+    tableSectionRemoveConfirm: "您确定要移除这个区域吗？",
+    tablesInuse: "有 {i} 个座位处于使用中, 请先处理完毕后再执行删除操作",
     tableRemoveConfirm: "删除座位",
     tableRemoveConfirmTip: "您确定要删除这个座位吗？",
     thirdPartyInvoice: "第三方订单",
@@ -665,12 +667,11 @@ export default {
     cantExecute: "无法执行",
     errorOccurred: "执行这个命令的过程发送一个错误, 命令被中止!",
     duplicateNotAllow: "已经有相同名称，请重新命名",
-    splitTicketItemRemain:
-      "此订单中还有 {i} 个物品尚未被分配。请分完后再进行付款操作",
+    splitTicketItemRemain: "此订单中还有 {i} 个物品尚未被分配。请分完后再进行付款操作",
     temporaryTable: "临时座位",
     createTemporaryTable: "您需要创建一个临时的座位吗？",
     switchServer: "切换服务员",
-    switchServerConfirm: "您确定要将此座位的服务员由 {i} 换成 {i} 吗？",
+    switchServerConfirm: "您确定要将服务员由 {i} 换成 {i} 吗？",
     NoTip: "没有小费",
     transactionHasNoTip: "即将过账的交易中没有输入任何小费, 您确定要继续?",
     tipConfirm: "确定小费",
@@ -1312,7 +1313,8 @@ export default {
     placedItemFor: "点了 {i}个 单品",
     voidTicketFor: " 取消了订单, 原因是",
     gallery: "图片库",
-    itemInline: "物品内联"
+    itemInline: "物品内联",
+    earn: "收入"
   },
   nav: {
     store: "店面",
@@ -1567,24 +1569,8 @@ export default {
       format: "卡号格式"
     }
   },
-  reservation: {
-    create: "创建预约",
-    edit: "编辑预约",
-    date: "预约日期",
-    walkIn: "外等",
-    phone: "电话预约",
-    name: "名字",
-    guest: "人数",
-    number: "当前等待号码",
-    seat: "入座",
-    sentSMS: "发送消息",
-    reprint: "重新打印",
-    cancel: "取消预约",
-    remove: "移除",
-    inactive: "不活动",
-    checkIn: "登记",
-    timeline: "时间表",
-    list: "列表"
+  booking: {
+
   },
   database: {
     dataSize: "数据库大小",
@@ -1708,6 +1694,7 @@ export default {
     percentageDiscount: "按订单总数的百分比折扣",
     autoStackItemQty: "自动叠加相同物品的数量",
     marketPriceInUse: "物品使用市场价格",
+    payrolls: "打卡工资单列表",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",
@@ -1741,8 +1728,9 @@ export default {
     itemSplit: "您想将选择的物品平摊成几份?",
     sessionReport: "允许打印个人时段报表",
     timecard: {
-      forOne: "记录上下班打卡情况",
-      forAll: "全体员工打卡上下班",
+      forOne: "按员工个人设置打卡",
+      forAll: "强制全体员工打卡",
+      timeout: "超时后自动打卡",
       tipReport: "打卡下班时上报小费信息"
     },
     dinein: {
@@ -1810,6 +1798,7 @@ export default {
     servo: "伺服器"
   },
   online: {
+    about: "介绍",
     adWords: '推广',
     config: "配置",
     performance: "表现",

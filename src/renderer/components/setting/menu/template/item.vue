@@ -22,7 +22,7 @@
                     <h5>{{$t("text.items",template.contain[index].contain.length)}}</h5>
                 </div>
                 <nav>
-                    <span @click="setOption">{{$t('button.option')}}</span>
+                    <span @click="setOperatortion">{{$t('button.option')}}</span>
                 </nav>
             </header>
             <div>
@@ -73,7 +73,7 @@ export default {
           max: 0,
           contain: []
         });
-      !this.template.contain[0].name && this.setOption();
+      !this.template.contain[0].name && this.setOperatortion();
     }, 500);
   },
   methods: {
@@ -109,7 +109,7 @@ export default {
           this.exitComponent();
         });
     },
-    setOption() {
+    setOperatortion() {
       const {
         addition,
         startAt,

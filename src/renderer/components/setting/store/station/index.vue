@@ -24,6 +24,7 @@
 
 <script>
 import { mapActions } from "vuex";
+
 import range from "../../common/range";
 import toggle from "../../common/toggle";
 import external from "../../common/external";

@@ -228,19 +228,24 @@ export default {
 
       return new Promise((next, stop) => {
         if (split) {
-          this.$socket.emit("[SPLIT] GET", this.invoice.children, splits => {
-            this.splits = splits;
-            this.payWhole = false;
+          this.$socket.emit("[SPLIT] GET", this.invoice._id, splits => {
+            if (splits.length) {
+              this.splits = splits;
+              this.payWhole = false;
 
-            const index = splits.findIndex(t => t.payment.remain !== 0);
+              const index = splits.findIndex(t => t.payment.remain !== 0);
 
-            if (index !== -1) {
-              this.splitIndex = index;
-              this.order = this.splits[index];
+              if (index !== -1) {
+                this.splitIndex = index;
+                this.order = this.splits[index];
+              } else {
+                stop({ error: "ALL_SPLIT_PAID" });
+              }
+              next();
             } else {
-              stop({ error: "ALL_SPLIT_PAID" });
+              // no split ticket error
+              stop({ error: "SPLIT_TICKET_NOT_FUND" });
             }
-            next();
           });
         } else {
           this.order = this.invoice;
@@ -664,7 +669,7 @@ export default {
       const paid = parseFloat(this.paid);
       const tip = parseFloat(this.tip);
 
-      const _id = ObjectId();
+      const _id = ObjectId().toString();
       const time = Date.now();
       const create = this.invoice.create;
       const date = this.invoice.date || today();
@@ -735,7 +740,7 @@ export default {
             Object.assign(data, {
               date,
               for: "Order",
-              _id: ObjectId(),
+              _id: ObjectId().toString(),
               order: {
                 _id: order,
                 cashier: this.op.name,
@@ -814,8 +819,12 @@ export default {
             break;
         }
 
-        !this.payWhole &&
+        if (!this.payWhole) {
           Object.assign(transaction, { splitPayment: this.splitIndex });
+        } else if (this.order.hasOwnProperty("parent")) {
+          const index = this.order.number.split("-")[1];
+          Object.assign(transaction, { splitPayment: index - 1 });
+        }
 
         this.order.payment.log.push(transaction);
         this.order.payment.paid += parseFloat(actual);
@@ -838,7 +847,7 @@ export default {
               settled
             });
 
-            this.$socket.emit("[INVOICE] SAVE", this.order, false, data => {
+            this.$socket.emit("[ORDER] SAVE", this.order, false, data => {
               this.willTicketNumberUpdate = false;
               this.order = data;
               next();
@@ -849,21 +858,13 @@ export default {
               settled
             });
 
-            this.$socket.emit("[INVOICE] UPDATE", this.order, false, () =>
+            this.$socket.emit("[ORDER] UPDATE", this.order, false, () =>
               next()
             );
           }
-
           //there is no new ticket under split pay mode
         } else {
-          const settled = this.splits.every(
-            order => order.payment.remain === 0
-          );
-
-          this.$socket.emit("[SPLIT] UPDATE", this.order, invoice => {
-            this.invoice = invoice;
-            next();
-          });
+          this.$socket.emit("[SPLIT] PAY", this.order, () => next());
         }
       });
     },
@@ -885,15 +886,15 @@ export default {
           msg: ["dialog.cashChangeTip", paid],
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
-            { text: "button.printReceipt", fn: "resolve" }
+            { text: "button.receiptOnly", fn: "resolve" },
+            { text: "button.print", fn: "print" }
           ]
         };
 
         if (this.currentTender > 0) {
           switch (this.store.receipt) {
             case "always":
-              this.printReceipt();
-              next();
+              this.printReceipt(next);
               break;
             case "never":
               this.$dialog(tenderWithoutDialog).then(() => {
@@ -903,14 +904,8 @@ export default {
               break;
             default:
               this.$dialog(tenderWithDialog)
-                .then(() => {
-                  this.printReceipt();
-                  next();
-                })
-                .catch(() => {
-                  this.exitComponent();
-                  next();
-                });
+                .then(() => this.printReceipt(next))
+                .catch(print => this.printTicket(print, next));
           }
         } else {
           this.askReceipt().then(() => next());
@@ -925,7 +920,8 @@ export default {
           msg: "dialog.printReceiptConfirmTip",
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
-            { text: "button.printReceipt", fn: "resolve" }
+            { text: "button.receiptOnly", fn: "resolve" },
+            { text: "button.print", fn: "print" }
           ]
         };
 
@@ -934,27 +930,31 @@ export default {
             next();
             break;
           case "always":
-            this.printReceipt();
-            next();
+            this.printReceipt(next);
             break;
           default:
             this.$dialog(prompt)
-              .then(() => {
-                this.printReceipt();
-                next();
-              })
-              .catch(() => next());
+              .then(() => this.printReceipt(next))
+              .catch(print => this.printTicket(print, next));
         }
       });
     },
-    printReceipt() {
+    printTicket(print, next) {
+      print && Printer.print(this.order);
+      const markPrint = this.order.payment.remain === 0 || print;
+      this.$socket.emit("[ORDER] UPDATE", this.order, markPrint);
+
+      this.exitComponent();
+      next();
+    },
+    printReceipt(next) {
       Printer.setTarget("Receipt").print(this.order, true);
+      next();
     },
     checkBalance() {
       this.tip = "0.00";
       this.exitComponent();
-
-      if (this.payWhole && !this.invoice.hasOwnProperty('parent')) {
+      if (this.payWhole && !this.invoice.hasOwnProperty("parent")) {
         this.$socket.emit(
           "[PAYMENT] CHECK",
           this.invoice._id,
@@ -963,7 +963,7 @@ export default {
             const remain = Math.max(0, toFixed(balance - paid, 2));
 
             this.order.settled = remain === 0;
-            
+
             if (remain > 0) {
               this.changePaymentType("CASH");
               this.poleDisplay("Balance Due:", `$ ${remain.toFixed(2)}`);
@@ -976,35 +976,20 @@ export default {
       } else {
         this.switchInvoice();
       }
-
-      if (this.isNewTicket) {
-        Printer.setTarget("Order").print(this.order);
-        this.$socket.emit("[INVOICE] UPDATE", this.order, true);
-      }
     },
     openTipComponent() {
       this.$checkPermission("modify", "tip")
         .then(this.setTip)
-        .catch(() =>
-          this.$log({
-            eventID: 5000,
-            note: `${this.op.name} attempt to set tip on ticket # ${
-              this.order.number
-            } (Total: $${this.order.payment.balance})`
-          })
-        );
+        .catch(() => {
+          //set tip failed log
+        });
     },
     openDiscountComponent() {
       this.$checkPermission("modify", "discount")
         .then(this.setDiscount)
-        .catch(() =>
-          this.$log({
-            eventID: 5000,
-            note: `${this.op.name} attempt to set discount on ticket # ${
-              this.order.number
-            } (Total: $${this.order.payment.balance})`
-          })
-        );
+        .catch(() => {
+          //set discount failed log
+        });
     },
     setTip() {
       new Promise((resolve, reject) => {
@@ -1121,14 +1106,11 @@ export default {
       this.$calculatePayment(this.order, { selfAssign: true });
       this.exitComponent();
 
-      !this.payWhole &&
-        this.$socket.emit("[SPLIT] UPDATE", this.order, invoice => {
-          this.invoice = invoice;
-        });
+      !this.payWhole && this.$socket.emit("[SPLIT] UPDATE", this.order);
     },
     save() {
       this.setOrder(this.order);
-      this.$socket.emit("[INVOICE] UPDATE", this.invoice, false);
+      this.$socket.emit("[ORDER] UPDATE", this.invoice, false);
       this.exitPaymentModule();
     },
     setSplit(number) {
@@ -1234,13 +1216,22 @@ export default {
           this.$dialog(prompt)
             .then(() =>
               this.$socket.emit(
-                "[INVOICE] UPDATE",
+                "[ORDER] UPDATE",
                 Object.assign(this.invoice, { settled: true }),
                 false,
                 () => this.exitPaymentModule()
               )
             )
             .catch(this.exitPaymentModule);
+          break;
+        case "SPLIT_TICKET_NOT_FUND":
+          prompt = {
+            type: "error",
+            title: "dialog.cantExecute",
+            msg: "dialog.splitTicketNotFound",
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+          this.$dialog(prompt).then(this.exitPaymentModule);
           break;
         case "ITEM_REMAIN_UNSPLIT":
           prompt = {
@@ -1288,7 +1279,7 @@ export default {
     },
     closeTicket() {
       this.$socket.emit(
-        "[INVOICE] UPDATE",
+        "[ORDER] UPDATE",
         Object.assign(this.invoice, { settled: true })
       );
 
@@ -1297,7 +1288,7 @@ export default {
           if (this.invoice.type === "BUFFET") {
             //buffet mode only reset current order status
             this.setApp({ newTicket: true });
-            this.resetMenu();
+            this.resetOrder();
             this.setOrder({
               type: "BUFFET",
               number: this.ticket.number,
@@ -1311,7 +1302,7 @@ export default {
             const { done } = this.station.autoLock;
             if (done) {
               //auto lock screen after paid
-              this.setOp(null);
+              this.setOperator(null);
               this.resetAll();
               this.$router.push({ path: "/main/lock" });
             } else {
@@ -1355,7 +1346,13 @@ export default {
     exitPaymentModule() {
       this.init.resolve();
     },
-    ...mapActions(["setOp", "setApp", "setOrder", "resetAll", "resetMenu"])
+    ...mapActions([
+      "setOperator",
+      "setApp",
+      "setOrder",
+      "resetAll",
+      "resetOrder"
+    ])
   },
   watch: {
     "order._id": "saveOriginalPayment"
@@ -1365,6 +1362,9 @@ export default {
       this.willTicketNumberUpdate &&
         this.isNewTicket &&
         Object.assign(this.invoice, { number });
+    },
+    UPDATE_ORDER(invoice) {
+      if (invoice._id === this.invoice._id) this.invoice = invoice;
     }
   }
 };

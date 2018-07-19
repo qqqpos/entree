@@ -75,7 +75,7 @@ export default {
   methods: {
     getTicketNumber() {
       return new Promise(next => {
-        this.$socket.emit("[INQUIRY] TICKET_NUMBER", number => {
+        this.$socket.emit("[ORDER] QUERY_TICKET_NUMBER", number => {
           this.setTicket({ number });
           next();
         });
@@ -110,27 +110,28 @@ export default {
                 buttons: [{ text: "button.confirm", fn: "resolve" }]
               };
 
-              this.setOp({ clockIn: this.time, session: ObjectId() });
+              this.setOperator({ clockIn: this.time, session: ObjectId().toString() });
               this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
-              this.$dialog(confirm).then(() => next());
+              this.$dialog(confirm).then(next);
             })
-            .catch(() => next());
+            .catch(next);
         } else if (this.op.break) {
           const duration = moment
-            .duration(+new Date() - this.op.break, "milliseconds")
+            .duration(Date.now() - this.op.break, "milliseconds")
             .humanize();
-
-          this.$dialog({
+          const question = {
             type: "question",
             title: "dialog.endBreakTime",
             msg: ["dialog.endBreakTimeConfirm", duration]
-          })
+          };
+
+          this.$dialog(question)
             .then(() => {
               this.$socket.emit("[TIMECARD] BREAK_END", this.op);
-              this.setOp({ break: null });
+              this.setOperator({ break: null });
               next();
             })
-            .catch(() => next());
+            .catch(next);
         } else {
           next();
         }
@@ -202,13 +203,6 @@ export default {
     },
     initialFailed(error) {
       console.log(error);
-      // this.$log({
-      //   eventID: 9101,
-      //   type: "failure",
-      //   note: `Dashboard initial has failed.\n\nError Message:\n${JSON.stringify(
-      //     error
-      //   )}`
-      // });
     },
     welcomeScreen() {
       const {
@@ -221,18 +215,14 @@ export default {
         poleDisplay.write(line(top, bot));
       }
     },
-    access(grid) {
-      const { route, password } = grid;
-
+    access({ route, password }) {
       new Promise((next, stop) => {
         if (password) {
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject };
             this.component = "unlockModule";
           })
-            .then(_op => {
-              _op._id === this.op._id ? next() : stop();
-            })
+            .then(op => (op._id === this.op._id ? next() : stop()))
             .catch(() => stop());
         } else {
           next();
@@ -250,11 +240,6 @@ export default {
             buttons: [{ text: "button.confirm", fn: "reject" }]
           };
           this.$accessDenied(prompt);
-          this.$log({
-            eventID: 9100,
-            type: "failure",
-            note: `Attempt access ${route} failed.`
-          });
         });
     },
     go(route) {
@@ -342,7 +327,7 @@ export default {
           break;
         case "lock":
           this.resetAll();
-          this.setOp(null);
+          this.setOperator({});
           this.$router.push({ path: "/main/lock" });
           break;
         default:
@@ -359,12 +344,10 @@ export default {
                   cashDrawer: this.station.cashDrawer.name,
                   close: false
                 },
-                data => {
-                  let { name, initial } = data;
+                ({ name, initial }) =>
                   initial
                     ? this.initialCashFlow(name)
-                    : this.recordCashFlow(name);
-                }
+                    : this.recordCashFlow(name)
               )
             : Printer.openCashDrawer();
           break;
@@ -396,7 +379,7 @@ export default {
     },
     askSelfCashIn() {
       this.$dialog({ title: "dialog.selfCashIn", msg: "dialog.selfCashInTip" })
-        .then(() => this.countSelfCash())
+        .then(this.countSelfCash)
         .catch(this.exitComponent);
     },
     countSelfCash(amount) {
@@ -426,7 +409,7 @@ export default {
         cashDrawer,
         operator: this.op.name,
         begin: amount.toFixed(2),
-        beginTime: +new Date(),
+        beginTime: Date.now(),
         end: null,
         endTime: null,
         close: false,
@@ -435,7 +418,7 @@ export default {
             type: "START",
             inflow: parseFloat(amount),
             outflow: 0,
-            time: +new Date(),
+            time: Date.now(),
             ticket: null,
             operator: this.op.name
           }
@@ -454,7 +437,7 @@ export default {
           type: "OPEN",
           inflow: 0,
           outflow: 0,
-          time: +new Date(),
+          time: Date.now(),
           ticket: null,
           operator: this.op.name
         };
@@ -473,7 +456,7 @@ export default {
       this.op.cashCtrl === "enable" ? this.askCashIn() : this.askSelfCashIn();
     },
     ...mapActions([
-      "setOp",
+      "setOperator",
       "setApp",
       "setTicket",
       "setOrder",

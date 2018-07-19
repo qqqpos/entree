@@ -2,7 +2,7 @@
   <div class="history">
     <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
     <article>
-      <side-buttons :date="calendarDate || today" @change="setCalendar"></side-buttons>
+      <side-buttons :date="calendarDate || today" @change="setCalendar" :splitMode="splits.length > 0"></side-buttons>
       <section class="tickets">
         <div class="inner">
           <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
@@ -67,7 +67,7 @@ export default {
   mounted() {
     if (this.orders.length) {
       this.setViewOrder(this.orders[0]);
-      let dom = document.querySelector(".invoice");
+      const dom = document.querySelector(".invoice");
       dom && dom.classList.add("active");
     }
   },
@@ -76,9 +76,8 @@ export default {
   },
   methods: {
     checkSync() {
-      this.$socket.emit("[SYNC] POS", time => {
-        time !== this.sync && this.$socket.emit("[SYNC] ORDER_LIST");
-      });
+      this.ticket.number !== this.history.length + 1 &&
+        this.$socket.emit("[ORDER] SYNC", orders => this.setTodayOrder(orders));
     },
     setFilter(type, name) {
       this.page = 0;
@@ -115,7 +114,7 @@ export default {
         } else {
           this.orders.length
             ? this.setViewOrder(this.invoices[0])
-            : this.resetMenu();
+            : this.resetOrder();
         }
 
         this.highlightTicket(this.invoices[0]);
@@ -133,7 +132,7 @@ export default {
     },
     setCalendar(date) {
       this.calendarDate = date;
-      this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, invoices => {
+      this.$socket.emit("[ORDER] HISTORY", date, invoices => {
         this.prevHistory = invoices;
         this.splits = [];
         this.resetViewOrder();
@@ -176,7 +175,7 @@ export default {
     },
     getSplits(invoice) {
       invoice.split &&
-        this.$socket.emit("[SPLIT] GET", invoice.children, splits => {
+        this.$socket.emit("[SPLIT] GET", invoice._id, splits => {
           this.splits = splits;
           this.resetViewOrder();
         });
@@ -238,7 +237,7 @@ export default {
       }
       return page;
     },
-    ...mapActions(["resetMenu", "setViewOrder"])
+    ...mapActions(["resetOrder", "setViewOrder", "setTodayOrder"])
   },
   computed: {
     targetInvoices() {
@@ -312,7 +311,11 @@ export default {
   sockets: {
     UPDATE_SPLIT(order) {
       const index = this.splits.findIndex(split => split._id === order._id);
-      index !== -1 && this.splits.splice(index, 1, order);
+      if (index !== -1) {
+        this.splits.splice(index, 1, order);
+
+        order._id === this.order._id && this.setViewOrder(order);
+      }
     }
   }
 };

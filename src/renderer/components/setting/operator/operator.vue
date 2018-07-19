@@ -9,7 +9,7 @@
       </template>
     </ul>
     <transition name="slide" mode="out-in">
-      <router-view class="tab-content" @set="setOperator"></router-view>
+      <router-view class="tab-content" @set="setOperatorerator"></router-view>
     </transition>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     };
   },
   methods: {
-    setOperator(operator) {
+    setOperatorerator(operator) {
       this.operator = operator;
       this.$router.push({
         name: "Setting.operator.config",

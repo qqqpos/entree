@@ -5,7 +5,7 @@
         <h5>United POS</h5>
         <h2>{{store.name}}</h2>
         <transition-group tag="div" class="input" name="pin">
-          <span v-for="(circle,index) in password" :key="index"></span>
+          <span v-for="(circle,index) in pin" :key="index"></span>
         </transition-group>
         <section class="numpad">
           <div @click="setPin(7)" class="numKey">7</div>
@@ -64,6 +64,7 @@ export default {
   components: { dialogModule },
   data() {
     return {
+      pin: [],
       isHost: false,
       reset: false,
       component: null,
@@ -77,25 +78,6 @@ export default {
       .then(this.checkActivation)
       .then(this.initialized)
       .catch(this.initialFailed);
-  },
-  beforeRouteEnter(to, from, next) {
-    switch (from.name) {
-      case "Dashboard":
-        appSocket.emit("[STATION] LOCK", {
-          eventID: 1103,
-          type: "information",
-          note: `Operator manually lock the station.`
-        });
-        break;
-      case "Menu":
-        appSocket.emit("[STATION] LOCK", {
-          eventID: 1103,
-          type: "information",
-          note: `Station is auto locked due to software setting.`
-        });
-        break;
-    }
-    next();
   },
   mounted() {
     window.addEventListener("keydown", this.entry, false);
@@ -166,6 +148,15 @@ export default {
           break;
       }
     },
+    setPin(num) {
+      num === undefined ? this.resetPin() : this.pin.push(num);
+    },
+    resetPin() {
+      this.pin = [];
+    },
+    delPin() {
+      this.pin.pop();
+    },
     entry(e) {
       e.preventDefault();
       switch (e.key) {
@@ -188,12 +179,12 @@ export default {
       if (this.disableAccess) return;
 
       this.reset = true;
-      this.$socket.emit("[ACCESS] PIN", this.password.join(""));
+      this.$socket.emit("[STATION] ACCESS", this.pin.join(""));
     },
     autoAccess: _debounce(function() {
       if (this.$route.name === "Login" || this.$route.name === "Lock") {
-        const password = this.password.join("");
-        password && this.access();
+        const pin = this.pin.join("");
+        pin && this.access();
         this.reset = false;
       }
     }, 300),
@@ -201,18 +192,11 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.shutdownStations",
-        msg: "dialog.shutdownStationsConfirm",
-        buttons: [
-          { text: "button.cancel", fn: "reject" },
-          { text: "button.confirm", fn: "resolve", load: true }
-        ]
+        msg: "dialog.shutdownStationsConfirm"
       };
 
       this.$dialog(prompt)
-        .then(() => {
-          this.$socket.emit("[CTRL] SHUTDOWN_ALL");
-          this.exitComponent();
-        })
+        .then(() => this.$socket.emit("[STATION] SHUTDOWN_ALL"))
         .catch(this.exitComponent);
     },
     shutdown() {
@@ -221,43 +205,40 @@ export default {
     restart() {
       this.$electron.ipcRenderer.send("Relaunch");
     },
-    restartAll() {
-      
-    },
+    restartAll() {},
     exit() {
       this.$electron.ipcRenderer.send("Exit");
     },
-    ...mapActions(["setPin", "delPin", "setOp", "setApp"])
+    ...mapActions(["setApp", "setOperator"])
   },
   watch: {
-    password(n) {
+    pin(n) {
       this.store.autoLogin && this.autoAccess();
     }
   },
   computed: {
-    ...mapGetters(["sync", "store", "password", "station"])
+    ...mapGetters(["sync", "store", "station"])
   },
   sockets: {
-    AUTHORIZATION(data) {
-      const { auth, op } = data;
-      if (auth) {
+    AUTHORIZATION(operator) {
+      if (operator) {
         document.querySelector(".ctrl").classList.add("hide");
 
-        const language = op.language || "usEN";
+        const language = operator.language || "usEN";
         moment.locale(language === "usEN" ? "en" : "zh-cn");
 
         this.$setLanguage(language);
         this.setApp({ language, newTicket: true, mode: "create" });
-        this.setOp(op);
+        this.setOperator(operator);
         this.setPin();
 
         this.$router.push({ path: "/main" });
-        this.$socket.emit("[SYNC] POS", sync => {
-          if (this.sync !== sync) {
-            this.$socket.emit("[SYNC] ORDER_LIST");
-            this.$socket.emit("[SYNC] TABLE_LIST");
-          }
-        });
+        // this.$socket.emit("[SYNC] POS", sync => {
+        //   if (this.sync !== sync) {
+        //     this.$socket.emit("[SYNC] ORDER_LIST");
+        //     this.$socket.emit("[SYNC] TABLE_LIST");
+        //   }
+        // });
       } else {
         this.reset && this.setPin();
       }

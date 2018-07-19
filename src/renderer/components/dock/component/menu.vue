@@ -186,12 +186,12 @@ export default {
   },
   data() {
     return {
-      componentData: null,
-      component: null,
       isShow: this.init.args,
       giftcardEnable: false,
-      updater: null,
+      componentData: null,
+      component: null,
       updateStatus: null,
+      updater: null,
       updateMeta: {}
     };
   },
@@ -274,7 +274,7 @@ export default {
       
       this.$dialog(prompt)
         .then(() => {
-          this.setOp({ clockIn: this.time, session: ObjectId() });
+          this.setOperator({ clockIn: this.time, session: ObjectId().toString() });
           this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
           this.exitComponent();
         })
@@ -353,7 +353,7 @@ export default {
     clockOut(tip = 0) {
       this.exitComponent();
       this.$socket.emit("[TIMECARD] CLOCK_OUT", { op: this.op, tip });
-      this.setOp({ clockIn: null, session: null });
+      this.setOperator({ clockIn: null, session: null });
       this.$router.push({ path: "/main/lock" });
       this.init.resolve();
     },
@@ -390,7 +390,7 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           this.$socket.emit("[TIMECARD] BREAK_START", this.op);
-          this.setOp({ clockIn: null, session: null });
+          this.setOperator({ clockIn: null, session: null });
           this.$router.push({ path: "/main/lock" });
           this.init.resolve();
         })
@@ -410,7 +410,7 @@ export default {
       this.$dialog(prompt)
         .then(() => {
           this.$socket.emit("[TIMECARD] BREAK_END", this.op);
-          this.setOp({ break: null });
+          this.setOperator({ break: null });
           this.exitComponent();
         })
         .catch(this.exitComponent);
@@ -834,7 +834,7 @@ export default {
       };
       Printer.printSessionReport(report);
     },
-    ...mapActions(["setApp", "setOp"])
+    ...mapActions(["setApp", "setOperator"])
   }
 };
 </script>

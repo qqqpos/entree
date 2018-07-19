@@ -1,16 +1,16 @@
 <template>
   <div class="layout">
-    <draggable v-model="sections" @sort="isSectionSorted = true" :options="{animation: 300,group: 'section',ghostClass: 'sectionGhost',draggable:'.draggable'}">
+    <draggable v-model="layouts.table" @sort="isSectionSorted = true" :options="sectionOpt">
       <transition-group tag="section" class="section">
-        <div class="btn draggable" v-for="(section,index) in sections" @click="viewSection(index)" @contextmenu="editSection(section,index)" :key="index">{{section[language]}}</div>
+        <div class="btn draggable" v-for="(section,index) in layouts.table" @click="setSection(index)" @contextmenu="editSection(section,index)" :key="index">{{section[language]}}</div>
         <div class="btn add" @click="newSection" :key="-1">
           <i class="fa fa-plus"></i>
         </div>
       </transition-group>
     </draggable>
-    <draggable v-model="tabs" @sort="isTableSorted = true" :options="{animation: 300,group: 'table',ghostClass: 'tableGhost'}" class="f1">
+    <draggable v-model="tabs" @sort="isTableSorted = true" :options="tableOpt" class="f1">
       <transition-group tag="section" class="tables">
-        <div class="table" v-for="(table,index) in tabs" @contextmenu="editTable(table,index)" :key="index">
+        <div class="table" v-for="(table,index) in tableSection" @contextmenu="editTable(table,index)" :key="index">
           <span :class="[table.shape]" class="icon"></span>
           <span class="name">{{table.name}}</span>
         </div>
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import draggable from "vuedraggable";
 import dialogModule from "../../../common/dialog";
 import tableEditor from "../component/tableEditor";
@@ -30,32 +32,60 @@ export default {
   components: { draggable, dialogModule, tableEditor, sectionEditor },
   data() {
     return {
-      language: this.$store.getters.language,
-      sections: this.$store.getters.tables,
+      sectionOpt: {
+        animation: 300,
+        group: "section",
+        ghostClass: "sectionGhost",
+        draggable: ".draggable"
+      },
+      tableOpt: {
+        animation: 300,
+        group: "table",
+        ghostClass: "tableGhost"
+      },
       isSectionSorted: false,
       isTableSorted: false,
       componentData: null,
       component: null,
-      sectionIndex: 0,
+      section: 0,
       tabs: []
     };
   },
-  created() {
-    this.viewSection(0);
+  computed: {
+    tableSection() {
+      const { zone } = this.layouts.table[this.section];
+      const tables = this.tables[zone];
+
+      let seats = Array(56)
+        .fill()
+        .map(() => ({
+          feature: [],
+          invoice: [],
+          name: "",
+          server: null,
+          session: null,
+          shape: "",
+          status: 0,
+          time: 0,
+          grid: 0,
+          status: 0,
+          zone
+        }));
+
+      tables.forEach(table => {
+        seats[table.grid] = table;
+      });
+      return seats;
+    },
+    ...mapGetters(["language", "tables", "layouts"])
   },
   beforeDestroy() {
     this.isSectionSorted && this.updateSortedSection();
     this.isTableSorted && this.updateSortedTable();
   },
   methods: {
-    viewSection(index) {
-      let section = this.sections[index];
-
-      this.sectionIndex = index;
-      this.tabs =
-        section.item.length !== 0
-          ? section.item
-          : Array(56).fill({ name: "", shape: "", zone: section.zone });
+    setSection(index) {
+      this.section = index;
     },
     newSection() {
       const section = {
@@ -68,9 +98,10 @@ export default {
         this.componentData = { resolve, reject, section, edit: false };
         this.component = "sectionEditor";
       })
-        .then(_section => {
-          const { zone, usEN, zhCN } = _section;
-          const item = Array(56)
+        .then(section => {
+          const { zone } = section;
+
+          const tables = Array(56)
             .fill()
             .map((_, index) => ({
               feature: [],
@@ -86,14 +117,11 @@ export default {
               zone
             }));
 
-          this.sections.push({ usEN, zhCN, zone, item });
-          this.viewSection(this.sections.length - 1);
-
-          const sections = this.sections.map(section => {
-            Object.assign(section, { item: [] });
-            return section;
-          });
-          this.$socket.emit("[TABLE] SAVE_SECTION", sections);
+          const index = this.layouts.table.length;
+          this.layouts.table[index] = section;
+          this.tables[zone] = tables;
+          this.section = index;
+          this.$socket.emit("[TABLE] SAVE_SECTION", this.layout.table);
           this.exitComponent();
         })
         .catch(this.exitComponent);
@@ -104,20 +132,48 @@ export default {
         this.component = "sectionEditor";
       })
         .then(() => {
-          const sections = this.sections.map(section => {
-            Object.assign(section, { item: [] });
-            return section;
-          });
+          const sections = this.layout.table.map(section =>
+            Object.assign(section, { item: [] })
+          );
           this.$socket.emit("[TABLE] SAVE_SECTION", sections);
           this.exitComponent();
         })
-        .catch(del => {
-          if (del) {
-            this.$socket.emit("[TABLE] REMOVE_ZONE", index);
-            this.$store.getters.tables.splice(index, 1);
-          }
+        .catch(deleteSection => {
           this.exitComponent();
+
+          deleteSection && this.deleteSectionDialog(index);
         });
+    },
+    deleteSectionDialog(index) {
+      const prompt = {
+        title: "dialog.tableSectionRemove",
+        msg: "dialog.tableSectionRemoveConfirm",
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.remove", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.checkSectionStatus(index))
+        .catch(this.exitComponent);
+    },
+    checkSectionStatus(index) {
+      this.$socket.emit("[TABLE] CHECK_SECTION", index, inuse => {
+        const prompt = {
+          title: "dialog.cantExecute",
+          msg: ["dialog.tablesInuse", inuse],
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+        inuse > 0
+          ? this.$dialog(prompt).then(this.exitComponent)
+          : this.deleteSection(index);
+      });
+    },
+    deleteSection(index) {
+      this.$socket.emit("[TABLE] REMOVE_SECTION", index);
+      this.layouts.table.splice(index, 1);
+      this.exitComponent();
     },
     editTable(table, index) {
       const { zone } = this.sections[this.sectionIndex];
@@ -161,24 +217,17 @@ export default {
       this.exitComponent();
     },
     updateSortedSection() {
-      const sections = this.sections.map(section => {
-        Object.assign(section, { item: [] });
-        return section;
-      });
+      // const sections = this.sections.map(section => {
+      //   Object.assign(section, { item: [] });
+      //   return section;
+      // });
       this.$socket.emit("[TABLE] SAVE_SECTION", sections);
       this.isSectionSorted = false;
     },
     updateSortedTable() {
-      Object.assign(this.$store.getters.tables[this.sectionIndex], {
-        item: this.tabs
-      });
-      const tables = this.tabs.map(table => table._id);
-      this.$socket.emit("[TABLE] SORT", tables);
+      // const tables = this.tabs.map(table => table._id);
+      // this.$socket.emit("[TABLE] SORT", tables);
       this.isTableSorted = false;
-    },
-    refreshData() {
-      this.sections = this.$store.getters.tables;
-      this.viewSection(this.sectionIndex);
     }
   }
 };
