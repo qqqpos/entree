@@ -418,7 +418,8 @@ export default {
     hourlySaleSummary: "每小时销售总数",
     evenSplit: "订单均分",
     refund: "退款金额",
-    changeLog: "改动日志"
+    changeLog: "改动日志",
+    book: "预约"
   },
   dialog: {
     maintenance: "维护",
@@ -525,8 +526,10 @@ export default {
     voidOrderConfirm: "确认取消 #{i} {i}订单？",
     voidOrderConfirmTip: "取消之后将无法修改订单的内容",
     reopenSettledOrderTip: "您要先移除此单的 {i}结账 记录后才能修改订单",
-    recoverOrderConfirm: "您确定要恢复 {i}号 订单吗？",
-    recoverOrderConfirmTip: "该订单是由 {i} 取消。原因: {i}",
+    restoreOrder: "您确定要恢复 {i}号 订单吗？",
+    restoreOrderConfirm: "该订单是由 {i} 取消。原因: {i}",
+    restoreTable: "还原座位",
+    restoreTableConfirm: "您需要同时还原对应的座位信息吗?",
     unableAccess: "无法访问",
     missTerminalConfig: "无法找到任何一个信用卡终端配置信息",
     splitPayment: "分单付款",
@@ -556,11 +559,12 @@ export default {
     noRemainItem: "已经全部打印完毕",
     itemSent: "打印 #{i} 订单的物品",
     printResult: "订单中的 {i} 个物品, {i}",
+    tableRemove: "删除座位",
+    tableRemoveConfirm: "您确定要删除座位 {i} 吗?",
     tableSectionRemove: "区域移除",
     tableSectionRemoveConfirm: "您确定要移除这个区域吗？",
+    tableInuse: "{i} 座位处于使用中",
     tablesInuse: "有 {i} 个座位处于使用中, 请先处理完毕后再执行删除操作",
-    tableRemoveConfirm: "删除座位",
-    tableRemoveConfirmTip: "您确定要删除这个座位吗？",
     thirdPartyInvoice: "第三方订单",
     thirdPartyInvoiceTip: "您要如何处理这个第三方订单的付款方式？",
     shutdownStations: "集体关机",
@@ -612,6 +616,7 @@ export default {
     itemRestricted: "{i} 被限制",
     itemNotAvailable: "此物品无法在 {i} 使用",
     itemNotAvailableNow: "此物品只能在 {i} 到 {i} 之间使用",
+    holidayOnly: "此物品只能在法定节假日时使用",
     addressMismatch: "地址不一致",
     replaceAddressConfirm: "是否要将地址 {i} 替换成 {i} ?",
     invalidDate: "日期错误",
@@ -667,7 +672,7 @@ export default {
     cantExecute: "无法执行",
     errorOccurred: "执行这个命令的过程发送一个错误, 命令被中止!",
     duplicateNotAllow: "已经有相同名称，请重新命名",
-    splitTicketItemRemain: "此订单中还有 {i} 个物品尚未被分配。请分完后再进行付款操作",
+    splitTicketItemRemain: "此订单中还有 {i} 个物品尚未被分配, 请分单后再进行付款操作",
     temporaryTable: "临时座位",
     createTemporaryTable: "您需要创建一个临时的座位吗？",
     switchServer: "切换服务员",
@@ -1314,7 +1319,8 @@ export default {
     voidTicketFor: " 取消了订单, 原因是",
     gallery: "图片库",
     itemInline: "物品内联",
-    earn: "收入"
+    earn: "收入",
+    holiday: "节假日"
   },
   nav: {
     store: "店面",
@@ -1400,7 +1406,6 @@ export default {
     systemTip: "软件设置",
     tool: "工具",
     troubleshooting: "检测 · 排错 · 报告问题",
-
     exit: "退出",
     exitTip: "退出软件设置",
     host: "伺服器",

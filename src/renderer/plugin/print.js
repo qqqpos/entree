@@ -19,7 +19,7 @@ const Printer = function (plugin, config, station) {
   this.devices = station
     ? station.printers || Object.keys(config.printers)
     : Object.keys(config.printers);
-  this.target = "Receipt";
+  this.target = "All";
 
   /**
    * Set target printers

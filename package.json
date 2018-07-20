@@ -1,8 +1,8 @@
 {
   "name": "unitedpos",
-  "version": "0.9.0",
-  "require": "0.9.0",
-  "stage": "Beta",
+  "version": "1.0.0",
+  "require": "1.0.0",
+  "stage": "RC",
   "description": "UnitedPOS point of sale system",
   "author": "United POS <huangxuewu@gmail.com>",
   "license": "Apache-2.0",

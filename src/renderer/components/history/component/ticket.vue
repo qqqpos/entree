@@ -14,6 +14,7 @@
       <span>{{invoice.customer.phone | phone}}</span>
     </div>
     <span class="note" v-if="invoice.status === 0">{{$t('reason.'+invoice.void.note,(invoice.void.join || ""))}}</span>
+    <span class="note discount" v-else-if="invoice.coupons.length > 0">{{invoice.coupons[0].alias}}</span>
     <span class="price">$ {{invoice.payment.due | decimal}}</span>
     <span class="modifed" v-if="invoice.modify" @click.self="$emit('recall',invoice._id)"></span>
   </div>
@@ -126,6 +127,11 @@ export default {
   bottom: 22px;
   text-shadow: none;
   z-index: 1;
+}
+
+.note.discount {
+  color: #ff5722;
+  background: antiquewhite;
 }
 
 .active.void {

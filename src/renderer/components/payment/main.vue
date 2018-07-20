@@ -228,30 +228,45 @@ export default {
 
       return new Promise((next, stop) => {
         if (split) {
-          this.$socket.emit("[SPLIT] GET", this.invoice._id, splits => {
-            if (splits.length) {
-              this.splits = splits;
-              this.payWhole = false;
+          //check if item remain unsplit
+          const remain = this.invoice.content.filter(i => !i.split).length;
 
-              const index = splits.findIndex(t => t.payment.remain !== 0);
+          remain === 0
+            ? this.$socket.emit("[SPLIT] GET", this.invoice._id, splits => {
+                if (splits.length) {
+                  this.splits = splits;
+                  this.payWhole = false;
 
-              if (index !== -1) {
-                this.splitIndex = index;
-                this.order = this.splits[index];
-              } else {
-                stop({ error: "ALL_SPLIT_PAID" });
-              }
-              next();
-            } else {
-              // no split ticket error
-              stop({ error: "SPLIT_TICKET_NOT_FUND" });
-            }
-          });
+                  const index = splits.findIndex(t => t.payment.remain !== 0);
+
+                  if (index !== -1) {
+                    this.splitIndex = index;
+                    this.order = this.splits[index];
+                  } else {
+                    stop({ error: "ALL_SPLIT_PAID" });
+                  }
+                  next();
+                } else {
+                  // no split ticket error
+                  stop({ error: "SPLIT_TICKET_NOT_FUND" });
+                }
+              })
+            : this.itemUnsplitDialog(remain, stop);
         } else {
           this.order = this.invoice;
           next();
         }
       });
+    },
+    itemUnsplitDialog(remain, stop) {
+      const prompt = {
+        type: "error",
+        title: "dialog.cantExecute",
+        msg: ["dialog.splitTicketItemRemain", remain],
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+      stop();
+      this.$dialog(prompt).then(this.exitPaymentModule);
     },
     checkPrevsPayment() {
       return new Promise(next =>
@@ -299,6 +314,9 @@ export default {
         : null;
 
       this.changePaymentType(defaultType);
+
+      // pole display
+      this.poleDisplay("Balance Due:", `$ ${this.order.payment.remain}`);
     },
     switchInvoice(index) {
       if (isNumber(index)) {

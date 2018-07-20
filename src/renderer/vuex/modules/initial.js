@@ -135,8 +135,26 @@ const mutations = {
         }
     },
     [types.UPDATE_TABLE](state, table) {
-        const { zone } = table;
-        const index = state.tables[zone].findIndex(t => t._id === table._id);
+        const { _id, zone } = table;
+        const index = state.tables[zone].findIndex(t => t._id === _id);
+
+        index !== -1 && state.tables[zone].splice(index, 1, table);
+    },
+    [types.REMOVE_TABLE](state, table) {
+        const { _id, zone } = table;
+        const index = state.tables[zone].findIndex(t => t._id === _id);
+
+        Object.assign(table, {
+            _id: null,
+            feature: [],
+            invoice: [],
+            name: "",
+            server: null,
+            session: null,
+            time: null,
+            shape: "",
+            status: 0
+        });
 
         index !== -1 && state.tables[zone].splice(index, 1, table);
     },
@@ -207,12 +225,7 @@ const mutations = {
         let { section, index } = data;
         state.config.layout.table.splice(index, 1, section);
     },
-    [types.REMOVE_TABLE](state, { section, index }) {
-        let table = state.config.layout.table[section].item[index];
 
-        Object.assign(table, { name: '', shape: '' });
-        state.config.layout.table[section].item.splice(index, 1, table);
-    },
     [types.NEW_RESERVATION](state, data) {
         state.reservation.push(data)
     },

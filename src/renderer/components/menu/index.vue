@@ -31,6 +31,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 import buttons from "./buttons";
+import Holiday from "moment-holiday";
 import modify from "./component/modify";
 import request from "./component/request";
 import weightItem from "./component/scale";
@@ -289,14 +290,16 @@ export default {
       return new Promise((next, stop) => {
         if (item.disable) {
           stop("unavailable");
-        } else if (item.hasOwnProperty("restrict")) {
-          const { from, to, days, types } = item.restrict;
+        } else if (item.restrict) {
+          const { from, to, days, types, holiday = true } = item.restrict;
           const day = moment().format("d");
 
           if (!types.includes(this.order.type)) {
             stop("typeRestricted");
           } else if (!days.includes(day)) {
             stop("dayRestricted");
+          } else if (holiday && !Holiday().isHoliday()) {
+            stop("holidayRestricted");
           } else {
             const time = moment(this.order.create);
             const _from = moment(
@@ -427,6 +430,12 @@ export default {
             price: set.price
           }));
         }
+        
+        try {
+          this.poleDisplay(item.usEN, `$ ${item.price[0].toFixed(2)}`);
+        } catch (e) {
+          console.log(e);
+        }
 
         next(item);
       });
@@ -467,6 +476,7 @@ export default {
         case "dayRestricted":
         case "timeRestricted":
         case "typeRestricted":
+        case "holidayRestricted":
           name =
             item[this.language].length > 15
               ? item[this.language].slice(0, 15) + "..."
@@ -483,10 +493,12 @@ export default {
                       item.restrict.from,
                       item.restrict.to
                     ]
-                  : [
-                      "dialog.itemNotAvailable",
-                      this.$t("type." + this.order.type)
-                    ],
+                  : type === "holidayRestricted"
+                    ? "dialog.holidayOnly"
+                    : [
+                        "dialog.itemNotAvailable",
+                        this.$t("type." + this.order.type)
+                      ],
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 

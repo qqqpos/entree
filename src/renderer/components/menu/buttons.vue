@@ -434,7 +434,7 @@ export default {
 
           if (print) {
             !this.isDineInTicket
-              ? Printer.setTarget("ALL").print(diffs)
+              ? Printer.setTarget("All").print(diffs)
               : printOnDone
                 ? Printer.setTarget("ALL").print(diffs)
                 : Printer.setTarget("Order").print(diffs);
@@ -466,10 +466,11 @@ export default {
       const { done } = this.station.autoLock;
       const { lockOnDone, table } = this.dinein;
 
-      if (this.order.type === "DINE_IN" && table) {
+      if (this.isDineInTicket && table) {
         if (lockOnDone || done) {
           this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
+          this.resetAll();
         } else {
           this.setOrder(this.order);
           this.$router.push({ name: "Table" });
@@ -481,8 +482,8 @@ export default {
         } else {
           this.$router.push({ path: "/main" });
         }
+        this.resetAll();
       }
-      this.resetAll();
     },
     quit() {
       const prompt = {
@@ -689,9 +690,9 @@ export default {
       "moreQty",
       "resetAll",
       "setOrder",
+      "setOperator",
       "setTableInfo",
-      "archiveOrder",
-      "setOperator"
+      "archiveOrder"
     ])
   },
   computed: {

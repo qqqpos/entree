@@ -213,7 +213,8 @@ header.nav nav {
   right:10px;
 }
 
-header.nav nav > span, .editor header button.remove {
+header.nav nav > span, .editor header button.remove,
+.mini-btn {
   padding: 10px 20px;
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   border-radius: 4px;

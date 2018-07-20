@@ -68,7 +68,7 @@ export default {
           status: 0,
           time: 0,
           grid: 0,
-          status: 0,
+          status: 1,
           zone
         }));
 
@@ -176,44 +176,57 @@ export default {
       this.exitComponent();
     },
     editTable(table, index) {
-      const { zone } = this.sections[this.sectionIndex];
+      const { zone } = this.layouts.table[this.section];
 
       table = JSON.parse(JSON.stringify(table));
+      table.seats = table.seats || 0;
+      table._id = table._id || ObjectId().toString();
       Object.assign(table, { zone, grid: index });
 
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, table };
         this.component = "tableEditor";
       })
-        .then(_table => {
-          this.tabs.splice(index, 1, _table);
-          this.$socket.emit("[TABLE] SAVE", {
-            index,
-            table: _table,
-            section: this.sectionIndex
-          });
+        .then(update => {
+          this.$socket.emit("[TABLE] SAVE", update);
+          this.tables[zone].splice(index, 1, update);
           this.exitComponent();
         })
-        .catch(del => {
-          del && this.removeTable(table, index);
-          this.exitComponent();
+        .catch(deleteTable => {
+          deleteTable
+            ? this.removeTableDialog(table, index)
+            : this.exitComponent();
         });
     },
+    removeTableDialog(table, index) {
+      const prompt = {
+        title: "dialog.tableRemove",
+        msg: ["dialog.tableRemoveConfirm", table.name]
+      };
+
+      this.$dialog(prompt)
+        .then(() => this.removeTable(table, index))
+        .catch(this.exitComponent);
+    },
     removeTable(table, index) {
-      table._id && this.$socket.emit("[TABLE] REMOVE", table._id);
+      const { _id, zone } = table;
+      _id && this.$socket.emit("[TABLE] REMOVE", table);
 
-      this.$store.getters.tables[this.sectionIndex].item.splice(index, 1, {
-        _id: null,
-        contain: [],
-        feature: [],
-        invoice: [],
-        grid: index,
-        name: "",
-        shape: "",
-        status: 1,
-        zone: ""
-      });
-
+      this.tables[zone].splice(
+        index,
+        1,
+        Object.assign(table, {
+          _id: null,
+          feature: [],
+          invoice: [],
+          name: "",
+          server: null,
+          session: null,
+          shape: "",
+          status: 0,
+          time: null
+        })
+      );
       this.exitComponent();
     },
     updateSortedSection() {

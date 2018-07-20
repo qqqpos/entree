@@ -278,6 +278,7 @@ export default {
         restrict = {
           from: "09:00 AM",
           to: "11:00 PM",
+          holiday: true,
           days: ["0", "1", "2", "3", "4", "5", "6"],
           types: [
             "WALK_IN",
@@ -286,9 +287,9 @@ export default {
             "DINE_IN",
             "HIBACHI",
             "BUFFET",
-            "BAR",
             "SALES",
-            "TO_GO"
+            "TO_GO",
+            "BAR"
           ]
         }
       } = this.item;
@@ -297,14 +298,13 @@ export default {
         this.componentData = { resolve, reject, restrict };
         this.component = "limitor";
       })
-        .then(_restrict => {
-          Object.assign(this.item, { restrict: _restrict });
+        .then(update => {
+          Object.assign(this.item, { restrict: update });
           this.exitComponent();
         })
         .catch(remove => {
-          if (remove) {
-            delete this.item.restrict;
-          }
+          if (remove) delete this.item.restrict;
+
           this.exitComponent();
         });
     },

@@ -615,7 +615,7 @@ export default {
       ).slice(-2)}`;
     };
     window.line = function (line1, line2) {
-      const f = function (data) {
+      const f = data => {
         if (typeof data === "string") {
           const i = Math.floor(Math.abs(20 - data.length) / 2);
           return (" ".repeat(i) + data + " ".repeat(i + 10)).slice(0, 20);

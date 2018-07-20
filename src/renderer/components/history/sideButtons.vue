@@ -258,9 +258,9 @@ export default {
 
       const prompt = {
         type: "question",
-        title: ["dialog.recoverOrderConfirm", this.order.number],
+        title: ["dialog.restoreOrder", this.order.number],
         msg: [
-          "dialog.recoverOrderConfirmTip",
+          "dialog.restoreOrderConfirm",
           this.order.void.by,
           this.$t("reason." + this.order.void.note)
         ]
@@ -274,11 +274,59 @@ export default {
               order.status = 1;
               delete order.void;
               this.updateInvoice(order);
-              this.exitComponent();
+
+              this.isDineInTicket(order.type)
+                ? this.reOpenTableDialog(order.tableID)
+                : this.exitComponent();
             })
             .catch(this.exitComponent);
         })
         .catch(() => {});
+    },
+    isDineInTicket(type) {
+      return type === "DINE_IN" || type === "BAR" || type === "HIBACHI";
+    },
+    reOpenTableDialog(table) {
+      const prompt = {
+        type: "question",
+        title: "dialog.restoreTable",
+        msg: "dialog.restoreTableConfirm"
+      };
+
+      this.$dialog(prompt)
+        .then(this.reOpenTable.bind(null, table))
+        .catch(this.exitComponent);
+    },
+    reOpenTable(id) {
+      this.$socket.emit("[TABLE] CHECK_STATUS", id, table => {
+        if (table.status !== 1) {
+          // table is inuse
+          const prompt = {
+            title: "dialog.cantExecute",
+            msg: ["dialog.tableInuse", table.name],
+            buttons: [
+              { text: "button.cancel", fn: "resolve" },
+              { text: "button.retry", fn: "reject" }
+            ]
+          };
+
+          this.$dialog(prompt)
+            .then(this.exitComponent)
+            .catch(this.reOpenTable.bind(null, id));
+        } else {
+          // table is free
+          const { _id, session, server, guest } = this.order;
+          Object.assign(table, {
+            guest: parseInt(guest) || 1,
+            invoice: [_id],
+            status: 2,
+            session,
+            server
+          });
+          this.$socket.emit("[TABLE] UPDATE", table);
+          this.exitComponent();
+        }
+      });
     },
     calendar() {
       new Promise((resolve, reject) => {

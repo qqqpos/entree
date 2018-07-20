@@ -6,7 +6,7 @@
                     <button class="btn relative" v-for="(section,index) in layouts.table" :key="index" @click="section = index">{{section[language]}}<span class="notify blue">{{countSeats(index)}}</span></button>
                 </div>
                 <div class="column">
-                    <button class="btn" @click="openBook">
+                    <button class="btn" @click="$open('bookModule')">
                         <i class="far fa-calendar-check"></i>
                         <span class="text">{{$t('button.booking')}}</span>
                     </button>
@@ -41,10 +41,18 @@ import inputModule from "../component/inputer";
 import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import orderList from "../common/orderList";
+import bookModule from "../book/index";
 import buttons from "./buttons";
 
 export default {
-  components: { inputModule, dialogModule, unlockModule, orderList, buttons },
+  components: {
+    dialogModule,
+    unlockModule,
+    inputModule,
+    bookModule,
+    orderList,
+    buttons
+  },
   data() {
     return {
       componentData: null,
@@ -242,7 +250,10 @@ export default {
               .then(({ amount }) =>
                 next(Object.assign(table, { guest: amount }))
               )
-              .catch(() => stop())
+              .catch(() => {
+                this.exitComponent();
+                stop();
+              })
           : next(Object.assign(table, { guest: defaultGuest }));
       });
     },
@@ -286,7 +297,6 @@ export default {
     },
     swapTable([table1, table2]) {},
     viewList() {},
-    openBook() {},
     switchTable() {},
     reset(table) {
       table._id && this.resetTableDialog(table);

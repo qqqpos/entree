@@ -49,17 +49,24 @@ function createWindow() {
   mainWindow = new BrowserWindow(option);
   mainWindow.loadURL(winURL);
 
-  appParams.some(args => args.includes("debug")) && mainWindow.webContents.openDevTools()
+  let { webContents } = mainWindow;
+  webContents.on('did-finish-load', () => {
+    webContents.setZoomFactor(1);
+    webContents.setVisualZoomLevelLimits(1, 1);
+    webContents.setLayoutZoomLevelLimits(0, 0);
+  });
+
+  appParams.some(args => args.includes("debug")) && webContents.openDevTools()
 
   splashWindow = new BrowserWindow({
     width: 460,
     height: 270,
+    show: false,
     frame: false,
     resizable: false,
-    autoHideMenuBar: true,
     alwaysOnTop: true,
-    show: false,
-    skipTaskbar: true
+    skipTaskbar: true,
+    autoHideMenuBar: true
   })
   splashWindow.loadURL(splashURL);
 

@@ -1,5 +1,6 @@
 const ticket = function (raw, receipt) {
   const printers = this.getPrinters();
+  console.log("target printers",printers);
   const ticket = raw.type;
 
   printers.forEach(printer => {

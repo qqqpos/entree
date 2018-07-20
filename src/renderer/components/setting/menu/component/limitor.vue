@@ -12,6 +12,7 @@
                 <selector title="text.to" v-model="init.restrict.to" :opts="hours"></selector>
                 <div class="days">
                     <checkbox v-for="(day,index) in weekdays" :key="index" v-model="init.restrict.days" :title="day" :val="index.toString()" :multiple="true"></checkbox>
+                    <checkbox v-model="init.restrict.holiday" title="text.holiday"></checkbox>
                 </div>
                 <div class="days">
                     <checkbox v-for="(type,index) in types" :key="index" v-model="init.restrict.types" :title="$t('type.'+type)" :val="type" :multiple="true"></checkbox>
