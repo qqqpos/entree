@@ -238,7 +238,7 @@ export default {
 
       return !this.init.gratuityFree && correctType;
     },
-    ...mapGetters(["config", "tax", "store", "dinein", "order"])
+    ...mapGetters(["config", "tax", "store", "dineInOpt", "order"])
   }
 };
 </script>

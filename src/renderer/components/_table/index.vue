@@ -85,7 +85,7 @@ export default {
     },
     ...mapGetters([
       "op",
-      "dinein",
+      "dineInOpt",
       "tables",
       "history",
       "layouts",
@@ -297,7 +297,7 @@ export default {
     },
     checkAccessPin() {
       return new Promise((next, stop) => {
-        if (this.dinein.passwordRequire) {
+        if (this.dineInOpt.passwordRequire) {
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject };
             this.component = "unlockModule";
@@ -340,7 +340,7 @@ export default {
     },
     countGuest(table) {
       return new Promise((next, stop) => {
-        this.dinein.guestCount
+        this.dineInOpt.guestCount
           ? new Promise((resolve, reject) => {
               this.componentData = { resolve, reject };
               this.component = "counter";

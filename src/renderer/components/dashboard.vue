@@ -23,8 +23,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
-import dialogModule from "./common/dialog";
 import collector from "./component/collector";
+import dialogModule from "./common/dialog";
 import unlockModule from "./common/unlock";
 import spooler from "./component/spooler";
 import noSales from "./component/noSale";
@@ -49,7 +49,7 @@ export default {
       "device",
       "config",
       "store",
-      "dinein",
+      "dineInOpt",
       "station",
       "history",
       "callLog",
@@ -110,7 +110,10 @@ export default {
                 buttons: [{ text: "button.confirm", fn: "resolve" }]
               };
 
-              this.setOperator({ clockIn: this.time, session: ObjectId().toString() });
+              this.setOperator({
+                clockIn: this.time,
+                session: ObjectId().toString()
+              });
               this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
               this.$dialog(confirm).then(next);
             })
@@ -209,7 +212,7 @@ export default {
         customerDisplay = { poleDisplay: {}, ledDisplay: {} }
       } = this.station;
 
-      if (customerDisplay.poleDisplay && customerDisplay.poleDisplay.enable) {
+      if (customerDisplay.poleDisplay.enable) {
         const { top, bot } = customerDisplay.poleDisplay;
         poleDisplay.write("\f");
         poleDisplay.write(line(top, bot));
@@ -270,7 +273,7 @@ export default {
           this.$router.push({ path: "/main/customer" });
           break;
         case "table":
-          if (this.dinein.table) {
+          if (this.dineInOpt.table) {
             this.$router.push({ path: "/main/table" });
           } else {
             this.setTicket({ type: "DINE_IN" });
@@ -456,14 +459,14 @@ export default {
       this.op.cashCtrl === "enable" ? this.askCashIn() : this.askSelfCashIn();
     },
     ...mapActions([
-      "setOperator",
       "setApp",
-      "setTicket",
       "setOrder",
       "resetAll",
-      "setCustomer",
+      "setTicket",
       "setStation",
       "setStations",
+      "setOperator",
+      "setCustomer",
       "emptyCustomerInfo"
     ])
   }
@@ -477,7 +480,6 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin: 50px;
   width: 704px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }

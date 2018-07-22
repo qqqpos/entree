@@ -1,7 +1,9 @@
-export const op = s => s.initial.operator;
+
 export const app = s => s.initial.app;
+export const sync = s => s.initial.sync;
 export const time = s => s.initial.time;
 export const ring = s => s.initial.ring;
+export const op = s => s.initial.operator;
 export const books = s => s.initial.books;
 export const device = s => s.initial.device;
 export const config = s => s.initial.config;
@@ -12,7 +14,7 @@ export const spooler = s => s.initial.spooler;
 
 export const tax = s => s.initial.config.tax;
 export const store = s => s.initial.config.store;
-export const dinein = s => s.initial.config.dinein;
+export const dineInOpt = s => s.initial.config.dinein;
 
 export const language = s => s.initial.app.language;
 export const station = s => s.initial.config.station;

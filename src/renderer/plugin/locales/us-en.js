@@ -155,7 +155,10 @@ export default {
     station: "By Station",
     terminal: "By Terminal",
     period: "Select Date Range",
-    allServers: "All Servers"
+    allServers: "All Servers",
+    allBooks:"All Booking",
+    cancelled: "Cancelled",
+    noShows: "No Shows"
   },
   tag: {
     goodCustomer: "Good",

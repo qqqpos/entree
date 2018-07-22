@@ -344,7 +344,7 @@ export default {
       "tax",
       "order",
       "store",
-      "dinein",
+      "dineInOpt",
       "station",
       "isEmptyTicket",
       "currentTable"

@@ -75,7 +75,7 @@ export default {
       "device",
       "config",
       "ticket",
-      "dinein",
+      "dineInOpt",
       "station",
       "language",
       "customer",

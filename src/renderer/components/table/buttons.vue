@@ -314,8 +314,8 @@ export default {
       "order",
       "table",
       "store",
-      "dinein",
       "station",
+      "dineInOpt",
       "isEmptyTicket"
     ])
   }

@@ -18,7 +18,7 @@
         </div>
         <div class="item">
             <span class="name">{{$t('spec.servo')}}:</span>
-            <span class="value">{{servo}}</span>
+            <span class="value">{{about.host}}</span>
         </div>
     </div>
 </template>
@@ -35,14 +35,12 @@ export default {
       platform: require("os").platform(),
       vue: require("vue/package.json").version,
       electron: process.versions["atom-shell"],
-      servo: null,
-      about: null
+      about: {}
     };
   },
   created() {
     this.$socket.emit("ABOUT", system => {
       this.about = system;
-      this.servo = system.host;
     });
   },
   methods: {}

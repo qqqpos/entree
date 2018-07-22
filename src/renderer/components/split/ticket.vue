@@ -71,7 +71,7 @@ export default {
             !!this.component
         : true;
     },
-    ...mapGetters(["tax", "store", "config", "dinein"])
+    ...mapGetters(["tax", "store", "config", "dineInOpt"])
   },
   data() {
     return {

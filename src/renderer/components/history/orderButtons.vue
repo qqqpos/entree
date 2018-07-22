@@ -323,7 +323,7 @@ export default {
       "store",
       "config",
       "ticket",
-      "dinein",
+      "dineInOpt",
       "history",
       "station",
       "customer",

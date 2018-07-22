@@ -16,16 +16,28 @@ export const startTick = ({ commit }) => {
   }, 1000);
 };
 
+export const setAppEnvironment = ({ commit }, { config, layout, menu, request, orders, tables, templates, books, lastSync }) => {
+  commit(types.SET_CONFIG, config);
+  commit(types.SET_LAYOUTS, layout);
+  commit(types.SET_MENU, menu);
+  commit(types.SET_REQUEST, request);
+  commit(types.SET_TODAY_ORDER, orders);
+  commit(types.SET_TABLES, tables);
+  commit(types.SET_TEMPLATES, templates);
+  commit(types.SET_BOOKS, books);
+  commit(types.SET_SYNC, lastSync);
+};
+
 /* @ Setter */
 export const setApp = ({ commit }, data) => commit(types.SET_APP, data);
+export const setSync = ({ commit }, data) => commit(types.SET_SYNC, data);
 export const setConfig = ({ commit }, data) => commit(types.SET_CONFIG, data);
 export const setStation = ({ commit }, data) => commit(types.SET_STATION, data);
 export const setCategory = ({ commit }, category) => commit(types.SET_CATEGORY, category);
 export const setTemplates = ({ commit }, templates) => commit(types.SET_TEMPLATES, templates);
-export const setBook = ({ commit }, book) => commit(types.SET_BOOK, book);
+export const setBooks = ({ commit }, book) => commit(types.SET_BOOKS, book);
 export const setMenu = ({ commit }, menu) => commit(types.SET_MENU, menu);
 export const setLayout = ({ commit }, layout) => commit(types.SET_LAYOUTS, layout);
-export const setTable = ({ commit }, tables) => commit(types.SET_TABLE, tables);
 export const setRequest = ({ commit }, request) => commit(types.SET_REQUEST, request);
 export const setOperator = ({ commit }, operator) => commit(types.SET_OPERATOR, operator);
 export const setTicket = ({ commit }, data) => commit(types.SET_TICKET, data);

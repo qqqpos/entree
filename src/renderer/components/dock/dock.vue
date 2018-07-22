@@ -264,7 +264,8 @@ export default {
     },
     ...mapActions([
       "setApp",
-      "setBook",
+      "setSync",
+      "setBooks",
       "resetAll",
       "setTicket",
       "updateMenu",
@@ -291,6 +292,9 @@ export default {
       this.$socket.emit("[ORDER] QUERY_TICKET_NUMBER", number =>
         this.setTicket({ number })
       );
+    },
+    SYNC(time) {
+      this.setSync(time);
     },
     TICKET_NUMBER(number) {
       this.app.newTicket && this.setTicket({ number });
@@ -321,10 +325,17 @@ export default {
       this.updateMenu(data);
     },
     UPDATE_BOOK(data) {
-      this.setBook(data);
+      this.setBooks(data);
     },
-    SHUTDOWN() {
-      this.$electron.ipcRenderer.send("Shutdown");
+    SERVO_CTRL(action) {
+      switch (action) {
+        case "SHUTDOWN":
+          this.$electron.ipcRenderer.send("Shutdown");
+          break;
+        case "RESTART":
+          this.$electron.ipcRenderer.send("Relunch");
+          break;
+      }
     },
     disconnect() {
       this.setApp({ database: false });

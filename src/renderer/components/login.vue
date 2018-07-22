@@ -88,10 +88,17 @@ export default {
   methods: {
     checkVersion() {
       return new Promise((next, stop) => {
-        this.$socket.emit("[SYS] GET_VERSION", ({ version, appRequire }) => {
-          const info = require("../../../package.json");
-          const serverRequire = info.require;
-          const appVersion = info.version;
+        this.$socket.emit("ABOUT", System => {
+          const {
+            version: servoVersion,
+            require: appRequire,
+            lastSync
+          } = System;
+
+          const {
+            version: appVersion,
+            require: serverRequire
+          } = require("../../../package.json");
 
           let fulfilled = true;
           let error;
@@ -107,7 +114,7 @@ export default {
               }
             };
             fulfilled = false;
-          } else if (serverRequire > version) {
+          } else if (serverRequire > servoVersion) {
             error = {
               reason: "outDatedVersion",
               prompt: {
@@ -188,6 +195,9 @@ export default {
         this.reset = false;
       }
     }, 300),
+    syncData() {
+      this.$socket.emit("[INITIAL] POS", data => this.setAppEnvironment(data));
+    },
     shutdownAll() {
       const prompt = {
         type: "question",
@@ -196,7 +206,7 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() => this.$socket.emit("[STATION] SHUTDOWN_ALL"))
+        .then(() => this.$socket.emit("[STATION] CTRL", "SHUTDOWN"))
         .catch(this.exitComponent);
     },
     shutdown() {
@@ -205,11 +215,13 @@ export default {
     restart() {
       this.$electron.ipcRenderer.send("Relaunch");
     },
-    restartAll() {},
+    restartAll() {
+      this.$socket.emit("[STATION] CTRL", "RESTART");
+    },
     exit() {
       this.$electron.ipcRenderer.send("Exit");
     },
-    ...mapActions(["setApp", "setOperator"])
+    ...mapActions(["setApp", "setOperator", "setAppEnvironment"])
   },
   watch: {
     pin(n) {
@@ -233,18 +245,23 @@ export default {
         this.setPin();
 
         this.$router.push({ path: "/main" });
-        // this.$socket.emit("[SYNC] POS", sync => {
-        //   if (this.sync !== sync) {
-        //     this.$socket.emit("[SYNC] ORDER_LIST");
-        //     this.$socket.emit("[SYNC] TABLE_LIST");
-        //   }
-        // });
+
+        this.$socket.emit("ABOUT", ({ lastSync }) => {
+          this.sync !== lastSync && this.syncData();
+        });
       } else {
         this.reset && this.setPin();
       }
     },
-    SHUTDOWN() {
-      this.shutdown();
+    SERVO_CTRL(action) {
+      switch (action) {
+        case "SHUTDOWN":
+          this.shutdown();
+          break;
+        case "RESTART":
+          this.restart();
+          break;
+      }
     }
   }
 };

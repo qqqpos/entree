@@ -102,7 +102,7 @@ export default {
     ...mapActions(["setOrder"])
   },
   computed: {
-    ...mapGetters(["tax", "config", "store", "dinein"])
+    ...mapGetters(["tax", "config", "store", "dineInOpt"])
   }
 };
 </script>

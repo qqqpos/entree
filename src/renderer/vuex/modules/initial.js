@@ -2,6 +2,7 @@ import * as types from '../mutation-types'
 
 const state = {
     time: Date.now(),
+    sync: Date.now(),
     app: {},
     menu: {},
     config: {},
@@ -33,6 +34,7 @@ const mutations = {
             state.operator = {};
             state.orders = [];
             state.order = {};
+            state.books = [];
             state.ticket = {
                 number: 1,
                 type: ""
@@ -44,6 +46,9 @@ const mutations = {
     [types.SET_CONFIG](state, data) {
         state.config = Object.assign({}, state.config, data)
     },
+    [types.SET_SYNC](state, sync) {
+        state.sync = sync;
+    },
     [types.SET_TICKET](state, data) {
         state.ticket = Object.assign({}, state.ticket, data)
     },
@@ -53,7 +58,7 @@ const mutations = {
     [types.SET_TEMPLATES](state, templates) {
         state.templates = templates;
     },
-    [types.SET_BOOK](state, books) {
+    [types.SET_BOOKS](state, books) {
         state.books = books;
     },
     [types.SET_APP](state, data) {
@@ -94,7 +99,7 @@ const mutations = {
     [types.SET_REQUEST](state, request) {
         state.request = arrayToObject(request);
     },
-    [types.SET_TABLE](state, tables) {
+    [types.SET_TABLES](state, tables) {
         state.tables = tables.reduce((obj, table) => {
             obj[table.zone]
                 ? obj[table.zone].push(table)
@@ -221,21 +226,6 @@ const mutations = {
         state.callLog.unshift(data);
         state.callLog = state.callLog.slice(0, 10);
     },
-    [types.UPDATE_TABLE_SECTION](state, data) {
-        let { section, index } = data;
-        state.config.layout.table.splice(index, 1, section);
-    },
-
-    [types.NEW_RESERVATION](state, data) {
-        state.reservation.push(data)
-    },
-    [types.UPDATE_RESERVATION](state, data) {
-        let { _id } = data;
-        let index = state.reservation.findIndex(reservation => reservation._id === _id);
-        state.reservation.splice(index, 1, data)
-
-        state.reservation = state.reservation.filter(reserved => reserved.status !== 2)
-    }
 }
 
 export default {

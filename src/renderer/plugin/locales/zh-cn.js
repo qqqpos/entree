@@ -147,7 +147,11 @@ export default {
     station: "按工作站",
     terminal: "按刷卡机",
     period: "选择时段",
-    allServers: "所有服务员"
+    allServers: "所有服务员",
+    category: "按类别",
+    allBooks: "所有预定",
+    cancelled: "已取消",
+    noShows: "已放弃"
   },
   tag: {
     goodCustomer: "好客人",

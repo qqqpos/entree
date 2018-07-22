@@ -2,7 +2,7 @@
   "name": "unitedpos",
   "version": "0.9.1",
   "require": "0.9.1",
-  "stage": "RC",
+  "stage": "Beta",
   "description": "UnitedPOS point of sale system",
   "author": "United POS <huangxuewu@gmail.com>",
   "license": "Apache-2.0",

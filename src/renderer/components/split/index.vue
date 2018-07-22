@@ -55,11 +55,11 @@ export default {
     ...mapGetters([
       "app",
       "tax",
+      "table",
       "store",
       "ticket",
       "customer",
-      "dinein",
-      "table"
+      "dineInOpt"
     ])
   },
   data() {
@@ -232,13 +232,13 @@ export default {
           Object.assign(this.order, order);
           this.setApp({ newTicket: false });
 
-          if (this.dinein.table && this.order.session) {
+          if (this.dineInOpt.useTable && this.order.session) {
             Object.assign(this.table, {
               invoice: [this.order._id],
               status: 2
             });
 
-            this.$socket.emit("[TABLE] SETUP", this.table);
+            this.$socket.emit("[TABLE] UPDATE", this.table);
           }
 
           this[fn](print);
@@ -287,7 +287,7 @@ export default {
       if (splits.length > 1) {
         splits.forEach((order, index) => {
           order.parent = parent;
-          order.time = order.time || this.order.time;
+          order.time = order.time || this.order.time || Date.now();
           order.number = `${this.order.number}-${index + 1}`;
 
           const { payment } = order;
@@ -295,7 +295,7 @@ export default {
           Object.keys(payment).forEach(key => {
             if (Number.isNaN(payment[key])) return;
 
-            if (payments.hasOwnProperty(key)) {
+            if (payments[key]) {
               payments[key] += payment[key];
             } else {
               payments[key] = payment[key];

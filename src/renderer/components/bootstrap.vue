@@ -12,7 +12,8 @@ import os from "os";
 export default {
   data() {
     return {
-      timeout: null
+      timeout: null,
+      connected: false
     };
   },
   created() {
@@ -31,40 +32,7 @@ export default {
       this.setDevice({ online: navigator.onLine });
 
       this.progress("findHost");
-      this.$socket.connected && this.socketConnected();
-    },
-    socketConnected() {
-      this.progress("hostConnected");
-      this.$socket.emit("[INITIAL] POS");
-      this.progress("initialApplication");
-    },
-    setEnvironment({
-      config,
-      layout,
-      menu,
-      request,
-      orders,
-      tables,
-      template,
-      book
-    }) {
-      try {
-        this.setConfig(config);
-        this.setLayout(layout);
-        this.setMenu(menu);
-        this.setTable(tables);
-        this.setRequest(request);
-        this.progress("applyConfiguration");
-        this.setExternalDisplay(config);
-        this.setTodayOrder(orders);
-        this.setTemplates(template);
-        this.setBook(book);
-        this.setStationEnvironment()
-          .then(this.initialized)
-          .catch(this.registration);
-      } catch (error) {
-        console.log(error);
-      }
+      this.$socket.connected && this.connectionEstablished();
     },
     setStationEnvironment() {
       return new Promise((use, register) => {
@@ -84,6 +52,14 @@ export default {
           }
         });
       });
+    },
+    connectionEstablished() {
+      if (this.connected) return;
+
+      this.progress("hostConnected");
+      this.$socket.emit("[INITIAL] POS");
+      this.progress("initialApplication");
+      this.connected = true;
     },
     initialized(data) {
       const { alias, mac } = data;
@@ -253,30 +229,24 @@ export default {
     },
     ...mapActions([
       "setApp",
-      "setMenu",
-      "setTable",
-      "setLayout",
       "phoneRing",
       "startTick",
-      "setConfig",
       "setDevice",
       "setStation",
-      "setRequest",
-      "setTemplates",
-      "setTodayOrder",
-      "setBook"
+      "setAppEnvironment"
     ])
   },
   sockets: {
     CONNECTED() {
-      this.socketConnected();
+      this.connectionEstablished();
     },
     SETUP_APP_RUNTIME(data) {
-      this.$electron.ipcRenderer.send(
-        "Loading",
-        this.$t("initial.loadConfiguration")
-      );
-      this.setEnvironment(data);
+      this.progress("loadConfiguration");
+      this.setAppEnvironment(data);
+      this.progress("applyConfiguration");
+      this.setStationEnvironment()
+        .then(this.initialized)
+        .catch(this.registration);
     }
   },
   computed: {

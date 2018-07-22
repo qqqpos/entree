@@ -48,7 +48,7 @@ export default {
     return {
       componentData: null,
       component: null,
-      surcharge: Object.assign({}, this.$store.getters.dinein.surcharge)
+      surcharge: Object.assign({}, this.$store.getters.dineInOpt.surcharge)
     };
   },
   methods: {

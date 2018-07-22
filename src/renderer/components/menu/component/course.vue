@@ -216,7 +216,7 @@ export default {
       this.resetAll();
 
       const { done } = this.station.autoLock;
-      const { lockOnDone } = this.dinein;
+      const { lockOnDone } = this.dineInOpt;
 
       if (lockOnDone || done) {
         this.setOperator(null);
@@ -233,7 +233,7 @@ export default {
       "op",
       "app",
       "ticket",
-      "dinein",
+      "dineInOpt",
       "station",
       "customer",
       "language"

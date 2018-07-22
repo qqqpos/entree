@@ -147,7 +147,7 @@ export default {
       "config",
       "ticket",
       "device",
-      "dinein",
+      "dineInOpt",
       "station",
       "customer"
     ])

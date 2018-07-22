@@ -1,6 +1,6 @@
 const ticket = function (raw, receipt) {
   const printers = this.getPrinters();
-  console.log("target printers",printers);
+  console.log("target printers", printers);
   const ticket = raw.type;
 
   printers.forEach(printer => {
@@ -242,7 +242,7 @@ function createList(printer, setting, invoice, preview) {
           .filter(
             item =>
               item.printer[printer] &&
-              (item.diffs === "UNCHANGED" || item.diffs === "NEW")
+              (item.diffs === "UNCHANGED" || item.diffs === "NEW" || item.diffs === "DIFFERENT")
           )
           .map(item => {
             switch (item.diffs) {
@@ -256,6 +256,7 @@ function createList(printer, setting, invoice, preview) {
                 }
                 break;
               case "NEW":
+              case "DIFFERENT":
                 if (printBothText) {
                   item.zhCN = firstLineChinese ? "☐ " + item.zhCN : item.zhCN;
                   item.usEN = firstLineEnglish ? "☐ " + item.usEN : item.usEN;
@@ -284,27 +285,17 @@ function createList(printer, setting, invoice, preview) {
 
   if (categorize) {
     let sorted = [];
-    let categoryMap = [];
 
     for (let i = 0; i < items.length; i++) {
-      let category = items[i].category;
-      if (!sorted[category]) {
-        sorted[category] = [];
-        categoryMap[category] = items[i].categoryCN;
-        sorted[category].push(items[i]);
-      } else {
-        sorted[category].push(items[i]);
-      }
+      const { category } = items[i];
+      sorted[category] ? sorted[category].push(items[i]) : (sorted[category] = [items[i]]);
     }
-    for (let category in sorted) {
-      if (sorted.hasOwnProperty(category)) {
-        content += `<div class="category"><span class="zhCN">${categoryMap[category]}</span><span class="usEN">${category}</span></div>`;
-        content += sorted[category]
-          .map(item => mockup(item, renderQty))
-          .join("")
-          .toString();
-      }
-    }
+
+    Object.keys(sorted).forEach(category => {
+      const title = `<p class="title"><span class="usEN">${category}</span></p>`;
+      const categorized = sorted[category].map(item => mockup(item, renderQty)).join("").toString();
+      content += `<div class="category">${title + categorized}</div>`
+    })
   } else {
     content = items
       .map(item => mockup(item, renderQty))
@@ -429,7 +420,7 @@ function createStyle(setting) {
   const { contact, title, customer, payment, languages } = setting.layout;
   const primary = languages.find(t => t.ref === "usEN");
   const secondary = languages.find(t => t.ref === "zhCN");
-  const fontFamily = navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
+  const defaultFont = navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
   const zhCN = `.zhCN{font-family:'${secondary.fontFamily}';font-size:${secondary.fontSize}px;line-height:${secondary.lineHeight}}`;
   const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${primary.fontSize}px;line-height:${primary.lineHeight}}`;
   const zhCN_sub = secondary.subFontSize ? `.zhCN .sub{padding-left:20px;font-size:${secondary.subFontSize}em;}` : `.zhCN .sub{padding-left:20px;font-size:0.8em;}`;
@@ -441,7 +432,7 @@ function createStyle(setting) {
               div.store{margin-bottom:10px;${contact ? "" : "display:none;"}}\
               .store h3{font-size:1.25em;}\
               .store h5{font-size:16px;font-weight:lighter}\
-              h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${fontFamily}";}\
+              h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${defaultFont}";}\
               .delay{border:1px dashed #000;margin:10px 0;text-align:center;}
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
               footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}.ticketNumber{right:10px;}\
@@ -453,6 +444,8 @@ function createStyle(setting) {
               .customer p:last-child{border-bottom:1px solid #000;}\
               .tel{letter-spacing:2px;}.ext{margin-left:10px;}.pt{font-size:0.8em;}
               section.receipt{width:100%;margin:5px 0;}\
+              .category .title{border-bottom:1px dashed #000; font-size:18px;font-weight:bold; font-family:"${defaultFont}";}
+              .category div{text-indent:0.5em;}
               .main{display:flex;position:relative;width:100%;}\
               .main .wrap,.empty{flex:1;}\
               .main .side{font-size:0.9em;margin-left:2px;}\

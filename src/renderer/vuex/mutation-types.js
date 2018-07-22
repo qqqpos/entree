@@ -1,6 +1,7 @@
 export const SET_APP = "SET_APP";
+export const SET_SYNC = "SET_SYNC";
 export const SET_MENU = "SET_MENU";
-export const SET_TABLE = "SET_TABLE";
+export const SET_TABLES = "SET_TABLES";
 export const START_TICK = "START_TICK";
 export const SET_CONFIG = "SET_CONFIG";
 export const SET_DEVICE = "SET_DEVICE";
@@ -20,7 +21,7 @@ export const REMOVE_SPOOLER = "REMOVE_SPOOLER";
 export const CREATE_ORDER_INSTANCE = "CREATE_ORDER_INSTANCE";
 export const ARCHIVE_ORDER = "ARCHIVE_ORDER";
 
-export const SET_BOOK = "SET_BOOK";
+export const SET_BOOKS = "SET_BOOKS";
 export const UPDATE_MENU_ITEM = "UPDATE_MENU_ITEM";
 export const REMOVE_MENU_ITEM = "REMOVE_MENU_ITEM";
 export const REMOVE_REQUEST_ITEM = "REMOVE_REQUEST_ITEM";
@@ -64,6 +65,4 @@ export const SET_VIEW_TABLE = "SET_VIEW_TABLE";
 export const SET_VIEW_ORDER = "SET_VIEW_ORDER";
 export const RESET_VIEW_TABLE = "RESET_VIEW_TABLE";
 
-export const NEW_RESERVATION = "NEW_RESERVATION";
-export const UPDATE_RESERVATION = "UPDATE_RESERVATION";
 export const EMPTY_CUSTOMER_INFO = "EMPTY_CUSTOMER_INFO";

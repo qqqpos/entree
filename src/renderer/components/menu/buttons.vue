@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="bottomLeft">
-      <div class="btn" @click="switchGuest" v-if="dinein.seatOrder || order.type === 'HIBACHI'">
+      <div class="btn" @click="switchGuest" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'">
         <i class="fa fa-users"></i>
         <span class="text">{{$t('button.switch')}}</span>
       </div>
@@ -324,7 +324,7 @@ export default {
       const { type } = this.order;
 
       this.order.content.forEach(item => {
-        this.archiveOrder.content.push(
+        this.archivedOrder.content.push(
           Object.assign(item, {
             diffs: "NEW",
             orderType: type
@@ -332,9 +332,9 @@ export default {
         );
       });
 
-      this.$calculatePayment(this.archiveOrder);
+      this.$calculatePayment(this.archivedOrder);
 
-      return this.archiveOrder;
+      return this.archivedOrder;
     },
     checkPendingItem(print) {
       return new Promise((next, stop) => {
@@ -391,7 +391,7 @@ export default {
     },
     save(print) {
       return new Promise((resolve, reject) => {
-        const { printOnDone = false, useTable = true } = this.dinein;
+        const { printOnDone = false, useTable = true } = this.dineInOpt;
         const printCount = this.app.newTicket
           ? print ? 1 : 0
           : print ? this.order.printCount + 1 : this.order.printCount;
@@ -466,7 +466,7 @@ export default {
     },
     exit(quit) {
       const { done } = this.station.autoLock;
-      const { lockOnDone, table } = this.dinein;
+      const { lockOnDone, table } = this.dineInOpt;
 
       if (this.isDineInTicket && table) {
         if (lockOnDone || done) {
@@ -713,7 +713,7 @@ export default {
       "order",
       "table",
       "store",
-      "dinein",
+      "dineInOpt",
       "ticket",
       "station",
       "spooler",

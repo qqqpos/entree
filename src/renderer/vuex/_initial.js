@@ -48,7 +48,7 @@ const mutations = {
     [types.SET_TEMPLATES](state, data) {
         state.templates = data;
     },
-    [types.SET_BOOK](state, data) {
+    [types.SET_BOOKS](state, data) {
         state.reservation = data;
     },
     [types.SET_APP](state, data) {
@@ -69,26 +69,12 @@ const mutations = {
                 submenu[item.group].push(item) :
                 submenu[item.group] = [item];
         })
-        // Object.keys(submenu).forEach(key => {
-        //     let group = submenu[key];
-        //     let length = group.length;
-        //     let align = 6 - length % 3;
-
-        //     align === 6 && (align = 3);
-        //     group.sort((a, b) => a.num - b.num);
-
-        //     Array(align).fill().forEach(_ => { group.push({ zhCN: "", usEN: "", clickable: false, group: null }) });
-        // })
         state.config.layout.submenu = submenu;
     },
     [types.SET_REQUEST](state, data) {
         state.config.layout.request = flatten(state.config.layout.request, data, false)
     },
-    // [types.REMOVE_PRINTER](state, data) {
-    //     delete state.config.printer[data];
-    //     state.config.printer.splice();
-    // },
-    [types.SET_TABLE](state, data) {
+    [types.SET_TABLES](state, data) {
         let layout = state.config.layout.table;
         state.config.layout.table = layout.map(section => {
             const { zone } = section;

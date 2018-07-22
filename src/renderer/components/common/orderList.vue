@@ -416,7 +416,7 @@ export default {
       "store",
       "order",
       "config",
-      "dinein",
+      "dineInOpt",
       "ticket",
       "station",
       "language",
@@ -740,8 +740,8 @@ header.info {
   position: absolute;
   top: 0;
   left: 0;
-  height: 329px;
-  width: 285px;
+  height: 100%;
+  width: 100%;
 }
 
 .table {

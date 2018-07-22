@@ -1,17 +1,46 @@
-@media only screen and (max-width: 1920px) {
+@media only screen and (min-width : 1025px) {
+    #app{
+        width: 1920px;
+        height: 1080px;
+    }
 
     .category div {
-        width: 278px;
+        width: 262px;
         height: 91.5px;
         font-size: 26px;
     }
 
     .items div {
         height: 92px;
+        width: 209px;
         font-size: 26px;
     }
 
-    div.pageButton {
-        width: 220.5px;
+    section.sides{
+        max-width: initial;
+        margin-left: 1px;
     }
+
+    section.sides div{
+        height: 92px;
+    }
+
+    section.cart div.order{
+        width: initial;
+    }
+
+    section.cart div.main .wrap{
+        max-width: initial;
+    }
+
+    section.cart .settle{
+        width: 403px;
+    }
+
+    section.tickets{
+        flex: 1;
+        height: 985px;
+        width: initial!important;
+    }
+
 }

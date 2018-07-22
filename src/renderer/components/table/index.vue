@@ -177,7 +177,7 @@ export default {
     },
     checkAccessPin() {
       return new Promise((next, stop) => {
-        if (this.dinein.passwordRequire) {
+        if (this.dineInOpt.passwordRequire) {
           // password required to create new table
           new Promise((resolve, reject) => {
             this.componentData = { resolve, reject };
@@ -234,7 +234,7 @@ export default {
       const defaultGuest = parseInt(table.seats) || 1;
 
       return new Promise((next, stop) => {
-        this.dinein.guestCount
+        this.dineInOpt.guestCount
           ? new Promise((resolve, reject) => {
               const config = {
                 title: "text.setGuest",
@@ -410,7 +410,7 @@ export default {
     ...mapGetters([
       "op",
       "table",
-      "dinein",
+      "dineInOpt",
       "tables",
       "history",
       "layouts",

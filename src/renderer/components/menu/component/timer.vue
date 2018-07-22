@@ -318,7 +318,7 @@ export default {
       "store",
       "order",
       "ticket",
-      "dinein",
+      "dineInOpt",
       "station",
       "customer",
       "archivedOrder"

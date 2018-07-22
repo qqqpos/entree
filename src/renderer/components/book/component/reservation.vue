@@ -1,6 +1,6 @@
 <template>
     <div class="books-wrap">
-      <div :style="verticalStyle" ref="dom">
+      <div :style="verticalStyle" ref="dom" class="books-inner-wrap">
           <div v-for="(session,hour,index) in schedule" :key="index" class="hourly">
             <div class="hour" :id="'bk'+index">{{hour+":00"}}</div>
             <hourly-session :hour="hour" :unique="'bk'+index" :session="session"></hourly-session>
@@ -42,7 +42,10 @@ export default {
           };
         }
       });
+
+      this.vertical = 0;
       this.schedule = hours;
+      this.lastVerticalDelta = 0;
     },
     sessionize(timestamp) {
       const time = parseInt(moment(timestamp).format("mm"));
@@ -126,6 +129,11 @@ export default {
 .books-wrap {
   position: relative;
   overflow: hidden;
+}
+
+.books-inner-wrap {
+  height: 300%;
+  min-height: 593px;
 }
 
 .hourly {

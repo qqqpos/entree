@@ -103,8 +103,9 @@
                   </P>
                   <i class="fas fa-angle-right" @click="nextDate"></i>
                 </div>
+                <dropdown label="filter.category" :options="types" filter="filter"></dropdown>
               </header>
-              <reservation :books="books"></reservation>
+              <reservation :books="sortedList"></reservation>
             </div>
         </div>
         <div :is="component" :init="componentData"></div>
@@ -117,14 +118,17 @@ import Holiday from "moment-holiday";
 import dialogModule from "../common/dialog";
 import reservation from "./component/reservation";
 import calendar from "../history/component/calendar";
+import dropdown from "../history/component/dropdown";
 
 export default {
   props: ["init"],
-  components: { calendar, dialogModule, reservation },
+  components: { calendar, dialogModule, reservation, dropdown },
   data() {
     return {
+      filter: null,
       componentData: null,
       component: null,
+      bookingList: null,
       calendarDate: moment(),
       book: {
         type: "WALK_IN",
@@ -137,8 +141,28 @@ export default {
         request: [],
         note: "",
         status: 1
-      }
+      },
+      types: [
+        {
+          text: this.$t("filter.allBooks"),
+          value: "ALL"
+        },
+        {
+          text: this.$t("filter.cancelled"),
+          value: "CANCELLED"
+        },
+        {
+          text: this.$t("filter.noShows"),
+          value: "NOSHOWS"
+        }
+      ]
     };
+  },
+  created() {
+    this.$bus.on("filter", this.applyFilter);
+  },
+  beforeDestroy() {
+    this.$bus.off("filter", this.applyFilter);
   },
   filters: {
     isHoliday(date) {
@@ -146,6 +170,9 @@ export default {
     }
   },
   computed: {
+    sortedList() {
+      return Array.isArray(this.bookingList) ? this.bookingList : this.books;
+    },
     changed() {
       const book = {
         type: "WALK_IN",
@@ -174,11 +201,14 @@ export default {
       const value = this.book.guest[i] + 1;
       this.book.guest.splice(i, 1, value);
     },
+    applyFilter(value) {},
     prevDate() {
       this.calendarDate = moment(this.calendarDate).subtract(1, "d");
+      this.getBookingList();
     },
     nextDate() {
       this.calendarDate = moment(this.calendarDate).add(1, "d");
+      this.getBookingList();
     },
     openCalendar() {
       new Promise((resolve, reject) => {
@@ -187,12 +217,19 @@ export default {
       })
         .then(date => {
           this.book.date = date;
-          date !== today() && this.getReservation(date);
+          this.calendarDate = moment(date, "YYYY-MM-DD", true);
+          date !== today() && this.getBookingList(date);
           this.exitComponent();
         })
         .catch(this.exitComponent);
     },
-    getReservation(date) {},
+    getBookingList(date) {
+      date = date || this.calendarDate.format("YYYY-MM-DD");
+
+      this.$socket.emit("[BOOK] LIST", date, list => {
+        this.bookingList = list;
+      });
+    },
     reset() {
       this.book = {
         type: "WALK_IN",

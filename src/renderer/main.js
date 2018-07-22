@@ -19,14 +19,6 @@ import Trend from "vuetrend";
 import Bars from "vuebars";
 import { Mask, OuterClick } from "./plugin/directive"
 
-// const electron = require("electron");
-// const { webFrame } = electron;
-// // disable zoom 
-// webFrame.setZoomFactor(1)
-// webFrame.setZoomLevelLimits(1, 1)
-// webFrame.setVisualZoomLevelLimits(1, 1)
-// webFrame.setLayoutZoomLevelLimits(0, 0)
-
 Vue.use(Electron);
 Vue.use(VueBus);
 Vue.use(Trend);
