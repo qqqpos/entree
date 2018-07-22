@@ -141,7 +141,7 @@ export default {
       prompt = prompt || {
         type: "warning",
         title: "dialog.permissionDenied",
-        msg: "dialog.permissionDeniedTip",
+        msg: "dialog.permissionDeniedContactManager",
         timeout: { duration: 10000, fn: "reject" },
         buttons: [{ text: "button.confirm", fn: "reject" }]
       };

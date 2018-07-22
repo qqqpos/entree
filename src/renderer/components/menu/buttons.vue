@@ -399,9 +399,12 @@ export default {
         let order = this.combineOrderInfo({ printCount });
         const todo = !!document.querySelector(".item.todo");
 
+        if (todo) print = false;
         if (this.app.newTicket) {
           // handle new ticket
-          const items = todo ? todoPrintHandler(order, print) : order.content;
+          const items = todo
+            ? this.todoPrintHandler(order, print)
+            : order.content;
 
           if (this.isDineInTicket && useTable) {
             Object.assign(this.table, {
@@ -429,7 +432,6 @@ export default {
             );
           }
         } else {
-          // handle edit ticket
           const diffs = this.compare(order);
 
           if (print) {

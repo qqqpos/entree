@@ -256,7 +256,7 @@ export default {
       return new Promise((next, stop) => {
         const noCashDrawerError = {
           title: "dialog.cashDrawerUnavailable",
-          msg: "dialog.cashDrawerUnavailableTip",
+          msg: "dialog.stationCashDrawerRequired",
           timeout: { duration: 5000, fn: "resolve" },
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };

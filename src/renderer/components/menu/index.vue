@@ -103,7 +103,7 @@ export default {
 
     if (this.archivedOrder) {
       const { session, table, tableID } = this.order;
-      this.setApp({ newTicket: false });
+      //this.setApp({ newTicket: false });
       this.createOrderInstance(this.archivedOrder);
       this.setOrder({ ...this.archivedOrder, session, table, tableID });
       this.emptyArchiveOrder();
@@ -430,7 +430,7 @@ export default {
             price: set.price
           }));
         }
-        
+
         try {
           this.poleDisplay(item.usEN, `$ ${item.price[0].toFixed(2)}`);
         } catch (e) {
@@ -540,11 +540,11 @@ export default {
       "addToOrder",
       "resetPointer",
       "setChoiceSet",
-      "createOrderInstance",
       "archiveOrder",
       "alertChoiceSet",
       "alterItemOption",
-      "emptyArchiveOrder"
+      "emptyArchiveOrder",
+      "createOrderInstance"
     ])
   },
   watch: {

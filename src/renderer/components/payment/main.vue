@@ -251,22 +251,12 @@ export default {
                   stop({ error: "SPLIT_TICKET_NOT_FUND" });
                 }
               })
-            : this.itemUnsplitDialog(remain, stop);
+            : stop({ error: "ITEM_REMAIN_UNSPLIT", param: remain });
         } else {
           this.order = this.invoice;
           next();
         }
       });
-    },
-    itemUnsplitDialog(remain, stop) {
-      const prompt = {
-        type: "error",
-        title: "dialog.cantExecute",
-        msg: ["dialog.splitTicketItemRemain", remain],
-        buttons: [{ text: "button.confirm", fn: "resolve" }]
-      };
-      stop();
-      this.$dialog(prompt).then(this.exitPaymentModule);
     },
     checkPrevsPayment() {
       return new Promise(next =>
@@ -276,10 +266,7 @@ export default {
           ({ paid, tip }) => {
             const { balance } = this.order.payment;
 
-            this.order.payment.remain = Math.max(0, balance - paid)
-              .toPrecision(12)
-              .toFloat();
-
+            this.order.payment.remain = toFixed(Math.max(0, balance - paid), 2);
             next();
           }
         )
@@ -484,7 +471,7 @@ export default {
         };
         const noCashDrawerError = {
           title: "dialog.cashDrawerUnavailable",
-          msg: "dialog.cashDrawerUnavailableTip",
+          msg: "dialog.stationCashDrawerRequired",
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
@@ -1225,7 +1212,7 @@ export default {
         case "ALL_SPLIT_PAID":
           prompt = {
             title: "dialog.ticketSettled",
-            msg: "dialog.ticketSettledTip",
+            msg: "dialog.settleTicketConfirm",
             buttons: [
               { text: "button.cancel", fn: "reject" },
               { text: "button.markAsPaid", fn: "resolve" }

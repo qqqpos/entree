@@ -1,6 +1,6 @@
 <template>
-    <div class="books-outer-wrap">
-      <div class="books-inner-wrap" :style="verticalStyle" ref="dom">
+    <div class="books-wrap">
+      <div :style="verticalStyle" ref="dom">
           <div v-for="(session,hour,index) in schedule" :key="index" class="hourly">
             <div class="hour" :id="'bk'+index">{{hour+":00"}}</div>
             <hourly-session :hour="hour" :unique="'bk'+index" :session="session"></hourly-session>
@@ -123,12 +123,9 @@ export default {
 </script>
 
 <style scoped>
-.books-outer-wrap {
+.books-wrap {
   position: relative;
   overflow: hidden;
-}
-
-.books-inner-wrap {
 }
 
 .hourly {

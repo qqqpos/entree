@@ -104,11 +104,13 @@ export default {
       this.init.resolve();
     },
     togo() {
-      this.$dialog({
+      const prompt = {
         type: "question",
         title: "dialog.foodTogo",
         msg: "dialog.togoConfirm"
-      })
+      };
+
+      this.$dialog(prompt)
         .then(() => {
           this.setOrder({ plasticBag: 1 });
           this.$bus.emit("FOOD_TOGO");

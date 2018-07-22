@@ -371,7 +371,7 @@ export default {
     cashDrawerUnavailable() {
       const prompt = {
         title: "dialog.cashDrawerUnavailable",
-        msg: "dialog.cashDrawerUnavailableTip",
+        msg: "dialog.stationCashDrawerRequired",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 

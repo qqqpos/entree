@@ -503,7 +503,7 @@ export default {
         case "PASSWORD_REQUIRED":
           prompt = {
             title: "dialog.unableAccess",
-            msg: "dialog.permissionDeniedTip",
+            msg: "dialog.permissionDeniedContactManager",
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
           break;
