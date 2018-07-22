@@ -594,6 +594,37 @@ export default {
         const match = address.match(reg);
 
         return match ? match[0] : false;
+      },
+      ease({ start = 1, end = 0, duration = 300, progress, done }) {
+        const reverse = start < end;
+        const count = duration / 16;
+        const stepSize = Math.abs(start - end) / count;
+        let current = start;
+
+        const step = () => {
+          current = reverse ? current + stepSize : current - stepSize;
+
+          if (reverse ? current < end : current > end) {
+            progress(current);
+            window.requestAnimationFrame(step);
+          } else {
+            progress(end);
+            done();
+          }
+        };
+
+        step();
+      },
+      isCollide(a, b) {
+        const aRect = a.getBoundingClientRect();
+        const bRect = b.getBoundingClientRect();
+
+        return !(
+          aRect.top + aRect.height < bRect.top ||
+          aRect.top > bRect.top + bRect.height ||
+          aRect.left + aRect.width < bRect.left ||
+          aRect.left > bRect.left + bRect.width
+        );
       }
     };
 

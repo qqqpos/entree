@@ -180,8 +180,8 @@ export default {
         this.timer.isAfter(this.now)
           ? next()
           : stop({
-              title: "dialog.scheduleError",
-              msg: "dialog.scheduleErrorTip",
+              title: "dialog.dateTimeIncorrect",
+              msg: "dialog.inputTimeMustAfterCurrent",
               buttons: [{ text: "button.confirm", fn: "resolve" }]
             });
       });
@@ -189,9 +189,9 @@ export default {
     confirm() {
       const duration = moment.duration(this.timer.diff(this.now)).humanize();
       const prompt = {
-        title: "dialog.scheduleTimer",
+        title: "dialog.scheduleConfirm",
         msg: [
-          "dialog.scheduleTimerConfirm",
+          "dialog.scheduleTimerDetail",
           this.timer.format("MMM DD hh:mm a"),
           duration
         ]
@@ -207,7 +207,7 @@ export default {
       const prompt = {
         title: "dialog.printConfirm",
         msg: [
-          "dialog.scheduleTimerConfirm",
+          "dialog.scheduleTimerDetail",
           this.timer.format("MMM DD hh:mm a"),
           duration
         ]

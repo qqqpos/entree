@@ -165,7 +165,7 @@ export default {
     handleSettledInvoice() {
       const prompt = {
         title: "dialog.orderSettled",
-        msg: "dialog.orderSettledTip",
+        msg: "dialog.orderHasBeenSettled",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 

@@ -231,7 +231,7 @@ export default {
       next();
     },
     countGuest(table) {
-      const defaultGuest = table.seats || 1;
+      const defaultGuest = parseInt(table.seats) || 1;
 
       return new Promise((next, stop) => {
         this.dinein.guestCount
@@ -251,8 +251,8 @@ export default {
                 next(Object.assign(table, { guest: amount }))
               )
               .catch(() => {
-                this.exitComponent();
                 stop();
+                this.exitComponent();
               })
           : next(Object.assign(table, { guest: defaultGuest }));
       });
@@ -295,9 +295,43 @@ export default {
       this.$socket.emit("[TABLE] UPDATE", this.table);
       this.$router.push({ path: "/main/menu" });
     },
-    swapTable([table1, table2]) {},
+    swapTable([table1, table2]) {
+      const { server, status, session, invoice, time, guest } = table1;
+
+      Object.assign(table2, {
+        server,
+        status,
+        session,
+        invoice,
+        time,
+        guest
+      });
+
+      let order = this.history.find(i => i._id === invoice[0]);
+
+      if (order) {
+        Object.assign(order, {
+          table: table2.name,
+          tableID: table2._id
+        });
+
+        this.$socket.emit("[ORDER] UPDATE", order);
+      }
+
+      this.setViewTable(table2);
+      this.$socket.emit("[TABLE] RESET", { _id: table1._id });
+      this.$socket.emit("[TABLE] UPDATE", table2);
+    },
     viewList() {},
-    switchTable() {},
+    switchTable(data) {
+      if (typeof data === "boolean") {
+        this.transfer = false;
+        this.buffer = [];
+      } else {
+        this.transfer = true;
+        this.buffer.push(data);
+      }
+    },
     reset(table) {
       table._id && this.resetTableDialog(table);
     },
@@ -334,6 +368,7 @@ export default {
 
       this.$dialog(prompt).then(this.exitComponent);
     },
+    createTableFailed(error) {},
     ...mapActions([
       "setApp",
       "setOrder",

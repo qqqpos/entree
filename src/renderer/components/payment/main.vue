@@ -895,13 +895,13 @@ export default {
 
         const tenderWithoutDialog = {
           title: ["dialog.cashChange", tender],
-          msg: ["dialog.cashChangeTip", paid],
+          msg: ["dialog.cashChangeDetail", paid],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
         const tenderWithDialog = {
           title: ["dialog.cashChange", tender],
-          msg: ["dialog.cashChangeTip", paid],
+          msg: ["dialog.cashChangeDetail", paid],
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
             { text: "button.receiptOnly", fn: "resolve" },
@@ -934,8 +934,8 @@ export default {
       return new Promise(next => {
         const prompt = {
           type: "question",
-          title: "dialog.printReceiptConfirm",
-          msg: "dialog.printReceiptConfirmTip",
+          title: "dialog.printReceipt",
+          msg: "dialog.printReceiptConfirm",
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
             { text: "button.receiptOnly", fn: "resolve" },
@@ -1267,7 +1267,7 @@ export default {
 
           prompt = {
             title: "dialog.pending",
-            msg: "dialog.pendingOrderAccessDenied",
+            msg: "dialog.paymentInPending",
             timeout: { duration, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };

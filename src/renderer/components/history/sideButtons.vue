@@ -115,7 +115,7 @@ export default {
       return new Promise((next, stop) => {
         const prompt = {
           title: "dialog.unableEdit",
-          msg: "dialog.editPrevOrderTip",
+          msg: "dialog.unableEditPrevsTicket",
           buttons: [{ text: "button.confirm", fn: "reject" }]
         };
 
@@ -130,7 +130,7 @@ export default {
           ? next()
           : stop({
               title: "dialog.unableEdit",
-              msg: ["dialog.editVoidOrderTip", this.order.void.by],
+              msg: ["dialog.unableEditVoidTicket", this.order.void.by],
               buttons: [{ text: "button.confirm", fn: "reject" }]
             });
       });
@@ -290,7 +290,7 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.restoreTable",
-        msg: "dialog.restoreTableConfirm"
+        msg: "dialog.restoreTableInvoiceConfirm"
       };
 
       this.$dialog(prompt)

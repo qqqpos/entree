@@ -115,7 +115,7 @@ export default {
 
           this.$dialog({
             title: "dialog.pending",
-            msg: "dialog.pendingOrderAccessDenied",
+            msg: "dialog.paymentInPending",
             timeout: { duration, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           }).then(() => this.exit());

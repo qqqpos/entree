@@ -320,6 +320,9 @@ export default {
     UPDATE_MENU(data) {
       this.updateMenu(data);
     },
+    UPDATE_BOOK(data) {
+      this.setBook(data);
+    },
     SHUTDOWN() {
       this.$electron.ipcRenderer.send("Shutdown");
     },

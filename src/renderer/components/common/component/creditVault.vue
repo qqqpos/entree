@@ -167,7 +167,7 @@ export default {
     remove(index) {
       const data = {
         type: "question",
-        title: "dialog.removeCreditCard",
+        title: "dialog.removeConfirm",
         msg: "dialog.removeCreditCardConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },

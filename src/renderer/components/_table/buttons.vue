@@ -142,7 +142,7 @@ export default {
 
       const prompt = {
         title: ["dialog.switchTable", this.currentTable.name],
-        msg: "dialog.switchTableTip"
+        msg: "dialog.selectAnEmptyTable"
       };
 
       this.$dialog(prompt)
@@ -164,7 +164,7 @@ export default {
         this.$dialog({
           type: "question",
           title: "dialog.prePayment",
-          msg: ["dialog.prePaymentTip", this.order.table],
+          msg: ["dialog.printPrePaymentConfirm", this.order.table],
           buttons: [
             { text: "button.cancel", fn: "reject" },
             { text: "button.print", fn: "resolve" }
@@ -182,8 +182,8 @@ export default {
       } else {
         let remain = this.order.content.filter(item => !item.print).length;
         this.$dialog({
-          title: "dialog.prePaymentFailed",
-          msg: ["dialog.itemRemainUnprintBeforePayment", remain],
+          title: "dialog.unablePrintPrePayment",
+          msg: ["dialog.itemRemainUnprint", remain],
           buttons: [
             { text: "button.cancel", fn: "reject" },
             { text: "button.printAnyway", fn: "resolve" }
@@ -301,7 +301,7 @@ export default {
         this.currentTable.invoice.length === 0
       ) {
         const prompt = {
-          title: "dialog.tableClear",
+          title: "dialog.tableReset",
           msg: ["dialog.tableStatusClearConfirm", this.currentTable.name],
           buttons: [
             { text: "button.cancel", fn: "reject" },
@@ -319,7 +319,7 @@ export default {
       } else {
         const prompt = {
           type: "info",
-          title: "dialog.tableClearFailed",
+          title: "dialog.tableResetFailed",
           msg: ["dialog.tableClearNotAllowed", this.currentTable.name],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };

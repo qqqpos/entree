@@ -148,9 +148,10 @@ function createWindow() {
 
   splashWindow.once('ready-to-show', () => splashWindow.show())
 
-  mainWindow.on('closed', () => {
+  mainWindow.on('close', (e) => {
     mainWindow = null;
     splashWindow = null;
+    e.preventDefault();
     process.exit(0);
   })
 }

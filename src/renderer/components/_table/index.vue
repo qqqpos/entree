@@ -176,7 +176,7 @@ export default {
           break;
         case 4:
           prompt = {
-            title: "dialog.tableClear",
+            title: "dialog.tableReset",
             msg: ["dialog.tableStatusClearConfirm", this.viewTable.name],
             buttons: [
               { text: "button.cancel", fn: "reject" },

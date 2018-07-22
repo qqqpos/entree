@@ -41,7 +41,7 @@ export default {
     remove() {
       const prompt = {
         type: "question",
-        title: "dialog.addressRemove",
+        title: "dialog.removeConfirm",
         msg: ["dialog.addressRemoveConfirm", this.address.street]
       };
 

@@ -146,7 +146,7 @@ export default {
     },
     deleteSectionDialog(index) {
       const prompt = {
-        title: "dialog.tableSectionRemove",
+        title: "dialog.removeConfirm",
         msg: "dialog.tableSectionRemoveConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },
@@ -200,7 +200,7 @@ export default {
     },
     removeTableDialog(table, index) {
       const prompt = {
-        title: "dialog.tableRemove",
+        title: "dialog.removeConfirm",
         msg: ["dialog.tableRemoveConfirm", table.name]
       };
 

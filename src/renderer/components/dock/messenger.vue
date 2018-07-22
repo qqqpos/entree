@@ -99,7 +99,7 @@ export default {
     remove(i) {
       const prompt = {
         type: "question",
-        title: "dialog.removeSpooler",
+        title: "dialog.removeConfirm",
         msg: "dialog.removeSpoolerConfirm"
       };
 

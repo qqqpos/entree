@@ -101,7 +101,6 @@ export default {
           });
           break;
         case "dockMenu":
-        console.log("trigger");
           this.$open("menuModule", { args });
           break;
         case "dialog":

@@ -2,8 +2,10 @@
   <div class="popupMask center dark">
     <div class="editor">
       <header class="title">
-        <h5>{{cashDrawer}}</h5>
-        <h3>{{$t('text.cashInCount')}}</h3>
+        <div>
+          <h5>{{cashDrawer}}</h5>
+          <h3>{{$t('text.cashInCount')}}</h3>
+        </div>
       </header>
       <div class="banner"></div>
       <section class="inner">

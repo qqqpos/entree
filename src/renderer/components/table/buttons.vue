@@ -8,7 +8,7 @@
       <i class="fas fa-ban"></i>
       <span class="text">{{$t("button.cancel")}}</span>
     </button>
-    <button class="btn" @click="switchTable" v-else :disabled="!table">
+    <button class="btn" @click="invoke('switchTableDialog')" v-else :disabled="!table">
       <i class="fas fa-exchange-alt"></i>
       <span class="text">{{$t('button.switchTable')}}</span>
     </button>
@@ -162,16 +162,16 @@ export default {
       const prompt = this.order.print
         ? {
             type: "question",
-            title: "dialog.prePayment",
-            msg: ["dialog.prePaymentTip", this.order.table],
+            title: "dialog.printPrePayment",
+            msg: ["dialog.printPrePaymentConfirm", this.order.table],
             buttons: [
               { text: "button.cancel", fn: "reject" },
               { text: "button.print", fn: "resolve" }
             ]
           }
         : {
-            title: "dialog.prePaymentFailed",
-            msg: ["dialog.itemRemainUnprintBeforePayment", remain],
+            title: "dialog.unablePrintPrePayment",
+            msg: ["dialog.itemRemainUnprint", remain],
             buttons: [
               { text: "button.cancel", fn: "reject" },
               { text: "button.printAnyway", fn: "resolve" }
@@ -246,14 +246,27 @@ export default {
         )
         .catch(() => {});
     },
-    switchTable() {},
+    switchTableDialog() {
+      const prompt = {
+        title: ["dialog.switchTable", this.table.name],
+        msg: "dialog.selectAnEmptyTable"
+      };
+
+      this.$dialog(prompt)
+        .then(this.switchTable.bind(null, this.table))
+        .catch(this.switchTable.bind(null, false));
+    },
+    switchTable(table) {
+      this.$emit("switch", table);
+      this.exitComponent();
+    },
     clearTable() {
       if (!this.table) return;
 
       const { _id, name, status, invoice } = this.table;
       if (status === 4 || invoice.length === 0) {
         const prompt = {
-          title: "dialog.tableClear",
+          title: "dialog.tableReset",
           msg: ["dialog.tableStatusClearConfirm", name],
           buttons: [
             { text: "button.cancel", fn: "reject" },
@@ -271,7 +284,7 @@ export default {
       } else {
         const prompt = {
           type: "info",
-          title: "dialog.tableClearFailed",
+          title: "dialog.tableResetFailed",
           msg: ["dialog.tableClearNotAllowed", name],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };

@@ -12,7 +12,7 @@
           <dropdown label="filter.order" :options="types" filter="filterType"></dropdown>
           <dropdown label="filter.cashier" :options="cashiers" filter="filterCashier"></dropdown>
           <dropdown label="filter.server" :options="servers" filter="filterServer"></dropdown>
-          <div class="picker">
+          <div class="calendar-date-box">
             <i class="fa fa-angle-left" @click="prev"></i>
             <span class="date">{{date}}</span>
             <i class="fa fa-angle-right" @click="next"></i>
@@ -568,7 +568,7 @@ export default {
     preBatch() {
       const prompt = {
         title: "dialog.batchClose",
-        msg: "dialog.batchCloseTip",
+        msg: "dialog.batchCloseConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.batch", fn: "resolve" }
@@ -813,23 +813,6 @@ tbody tr.voided {
 
 .zero {
   color: lightgray;
-}
-
-.picker {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  color: #9e9e9e;
-  background: #f5f5f5;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  padding: 1px;
-  margin-left: 15px;
-}
-
-.picker i {
-  padding: 10px 20px;
-  cursor: pointer;
 }
 
 .fa-eye-slash {

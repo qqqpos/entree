@@ -135,7 +135,7 @@ export default {
     removePrinter() {
       const content = {
         type: "question",
-        title: "dialog.removePrinter",
+        title: "dialog.removeConfirm",
         msg: "dialog.removePrinterConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },

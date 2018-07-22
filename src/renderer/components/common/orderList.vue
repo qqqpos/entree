@@ -142,42 +142,27 @@
 import { mapGetters, mapActions } from "vuex";
 
 import creditVault from "./component/creditVault";
-import dialogModule from "../common/dialog";
 import groupItem from "./component/groupItem";
+import configModule from "./component/config";
+import dialogModule from "../common/dialog";
 import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
 import shortcut from "./component/shortcut";
-import configModule from "./component/config";
 
 export default {
   components: {
     dialogModule,
     configModule,
     creditVault,
+    groupItem,
     shortcut,
     listItem,
-    groupItem,
     entry
   },
   props: ["layout", "group", "display", "seats", "seat"],
   data() {
     return {
-      payment: {
-        subtotal: 0,
-        tax: 0,
-        plasticTax: 0,
-        total: 0, // subtotal + tax
-        discount: 0,
-        due: 0, // total + delivery - discount
-        balance: 0, // due + surcharge
-        paid: 0,
-        remain: 0, // balance - paid
-        tip: 0,
-        gratuity: 0,
-        delivery: 0,
-        rounding: 0,
-        log: []
-      },
+      payment: {},
       lastDelta: 0,
       offset: 0,
       todo: false,
