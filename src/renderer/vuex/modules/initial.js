@@ -30,6 +30,7 @@ const mutations = {
     [types.START_TICK](state, { time, date }) {
         state.time = time;
         if (date !== state.app.date) {
+            state.app.newTicket = true;
             state.app.date = date;
             state.operator = {};
             state.orders = [];
@@ -39,6 +40,9 @@ const mutations = {
                 number: 1,
                 type: ""
             }
+
+            // force reset pos when next login
+            state.sync = null;
 
             location.href = "http://localhost:9080/#/main/lock";
         }

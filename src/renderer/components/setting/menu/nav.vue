@@ -14,6 +14,10 @@
                     <i class="far fa-list-alt"></i>
                     <span class="text">{{$t('nav.template')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.menu.config'}">
+                    <i class="fas fa-cogs"></i>
+                    <span class="text">{{$t('nav.config')}}</span>
+                </router-link>                
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>
                 <i class="fa fa-arrow-circle-left"></i>

@@ -15,7 +15,6 @@
 
 <script>
 import toggle from "../../common/toggle";
-import inputer from "../../common/inputer";
 import textList from "../../common/textList";
 
 export default {
@@ -45,11 +44,16 @@ export default {
     };
   },
   created() {
-    this.defaults = this.$store.getters.config.defaults || {
+    //hot patch
+    const defaults = {
       paymentType: "CASH",
       percentageDiscount: true,
-      percentageTip: true
+      percentageTip: true,
+      autoStackItem: false,
+      matchItemQty: false
     };
+
+    this.defaults = this.$store.getters.config.defaults || defaults;
   },
   beforeRouteLeave(to, from, next) {
     this.$socket.emit("[CONFIG] UPDATE", {

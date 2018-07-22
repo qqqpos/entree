@@ -16,7 +16,7 @@
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
     </section>
     <section class="sides">
-      <div v-for="(side,index) in sides" @click="setOperatortion(side,index)" :key="index">{{side[language]}}</div>
+      <div v-for="(side,index) in sides" @click="setSideOpt(side,index)" :key="index">{{side[language]}}</div>
     </section>
     <section class="cart">
       <order-list layout="order" :seats="seats" @update="setSeat"></order-list>
@@ -508,7 +508,7 @@ export default {
           this.exitComponent();
       }
     },
-    setOperatortion(side, index) {
+    setSideOpt(side, index) {
       const { skip, ignore } = side;
 
       side.template && this.specialItemHandler(null, "template", index);

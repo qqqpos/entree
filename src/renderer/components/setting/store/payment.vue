@@ -3,14 +3,13 @@
     <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
     <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
     <external title="setting.default.setValue" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
-    <!-- <external title="setting.thirdParty" @open="$router.push({ name: 'Setting.store.thirdParty' })"></external> -->
     <toggle title="setting.autoSaveCreditCard" v-model="store.autoSaveCard" v-show="authorized" @update="updateAutoSave"></toggle>
     <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
       <transition name="dropdown">
         <div v-if="store.tipSuggestion.enable" class="fees">
           <label>{{$t('text.tipPercentage')}}</label>
-          <input type="text" v-model="store.tipSuggestion.percentages" v-mask="'##,##,##'" maxlength="10" placeholder="15,18,20" @blur="updateTipPercentages">
+          <input type="text" v-model="store.tipSuggestion.percentages" maxlength="10" placeholder="15,18,20" @blur="updateTipPercentages">
         </div>
       </transition>
     </toggle>

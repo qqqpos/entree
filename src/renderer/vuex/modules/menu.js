@@ -21,8 +21,8 @@ const state = {
       remain: 0,
       log: []
     },
-    settled:false,
-    print:false,
+    settled: false,
+    print: false,
     content: [],
     coupons: [],
     modify: 0,
@@ -58,8 +58,8 @@ const mutations = {
         remain: 0,
         log: []
       },
-      settled:false,
-      print:false,
+      settled: false,
+      print: false,
       content: [],
       coupons: [],
       modify: 0,
@@ -327,22 +327,27 @@ const mutations = {
       state.order.content.splice();
     }
   },
-  [types.SET_CHOICE_SET](state, set) {
+  [types.SET_CHOICE_SET](state, { subitem, matchItemQty }) {
     if (state.order.content.length === 0) return;
     if (state.item.split) return;
 
-    set.unique = String().random();
+    if (matchItemQty) {
+      subitem.qty = state.item.qty;
+      subitem.price = toFixed(subitem.qty * subitem.single, 2)
+    }
+
+    subitem.unique = String().random();
 
     const dom = document.querySelector(".sub.target");
     if (dom) {
       const { key } = dom.dataset;
       const index = state.item.choiceSet.findIndex(s => s.key === key) + 1;
 
-      state.item.choiceSet.splice(index, 0, set);
+      state.item.choiceSet.splice(index, 0, subitem);
       dom.classList.remove("target");
     } else {
-      state.item.choiceSet.push(set);
-      state.choiceSetTarget = set;
+      state.item.choiceSet.push(subitem);
+      state.choiceSetTarget = subitem;
     }
   },
   [types.ALERT_CHOICE_SET](state, set) {

@@ -55,7 +55,7 @@ export const resetTable = ({ commit }) => commit(types.RESET_TABLE);
 export const resetOrder = ({ commit }) => commit(types.RESET_ORDER);
 export const delayPrint = ({ commit }, order) => commit(types.ADD_SPOOLER, order);
 export const removeSpooler = ({ commit }, index) => commit(types.REMOVE_SPOOLER, index);
-export const addToOrder = ({ commit, getters }, item) => commit(types.ADD_TO_ORDER, { item, autoStack: getters.store.autoStackItem });
+export const addToOrder = ({ commit, getters }, item) => commit(types.ADD_TO_ORDER, { item, autoStack: getters.config.defaults.autoStackItem });
 export const pushToOrder = ({ commit }, item) => commit(types.PUSH_TO_ORDER, item);
 export const setPointer = ({ commit }, target) => commit(types.SET_POINTER, target);
 export const resetPointer = ({ commit }) => commit(types.RESET_POINTER);
@@ -63,18 +63,6 @@ export const lessQty = ({ commit }, bool) => commit(types.LESS_QTY, bool);
 export const moreQty = ({ commit }) => commit(types.MORE_QTY);
 export const alterItem = ({ commit }, item) => commit(types.ALTER_ITEM, item);
 export const splitItem = ({ commit }, item) => commit(types.SPLIT_ITEM, item);
-export const alterItemOption = ({ commit }, data) => {
-  data.side.sub
-    ? commit(types.SET_CHOICE_SET, {
-      qty: 1,
-      single: parseFloat(data.side.price) || 0,
-      price: data.side.price || 0,
-      usEN: data.side.usEN,
-      zhCN: data.side.zhCN
-    })
-    : commit(types.ALTER_ITEM_OPTION, data);
-};
-export const setChoiceSet = ({ commit }, set) => commit(types.SET_CHOICE_SET, set);
 export const alertChoiceSet = ({ commit }, set) => commit(types.ALERT_CHOICE_SET, set);
 export const resetChoiceSet = ({ commit }) => commit(types.RESET_CHOICE_SET);
 export const emptyChoiceSet = ({ commit }, target) => commit(types.EMPTY_CHOICE_SET, target);
@@ -88,6 +76,21 @@ export const archiveOrder = ({ commit }, data) => commit(types.ARCHIVE_ORDER, da
 export const emptyArchiveOrder = ({ commit }) => commit(types.EMPTY_ARCHIVE_ORDER);
 export const emptyCustomerInfo = ({ commit }, data) => commit(types.EMPTY_CUSTOMER_INFO, data);
 export const newPhoneCall = ({ commit }, data) => commit(types.NEW_PHONE_CALL, data);
+
+export const setChoiceSet = ({ commit, getters }, subitem) => commit(types.SET_CHOICE_SET, { subitem, matchItemQty: getters.config.defaults.matchItemQty });
+export const alterItemOption = ({ commit, getters }, data) => {
+  const subitem = {
+    qty: 1,
+    single: parseFloat(data.side.price) || 0,
+    price: parseFloat(data.side.price) || 0,
+    usEN: data.side.usEN,
+    zhCN: data.side.zhCN
+  };
+
+  data.side.sub
+    ? commit(types.SET_CHOICE_SET, { subitem, matchItemQty: getters.config.defaults.matchItemQty })
+    : commit(types.ALTER_ITEM_OPTION, data);
+};
 
 export const resetAll = ({ commit }) => {
   commit(types.RESET_ORDER);

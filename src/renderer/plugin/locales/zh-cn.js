@@ -1100,7 +1100,6 @@ export default {
     advance: "高级设置",
     normal: "常规设置",
     category: "类别",
-    categoryCN: "类别(中)",
     spicy: "辣",
     priority: "优先值",
     inventory: "库存量",
@@ -1412,9 +1411,12 @@ export default {
     tax: "税率",
     default: {
       setValue: "设定默认值",
+      orderLogic: "默认点餐动作",
       paymentType: "付款类型",
       discount: "按百分比折扣",
-      tip: "按百分比小费"
+      tip: "按百分比小费",
+      autoStack: "自动叠加",
+      matchQty: "物品数量对齐",
     },
     taxBeforeDiscount: "折扣前征税",
     taxBeforeCredit: "积分前征税",
@@ -1507,7 +1509,6 @@ export default {
     settledReceipt: "结账收据",
     plasticPenaltyTax: "塑料袋罚款税",
     autoSaveCreditCard: "自动保存信用卡信息",
-    autoStack: "自动叠加",
     playDuration: "播放时长",
     delivery: {
       config: "送餐设定",
@@ -1694,9 +1695,6 @@ export default {
     alwaysPrintReceipt: "总是打印收据",
     sameItemName: "当两种语言相同时，只会打印第一语言文本",
     foodAllergy: "设置物品过敏源",
-    dollarDiscount: "按美元给予折扣",
-    percentageDiscount: "按订单总数的百分比折扣",
-    autoStackItemQty: "自动叠加相同物品的数量",
     marketPriceInUse: "物品使用市场价格",
     payrolls: "打卡工资单列表",
     delivery: {
@@ -1709,7 +1707,9 @@ export default {
       percentageDiscount: "默认按百分比计算折扣",
       dollarDiscount: "默认按金额计算折扣",
       percentageTip: "默认按百分比计算小费",
-      dollarTip: "默认按金额计算小费"
+      dollarTip: "默认按金额计算小费",
+      autoStackItemQty: "选择相同物品时会自动增加数量",
+      matchItemQty: "子菜品的数量默认与主菜品的相同",
     },
     tax: "编辑税率",
     taxApply: "是否默认征税",

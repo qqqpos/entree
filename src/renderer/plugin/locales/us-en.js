@@ -156,7 +156,7 @@ export default {
     terminal: "By Terminal",
     period: "Select Date Range",
     allServers: "All Servers",
-    allBooks:"All Booking",
+    allBooks: "All Booking",
     cancelled: "Cancelled",
     noShows: "No Shows"
   },
@@ -1110,7 +1110,6 @@ export default {
     advance: "Advance",
     normal: "Normal",
     category: "Category",
-    categoryCN: "Category(S)",
     spicy: "Spicy",
     priority: "Priority",
     inventory: "Inventory",
@@ -1421,9 +1420,12 @@ export default {
     rounding: "Penny Rounding",
     default: {
       setValue: "Set Default Value",
+      orderLogic: "Default Order Action",
       paymentType: "Payment Type",
       discount: "Discount",
-      tip: "Tip"
+      tip: "Tip",
+      autoStack: "Auto Stack",
+      mathQty: "Match Quantity",
     },
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Discount",
@@ -1514,7 +1516,6 @@ export default {
     settledReceipt: "Settle Payment Receipt",
     plasticPenaltyTax: "Plastic Bag Penalty Tax",
     autoSaveCreditCard: "Auto Save Credit Card",
-    autoStack: "Auto Stack",
     playDuration: "Duration",
     delivery: {
       config: "Delivery Config",
@@ -1702,9 +1703,6 @@ export default {
     alwaysPrintReceipt: "Always print receipt",
     sameItemName: "Will only print primary text when both primary & secondary text are the same.",
     foodAllergy: "Set food allergen",
-    dollarDiscount: "Giving dollar discount",
-    percentageDiscount: "Percentage discount of the subtotal",
-    autoStackItemQty: "Auto stacking item quantity",
     marketPriceInUse: "Item use market price",
     payrolls: "Time card payroll list",
     delivery: {
@@ -1717,7 +1715,9 @@ export default {
       percentageDiscount: "Calculate discount as percentage",
       dollarDiscount: "Calculate discount as dollar",
       percentageTip: "Calculate tip as percentage",
-      dollarTip: "Calculate tip as dollar"
+      dollarTip: "Calculate tip as dollar",
+      autoStackItemQty: "Auto stacking item quantity",
+      matchItemQty: "Subitem quantity match main item's quantity",
     },
     tax: "Store tax setting",
     taxApply: "Setup default apply tax",

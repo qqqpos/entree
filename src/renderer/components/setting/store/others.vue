@@ -23,7 +23,6 @@
       </transition>
     </toggle>
     <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
-    <toggle title="setting.autoStack" tooltip="tip.autoStackItemQty" v-model="store.autoStackItem" @update="updateAutoStack"></toggle>
     <toggle title="text.menuID" v-model="display.menuID" @update="updateMenuID"></toggle>
     <toggle title="text.favoriteItem" v-model="display.favorite" @update="updateFavorite"></toggle>
     <toggle title="text.alphabetical" tooltip="tip.alphabetical" v-model="display.alphabetical" @update="updateAlphabetical"></toggle>
@@ -122,12 +121,6 @@ export default {
     updateAutoCorrect(value) {
       this.update({
         key: "store.matrix.autoCorrect",
-        value
-      });
-    },
-    updateAutoStack(value) {
-      this.update({
-        key: "store.autoStackItem",
         value
       });
     },

@@ -140,6 +140,7 @@ li {
   color: darkgray;
 }
 
+.active .sub .item:before,
 .sub.target .item,
 .active .sub .item,
 .active .price,

@@ -85,7 +85,7 @@ ul.tabs li.router-link-exact-active {
 }
 
 .tab-content {
-  margin: 10px auto 0;
+  margin: 10px auto;
   width: 450px;
   background: #fff;
   box-shadow: var(--shadow);

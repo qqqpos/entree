@@ -294,7 +294,7 @@ function createList(printer, setting, invoice, preview) {
     Object.keys(sorted).forEach(category => {
       const title = `<p class="title"><span class="usEN">${category}</span></p>`;
       const categorized = sorted[category].map(item => mockup(item, renderQty)).join("").toString();
-      content += `<div class="category">${title + categorized}</div>`
+      content += `<div class="categorize">${title + categorized}</div>`
     })
   } else {
     content = items
@@ -444,8 +444,8 @@ function createStyle(setting) {
               .customer p:last-child{border-bottom:1px solid #000;}\
               .tel{letter-spacing:2px;}.ext{margin-left:10px;}.pt{font-size:0.8em;}
               section.receipt{width:100%;margin:5px 0;}\
-              .category .title{border-bottom:1px dashed #000; font-size:18px;font-weight:bold; font-family:"${defaultFont}";}
-              .category div{text-indent:0.5em;}
+              .categorize .title{border-bottom:1px dashed #000; font-size:18px;font-weight:bold; font-family:"${defaultFont}";}
+              .categorize > div{text-indent:0.5em;}
               .main{display:flex;position:relative;width:100%;}\
               .main .wrap,.empty{flex:1;}\
               .main .side{font-size:0.9em;margin-left:2px;}\
@@ -458,7 +458,7 @@ function createStyle(setting) {
               .payment p{display:flex;font-family:'Tensentype RuiHeiJ-W2';width:200px;}\
               .payment .text{flex:1;text-align:right;}\
               .payment .value{min-width:40%;text-align:right;}\
-              .settle{${payment ? "" : "display:none;"}}\
+              .ticket-settle{${payment ? "" : "display:none;"}}\
               .payment p.bold{font-weight:bold;font-size:22px;}\
               .details{border:1px dashed #000;margin-top:5px;text-align:center;}\
               .details h3{letter-spacing:1px;}\
@@ -652,7 +652,7 @@ function createFooter(config, setting, printer, ticket) {
             <div class="empty">${_geo}</div>\
             <div class="payment">${detail.join("").toString()}</div>\
             </section>\
-            <div class="settle">${suggestions + settle.join("").toString()}</div>\
+            <div class="ticket-settle">${suggestions + settle.join("").toString()}</div>\
             <div class="slogan">\
             ${slogan}
             ${extraInfo}
