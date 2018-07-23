@@ -278,7 +278,7 @@ export default {
           this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
           this.exitComponent();
         })
-        .catch(this.exitComponent);
+        //.catch(this.exitComponent);
     },
     askClockOut() {
       const diff = moment().diff(moment(this.op.clockIn));

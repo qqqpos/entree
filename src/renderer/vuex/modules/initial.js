@@ -122,7 +122,7 @@ const mutations = {
         state.spooler.splice(index, 1)
     },
     [types.SET_OPERATOR](state, operator) {
-        state.operator = operator;
+        state.operator = operator ? Object.assign(state.operator, operator) : {};
     },
     [types.PHONE_RING](state, data) {
         if (data) {

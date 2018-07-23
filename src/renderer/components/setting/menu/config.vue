@@ -5,6 +5,9 @@
     </header>
     <toggle title="setting.default.autoStack" tooltip="tip.default.autoStackItemQty" v-model="defaults.autoStackItem"></toggle>
     <toggle title="setting.default.matchQty" tooltip="tip.default.matchItemQty" v-model="defaults.matchItemQty"></toggle>
+    <toggle title="text.menuID" v-model="defaults.menuID"></toggle>
+    <toggle title="text.favoriteItem" v-model="defaults.favorite"></toggle>
+    <toggle title="text.alphabetical" tooltip="tip.alphabetical" v-model="defaults.alphabetical" @update="updateAlphabetical"></toggle>
   </div>
 </template>
 
@@ -38,6 +41,11 @@ export default {
     });
 
     next();
+  },
+  methods:{
+    updateAlphabetical(value){
+
+    }
   }
 };
 </script>

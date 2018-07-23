@@ -330,7 +330,7 @@ export default {
           break;
         case "lock":
           this.resetAll();
-          this.setOperator({});
+          this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
           break;
         default:
