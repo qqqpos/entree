@@ -1,0 +1,7 @@
+.dashboard-grid{
+    display: grid;
+    background: #fff;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4,1fr);
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+}

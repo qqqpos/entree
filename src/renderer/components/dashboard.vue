@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <div class="cardWrap" v-if="station" :class="{enlarge:station.enlargeTitle}">
+    <div class="dashboard-grid" v-if="station" :class="{enlarge:station.enlargeTitle}">
       <div class="card" v-for="(grid,index) in station.interface" @click="access(grid)" :class="{disable:!grid.enable}" :key="index">
         <i class="fa" :class="[grid.icon]"></i>
         <h1>{{grid.head}}</h1>
@@ -273,7 +273,7 @@ export default {
           this.$router.push({ path: "/main/customer" });
           break;
         case "table":
-          if (this.dineInOpt.table) {
+          if (this.dineInOpt.useTable) {
             this.$router.push({ path: "/main/table" });
           } else {
             this.setTicket({ type: "DINE_IN" });
@@ -474,25 +474,14 @@ export default {
 </script>
 
 <style scoped>
-.cardWrap {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 704px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
-}
-
 .card {
   width: 135px;
   height: 115px;
   padding: 20px;
-  margin: 0px;
   cursor: pointer;
-  background: #fff;
   border-right: 1px solid #eee;
   border-bottom: 1px solid #eee;
+  will-change: background, box-shadow;
   transition: background, box-shadow 0.22s ease;
   position: relative;
 }
@@ -543,10 +532,6 @@ h4 {
 h1 {
   font-weight: normal;
   margin-top: 50px;
-}
-
-.enlarge h1 {
-  font-size: 46px;
 }
 
 .dashboard .clock {

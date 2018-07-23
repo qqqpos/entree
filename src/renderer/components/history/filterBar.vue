@@ -137,6 +137,7 @@ export default {
         "PICK_UP",
         "DELIVERY",
         "DINE_IN",
+        "BUFFET",
         "UNSETTLED"
       ];
 
@@ -242,12 +243,6 @@ export default {
         Array.isArray(filters["DINE_IN"].subTypes)
           ? filters["DINE_IN"].subTypes.push(filters["HIBACHI"])
           : (filters["DINE_IN"].subTypes = [filters["HIBACHI"]]);
-      }
-
-      if (filters.hasOwnProperty("BUFFET")) {
-        Array.isArray(filters["DINE_IN"].subTypes)
-          ? filters["DINE_IN"].subTypes.push(filters["BUFFET"])
-          : (filters["DINE_IN"].subTypes = [filters["BUFFET"]]);
       }
 
       if (subTypes.hasOwnProperty("SETTLED")) {

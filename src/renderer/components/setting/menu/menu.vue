@@ -81,7 +81,7 @@ export default {
       let menu = [];
 
       this.layouts.menu[index].contain.forEach(category => {
-        let items = this.menu[category].slice();
+        let items = (this.menu[category] || []).slice();
         let align = 6 - items.length % 3;
         if (align === 6) align = 3;
 

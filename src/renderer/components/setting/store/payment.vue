@@ -83,13 +83,13 @@ export default {
   created() {
     //patch
     this.store = Object.assign({}, this.config.store);
-    !this.store.hasOwnProperty("tipSuggestion") &&
-      Object.assign(this.store, {
-        tipSuggestion: {
-          enable: false,
-          percentages: "15,18,20"
-        }
-      });
+    // !this.store.hasOwnProperty("tipSuggestion") &&
+    //   Object.assign(this.store, {
+    //     tipSuggestion: {
+    //       enable: false,
+    //       percentages: "15,18,20"
+    //     }
+    //   });
   },
   methods: {
     update(data) {
@@ -102,7 +102,7 @@ export default {
       });
     },
     updateTipPercentages() {
-      let value = this.store.tipPercentages || "15,18,20";
+      const value = this.store.tipSuggestion.percentages || "15,18,20";
       if (value.split(",").length === 3) {
         this.update({
           key: "store.tipSuggestion.percentages",

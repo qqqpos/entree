@@ -23,7 +23,7 @@ export default {
     };
   },
   created() {
-    this.dineInOpt = Object.assign({}, this.$store.getters.dinein);
+    this.dineInOpt = Object.assign({}, this.$store.getters.dineInOpt);
   },
   methods: {
     update(data) {

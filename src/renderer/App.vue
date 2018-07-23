@@ -34,6 +34,7 @@ export default {
 </script>
 
 <style>
+@import url(./assets/css/grid.css);
 @import url(./assets/css/icon.css);
 @import url(./assets/css/style.css);
 @import url(./assets/css/setting.css);

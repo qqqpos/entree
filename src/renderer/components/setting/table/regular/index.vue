@@ -53,8 +53,9 @@ export default {
   },
   computed: {
     tableSection() {
-      const { zone } = this.layouts.table[this.section];
-      const tables = this.tables[zone];
+      const section = this.layouts.table[this.section] || {};
+      const { zone = "Entree" } = section;
+      const tables = this.tables[zone] || [];
 
       let seats = Array(56)
         .fill()

@@ -4,13 +4,13 @@
       <div v-for="(category,index) in layouts.menu" @click="categoryIndex = index" :key="index">{{category[language]}}</div>
     </section>
     <section class="items" v-if="config.display.menuID">
-      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item._id,like:item.like}" :key="index" :data-menuID="item.menuID">{{item[language]}}</div>
+      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:(!item._id || item.disable),like:item.like}" :key="index" :data-menuID="item.menuID">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
     </section>
     <section class="items" v-else>
-      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:!item._id,like:item.like}" :key="index">{{item[language]}}</div>
+      <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:(!item._id|| item.disable),like:item.like}" :key="index">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
       <div @click="itemPage = 2" v-if="items.length >= 34" class="pageButton">{{$t("button.thirdPage")}}</div>
@@ -219,7 +219,7 @@ export default {
       console.time("Flatten");
       let menu = [];
       contain.forEach(category => {
-        let items = this.menu[category].map(item => {
+        let items = (this.menu[category] || []).map(item => {
           if (this.favorites.includes(item._id)) {
             item = clone(item);
             item.like = true;

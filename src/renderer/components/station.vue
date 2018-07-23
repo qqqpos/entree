@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     confirm() {
-      this.$socket.emit("[STATION] ATTACHED", this.station, () =>
+      this.$socket.emit("[STATION] REGISTER", this.station, () =>
         Electron.ipcRenderer.send("Relaunch")
       );
     }

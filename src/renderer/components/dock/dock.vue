@@ -129,7 +129,6 @@ export default {
   },
   methods: {
     initialPanel() {
-      console.log(this.op);
       if (this.$route.name === "Dashboard") {
         switch (this.op.cashCtrl) {
           case "enable":
