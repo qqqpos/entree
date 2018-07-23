@@ -3,7 +3,7 @@
         <div class="table-layout">
             <aside class="column">
                 <div class="table-section">
-                    <button class="btn relative" v-for="(section,index) in layouts.table" :key="index" @click="section = index">{{section[language]}}<span class="notify blue">{{countSeats(index)}}</span></button>
+                    <button class="btn relative" v-for="(zone,index) in layouts.table" :key="index" @click="setSection(index)">{{zone[language]}}<span class="notify blue">{{countSeats(index)}}</span></button>
                 </div>
                 <div class="column">
                     <button class="btn" @click="$open('bookModule')">
@@ -63,6 +63,9 @@ export default {
     };
   },
   methods: {
+    setSection(index) {
+      this.section = index;
+    },
     getTableStatus({ status, session }) {
       switch (status) {
         case -2:
@@ -452,6 +455,8 @@ aside {
 .table-section {
   flex: 1;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .tables {
@@ -557,26 +562,6 @@ aside {
   content: "\f073";
   color: #009688;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-}
-
-.notify {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 20px;
-  height: 20px;
-  line-height: 22px;
-  background-clip: padding-box;
-  font-size: 14px;
-  font-weight: lighter;
-  color: #fff;
-  text-shadow: 0 1px 0 #333;
-  border-radius: 50%;
-  box-shadow: 0 1px 1px #37474f;
-}
-
-.notify.blue {
-  background-image: linear-gradient(#54a3ff, #006eed);
 }
 </style>
 

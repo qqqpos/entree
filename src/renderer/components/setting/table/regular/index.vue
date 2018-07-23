@@ -121,7 +121,7 @@ export default {
           this.layouts.table[index] = section;
           this.tables[zone] = tables;
           this.section = index;
-          this.$socket.emit("[TABLE] SAVE_SECTION", this.layout.table);
+          this.$socket.emit("[TABLE] SAVE_SECTION", this.layouts.table);
           this.exitComponent();
         })
         .catch(this.exitComponent);

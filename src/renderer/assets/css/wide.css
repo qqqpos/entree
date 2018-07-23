@@ -1,9 +1,4 @@
 @media only screen and (min-width : 1025px) {
-    #app{
-        width: 1920px;
-        height: 1080px;
-    }
-
     .category div {
         width: 262px;
         height: 91.5px;

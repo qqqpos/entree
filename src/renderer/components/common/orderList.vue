@@ -523,7 +523,6 @@ header.info {
 
 .order {
   height: 329px;
-  width: 285px;
   background: rgba(238, 238, 238, 0.5);
   overflow: hidden;
   position: relative;
