@@ -66,7 +66,6 @@ export default {
       this.$open("ticket", { ticket, exit: true });
     },
     parse([type, ...value]) {
-      console.log(type, value);
       switch (type) {
         case "CHANGE.ITEM_QTY_LESS":
         case "CHANGE.ITEM_QTY_MORE":

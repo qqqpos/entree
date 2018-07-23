@@ -690,7 +690,7 @@ tbody td {
 
 td.card {
   text-align: left;
-  padding: 10px 0 10px 8px;
+  padding: 10px 0 10px 5px;
 }
 
 tbody tr {

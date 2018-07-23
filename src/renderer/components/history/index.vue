@@ -135,6 +135,7 @@ export default {
       this.$socket.emit("[ORDER] HISTORY", date, invoices => {
         this.prevHistory = invoices;
         this.splits = [];
+        this.page = 0;
         this.resetViewOrder();
         this.exitComponent();
       });
