@@ -66,7 +66,7 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.printConfirm",
-        msg: ["dialog.printSpoolerTip", schedule, toNow],
+        msg: ["dialog.printSpoolerConfirm", schedule, toNow],
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.print", fn: "resolve" }

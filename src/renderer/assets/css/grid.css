@@ -1,7 +1,38 @@
+/* dashboard grid */
 .dashboard-grid{
     display: grid;
     background: #fff;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: repeat(4,1fr);
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* history module grid */
+
+.history-grid {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-areas: "header header header" "side order ticket";
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 99px 1fr 285px;
+    background: url(../../assets/image/grid.png) #ebeff1;
+}
+
+.history-grid .invoices {
+    grid-area: order;
+    display: grid;
+    padding-top: 4px;
+    grid-template-rows: 1fr 62px;
+  }
+  
+.history-grid .invoices .wrap {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.history-grid section.ticket {
+    grid-area: ticket;
+    background: rgba(255, 255, 255, 0.5);
 }

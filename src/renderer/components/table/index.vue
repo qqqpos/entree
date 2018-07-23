@@ -429,9 +429,9 @@ export default {
 .table-outer {
   display: flex;
   flex-direction: row;
-  height: 771px;
-  width: 1024px;
-  padding-top: 63px;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 60px;
   background: url(../../assets/image/floor.png) #ebeff1;
 }
 
@@ -441,7 +441,7 @@ export default {
 
 aside {
   padding: 5px;
-  height: 733px;
+  height: calc(100vh - 35px);
 }
 
 .column {
@@ -467,7 +467,7 @@ aside {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  height: 737px;
+  height: calc(100vh - 35px);
   flex: 1;
 }
 

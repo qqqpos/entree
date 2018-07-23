@@ -11,8 +11,8 @@ export default {}
 <style scoped>
 .setting {
     background: url(../assets/image/grid.png) #fcfcfc;
-    width: 100%;
-    height: 738px;
-    padding-top: 30px;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 60px;
 }
 </style>

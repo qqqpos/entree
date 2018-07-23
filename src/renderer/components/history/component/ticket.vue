@@ -36,8 +36,6 @@ export default {
 .ticket {
   display: flex;
   flex-direction: column;
-  width: 117.5px;
-  height: 92px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin: 5px;
@@ -65,14 +63,15 @@ export default {
 .type {
   margin-left: 33px;
   padding: 4px 0;
+  font-size: 1.5vw;
 }
 
 .info {
-  font-size: 14px;
+  font-size: 1.5vw;
   text-align: center;
   color: gray;
-  height: 42px;
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
   flex-direction: column;

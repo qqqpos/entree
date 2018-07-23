@@ -1,10 +1,9 @@
 <template>
-  <div class="history">
+  <div class="history-grid">
     <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
-    <article>
       <side-buttons :date="calendarDate || today" @change="setCalendar" :splitMode="splits.length > 0"></side-buttons>
-      <section class="tickets">
-        <div class="inner">
+      <section class="invoices">
+        <div class="wrap">
           <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
         </div>
         <paginator :of="orders" @page="setPage" :contain="30" :max="12"></paginator>
@@ -13,7 +12,6 @@
         <order-list layout="display" :display="true"></order-list>
         <order-buttons :date="calendarDate || today"></order-buttons>
       </section>
-    </article>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>
@@ -52,9 +50,9 @@ export default {
       prevHistory: null,
       targetName: null,
       component: null,
-      splits: [],
       today: today(),
       summary: {},
+      splits: [],
       filter: "",
       view: "",
       page: 0
@@ -321,39 +319,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.history {
-  width: 100%;
-  height: 100%;
-  background: #f6f6f6;
-  flex-direction: column;
-}
-
-article {
-  flex: 1;
-  display: flex;
-  background: url(../../assets/image/grid.png) #ebeff1;
-}
-
-section.ticket {
-  width: 285px;
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.tickets {
-  display: flex;
-  flex-direction: column;
-  width: 641px;
-  padding: 2px 0 0;
-}
-
-.inner {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  flex: 1;
-  max-height: 616px;
-}
-</style>

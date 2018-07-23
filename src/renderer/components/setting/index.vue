@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="wrap">
     <h3>{{$t('setting.softwareSetting')}}</h3>
     <section class="grids">
       <router-link tag="figure" :to="{name:'Setting.store'}">
@@ -87,19 +87,17 @@ export default {
 </script>
 
 <style scoped>
-.index {
+.wrap {
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   display: flex;
-  position: relative;
 }
 
 h3 {
   font-family: "Microsoft YaHei";
+  margin: 30px 0 10px;
   font-size: 2em;
   color: #666;
-  margin: 30px 0 10px;
 }
 
 .grids {

@@ -15,7 +15,7 @@
                     </transition>
                 </div>
                 <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price')">
-                <i class="fa fa-sign-in fa-2x confirm" @click="confirm"></i>
+                <i class="fas fa-sign-in-alt fa-2x confirm" @click="confirm"></i>
             </div>
             <ul>
                 <li v-for="(list,index) in lists" :key="index" @click="fill(list)">

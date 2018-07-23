@@ -822,10 +822,13 @@ section.cart {
   position: fixed;
   bottom: 0;
   left: 0;
+  right: 0;
   background: linear-gradient(#9098a3, #48525f);
   color: #3a3d42;
   border-top: 1px solid #848b96;
   display: flex;
+  max-width: 1024px;
+  margin: auto;
 }
 .keyboard .alphabetic,
 .keyboard .numeric {

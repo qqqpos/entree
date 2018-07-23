@@ -306,6 +306,7 @@ header {
   margin-top: 30px;
   display: flex;
   height: 63px;
+  grid-area: header;
   background-image: linear-gradient(170deg, rgb(81, 103, 140) 0%, #234c75 100%);
 }
 

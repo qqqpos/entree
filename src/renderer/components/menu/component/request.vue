@@ -7,7 +7,7 @@
       <div class="prefix">
         <div v-for="(action,index) in layouts.action" @click="getPrefix(action,$event)" :key="index">{{action[language]}}</div>
       </div>
-      <div class="item">
+      <div class="items">
         <div v-for="(item,index) in items" @click="setChoice(item)" :class="{disable:!item._id}" :key="index">{{item[language]}}</div>
       </div>
       <div class="shortCut">
@@ -203,19 +203,19 @@ div.prefix div {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-div.item {
+div.items {
   width: 342px;
 }
 
-div.item div:hover {
+div.items div:hover {
   transition: background 0.22s linear;
 }
 
-div.item div:active {
+div.items div:active {
   background: rgba(166, 195, 201, 0.55);
 }
 
-div.item div {
+div.items div {
   display: inline-flex;
   flex-wrap: nowrap;
   justify-content: center;
@@ -230,7 +230,7 @@ div.item div {
   text-align: center;
 }
 
-.item .disable {
+.items .disable {
   background: rgba(166, 195, 201, 0.55);
 }
 

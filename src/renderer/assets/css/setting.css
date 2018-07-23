@@ -6,8 +6,7 @@ section.content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 738px;
-  width: 949px;
+  height: calc(100vh - 30px);
 }
 
 .content .page {
@@ -18,10 +17,9 @@ section.content {
 
 ul.nav {
   width: 75px;
-  height: 738px;
-  background: #009688;
   display: flex;
   flex-direction: column;
+  background: #009688;  
 }
 
 ul.nav .wrap {

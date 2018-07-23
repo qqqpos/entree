@@ -466,9 +466,9 @@ export default {
     },
     exit(quit) {
       const { done } = this.station.autoLock;
-      const { lockOnDone, table } = this.dineInOpt;
+      const { lockOnDone, useTable } = this.dineInOpt;
 
-      if (this.isDineInTicket && table) {
+      if (this.isDineInTicket && useTable) {
         if (lockOnDone || done) {
           this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
@@ -544,7 +544,7 @@ export default {
       if (this.table) {
         const { _id, status } = this.table;
 
-        (this.app.newTicket || status === -1) &&
+        if (this.app.newTicket || status === -1)
           this.$socket.emit("[TABLE] RESET", { _id });
       }
       this.abandon();
@@ -713,7 +713,6 @@ export default {
       "order",
       "table",
       "store",
-      "dineInOpt",
       "ticket",
       "station",
       "spooler",
@@ -721,6 +720,7 @@ export default {
       "language",
       "instance",
       "choiceSet",
+      "dineInOpt",
       "archivedOrder",
       "isEmptyTicket"
     ])

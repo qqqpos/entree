@@ -443,7 +443,7 @@ export default {
     autoLock: "自动锁定",
     autoLockTip: "由于您 {i} 秒内没有进行任何操作，系统将自动锁定界面",
     printConfirm: "打印确定",
-    printSpoolerTip: "原计划 {i} 打印({i} 之后)，您确定要立刻打印吗？",
+    printSpoolerConfirm: "原计划 {i} 打印({i} 之后)，您确定要立刻打印吗？",
     clockInConfirm: "打卡上班",
     clockInTime: "您的打卡时间 {i}",
     clockOutConfirm: "打卡下班",

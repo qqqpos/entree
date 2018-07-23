@@ -57,7 +57,7 @@
             <td class="amount">$ {{record.amount.approve}}</td>
             <td class="amount" :class="{zero:record.amount.tip === '0.00'}">$ {{record.amount.tip}}</td>
             <td v-if="!record.close" class="action">
-              <span class="print" @click="adjustTip(record)">{{$t('button.adjust')}}</span>
+              <span class="print" @click="adjustTipDialog(record)">{{$t('button.adjust')}}</span>
               <span class="print" @click="print(record)">{{$t('button.print')}}</span>
               <span class="void" @click="voidSale(record)">{{$t('button.void')}}</span>
             </td>
@@ -102,6 +102,7 @@
 import { mapGetters } from "vuex";
 
 import inputModule from "../component/inputer";
+import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
 import dropdown from "./component/dropdown";
 import paginator from "../common/paginator";
@@ -113,6 +114,7 @@ export default {
   props: ["init"],
   components: {
     dialogModule,
+    unlockModule,
     inputModule,
     dropdown,
     paginator,
@@ -488,66 +490,63 @@ export default {
 
       this.$dialog(prompt).then(this.exitComponent);
     },
-    adjustTip(record) {
+    adjustTipDialog(record) {
       this.$checkPermission("modify", "transaction")
-        .then(() => {
-          // Operator has permission to adjust tip
+        .then(() => this.adjustTip(record))
+        .catch(() => {
+          console.log("error");
+        });
+    },
+    adjustTip(record) {
+      // Operator has permission to adjust tip
+      const config = {
+        title: "title.setTips",
+        subtitle: `# ${record.index}`,
+        type: "decimal",
+        percentage: false,
+        allowPercentage: false,
+        amount: record.amount.tip
+      };
 
-          const config = {
-            title: "title.setTips",
-            subtitle: `# ${record.index}`,
-            type: "decimal",
-            percentage: false,
-            allowPercentage: false,
-            amount: record.amount.tip
-          };
+      new Promise((resolve, reject) => {
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
+      })
+        .then(({ amount }) => {
+          this.exitComponent();
 
-          new Promise((resolve, reject) => {
-            this.componentData = Object.assign({ resolve, reject }, config);
-            this.component = "inputModule";
-          })
-            .then(({ amount }) => {
-              this.exitComponent();
+          amount = isNumber(amount) ? Math.round(amount * 100) : 0;
 
-              amount = isNumber(amount) ? Math.round(amount * 100) : 0;
+          this.$open("processor", { timeout: 30000 });
+          this.initialParser(record.terminal).then(() => {
+            const invoice = record.order.number;
+            const transaction = record.trace.trans;
 
-              this.$open("processor", { timeout: 30000 });
-              this.initialParser(record.terminal).then(() => {
-                const invoice = record.order.number;
-                const transaction = record.trace.trans;
-
-                this.terminal
-                  .adjust(invoice, transaction, amount)
-                  .then(response => {
-                    this.exitComponent();
-                    const result = this.terminal.explainTransaction(
-                      response.data
-                    );
-                    if (result.code === "000000") {
-                      Object.assign(record, {
-                        amount: result.amount,
-                        status: 2
-                      });
-                      this.$socket.emit("[TERMINAL] ADJUST", record);
-                    } else {
-                      const prompt = {
-                        type: "error",
-                        title: "dialog.adjustTipFailed",
-                        msg: [
-                          "dialog.adjustTipFailedErrorMessage",
-                          result.code
-                        ],
-                        buttons: [{ text: "button.confirm", fn: "resolve" }]
-                      };
-
-                      this.$dialog(prompt).then(this.exitComponent);
-                    }
+            this.terminal
+              .adjust(invoice, transaction, amount)
+              .then(response => {
+                this.exitComponent();
+                const result = this.terminal.explainTransaction(response.data);
+                if (result.code === "000000") {
+                  Object.assign(record, {
+                    amount: result.amount,
+                    status: 2
                   });
+                  this.$socket.emit("[TERMINAL] ADJUST", record);
+                } else {
+                  const prompt = {
+                    type: "error",
+                    title: "dialog.adjustTipFailed",
+                    msg: ["dialog.adjustTipFailedErrorMessage", result.code],
+                    buttons: [{ text: "button.confirm", fn: "resolve" }]
+                  };
+
+                  this.$dialog(prompt).then(this.exitComponent);
+                }
               });
-            })
-            .catch(this.exitComponent);
+          });
         })
-        .catch(() => this.log());
+        .catch(this.exitComponent);
     },
     accessAdjuster() {
       this.$checkPermission("modify", "transaction")

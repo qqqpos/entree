@@ -1,35 +1,33 @@
 @media only screen and (min-width : 1025px) {
     .category div {
-        width: 262px;
+        width: 310px;
         height: 91.5px;
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .items div {
-        height: 92px;
-        width: 209px;
-        font-size: 26px;
+        height: 92px!important;
+        width: 247px;
+        font-size: 24px;
     }
 
     section.sides{
         max-width: initial;
-        margin-left: 1px;
+        margin-left: 0px;
     }
 
     section.sides div{
         height: 92px;
     }
 
-    section.cart div.order{
+    section.cart div.order,
+    .ticket div.order{
         width: initial;
+        height: 640px;
     }
 
     section.cart div.main .wrap{
         max-width: initial;
-    }
-
-    section.cart .settle{
-        width: 403px;
     }
 
     section.tickets{
@@ -38,4 +36,42 @@
         width: initial!important;
     }
 
+    .tables .table{
+        height: 120px!important;
+        width: 120px!important;
+        margin: 3px 10px!important;
+    }
+
+    .table-layout .tables{
+        padding:0 277px!important;
+    }
+
+    .request .content{
+        width: 1635px!important;
+        height: 1048px;
+    }
+
+    .request div.category,
+    .request div.prefix{
+        width: 310px!important;
+    }
+    .request .category div,
+    .request .prefix div{
+        width: 310px!important;
+        height: 91.5px!important;
+    }
+
+    .request .items{
+        margin-left: 4px;
+        width: 756px!important;
+    }
+
+    .request .shortCut{
+        width: 259px!important;
+        margin-left: -5px;
+    }
+    .request .shortCut div{
+        width: 254px!important;
+        height: 92px!important;
+    }
 }
