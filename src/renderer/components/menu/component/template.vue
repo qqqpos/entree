@@ -76,7 +76,7 @@ export default {
           JSON.stringify(this.templates.find(t => t.name === template))
         );
         Object.assign(this.template.contain[0], templateOption);
-        console.log(this.template);
+
         this.insertMode = this.template.insert;
         this.itemCount = Array(this.template.contain.length).fill(0);
 
@@ -166,11 +166,128 @@ export default {
       this.items.splice(index, 1, item);
     },
     confirm() {
-        
+      this.saveItems(this.index);
+      !this.insertMode && this.emptyChoiceSet({ _ti: this.template._id });
+
+      const { skip, ignore } = this.init.side;
+
+      this.alterItemOption({
+        side: this.init.side,
+        index: this.init.index,
+        function: true
+      });
+
+      this.saved.forEach((items, i) => {
+        let count = 0;
+        let { startAt, addition, inline = false } = this.template.contain[i];
+
+        startAt = parseInt(startAt) || 0;
+        addition = parseInt(addition) || 0;
+
+        count += inline ? this.inlineHanlder(items) : this.itemHanlder(items);
+
+        if (startAt > 0 && count - startAt > 0) {
+          const qty = count - startAt;
+
+          this.setChoiceSet({
+            qty,
+            key: String().random(),
+            zhCN: "Extra Charge",
+            usEN: "Extra Charge",
+            print: [],
+            single: addition,
+            price: (addition * qty).toFixed(2),
+            _ti: this.template._id
+          });
+        }
+      });
+
+      this.template.dynamicPrint && this.setItemPrinter();
+      this.init.resolve();
+    },
+    itemHanlder(items) {
+      let count = 0;
+      items.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
+        price = parseFloat(price) || 0;
+
+        this.setChoiceSet({
+          qty,
+          key,
+          zhCN,
+          usEN,
+          print,
+          single: price,
+          price: (price * qty).toFixed(2),
+          _ti: this.template._id
+        });
+
+        count += qty;
+      });
+
+      return count;
+    },
+    inlineHanlder(items) {
+      let count = 0;
+      let primary = [];
+      let secondary = [];
+      let printer = new Set();
+      let total = 0;
+      let keys = [];
+
+      items.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
+        qty = qty === 1 ? "" : `${qty} x `;
+        primary.push(qty + usEN);
+        secondary.push(qty + zhCN);
+        printer.add(...print);
+        total += parseFloat(price) || 0;
+        keys.push(key);
+        count++;
+      });
+
+      this.setChoiceSet({
+        qty: 1,
+        key: keys,
+        zhCN: secondary.join(" & "),
+        usEN: primary.join(" & "),
+        print: Array.from(printer),
+        single: toFixed(total, 2),
+        price: toFixed(total, 2),
+        _ti: this.template._id
+      });
+
+      return count;
+    },
+    setItemPrinter() {
+      if (this.item.choiceSet.length === 0) {
+        if (this.item.hasOwnProperty("defaultPrinter")) {
+          this.item.printer = this.item.defaultPrinter;
+          delete this.item.defaultPrinter;
+        }
+        return;
+      }
+
+      let printer = new Set();
+      let printerSet = {};
+      this.item.choiceSet.forEach(
+        sub =>
+          Array.isArray(sub.print) &&
+          sub.print.forEach(name => printer.add(name))
+      );
+      Array.from(printer).forEach(name => {
+        printerSet[name] = {
+          replace: false
+        };
+      });
+      Object.assign(this.item, {
+        defaultPrinter: this.item.hasOwnProperty("defaultPrinter")
+          ? this.item.defaultPrinter
+          : JSON.parse(JSON.stringify(this.item.printer)),
+        printer: printerSet
+      });
     },
     ...mapActions([
       "addChoiceSet",
-      "seChoiceSet",
+      "setChoiceSet",
       "emptyChoiceSet",
       "alterItemOption"
     ])
@@ -190,22 +307,19 @@ export default {
 }
 
 .wrap {
-  display: flex;
-  align-items: flex-start;
   padding: 0px;
+  width: 647px;
+  display: grid;
   min-height: 533px;
   max-height: 600px;
   background: #f5f5f5;
+  grid-template-columns: 151px 1fr;
 }
 
 .items {
-  display: flex;
-  flex-wrap: wrap;
-  width: 496px;
-}
-
-.items .item {
-  width: 120px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(8, 1fr);
 }
 
 .item .qty {
@@ -231,8 +345,6 @@ export default {
 }
 
 ul {
-  width: 150px;
-  height: 100%;
   border-right: 1px solid #eee;
   background: #fff;
 }

@@ -6,7 +6,8 @@
                     <button class="btn relative" v-for="(zone,index) in layouts.table" :key="index" @click="setSection(index)">{{zone[language]}}<span class="notify blue">{{countSeats(index)}}</span></button>
                 </div>
                 <div class="column">
-                    <button class="btn" @click="$open('bookModule')">
+                    <button class="btn relative" @click="$open('bookModule')">
+                        <span class="notify blue" v-show="currentBookingCount > 0">{{currentBookingCount}}</span>
                         <i class="far fa-calendar-check"></i>
                         <span class="text">{{$t('button.booking')}}</span>
                     </button>
@@ -411,15 +412,26 @@ export default {
       });
       return seats;
     },
+    currentBookingCount() {
+      const now = this.time;
+      const before = now - 1.8e6;
+      const after = now + 3.6e6;
+
+      return this.books.filter(
+        ({ timestamp }) => timestamp > before && timestamp < after
+      ).length;
+    },
     ...mapGetters([
       "op",
+      "time",
       "table",
-      "dineInOpt",
+      "books",
       "tables",
       "history",
       "layouts",
+      "customer",
       "language",
-      "customer"
+      "dineInOpt"
     ])
   }
 };

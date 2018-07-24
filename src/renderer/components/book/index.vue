@@ -129,7 +129,7 @@ export default {
       componentData: null,
       component: null,
       bookingList: null,
-      calendarDate: moment(),
+      calendarDate: moment().subtract(4,'h'),
       book: {
         type: "WALK_IN",
         date: today(),
@@ -293,7 +293,6 @@ export default {
       });
     },
     exception(error) {
-      console.log(error);
       let prompt = {
         type: "error",
         title: "dialog.cantExecute",

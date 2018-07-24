@@ -82,7 +82,6 @@ export default {
     giveaway: "礼品券",
     voucher: "现金券",
     discount: "折扣券",
-    order: "订单",
     category: "类别",
     item: "物品",
     Owner: "店主",
@@ -1060,6 +1059,7 @@ export default {
     enable: "启用",
     disable: "禁用",
     staffBank: "个人钱箱",
+    creditOnly: "仅限信用卡",
     disallow: "禁止",
     api: "授权码",
     coordinate: "坐标",
@@ -1779,7 +1779,8 @@ export default {
     cashdrawer: {
       enable: "可以使用钱箱",
       disable: "不可以结算订单",
-      staffBank: "员工私场"
+      staffBank: "员工私场",
+      creditOnly: "只允许收信用卡"
     }
   },
   payroll: {

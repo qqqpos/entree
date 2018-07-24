@@ -210,7 +210,7 @@ export default {
         gratuityFree = false,
         plasticBag = 1
       } = this.order;
-      const { menuID } = this.config.display;
+      const { menuID = false } = this.config.defaults;
 
       this.$open("configModule", {
         menuID,

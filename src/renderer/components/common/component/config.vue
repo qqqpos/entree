@@ -75,9 +75,7 @@ export default {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
 
-    const { top, height } = document
-      .querySelector(".middle")
-      .getBoundingClientRect();
+    const { top } = document.querySelector(".middle").getBoundingClientRect();
 
     this.offsetTop = {
       bottom: top + 26 + "px"
@@ -85,9 +83,9 @@ export default {
   },
   data() {
     return {
+      viewCategory: false,
       componentData: null,
       component: null,
-      viewCategory: false,
       offsetTop: {}
     };
   },
@@ -108,10 +106,10 @@ export default {
       });
     },
     toggleMenuID() {
-      const display = Object.assign({}, this.config.display, {
-        menuID: this.init.menuID
-      });
-      this.setConfig({ display });
+      const { menuID } = this.init;
+      const defaults = Object.assign({}, this.config.defaults, { menuID });
+
+      this.setConfig({ defaults });
     },
     toggleViewCategory() {
       const dom = document.querySelector(".order");

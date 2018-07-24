@@ -1,32 +1,24 @@
 @media only screen and (min-width : 1025px) {
-    .category div {
-        width: 310px;
-        height: 91.5px;
-        font-size: 24px;
+    .menu{
+        grid-template-columns: 628px 1fr 200px 285px;
     }
 
-    .items div {
-        height: 92px!important;
-        width: 247px;
-        font-size: 24px;
-    }
-
-    section.sides{
+    /* section.sides{
         max-width: initial;
         margin-left: 0px;
-    }
+    } */
 
-    section.sides div{
+    /* section.sides div{
         height: 92px;
-    }
+    } */
 
-    section.cart div.order,
+    /* section.cart div.order,
     .ticket div.order{
         width: initial;
         height: 640px;
-    }
+    } */
 
-    section.cart div.main .wrap{
+    /* section.cart div.main .wrap{
         max-width: initial;
     }
 
@@ -73,5 +65,5 @@
     .request .shortCut div{
         width: 254px!important;
         height: 92px!important;
-    }
+    } */
 }

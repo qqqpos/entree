@@ -6,7 +6,7 @@
         <div v-if="store.matrix.enable" class="opt">
           <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect" @update="updateAutoCorrect"></switches>
           <inputer title="text.coordinate" v-model="store.matrix.coordinate" @update="updateStoreCoordinate"></inputer>
-          <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI"></inputer>
+          <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI" v-show="operator.role === 'Developer'"></inputer>
         </div>
       </transition>
     </toggle>
@@ -23,9 +23,9 @@
       </transition>
     </toggle>
     <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
-    <toggle title="text.menuID" v-model="display.menuID" @update="updateMenuID"></toggle>
+    <!-- <toggle title="text.menuID" v-model="display.menuID" @update="updateMenuID"></toggle>
     <toggle title="text.favoriteItem" v-model="display.favorite" @update="updateFavorite"></toggle>
-    <toggle title="text.alphabetical" tooltip="tip.alphabetical" v-model="display.alphabetical" @update="updateAlphabetical"></toggle>
+    <toggle title="text.alphabetical" tooltip="tip.alphabetical" v-model="display.alphabetical" @update="updateAlphabetical"></toggle> -->
   </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       alphabetical: false,
+      operator: this.$store.getters.op,
       store: JSON.parse(JSON.stringify(this.$store.getters.store)),
       display: JSON.parse(JSON.stringify(this.$store.getters.config.display))
     };
@@ -91,24 +92,6 @@ export default {
     updateAutoLogin(value) {
       this.update({
         key: "store.autoLogin",
-        value
-      });
-    },
-    updateMenuID(value) {
-      this.update({
-        key: "display.menuID",
-        value
-      });
-    },
-    updateFavorite(value) {
-      this.update({
-        key: "display.favorite",
-        value
-      });
-    },
-    updateAlphabetical(value) {
-      this.update({
-        key: "display.alphabetical",
         value
       });
     },

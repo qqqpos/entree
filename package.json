@@ -66,7 +66,7 @@
   "dependencies": {
     "@tweenjs/tween.js": "^17.2.0",
     "amcharts3": "^3.21.12",
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "bson-objectid": "^1.2.3",
     "diskusage": "^0.2.4",
     "electron-simple-updater": "^1.2.3",

@@ -702,19 +702,19 @@ label.input-toggle > input {
   cursor: pointer;
 }
 .menu {
-  display: flex;
-  flex-wrap: nowrap;
-  margin-top: 62px;
-  height: 100%;
-  width: 100%;
+  display: grid;
+  margin-top: 31px;
+  width: 100vw;
+  height: calc(100vh - 30px);
+  grid-template-columns: 285px 1fr 113px 285px;
   background: url(../image/grid.png) #fcfcfc;
 }
 section.category {
-  flex: 5;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(11,1fr);
 }
 .category div {
-  height: 62.5px;
-  width: 137.92px;
   justify-content: center;
   align-items: center;
   display: inline-flex;
@@ -722,7 +722,7 @@ section.category {
   background: rgba(0, 159, 247, 0.91);
   margin: 1px;
   vertical-align: top;
-  font-size: 1.1em;
+  font-size: 1.7vw;
   text-align: center;
 }
 .category .active {
@@ -730,19 +730,18 @@ section.category {
   border: 1px dashed #2196f3;
 }
 section.items {
-  flex: 6;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-template-rows: repeat(11,1fr);
 }
 .items .disable {
   background: rgba(207, 216, 220, 0.5);
 }
 .items div {
-  display: inline-flex;
+  display: flex;
   text-align: center;
-  flex-wrap: wrap;
-  width: calc(33% - 3px);
   justify-content: center;
   align-items: center;
-  height: 62.5px;
   border: 1px solid #78909c;
   margin: 1px;
   background: #b0bec5;
@@ -774,9 +773,7 @@ section.items {
   color: #f44336;
 }
 div.pageButton {
-  width: 109.6px;
   background: blanchedalmond;
-  margin-right: -3px;
 }
 .items div:hover,
 .sides div:hover {
@@ -786,36 +783,25 @@ div.pageButton {
   background: rgba(166, 195, 201, 0.55);
 }
 section.sides {
-  flex: 2;
-  display: flex;
   flex-direction: column;
   margin-left: 1px;
-  max-width: 113px;
   overflow: hidden;
+  display: grid;
 }
 .sides div {
   border: 1px solid #9e9e9e;
-  height: 63px;
   margin: 1px 0;
   background: rgba(206, 206, 206, 0.66);
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
 }
 .sides div:active {
   background: rgba(241, 239, 239, 0.52);
 }
-/* .sides div:first-child {
-  margin-top: 1px;
-} */
-section.cart {
-  width:285px;
-  position: relative;
-}
 
 .function {
-  padding: 3px 0 0 3px;
+  padding: 2px 0 0 4px;
 }
 /* keyboard layout */
 .keyboard {

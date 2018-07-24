@@ -15,6 +15,7 @@
             <span class="role">{{$t('type.'+operator.role)}}</span>
           </div>
         </div>
+        <paginator :of="employees" @page="setPage" :contain="24" :max="5"></paginator>
       </div>
       <footer>
         <button class="btn" @click="confirm" :disabled="!operator">{{$t('button.confirm')}}</button>
@@ -26,21 +27,23 @@
 
 <script>
 import dialogModule from "../common/dialog";
+import paginator from "../common/paginator";
 
 export default {
   props: ["init"],
-  components: { dialogModule },
+  components: { dialogModule, paginator },
   data() {
     return {
       order: this.$store.getters.order,
       componentData: null,
       component: null,
-      operators: [],
-      operator: null
+      operator: null,
+      employees: [],
+      page: 0
     };
   },
   created() {
-    this.operators = this.init.operators.filter(
+    this.employees = this.init.operators.filter(
       o =>
         o.role !== "Owner" &&
         o.role !== "Worker" &&
@@ -74,6 +77,17 @@ export default {
           this.init.resolve();
         })
         .catch(this.exitComponent);
+    },
+    setPage(index) {
+      this.page = index;
+    }
+  },
+  computed: {
+    operators() {
+      const min = this.page * 24;
+      const max = min + 24;
+
+      return this.employees.slice(min, max);
     }
   }
 };
@@ -82,6 +96,7 @@ export default {
 <style scoped>
 .wrap {
   width: 496px;
+  padding: 15px 25px 3px;
 }
 
 .operators {
@@ -111,6 +126,8 @@ export default {
 
 .role {
   color: rgba(0, 0, 0, 0.5);
+  font-size: 0.8em;
+  margin-top: 4px;
 }
 
 .select {

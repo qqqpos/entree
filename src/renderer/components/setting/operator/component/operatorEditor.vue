@@ -80,11 +80,9 @@ export default {
     };
   },
   created() {
-    const op = this.$store.getters.op;
-
-    op.role === "Developer" &&
+    this.$store.getters.op.role === "Developer" &&
       this.roles.splice(0, 0, {
-        label: "type.Owner",
+        label: this.$t("type.Owner"),
         tooltip: "",
         value: "Owner"
       });

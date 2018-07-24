@@ -70,7 +70,7 @@ export default {
           value: "zhCN"
         }
       ],
-      ctrl: ["enable", "disable", "staffBank"].map(type => ({
+      ctrl: ["enable", "disable", "staffBank", "creditOnly"].map(type => ({
         label: "text." + type,
         tooltip: "tip.cashdrawer." + type,
         value: type
@@ -82,7 +82,7 @@ export default {
         "Waitstaff",
         "Bartender",
         "Worker",
-        "ThirdParty"
+        "Driver"
       ].map(role => ({
         label: "type." + role,
         tooltip: "",

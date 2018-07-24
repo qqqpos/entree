@@ -3,7 +3,7 @@
     <section class="category">
       <div v-for="(category,index) in layouts.menu" @click="categoryIndex = index" :key="index">{{category[language]}}</div>
     </section>
-    <section class="items" v-if="config.display.menuID">
+    <section class="items" v-if="config.defaults.menuID">
       <div v-for="(item,index) in page" @click="pick(item)" :class="{disable:(!item._id || item.disable),like:item.like}" :key="index" :data-menuID="item.menuID">{{item[language]}}</div>
       <div @click="itemPage = 0" v-if="items.length >= 34" class="pageButton">{{$t("button.firstPage")}}</div>
       <div @click="itemPage = 1" v-if="items.length >= 34" class="pageButton">{{$t("button.secondPage")}}</div>
@@ -38,13 +38,13 @@ import weightItem from "./component/scale";
 import queryBar from "./component/queryBar";
 import orderList from "../common/orderList";
 import dialogModule from "../common/dialog";
-import templateItem from "./component/templateItem";
+import templateModule from "./component/template";
 import temporaryItem from "./component/temporaryItem";
 
 export default {
   components: {
     dialogModule,
-    templateItem,
+    templateModule,
     temporaryItem,
     modify,
     request,
@@ -88,6 +88,7 @@ export default {
     return {
       menuInstance: null,
       componentData: null,
+      displayMenuID: false,
       categoryIndex: 0,
       component: null,
       queriedItems: [],
@@ -471,7 +472,11 @@ export default {
           break;
         case "template":
           item ? this.addToOrder(item) : (item = this.item);
-          this.$open("templateItem", { side: item.option[index], item, index });
+          this.$open("templateModule", {
+            side: item.option[index],
+            item,
+            index
+          });
           break;
         case "dayRestricted":
         case "timeRestricted":

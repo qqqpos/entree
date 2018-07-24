@@ -157,34 +157,21 @@ export default {
 
 <style scoped>
 .request {
-  display: flex;
-  flex-direction: row;
   position: absolute;
+  width: 738px;
   left: 0;
 }
 
-.request .content {
+section.content {
+  display: grid;
+  grid-template-columns: 142.5px 142.5px 1fr 113px;
   background: url(../../../assets/image/grid.png) #fcfcfc;
-  display: flex;
-  flex-direction: row;
-  width: 739px;
 }
 
-div.category,
-div.prefix {
-  width: 142px;
-}
-
-.category div,
-div.prefix div {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1px;
-  vertical-align: top;
-  font-size: 1.15em;
-  height: 62.5px;
-  width: 138px;
+.category,
+.prefix {
+  display: grid;
+  grid-template-rows: repeat(11, 1fr);
 }
 
 .category div {
@@ -195,16 +182,16 @@ div.prefix div {
 .prefix div {
   border: 1px solid #607d8b;
   background: #b0bec5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1px;
 }
 
 .prefix div.acting {
-  background: #009688;
   color: #fff;
+  background: #009688;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-div.items {
-  width: 342px;
 }
 
 div.items div:hover {
@@ -215,19 +202,15 @@ div.items div:active {
   background: rgba(166, 195, 201, 0.55);
 }
 
-div.items div {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
-  height: 62.5px;
-  width: calc(33% - 3px);
+.items {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: repeat(11, 1fr);
+}
+
+.items div {
   border: 1px solid #78909c;
   background: #92aaaf;
-  margin: 1px;
-  vertical-align: top;
-  font-size: 1.15em;
-  text-align: center;
 }
 
 .items .disable {
@@ -235,13 +218,13 @@ div.items div {
 }
 
 div.shortCut {
-  width: 114px;
+  display: grid;
+  grid-template-rows: repeat(11, 1fr);
 }
 
 div.shortCut div {
-  display: inline-flex;
+  display: flex;
   width: 111px;
-  height: 62.5px;
   margin: 1px;
   vertical-align: top;
   font-size: 1.15em;

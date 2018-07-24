@@ -333,23 +333,23 @@ function createList(printer, setting, invoice, preview) {
     let englishSub = "";
 
     item.choiceSet.forEach(set => {
-      if (set.hasOwnProperty('print') && Array.isArray(set.print) && set.print.length > 0 && !set.print.includes(printer)) return;
-      const _qty = set.qty !== 1 ? set.qty + " x " : "";
-      const _price = Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
+      if (Array.isArray(set.print) && set.print.length > 0 && !set.print.includes(printer)) return;
+      const qty = set.qty !== 1 ? set.qty + " x " : "";
+      const price = Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
 
       if (diffs === "REMOVED") {
         chineseSub += enableChinese
-          ? `<p><del></del><span>${_qty}</span><span>${set.zhCN}</span><span>${_price}</span></p>`
+          ? `<p><del></del><span>${qty}</span><span>${set.zhCN}</span><span>${price}</span></p>`
           : "";
         englishSub += enableEnglish
-          ? `<p><del></del><span>${_qty}</span><span>${set.usEN}</span><span>${_price}</span></p>`
+          ? `<p><del></del><span>${qty}</span><span>${set.usEN}</span><span>${price}</span></p>`
           : "";
       } else {
         chineseSub += enableChinese
-          ? `<p><span>${_qty}</span><span>${set.zhCN}</span><span>${_price}</span></p>`
+          ? `<p><span>${qty}</span><span>${set.zhCN}</span><span>${price}</span></p>`
           : "";
         englishSub += enableEnglish
-          ? `<p><span>${_qty}</span><span>${set.usEN}</span><span>${_price}</span></p>`
+          ? `<p><span>${qty}</span><span>${set.usEN}</span><span>${price}</span></p>`
           : "";
       }
     });

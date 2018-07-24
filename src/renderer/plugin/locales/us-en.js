@@ -90,7 +90,6 @@ export default {
     giveaway: "Giveaway",
     voucher: "Voucher",
     discount: "Discount",
-    order: "Order",
     category: "Category",
     item: "Item",
     Owner: "Owner",
@@ -1071,6 +1070,7 @@ export default {
     enable: "Enable",
     disable: "Disable",
     staffBank: "Staff Bank",
+    creditOnly: "Credit Card Only",
     disallow: "Disallow",
     api: "API",
     coordinate: "Coordinate",
@@ -1794,7 +1794,8 @@ export default {
     cashdrawer: {
       enable: "Employee may use cash drawer",
       disable: "Cash drawer restricted use",
-      staffBank: "Employee as a cash drawer"
+      staffBank: "Employee as a cash drawer",
+      creditOnly: "Only accept credit card"
     }
   },
   payroll: {
