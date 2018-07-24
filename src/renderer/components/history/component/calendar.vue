@@ -8,7 +8,7 @@
                 </div>
                 <nav>
                     <i class="fa fa-angle-left" @click="prev" @contextmenu="prevYear"></i>
-                    <h5 class="center">{{date | moment('MMMM')}}</h5>
+                    <h5 class="text-center">{{date | moment('MMMM')}}</h5>
                     <i class="fa fa-angle-right" @click="next" @contextmenu="nextYear"></i>
                 </nav>
             </header>
@@ -50,7 +50,6 @@ export default {
   },
   created() {
     this.initialCalendar();
-
     if (moment.isMoment(this.init.picked)) this.picked = this.init.picked;
   },
   filters: {
@@ -60,6 +59,7 @@ export default {
   },
   methods: {
     initialCalendar() {
+      console.time("performance");
       let calendar = [];
 
       const startDay = this.date
@@ -96,6 +96,7 @@ export default {
 
       this.calendar = calendar;
       this.$forceUpdate();
+      console.timeEnd("performance");
     },
     prev() {
       this.date.subtract(1, "M");
@@ -132,15 +133,6 @@ export default {
   padding: initial;
 }
 
-.calendar {
-  display: flex;
-  flex-direction: column;
-}
-
-header {
-  flex-direction: row;
-}
-
 nav {
   flex: 1;
   display: flex;
@@ -161,8 +153,8 @@ nav i {
 
 .title span {
   flex: 1;
-  text-align: center;
   padding: 5px 0;
+  text-align: center;
   background: #009688;
   color: #e8f5e9;
 }
@@ -210,9 +202,5 @@ nav i {
 .week .day.today {
   background: #009688;
   color: #fff;
-}
-
-.center {
-  text-align: center;
 }
 </style>

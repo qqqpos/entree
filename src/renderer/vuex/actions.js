@@ -173,6 +173,8 @@ export const updateMenu = ({ commit }, { target, action, data }) => {
       break;
     case "TABLE":
       switch (action) {
+        case "REPLACE":
+          commit(types.REPLACE_TABLE,data)
         case "REMOVE":
           commit(types.REMOVE_TABLE, data)
       }

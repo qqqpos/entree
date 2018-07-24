@@ -7,6 +7,37 @@
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* menu grid */
+.menu-grid {
+    display: grid;
+    margin-top: 31px;
+    width: 100vw;
+    height: calc(100vh - 30px);
+    grid-template-columns: 285px 1fr 113px 285px;
+    background: url(../image/grid.png) #fcfcfc;
+  }
+
+.menu-grid > .category {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(11,1fr);
+}
+
+.menu-grid .items {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(11,1fr);
+  }
+
+.menu-grid .sides {
+    grid-template-rows: repeat(11,1fr);
+    flex-direction: column;
+    margin-left: 1px;
+    overflow: hidden;
+    display: grid;
+}
+
+
 /* history module grid */
 
 .history-grid {

@@ -189,8 +189,8 @@ export default {
         this.component = "tableEditor";
       })
         .then(update => {
-          this.$socket.emit("[TABLE] SAVE", update);
           this.tables[zone].splice(index, 1, update);
+          this.$socket.emit("[TABLE] SAVE", update);
           this.exitComponent();
         })
         .catch(deleteTable => {

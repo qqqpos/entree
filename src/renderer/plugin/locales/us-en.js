@@ -1322,7 +1322,8 @@ export default {
     gallery: "Gallery",
     itemInline: "Items Inline",
     earn: "Earn",
-    holiday: "Holiday"
+    holiday: "Holiday",
+    swipeArea:"Swipe Area"
   },
   nav: {
     store: "Store",
@@ -1675,6 +1676,7 @@ export default {
     regular: "Regular Table",
     hibachi: "Hibachi Table",
     bar: "Bar Tab",
+    placeholder: "Placeholder",
     smoke: "Smoke",
     window: "Window",
     accessibility: "Accessibility",

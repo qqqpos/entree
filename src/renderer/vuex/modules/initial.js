@@ -75,7 +75,7 @@ const mutations = {
         state.layouts = Object.assign({}, state.layouts, layouts);
     },
     [types.SET_MENU](state, menu) {
-        const { alphabetical = false } = state.config.display;
+        const { alphabetical = false } = state.config.defaults;
         const format = menu ? arrayToObject(menu) : state.menu;
 
         Object.keys(format).forEach(key => {
@@ -148,6 +148,10 @@ const mutations = {
         const index = state.tables[zone].findIndex(t => t._id === _id);
 
         index !== -1 && state.tables[zone].splice(index, 1, table);
+    },
+    [types.REPLACE_TABLE](state, table) {
+        const { zone, grid } = table;
+        state.tables[zone].splice(grid, 1, table);
     },
     [types.REMOVE_TABLE](state, table) {
         const { _id, zone } = table;

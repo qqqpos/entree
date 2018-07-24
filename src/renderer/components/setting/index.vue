@@ -17,7 +17,7 @@
         <figcaption>{{$t('setting.seat')}}</figcaption>
         <p>{{$t('setting.seatTip')}}</p>
       </router-link>
-      <router-link tag="figure" :to="{name:'Setting.online'}">
+      <router-link tag="figure" :to="{name:'Setting.online'}" v-show="store.onlineOrder">
         <div class="ribbon red"><span>New</span></div>
         <i class="fas fa-2x fa-globe-americas"></i>
         <figcaption>{{$t('setting.onlineOrder')}}</figcaption>
@@ -76,7 +76,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["op"])
+    ...mapGetters(["op", "store"])
   },
   methods: {
     go(name) {

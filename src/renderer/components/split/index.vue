@@ -10,8 +10,8 @@
       </header>
       <div class="banner"></div>
       <div class="wrap">
-        <div class="view" ref="scroll">
-          <div class="scroll" :style="scroll">
+        <div class="view">
+          <div class="scroll" :style="scroll" ref="tickets">
             <ticket v-for="(order,index) in splits" :key="index" :index="index" :data="order" @acquire="transfer" @delete="remove" :master="false" @destroy="destroy"></ticket>
           </div>
         </div>
@@ -31,6 +31,9 @@
         <ticket :data="order" :master="true" @acquire="restore" @done="setDone"></ticket>
       </div>
       <footer>
+        <div class="opt">
+          <div class="swipe" ref="pan">{{$t('text.swipeArea')}}</div>
+        </div>
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
         <button class="btn" @click="call('printTicket',true)" :disabled="!done">{{$t('button.printAll')}}</button>
         <button class="btn" @click="call('confirmSplit',false)" :disabled="!done">{{$t('button.confirm')}}</button>
@@ -50,7 +53,7 @@ export default {
   components: { ticket },
   computed: {
     scroll() {
-      return { transform: `translate3d(${this.offset}px,0,0)` };
+      return { transform: `translate3d(${this.horizontal}px,0,0)` };
     },
     ...mapGetters([
       "app",
@@ -65,11 +68,11 @@ export default {
   data() {
     return {
       order: JSON.parse(JSON.stringify(this.$store.getters.order)),
-      swipeMode: false,
       hammer: null,
       done: false,
       splits: [],
-      offset: 0
+      horizontal: 0,
+      lastHorizontalDelta: 0
     };
   },
   created() {
@@ -146,43 +149,57 @@ export default {
       __split__ && this.$bus.emit("destroy", items);
     },
     registerSwipeEvent() {
-      const dom = this.$refs.scroll;
-      this.hammer = new Hammer(dom);
-      this.hammer.get("swipe").set({ direction: Hammer.DIRECTION_HORIZONTAL });
-      this.hammer.on("swipeleft swiperight", e => {
+      const pan = new Hammer(this.$refs.pan);
+      pan.get("pan").set({ direction: Hammer.DIRECTION_HORIZONTAL });
+      pan.on("panleft panright panend", e => {
+        if (this.$children.length === 1) return;
+
         switch (e.type) {
-          case "swipeleft":
-            this.checkBoundary(-1);
+          case "panleft":
+          case "panright":
+            this.horizontal = this.lastHorizontalDelta + e.deltaX * 1.5;
             break;
-          case "swiperight":
-            this.checkBoundary(+1);
-            break;
+          case "panend":
+            //this.checkCoolide(e.additionalEvent);
+            this.lastHorizontalDelta = this.horizontal;
         }
       });
     },
-    checkBoundary(direction) {
-      this.$nextTick(() => {
-        const parent = document.querySelector(".view").getBoundingClientRect();
-        const child = document.querySelector(".scroll").getBoundingClientRect();
-        const leftDiff = child.left - parent.left;
-        const rightDiff = child.right - parent.right;
-        const actualWidth = this.calWidth();
-        const fixedWidth = 260;
+    checkCoolide(direction) {
+      const doms =
+        direction === "panleft"
+          ? Array.from(this.$refs.tickets.children)
+          : Array.from(this.$refs.tickets.children).reverse();
 
-        let offset = this.offset + 260 * direction;
-        offset = offset === -260 ? -98 : offset;
-        offset = offset === 162 ? 0 : offset;
-        this.offset = offset;
-      });
-    },
-    calWidth() {
-      let width = 0;
-      const doms = document.querySelectorAll(".view .invoice");
+      const target = document.querySelector(`div.view`);
+      const overlay = doms.find(dom => util.isCollide(target, dom));
 
-      for (let dom of doms) {
-        width += dom.getBoundingClientRect().width;
+      if (overlay) {
+        const {
+          left: parentLeft,
+          right: parentRight
+        } = target.getBoundingClientRect();
+        const {
+          left: overlayLeft,
+          right: overlayRight
+        } = overlay.getBoundingClientRect();
+
+        const diffs =
+          direction === "panleft"
+            ? overlayLeft - parentLeft - 5
+            : overlayRight - parentRight + 5;
+
+        util.ease({
+          start: this.horizontal,
+          end: this.horizontal - diffs,
+          progress: value => {
+            this.horizontal = value;
+          },
+          done: () => {
+            this.lastHorizontalDelta = this.horizontal;
+          }
+        });
       }
-      return width;
     },
     setDone(boolean) {
       this.done = boolean;
@@ -360,7 +377,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); */
 }
 
 .option {
@@ -388,5 +405,25 @@ export default {
 
 .switches .label {
   margin-left: 5px;
+}
+
+.swipe {
+  width: 100%;
+  height: 50px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: background 0.3s ease-out;
+  font-family: "Microsoft YaHei";
+  text-transform: uppercase;
+  font-size: 2em;
+  color: #cacaca;
+}
+
+.swipe:active {
+  background: #fff;
 }
 </style>

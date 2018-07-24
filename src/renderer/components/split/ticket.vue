@@ -39,7 +39,8 @@
         <i class="fa fa-warning"></i>
         <span>{{reason}}</span>
       </div>
-      <div class="settle" @click="tap">
+      <div class="settle relative" @click="tap">
+        <span class="index">{{index}}</span>
         <p class="total">$ {{order.payment.balance | decimal}}
           <span class="tip">( {{order.payment.tax | decimal}} )</span>
         </p>
@@ -797,5 +798,19 @@ li.picked .sub {
   z-index: 2;
   display: block;
   position: absolute;
+}
+
+.index {
+  font-family: "Agency FB";
+  font-weight: bold;
+  top: -10px;
+  left: 5px;
+  position: absolute;
+}
+
+.index:before {
+  content: "#";
+  font-size: 12px;
+  margin-right: 2px;
 }
 </style>

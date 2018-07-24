@@ -90,10 +90,12 @@ export default {
       const { zone } = this.layouts.table[section];
       const tables = this.tables[zone];
 
-      return tables.filter(table => table._id && table.status === 1).length;
+      return tables.filter(
+        ({ _id, type, status }) => _id && type !== "placeholder" && status === 1
+      ).length;
     },
     tap(table) {
-      if (!table._id) return;
+      if (!table._id || table.type === "placeholder") return;
       this.setViewTable(table);
 
       let prompt;

@@ -1,5 +1,5 @@
 <template>
-  <div class="menu">
+  <div class="menu-grid">
     <section class="category">
       <div v-for="(category,index) in layouts.menu" @click="categoryIndex = index" :key="index">{{category[language]}}</div>
     </section>
@@ -71,16 +71,16 @@ export default {
       "item",
       "order",
       "sides",
-      "layouts",
+      "table",
       "device",
       "config",
       "ticket",
-      "dineInOpt",
+      "layouts",
       "station",
       "language",
       "customer",
       "favorites",
-      "table",
+      "dineInOpt",
       "archivedOrder"
     ])
   },

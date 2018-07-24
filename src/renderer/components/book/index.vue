@@ -126,10 +126,10 @@ export default {
   data() {
     return {
       filter: null,
-      componentData: null,
-      component: null,
       bookingList: null,
-      calendarDate: moment().subtract(4,'h'),
+      component: null,
+      componentData: null,
+      calendarDate: moment().subtract(4, "h"),
       book: {
         type: "WALK_IN",
         date: today(),
@@ -319,17 +319,17 @@ export default {
 
 <style scoped>
 .book {
-  display: flex;
+  display: grid;
   width: 95%;
   height: 650px;
   overflow: hidden;
   margin-top: -42px;
   border-radius: 6px;
   background: #fff;
+  grid-template-columns: 300px 1fr;
 }
 
 .form {
-  flex: 2;
   overflow: hidden;
   background: #f4f4f4;
   border-right: 1px solid #e0e0e0;
@@ -444,7 +444,6 @@ i.dialog {
 }
 
 .detail {
-  flex: 5;
   background: #eceff1;
 }
 

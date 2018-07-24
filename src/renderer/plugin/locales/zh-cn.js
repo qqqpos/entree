@@ -1311,7 +1311,8 @@ export default {
     gallery: "图片库",
     itemInline: "物品内联",
     earn: "收入",
-    holiday: "节假日"
+    holiday: "节假日",
+    swipeArea: "滑动区"
   },
   nav: {
     store: "店面",
@@ -1667,6 +1668,7 @@ export default {
     regular: "普通座位",
     hibachi: "铁板座位",
     bar: "酒吧座位",
+    placeholder: "占位图",
     smoke: "吸烟区",
     window: "靠窗",
     accessibility: "残障人士专用",

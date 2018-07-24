@@ -13,6 +13,7 @@ export const SET_CATEGORY = "SET_CATEGORY";
 export const SET_LAYOUTS = "SET_LAYOUTS";
 
 export const REMOVE_TABLE = "REMOVE_TABLE";
+export const REPLACE_TABLE = "REPLACE_TABLE";
 export const UPSERT_INVOICE = "UPSERT_INVOICE";
 export const SET_TEMPLATES = "SET_TEMPLATES";
 export const NEW_PHONE_CALL = "NEW_PHONE_CALL";

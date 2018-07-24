@@ -81,7 +81,7 @@ export default {
           value: "icon-square-couple"
         }
       ],
-      tableOpts: ["regular", "hibachi", "bar"].map(type => ({
+      tableOpts: ["regular", "hibachi", "bar","placeholder"].map(type => ({
         label: this.$t("table." + type),
         tooltip: "",
         value: type

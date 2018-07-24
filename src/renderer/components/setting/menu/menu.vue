@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <div>
     <draggable v-model="layouts.menu" @sort="isCategorySorted = true" :options="categoryOpt" class="category-wrap">
       <transition-group tag="section" class="category">
         <div v-for="(category,index) in layouts.menu" @click="setCategory(index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
@@ -27,8 +27,8 @@ import { mapGetters } from "vuex";
 import Preset from "../../../preset";
 import draggable from "vuedraggable";
 import itemTrend from "./component/itemTrend";
-import itemEditor from "./component/itemEditor";
 import dialogModule from "../../common/dialog";
+import itemEditor from "./component/itemEditor";
 import categoryEditor from "./component/categoryEditor";
 
 export default {
@@ -235,30 +235,36 @@ export default {
 </script>
 
 <style scoped>
-.layout {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  overflow-y: auto;
-}
-
 .category-wrap {
-  position: fixed;
   top: 31px;
+  position: fixed;
+  height: calc(100vh - 31px);
 }
 
 .items-wrap {
   margin-left: 284px;
   margin-top: 1px;
 }
+
 .category {
   width: 284px;
-  flex: none;
+  display: grid;
+  height: inherit;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(11, 1fr);
 }
 
 .items {
   width: 410px;
-  flex: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.items div {
+  display: inline-flex;
+  width: calc(100% / 3 - 4px);
+  height: 63px;
 }
 
 .categoryGhost {
@@ -268,7 +274,7 @@ export default {
 
 aside {
   position: fixed;
-  right: 8px;
+  right: 7px;
   top: 32px;
   flex: 1;
 }

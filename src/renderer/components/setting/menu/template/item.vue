@@ -197,6 +197,13 @@ nav {
   display: flex;
 }
 
+.items {
+  display: grid;
+  height: 600px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+
 .items div {
   width: 128px;
 }
@@ -211,10 +218,5 @@ li {
 
 li span {
   flex: 1;
-}
-
-.items {
-  display: flex;
-  flex-wrap: wrap;
 }
 </style>
