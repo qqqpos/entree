@@ -783,18 +783,19 @@ div.pageButton {
   background: rgba(166, 195, 201, 0.55);
 }
 section.sides {
+  grid-template-rows: repeat(11,1fr);
   flex-direction: column;
   margin-left: 1px;
   overflow: hidden;
   display: grid;
 }
 .sides div {
-  border: 1px solid #9e9e9e;
-  margin: 1px 0;
   background: rgba(206, 206, 206, 0.66);
-  display: flex;
+  border: 1px solid #9e9e9e;
   justify-content: center;
   align-items: center;
+  margin: 1px 0;
+  display: flex;
 }
 .sides div:active {
   background: rgba(241, 239, 239, 0.52);
@@ -825,35 +826,35 @@ section.sides {
 .keyboard .alphabetic i,
 .keyboard .numeric div,
 .keyboard .numeric i {
-  margin: 3px 4px;
-  width: 70.7px;
   height: 62px;
+  width: 70.7px;
+  margin: 3px 4px;
+  text-indent: 8px;
   line-height: 25px;
   font-size: 1.15em;
   font-weight: bold;
-  text-indent: 8px;
-  background: linear-gradient(#fefefe, #cfd0d3);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
-  text-shadow: 0 1px 1px white;
-  border-top: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 4px;
+  text-shadow: 0 1px 1px white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  background: linear-gradient(#fefefe, #cfd0d3);
 }
 .keyboard .alphabetic div:active,
 .keyboard .numeric div:active {
   background: linear-gradient(#e2e3e4, #aaadb4);
 }
 .keyboard .alphabetic i {
-  background: linear-gradient(#939ba6, #687180);
   color: white;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
+  background: linear-gradient(#939ba6, #687180);
   border-top: 1px solid rgba(255, 255, 255, 0.45);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 .keyboard .alphabetic i:active,
 .keyboard .numeric i:active {
   color: #3a3d42;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
-  background: linear-gradient(#f8f8f9, #dddfe1);
   text-shadow: 0 1px 1px white;
+  background: linear-gradient(#f8f8f9, #dddfe1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 .keyboard div.space {
   width: 307px;
@@ -865,8 +866,8 @@ section.sides {
 .keyboard div.created {
   background: linear-gradient(to bottom, #51b2ff 0%, #245094 100%);
   text-shadow: 0 2px 1px #0d47a1;
-  color: #fff;
   border-top: 1px solid #3f7eb1;
+  color: #fff;
 }
 .keyboard div.created:active {
   background: linear-gradient(to bottom, #51b2ff 0%, #245094 100%);
