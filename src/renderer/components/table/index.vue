@@ -206,7 +206,10 @@ export default {
 
                 this.$dialog(prompt)
                   .then(() => this.switchOperator(operator, next))
-                  .catch(() => stop("PASSWORD_REQUIRED"));
+                  .catch(() => {
+                    this.exitComponent();
+                    stop();
+                  });
               }
             })
             .catch(this.pinIncorrectDialog);
@@ -374,7 +377,9 @@ export default {
 
       this.$dialog(prompt).then(this.exitComponent);
     },
-    createTableFailed(error) {},
+    createTableFailed(error) {
+      
+    },
     ...mapActions([
       "setApp",
       "setOrder",

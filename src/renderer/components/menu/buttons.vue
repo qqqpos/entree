@@ -31,10 +31,10 @@
         <i class="fa fa-tags"></i>
         <span class="text">{{$t('button.coupon')}}</span>
       </div>
-      <div class="btn" @click="done(false)">
+      <button class="btn" @click="done(false)">
         <i class="fas fa-pause"></i>
         <span class="text">{{$t('button.hold')}}</span>
-      </div>
+      </button>
       <button class="btn" @click="modify">
         <i class="fa fa-calculator"></i>
         <span class="text">{{$t('button.modify')}}</span>
@@ -400,15 +400,20 @@ export default {
         let todo = !!document.querySelector(".item.todo");
 
         if (todo && !print) {
-          print = false;
           todo = false;
         }
 
         if (this.app.newTicket) {
-          // handle new ticket
-          const items = todo
-            ? this.todoPrintHandler(order, print)
-            : order.content;
+          const items =
+            todo && print
+              ? this.todoPrintHandler(order)
+              : print
+                ? order.content.map(item => {
+                    const _item = clone(item);
+                    Object.assign(item, { print: true });
+                    return _item;
+                  })
+                : [];
 
           if (this.isDineInTicket && useTable) {
             Object.assign(this.table, {
@@ -419,7 +424,7 @@ export default {
             this.$socket.emit("[TABLE] UPDATE", this.table);
 
             this.$socket.emit("[ORDER] SAVE", order, false, () => {
-              if (!print && !todo) return;
+              if (items.length === 0) return;
 
               const ticket = Object.assign({}, order, { content: items });
 
@@ -436,35 +441,36 @@ export default {
             );
           }
         } else {
-          const diffs = this.compare(order);
+          if (this.ticket.type !== "TO_GO") {
+            if (print) {
+              const diffs = this.compare(order);
 
-          if (print) {
-            !this.isDineInTicket
-              ? Printer.setTarget("All").print(diffs)
-              : printOnDone
-                ? Printer.setTarget("ALL").print(diffs)
-                : Printer.setTarget("Order").print(diffs);
+              if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
+                Printer.setTarget("All").print(diffs);
+              } else {
+                this.dineInOpt.printOnDone
+                  ? Printer.setTarget("All").print(diffs)
+                  : Printer.setTarget("Order").print(diffs);
+              }
+            }
+            this.$socket.emit("[ORDER] UPDATE", order, print);
+          } else {
+            Printer.setTarget("Order").print(this.order);
           }
-
-          this.$socket.emit("[ORDER] UPDATE", order, print);
         }
 
         resolve(false);
       });
     },
-    todoPrintHandler(order, print) {
+    todoPrintHandler(order) {
       let items = [];
 
-      print
-        ? order.content.forEach(item => {
-            if (item.pending) {
-              items.push(clone(item));
-              item.print = true;
-            }
-          })
-        : order.content.forEach(item =>
-            Object.assign(item, { print: false, pending: false })
-          );
+      order.content.forEach(item => {
+        if (item.todo) {
+          items.push(clone(item));
+          item.print = true;
+        }
+      });
 
       return items;
     },
@@ -479,6 +485,7 @@ export default {
           this.resetAll();
         } else {
           this.setOrder(this.order);
+          this.setApp({ newTicket: true });
           this.$router.push({ name: "Table" });
         }
       } else {

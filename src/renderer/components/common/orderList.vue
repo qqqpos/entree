@@ -348,7 +348,7 @@ export default {
     toggleTodoList() {
       this.todo = !this.todo;
 
-      !this.todo && this.order.content.forEach(item => (item.pending = false));
+      !this.todo && this.order.content.forEach(item => (item.todo = false));
     },
     calculate() {
       if (this.order.content.length === 0) {
