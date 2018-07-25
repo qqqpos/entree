@@ -512,7 +512,7 @@ export default {
     customerProfile: "Customer Info",
     ticketProfile: "Ticket Info",
     reportTip: "Report Tips",
-    giftcardStats: "Gift Card Stats",
+    giftcardSummary: "Gift Card Summary",
     dailySaleSummary: "Daily Sales Summary",
     hourlySaleSummary: "Hourly Sales Summary",
     evenSplit: "Ticket Even Split",
@@ -898,7 +898,8 @@ export default {
       giftcardCount: "Gift Card Count",
       giftcardTotal: "Gift Card Remain Balance",
       vipCount: "VIP Card Count",
-      giftcardSalesToday: "Gift Card Sales Of The Day"
+      giftcardSalesToday: "Gift Card Sales Of The Day",
+      latestGiftcardList: "Latest Gift Card List"
     }
   },
   calendar: {
@@ -1222,7 +1223,8 @@ export default {
     readyBatch: "Ready For Batch",
     commission: "Commission",
     totalCustomer: "Total Customer: ",
-    totalAddress: "Total Address:",
+    totalAddress: "Total Address: ",
+    totalGiftCard: "Total Gift Card: ",
     dob: "Date of Birth",
     extension: "Extension",
     prompt: "Prompt",
@@ -1323,7 +1325,7 @@ export default {
     itemInline: "Items Inline",
     earn: "Earn",
     holiday: "Holiday",
-    swipeArea:"Swipe Area"
+    swipeArea: "Swipe Area"
   },
   nav: {
     store: "Store",
@@ -1379,6 +1381,7 @@ export default {
     item: "Item",
     daily: "Daily",
     hourly: "Hourly",
+    categorize: "Categorize",
     compare: "Compare",
     reconciliation: "Reconc."
   },

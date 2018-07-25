@@ -2,11 +2,8 @@
     <div>
         <header class="nav">
             <div class="title">
-                <h3>{{$t('title.giftcardStats')}}</h3>
+                <h3>{{$t('title.giftcardSummary')}}</h3>
             </div>
-            <nav>
-                <span>{{$t('button.search')}}</span>
-            </nav>
         </header>
         <div class="data-status">
             <h3>{{$t('card.stats.giftcardCount')}}</h3>
@@ -34,10 +31,6 @@
                 <span>{{$t('card.giftCardDebit')}}</span>
                 <span class="value">{{summary.spendAmount | decimal}}</span>
             </h5>
-            <h5>
-                <span></span>
-                <span class="value"></span>
-            </h5>
         </div>
     </div>
 </template>
@@ -55,7 +48,6 @@ export default {
         vm.summary = data;
       });
     });
-  },
-  methods: {}
+  }
 };
 </script>

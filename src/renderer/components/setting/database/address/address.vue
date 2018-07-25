@@ -23,7 +23,7 @@
           <span>{{$t('text.totalAddress')}}</span>
           <span>{{total}}</span>
         </p>
-        <div class="fliper">
+        <div class="mini-paginator">
           <i class="fa fa-angle-left" @click="prev"></i>
           <div>
             <span>{{page + 1}}</span>
@@ -61,8 +61,8 @@ export default {
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject };
         this.component = "editor"
-      }).then(_address => {
-        this.$socket.emit("[ADDRESS] SAVE", _address, callback => {
+      }).then(address => {
+        this.$socket.emit("[ADDRESS] SAVE", address, () => {
           this.$emit("reset");
           this.$emit("refresh");
           this.exitComponent();

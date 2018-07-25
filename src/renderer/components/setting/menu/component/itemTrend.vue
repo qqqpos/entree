@@ -105,8 +105,8 @@ li.head {
 }
 
 li.stats {
-  padding: 5px 5px 0 10px;
-  width: 230px;
+  padding: 5px 5px 0 7px;
+  width: 233px;
 }
 
 li.stats:hover {
@@ -120,7 +120,7 @@ h5.name {
 
 progress {
   border: 1px solid transparent;
-  width: 200px;
+  width: 190px;
 }
 
 ::-webkit-progress-value {

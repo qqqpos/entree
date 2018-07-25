@@ -323,7 +323,7 @@ header.tab {
 
 .editor .wrap {
   padding: 15px 25px;
-  background: #fafafa;
+  background: #f5f6f7;
   min-width: 350px;
 }
 
@@ -447,14 +447,14 @@ header.tab {
 }
 
 .checkboxes {
-  margin-top: 5px;
-  border: 1px solid #eee;
-  background: #fff;
-  border-radius: 2px;
   width: 540px;
   padding: 5px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  margin-top: 5px;
+  background: #fff;
+  border-radius: 2px;
+  border: 1px solid #eee;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .checkboxes .checkbox {
@@ -517,7 +517,7 @@ header.tab {
   align-items: center;
 }
 
-.fliper {
+.mini-paginator {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -525,7 +525,7 @@ header.tab {
   flex: 1;
 }
 
-.fliper i {
+.mini-paginator i {
   padding: 10px 20px;
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   border-radius: 4px;
@@ -533,17 +533,17 @@ header.tab {
   cursor: pointer;
 }
 
-.fliper i:active {
+.mini-paginator i:active {
   background: #fcfcfc;
 }
 
-.fliper div {
+.mini-paginator div {
   display: flex;
   min-width: 80px;
   justify-content: center;
 }
 
-.fliper .slash {
+.mini-paginator .slash {
   font-weight: bold;
   margin: 0 5px;
 }

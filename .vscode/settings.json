@@ -4,6 +4,8 @@
         "creditcard",
         "giftcard",
         "mastercard",
+        "mini",
+        "paginator",
         "payment",
         "unprint",
         "unsave",

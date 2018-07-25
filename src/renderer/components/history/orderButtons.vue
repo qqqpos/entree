@@ -36,7 +36,7 @@ import dialogModule from "../common/dialog";
 import paymentMarker from "../payment/mark";
 import paymentModule from "../payment/main";
 import splitModule from "../split/index";
-import driverModule from "./driver";
+import driverModule from "./component/driver";
 
 export default {
   props: ["date"],

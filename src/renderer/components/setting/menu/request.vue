@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="request-setup">
     <draggable v-model="layouts.request" @sort="isCategorySorted = true" :options="categoryOpt">
       <transition-group tag="div" class="category">
         <div v-for="(category,index) in layouts.request" @click="setCategory(category.contain,index)" @contextmenu="editCategory(category,index)" :key="index">{{category[language]}}</div>
@@ -202,7 +202,6 @@ export default {
   position: fixed;
   height: calc(100vh - 31px);
   grid-template-rows: repeat(11, 1fr);
-  
 }
 
 .prefix {
@@ -210,7 +209,6 @@ export default {
 }
 
 .prefix div {
-  height: 62.5px;
   width: 137.92px;
   justify-content: center;
   align-items: center;

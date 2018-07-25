@@ -941,7 +941,7 @@ export default {
       });
     },
     printTicket(print, next) {
-      print && Printer.print(this.order);
+      print && Printer.setTarget("All").print(this.order);
       const markPrint = this.order.payment.remain === 0 || print;
       this.$socket.emit("[ORDER] UPDATE", this.order, markPrint);
 
@@ -1278,7 +1278,8 @@ export default {
     closeTicket() {
       this.$socket.emit(
         "[ORDER] UPDATE",
-        Object.assign(this.invoice, { settled: true })
+        Object.assign(this.invoice, { settled: true }),
+        true
       );
 
       switch (this.$route.name) {

@@ -134,6 +134,11 @@ export default {
 </script>
 
 <style scoped>
+.wrap {
+  overflow: scroll;
+  max-height: 300px;
+}
+
 li {
   display: flex;
   align-items: center;

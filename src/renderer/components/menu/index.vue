@@ -292,7 +292,7 @@ export default {
         if (item.disable) {
           stop("unavailable");
         } else if (item.restrict) {
-          const { from, to, days, types, holiday = true } = item.restrict;
+          const { from, to, days, types, holiday = false } = item.restrict;
           const day = moment().format("d");
 
           if (!types.includes(this.order.type)) {

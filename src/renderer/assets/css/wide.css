@@ -1,69 +1,73 @@
 @media only screen and (min-width : 1025px) {
-    .menu{
+    .menu-grid{
         grid-template-columns: 628px 1fr 200px 285px;
     }
-
-    /* section.sides{
+    .menu-grid .sides div{
         max-width: initial;
-        margin-left: 0px;
-    } */
-
-    /* section.sides div{
-        height: 92px;
-    } */
-
-    /* section.cart div.order,
+    }
+    section.cart div.order,
     .ticket div.order{
         width: initial;
         height: 640px;
-    } */
-
-    /* section.cart div.main .wrap{
-        max-width: initial;
     }
 
-    section.tickets{
-        flex: 1;
-        height: 985px;
+    section.items div{
+        font-size: 1.4vw;
+    }
+
+    div.request{
+        width:1636px!important;
+    }
+
+    div.request .content{
+        grid-template-columns: 312px 312px 1fr 199px!important;
+    }
+
+    .shortCut div{
         width: initial!important;
     }
 
-    .tables .table{
-        height: 120px!important;
-        width: 120px!important;
-        margin: 3px 10px!important;
+    .category-wrap .category{
+        width: 600px!important;
     }
 
-    .table-layout .tables{
-        padding:0 277px!important;
+    .items-wrap{
+        margin-left:600px!important;
     }
 
-    .request .content{
-        width: 1635px!important;
-        height: 1048px;
+    .items-wrap .items{
+        width:990px!important;
     }
 
-    .request div.category,
-    .request div.prefix{
-        width: 310px!important;
-    }
-    .request .category div,
-    .request .prefix div{
-        width: 310px!important;
-        height: 91.5px!important;
+    .items-wrap .items div{
+        height: 91.36px!important;
     }
 
-    .request .items{
-        margin-left: 4px;
-        width: 756px!important;
+    .request-setup .category {
+        width: 300px!important;
     }
-
-    .request .shortCut{
-        width: 259px!important;
-        margin-left: -5px;
+    
+    .request-setup .prefix{
+        left:375px!important;
     }
-    .request .shortCut div{
-        width: 254px!important;
-        height: 92px!important;
+    .request-setup .prefix div {
+        width: 300px!important;
+    }
+    
+    .request-setup .itemWrap {
+        width: 900px!important;
+        height: calc(100vh - 30px);
+        margin-left: 603px!important;
+    }
+    
+    /* .request-setup .item
+     div {
+        width: 900px!important;
     } */
+    
+    .request-setup .item
+     section > div {
+        height: 91.36px!important;
+    }
+
 }

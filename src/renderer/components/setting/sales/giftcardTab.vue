@@ -1,10 +1,8 @@
 <template>
   <div>
     <ul class="tabs">
-      <router-link tag="li" class="tab" :to="{name:'Setting.store.giftcard'}">{{$t('nav.overview')}}</router-link>
-      <template v-if="card">
-        <router-link tag="li" class="tab" :to="{name:'Setting.printer.config',params:{printer}}">{{$t('setting.basic')}}</router-link>
-      </template>
+      <router-link tag="li" class="tab" :to="{name:'Setting.sales.giftcard'}">{{$t('nav.overview')}}</router-link>
+      <router-link tag="li" class="tab" :to="{name:'Setting.sales.giftcard.list'}">{{$t('nav.list')}}</router-link>
     </ul>
     <transition name="slide" mode="out-in">
       <router-view class="tab-content" @click="getGiftCard"></router-view>

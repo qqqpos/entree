@@ -451,6 +451,7 @@ export default {
 
 .table-layout {
   display: flex;
+  width: inherit;
 }
 
 aside {
@@ -476,11 +477,9 @@ aside {
 
 .tables {
   padding: 2px 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(8, 1fr);
   height: calc(100vh - 35px);
   flex: 1;
 }
@@ -488,6 +487,8 @@ aside {
 .table {
   height: 81px;
   width: 83px;
+  align-self: center;
+  justify-self: center;
   display: flex;
   position: relative;
   align-items: center;

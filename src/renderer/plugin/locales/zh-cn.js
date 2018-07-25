@@ -418,7 +418,7 @@ export default {
     customerProfile: "客户信息",
     ticketProfile: "订单信息",
     reportTip: "上报本次小费",
-    giftcardStats: "礼物卡数据",
+    giftcardSummary: "礼物卡概览",
     dailySaleSummary: "每日销售总数",
     hourlySaleSummary: "每小时销售总数",
     evenSplit: "订单均分",
@@ -803,7 +803,8 @@ export default {
       giftcardCount: "礼物卡发行计数",
       giftcardTotal: "礼物卡总余额",
       vipCount: "会员卡计数",
-      giftcardSalesToday: "今日礼物卡销售统计"
+      giftcardSalesToday: "今日礼物卡销售统计",
+      latestGiftcardList: "近期激活的礼物卡列表"
     }
   },
   calendar: {
@@ -1212,6 +1213,7 @@ export default {
     commission: "佣金",
     totalCustomer: "用户统计: ",
     totalAddress: "地址统计: ",
+    totalGiftCard: "礼物卡总计: ",
     dob: "生日",
     extension: "分机",
     prompt: "提示",
@@ -1367,6 +1369,8 @@ export default {
     hibachi: "铁板",
     item: "物品",
     daily: "每日",
+    hourly: "时刻",
+    categorize: "分类",
     hourly: "时段",
     compare: "对比",
     reconciliation: "对账"

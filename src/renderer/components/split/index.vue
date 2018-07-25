@@ -320,11 +320,9 @@ export default {
           });
         });
 
-        payments.rounding = this.$rounding(
-          toFixed((payments.due + payments.gratuity) * 100, 2)
-        );
-        payments.balance = payments.due + payments.gratuity + payments.rounding;
-        payments.remain = payments.balance - payments.paid;
+        payments.rounding = this.$rounding( toFixed((payments.due + payments.gratuity) * 100, 2));
+        payments.balance = toFixed(payments.due + payments.gratuity + payments.rounding,2);
+        payments.remain = toFixed(payments.balance - payments.paid, 2);
 
         Object.keys(payments).forEach(key => {
           this.order.payment[key] = toFixed(payments[key], 2);

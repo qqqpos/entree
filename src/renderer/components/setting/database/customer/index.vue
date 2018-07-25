@@ -25,7 +25,7 @@
           <span>{{$t('text.totalCustomer')}}</span>
           <span>{{total}}</span>
         </p>
-        <div class="fliper">
+        <div class="mini-paginator">
           <i class="fa fa-angle-left" @click="prev"></i>
           <div>
             <span>{{page + 1}}</span>

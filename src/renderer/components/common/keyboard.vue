@@ -129,9 +129,6 @@ export default {
 <style scoped>
 .keyboard {
   flex-direction: column;
-  margin: 0;
-  left: 120px;
-  border-radius: 2px 2px 0 0;
 }
 
 .keyboard > section {

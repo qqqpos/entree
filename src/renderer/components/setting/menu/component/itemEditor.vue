@@ -309,19 +309,31 @@ export default {
         });
     },
     save() {
-      this.item.zhCN = this.item.zhCN || this.item.usEN;
+      let { usEN, zhCN, price } = this.item;
+
+      zhCN = zhCN || usEN;
+      price = Array.isArray(price)
+        ? price
+        : price
+            .toString()
+            .split(",")
+            .map(p => parseFloat(p) || 0);
 
       //correcting
-      this.item.usEN = this.item.usEN.trim().replace(/\s\s+/g, " ");
-      this.item.zhCN = this.item.zhCN.trim().replace(/\s\s+/g, " ");
+      usEN = usEN.trim().replace(/\s\s+/g, " ");
+      zhCN = zhCN.trim().replace(/\s\s+/g, " ");
+
+      if (!this.init.edit) {
+        // use camcel case for first time create
+        // disable when edit item
+
+        usEN = usEN.toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase());
+        zhCN = zhCN.toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase());
+      }
 
       this.updateItemPrinter();
 
-      this.item.price = Array.isArray(this.item.price)
-        ? this.item.price
-        : this.item.price.toString().split(",");
-
-      this.init.resolve(this.item);
+      this.init.resolve(Object.assign(this.item, { usEN, zhCN, price }));
     },
     updateItemPrinter() {
       let printer = {};

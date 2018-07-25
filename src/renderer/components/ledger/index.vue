@@ -26,14 +26,14 @@
 <script>
 import tab from "./helper/tab";
 import loader from "../common/loader";
-import chart from "./component/chart";
-import stats from "./component/statistic";
+import column from "./component/hourly";
+import radar from "./component/categorize";
 import checking from "./component/checking";
 import department from "./component/department";
 
 export default {
   props: ["init"],
-  components: { tab, loader, chart, stats, checking, department },
+  components: { tab, loader, column, radar, checking, department },
   data() {
     return {
       component: null,
@@ -72,10 +72,10 @@ export default {
     loadComponent(name) {
       switch (name) {
         case "CHART":
-          this.component = "chart";
+          this.component = "column";
           break;
-        case "STATS":
-          this.component = "stats";
+        case "RADAR":
+          this.component = "radar";
           break;
         case "DEPARTMENT":
           this.component = "department";

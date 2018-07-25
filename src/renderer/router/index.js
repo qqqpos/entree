@@ -514,9 +514,9 @@ export default new Router({
                       component: require("../components/setting/sales/giftcard/index")
                     },
                     {
-                      path: "info",
-                      name: "Setting.sales.giftcard.info",
-                      component: require("../components/setting/sales/giftcard/info")
+                      path: "list",
+                      name: "Setting.sales.giftcard.list",
+                      component: require("../components/setting/sales/giftcard/list")
                     },
                     {
                       path: "history",
