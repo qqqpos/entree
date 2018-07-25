@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  props: ["invoices"],
+  props: ["invoices", "transactions"],
   created() {
     this.process();
   },
@@ -23,15 +23,15 @@ export default {
       this.invoices.forEach(invoice => {
         if (invoice.status === 1) {
           const hour = new Date(invoice.create || invoice.time).getHours();
-          const { due } = invoice.payment;
+          const { balance } = invoice.payment;
 
           if (hours.hasOwnProperty(hour)) {
-            hours[hour].value += due;
+            hours[hour].value += balance;
             hours[hour].count++;
           } else {
             hours[hour] = {
               count: 1,
-              value: due
+              value: balance
             };
           }
         }

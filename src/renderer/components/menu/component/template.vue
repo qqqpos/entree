@@ -63,19 +63,14 @@ export default {
   methods: {
     initialTemplate() {
       return new Promise(next => {
-        const {
-          template,
-          templateOption = {
-            addition: 0,
-            max: Infinity,
-            startAt: 0
-          }
-        } = this.init.side;
+        const { template, templateOption } = this.init.side;
 
         this.template = JSON.parse(
           JSON.stringify(this.templates.find(t => t.name === template))
         );
-        Object.assign(this.template.contain[0], templateOption);
+
+        if (templateOption)
+          Object.assign(this.template.contain[0], templateOption);
 
         this.insertMode = this.template.insert;
         this.itemCount = Array(this.template.contain.length).fill(0);

@@ -5,6 +5,10 @@
             <label for="CHART">{{$t('nav.chart')}}</label>
         </div>
         <div>
+            <input type="radio" v-model="tab" value="STATS" name="tab" id="STATS">
+            <label for="STATS">{{$t('nav.stats')}}</label>
+        </div>
+        <div>
             <input type="radio" v-model="tab" value="DEPARTMENT" name="tab" id="DEPARTMENT">
             <label for="DEPARTMENT">{{$t('nav.department')}}</label>
         </div>

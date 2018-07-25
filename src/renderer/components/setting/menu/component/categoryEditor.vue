@@ -163,7 +163,7 @@ export default {
         const restrict = {
           from: "09:00 AM",
           to: "11:00 PM",
-          holiday: true,
+          holiday: false,
           days: ["0", "1", "2", "3", "4", "5", "6"],
           types: [
             "WALK_IN",

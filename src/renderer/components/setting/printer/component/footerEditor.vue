@@ -7,6 +7,7 @@
                     <h3>{{$t('title.footer')}}</h3>
                 </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <inputer type="textarea" v-model.trim="footer.content" title="text.content" :center="true"></inputer>
                 <switches title="print.geographic" v-model="footer.geo"></switches>

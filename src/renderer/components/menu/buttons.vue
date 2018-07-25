@@ -397,9 +397,13 @@ export default {
           : print ? this.order.printCount + 1 : this.order.printCount;
 
         let order = this.combineOrderInfo({ printCount });
-        const todo = !!document.querySelector(".item.todo");
+        let todo = !!document.querySelector(".item.todo");
 
-        if (todo) print = false;
+        if (todo && !print) {
+          print = false;
+          todo = false;
+        }
+
         if (this.app.newTicket) {
           // handle new ticket
           const items = todo
@@ -414,8 +418,8 @@ export default {
 
             this.$socket.emit("[TABLE] UPDATE", this.table);
 
-            this.$socket.emit("[ORDER] SAVE", order, print, () => {
-              if (!print) return;
+            this.$socket.emit("[ORDER] SAVE", order, false, () => {
+              if (!print && !todo) return;
 
               const ticket = Object.assign({}, order, { content: items });
 

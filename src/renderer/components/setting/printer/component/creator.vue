@@ -28,32 +28,32 @@ import checkbox from "../../common/checkbox";
 import selector from "../../common/selector";
 
 export default {
-    props: ["init"],
-    components: { inputer, selector, checkbox },
-    data() {
-        return {
-            name: "",
-            type: "regular",
-            assign: true,
-            printerOpts: ["regular", "label", "hibachi"].map(type => ({
-                label: this.$t('print.type.' + type),
-                tooltip: "",
-                value: type
-            }))
-        };
-    },
-    methods: {
-        confirm() {
-            if (!this.name) return;
-            if (this.init.printers.includes(this.name)) return;
-            this.assign && this.$socket.emit("[PRINTER] ASSIGN", this.name);
+  props: ["init"],
+  components: { inputer, selector, checkbox },
+  data() {
+    return {
+      name: "",
+      type: "regular",
+      assign: true,
+      printerOpts: ["regular", "label", "hibachi"].map(type => ({
+        label: this.$t("print.type." + type),
+        tooltip: "",
+        value: type
+      }))
+    };
+  },
+  methods: {
+    confirm() {
+      if (!this.name) return;
+      if (this.init.printers.includes(this.name)) return;
+      this.assign && this.$socket.emit("[PRINTER] ASSIGN", this.name);
 
-            this.init.resolve({
-                name: this.name,
-                type: this.type,
-                assign: this.assign
-            });
-        }
+      this.init.resolve({
+        name: this.name,
+        type: this.type,
+        assign: this.assign
+      });
     }
+  }
 };
 </script>

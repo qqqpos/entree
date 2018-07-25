@@ -7,6 +7,7 @@
                     <h3>{{$t('print.printStyle')}}</h3>
                 </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <selector title="print.fontFamily" v-model="language.fontFamily" :opts="fonts"></selector>
                 <range title="print.fontSize" :min="0" :max="40" :step="1" v-model="language.fontSize"></range>

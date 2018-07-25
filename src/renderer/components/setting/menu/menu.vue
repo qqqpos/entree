@@ -167,7 +167,7 @@ export default {
           usEN: "",
           zhCN: "",
           price: [0],
-          num: this.items[group].filter(i => i.hasOwnProperty("_id")).length,
+          num: this.items[group].filter(i => i._id).length,
           prices: {}
         });
       } else {
@@ -178,7 +178,7 @@ export default {
         });
 
         item = Preset.item();
-        const category = this.categories[this.categoryIndex].contain[group];
+        const category = this.layouts.menu[this.categoryIndex].contain[group];
         Object.assign(item, {
           taxClass: defaultTax,
           category

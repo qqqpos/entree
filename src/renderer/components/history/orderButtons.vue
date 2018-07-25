@@ -8,7 +8,7 @@
       <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
-    <button class="btn" @click="thirdParty" :disabled="disable">
+    <button class="btn" @click="thirdParty" :disabled="disable || order.split">
       <i class="fab fa-google-wallet"></i>
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
@@ -35,28 +35,25 @@ import inputModule from "../component/inputer";
 import dialogModule from "../common/dialog";
 import paymentMarker from "../payment/mark";
 import paymentModule from "../payment/main";
-import driver from "./component/driver";
-import viewer from "../split/viewer";
-import split from "../split/index";
+import splitModule from "../split/index";
+import driverModule from "./driver";
 
 export default {
   props: ["date"],
   components: {
-    split,
-    driver,
-    viewer,
+    splitModule,
     inputModule,
+    driverModule,
     dialogModule,
     paymentMarker,
     paymentModule
   },
   data() {
     return {
-      componentData: null,
-      component: null,
+      today: today(),
       assignable: false,
-      discountable: false,
-      today: today()
+      componentData: null,
+      component: null
     };
   },
   created() {
@@ -64,25 +61,14 @@ export default {
   },
   methods: {
     thirdParty() {
-      if (this.isEmptyTicket) return;
+      if (this.isEmptyTicket || this.order.children) return;
 
-      if (this.order.split) {
-        this.$socket.emit("[SPLIT] GET", this.order.children, splits => {
-          new Promise((resolve, reject) => {
-            this.componentData = { resolve, reject, splits };
-            this.component = "viewer";
-          })
-            .then(order => this.$open("paymentMarker", { order }))
-            .catch(this.exitComponent);
-        });
-      } else {
-        this.$open("paymentMarker");
-      }
+      this.$open("paymentMarker");
     },
     split() {
       if (this.isEmptyTicket) return;
 
-      this.$open("split");
+      this.$open("splitModule");
     },
     evenSplit() {
       if (this.isEmptyTicket) return;
@@ -287,16 +273,28 @@ export default {
       this.exitComponent();
     },
     driver() {
-      const date = document.querySelector("#calendar .text").innerText;
-      if (date !== this.today) {
-        this.$socket.emit("[INQUIRY] HISTORY_ORDER", date, data => {
-          const invoices = data.filter(i => i.type === "DELIVERY");
-          this.$open("driver", { invoices });
-        });
-      } else {
-        const invoices = this.history.filter(i => i.type === "DELIVERY");
-        this.$open("driver", { ticket: this.order.number, invoices, date });
-      }
+      this.$socket.emit("[OPERATOR] LIST", operators => {
+        const drivers = operators
+          .filter(op => op.role === "Driver")
+          .map(op => op.name);
+        const date = document.querySelector("#calendar .text").innerText;
+
+        if (date !== this.today) {
+          this.$socket.emit("[ORDER] HISTORY", date, data =>
+            this.$open("driverModule", {
+              invoices: data.filter(i => i.type === "DELIVERY"),
+              drivers
+            })
+          );
+        } else {
+          const invoices = this.history.filter(i => i.type === "DELIVERY");
+          this.$open("driverModule", {
+            invoices,
+            drivers,
+            date
+          });
+        }
+      });
     },
     exit() {
       this.resetOrder();

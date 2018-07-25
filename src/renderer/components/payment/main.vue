@@ -311,9 +311,7 @@ export default {
         this.order = this.splits[index];
         this.changePaymentType();
       } else {
-        const next = this.splits.findIndex(
-          ticket => ticket.payment.remain !== 0
-        );
+        const next = this.splits.findIndex(t => t.payment.remain !== 0);
 
         if (next !== -1) {
           this.tip = "0.00";
@@ -397,7 +395,6 @@ export default {
     },
     clearInput() {
       const { format } = document.querySelector(".field.active").dataset;
-      let value = this[this.anchor];
 
       switch (format) {
         case "decimal":
@@ -540,7 +537,6 @@ export default {
     },
     chargeThirdParty() {
       return new Promise(charge => {
-        console.log(this.externalPaymentType);
         this.externalPaymentType
           ? charge(this.externalPaymentType)
           : new Promise((resolve, reject) => {
@@ -965,7 +961,7 @@ export default {
           this.invoice._id,
           ({ paid, tip }) => {
             const { balance } = this.order.payment;
-            const remain = Math.max(0, toFixed(balance - paid, 2));
+            const remain = Math.max(0, +(balance - paid).toFixed(2));
 
             this.order.settled = remain === 0;
 
@@ -1180,10 +1176,7 @@ export default {
       const total = toFixed(subtotal + tax + plasticTax, 2);
       const due = toFixed(total + delivery - discount, 2);
       const balance = toFixed(due + gratuity + rounding, 2);
-      const remain = Math.max(
-        0,
-        toFixed(balance - Math.round(paid * 100 + Number.EPSILON) / 100, 2)
-      );
+      const remain = Math.max(0, +(balance - paid).toFixed(2));
 
       Object.assign(this.order.payment, {
         total,
@@ -1352,11 +1345,11 @@ export default {
       this.init.resolve();
     },
     ...mapActions([
-      "setOperator",
       "setApp",
       "setOrder",
       "resetAll",
-      "resetOrder"
+      "resetOrder",
+      "setOperator"
     ])
   },
   watch: {

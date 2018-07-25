@@ -27,19 +27,20 @@
 import tab from "./helper/tab";
 import loader from "../common/loader";
 import chart from "./component/chart";
+import stats from "./component/statistic";
 import checking from "./component/checking";
 import department from "./component/department";
 
 export default {
   props: ["init"],
-  components: { tab, loader, chart, checking, department },
+  components: { tab, loader, chart, stats, checking, department },
   data() {
     return {
       component: null,
-      ledgerDate: null,
       isLoading: true,
-      invoices: [],
-      transactions: []
+      ledgerDate: null,
+      transactions: [],
+      invoices: []
     };
   },
   created() {
@@ -72,6 +73,9 @@ export default {
       switch (name) {
         case "CHART":
           this.component = "chart";
+          break;
+        case "STATS":
+          this.component = "stats";
           break;
         case "DEPARTMENT":
           this.component = "department";

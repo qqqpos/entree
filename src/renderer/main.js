@@ -9,6 +9,7 @@ import AmCharts from 'amcharts3'
 import AmExport from "amcharts3/amcharts/plugins/export"
 import "amcharts3/amcharts/plugins/export/export.css"
 import AmSerial from 'amcharts3/amcharts/serial'
+import AmRadar from "amcharts3/amcharts/radar"
 import AmPie from "amcharts3/amcharts/pie"
 import App from "./App";
 import router from "./router";

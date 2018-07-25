@@ -526,37 +526,26 @@ function createFooter(config, setting, printer, ticket) {
   coupons.forEach(coupon => settle.push(`<section class="details"><h3>${coupon.alias}</h3><p>${coupon.slogan || ''}</p></section>`));
 
   payment.log.forEach(log => {
-    const { type, subType, lfd, paid, change } = log;
+    const { type, subType, lfd, paid, tip, change } = log;
+    const tipText = tip > 0 ? `<p><span class="text">Tip:</span><span class="value">$ ${tip.toFixed(2)}</span></p>` : "";
     switch (type) {
       case "CASH":
         settle.push(`<section class="details">\
                         <h3>Paid by Cash - Thank You</h3>\
-                        <p>\
-                            <span class="text">Paid:</span>\
-                            <span class="value">$ ${paid.toFixed(2)}</span>\
-                        </p>\
-                        <p>\
-                        <span class="text">Change:</span>\
-                        <span class="value">$ ${change.toFixed(2)}</span>\
-                        </p>\
+                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>\
+                        <p><span class="text">Change:</span><span class="value">$ ${change.toFixed(2)}</span></p>\
                     </section>`);
         break;
       case "CREDIT":
         settle.push(`<section class="details">\
                         <h3>CREDIT CARD - ${subType} ( ${lfd} )</h3>\
-                        <p>\
-                            <span class="text">Paid:</span>\
-                            <span class="value">$ ${paid.toFixed(2)}</span>\
-                        </p>\
+                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>${tipText}
                     </section>`);
         break;
       case "GIFT":
         settle.push(`<section class="details">\
                         <h3>Paid by GIFT Card - Thank You</h3>\
-                        <p>\
-                            <span class="text">Paid:</span>\
-                            <span class="value">$ ${paid.toFixed(2)}</span>\
-                        </p>
+                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>
                     </section>`);
         break;
       default:

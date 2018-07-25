@@ -44,7 +44,7 @@ function createWindow() {
     show: false
   };
 
-  //appParams.some(args => args.includes("widescreen")) && Object.assign(option, { width: 1920, height: 1080 });
+  appParams.some(args => args.includes("widescreen")) && Object.assign(option, { width: 1920, height: 1080 });
 
   mainWindow = new BrowserWindow(option);
   mainWindow.loadURL(winURL);
