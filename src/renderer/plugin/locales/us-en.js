@@ -1824,7 +1824,10 @@ export default {
   },
   online: {
     about: "About",
-    adWords: 'AdWords',
+    marketing: 'Ads.',
+    feeds: "Feeds",
+    socialSharing: "Social Sharing",
+    adWords: "Google AdWords",
     config: "Config",
     performance: "Perf.",
     history: "History",

@@ -299,10 +299,6 @@ export default new Router({
                   name: "Setting.online.config",
                   component: require("../components/setting/online/config")
                 }, {
-                  path: "adWords",
-                  name: "Setting.online.adWords",
-                  component: require("../components/setting/online/adWords")
-                }, {
                   path: "history",
                   name: "Setting.online.history",
                   component: require("../components/setting/online/history")
@@ -310,6 +306,23 @@ export default new Router({
                   path: "bill",
                   name: "Setting.online.bill",
                   component: require("../components/setting/online/bill")
+                }, {
+                  path: "marketing",
+                  name: "Setting.marketing",
+                  component: require("../components/setting/online/marketing/index"),
+                  children: [{
+                    path: "/",
+                    name: "Setting.marketing.feeds",
+                    component: require("../components/setting/online/marketing/feeds")
+                  }, {
+                    path: "sharing",
+                    name: "Setting.marketing.sharing",
+                    component: require("../components/setting/online/marketing/socialSharing")
+                  }, {
+                    path: "adWords",
+                    name: "Setting.marketing.adWords",
+                    component: require("../components/setting/online/marketing/adWords")
+                  }]
                 }
               ]
             },

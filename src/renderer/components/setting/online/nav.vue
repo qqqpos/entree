@@ -10,10 +10,6 @@
                     <i class="fas fa-cogs"></i>
                     <span class="text">{{$t('online.config')}}</span>
                 </router-link>
-                <router-link tag="li" :to="{name:'Setting.online.adWords'}">
-                    <i class="fab fa-adversal"></i>
-                    <span class="text">{{$t('online.adWords')}}</span>
-                </router-link>
                 <router-link tag="li" :to="{name:'Setting.online.history'}">
                     <i class="fas fa-history"></i>
                     <span class="text">{{$t('online.history')}}</span>
@@ -21,7 +17,11 @@
                 <router-link tag="li" :to="{name:'Setting.online.bill'}">
                     <i class="fas fa-file-invoice-dollar"></i>
                     <span class="text">{{$t('online.bill')}}</span>
-                </router-link>                
+                </router-link>  
+                <router-link tag="li" :to="{name:'Setting.marketing'}">
+                    <i class="fab fa-adversal"></i>
+                    <span class="text">{{$t('online.marketing')}}</span>
+                </router-link>              
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>
                 <i class="fa fa-arrow-circle-left"></i>
@@ -29,7 +29,7 @@
             </router-link>
         </ul>
         <section class="content">
-            <transition name="switch" mode="out-in">
+            <transition name="fade" mode="out-in">
                 <router-view class="page"></router-view>
             </transition>
         </section>

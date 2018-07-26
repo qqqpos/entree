@@ -5,28 +5,32 @@ import moment from "moment";
 import VueTouch from "vue-touch";
 import Electron from "vue-electron";
 import VueSocketio from "vue-socket.io";
+import SocialSharing from "vue-social-sharing";
+import { Mask, OuterClick } from "./plugin/directive"
+
 import AmCharts from 'amcharts3'
 import AmExport from "amcharts3/amcharts/plugins/export"
 import "amcharts3/amcharts/plugins/export/export.css"
 import AmSerial from 'amcharts3/amcharts/serial'
 import AmRadar from "amcharts3/amcharts/radar"
 import AmPie from "amcharts3/amcharts/pie"
+
 import App from "./App";
+import Bars from "vuebars";
+import Trend from "vuetrend";
 import router from "./router";
 import i18n from "./plugin/dict";
 import util from "./plugin/util";
 import VueBus from "./plugin/bus";
-import Trend from "vuetrend";
-import Bars from "vuebars";
-import { Mask, OuterClick } from "./plugin/directive"
 
+Vue.use(VueTouch, { name: "v-touch" });
+Vue.use(SocialSharing);
 Vue.use(Electron);
 Vue.use(VueBus);
 Vue.use(Trend);
 Vue.use(Bars);
 Vue.use(util);
 Vue.use(i18n);
-Vue.use(VueTouch, { name: "v-touch" });
 
 Vue.directive('mask', Mask);
 Vue.directive('outer-click', OuterClick);

@@ -1810,7 +1810,10 @@ export default {
   },
   online: {
     about: "介绍",
-    adWords: '推广',
+    marketing: '推广',
+    feeds: "信息流",
+    socialSharing: "社交推广",
+    adWords: "谷歌关键词",
     config: "配置",
     performance: "表现",
     history: "历史",

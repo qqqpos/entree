@@ -23,7 +23,7 @@
       </transition>
     </toggle>
     <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
-    <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="true"></toggle>
+    <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>
   </div>
 </template>
 
@@ -39,17 +39,9 @@ export default {
   components: { toggle, switches, inputer, external },
   data() {
     return {
-      alphabetical: false,
       operator: this.$store.getters.op,
-      store: JSON.parse(JSON.stringify(this.$store.getters.store)),
-      display: JSON.parse(JSON.stringify(this.$store.getters.config.display))
+      store: JSON.parse(JSON.stringify(this.$store.getters.store))
     };
-  },
-  created() {
-    this.alphabetical = this.display.alphabetical;
-  },
-  beforeDestroy() {
-    this.alphabetical !== this.display.alphabetical && this.setMenu();
   },
   methods: {
     update(data) {
@@ -74,14 +66,14 @@ export default {
       });
     },
     updateUser() {
-      let value = this.store.email.username;
+      const value = this.store.email.username;
       this.update({
         key: "store.email.username",
         value
       });
     },
     updatePassword() {
-      let value = this.store.email.password;
+      const value = this.store.email.password;
       this.update({
         key: "store.email.password",
         value
