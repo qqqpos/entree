@@ -40,7 +40,7 @@
         <span>{{reason}}</span>
       </div>
       <div class="settle relative" @click="tap">
-        <span class="index">{{index}}</span>
+        <span class="index">{{index + 1}}</span>
         <p class="total">$ {{order.payment.balance | decimal}}
           <span class="tip">( {{order.payment.tax | decimal}} )</span>
         </p>

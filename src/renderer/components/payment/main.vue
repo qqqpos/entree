@@ -234,7 +234,7 @@ export default {
           remain === 0
             ? this.$socket.emit("[SPLIT] GET", this.invoice._id, splits => {
                 if (splits.length) {
-                  this.splits = splits;
+                  this.splits = splits.sort((a, b) => a.number.localeCompare(b.number));
                   this.payWhole = false;
 
                   const index = splits.findIndex(t => t.payment.remain !== 0);

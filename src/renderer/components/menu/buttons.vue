@@ -69,7 +69,7 @@
       <i class="fa fa-calculator"></i>
       <span class="text">{{$t('button.modify')}}</span>
     </button>
-    <button class="btn settle" @click="settle" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
+    <button class="btn settle" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
@@ -116,7 +116,7 @@
       <i class="fa fa-print"></i>
       <span class="text">{{$t('button.print')}}</span>
     </button>
-    <button class="btn" @click="settle" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
+    <button class="btn" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
@@ -248,11 +248,6 @@ export default {
       if (this.isEmptyTicket) return;
       this.$open("course");
     },
-    settle() {
-      this.ticket.type === "TO_GO"
-        ? this.openPaymentModule({ order: this.combineTogoItems() })
-        : this.openPaymentModule();
-    },
     openPaymentModule(params) {
       new Promise((resolve, reject) => {
         this.componentData = Object.assign({}, { resolve, reject }, params);
@@ -319,23 +314,6 @@ export default {
         this.$dialog(prompt).then(this.exitComponent);
       }
     },
-    combineTogoItems() {
-      //combine togo list to origin dineIn placed items
-      const { type } = this.order;
-
-      this.order.content.forEach(item => {
-        this.archivedOrder.content.push(
-          Object.assign(item, {
-            diffs: "NEW",
-            orderType: type
-          })
-        );
-      });
-
-      this.$calculatePayment(this.archivedOrder);
-
-      return this.archivedOrder;
-    },
     checkPendingItem(print) {
       return new Promise((next, stop) => {
         const pendingItems = this.order.content.filter(item => item.pending);
@@ -380,9 +358,15 @@ export default {
     initialPrint(print) {
       return new Promise(next => {
         if (this.ticket.type === "TO_GO" && this.order.content.length > 0) {
-          //save togo items
-          const order = this.combineTogoItems();
-          this.$socket.emit("[ORDER] UPDATE", order, print);
+          this.$socket.emit(
+            "[ORDER] SAVE_TOGO",
+            this.archivedOrder,
+            this.order,
+            print
+          );
+
+          this.table.invoice.push(this.order._id);
+          this.$socket.emit("[TABLE] UPDATE", this.table);
           next();
         } else {
           next();
@@ -537,7 +521,12 @@ export default {
     createTogo() {
       this.archiveOrder(this.order);
       Object.assign(this.ticket, { type: "TO_GO" });
-      this.setOrder({ type: "TO_GO", content: [] });
+      this.setOrder({
+        _id: ObjectId().toString(),
+        parent: this.order._id,
+        type: "TO_GO",
+        content: []
+      });
     },
     dineInQuit() {
       const prompt = {

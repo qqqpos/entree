@@ -67,7 +67,9 @@ export default {
     setSection(index) {
       this.section = index;
     },
-    getTableStatus({ status, session }) {
+    getTableStatus({ status, session, invoice }) {
+      const togo = invoice.length > 1;
+
       switch (status) {
         case -2:
           return { reserved: true };
@@ -76,12 +78,12 @@ export default {
         case 1:
           return { idle: true };
         case 2:
-          const invoice = this.history.find(t => t.session === session);
-          return invoice && invoice.print
-            ? { placed: true }
-            : { preparing: true };
+          const ticket = this.history.find(t => t.session === session);
+          return ticket && ticket.print
+            ? { placed: true, togo }
+            : { preparing: true, togo };
         case 3:
-          return { receipted: true };
+          return { receipted: true, togo };
         case 4:
           return { booked: true };
       }
@@ -377,9 +379,7 @@ export default {
 
       this.$dialog(prompt).then(this.exitComponent);
     },
-    createTableFailed(error) {
-      
-    },
+    createTableFailed(error) {},
     ...mapActions([
       "setApp",
       "setOrder",
@@ -583,6 +583,17 @@ aside {
   content: "\f073";
   color: #009688;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.togo:before {
+  content: "\f290";
+  font-family: "fontAwesome";
+  font-weight: bold;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  color: #ff5722;
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
 }
 </style>
 

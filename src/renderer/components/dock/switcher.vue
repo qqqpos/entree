@@ -17,7 +17,7 @@
         <i class="fa fa-utensils"></i>
         <span>{{$t('type.DINE_IN')}}</span>
       </li>
-      <li v-show="(type === 'DINE_IN' || type === 'HIBACHI') && !app.newTicket" @click="togo">
+      <li v-show="(type === 'DINE_IN' || type === 'HIBACHI') && !app.newTicket && !order.togo" @click="togo">
         <i class="fas fa-walking"></i>
         <span>{{$t('type.TO_GO')}}</span>
       </li>

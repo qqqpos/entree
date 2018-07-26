@@ -435,7 +435,7 @@ function createStyle(setting) {
               h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${defaultFont}";}\
               .delay{border:1px dashed #000;margin:10px 0;text-align:center;}
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
-              footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}.ticketNumber{right:10px;}\
+              footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}.ticketNumber{right:0px;}\
               div.time span{display:inline-block;margin:0 10px;font-size:1em;}\
               div.time{border-bottom:1px solid #000;position:relative;margin-top:10px;}\
               .server{border-bottom:1px solid #000;text-align:left;}\

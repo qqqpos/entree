@@ -207,7 +207,7 @@ export default {
         splits.forEach(ticket =>
           Printer.setTarget("Receipt").print(
             Object.assign(ticket, {
-              type: "PRE_PAYMENT",
+              type: this.order.togo ? ticket.type : "PRE_PAYMENT",
               cashier: this.op.name
             }),
             true

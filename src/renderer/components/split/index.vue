@@ -84,7 +84,7 @@ export default {
   methods: {
     getSplitOrder() {
       this.$socket.emit("[SPLIT] GET", this.order._id, splits => {
-        const orders = splits.filter(order => order);
+        const orders = splits.sort((a, b) => a.number.localeCompare(b.number));
         if (orders.length) {
           this.splits = orders;
           this.done = this.order.content.every(item => item.split);

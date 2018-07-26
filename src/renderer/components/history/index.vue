@@ -74,8 +74,12 @@ export default {
   },
   methods: {
     checkSync() {
-      this.ticket.number !== this.history.length + 1 &&
-        this.$socket.emit("[ORDER] SYNC", orders => this.setTodayOrder(orders));
+      this.$socket.emit("ABOUT", ({ lastSync }) => {
+        this.sync !== lastSync &&
+          this.$socket.emit("[INITIAL] POS", data =>
+            this.setAppEnvironment(data)
+          );
+      });
     },
     setFilter(type, name) {
       this.page = 0;
@@ -175,7 +179,7 @@ export default {
     getSplits(invoice) {
       invoice.split &&
         this.$socket.emit("[SPLIT] GET", invoice._id, splits => {
-          this.splits = splits;
+          this.splits = splits.sort((a, b) => a.number.localeCompare(b.number));
           this.resetViewOrder();
         });
     },
@@ -236,7 +240,12 @@ export default {
       }
       return page;
     },
-    ...mapActions(["resetOrder", "setViewOrder", "setTodayOrder"])
+    ...mapActions([
+      "resetOrder",
+      "setViewOrder",
+      "setTodayOrder",
+      "setAppEnvironment"
+    ])
   },
   computed: {
     targetInvoices() {
