@@ -181,7 +181,7 @@ const mutations = {
     [types.UPDATE_MENU_ITEM](state, item) {
         const { _id, category } = item;
 
-        if (state.menu.hasOwnProperty(category))
+        if (!state.menu.hasOwnProperty(category))
             state.menu[category] = [];
 
         const index = state.menu[category].findIndex(i => i._id === _id);

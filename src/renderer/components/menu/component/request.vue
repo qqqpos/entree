@@ -61,7 +61,7 @@ export default {
           .fill()
           .forEach(() => request.push({ zhCN: "", usEN: "" }));
 
-      this.items = request;
+      this.items = request.slice(0,33);
     },
     getPrefix(action, e) {
       const dom = document.querySelector(".acting");
@@ -202,10 +202,8 @@ div.items div:active {
   background: rgba(166, 195, 201, 0.55);
 }
 
-.items {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: repeat(11, 1fr);
+.items{
+
 }
 
 .items div {

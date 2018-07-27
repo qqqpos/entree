@@ -163,7 +163,7 @@ const singleInstance = app.makeSingleInstance((command, working) => {
   }
 });
 
-singleInstance && app.quit(0);
+process.env.NODE_ENV === 'production' && singleInstance && app.quit(0);
 
 app.on('ready', createWindow)
 

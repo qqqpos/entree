@@ -7,6 +7,7 @@
           <h3>{{$t(category[language])}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer title="text.primary" v-model.trim="category.usEN" length="19"></inputer>
         <inputer title="text.secondary" v-model.trim="category.zhCN" length="19"></inputer>

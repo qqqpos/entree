@@ -1628,7 +1628,7 @@ export default {
     itemPrice: "打印价格",
     storeContact: "店面信息",
     customer: "客人资料",
-    jobTime: "打印时间",
+    jobTime: "出单时间信息",
     payment: "打印总额",
     buzzer: "提示音",
     menuID: "菜单ID",
@@ -1644,7 +1644,7 @@ export default {
     geographic: "地址信息",
     ticketNumber: "订单号码",
     tableName: "座位名称",
-    tradeMark: "打印商标",
+    tradeMark: "商标水印",
     layout: "打印布局",
     type: {
       regular: "常规打印",

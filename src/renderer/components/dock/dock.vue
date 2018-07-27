@@ -2,11 +2,10 @@
   <div>
     <transition name="slideDown" appear>
         <header class="dock">
-          <div class="ticket-number text">{{ticket.number}}</div>
+          <div class="ticket-number text">{{app.newTicket ? ticket.number : order.number}}</div>
           <div class="ticket-type" @click="changeType">{{orderType}}</div>
           <div class="trademark">
             <span v-show="isTrademarkVisible">{{order.source}}</span>
-            <!-- <span class="waterMark" v-show="$route.name === 'Menu' && order.hasOwnProperty('__vip__')">VIP</span> -->
           </div>
           <div class="center-wrap text" @click="editProfile">
             <div class="client" v-show="isMenuPage">
@@ -78,16 +77,14 @@ export default {
     },
     orderType() {
       if (this.isMenuPage) {
-        let type = "type." + this.order.type;
+        let type = this.$t("type." + this.order.type, this.app.language);
+        let table = "";
 
-        return this.order.type === "DINE_IN" || this.order.type === "BAR"
-          ? this.$t(type, this.app.language) +
-              (this.order.table
-                ? " - " +
-                  this.order.table +
-                  (this.order.guest > 0 ? " - " + this.order.guest : "")
-                : "")
-          : this.$t(type, this.app.language);
+        if (this.order.type === "DINE_IN" || this.order.type === "BAR") {
+          table = ` - ${this.order.table} - ${this.order.guest}`;
+        }
+
+        return type + table;
       } else {
         return this.$t("type." + this.ticket.type, this.app.language);
       }
@@ -264,6 +261,7 @@ export default {
     ...mapActions([
       "setApp",
       "setSync",
+      "setOrder",
       "setBooks",
       "resetAll",
       "setTicket",
@@ -296,7 +294,8 @@ export default {
       this.setSync(time);
     },
     TICKET_NUMBER(number) {
-      this.app.newTicket && this.setTicket({ number });
+      this.setTicket({ number });
+      this.app.newTicket && this.setOrder({ number });
     },
     UPDATE_CONFIG({ target, data }) {
       Object.assign(this.config, { [target]: data });
