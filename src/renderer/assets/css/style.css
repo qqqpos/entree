@@ -739,6 +739,7 @@ label.input-toggle > input {
   background: #b0bec5;
   will-change: background;
   border: 1px solid #78909c;
+  max-height: 63.08px;
 }
 .sub.items div {
   border: 1px solid #ff9800;

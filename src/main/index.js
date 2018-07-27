@@ -5,7 +5,11 @@ const updater = require('electron-simple-updater');
 
 import { app, BrowserWindow, ipcMain, powerSaveBlocker } from 'electron';
 
-powerSaveBlocker.start('prevent-display-sleep');
+const powerID = powerSaveBlocker.start('prevent-display-sleep')
+powerSaveBlocker.stop(powerID)
+
+//disable security warning
+process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = false;
 
 //auto updater
 updater.init({

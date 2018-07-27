@@ -13,6 +13,7 @@
 
     section.items div{
         font-size: 1.4vw;
+        max-height: initial;
     }
 
     div.request{
