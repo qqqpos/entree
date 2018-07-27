@@ -1,6 +1,6 @@
 <template>
     <div>
-        <social-sharing url="http://www.qqqpos.com"
+        <!-- <social-sharing url="http://www.qqqpos.com"
             title="Testing"
             description="Hello from Entree POS."
             quote="Vue is a progressive framework for building user interfaces."
@@ -21,7 +21,7 @@
                     <i class="fab fa-pinterest-square"></i> Pinterest
                 </network>
             </div>
-        </social-sharing>
+        </social-sharing> -->
     </div>
 </template>
 
@@ -38,10 +38,10 @@ export default {
     };
   },
   created(){
-      this.$root.$on('social_shares_open', this.modalWindowHanlder);
+      //this.$root.$on('social_shares_open', this.modalWindowHanlder);
   },
   beforeDestroy(){
-      this.$root.$off('social_shares_open', this.modalWindowHanlder)
+      //this.$root.$off('social_shares_open', this.modalWindowHanlder)
   },
   methods:{
       modalWindowHandler(network,url){

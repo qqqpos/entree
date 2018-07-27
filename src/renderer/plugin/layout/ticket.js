@@ -283,6 +283,13 @@ function createList(printer, setting, invoice, preview) {
 
   prioritize && items.sort((p, n) => (p.priority || 0) < (n.priority || 0) ? 1 : -1);
 
+  //if togo ticket 
+  let togoItems;
+  if (invoice.togo) {
+    togoItems = items.filter(i => i.orderType === 'TO_GO').map(item => mockup(item, renderQty)).join("").toString();
+    items = items.filter(i => i.orderType !== 'TO_GO');
+  }
+
   if (categorize) {
     let sorted = [];
 
@@ -292,7 +299,7 @@ function createList(printer, setting, invoice, preview) {
     }
 
     Object.keys(sorted).forEach(category => {
-      const title = `<p class="title"><span class="usEN">${category}</span></p>`;
+      const title = `<p class="title">${category}</p>`;
       const categorized = sorted[category].map(item => mockup(item, renderQty)).join("").toString();
       content += `<div class="categorize">${title + categorized}</div>`
     })
@@ -303,7 +310,17 @@ function createList(printer, setting, invoice, preview) {
       .toString();
   }
   const delay = invoice.delay ? `<h1 class="delay">${moment(invoice.delay).locale("en").format('MM-DD hh:mm A')}</h1>` : '';
-  return `<section class="receipt">${delay + content}</section>`;
+  const togo = invoice.togo
+    ? `<div class="categorize"><p class="title">${setting.title['TO_GO']}</p>${togoItems}</div>`
+    : '';
+
+  // generate list
+  if (invoice.togo) {
+    content = content ? `<div class="categorize"><p class="title">${setting.title['DINE_IN']}</p>${content}</div>` : "";
+    return `<section class="receipt">${delay + content + togo}</section>`
+  } else {
+    return `<section class="receipt">${delay + content}</section>`
+  }
 
   function mockup(item, renderQty) {
     const { replace = false, zhCN, usEN, note } = item.printer[printer];
@@ -444,7 +461,7 @@ function createStyle(setting) {
               .customer p:last-child{border-bottom:1px solid #000;}\
               .tel{letter-spacing:2px;}.ext{margin-left:10px;}.pt{font-size:0.8em;}
               section.receipt{width:100%;margin:5px 0;}\
-              .categorize .title{border-bottom:1px dashed #000; font-size:18px;font-weight:bold; font-family:"${defaultFont}";}
+              .categorize .title{border-bottom:1px dashed #000;margin-bottom:5px; font-size:18px;font-weight:bold; font-family:"${defaultFont}";}
               .categorize > div{text-indent:0.5em;}
               .main{display:flex;position:relative;width:100%;}\
               .main .wrap,.empty{flex:1;}\

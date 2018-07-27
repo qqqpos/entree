@@ -6,10 +6,10 @@
                     <i class="fas fa-grip-horizontal"></i>
                     <span class="text">{{$t('nav.seat')}}</span>
                 </router-link>
-                <router-link tag="li" :to="{name:'Setting.table.config'}">
-                    <i class="fas fa-cogs"></i>
-                    <span class="text">{{$t('nav.setting')}}</span>
-                </router-link>      
+                <router-link tag="li" :to="{name:'Setting.hibachi'}">
+                    <i class="fas fa-fire"></i>
+                    <span class="text">{{$t('nav.hibachi')}}</span>
+                </router-link>
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>
                 <i class="fa fa-arrow-circle-left"></i>

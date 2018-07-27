@@ -18,7 +18,7 @@
                 </div>
             </aside>
             <div class="tables">
-                <div class="table" v-for="(table,index) in tableSection" @click="tap(table)" @contextmenu="reset(table)" :key="index" :class="getTableStatus(table)">
+                <div class="table-seat" v-for="(table,index) in tableSection" @click="tap(table)" @contextmenu="reset(table)" :key="index" :class="getTableStatus(table)">
                 <span :class="[table.shape]" class="icon"></span>
                 <span class="name">{{table.name}}</span>
                 <span class="staff" v-show="table.server">{{table.server}}</span>
@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      viewTables: false,
       componentData: null,
       component: null,
       transfer: false,
@@ -63,13 +64,14 @@ export default {
       section: 0
     };
   },
+  created() {
+    this.viewTables = this.approval(this.op.view, "tables");
+  },
   methods: {
     setSection(index) {
       this.section = index;
     },
-    getTableStatus({ status, session, invoice }) {
-      const togo = invoice.length > 1;
-
+    getTableStatus({ status, session, invoice, server }) {
       switch (status) {
         case -2:
           return { reserved: true };
@@ -79,18 +81,23 @@ export default {
           return { idle: true };
         case 2:
           const ticket = this.history.find(t => t.session === session);
+          const togo = ticket ? ticket.togo : false;
+          const ban = ticket
+            ? !this.viewTables && server !== this.op.name
+            : false;
+
           return ticket && ticket.print
-            ? { placed: true, togo }
-            : { preparing: true, togo };
+            ? { placed: true, togo, ban }
+            : { preparing: true, togo, ban };
         case 3:
-          return { receipted: true, togo };
+          return { receipted: true };
         case 4:
           return { booked: true };
       }
     },
     countSeats(section) {
       const { zone } = this.layouts.table[section];
-      const tables = this.tables[zone];
+      const tables = this.tables[zone] || [];
 
       return tables.filter(
         ({ _id, type, status }) => _id && type !== "placeholder" && status === 1
@@ -130,9 +137,11 @@ export default {
         case 4:
           break;
         default:
-          this.$checkPermission("view", "tables")
-            .then(this.viewTicket)
-            .catch(this.unableViewTicketDialog);
+          this.table.server !== this.op.name
+            ? this.$checkPermission("view", "tables")
+                .then(this.viewTicket)
+                .catch(() => {})
+            : this.viewTicket();
       }
     },
     viewTicket() {
@@ -242,7 +251,7 @@ export default {
       next();
     },
     countGuest(table) {
-      const defaultGuest = parseInt(table.seats) || 1;
+      const defaultGuest = parseInt(table.seat) || 1;
 
       return new Promise((next, stop) => {
         this.dineInOpt.guestCount
@@ -372,8 +381,8 @@ export default {
     },
     unableViewTicketDialog() {
       const prompt = {
-        title: "dialog.insufficientPermission",
-        msg: "dialog.permission",
+        title: "dialog.permissionDenied",
+        msg: "dialog.unableViewOtherTable",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
@@ -489,34 +498,6 @@ aside {
   flex: 1;
 }
 
-.table {
-  height: 81px;
-  width: 83px;
-  align-self: center;
-  justify-self: center;
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: space-around;
-  flex-direction: column;
-  border-radius: 6px;
-  border-top: 1px solid #f3f3f3;
-  background: linear-gradient(
-    135deg,
-    rgb(245, 247, 250) 0%,
-    rgb(195, 207, 226) 110%
-  );
-  margin: 4px;
-  text-shadow: 0 1px 1px #fff;
-  box-shadow: 0 1px 3px #607d8b;
-}
-
-.icon {
-  font-size: 4em;
-  width: 64px;
-  height: 64px;
-}
-
 .staff {
   position: absolute;
   background: #03a9f4;
@@ -532,16 +513,6 @@ aside {
 
 .ticket {
   width: 285px;
-}
-
-.icon:after {
-  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
-  font-family: fontAwesome;
-  font-size: 16px;
-  font-weight: 900;
-  position: absolute;
-  top: 3px;
-  right: 3px;
 }
 
 .placed {
@@ -593,6 +564,17 @@ aside {
   left: 3px;
   top: 3px;
   color: #ff5722;
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.ban:before {
+  content: "\f070";
+  font-family: "fontAwesome";
+  font-weight: bold;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  color: #ff9800;
   text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
 }
 </style>

@@ -432,7 +432,7 @@ export default {
       this.exitComponent();
       this.updateInvoice(order);
 
-      this.$socket.emit("[SPLIT] GET", order.children, splits => {
+      this.$socket.emit("[SPLIT] GET", order._id, splits => {
         splits.forEach(ticket => {
           receipt
             ? Printer.setTarget("Receipt").print(ticket, true)

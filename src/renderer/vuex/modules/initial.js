@@ -151,7 +151,13 @@ const mutations = {
     },
     [types.REPLACE_TABLE](state, table) {
         const { zone, grid } = table;
-        state.tables[zone].splice(grid, 1, table);
+
+        if (state.tables[zone]) {
+            state.tables[zone].splice(grid, 1, table);
+        } else {
+            state.tables[zone] = [table];
+        }
+
     },
     [types.REMOVE_TABLE](state, table) {
         const { _id, zone } = table;
@@ -174,8 +180,11 @@ const mutations = {
     // new update methods
     [types.UPDATE_MENU_ITEM](state, item) {
         const { _id, category } = item;
-        const index = state.menu[category].findIndex(i => i._id === _id);
 
+        if (state.menu.hasOwnProperty(category))
+            state.menu[category] = [];
+
+        const index = state.menu[category].findIndex(i => i._id === _id);
         index === -1 ? state.menu[category].push(item) : state.menu[category].splice(index, 1, item);
     },
     [types.REMOVE_MENU_ITEM](state, { _id, category }) {

@@ -1071,3 +1071,41 @@ thead.title td {
   font-weight: bold;
   color: #FF5722;
 }
+
+.table-seat{
+  height: 81px;
+  width: 83px;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  border-radius: 6px;
+  border-top: 1px solid #f3f3f3;
+  background: linear-gradient(
+    135deg,
+    rgb(245, 247, 250) 0%,
+    rgb(195, 207, 226) 110%
+  );
+  margin: 4px;
+  text-shadow: 0 1px 1px #fff;
+  box-shadow: 0 1px 3px #607d8b;
+}
+
+.table-seat .icon {
+  font-size: 4em;
+  width: 64px;
+  height: 64px;
+}
+
+.table-seat .icon:after {
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
+  font-family: fontAwesome;
+  font-size: 16px;
+  font-weight: 900;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}

@@ -5,6 +5,7 @@
       <div class="wrap">
         <span class="name">{{item[language]}}</span>
         <span class="side">{{item.side[language]}}</span>
+        <span class="togo" v-if="item.orderType && item.orderType !== type">({{$t('type.'+item.orderType)}})</span>
       </div>
       <i class="fa fa-sort splitor" v-if="splitBtnVisible" @click="splitItem(item)"></i>
       <span class="price">{{item.total | decimal}}</span>
@@ -25,8 +26,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import checkbox from "../../setting/common/checkbox";
+
 export default {
-  props: ["item", "ignore", "checkbox"],
+  props: ["type", "item", "ignore", "checkbox"],
   components: { checkbox },
   computed: {
     splitBtnVisible() {
@@ -197,6 +199,10 @@ li {
 
 .todo {
   height: 18px;
+}
+
+.togo{
+  color: #D84315;
 }
 
 li.disable {

@@ -67,13 +67,13 @@
     </div>
     <div class="order" @click.self="resetHighlight" v-else-if="layout === 'order'">
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd" tag="ul">
-        <list-item v-for="(item,index) in order.content" :data-category="item.category" :key="index" :item="item" :checkbox="todo"></list-item>
+        <list-item v-for="(item,index) in order.content" :data-category="item.category" :key="index" :item="item" :type="order.type" :checkbox="todo"></list-item>
       </v-touch>
       <shortcut :items="shortcutItems" @add="add" v-if="customer._id && shortcutItems.length > 0 && offset >=0"></shortcut>
     </div>
     <div class="order" v-else>
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd" tag="ul">
-        <list-item v-for="(item,index) in order.content" :data-category="item.category" :key="index" :item="item" :class="{print:!item.print,pending:item.pending}" @click.native="addToSpooler(item)"></list-item>
+        <list-item v-for="(item,index) in order.content" :data-category="item.category" :key="index" :item="item" :type="order.type" :class="{print:!item.print,pending:item.pending}" @click.native="addToSpooler(item)"></list-item>
       </v-touch>
     </div>
     <div class="middle">

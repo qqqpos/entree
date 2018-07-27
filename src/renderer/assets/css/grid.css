@@ -66,3 +66,28 @@
     grid-area: ticket;
     background: rgba(255, 255, 255, 0.5);
 }
+
+/* table setting page */
+
+.table-layout-setting {
+    display: grid;
+    grid-template-columns: 105px 1fr;
+}
+
+.grid-table-setup{
+    display: grid;
+    height: 100%;
+    margin-left: 5px;
+    width: calc(100% - 207px);
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: repeat(8,1fr);
+}
+
+/* hibachi setting page  */
+
+.hibachi-setup-grid {
+    height: calc(100vh - 30px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}

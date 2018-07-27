@@ -6,7 +6,7 @@
         <h3>Welcome to your new Station</h3>
         <p class="intro">Thank you for choosing United POS.</p>
         <p class="intro">If you experiencing any difficult moment, please do not hesitate to contact us.</p>
-        <input type="text" v-model="station.alias" placeholder="Please Enter Station Name">
+        <input type="text" v-model="station.alias" maxlength="10" placeholder="Please Enter Station Name">
         <p class="copyleft">2017-2018 United POS Inc.</p>
       </div>
       <footer>

@@ -180,7 +180,7 @@ export default {
       const { zone } = this.layouts.table[this.section];
 
       table = JSON.parse(JSON.stringify(table));
-      table.seats = table.seats || 0;
+      table.seat = table.seat || 0;
       table._id = table._id || ObjectId().toString();
       Object.assign(table, { zone, grid: index });
 

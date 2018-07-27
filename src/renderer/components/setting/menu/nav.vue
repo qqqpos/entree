@@ -16,7 +16,7 @@
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.menu.config'}">
                     <i class="fas fa-cogs"></i>
-                    <span class="text">{{$t('nav.config')}}</span>
+                    <span class="text">{{$t('nav.setting')}}</span>
                 </router-link>                
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>

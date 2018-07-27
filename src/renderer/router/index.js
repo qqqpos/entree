@@ -277,12 +277,12 @@ export default new Router({
                 {
                   path: "/",
                   name: "Setting.table",
-                  component: require("../components/setting/table/regular/index")
+                  component: require("../components/setting/table/index")
                 },
                 {
-                  path: "hibachi",
-                  name: "Setting.hibachi",
-                  component: require("../components/setting/table/hibachi/index")
+                  path: "config",
+                  name: "Setting.table.config",
+                  component: require("../components/setting/table/config")
                 }
               ]
             },

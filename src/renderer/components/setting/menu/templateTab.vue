@@ -2,7 +2,7 @@
     <div>
         <ul class="tabs">
             <router-link tag="li" class="tab" :to="{name:'Setting.template'}">{{$t('nav.list')}}</router-link>
-            <router-link tag="li" class="tab" :to="{name:'Setting.template.config'}" :class="{disable:!template}">{{$t('nav.config')}}</router-link>
+            <router-link tag="li" class="tab" :to="{name:'Setting.template.config'}" :class="{disable:!template}">{{$t('nav.setting')}}</router-link>
             <router-link tag="li" class="tab" :to="{name:'Setting.template.item'}" :class="{disable:!template}">{{$t('title.item')}}</router-link>
             <router-link tag="li" class="tab" :to="{name:'Setting.template.side'}" :class="{disable:!template}">{{$t('title.sideOption')}}</router-link>
         </ul>

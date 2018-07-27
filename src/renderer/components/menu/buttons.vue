@@ -357,16 +357,16 @@ export default {
     },
     initialPrint(print) {
       return new Promise(next => {
-        if (this.ticket.type === "TO_GO" && this.order.content.length > 0) {
-          this.$socket.emit(
-            "[ORDER] SAVE_TOGO",
-            this.archivedOrder,
-            this.order,
-            print
+        if (this.ticket.type === "TO_GO") {
+          let order = this.archivedOrder;
+          let items = this.order.content.map(item =>
+            Object.assign({}, item, { print, orderType: "TO_GO" })
           );
+          order.content.push(...items);
 
-          this.table.invoice.push(this.order._id);
-          this.$socket.emit("[TABLE] UPDATE", this.table);
+          this.$calculatePayment(order);
+          this.$socket.emit("[ORDER] UPDATE", order, false);
+
           next();
         } else {
           next();
@@ -421,7 +421,9 @@ export default {
               "[ORDER] SAVE",
               order,
               print,
-              ticket => print && Printer.print(ticket)
+              ticket =>
+                print &&
+                Printer.print(Object.assign(ticket, { content: items }))
             );
           }
         } else {
@@ -523,8 +525,8 @@ export default {
       Object.assign(this.ticket, { type: "TO_GO" });
       this.setOrder({
         _id: ObjectId().toString(),
-        parent: this.order._id,
         type: "TO_GO",
+        print: false,
         content: []
       });
     },
