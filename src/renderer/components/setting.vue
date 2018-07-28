@@ -10,7 +10,7 @@ export default {}
 
 <style scoped>
 .setting {
-    background: url(../assets/image/grid.png) #fcfcfc;
+    background: url(../assets/image/grid.png) #f4f4f4;
     width: 100vw;
     height: 100vh;
     padding-top: 60px;

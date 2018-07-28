@@ -1395,16 +1395,16 @@ export default {
     chart: "图表",
     chartTip: "销售图表 · 趋势",
     department: "部门划分",
-    system: "系统",
-    systemTip: "软件设置",
     tool: "工具",
     troubleshooting: "检测 · 排错 · 报告问题",
     exit: "退出",
     exitTip: "退出软件设置",
-    host: "伺服器",
-    version: "版本",
-    buildTime: "创建日期: ",
-    support: "技术支持",
+    nav:{
+      
+    },
+    title:{
+
+    },
     storeInfo: "店面资料",
     payment: "付款",
     receiptDialog: "打印收据",
@@ -1532,7 +1532,7 @@ export default {
       exit: "退出软件"
     },
     modify: {
-      less: "下调订单价格",
+      less: "下调物品数量或价格",
       discount: "订单折扣",
       price: "修改物品价格",
       item: "移除已下单的物品",

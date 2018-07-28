@@ -1,29 +1,34 @@
 <template>
   <div>
-    <external title="text.timecard" @open="$router.push({name:'Setting.store.timecard'})"></external>
-    <toggle title="setting.googleMatrix" true-tooltip="tip.matrixService" false-tooltip="tip.disableMatrix" v-model="store.matrix.enable" :conditionalTooltip="true" @update="updateMatrix">
-      <transition name="dropdown">
-        <div v-if="store.matrix.enable" class="opt">
-          <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect" @update="updateAutoCorrect"></switches>
-          <inputer title="text.coordinate" v-model="store.matrix.coordinate" @update="updateStoreCoordinate"></inputer>
-          <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI" v-show="operator.role === 'Developer'"></inputer>
-        </div>
-      </transition>
-    </toggle>
-    <toggle title="setting.emailService" tooltip="tip.emailService" v-model="store.email.enable" @update="updateEmail" :disabled="true">
-      <transition name="dropdown">
-        <div v-if="store.email.enable" class="opt">
-          <inputer title="text.username" v-model="store.email.username" @update="updateUser"></inputer>
-          <inputer title="text.password" v-model="store.email.password" @update="updatePassword" type="password"></inputer>
-          <switches title="text.autoEmailPromotion" v-model="store.email.coupon" :disabled="true"></switches>
-          <switches title="text.emailReceipt" v-model="store.email.receipt" :disabled="true"></switches>
-          <switches title="text.autoEmailConfirmation" v-model="store.email.reservation" :disabled="true"></switches>
-          <switches title="text.emailReport" v-model="store.email.report" :disabled="true"></switches>
-        </div>
-      </transition>
-    </toggle>
-    <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
-    <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>
+    <div class="tab-content">
+      <header class="nav">
+        <h3 class="title">{{$t('setting.title.other')}}</h3>
+      </header>
+      <external title="text.timecard" @open="$router.push({name:'Setting.store.timecard'})"></external>
+      <toggle title="setting.googleMatrix" true-tooltip="tip.matrixService" false-tooltip="tip.disableMatrix" v-model="store.matrix.enable" :conditionalTooltip="true" @update="updateMatrix">
+        <transition name="dropdown">
+          <div v-if="store.matrix.enable" class="opt">
+            <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect" @update="updateAutoCorrect"></switches>
+            <inputer title="text.coordinate" v-model="store.matrix.coordinate" @update="updateStoreCoordinate"></inputer>
+            <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI" v-show="operator.role === 'Developer'"></inputer>
+          </div>
+        </transition>
+      </toggle>
+      <toggle title="setting.emailService" tooltip="tip.emailService" v-model="store.email.enable" @update="updateEmail" :disabled="true">
+        <transition name="dropdown">
+          <div v-if="store.email.enable" class="opt">
+            <inputer title="text.username" v-model="store.email.username" @update="updateUser"></inputer>
+            <inputer title="text.password" v-model="store.email.password" @update="updatePassword" type="password"></inputer>
+            <switches title="text.autoEmailPromotion" v-model="store.email.coupon" :disabled="true"></switches>
+            <switches title="text.emailReceipt" v-model="store.email.receipt" :disabled="true"></switches>
+            <switches title="text.autoEmailConfirmation" v-model="store.email.reservation" :disabled="true"></switches>
+            <switches title="text.emailReport" v-model="store.email.report" :disabled="true"></switches>
+          </div>
+        </transition>
+      </toggle>
+      <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
+      <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>      
+    </div>
   </div>
 </template>
 

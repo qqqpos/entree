@@ -1,6 +1,7 @@
 <template>
     <div>
-        <header class="nav">
+      <div class="tab-content">
+          <header class="nav">
             <div class="title">
                 <h3>{{$t("title.departments")}}</h3>
             </div>
@@ -9,7 +10,8 @@
             </nav>
         </header>
         <external :title="department[language]" v-for="(department,index) in departments" :key="index" @open="edit(department,index)"></external>
-        <div :is="component" :init="componentData"></div>
+      </div>
+      <div :is="component" :init="componentData"></div>
     </div>
 </template>
 

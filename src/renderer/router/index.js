@@ -96,58 +96,47 @@ export default new Router({
               children: [
                 {
                   path: "/",
-                  component: require("../components/setting/store/storeTab"),
-                  children: [
-                    {
-                      path: "/",
-                      name: "Setting.store",
-                      component: require("../components/setting/store/store")
-                    },
-                    {
-                      path: "tax",
-                      name: "Setting.store.tax",
-                      component: require("../components/setting/store/sub/tax")
-                    },
-                    {
-                      path: "delivery",
-                      name: "Setting.store.delivery",
-                      component: require("../components/setting/store/sub/delivery")
-                    }, {
-                      path: "defaults",
-                      name: "Setting.store.defaults",
-                      component: require("../components/setting/store/sub/defaults")
-                    },
-                    {
-                      path: "thirdParty",
-                      name: "Setting.store.thirdParty",
-                      component: require("../components/setting/store/sub/thirdParty")
-                    },
-                    {
-                      path: "giftcard",
-                      name: "Setting.store.giftcard",
-                      component: require("../components/setting/store/giftcard")
-                    },
-                    {
-                      path: "others",
-                      name: "Setting.store.others",
-                      component: require("../components/setting/store/others")
-                    },
-                    {
-                      path: "department",
-                      name: "Setting.store.department",
-                      component: require("../components/setting/store/department")
-                    },
-                    {
-                      path: "timecard",
-                      name: "Setting.store.timecard",
-                      component: require("../components/setting/store/sub/timecard")
-                    },
-                    {
-                      path: 'openHour',
-                      name: 'Setting.store.openHour',
-                      component: require('../components/setting/store/sub/openHour')
-                    }
-                  ]
+                  name: "Setting.store",
+                  component: require("../components/setting/store/store")
+                },
+                {
+                  path: "tax",
+                  name: "Setting.store.tax",
+                  component: require("../components/setting/store/sub/tax")
+                },
+                {
+                  path: "delivery",
+                  name: "Setting.store.delivery",
+                  component: require("../components/setting/store/sub/delivery")
+                }, {
+                  path: "defaults",
+                  name: "Setting.store.defaults",
+                  component: require("../components/setting/store/sub/defaults")
+                },
+                {
+                  path: "giftcard",
+                  name: "Setting.store.giftcard",
+                  component: require("../components/setting/store/giftcard")
+                },
+                {
+                  path: "others",
+                  name: "Setting.store.others",
+                  component: require("../components/setting/store/others")
+                },
+                {
+                  path: "department",
+                  name: "Setting.store.department",
+                  component: require("../components/setting/store/department")
+                },
+                {
+                  path: "timecard",
+                  name: "Setting.store.timecard",
+                  component: require("../components/setting/store/sub/timecard")
+                },
+                {
+                  path: 'openHour',
+                  name: 'Setting.store.openHour',
+                  component: require('../components/setting/store/sub/openHour')
                 },
                 {
                   path: "payment",

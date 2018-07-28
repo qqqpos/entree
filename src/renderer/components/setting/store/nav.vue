@@ -4,20 +4,32 @@
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.store'}" exact>
                     <i class="fa fa-home"></i>
-                    <span class="text">{{$t('nav.store')}}</span>
+                    <span class="text">{{$t('setting.nav.store')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.payment'}" exact>
                     <i class="fas fa-hand-holding-usd"></i>
-                    <span class="text">{{$t('setting.payment')}}</span>
+                    <span class="text">{{$t('setting.nav.payment')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.terminal'}">
                     <i class="fa fa-tablet-alt"></i>
-                    <span class="text">{{$t('nav.terminal')}}</span>
+                    <span class="text">{{$t('setting.nav.terminal')}}</span>
+                </router-link>
+                <router-link tag="li" class="tab" :to="{name:'Setting.store.giftcard'}">
+                    <i class="fas fa-id-card-alt"></i>
+                    <span class="text">{{$t('setting.nav.giftCard')}}</span>
+                </router-link>
+                <router-link tag="li" class="tab" :to="{name:'Setting.store.department'}">
+                    <i class="fas fa-boxes"></i>
+                    <span class="text">{{$t('setting.nav.department')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.promotion'}">
                     <i class="fa fa-tags"></i>
-                    <span class="text">{{$t('nav.promotion')}}</span>
+                    <span class="text">{{$t('setting.nav.promotion')}}</span>
                 </router-link>
+                <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">
+                    <i class="fas fa-cogs"></i>
+                    <span class="text">{{$t('setting.nav.others')}}</span>
+                </router-link>                
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>
                 <i class="fa fa-arrow-circle-left"></i>

@@ -1,15 +1,17 @@
 <template>
     <div>
-        <header class="nav">
-          <div class="back" @click="save">
-              <i class="fa fa-chevron-left"></i>
-          </div>
-          <nav></nav>
-        </header>
-        <toggle title="setting.callerId" v-model="callid.enable"></toggle>
-        <text-list title="text.port" v-model="callid.port" :opts="ports"></text-list>
-        <text-list title="text.command" v-model="callid.command" :opts="commands"></text-list>
-      </div>
+        <div class="tab-content">
+          <header class="nav">
+            <div class="back" @click="save">
+                <i class="fa fa-chevron-left"></i>
+            </div>
+            <nav></nav>
+          </header>
+          <toggle title="setting.callerId" v-model="callid.enable"></toggle>
+          <text-list title="text.port" v-model="callid.port" :opts="ports"></text-list>
+          <text-list title="text.command" v-model="callid.command" :opts="commands"></text-list>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -45,7 +47,7 @@ export default {
         key: "callid",
         value: this.callid
       });
-      this.$router.push({ name: "Setting.station" });
+      this.$router.push({ name: "Setting.station.device" });
     }
   }
 };

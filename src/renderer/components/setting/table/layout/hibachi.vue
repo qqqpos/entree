@@ -2,7 +2,7 @@
     <div class="hibachi-setup-grid">
         <div class="hibachi-seat" :class="[item.layout,item.orientation]" v-for="(item,index) in items" :key="index">
             <span class="table-name" @contextmenu="edit(item,index)">{{item.name}}</span>
-            <span v-for="(seat,idx) in item.seats" :key="idx" :index="idx" class="seat" tag="span" @click="swap(item.name,seat,idx)">{{seat.name}}</span>
+            <span v-for="(seat,idx) in item.seats" :key="idx" :index="idx" class="seat" tag="span" @click="swap($event,item.name,seat,idx)">{{seat.name}}</span>
         </div>
         <div class="add-hibachi" v-show="items.length !== 4" @click="edit()">
             <i class="fa fa-3x fa-plus"></i>
@@ -30,20 +30,24 @@ export default {
     tables: {
       immediate: true,
       handler: "initial"
-    }
+    },
+    buffer: "resetStyle"
   },
   methods: {
     initial(tables) {
       this.items = tables || [];
     },
-    swap(target, seat, index) {
+    swap(e, target, seat, index) {
       if (this.target === null) this.target = target;
 
       if (this.target !== target) {
+        this.resetStyle([]);
         this.target = target;
         this.buffer = [index];
+        e.target.classList.add("active");
       } else {
         this.buffer.push(index);
+        e.target.classList.add("active");
       }
 
       if (this.buffer.length === 2) {
@@ -81,7 +85,7 @@ export default {
               server: "",
               status: 1
             })),
-          layout: "eight",
+          layout: "six",
           orientation: "left",
           zone: this.zone,
           grid: this.items.length,
@@ -112,6 +116,12 @@ export default {
             this.$socket.emit("[TABLE] REMOVE", table);
           }
         });
+    },
+    resetStyle(buffer) {
+      buffer.length === 0 &&
+        document
+          .querySelectorAll(".active")
+          .forEach(dom => dom.classList.remove("active"));
     }
   }
 };
@@ -155,13 +165,32 @@ export default {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.right .table-name {
+.hibachi-seat.six {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
+.six.left .table-name {
+  grid-column: 2 / 3;
+  grid-row: 2 / 4;
+}
+
+.six.right .table-name {
+  grid-column: 1 / 2;
+  grid-row: 2 / 4;
+}
+
+.eight.right .table-name {
   grid-column: 1 / 3;
   grid-row: 2/4;
 }
-.left .table-name {
+.eight.left .table-name {
   grid-column: 2/4;
   grid-row: 2/4;
+}
+
+.seat.active {
+  background: antiquewhite;
 }
 </style>
 

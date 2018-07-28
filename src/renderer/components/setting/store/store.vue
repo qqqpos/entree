@@ -1,5 +1,9 @@
 <template>
     <div>
+      <div class="tab-content">
+        <header class="nav">
+          <h3 class="title">{{$t('setting.title.store')}}</h3>
+        </header>
         <text-input title="text.storeName" v-model="store.name" :disabled="true">
             <div class="change" @click="register">
                 <span>{{$t('button.register')}}</span>
@@ -14,6 +18,7 @@
         <text-list title="text.storeType" v-model="store.type" :opts="types" @update="updateStoreType"></text-list>
         <external title="text.openHour" @open="$router.push({ name: 'Setting.store.openHour' })" :tooltip="getOpenHour()"></external>
         <div :is="component" :init="componentData"></div>
+      </div>
     </div>
 </template>
 
@@ -155,24 +160,26 @@ export default {
       });
     },
     getOpenHour() {
-      const { rules } = this.store.openingHours;
-      const rule = rules[moment().format("d")];
+      if(this.store.openingHours){
+        const { rules } = this.store.openingHours;
+        const rule = rules[moment().format("d")];
 
-      if (rule.open) {
-        const hours = rule.hours.map(h => ({
-          from: moment(new Date(moment().format("YYYY-MM-DD ") + h.from)),
-          to: moment(new Date(moment().format("YYYY-MM-DD ") + h.to)),
-          alias:h.alias
-        }));
+        if (rule.open) {
+          const hours = rule.hours.map(h => ({
+            from: moment(new Date(moment().format("YYYY-MM-DD ") + h.from)),
+            to: moment(new Date(moment().format("YYYY-MM-DD ") + h.to)),
+            alias:h.alias
+          }));
 
-        const open = hours.find(h => moment().isBetween(h.from, h.to));
-        if (open) {
-          return this.$t("text.storeOpen", open.alias, open.from.format("HH:mm"), open.to.format("HH:mm"));
+          const open = hours.find(h => moment().isBetween(h.from, h.to));
+          if (open) {
+            return this.$t("text.storeOpen", open.alias, open.from.format("HH:mm"), open.to.format("HH:mm"));
+          } else {
+            return "text.storeClose";
+          }
         } else {
           return "text.storeClose";
         }
-      } else {
-        return "text.storeClose";
       }
     }
   }

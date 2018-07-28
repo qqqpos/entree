@@ -1,30 +1,32 @@
 <template>
-    <div>
-        <header class="nav">
-          <div class="back" @click="save">
-              <i class="fa fa-chevron-left"></i>
-          </div>
-          <nav></nav>
-        </header>
-        <toggle title="setting.poleDisplay" v-model="customerDisplay.poleDisplay.enable">
-          <transition name="dropdown">
-            <div class="opt" v-if="customerDisplay.poleDisplay.enable">
-              <inputer title="text.firstLine" v-model="customerDisplay.poleDisplay.top"></inputer>
-              <inputer title="text.secondLine" v-model="customerDisplay.poleDisplay.bot"></inputer>
-              <text-list title="text.port" v-model="customerDisplay.poleDisplay.port" :opts="ports"></text-list>
-              <toggle title="setting.animation" tooltip="tip.poleDisplayAnimation" v-model="customerDisplay.poleDisplay.animation" :disabled="true"></toggle>
+  <div>
+      <div class="tab-content">
+          <header class="nav">
+            <div class="back" @click="save">
+                <i class="fa fa-chevron-left"></i>
             </div>
-          </transition>
-        </toggle>
-        <toggle title="setting.ledDisplay" v-model="customerDisplay.ledDisplay.enable">
-          <transition name="dropdown">
-            <div class="opt" v-if="customerDisplay.ledDisplay.enable">
-              <range title="setting.playDuration" :min="5" :max="30" :step="1" v-model.number="customerDisplay.ledDisplay.duration"></range>
-              <external title="text.gallery" @open="showDialog"></external>
-            </div>
-          </transition>
-        </toggle>
-      </div>
+            <nav></nav>
+          </header>
+          <toggle title="setting.poleDisplay" v-model="customerDisplay.poleDisplay.enable">
+            <transition name="dropdown">
+              <div class="opt" v-if="customerDisplay.poleDisplay.enable">
+                <inputer title="text.firstLine" v-model="customerDisplay.poleDisplay.top"></inputer>
+                <inputer title="text.secondLine" v-model="customerDisplay.poleDisplay.bot"></inputer>
+                <text-list title="text.port" v-model="customerDisplay.poleDisplay.port" :opts="ports"></text-list>
+                <toggle title="setting.animation" tooltip="tip.poleDisplayAnimation" v-model="customerDisplay.poleDisplay.animation" :disabled="true"></toggle>
+              </div>
+            </transition>
+          </toggle>
+          <toggle title="setting.ledDisplay" v-model="customerDisplay.ledDisplay.enable">
+            <transition name="dropdown">
+              <div class="opt" v-if="customerDisplay.ledDisplay.enable">
+                <range title="setting.playDuration" :min="5" :max="30" :step="1" v-model.number="customerDisplay.ledDisplay.duration"></range>
+                <external title="text.gallery" @open="showDialog"></external>
+              </div>
+            </transition>
+          </toggle>
+        </div>
+  </div>
 </template>
 
 <script>

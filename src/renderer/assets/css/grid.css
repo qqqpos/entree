@@ -14,7 +14,7 @@
     width: 100vw;
     height: calc(100vh - 30px);
     grid-template-columns: 285px 1fr 113px 285px;
-    background: url(../image/grid.png) #fcfcfc;
+    background: url(../image/grid.png) #f4f4f4;
   }
 
 .menu-grid > .category {
@@ -46,7 +46,7 @@
     grid-template-areas: "header header header" "side order ticket";
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 99px 1fr 285px;
-    background: url(../../assets/image/grid.png) #ebeff1;
+    background: url(../../assets/image/grid.png) #f4f4f4;
 }
 
 .history-grid .invoices {

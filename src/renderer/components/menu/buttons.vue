@@ -1,5 +1,5 @@
 <template>
-  <div class="function" v-if="layout ==='DINE_IN' || layout === 'HIBACHI' || layout === 'BAR'">
+  <div class="function" v-if="isDineInTicket">
     <div class="top">
       <div class="btn" @click="less">
         <i class="fa fa-minus-square"></i>
@@ -704,7 +704,8 @@ export default {
       return (
         this.order.type === "DINE_IN" ||
         this.order.type === "BAR" ||
-        this.order.type === "HIBACHI"
+        this.order.type === "HIBACHI" || 
+        this.order.type === "TO_GO"
       );
     },
     ...mapGetters([

@@ -2,7 +2,7 @@
   <div>
     <div class="tab-content">
     <header class="nav">
-      <h3 class="title">{{$t('setting.payment')}}</h3>
+      <h3 class="title">{{$t('setting.title.payment')}}</h3>
     </header>
     <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
     <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>

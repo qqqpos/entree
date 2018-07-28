@@ -3,7 +3,6 @@
     <div class="tab-content">
       <header class="nav">
         <div class="title">
-          <h5></h5>
           <h3>{{$t("title.terminalDevice")}}</h3>
         </div>
         <nav>
@@ -40,6 +39,7 @@
 <script>
 import toggle from "../common/toggle";
 import editor from "./component/deviceEditor";
+
 export default {
   components: { toggle, editor },
   data() {
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     create() {
-      let device = {
+      const device = {
         alias: "",
         model: "",
         ip: "",
@@ -81,18 +81,23 @@ export default {
         };
         this.component = "editor";
       })
-        .then(_device => this.$socket.emit("[TERMINAL] UPDATE", _device, () => this.refreshData()))
-        .catch(del => {
-          if (del) {
+        .then(update =>
+          this.$socket.emit("[TERMINAL] UPDATE", update, () =>
+            this.refreshData()
+          )
+        )
+        .catch(deleteDevice => {
+          this.exitComponent();
+
+          if (deleteDevice) {
             this.$socket.emit("[TERMINAL] REMOVE", device._id);
             this.devices.splice(index, 1);
           }
-          this.exitComponent();
         });
     },
     refreshData() {
-      this.$socket.emit("[TERMINAL] DEVICE", data => {
-        this.devices = data;
+      this.$socket.emit("[TERMINAL] DEVICE", devices => {
+        this.devices = devices;
         this.exitComponent();
       });
     }

@@ -1405,18 +1405,29 @@ export default {
     chart: "Chart",
     chartTip: "Sales Chart · Trend",
     department: "Department",
-    system: "System",
-    systemTip: "POS Setup",
     tool: "Tool",
     troubleshooting: "Debug · Feedback Troubleshooting",
     exit: "Exit",
     exitTip: "Exit Setting",
-    host: "Host",
-    version: "Version",
-    buildTime: "Build Time: ",
-    support: "Support",
-    storeInfo: "Information",
-    payment: "Payment",
+    nav:{
+      store:"Store",
+      payment:"Payment",
+      terminal:"Terminal",
+      promotion:"Promo.",
+      other:"Others",
+      giftcard:"GiftCard",
+      department:"Dept."
+    },
+    title:{
+      store:"Store Information",
+      payment:"Payment Related Setting",
+      terminal:"Credit Card Terminal Device",
+      promotion:"Store Promotion",
+      other:"Other Setting",
+      giftcard:"Gift Card Setting",
+      department:"Department Setup"
+
+    },
     receiptDialog: "Receipt Dialog",
     others: "Others",
     rounding: "Penny Rounding",
@@ -1539,7 +1550,7 @@ export default {
       exit: "Exit Program"
     },
     modify: {
-      less: "Reduce Ticket Overall Total",
+      less: "Reduce Item Quantity / Price",
       discount: "Bill Discount",
       price: "Modify Item Price",
       item: "Remove Placed Item",
