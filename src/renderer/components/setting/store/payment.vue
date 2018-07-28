@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="tab-content">
+    <header class="nav">
+      <h3 class="title">{{$t('setting.payment')}}</h3>
+    </header>
     <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
     <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
     <external title="setting.default.setValue" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
@@ -14,6 +18,7 @@
       </transition>
     </toggle>
     <options title="setting.receiptDialog" tooltip="tip.receiptDefaultAction" v-model="store.receipt" :opts="receiptOption" @update="updateReceipt"></options>
+    </div>
   </div>
 </template>
 

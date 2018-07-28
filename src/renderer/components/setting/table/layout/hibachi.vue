@@ -2,7 +2,7 @@
     <div class="hibachi-setup-grid">
         <div class="hibachi-seat" :class="[item.layout,item.orientation]" v-for="(item,index) in items" :key="index">
             <span class="table-name" @contextmenu="edit(item,index)">{{item.name}}</span>
-            <span v-for="(seat,idx) in item.seats" :key="idx" :index="idx" class="seat" tag="span" @click="swap(item.name,seat)">{{seat.name}}</span>
+            <span v-for="(seat,idx) in item.seats" :key="idx" :index="idx" class="seat" tag="span" @click="swap(item.name,seat,idx)">{{seat.name}}</span>
         </div>
         <div class="add-hibachi" v-show="items.length !== 4" @click="edit()">
             <i class="fa fa-3x fa-plus"></i>
@@ -36,17 +36,27 @@ export default {
     initial(tables) {
       this.items = tables || [];
     },
-    swap(target, seat) {
+    swap(target, seat, index) {
       if (this.target === null) this.target = target;
 
       if (this.target !== target) {
-        this.buffer = [seat.number];
+        this.target = target;
+        this.buffer = [index];
       } else {
-        this.buffer.push(seat.number);
+        this.buffer.push(index);
       }
 
       if (this.buffer.length === 2) {
         const table = this.items.find(table => table.name === this.target);
+        const [a, b] = this.buffer;
+
+        const first = table.seats[a];
+        const second = table.seats[b];
+
+        table.seats.splice(a, 1, second);
+        table.seats.splice(b, 1, first);
+        this.buffer = [];
+        this.target = null;
       }
     },
     edit(table, index) {
@@ -141,17 +151,17 @@ export default {
 }
 
 .hibachi-seat.eight {
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .right .table-name {
-  grid-column: 1 / 2;
-  grid-row: 2/6;
+  grid-column: 1 / 3;
+  grid-row: 2/4;
 }
 .left .table-name {
-  grid-column: 2/3;
-  grid-row: 2/6;
+  grid-column: 2/4;
+  grid-row: 2/4;
 }
 </style>
 

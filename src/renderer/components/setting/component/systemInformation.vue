@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="spec">
         <div class="item">
             <span class="name">{{$t('spec.version')}}:</span>
             <span class="value">{{app}} ({{stage}})</span>
@@ -15,6 +15,10 @@
         <div class="item">
             <span class="name">{{$t('spec.shell')}}:</span>
             <span class="value">{{electron}}</span>
+        </div>
+        <div class="item">
+            <span class="name">{{$t('spec.engine')}}:</span>
+            <span class="value">{{engine}}</span>
         </div>
         <div class="item">
             <span class="name">{{$t('spec.servo')}}:</span>
@@ -34,7 +38,8 @@ export default {
       node: process.versions.node,
       platform: require("os").platform(),
       vue: require("vue/package.json").version,
-      electron: process.versions["atom-shell"],
+      electron: process.versions.electron,
+      engine: process.versions.v8,
       about: {}
     };
   },
@@ -48,6 +53,12 @@ export default {
 </script>
 
 <style scoped>
+.spec {
+  position: fixed;
+  bottom: 0;
+  left: 10px;
+}
+
 .item {
   display: flex;
   margin-bottom: 6px;

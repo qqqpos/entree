@@ -20,6 +20,7 @@
 
 <script>
 import checkbox from "../../common/checkbox";
+
 export default {
   components: { checkbox },
   data() {

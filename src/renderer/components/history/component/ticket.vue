@@ -5,13 +5,13 @@
     </span>
     <span class="type" v-else>{{$t('type.'+invoice.type)}}</span>
     <div class="info list" v-if="invoice.type ==='DELIVERY'">
-      <span class="data">{{invoice.customer.address}}</span>
       <span>{{invoice.customer.phone | phone}}</span>
+      <span class="data">{{invoice.customer.address}}</span>
     </div>
     <span class="info" v-else-if="invoice.type === 'DINE_IN' || invoice.type === 'HIBACHI' || invoice.type === 'BAR'">{{invoice.table}}</span>
     <div class="info" v-else>
-      <span class="data">{{invoice.customer.name}}</span>
       <span>{{invoice.customer.phone | phone}}</span>
+      <span class="data">{{invoice.customer.name}}</span>
     </div>
     <span class="note" v-if="invoice.status === 0">{{$t('reason.'+invoice.void.note,(invoice.void.join || ""))}}</span>
     <span class="note discount" v-else-if="invoice.payment.discount > 0">{{invoice.coupons[0] && invoice.coupons[0].alias}}</span>

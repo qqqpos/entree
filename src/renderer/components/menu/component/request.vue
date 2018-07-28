@@ -202,10 +202,6 @@ div.items div:active {
   background: rgba(166, 195, 201, 0.55);
 }
 
-.items{
-
-}
-
 .items div {
   border: 1px solid #78909c;
   background: #92aaaf;

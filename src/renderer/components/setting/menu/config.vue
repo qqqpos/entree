@@ -1,14 +1,17 @@
 <template>
-  <div class="tab-content">
+  <div>
+    <div class="tab-content">
     <header class="nav">
-      <div class="title">{{$t('setting.default.orderLogic')}}</div>
+      <h3 class="title">{{$t('setting.default.orderLogic')}}</h3>
     </header>
-    <toggle title="setting.default.autoStack" tooltip="tip.default.autoStackItemQty" v-model="defaults.autoStackItem"></toggle>
-    <toggle title="setting.default.matchQty" tooltip="tip.default.matchItemQty" v-model="defaults.matchItemQty"></toggle>
     <toggle title="text.menuID" v-model="defaults.menuID"></toggle>
     <toggle title="text.favoriteItem" v-model="defaults.favorite"></toggle>
     <toggle title="text.alphabetical" tooltip="tip.alphabetical" v-model="defaults.alphabetical"></toggle>
+    <toggle title="setting.default.autoStack" tooltip="tip.default.autoStackItemQty" v-model="defaults.autoStackItem"></toggle>
+    <toggle title="setting.default.matchQty" tooltip="tip.default.matchItemQty" v-model="defaults.matchItemQty"></toggle>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -21,7 +24,7 @@ export default {
   data() {
     return {
       defaults: {},
-      alphabetical:false
+      alphabetical: false
     };
   },
   created() {
@@ -40,7 +43,7 @@ export default {
     this.defaults = this.$store.getters.config.defaults || defaults;
     this.alphabetical = this.defaults.alphabetical;
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.alphabetical !== this.defaults.alphabetical && this.setMenu();
   },
   beforeRouteLeave(to, from, next) {
@@ -51,7 +54,7 @@ export default {
 
     next();
   },
-  methods:{
+  methods: {
     ...mapActions(["setMenu"])
   }
 };

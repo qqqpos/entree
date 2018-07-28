@@ -41,7 +41,7 @@
 
 <script>
 import toggle from "../../common/toggle";
-import editor from "../component/ruleEditor";
+import editor from "./ruleEditor";
 export default {
   components: { toggle, editor },
   data() {

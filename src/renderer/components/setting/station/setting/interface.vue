@@ -15,7 +15,8 @@
 
 <script>
 import draggable from "vuedraggable";
-import editor from "../component/interfaceEditor";
+import editor from "./interfaceEditor";
+
 export default {
   components: { editor, draggable },
   data() {
@@ -38,8 +39,8 @@ export default {
         this.componentData = { resolve, reject, grid };
         this.component = "editor";
       })
-        .then(_grid => {
-          this.station.interface.splice(index, 1, _grid);
+        .then(update => {
+          this.station.interface.splice(index, 1, update);
           this.exitComponent();
         })
         .catch(this.exitComponent);
@@ -50,14 +51,18 @@ export default {
 
 <style scoped>
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  background: #eceff1;
+  display: grid;
+  grid-gap: 2px;
+  width: 873px;
+  margin: 10px auto;
+  padding: 5px;
+  background: #f4f4f4;
+  box-shadow: var(--shadow);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .block {
   width: 175px;
-  margin: 1px;
   padding: 40px 20px 17px;
   border: 1px solid #e0e0e0;
   background: #fff;
@@ -73,11 +78,6 @@ i.icon {
   padding: 10px 15px;
   font-size: 22px;
   color: var(--deepBlue);
-}
-
-.enlarge h1 {
-  font-size: 2em;
-  font-weight: normal;
 }
 
 .block h4 {

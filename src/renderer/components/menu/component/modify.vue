@@ -1,6 +1,6 @@
 <template>
   <div class="popupMask center dark" @click.self="init.reject">
-    <div class="window">
+    <div class="window" v-show="!component">
       <header class="title">
         <span>{{$t("title.modify")}}</span>
         <span class="name">{{item[language]}}</span>
@@ -57,15 +57,22 @@
         </aside>
       </div>
     </div>
+    <div :is="component" :init="componentData"></div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import dialogModule from "../../common/dialog";
+
 export default {
   props: ["init"],
+  components: { dialogModule },
   data() {
     return {
+      componentData: null,
+      component: null,
+      originalTotal: 0,
       target: "single",
       item: null,
       reset: true,
@@ -83,6 +90,9 @@ export default {
   methods: {
     initial() {
       this.item = JSON.parse(JSON.stringify(this.init.item));
+      this.originalTotal = parseFloat(this.item.total);
+      this.originalQty = this.item.qty;
+
       if (this.item.split) {
         this.init.reject();
         return;
@@ -151,6 +161,7 @@ export default {
     setPointer(target, e) {
       document.querySelector(".column.target").classList.remove("target");
       e.currentTarget.classList.add("target");
+
       this.target = target;
       this.reset = true;
     },
@@ -229,19 +240,26 @@ export default {
           price: -discount,
           type: "discount"
         });
-      this.init.marketPrice
-        ? (this.addToOrder(item), this.setSides(this.fillOption(item.option)))
-        : this.alterItem(item);
 
-      // this.$socket.emit("[SYS] RECORD", {
-      //   type: "User",
-      //   event: "modifyItem",
-      //   status: 1,
-      //   data: this.item,
-      //   backup: this.init.item
-      // });
+      const lessProhibhit = !this.approval(this.op.modify, "less");
 
-      this.init.resolve();
+      if (lessProhibhit && parseFloat(item.total) < this.originalTotal) {
+        const prompt = {
+          title: "dialog.unableEdit",
+          msg: "dialog.lessAmountProhibit",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+        this.$dialog(prompt).then(() => {
+          this.exitComponent();
+          this.item = JSON.parse(JSON.stringify(this.init.item));
+        });
+      } else {
+        this.init.marketPrice
+          ? (this.addToOrder(item), this.setSides(this.fillOption(item.option)))
+          : this.alterItem(item);
+
+        this.init.resolve();
+      }
     },
     fillOption(side) {
       let length = side.length;

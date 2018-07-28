@@ -6,9 +6,9 @@
                     <i class="fa fa-home"></i>
                     <span class="text">{{$t('nav.store')}}</span>
                 </router-link>
-                <router-link tag="li" :to="{name:'Setting.station'}">
-                    <i class="fa fa-desktop"></i>
-                    <span class="text">{{$t('nav.station')}}</span>
+                <router-link tag="li" :to="{name:'Setting.payment'}" exact>
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span class="text">{{$t('setting.payment')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.terminal'}">
                     <i class="fa fa-tablet-alt"></i>

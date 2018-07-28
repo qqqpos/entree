@@ -104,11 +104,6 @@ export default new Router({
                       component: require("../components/setting/store/store")
                     },
                     {
-                      path: "payment",
-                      name: "Setting.store.payment",
-                      component: require("../components/setting/store/payment")
-                    },
-                    {
                       path: "tax",
                       name: "Setting.store.tax",
                       component: require("../components/setting/store/sub/tax")
@@ -128,19 +123,9 @@ export default new Router({
                       component: require("../components/setting/store/sub/thirdParty")
                     },
                     {
-                      path: "dinein",
-                      name: "Setting.store.dinein",
-                      component: require("../components/setting/store/dinein")
-                    },
-                    {
                       path: "giftcard",
                       name: "Setting.store.giftcard",
                       component: require("../components/setting/store/giftcard")
-                    },
-                    {
-                      path: "surcharge",
-                      name: "Setting.store.surcharge",
-                      component: require("../components/setting/store/sub/surcharge")
                     },
                     {
                       path: "others",
@@ -165,40 +150,9 @@ export default new Router({
                   ]
                 },
                 {
-                  path: "station",
-                  component: require("../components/setting/store/stationTab"),
-                  children: [
-                    {
-                      path: "/",
-                      name: "Setting.station",
-                      component: require("../components/setting/store/station/index")
-                    },
-                    {
-                      path: "device",
-                      name: "Setting.station.interface",
-                      component: require("../components/setting/store/station/interface")
-                    },
-                    {
-                      path: "cashdrawer",
-                      name: "Setting.station.cashdrawer",
-                      component: require("../components/setting/store/station/cashdrawer")
-                    },
-                    {
-                      path: "printers",
-                      name: "Setting.station.printers",
-                      component: require("../components/setting/store/station/printers")
-                    },
-                    {
-                      path: "callid",
-                      name: "Setting.station.callid",
-                      component: require("../components/setting/store/station/callid")
-                    },
-                    {
-                      path: "customerDisplay",
-                      name: "Setting.station.customerDisplay",
-                      component: require("../components/setting/store/station/customerDisplay")
-                    }
-                  ]
+                  path: "payment",
+                  name: "Setting.payment",
+                  component: require("../components/setting/store/payment")
                 },
                 {
                   path: "promotion",
@@ -220,6 +174,47 @@ export default new Router({
                   path: "terminal",
                   name: "Setting.terminal",
                   component: require("../components/setting/store/terminal")
+                }
+              ]
+            },
+            {
+              path: "station",
+              component: require("../components/setting/station/nav"),
+              children: [
+                {
+                  path: "/",
+                  name: "Setting.station",
+                  component: require("../components/setting/station/index")
+                },
+                {
+                  path: "device",
+                  name: "Setting.station.device",
+                  component: require("../components/setting/station/device")
+                },
+                {
+                  path: "interface",
+                  name: "Setting.station.interface",
+                  component: require("../components/setting/station/setting/interface")
+                },
+                {
+                  path: "cashdrawer",
+                  name: "Setting.station.cashdrawer",
+                  component: require("../components/setting/station/setting/cashdrawer")
+                },
+                {
+                  path: "printers",
+                  name: "Setting.station.printers",
+                  component: require("../components/setting/station/setting/printers")
+                },
+                {
+                  path: "callid",
+                  name: "Setting.station.callid",
+                  component: require("../components/setting/station/setting/callid")
+                },
+                {
+                  path: "customerDisplay",
+                  name: "Setting.station.customerDisplay",
+                  component: require("../components/setting/station/setting/customerDisplay")
                 }
               ]
             },
@@ -283,6 +278,11 @@ export default new Router({
                   path: "config",
                   name: "Setting.table.config",
                   component: require("../components/setting/table/config")
+                },
+                {
+                  path: "surcharge",
+                  name: "Setting.table.surcharge",
+                  component: require("../components/setting/table/component/surcharge")
                 }
               ]
             },

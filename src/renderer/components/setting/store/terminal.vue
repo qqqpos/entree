@@ -1,8 +1,5 @@
 <template>
   <div>
-    <ul class="tabs">
-      <li class="router-link-exact-active">{{$t('title.device')}}</li>
-    </ul>
     <div class="tab-content">
       <header class="nav">
         <div class="title">

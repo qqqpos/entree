@@ -124,7 +124,7 @@
       <i class="fa fa-copy"></i>
       <span class="text">{{$t("button.split")}}</span>
     </div>
-    <button class="btn" @click="done(false)" :disabled="ticket.type === 'TO_GO'">
+    <button class="btn" @click="done(false)">
       <i class="fa fa-save"></i>
       <span class="text">{{$t("button.save")}}</span>
     </button>

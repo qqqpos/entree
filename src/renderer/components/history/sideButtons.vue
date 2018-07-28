@@ -273,7 +273,7 @@ export default {
               let order = JSON.parse(JSON.stringify(this.order));
               order.status = 1;
               delete order.void;
-              this.updateInvoice(order);
+              this.updateInvoice(order, true);
 
               this.isDineInTicket(order.type)
                 ? this.reOpenTableDialog(order.tableID)
@@ -419,9 +419,10 @@ export default {
       order.printCount++;
 
       this.exitComponent();
-      this.updateInvoice(order);
+      this.updateInvoice(order, !receipt);
 
       order.content.forEach(item => (item.diffs = "UNCHANGED"));
+
       receipt
         ? Printer.setTarget("Receipt").print(order, true)
         : Printer.setTarget("All").print(order);
@@ -430,7 +431,7 @@ export default {
       order.printCount++;
 
       this.exitComponent();
-      this.updateInvoice(order);
+      this.updateInvoice(order, !receipt);
 
       this.$socket.emit("[SPLIT] GET", order._id, splits => {
         splits.forEach(ticket => {
@@ -465,8 +466,8 @@ export default {
         note: `Permission Denied. Failed to access ${component}.`
       });
     },
-    updateInvoice(ticket) {
-      this.$socket.emit("[ORDER] UPDATE", ticket, true);
+    updateInvoice(ticket, print) {
+      this.$socket.emit("[ORDER] UPDATE", ticket, print);
     },
     getTransaction() {
       const date = document.querySelector("#calendar .text").innerText;
