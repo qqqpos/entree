@@ -64,14 +64,16 @@
       </router-link>
     </section>
     <system-information></system-information>
+    <about></about>
   </div>
 </template>
 
 <script>
+import about from "./component/about";
 import systemInformation from "./component/systemInformation";
 
 export default {
-  components: { systemInformation }
+  components: { about, systemInformation }
 };
 </script>
 
@@ -135,7 +137,7 @@ p {
   text-align: center;
 }
 
-.disabled{
+.disabled {
   opacity: 0.3;
   pointer-events: none;
 }

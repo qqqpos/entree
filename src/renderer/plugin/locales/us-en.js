@@ -1851,5 +1851,14 @@ export default {
     history: "History",
     bill: "Bill",
     plan: "Plan"
+  },
+  support: {
+    menuInput: "Menu Input By: ",
+    agent: "Sales Agent",
+    techSupport: "Tech Support",
+    Remain: "Remain {i} days",
+    aboutExpire: "About expire. Remain {i} days",
+    expired: "No Tech Support",
+    EOL: "Life Time / EOL"
   }
 };

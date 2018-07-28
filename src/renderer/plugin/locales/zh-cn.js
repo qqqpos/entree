@@ -1399,10 +1399,10 @@ export default {
     troubleshooting: "检测 · 排错 · 报告问题",
     exit: "退出",
     exitTip: "退出软件设置",
-    nav:{
-      
+    nav: {
+
     },
-    title:{
+    title: {
 
     },
     storeInfo: "店面资料",
@@ -1826,5 +1826,14 @@ export default {
     history: "历史",
     bill: "账单",
     plan: "套餐"
+  },
+  support: {
+    menuInput: "菜单输入: ",
+    agent: "代理商",
+    techSupport: "技术支持",
+    Remain: "技术支持 {i} 天",
+    aboutExpire: "即将过期, 剩余 {i} 天",
+    expired: "无技术支持",
+    EOL: "终身 / EOL"
   }
 };

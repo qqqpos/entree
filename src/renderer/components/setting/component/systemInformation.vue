@@ -47,8 +47,7 @@ export default {
     this.$socket.emit("ABOUT", system => {
       this.about = system;
     });
-  },
-  methods: {}
+  }
 };
 </script>
 

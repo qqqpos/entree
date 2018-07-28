@@ -5,6 +5,12 @@
     .menu-grid .sides div{
         max-width: initial;
     }
+
+    .menu-grid > .category,
+    .menu-grid > .items{
+        height: 1050px;
+    }
+
     section.cart div.order,
     .ticket div.order{
         width: initial;
@@ -12,8 +18,12 @@
     }
 
     section.items div{
-        font-size: 1.4vw;
+        font-size: 1.3vw;
         max-height: initial;
+    }
+
+    .category-wrap .category{
+        width: 600px!important;
     }
 
     div.request{
@@ -28,10 +38,6 @@
         width: initial!important;
     }
 
-    .category-wrap .category{
-        width: 600px!important;
-    }
-
     .items-wrap{
         margin-left:600px!important;
     }
@@ -42,6 +48,15 @@
 
     .items-wrap .items div{
         height: 91.36px!important;
+    }
+
+    .request .prefix{
+        font-size: 1.3vw;
+    }
+
+    .request .items div{
+        max-height: initial!important;
+        font-size: 1.3vw;
     }
 
     .request-setup .category {
