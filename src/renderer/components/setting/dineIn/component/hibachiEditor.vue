@@ -63,6 +63,7 @@ export default {
         .map((_, index) => ({
           name: index + 1,
           time: null,
+          session: "",
           invoice: "",
           number: "",
           server: "",

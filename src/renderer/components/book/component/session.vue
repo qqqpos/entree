@@ -4,7 +4,7 @@
             <div class="session" v-for="(books,frame) of session" :key="frame">
                 <div class="time">{{hour + frame}}</div>
                 <div class="books" ref="children">
-                    <div class="details" v-for="(book,i) in books" :key="i">
+                    <div class="details" v-for="(book,i) in books" :key="i" @click="$emit('select',book)">
                         <h5>{{book.name}}</h5>
                         <h5 class="phone">{{book.phone | phone}}</h5>
                         <p>
@@ -41,10 +41,16 @@ export default {
     horizontalPan(e) {
       this.horizontal = this.lastHorizontalDelta + e.deltaX;
     },
-    horizontalStart() {},
+    horizontalStart(e) {
+      const doms = document.querySelectorAll(".inner-wrap");
+      doms.forEach(dom => dom.classList.add("block"));
+    },
     horizontalEnd(e) {
       this.smooth(this.$refs.children);
       this.lastHorizontalDelta = this.horizontal;
+
+      const doms = document.querySelectorAll(".block");
+      doms.forEach(dom => dom.classList.remove("block"));
     },
     smooth(doms) {
       const target = document.querySelector(`#${this.unique}`);
@@ -101,7 +107,18 @@ export default {
 .inner-wrap {
   display: flex;
   flex-wrap: nowrap;
+  position: relative;
   width: 200%;
+}
+
+.block:after {
+  content: " ";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  left: 0;
+  top: 0;
 }
 
 .session {

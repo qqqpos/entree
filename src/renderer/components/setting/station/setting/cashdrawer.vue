@@ -2,7 +2,7 @@
   <div>
     <div class="tab-content">
       <header class="nav">
-        <div class="back" @click="$router.push({ name: 'Setting.station' })">
+        <div class="back" @click="$router.push({ name: 'Setting.station.device' })">
           <i class="fa fa-chevron-left"></i>
         </div>
         <nav></nav>

@@ -3,7 +3,7 @@
       <div :style="verticalStyle" ref="dom" class="books-inner-wrap">
           <div v-for="(session,hour,index) in schedule" :key="index" class="hourly" :data-hour="hour">
             <div class="hour" :id="'bk'+index">{{hour+":00"}}</div>
-            <hourly-session :hour="hour" :unique="'bk'+index" :session="session"></hourly-session>
+            <hourly-session :hour="hour" :unique="'bk'+index" :session="session" @select="view"></hourly-session>
         </div>
       </div>
         <v-touch id="slider" @panup="verticalPan" @pandown="verticalPan" @panstart="panstart" @panend="panend"></v-touch>
@@ -30,6 +30,9 @@ export default {
     this.ready = true;
   },
   methods: {
+    view(book){
+      console.log(book)
+    },
     initial(data) {
       const hours = {};
 

@@ -186,7 +186,6 @@ export default {
               this.$socket.emit("[ORDER] SYNC", orders => {
                 this.setTodayOrder(orders);
                 this.exitComponent();
-                this.viewTicket();
               });
             })
             .catch(() => {

@@ -18,12 +18,12 @@ const timecard = function (data) {
             </tr>\
           </thead>\
           <tbody>\
-            ${timecards.map(timecard => `
+            ${(timecards|| []).map(timecard => `
               <tr>\
                 <td>${moment(timecard.clockIn).locale("en").format("MM/DD HH:mm")}</td>\
                 <td>${moment(timecard.clockOut).locale("en").format("MM/DD HH:mm")}</td>\
                 <td>${timecard.hours.toFixed(2)}</td>\
-                <td>${timecard.tip.toFixed(2)}</td>\
+                <td>${(timecard.tip || 0).toFixed(2)}</td>\
                 <td>${timecard.unpaid.toFixed(2)}</td>\
               </tr>\
             `).join("").toString()}

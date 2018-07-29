@@ -1,21 +1,24 @@
 <template>
-    <div>
-        <header class="nav">
-            <div class="back" @click="save">
-            <i class="fa fa-chevron-left"></i>
-            </div>
-            <div class="title"><h3>{{$t('setting.printerGroup')}}</h3></div>
-            <nav>
-              <span @click="setAll" v-if="devices.length === 0">{{$t('button.setAll')}}</span>
-              <span @click="unsetAll" v-else>{{$t('button.unset')}}</span>
-            </nav>
-        </header>
-        <ul class="multiple">
-            <li v-for="(printer,index) in printers" :key="index">
-                <checkbox :val="printer" :multiple="true" :title="printer" v-model="devices"></checkbox>
-            </li>
-        </ul>
-    </div>
+  <div>
+      <div class="tab-content">
+          <header class="nav">
+              <div class="back" @click="save">
+              <i class="fa fa-chevron-left"></i>
+              </div>
+              <div class="title"><h3>{{$t('setting.printerGroup')}}</h3></div>
+              <nav>
+                <span @click="setAll" v-if="devices.length === 0">{{$t('button.setAll')}}</span>
+                <span @click="unsetAll" v-else>{{$t('button.unset')}}</span>
+              </nav>
+          </header>
+          <ul class="multiple">
+              <li v-for="(printer,index) in printers" :key="index">
+                  <checkbox :val="printer" :multiple="true" :title="printer" v-model="devices"></checkbox>
+              </li>
+          </ul>
+      </div>
+  </div>
+
 </template>
 
 <script>
@@ -44,7 +47,7 @@ export default {
         key: "printers",
         value: this.devices
       });
-      this.$router.push({ name: "Setting.station" });
+      this.$router.push({ name: "Setting.station.device" });
     }
   }
 };
