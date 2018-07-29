@@ -11,7 +11,7 @@
       <toggle title="setting.printOnDone" true-tooltip="tip.dinein.printReceipt" false-tooltip="tip.dinein.noReceipt" v-model="dineInOpt.printOnDone" :conditionalTooltip="true"></toggle>
       <toggle title="setting.lockOnDone" tooltip="tip.dinein.lock" v-model="dineInOpt.lockOnDone"></toggle>
       <toggle title="setting.autoClear" true-tooltip="tip.dinein.autoClearTable" false-tooltip="tip.dinein.manuallyClearTable" v-model="dineInOpt.autoClear" :conditionalTooltip="true"></toggle>
-      <external title="setting.surcharge" tooltip="tip.dinein.surcharge" @open="$router.push({name:'Setting.table.surcharge'})"></external>
+      <external title="setting.surcharge" tooltip="tip.dinein.surcharge" @open="$router.push({name:'Setting.dineIn.surcharge'})"></external>
     </div>
   </div>
 </template>

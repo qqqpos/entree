@@ -253,12 +253,12 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(this.switchTable.bind(null, this.table))
-        .catch(this.switchTable.bind(null, false));
+        .then(() => this.switchTable(true))
+        .catch(() => this.switchTable(false));
     },
-    switchTable(table) {
-      this.$emit("switch", table);
+    switchTable(boolean) {
       this.exitComponent();
+      this.$emit("update:transfer", boolean);
     },
     clearTable() {
       if (!this.table) return;

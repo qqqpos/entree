@@ -10,7 +10,7 @@
             <div class="banner"></div>
             <div class="wrap">
                 <ul class="record">
-                    <li v-for="(change,index) in init.records" :key="index" :data-time="change.time | moment('HH:mm')">
+                    <li v-for="(change,index) in records" :key="index" :data-time="change.time | moment('HH:mm')">
                         <p class="info"><i class="fas fa-user-edit space light"></i>{{change.operator}}</p>
                         <p class="changes" v-if="change.actions.length">
                           <span class="diff">{{$t('CHANGE.CHANGES',change.actions.length)}}</span>
@@ -31,6 +31,7 @@
                         </div>
                     </li>
                 </ul>
+                <paginator :of="init.records" :max="5" :contain="10" @page="setPage"></paginator>
             </div>
         </div>
         <ul class="log relative" v-show="actions">
@@ -44,16 +45,18 @@
 
 <script>
 import ticket from "../../common/ticket";
+import paginator from "../../common/paginator";
 
 export default {
   props: ["init"],
-  components: { ticket },
+  components: { ticket, paginator },
   data() {
     return {
-      actions: null,
       language: this.$store.getters.language,
       componentData: null,
-      component: null
+      component: null,
+      actions: null,
+      page:0
     };
   },
   methods: {
@@ -131,6 +134,17 @@ export default {
             .map(text => `<span>${text}</span>`)
             .join("");
       }
+    },
+    setPage(n){
+      this.page = n;
+    }
+  },
+  computed: {
+    records() {
+      const min = this.page * 10;
+      const max = min + 10;
+
+      return this.init.records.slice(min, max);
     }
   }
 };

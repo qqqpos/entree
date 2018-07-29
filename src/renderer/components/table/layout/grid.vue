@@ -16,14 +16,18 @@ import dialogModule from "../../common/dialog";
 import unlockModule from "../../common/unlock";
 
 export default {
-  props: ["tables", "transfer"],
+  props: ["buffer", "tables", "transfer"],
   components: { inputModule, dialogModule, unlockModule },
   data() {
     return {
       componentData: null,
       component: null,
-      sectionTables: []
+      sectionTables: [],
+      viewTables: false
     };
+  },
+  created() {
+    this.viewTables = this.approval(this.op.view, "tables");
   },
   methods: {
     initial(tables) {
@@ -75,7 +79,28 @@ export default {
     },
     tap(table) {
       if (!table._id || table.type === "placeholder") return;
-      this.setViewTable(table);
+      if (table.status !== 1) {
+        if (this.transfer) {
+          const alert = {
+            title: "dialog.tableSwitchFailed",
+            msg: "dialog.targetTableMustBeEmpty",
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.retry", fn: "resolve" }
+            ]
+          };
+
+          this.$dialog(alert)
+            .then(() => this.exitComponent())
+            .catch(() => {
+              this.$emit("update:transfer", false);
+              this.exitComponent();
+            });
+          return;
+        } else {
+          this.setViewTable(table);
+        }
+      }
 
       let prompt;
 
@@ -91,7 +116,7 @@ export default {
             ]
           };
 
-          this.$dialog(prompt).then();
+          this.$dialog(prompt).then(this.exitComponent);
           break;
         case -1:
           this.resetOrder();
@@ -178,12 +203,11 @@ export default {
     checkIfSwitch(table) {
       return new Promise((next, stop) => {
         if (this.transfer) {
-          this.buffer.push(table);
-          this.swapTable(this.buffer);
-          this.buffer = [];
-          this.transfer = false;
+          this.swapTable(table);
+          this.$emit("update:transfer", false);
           stop();
         } else {
+          this.setViewTable(table);
           next();
         }
       });
@@ -299,10 +323,10 @@ export default {
       this.$socket.emit("[TABLE] UPDATE", this.table);
       this.$router.push({ path: "/main/menu" });
     },
-    swapTable([table1, table2]) {
-      const { server, status, session, invoice, time, guest } = table1;
+    swapTable(table) {
+      const { _id, server, status, session, invoice, time, guest } = this.table;
 
-      Object.assign(table2, {
+      Object.assign(table, {
         server,
         status,
         session,
@@ -315,16 +339,18 @@ export default {
 
       if (order) {
         Object.assign(order, {
-          table: table2.name,
-          tableID: table2._id
+          table: table.name,
+          tableID: table._id
         });
 
         this.$socket.emit("[ORDER] UPDATE", order);
       }
 
-      this.setViewTable(table2);
-      this.$socket.emit("[TABLE] RESET", { _id: table1._id });
-      this.$socket.emit("[TABLE] UPDATE", table2);
+      this.setViewTable(table);
+      this.$nextTick(() => {
+        this.$socket.emit("[TABLE] RESET", { _id });
+        this.$socket.emit("[TABLE] UPDATE", table);
+      });
     },
     viewList() {},
     unableViewTicketDialog() {

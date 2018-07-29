@@ -17,12 +17,12 @@
                     </button> -->
                 </div>
             </aside>
-            <component :is="layout" :tables="sectionTables" :transfer="transfer"></component>
+            <component :is="layout" :tables="sectionTables" :transfer.sync="transfer"></component>
         </div>
         <div class="ticket">
             <div class="wrap">
                 <order-list layout="display" :display="true"></order-list>
-                <buttons class="buttons" :transfer="transfer" @switch="switchTable"></buttons>
+                <buttons class="buttons" :transfer.sync="transfer"></buttons>
             </div>
         </div>
         <div :is="component" :init="componentData"></div>
@@ -54,13 +54,9 @@ export default {
       componentData: null,
       component: null,
       transfer: false,
-      buffer: [],
-      section: 0,
-      layout: "grid"
+      layout: "grid",
+      section: 0
     };
-  },
-  created() {
-    this.viewTables = this.approval(this.op.view, "tables");
   },
   methods: {
     setSection(index) {
@@ -81,15 +77,6 @@ export default {
           ({ _id, type, status }) =>
             _id && type !== "placeholder" && status === 1
         ).length;
-      }
-    },
-    switchTable(data) {
-      if (typeof data === "boolean") {
-        this.transfer = false;
-        this.buffer = [];
-      } else {
-        this.transfer = true;
-        this.buffer.push(data);
       }
     }
   },
@@ -126,8 +113,8 @@ export default {
 
 <style scoped>
 .table-outer {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 285px;
   height: 100vh;
   width: 100vw;
   padding-top: 60px;

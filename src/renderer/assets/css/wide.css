@@ -86,4 +86,9 @@
         height: 91.36px!important;
     }
 
+    .hibachi-grid{
+        width: 1120px!important;
+        height: 985px!important;
+        grid-gap: 20px!important;
+    }
 }

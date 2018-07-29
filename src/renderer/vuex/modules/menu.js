@@ -1,5 +1,4 @@
 import * as types from "../mutation-types";
-import { isNumber } from "util";
 
 const state = {
   order: {
@@ -160,22 +159,16 @@ const mutations = {
     state.order.content.splice(index, 1, item);
     state.item = item;
   },
-  [types.SPLIT_ITEM](state, item) {
+  [types.SPLIT_ITEM](state, target) {
+    let item = JSON.parse(JSON.stringify(target));
     state.item.total = (--state.item.qty * state.item.single).toFixed(2);
 
-    //clone
     const index = state.order.content.findIndex(item => item === state.item) + 1;
-    let _item = JSON.parse(JSON.stringify(item));
-    _item.qty = 1;
-    _item.total = _item.single.toFixed(2);
-    _item.unique = String().random();
-    state.order.content.splice(index, 0, _item);
 
-    state.item = _item;
+    Object.assign(item, { qty: 1, total: item.single.toFixed(2), unique: String().random() })
+    state.order.content.splice(index, 0, item);
 
-    // setTimeout(() =>
-    //   document.querySelectorAll("li.item")[index].classList.add("active")
-    // );
+    state.item = item;
   },
   [types.ALTER_ITEM_OPTION](state, data) {
     let { item } = state;
@@ -197,7 +190,8 @@ const mutations = {
     single = parseFloat(price)
       || parseFloat(item.price[index])
       || parseFloat(item.price[0]) + parseFloat(extra)
-      || parseFloat(item.price[0]) || 0;
+      || parseFloat(item.price[0])
+      || 0;
 
     if (item.qty === 1) {
       if (index === item.sideIndex && !data.function) {

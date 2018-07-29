@@ -17,7 +17,9 @@
             </router-link>
         </ul>
         <section class="content">
-            <router-view class="page"></router-view>
+            <transition name="fade" mode="out-in">
+                <router-view class="page"></router-view>
+            </transition>
         </section>
     </section>
 </template>
