@@ -237,8 +237,17 @@ const mutations = {
         const index = state.request[category].findIndex(i => i._id === _id);
         index !== -1 && state.request[category].splice(index, 1);
     },
+    [types.UPDATE_SECTION_TABLES](state, { tables, zone }) {
+        state.tables[zone] = tables;
+    },
+    [types.REMOVE_TABLE_SECTION](state, zone) {
+        const index = state.layouts.table.findIndex(section => section.zone === zone);
 
-
+        if (index !== -1) {
+            state.layouts.table.splice(index, 1);
+            state.tables = state.tables.filter(table => table.zone === zone)
+        }
+    },
     [types.NEW_PHONE_CALL](state, data) {
         state.callLog.unshift(data);
         state.callLog = state.callLog.slice(0, 10);

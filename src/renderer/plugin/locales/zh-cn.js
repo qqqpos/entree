@@ -1400,10 +1400,22 @@ export default {
     exit: "退出",
     exitTip: "退出软件设置",
     nav: {
-
+      store: "店面",
+      payment: "付款",
+      terminal: "终端",
+      promotion: "促销",
+      giftcard: "礼物卡",
+      department: "部门",
+      other: "其它"
     },
     title: {
-
+      store: "店面基本资料",
+      payment: "付款相关设定",
+      terminal: "信用卡设备列表",
+      promotion: "促销折扣设定",
+      giftcard: "礼物卡设置",
+      department: "部门分类",
+      other: "其它设定",
     },
     storeInfo: "店面资料",
     payment: "付款",
@@ -1679,6 +1691,7 @@ export default {
     gridLayout: "网格布局",
     flowLayout: "自由布局",
     hibachiLayout: "铁板桌布局",
+    sixSeats: "六张座位",
     eightSeats: "八张座位",
     tenSeats: "十张座位",
     orientation: "方位",
@@ -1829,9 +1842,10 @@ export default {
   },
   support: {
     menuInput: "菜单输入: ",
+    hotline: "技术热线",
     agent: "代理商",
     techSupport: "技术支持",
-    Remain: "技术支持 {i} 天",
+    remain: "技术支持 {i} 天",
     aboutExpire: "即将过期, 剩余 {i} 天",
     expired: "无技术支持",
     EOL: "终身 / EOL"

@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="tab-content">
+      <header class="nav">
+        <h3 class="title">{{$t('setting.title.table')}}</h3>
+      </header>
       <toggle title="setting.table" true-tooltip="tip.dinein.useTableLayout" false-tooltip="tip.dinein.noTableLayout" v-model="dineInOpt.useTable" :conditionalTooltip="true"></toggle>
       <toggle title="setting.passwordRequire" tooltip="tip.dinein.passwordRequire" v-model="dineInOpt.passwordRequire"></toggle>
       <toggle title="setting.guestCount" v-model="dineInOpt.guestCount"></toggle>

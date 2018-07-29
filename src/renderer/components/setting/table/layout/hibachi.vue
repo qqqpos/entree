@@ -26,6 +26,12 @@ export default {
       componentData: null
     };
   },
+  beforeDestroy() {
+    this.$socket.emit("[TABLE] UPDATE_HIBACHI_TABLES", {
+      tables: this.items,
+      zone: this.zone
+    });
+  },
   watch: {
     tables: {
       immediate: true,
@@ -91,6 +97,7 @@ export default {
           grid: this.items.length,
           _id: ObjectId().toString()
         };
+        console.log(this.items);
       }
 
       new Promise((resolve, reject) => {
@@ -145,48 +152,6 @@ export default {
   background: #fff;
   margin: 5px 40px;
   cursor: pointer;
-}
-
-.hibachi-seat span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  border-radius: 4px;
-}
-.hibachi-seat .table-name {
-  font-weight: bold;
-  color: #fff;
-  background: #607d8b;
-}
-
-.hibachi-seat.eight {
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.hibachi-seat.six {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-}
-
-.six.left .table-name {
-  grid-column: 2 / 3;
-  grid-row: 2 / 4;
-}
-
-.six.right .table-name {
-  grid-column: 1 / 2;
-  grid-row: 2 / 4;
-}
-
-.eight.right .table-name {
-  grid-column: 1 / 3;
-  grid-row: 2/4;
-}
-.eight.left .table-name {
-  grid-column: 2/4;
-  grid-row: 2/4;
 }
 
 .seat.active {

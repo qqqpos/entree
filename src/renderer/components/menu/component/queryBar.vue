@@ -1,12 +1,12 @@
 <template>
     <transition-group name="fadeUp" mode="out-in">
         <div v-if="query.length !== 0" class="bar" key="0">
-            <span class="text">{{query}}</span>
+            <span class="text text-center">{{query}}</span>
         </div>
         <ul v-if="items.length" key="1">
             <li v-for="(item,index) in items" :key="index" class="item">
-                <span class="index">{{index+1}}</span>
-                <span class="name">{{item[language]}}</span>
+                <span class="index text-center">{{index+1}}</span>
+                <span class="f1">{{item[language]}}</span>
             </li>
         </ul>
     </transition-group>
@@ -24,9 +24,9 @@ export default {
 
 <style scoped>
 .bar {
-  position: absolute;
-  bottom: 420px;
-  left: 10px;
+  position: fixed;
+  bottom: 390px;
+  right: 10px;
   width: 265px;
   display: flex;
   justify-content: center;
@@ -42,7 +42,6 @@ export default {
   align-items: center;
   min-width: 100px;
   height: 40px;
-  text-align: center;
   font-size: 18px;
 }
 
@@ -62,12 +61,9 @@ li {
   padding: 3px;
   color: #fff;
 }
+
 .index {
   width: 20px;
   padding: 0 5px 0 3px;
-  text-align: center;
-}
-.name {
-  flex: 1;
 }
 </style>

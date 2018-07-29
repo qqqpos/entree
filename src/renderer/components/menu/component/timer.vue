@@ -83,10 +83,10 @@ export default {
   components: { dialogModule, calendar, slider },
   data() {
     return {
-      componentData: null,
-      component: null,
       date: moment().format("YYYY-MM-DD"),
       timer: moment(),
+      componentData: null,
+      component: null,
       now: moment(),
       time: null,
       ahead: 10,
@@ -177,13 +177,13 @@ export default {
     },
     checkTime() {
       return new Promise((next, stop) => {
-        this.timer.isAfter(this.now)
-          ? next()
-          : stop({
-              title: "dialog.dateTimeIncorrect",
-              msg: "dialog.inputTimeMustAfterCurrent",
-              buttons: [{ text: "button.confirm", fn: "resolve" }]
-            });
+        const dialog = {
+          title: "dialog.dateTimeIncorrect",
+          msg: "dialog.inputTimeMustAfterCurrent",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+
+        this.timer.isAfter(this.now) ? next() : stop(dialog);
       });
     },
     confirm() {
@@ -233,25 +233,19 @@ export default {
 
       return new Promise(next => {
         if (this.app.newTicket) {
+          const content = this.order.content.map(
+            item =>
+              print
+                ? Object.assign(item, { print })
+                : Object.assign(item, { pending: true })
+          );
+
           Object.assign(this.order, {
             customer: this.$minifyCustomer(this.customer),
-            number: this.ticket.number,
-            modify: 0,
-            time: Date.now(),
             schedule: +this.timer,
-            status: 1,
-            date: today(),
             timer: true,
-            print,
-            content: this.order.content.map(item => {
-              if (!print) {
-                item.pending = true;
-              } else {
-                item.print = true;
-              }
-
-              return item;
-            })
+            content,
+            print
           });
 
           this.$socket.emit("[ORDER] SAVE", this.order, false, order =>
@@ -271,16 +265,18 @@ export default {
 
               let { type, content } = this.archivedOrder;
               content.push(
-                ...this.order.content.map(item => {
-                  print ? (item.print = true) : (item.pending = true);
-                  return item;
-                })
+                ...this.order.content.map(
+                  item =>
+                    print
+                      ? Object.assign(item, { print })
+                      : Object.assign(item, { pending: true })
+                )
               );
 
               this.order.type = type;
               this.order.content = content;
 
-              this.$calculatePayment(this.order, { selfAssign: true });
+              this.$calculatePayment(this.order);
 
               this.$socket.emit("[ORDER] UPDATE", this.order);
               next(order);
@@ -318,9 +314,9 @@ export default {
       "store",
       "order",
       "ticket",
-      "dineInOpt",
       "station",
       "customer",
+      "dineInOpt",
       "archivedOrder"
     ])
   }

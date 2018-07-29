@@ -9,7 +9,7 @@
             </header>
             <div class="banner"></div>
             <div class="wrap">
-                <inputer title="text.alias" v-model="table.name" :autoFocus="true"></inputer>
+                <inputer title="text.alias" v-model="table.name" :autoFocus="true" @keydown.enter.native="confirm"></inputer>
                 <selector title="table.layout" v-model="table.layout" :opts="layouts"></selector>
                 <selector title="table.orientation" v-model="table.orientation" :opts="orientations"></selector>
             </div>
@@ -32,7 +32,7 @@ export default {
   components: { inputer, selector },
   data() {
     return {
-      layouts: ["six","eight"].map(layout => ({
+      layouts: ["six", "eight", "ten"].map(layout => ({
         label: this.$t(`table.${layout}Seats`),
         tooltip: "",
         value: layout
@@ -53,6 +53,9 @@ export default {
           break;
         case "eight":
           this.table.seat = 8;
+          break;
+        case "ten":
+          this.table.seat = 10;
           break;
       }
       this.table.seats = Array(this.table.seat)

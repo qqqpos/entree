@@ -1,7 +1,7 @@
 <template>
     <div class="about">
         <div>{{$t('support.menuInput')}}<span class="text">{{support.menuInput}}</span></div>
-        <div>{{$t('support.agent')}}:<span class="text">{{support.salesAgent}}</span> Tel:<span class="text">{{support.contact}}</span>{{$t('support.techSupport')}}:<span class="text">{{support.contract | remain}}</span></div>
+        <div>{{$t('support.agent')}}:<span class="text">{{support.salesAgent}}</span>{{$t('support.hotline')}}<span class="text">{{support.contact}}</span>{{$t('support.techSupport')}}:<span class="text">{{getTime(support.contract)}}</span></div>
         <div>Copyright © 2017 - 2018 United POS Computer Inc. All Rights Reserved</div>
     </div>
 </template>
@@ -13,8 +13,8 @@ export default {
       support: this.$store.getters.config.support || {}
     };
   },
-  filters: {
-    remain(time) {
+  methods: {
+    getTime(time) {
       const day = Math.round((time - Date.now()) / 8.64e7);
 
       if (day === Infinity) {

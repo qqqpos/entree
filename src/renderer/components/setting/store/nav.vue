@@ -16,7 +16,7 @@
                 </router-link>
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.giftcard'}">
                     <i class="fas fa-id-card-alt"></i>
-                    <span class="text">{{$t('setting.nav.giftCard')}}</span>
+                    <span class="text">{{$t('setting.nav.giftcard')}}</span>
                 </router-link>
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.department'}">
                     <i class="fas fa-boxes"></i>
@@ -28,7 +28,7 @@
                 </router-link>
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">
                     <i class="fas fa-cogs"></i>
-                    <span class="text">{{$t('setting.nav.others')}}</span>
+                    <span class="text">{{$t('setting.nav.other')}}</span>
                 </router-link>                
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>

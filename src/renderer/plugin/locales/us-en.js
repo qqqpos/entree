@@ -1409,24 +1409,23 @@ export default {
     troubleshooting: "Debug · Feedback Troubleshooting",
     exit: "Exit",
     exitTip: "Exit Setting",
-    nav:{
-      store:"Store",
-      payment:"Payment",
-      terminal:"Terminal",
-      promotion:"Promo.",
-      other:"Others",
-      giftcard:"GiftCard",
-      department:"Dept."
+    nav: {
+      store: "Store",
+      payment: "Payment",
+      terminal: "Terminal",
+      promotion: "Promo.",
+      other: "Others",
+      giftcard: "GiftCard",
+      department: "Dept."
     },
-    title:{
-      store:"Store Information",
-      payment:"Payment Related Setting",
-      terminal:"Credit Card Terminal Device",
-      promotion:"Store Promotion",
-      other:"Other Setting",
-      giftcard:"Gift Card Setting",
-      department:"Department Setup"
-
+    title: {
+      store: "Store Information",
+      payment: "Payment Related Setting",
+      terminal: "Credit Card Terminal Device",
+      promotion: "Store Promotion",
+      other: "Other Setting",
+      giftcard: "Gift Card Setting",
+      department: "Department Setup"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",
@@ -1697,6 +1696,7 @@ export default {
     gridLayout: "Grid Layout",
     flowLayout: "Free Flow Layout",
     hibachiLayout: "Hibachi Layout",
+    sixSeats: "Six Seats",
     eightSeats: "Eight Seats",
     tenSeats: "Ten Seats",
     orientation: "Orientation",
@@ -1854,9 +1854,10 @@ export default {
   },
   support: {
     menuInput: "Menu Input By: ",
+    hotline:"Support Hotline",
     agent: "Sales Agent",
     techSupport: "Tech Support",
-    Remain: "Remain {i} days",
+    remain: "Remain {i} days",
     aboutExpire: "About expire. Remain {i} days",
     expired: "No Tech Support",
     EOL: "Life Time / EOL"
