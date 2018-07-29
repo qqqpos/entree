@@ -24,6 +24,7 @@
 import { mapActions, mapGetters } from "vuex";
 
 import collector from "./component/collector";
+import inputModule from "./component/inputer";
 import dialogModule from "./common/dialog";
 import unlockModule from "./common/unlock";
 import spooler from "./component/spooler";
@@ -35,6 +36,7 @@ export default {
   components: {
     unlockModule,
     dialogModule,
+    inputModule,
     collector,
     provider,
     noSales,
@@ -46,13 +48,13 @@ export default {
       "op",
       "time",
       "ring",
+      "store",
       "device",
       "config",
-      "store",
-      "dineInOpt",
       "station",
       "history",
       "callLog",
+      "dineInOpt",
       "authorized"
     ])
   },
@@ -166,7 +168,7 @@ export default {
       });
     },
     askCashIn() {
-      const amount = this.station.cashDrawer.initialAmount;
+      const amount = parseFloat(this.station.cashDrawer.initialAmount) || 0;
       const prompt = { title: "dialog.cashIn", msg: "dialog.cashInTip" };
 
       this.$dialog(prompt)
@@ -273,12 +275,11 @@ export default {
           this.$router.push({ path: "/main/customer" });
           break;
         case "table":
-          if (this.dineInOpt.useTable) {
-            this.$router.push({ path: "/main/table" });
-          } else {
-            this.setTicket({ type: "DINE_IN" });
-            this.$router.push({ path: "/main/menu" });
-          }
+          const { useTable = true, guestCount } = this.dineInOpt;
+
+          useTable
+            ? this.$router.push({ path: "/main/table" })
+            : guestCount ? this.countGuestDialog() : this.createDineIn();
           break;
         case "list":
           this.$router.push({ path: "/main/list" });
@@ -335,6 +336,27 @@ export default {
           break;
         default:
       }
+    },
+    countGuestDialog() {
+      new Promise((resolve, reject) => {
+        const config = {
+          title: "text.setGuest",
+          type: "number",
+          percentage: false,
+          allowPercentage: false,
+          amount: 1
+        };
+
+        this.componentData = Object.assign({ resolve, reject }, config);
+        this.component = "inputModule";
+      })
+        .then(({ amount }) => this.createDineIn(amount))
+        .catch(this.exitComponent);
+    },
+    createDineIn(guest = 1) {
+      this.setTicket({ type: "DINE_IN" });
+      this.setOrder({ table: "", tableID: null, session: null, guest });
+      this.$router.push({ path: "/main/menu" });
     },
     cashDrawerAvailable() {
       switch (this.op.cashCtrl) {

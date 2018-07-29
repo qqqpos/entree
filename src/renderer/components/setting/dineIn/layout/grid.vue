@@ -6,17 +6,21 @@
                 <span class="name">{{item.name}}</span>
             </slick-item>
         </slick-list>
+        <div :is="component" :init="componentData"></div>
     </div>
 </template>
 
 <script>
 import { SlickList, SlickItem } from "vue-slicksort";
+import tableEditor from "../component/tableEditor";
 
 export default {
   props: ["zone", "tables"],
-  components: { SlickList, SlickItem },
+  components: { SlickList, SlickItem, tableEditor },
   data() {
     return {
+      componentData: null,
+      component: null,
       updated: [],
       items: []
     };
@@ -46,7 +50,19 @@ export default {
       this.items = seats;
     },
     edit(table) {
-      console.log(table);
+      console.log(table)
+      new Promise((resolve, reject) => {
+        const edit = !!table._id;
+        this.componentData = { resolve, reject, table, edit };
+        this.compoennt = "tableEditor";
+      })
+        .then(update => {
+          console.log(update)
+          this.exitComponent();
+        })
+        .catch(removeTable => {
+          this.exitComponent();
+        });
     },
     update(data) {
       this.updated = data.map((table, index) => ({

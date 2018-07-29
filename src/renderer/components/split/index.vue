@@ -115,12 +115,16 @@ export default {
         delivery: 0,
         rouding: 0,
         surcharge: 0,
-        remain: 0,
-        log: []
+        remain: 0
       };
 
       this.$children.map(vm => content.push(...vm.buffer));
-      const split = Object.assign({}, order, { _id, content, payment });
+      const split = Object.assign({}, order, {
+        _id,
+        content,
+        payment,
+        logs: []
+      });
       this.splits.push(split);
       this.$bus.emit("remove");
 
@@ -236,7 +240,7 @@ export default {
       this.order.children = [];
       this.order.split = false;
       this.order.payment.discount = 0;
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
       this.order.content.forEach(item => (item.split = false));
 
       this.setOrder(this.order);
@@ -310,8 +314,6 @@ export default {
           const { payment } = order;
 
           Object.keys(payment).forEach(key => {
-            if (!isNumber(payment[key])) return;
-
             if (payments[key]) {
               payments[key] += payment[key];
             } else {

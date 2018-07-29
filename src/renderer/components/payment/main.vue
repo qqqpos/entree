@@ -827,7 +827,10 @@ export default {
           Object.assign(transaction, { splitPayment: index - 1 });
         }
 
-        this.order.payment.log.push(transaction);
+        //hot fix
+        if(!this.order.logs) this.order.logs = [];
+
+        this.order.logs.push(transaction);
         this.order.payment.paid += parseFloat(actual);
         this.$socket.emit("[TRANSACTION] SAVE", transaction);
         this.recalculatePayment();
@@ -1104,7 +1107,7 @@ export default {
       discount > 0 && coupons.push(coupon);
 
       this.order.coupons = coupons;
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
       this.exitComponent();
 
       !this.payWhole && this.$socket.emit("[SPLIT] UPDATE", this.order);

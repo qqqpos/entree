@@ -268,7 +268,7 @@ export default {
       discount > 0 && coupons.push(coupon);
 
       this.order.coupons = coupons;
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
       this.$socket.emit("[ORDER] UPDATE", this.order);
       this.exitComponent();
     },

@@ -365,16 +365,12 @@ export default {
           tip: 0,
           gratuity: 0,
           delivery: 0,
-          rounding: 0,
-          log: []
+          rounding: 0
         };
 
         this.payment = Object.assign(this.order.payment, payment);
       } else {
-        this.payment = this.$calculatePayment(this.order, {
-          selfAssign: true,
-          callback: true
-        });
+        this.payment = this.$calculatePayment(this.order, { callback: true });
       }
     },
     setSeat(seat) {

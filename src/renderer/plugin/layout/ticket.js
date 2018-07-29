@@ -500,7 +500,7 @@ function createFooter(config, setting, printer, ticket) {
   if (!ticket.hasOwnProperty("payment")) return "";
 
   const { enable, percentages } = config.tipSuggestion;
-  const { type, payment, coupons, number, table, customer } = ticket;
+  const { type, payment, logs, coupons, number, table, customer } = ticket;
   const { tipSuggestion, ticketNumber, tableName, jobTime, tradeMark, geo, content } = setting.control.footer;
 
   let suggestions = "";
@@ -541,7 +541,7 @@ function createFooter(config, setting, printer, ticket) {
 
   coupons.forEach(coupon => settle.push(`<section class="details"><h3>${coupon.alias}</h3><p>${coupon.slogan || ''}</p></section>`));
 
-  payment.log.forEach(log => {
+  (logs || payment.log || []).forEach(log => {
     const { type, subType, lfd, paid, tip, change } = log;
     const tipText = tip > 0 ? `<p><span class="text">Tip:</span><span class="value">$ ${tip.toFixed(2)}</span></p>` : "";
     switch (type) {

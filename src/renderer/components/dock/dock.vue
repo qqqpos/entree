@@ -81,7 +81,8 @@ export default {
         let table = "";
 
         if (this.order.type === "DINE_IN" || this.order.type === "BAR") {
-          table = ` - ${this.order.table} - ${this.order.guest}`;
+          const name = this.order.table || this.$t("text.noSeat");
+          table = ` - ${name} - ${this.order.guest}`;
         }
 
         return type + table;
@@ -295,7 +296,7 @@ export default {
     },
     TICKET_NUMBER(number) {
       this.setTicket({ number });
-      
+
       this.app.newTicket &&
         this.$route.name === "Menu" &&
         this.setOrder({ number });

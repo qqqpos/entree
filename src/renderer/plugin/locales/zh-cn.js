@@ -1316,7 +1316,8 @@ export default {
     itemInline: "物品内联",
     earn: "收入",
     holiday: "节假日",
-    swipeArea: "滑动区"
+    swipeArea: "滑动区",
+    noSeat: "无座位"
   },
   nav: {
     store: "店面",

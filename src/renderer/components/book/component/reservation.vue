@@ -1,7 +1,7 @@
 <template>
     <div class="books-wrap">
       <div :style="verticalStyle" ref="dom" class="books-inner-wrap">
-          <div v-for="(session,hour,index) in schedule" :key="index" class="hourly">
+          <div v-for="(session,hour,index) in schedule" :key="index" class="hourly" :data-hour="hour">
             <div class="hour" :id="'bk'+index">{{hour+":00"}}</div>
             <hourly-session :hour="hour" :unique="'bk'+index" :session="session"></hourly-session>
         </div>
@@ -18,10 +18,16 @@ export default {
   components: { hourlySession },
   data() {
     return {
+      hours: [],
       schedule: {},
       vertical: 0,
+      ready: false,
       lastVerticalDelta: 0
     };
+  },
+  mounted() {
+    this.toCurrent();
+    this.ready = true;
   },
   methods: {
     initial(data) {
@@ -46,6 +52,8 @@ export default {
       this.vertical = 0;
       this.schedule = hours;
       this.lastVerticalDelta = 0;
+      this.hours = Object.keys(hours);
+      this.ready && this.$nextTick(this.toCurrent);
     },
     sessionize(timestamp) {
       const time = parseInt(moment(timestamp).format("mm"));
@@ -72,7 +80,7 @@ export default {
       const parent = document.querySelector(`.detail header`);
       const overlay = Array.from(doms)
         .reverse()
-        .find(dom => util.isCollide(parent, dom));
+        .find(dom => util.isCollide(parent, dom, 1.5));
       if (overlay) {
         const {
           top: parentTop,
@@ -108,6 +116,27 @@ export default {
             this.vertical = 0;
           }
         });
+      }
+    },
+    toCurrent() {
+      const hour = moment().format("HH");
+      const targetHour = this.hours.includes(hour)
+        ? hour
+        : this.hours.find(h => h > hour) || this.hours.last();
+
+      if (targetHour) {
+        const { top: parentTop, height } = document
+          .querySelector(`.detail header`)
+          .getBoundingClientRect();
+        const { top: targetTop } = document
+          .querySelector(`[data-hour='${hour}']`)
+          .getBoundingClientRect();
+
+        this.lastVerticalDelta = this.vertical = -(
+          targetTop -
+          parentTop -
+          height
+        );
       }
     }
   },

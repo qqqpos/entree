@@ -183,7 +183,7 @@ export default {
 
       this.order.cashier = this.op.name;
       this.order.payment.type = this.type;
-      this.order.payment.log.push(transaction);
+      this.order.logs.push(transaction);
       this.$socket.emit("[ORDER] UPDATE", this.order, false);
       this.$socket.emit("[TRANSACTION] SAVE", transaction);
       this.init.resolve();

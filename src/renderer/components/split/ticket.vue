@@ -106,14 +106,14 @@ export default {
       if (this.order.settled) {
         this.ban = true;
         this.reason = this.$t("dialog.ticketClosed");
-      } else if (this.order.payment.log.length) {
+      } else if (this.order.logs.length) {
         this.ban = true;
         this.reason = this.$t("dialog.paymentFound");
       }
     }
   },
   mounted() {
-    this.$calculatePayment(this.order, { selfAssign: true });
+    this.$calculatePayment(this.order);
     //register scroll event
     const dom = this.$refs[this.unique];
     if (dom) {
@@ -355,7 +355,7 @@ export default {
     },
     applyConfig(params) {
       Object.assign(this.order, params);
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
     },
     setDiscount() {
       const {
@@ -408,7 +408,7 @@ export default {
     },
     resetDiscount() {
       this.order.coupons = [];
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
     },
     setCoupon() {
       this.$bus.emit("__THREAD__OPEN", {
@@ -522,7 +522,7 @@ export default {
           }
           break;
       }
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
 
       if (this.componentData)
         this.componentData.isDiscount = this.order.payment.discount > 0;
@@ -588,7 +588,7 @@ export default {
       });
     },
     "order.content"() {
-      this.$calculatePayment(this.order, { selfAssign: true });
+      this.$calculatePayment(this.order);
     }
   }
 };

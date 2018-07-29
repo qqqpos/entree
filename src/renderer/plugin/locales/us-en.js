@@ -1327,7 +1327,8 @@ export default {
     itemInline: "Items Inline",
     earn: "Earn",
     holiday: "Holiday",
-    swipeArea: "Swipe Area"
+    swipeArea: "Swipe Area",
+    noSeat:"No Seat"
   },
   nav: {
     store: "Store",

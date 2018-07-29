@@ -237,7 +237,7 @@ export default {
       const { enable, rules } = this.dineInOpt.surcharge;
 
       let delivery = type === 'DELIVERY' && !deliveryFree ? getDeliveryCharge() : 0;
-      let { tip = 0, gratuity = 0, paid = 0, log = [] } = order.payment;
+      let { tip = 0, gratuity = 0, paid = 0 } = order.payment;
       let discount = 0;
       let subtotal = 0;
       let tax = 0;
@@ -375,8 +375,7 @@ export default {
         tip: toFixed(tip, 2),
         gratuity: toFixed(gratuity, 2),
         delivery: toFixed(delivery, 2),
-        rounding: toFixed(rounding, 2),
-        log
+        rounding: toFixed(rounding, 2)
       }
 
       selfAssign && Object.assign(order, { payment });
@@ -477,8 +476,6 @@ export default {
 
           splits.forEach(({ payment }) => {
             Object.keys(payment).forEach(key => {
-              if (!isNumber(payment[key])) return;
-
               if (payments[key]) {
                 payments[key] += payment[key];
               } else {
@@ -615,15 +612,15 @@ export default {
 
         step();
       },
-      isCollide(a, b) {
-        const aRect = a.getBoundingClientRect();
-        const bRect = b.getBoundingClientRect();
+      isCollide(x, y, tolerate = 1) {
+        const { top: xTop, left: xLeft, height: xHeight, width: xWidth } = x.getBoundingClientRect();
+        const { top: yTop, left: yLeft, height: yHeight, width: yWidth } = y.getBoundingClientRect();
 
         return !(
-          aRect.top + aRect.height < bRect.top ||
-          aRect.top > bRect.top + bRect.height ||
-          aRect.left + aRect.width < bRect.left ||
-          aRect.left > bRect.left + bRect.width
+          xTop + xHeight < (yTop / tolerate) ||
+          (xTop / tolerate) > yTop + yHeight ||
+          xLeft + xWidth < (yLeft / tolerate) ||
+          (xLeft / tolerate) > yLeft + yWidth
         );
       }
     };
