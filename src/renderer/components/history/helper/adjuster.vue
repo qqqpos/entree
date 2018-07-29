@@ -178,7 +178,7 @@ export default {
     },
     del() {
       const value = (this.tip.slice(0, -1) / 10).toFixed(2);
-      isNaN(value) || value === "0.00" ? this.clear() : (this.tip = value);
+      !isNumber(value) || value === "0.00" ? this.clear() : (this.tip = value);
     },
     clear() {
       this.tip = "";

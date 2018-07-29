@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     invalid() {
-      return isNaN(this.tax.rate);
+      return !isNumber(this.tax.rate);
     }
   },
   methods: {

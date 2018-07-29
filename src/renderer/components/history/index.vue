@@ -107,12 +107,7 @@ export default {
     resetViewOrder() {
       this.$nextTick(() => {
         if (this.splits.length) {
-          const ticket = this.splits.slice(
-            this.page * 30,
-            this.page * 30 + 30
-          )[0];
-
-          this.setViewOrder(ticket);
+          this.setViewOrder(this.splits[0]);
         } else {
           this.orders.length
             ? this.setViewOrder(this.invoices[0])
@@ -179,6 +174,7 @@ export default {
     getSplits(invoice) {
       invoice.split &&
         this.$socket.emit("[SPLIT] GET", invoice._id, splits => {
+          this.page = 0;
           this.splits = splits.sort((a, b) => a.number.localeCompare(b.number));
           this.resetViewOrder();
         });

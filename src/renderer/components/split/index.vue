@@ -310,7 +310,7 @@ export default {
           const { payment } = order;
 
           Object.keys(payment).forEach(key => {
-            if (Number.isNaN(payment[key])) return;
+            if (!isNumber(payment[key])) return;
 
             if (payments[key]) {
               payments[key] += payment[key];
@@ -320,8 +320,13 @@ export default {
           });
         });
 
-        payments.rounding = this.$rounding( toFixed((payments.due + payments.gratuity) * 100, 2));
-        payments.balance = toFixed(payments.due + payments.gratuity + payments.rounding,2);
+        payments.rounding = this.$rounding(
+          toFixed((payments.due + payments.gratuity) * 100, 2)
+        );
+        payments.balance = toFixed(
+          payments.due + payments.gratuity + payments.rounding,
+          2
+        );
         payments.remain = toFixed(payments.balance - payments.paid, 2);
 
         Object.keys(payments).forEach(key => {

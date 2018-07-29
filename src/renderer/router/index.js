@@ -255,23 +255,23 @@ export default new Router({
               ]
             },
             {
-              path: "table",
-              component: require("../components/setting/table/nav"),
+              path: "dineIn",
+              component: require("../components/setting/dineIn/nav"),
               children: [
                 {
                   path: "/",
-                  name: "Setting.table",
-                  component: require("../components/setting/table/index")
+                  name: "Setting.dineIn",
+                  component: require("../components/setting/dineIn/index")
                 },
                 {
                   path: "config",
-                  name: "Setting.table.config",
-                  component: require("../components/setting/table/config")
+                  name: "Setting.dineIn.config",
+                  component: require("../components/setting/dineIn/config")
                 },
                 {
                   path: "surcharge",
-                  name: "Setting.table.surcharge",
-                  component: require("../components/setting/table/component/surcharge")
+                  name: "Setting.dineIn.surcharge",
+                  component: require("../components/setting/dineIn/component/surcharge")
                 }
               ]
             },
@@ -572,6 +572,10 @@ export default new Router({
                   path: "/",
                   name: "Setting.debug",
                   component: require("../components/setting/debug/index")
+                }, {
+                  path: "tutorial",
+                  name: "Setting.tutorial",
+                  component: require("../components/setting/debug/tutorial")
                 }
               ]
             }

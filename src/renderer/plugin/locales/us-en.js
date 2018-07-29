@@ -1390,8 +1390,8 @@ export default {
     stationTip: "Device Setting",
     menu: "Menu",
     menuTip: "Items · Request · Template",
-    seat: "Dine In",
-    seatTip: "Seats · Layout · Setting",
+    dineIn: "Dine In",
+    dineInTip: "Seats · Layout · Setting",
     onlineOrder: "Online Order",
     onlineOrderTip: "Online Items · Social Sharing",
     print: "Print",
@@ -1414,9 +1414,11 @@ export default {
       payment: "Payment",
       terminal: "Terminal",
       promotion: "Promo.",
-      other: "Others",
       giftcard: "GiftCard",
-      department: "Dept."
+      department: "Dept.",
+      other: "Others",
+      tool: "Tool",
+      tutorial: "Tutorial"
     },
     title: {
       store: "Store Information",
@@ -1424,6 +1426,7 @@ export default {
       terminal: "Credit Card Terminal Device",
       promotion: "Store Promotion",
       other: "Other Setting",
+      table: "Dine in Related Setting",
       giftcard: "Gift Card Setting",
       department: "Department Setup"
     },
@@ -1854,7 +1857,7 @@ export default {
   },
   support: {
     menuInput: "Menu Input By: ",
-    hotline:"Support Hotline",
+    hotline: "Support Hotline",
     agent: "Sales Agent",
     techSupport: "Tech Support",
     remain: "Remain {i} days",

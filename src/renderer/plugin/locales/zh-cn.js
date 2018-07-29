@@ -1380,8 +1380,8 @@ export default {
     stationTip: "硬件设置",
     menu: "菜单",
     menuTip: "菜单 · 要求 · 模板 · 排序",
-    seat: "堂吃",
-    seatTip: "座位编辑 · 排序 · 堂吃设置",
+    dineIn: "堂吃",
+    dineInTip: "座位编辑 · 排序 · 堂吃设置",
     onlineOrder: "在线点餐",
     onlineOrderTip: "网单设置 · 社交媒体推广",
     print: "打印",
@@ -1406,7 +1406,9 @@ export default {
       promotion: "促销",
       giftcard: "礼物卡",
       department: "部门",
-      other: "其它"
+      other: "其它",
+      tool: "工具",
+      tutorial: "教程"
     },
     title: {
       store: "店面基本资料",
@@ -1415,6 +1417,7 @@ export default {
       promotion: "促销折扣设定",
       giftcard: "礼物卡设置",
       department: "部门分类",
+      table: "堂吃下单设定",
       other: "其它设定",
     },
     storeInfo: "店面资料",

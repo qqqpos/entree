@@ -17,10 +17,10 @@
         <figcaption>{{$t('setting.menu')}}</figcaption>
         <p>{{$t('setting.menuTip')}}</p>
       </router-link>
-      <router-link tag="figure" :to="{name:'Setting.table'}">
+      <router-link tag="figure" :to="{name:'Setting.dineIn'}">
         <i class="fa fa-2x fa-tablets"></i>
-        <figcaption>{{$t('setting.seat')}}</figcaption>
-        <p>{{$t('setting.seatTip')}}</p>
+        <figcaption>{{$t('setting.dineIn')}}</figcaption>
+        <p>{{$t('setting.dineInTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.online'}" class="disabled">
         <i class="fas fa-2x fa-globe-americas"></i>

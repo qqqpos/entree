@@ -477,7 +477,7 @@ export default {
 
           splits.forEach(({ payment }) => {
             Object.keys(payment).forEach(key => {
-              if (Number.isNaN(payment[key])) return;
+              if (!isNumber(payment[key])) return;
 
               if (payments[key]) {
                 payments[key] += payment[key];

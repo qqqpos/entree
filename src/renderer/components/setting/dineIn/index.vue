@@ -80,7 +80,7 @@ export default {
 
           if (removeSection) {
             this.layouts.table.splice(index, 1);
-            //update to database
+            this.$socket.emit("[TABLE] REMOVE_SECTION", index);
           }
         });
     }

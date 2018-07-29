@@ -103,7 +103,7 @@ export default {
     },
     del() {
       const value = (this.amount.slice(0, -1) / 10).toFixed(2);
-      isNaN(value) || value === "0.00" ? this.clear() : (this.amount = value);
+      !isNumber(value) || value === "0.00" ? this.clear() : (this.amount = value);
     },
     toggle() {
       if (!this.allowPercentage) return;

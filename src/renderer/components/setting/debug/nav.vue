@@ -4,7 +4,11 @@
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.debug'}" exact>
                     <i class="fas fa-toolbox"></i>
-                    <span class="text">{{$t('nav.index')}}</span>
+                    <span class="text">{{$t('setting.nav.tool')}}</span>
+                </router-link>
+                <router-link tag="li" :to="{name:'Setting.tutorial'}" exact>
+                    <i class="fas fa-toolbox"></i>
+                    <span class="text">{{$t('setting.nav.tutorial')}}</span>
                 </router-link>
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>

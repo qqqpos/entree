@@ -704,7 +704,7 @@ export default {
       return (
         this.order.type === "DINE_IN" ||
         this.order.type === "BAR" ||
-        this.order.type === "HIBACHI" || 
+        this.order.type === "HIBACHI" ||
         this.order.type === "TO_GO"
       );
     },
