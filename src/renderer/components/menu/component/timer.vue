@@ -220,7 +220,8 @@ export default {
     },
     print(order) {
       Printer.setTarget("All").print(
-        Object.assign(order, { delay: +this.timer })
+        Object.assign(order, { delay: +this.timer }),
+        true
       );
       this.resetAll();
       this.$router.push({ path: "/main" });
@@ -232,61 +233,33 @@ export default {
       this.exitComponent();
 
       return new Promise(next => {
-        if (this.app.newTicket) {
-          const content = this.order.content.map(
-            item =>
-              print
-                ? Object.assign(item, { print })
-                : Object.assign(item, { pending: true })
-          );
+        Object.assign(this.order, {
+          customer: this.$minifyCustomer(this.customer),
+          schedule: +this.timer,
+          timer: true
+        });
 
-          Object.assign(this.order, {
-            customer: this.$minifyCustomer(this.customer),
-            schedule: +this.timer,
-            timer: true,
-            content,
+        if (this.app.newTicket) {
+          const items = JSON.parse(JSON.stringify(this.order.content));
+
+          this.order.content.forEach(item => {
             print
+              ? Object.assign(item, { print })
+              : Object.assign(item, { pending: true });
           });
 
           this.$socket.emit("[ORDER] SAVE", this.order, false, order =>
-            next(order)
+            next(Object.assign(order, { content: items }))
           );
         } else {
-          try {
-            Object.assign(this.order, {
-              customer: this.$minifyCustomer(this.customer),
-              lastEdit: Date.now(),
-              editor: this.op.name,
-              schedule: +this.timer
-            });
-
-            if (this.order.type === "TO_GO") {
-              const order = JSON.parse(JSON.stringify(this.order));
-
-              let { type, content } = this.archivedOrder;
-              content.push(
-                ...this.order.content.map(
-                  item =>
-                    print
-                      ? Object.assign(item, { print })
-                      : Object.assign(item, { pending: true })
-                )
-              );
-
-              this.order.type = type;
-              this.order.content = content;
-
-              this.$calculatePayment(this.order);
-
-              this.$socket.emit("[ORDER] UPDATE", this.order);
-              next(order);
-            } else {
-              this.$socket.emit("[ORDER] UPDATE", this.order);
-              next(this.order);
-            }
-          } catch (e) {
-            console.log(e);
-          }
+          Object.assign(this.order, {
+            customer: this.$minifyCustomer(this.customer),
+            lastEdit: Date.now(),
+            editor: this.op.name,
+            schedule: +this.timer
+          });
+          this.$socket.emit("[ORDER] UPDATE", this.order);
+          next(this.order);
         }
       });
     },
