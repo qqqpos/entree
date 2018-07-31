@@ -19,6 +19,8 @@ export default {
   created() {
     this.startTick();
     this.initialEnvironment();
+
+    //window.ring = this.phoneRing
   },
   methods: {
     initialEnvironment() {
@@ -114,7 +116,7 @@ export default {
       const { command, port } = opt;
       this.setDevice({ callid: true });
 
-      let telephone = new serialport(port, {
+      window.telephone = new serialport(port, {
         autoOpen: false,
         parser: serialport.parsers.raw
       });
@@ -127,6 +129,7 @@ export default {
 
       telephone.on("data", data => {
         const raw = data.toString().split("\n");
+        
         switch (raw.length) {
           case 3:
             const type = raw[1].replace(/\W/g, "");
@@ -149,25 +152,21 @@ export default {
             break;
           default:
             let name = raw.find(i => i.indexOf("NAME") !== -1);
-            name = name ? name.split("=")[1].replace(/[\r\n]/g, "") : "";
+            name = name ? name.split("=")[1].replace(/[\r\n]/g, "").trim() : "";
 
-            if (
-              [
-                "AVAILABLE",
-                "UNAVAILA",
-                "WIRELESS",
-                "CELL PHONE",
-                "UNKNOWN"
-              ].some(verb => name.includes(verb))
-            ) {
-              name = "";
-            }
+            const hasInvalidString = [
+              "AVAILABLE",
+              "UNAVAILA",
+              "WIRELESS",
+              "CELL PHONE",
+              "UNKNOWN"
+            ].some(verb => name.includes(verb));
 
-            const phone = raw
-              .find(i => i.indexOf("NMBR") !== -1)
-              .split("=")[1]
-              .replace(/\D/g, "");
-            this.phoneRing({ phone, name });
+            if (hasInvalidString) name = "";
+
+            let phone = raw.find(i => i.indexOf("NMBR") !== -1);
+            phone = phone ? phone.split("=")[1].replace(/\D/g, "") : null;
+            phone && this.phoneRing({ phone, name });
             break;
         }
       });

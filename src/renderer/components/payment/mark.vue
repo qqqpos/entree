@@ -138,8 +138,10 @@ export default {
     },
     checkTip() {
       return new Promise(next =>
-        this.$socket.emit("[PAYMENT] CHECK", this.order._id, result =>
-          next(result)
+        this.$socket.emit(
+          "[PAYMENT] CHECK",
+          { order: this.order._id },
+          result => next(result)
         )
       );
     },

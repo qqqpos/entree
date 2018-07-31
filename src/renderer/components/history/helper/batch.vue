@@ -104,12 +104,12 @@ export default {
       return new Promise(next => {
         let tasks = {};
         this.init.transactions.forEach(trans => {
-          if (trans.close) return;
+          if (trans.close || trans.status === 0) return;
 
           const { terminal, amount } = trans;
           const { approve, tip } = amount;
 
-          if (tasks.hasOwnProperty(terminal)) {
+          if (tasks[terminal]) {
             tasks[terminal].total += parseFloat(approve);
             tasks[terminal].tip += parseFloat(tip);
             tasks[terminal].count++;

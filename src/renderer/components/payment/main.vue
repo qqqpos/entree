@@ -147,9 +147,9 @@ export default {
       "config",
       "ticket",
       "device",
-      "dineInOpt",
       "station",
-      "customer"
+      "customer",
+      "dineInOpt"
     ])
   },
   created() {
@@ -234,7 +234,9 @@ export default {
           remain === 0
             ? this.$socket.emit("[SPLIT] GET", this.invoice._id, splits => {
                 if (splits.length) {
-                  this.splits = splits.sort((a, b) => a.number.localeCompare(b.number));
+                  this.splits = splits.sort((a, b) =>
+                    a.number.localeCompare(b.number)
+                  );
                   this.payWhole = false;
 
                   const index = splits.findIndex(t => t.payment.remain !== 0);
@@ -259,18 +261,19 @@ export default {
       });
     },
     checkPrevsPayment() {
-      return new Promise(next =>
-        this.$socket.emit(
-          "[PAYMENT] CHECK",
-          this.order._id,
-          ({ paid, tip }) => {
-            const { balance } = this.order.payment;
+      return new Promise(next => {
+        const query =
+          this.payWhole && !this.order.hasOwnProperty("parent")
+            ? { order: this.order._id }
+            : { split: this.order._id };
 
-            this.order.payment.remain = toFixed(Math.max(0, balance - paid), 2);
-            next();
-          }
-        )
-      );
+        this.$socket.emit("[PAYMENT] CHECK", query, ({ paid, tip }) => {
+          const { balance } = this.order.payment;
+
+          this.order.payment.remain = toFixed(Math.max(0, balance - paid), 2);
+          next();
+        });
+      });
     },
     applyDefaultSetup() {
       this.isThirdPartyPayment = this.init.hasOwnProperty("thirdPartyPayment")
@@ -460,6 +463,7 @@ export default {
       return new Promise(next => {
         const allow =
           this.station.cashDrawer.enable || this.op.cashCtrl === "staffBank";
+
         const paidZeroError = {
           type: "error",
           title: "dialog.paymentFailed",
@@ -828,7 +832,7 @@ export default {
         }
 
         //hot fix
-        if(!this.order.logs) this.order.logs = [];
+        if (!this.order.logs) this.order.logs = [];
 
         this.order.logs.push(transaction);
         this.order.payment.paid += parseFloat(actual);
@@ -846,13 +850,14 @@ export default {
             Object.assign(this.order, {
               customer: this.$minifyCustomer(this.customer),
               cashier: this.op.name,
-              date: today(),
               time: Date.now(),
+              date: today(),
               settled
             });
 
             this.$socket.emit("[ORDER] SAVE", this.order, false, data => {
               this.willTicketNumberUpdate = false;
+              this.setApp({ newTicket: false });
               this.order = data;
               next();
             });
@@ -958,10 +963,10 @@ export default {
     checkBalance() {
       this.tip = "0.00";
       this.exitComponent();
-      if (this.payWhole && !this.invoice.hasOwnProperty("parent")) {
+      if (this.payWhole && !this.invoice["parent"]) {
         this.$socket.emit(
           "[PAYMENT] CHECK",
-          this.invoice._id,
+          { order: this.invoice._id },
           ({ paid, tip }) => {
             const { balance } = this.order.payment;
             const remain = Math.max(0, +(balance - paid).toFixed(2));
@@ -1113,7 +1118,7 @@ export default {
       !this.payWhole && this.$socket.emit("[SPLIT] UPDATE", this.order);
     },
     save() {
-      this.setOrder(this.order);
+      this.setOrder(this.invoice);
       this.$socket.emit("[ORDER] UPDATE", this.invoice, false);
       this.exitPaymentModule();
     },
@@ -1133,8 +1138,8 @@ export default {
             Object.assign(this.order, {
               customer: this.$minifyCustomer(this.customer),
               cashier: this.op.name,
-              date: today(),
-              time: Date.now()
+              time: Date.now(),
+              date: today()
             });
 
             this.setOrder(this.order);
@@ -1361,8 +1366,8 @@ export default {
   },
   sockets: {
     TICKET_NUMBER(number) {
-      this.willTicketNumberUpdate &&
-        this.isNewTicket &&
+      this.isNewTicket &&
+        this.willTicketNumberUpdate &&
         Object.assign(this.invoice, { number });
     },
     UPDATE_ORDER(invoice) {

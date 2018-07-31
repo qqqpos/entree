@@ -46,6 +46,7 @@ export default {
   min-width: 250px;
   max-width: 330px;
   position: fixed;
+  z-index: 1;
   top: 65px;
   left: 100px;
   background: #fafafa;

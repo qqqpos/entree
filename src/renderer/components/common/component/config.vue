@@ -159,7 +159,8 @@ export default {
           title,
           amount,
           percentage,
-          allowPercentage
+          allowPercentage,
+          type: "number"
         };
         this.component = "inputModule";
       })
@@ -212,7 +213,7 @@ export default {
         this.component = "inputModule";
       })
         .then(({ amount }) => {
-          this.setOrder({ guest: amount });
+          this.setOrder({ guest: parseInt(amount) || 1 });
           this.recalculatePayment();
           this.exitComponent();
         })

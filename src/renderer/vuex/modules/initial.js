@@ -3,6 +3,7 @@ import * as types from '../mutation-types'
 const state = {
     time: Date.now(),
     sync: Date.now(),
+    ring: null,
     app: {},
     menu: {},
     config: {},
@@ -14,6 +15,7 @@ const state = {
     templates: [],
     books: [],
     operator: {},
+    callLog: [],
     ticket: {
         number: 1,
         type: ""
@@ -43,8 +45,7 @@ const mutations = {
 
             // force reset pos when next login
             state.sync = null;
-
-            location.href = "http://localhost:9080/#/main/lock";
+            location.hash = "#/main/lock";
         }
     },
     [types.SET_CONFIG](state, data) {
