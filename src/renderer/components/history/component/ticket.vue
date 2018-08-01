@@ -14,7 +14,7 @@
       <span class="data">{{invoice.customer.name}}</span>
     </div>
     <span class="note" v-if="invoice.status === 0">{{$t('reason.'+invoice.void.note,(invoice.void.join || ""))}}</span>
-    <span class="note discount" v-else-if="invoice.payment.discount > 0">{{invoice.coupons[0] ? invoice.coupons[0].alias : '$ ' + invoice.payment.discount + ' OFF'}}</span>
+    <span class="note discount" v-else-if="discountTag && invoice.payment.discount > 0">{{invoice.coupons[0] ? invoice.coupons[0].alias : '$ ' + invoice.payment.discount + ' OFF'}}</span>
     <span class="price">$ {{invoice.payment.due | decimal}}</span>
     <span class="modifed" v-if="invoice.modify" @click.self="$emit('recall',invoice._id)"></span>
   </div>
@@ -25,7 +25,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  props: ["invoice"],
+  props: ["invoice","discountTag"],
   methods: {
     ...mapActions(["setViewOrder"])
   }

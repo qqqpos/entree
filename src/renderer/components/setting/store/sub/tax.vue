@@ -2,7 +2,7 @@
   <div>
     <div class="tab-content">
       <header class="nav">
-        <div class="back" @click="$router.push({ name: 'Setting.store.payment' })">
+        <div class="back" @click="$router.push({ name: 'Setting.payment' })">
           <i class="fa fa-chevron-left"></i>
         </div>
         <div class="title">{{$t('title.taxList')}}</div>
@@ -90,12 +90,12 @@ export default {
         this.componentData = { resolve, reject, tax, edit };
         this.component = "editor";
       })
-        .then(_tax => {
-          this.tax.class[name] = _tax;
+        .then(update => {
+          this.tax.class[name] = update;
           this.exitComponent();
         })
-        .catch(del => {
-          del && this.$delete(this.tax.class, name);
+        .catch(removeTax => {
+          removeTax && this.$delete(this.tax.class, name);
           this.exitComponent();
         });
     },

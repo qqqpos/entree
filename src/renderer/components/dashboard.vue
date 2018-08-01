@@ -70,6 +70,8 @@ export default {
       .then(this.checkCashCtrl)
       .then(this.initialized)
       .catch(this.initialFailed);
+
+      window.ring = this.phoneRing;
   },
   mounted() {
     this.$electron.ipcRenderer.send("External::stage", "idle");
@@ -482,6 +484,7 @@ export default {
     },
     ...mapActions([
       "setApp",
+      "phoneRing",
       "setOrder",
       "resetAll",
       "setTicket",

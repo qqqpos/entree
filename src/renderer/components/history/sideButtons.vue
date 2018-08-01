@@ -407,13 +407,16 @@ export default {
         msg: "dialog.printSplitTicketTip",
         buttons: [
           { text: "button.combinePrint", fn: "reject" },
-          { text: "button.splitPrint", fn: "resolve" }
+          { text: "button.splitPrint", fn: "resolve" },
+          { text: "button.cancel", fn: "exit" }
         ]
       };
 
       this.$dialog(prompt)
         .then(() => this.splitPrint(order, true))
-        .catch(() => this.printTicket(order, true));
+        .catch(exit => {
+          exit ? this.exitComponent() : this.printTicket(order, true);
+        });
     },
     printTicket(order, receipt) {
       order.printCount++;

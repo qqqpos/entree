@@ -3,7 +3,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import serialport from "serialport";
+import Serialport from "serialport";
 import Print from "../plugin/print";
 import Magic from "wake_on_lan";
 import Mac from "getmac";
@@ -19,8 +19,6 @@ export default {
   created() {
     this.startTick();
     this.initialEnvironment();
-
-    //window.ring = this.phoneRing
   },
   methods: {
     initialEnvironment() {
@@ -100,10 +98,17 @@ export default {
     },
     initialDevice() {
       try {
-        this.station.callid.enable && this.initCallerId(this.station.callid);
-        this.station.scale.enable && this.initScale(this.station.scale.port);
-        this.station.terminal && this.setDevice({ terminal: true });
-        this.initCustomerDisplay(this.station.customerDisplay);
+        const {
+          scale = {},
+          callerID = {},
+          terminal = "",
+          customerDisplay = {}
+        } = this.station;
+
+        callerID.enable && this.initCallerID(callerID.devices);
+        terminal && this.setDevice({ terminal: true });
+        scale.enable && this.initScale(scale.port);
+        this.initCustomerDisplay(customerDisplay);
       } catch (error) {
         this.$log({
           eventID: 9002,
@@ -112,63 +117,67 @@ export default {
         });
       }
     },
-    initCallerId(opt) {
-      const { command, port } = opt;
-      this.setDevice({ callid: true });
+    initCallerID(devices) {
+      devices.forEach(({ line, port, command, forward }) => {
+        const telephone = new Serialport(port, {
+          autoOpen: false,
+          parser: Serialport.parsers.raw
+        });
 
-      window.telephone = new serialport(port, {
-        autoOpen: false,
-        parser: serialport.parsers.raw
-      });
+        telephone.open(err => {
+          err
+            ? this.setDevice({ callerID: 0 })
+            : telephone.write(command + "\r");
+        });
 
-      telephone.open(err => {
-        err
-          ? this.setDevice({ callid: false })
-          : telephone.write(command + "\r");
-      });
+        telephone.on("data", data => {
+          const raw = data.toString().split("\n");
 
-      telephone.on("data", data => {
-        const raw = data.toString().split("\n");
-        
-        switch (raw.length) {
-          case 3:
-            const type = raw[1].replace(/\W/g, "");
-            switch (type) {
-              case "RING":
-                clearTimeout(this.timeout);
-                this.timeout = setTimeout(() => {
-                  this.phoneRing(null);
-                }, 1.2e4);
-                break;
-              case "ERROR":
-                this.setDevice({ callid: false });
-                break;
-              case "OK":
-                this.setDevice({ callid: true });
-                break;
-              default:
-                this.setDevice({ callid: false });
-            }
-            break;
-          default:
-            let name = raw.find(i => i.indexOf("NAME") !== -1);
-            name = name ? name.split("=")[1].replace(/[\r\n]/g, "").trim() : "";
+          switch (raw.length) {
+            case 3:
+              const type = raw[1].replace(/\W/g, "");
+              switch (type) {
+                case "RING":
+                  clearTimeout(this.timeout);
+                  this.timeout = setTimeout(() => {
+                    this.phoneRing(null);
+                  }, 1.2e4);
+                  break;
+                case "ERROR":
+                  this.setDevice({ callerID: 0 });
+                  break;
+                case "OK":
+                  this.setDevice({ callerID: 1 });
+                  break;
+                default:
+                  this.setDevice({ callerID: 0 });
+              }
+              break;
+            default:
+              let name = raw.find(i => i.indexOf("NAME") !== -1);
+              name = name
+                ? name
+                    .split("=")[1]
+                    .replace(/[\r\n]/g, "")
+                    .trim()
+                : "";
 
-            const hasInvalidString = [
-              "AVAILABLE",
-              "UNAVAILA",
-              "WIRELESS",
-              "CELL PHONE",
-              "UNKNOWN"
-            ].some(verb => name.includes(verb));
+              const hasInvalidString = [
+                "AVAILABLE",
+                "UNAVAILA",
+                "WIRELESS",
+                "CELL PHONE",
+                "UNKNOWN"
+              ].some(verb => name.includes(verb));
 
-            if (hasInvalidString) name = "";
+              if (hasInvalidString) name = "";
 
-            let phone = raw.find(i => i.indexOf("NMBR") !== -1);
-            phone = phone ? phone.split("=")[1].replace(/\D/g, "") : null;
-            phone && this.phoneRing({ phone, name });
-            break;
-        }
+              let phone = raw.find(i => i.indexOf("NMBR") !== -1);
+              phone = phone ? phone.split("=")[1].replace(/\D/g, "") : null;
+              phone && this.phoneRing({ line, forward, phone, name });
+              break;
+          }
+        });
       });
     },
     initCustomerDisplay({ poleDisplay = {}, ledDisplay = {} }) {

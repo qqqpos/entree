@@ -234,7 +234,8 @@ export default {
         plasticBag = 1
       } = order;
 
-      const { enable, rules } = this.dineInOpt.surcharge;
+      const { surcharge: dinInSurcharge = {} } = this.dineInOpt;
+      const { enable = false, rules } = dinInSurcharge;
 
       let delivery = type === 'DELIVERY' && !deliveryFree ? getDeliveryCharge() : 0;
       let { tip = 0, gratuity = 0, paid = 0 } = order.payment;

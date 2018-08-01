@@ -1328,7 +1328,11 @@ export default {
     earn: "Earn",
     holiday: "Holiday",
     swipeArea: "Swipe Area",
-    noSeat:"No Seat"
+    noSeat: "No Seat",
+    discountTag: "Discount Tag",
+    show: "Show",
+    hide: "Hide",
+    forward: "Forward"
   },
   nav: {
     store: "Store",
@@ -1467,11 +1471,12 @@ export default {
     printerGroup: "Printer Group",
     cashFlowRecord: "Record Cash Flow",
     animation: "Animation Effect",
-    saveLog: "Save Log",
+    autoForward: "Auto Forwarding",
     timecard: {
       tipReport: "Tip Report",
       excludeBreak: "Exclude Break Time",
-      isoWeek: "ISO Week"
+      overTimeAlert: "Overtime Warning",
+      foundOverTime: "Found {i} records overtime"
     },
     basic: "Basic",
     style: "Style",
@@ -1682,7 +1687,7 @@ export default {
   },
   table: {
     name: "Alias",
-    seats: "Seats",
+    seat: "Seats",
     zone: "Zone",
     icon: "Icon",
     type: "Type",
@@ -1732,6 +1737,8 @@ export default {
     foodAllergy: "Set food allergen",
     marketPriceInUse: "Item use market price",
     payrolls: "Time card payroll list",
+    noForward: "No Forwarding",
+    forwardToStation: "Forwarding to {i}",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

@@ -1317,7 +1317,11 @@ export default {
     earn: "收入",
     holiday: "节假日",
     swipeArea: "滑动区",
-    noSeat: "无座位"
+    noSeat: "无座位",
+    discountTag: "折扣标签",
+    show: "显示",
+    hide: "隐藏",
+    forward: "转向"
   },
   nav: {
     store: "店面",
@@ -1459,11 +1463,12 @@ export default {
     printerGroup: "打印机组",
     cashFlowRecord: "记录现金流",
     animation: "动画效果",
-    saveLog: "保存记录",
+    autoForward: "自动转向",
     timecard: {
       tipReport: "小费上报",
       excludeBreak: "休息不计时",
-      isoWeek: "国际标准时间"
+      overTimeAlert: "打卡超时警告",
+      foundOverTime: "有 {i} 次 打卡超时"
     },
     basic: "基本设置",
     style: "样式设置",
@@ -1677,7 +1682,7 @@ export default {
   },
   table: {
     name: "别名",
-    seats: "座位",
+    seat: "座位数",
     zone: "座位区",
     icon: "图标",
     type: "类型",
@@ -1726,6 +1731,8 @@ export default {
     foodAllergy: "设置物品过敏源",
     marketPriceInUse: "物品使用市场价格",
     payrolls: "打卡工资单列表",
+    noForward: "不转向其它工作站",
+    forwardToStation: "转向 {i} 工作站",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

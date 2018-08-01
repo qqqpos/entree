@@ -201,7 +201,8 @@ footer .btn {
 }
 
 .btn:active,
-i.flip:active {
+i.flip:active,
+.mini-btn:active {
   background: linear-gradient(#e2e3e4, #aaadb4);
   color: #333;
 }
@@ -510,6 +511,16 @@ header.dock .text{
 
 .dock .status {
   padding: 0 5px;
+}
+
+.dock .status .phone:after {
+  content: attr(data-device);
+  position: absolute;
+  left: 2px;
+  top: -2px;
+  font-size: 12px;
+  text-shadow: initial;
+  font-family: 'Agency FB';
 }
 
 .dock .shift {

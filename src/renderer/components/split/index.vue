@@ -254,12 +254,13 @@ export default {
           this.setApp({ newTicket: false });
 
           if (this.dineInOpt.useTable && this.order.session) {
-            Object.assign(this.table, {
-              invoice: [this.order._id],
-              status: 2
-            });
-
-            this.$socket.emit("[TABLE] UPDATE", this.table);
+            this.$socket.emit(
+              "[TABLE] UPDATE",
+              Object.assign(this.table, {
+                invoice: [this.order._id],
+                status: 2
+              })
+            );
           }
 
           this[fn](print);

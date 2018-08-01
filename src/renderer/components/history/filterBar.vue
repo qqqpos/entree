@@ -32,6 +32,14 @@
                             <div class="text">{{$t('text.searchTicket')}}</div>
                             <i class="fas fa-search"></i>
                           </li>
+                          <li @click.stop="toggleDiscountTag" v-if="discountTag">
+                            <div><span>{{$t('text.hide')}}</span></div>
+                            <div class="text">{{$t('text.discountTag')}}</div>
+                          </li>  
+                          <li @click.stop="toggleDiscountTag" v-else>
+                            <div><span>{{$t('text.show')}}</span></div>
+                            <div class="text">{{$t('text.discountTag')}}</div>
+                          </li>                                                  
                         </template>
                     </ul>
                 </transition>
@@ -53,7 +61,7 @@ import { mapGetters } from "vuex";
 import holiday from "moment-holiday";
 
 export default {
-  props: ["target", "reset", "data", "date", "on"],
+  props: ["target", "reset", "data", "date", "on", "discountTag"],
   data() {
     return {
       filters: [],
@@ -121,6 +129,9 @@ export default {
     search() {
       this.showMore = false;
       this.$emit("search");
+    },
+    toggleDiscountTag() {
+      this.$emit("update:discountTag", !this.discountTag);
     },
     initialData() {
       const servers = new Set();

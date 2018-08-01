@@ -8,7 +8,7 @@
             <text-list title="setting.terminal" v-model="station.terminal" :opts="terminals" @update="updateTerminal"></text-list>
             <text-list title="setting.receiptPrinter" v-model="station.receipt" :opts="printers" @update="updateReceipt"></text-list>
             <external title="setting.printerGroup" @open="$router.push({name:'Setting.station.printers'})" :tooltip="$t('text.stationPrinters',station.printers.length)"></external>
-            <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callid.enable ? 'text.enable':'text.disable'"></external>
+            <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callerID.enable ? 'text.enable':'text.disable'"></external>
             <external title="setting.customerDisplay" @open="$router.push({name:'Setting.station.customerDisplay'})"></external>
             <external title="setting.weightScale" @open="editScale"></external>
         </div>
@@ -75,6 +75,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
 

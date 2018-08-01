@@ -1,10 +1,10 @@
 <template>
   <div class="history-grid">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" :discountTag.sync="discountTag" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
       <side-buttons :date="calendarDate || today" @change="setCalendar" :splitMode="splits.length > 0"></side-buttons>
       <section class="invoices">
         <div class="wrap">
-          <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
+          <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" :discountTag="discountTag" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
         </div>
         <paginator :of="orders" @page="setPage" :contain="30" :max="12"></paginator>
       </section>
@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      discountTag: false,
       componentData: null,
       calendarDate: null,
       prevHistory: null,
@@ -61,6 +62,11 @@ export default {
   created() {
     this.checkSync();
     this.$bus.on("CALENDAR", this.setCalendar);
+
+    const isDiscountTagVisible = localStorage.getItem("isDiscountTagVisible");
+    this.discountTag = isDiscountTagVisible
+      ? JSON.parse(isDiscountTagVisible)
+      : false;
   },
   mounted() {
     if (this.orders.length) {
@@ -71,6 +77,7 @@ export default {
   },
   beforeDestroy() {
     this.$bus.off("CALENDAR", this.setCalendar);
+    localStorage.setItem("isDiscountTagVisible", this.discountTag);
   },
   methods: {
     checkSync() {

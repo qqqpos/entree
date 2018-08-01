@@ -3,6 +3,7 @@
       <header @click="expand = !expand">
           <h3>{{sheet.name}}</h3>
           <h5>{{$t('type.'+sheet.role)}}</h5>
+          <span v-show="sheet.overAlert > 0" class="overTime">{{$t('setting.timecard.foundOverTime',sheet.overAlert)}}</span>
           <span class="pay" v-show="!expand">$ {{sheet.unpaid | decimal}}</span>
           <i class="fa fa-chevron-up" v-if="expand"></i>
           <i class="fa fa-chevron-down" v-else></i>
@@ -89,6 +90,7 @@ header i {
   color: #009688;
   font-family: "Agency FB";
   font-weight: bold;
+  width: 65px;
 }
 
 .detail {
@@ -125,6 +127,12 @@ header i {
   padding: 10px;
   flex: 1;
   margin: 0 4px;
+}
+
+.overTime {
+  width: 180px;
+  font-weight: bold;
+  color: red;
 }
 </style>
 

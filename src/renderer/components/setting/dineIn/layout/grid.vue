@@ -1,7 +1,7 @@
 <template>
     <div>
         <slick-list axis="xy" v-model="items" class="grid-table-setup" @input="update">
-            <slick-item v-for="(item,index) in items" :key="index" :index="index" @contextmenu="edit(item)" class="table-seat">
+            <slick-item v-for="(item,index) in items" :key="index" :index="index" @contextmenu.native="edit(item,index)" class="table-seat">
                 <span :class="[item.shape]" class="icon"></span>
                 <span class="name">{{item.name}}</span>
             </slick-item>
@@ -21,9 +21,12 @@ export default {
     return {
       componentData: null,
       component: null,
-      updated: [],
+      updatedSort: null,
       items: []
     };
+  },
+  beforeDestroy() {
+    this.applySort();
   },
   methods: {
     initial(tables) {
@@ -38,7 +41,7 @@ export default {
           status: 1,
           shape: "",
           name: "",
-          seats: 1,
+          seat: 1,
           zone: this.zone,
           grid: index
         }));
@@ -48,27 +51,38 @@ export default {
       });
 
       this.items = seats;
+      this.applySort();
     },
-    edit(table) {
-      console.log(table)
+    edit(table, index) {
       new Promise((resolve, reject) => {
         const edit = !!table._id;
         this.componentData = { resolve, reject, table, edit };
-        this.compoennt = "tableEditor";
+        this.component = "tableEditor";
       })
         .then(update => {
-          console.log(update)
+          this.items.splice(index, 1, update);
+          this.$socket.emit("[TABLE] SAVE", update);
           this.exitComponent();
         })
         .catch(removeTable => {
           this.exitComponent();
+
+          if (removeTable) this.$socket.emit("[TABLE] REMOVE", table);
         });
     },
+    applySort() {
+      if (Array.isArray(this.updatedSort)) {
+        this.$socket.emit("[TABLE] NEW_SORT", this.updatedSort);
+        this.updatedSort = null;
+      }
+    },
     update(data) {
-      this.updated = data.map((table, index) => ({
-        _id: table._id,
-        grid: index
-      }));
+      this.updatedSort = data
+        .map((table, index) => ({
+          _id: table._id,
+          grid: index
+        }))
+        .filter(d => d._id);
     }
   },
   watch: {

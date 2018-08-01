@@ -39,22 +39,39 @@ export default {
   methods: {
     run() {
       this.invoices.forEach(invoice => {
-        const payment = this.$calculatePayment(invoice, {
+        const { discount } = invoice.payment;
+
+        const {
+          subtotal,
+          plasticTax,
+          delivery,
+          tax,
+          gratuity,
+          rounding
+        } = this.$calculatePayment(invoice, {
           selfAssign: false,
           callback: true
         });
 
-        const { subtotal, tax, discount, balance } = payment;
+        const balance = +(
+          subtotal +
+          plasticTax +
+          tax +
+          delivery +
+          gratuity +
+          rounding -
+          discount
+        ).toFixed(2);
 
         if (invoice.status === 1) {
-          this.ticketAmount += balance;
+          this.ticketAmount += balance - discount;
         } else {
-          this.voidAmount += balance;
+          this.voidAmount += balance - discount;
         }
 
         const payments = this.transactions.filter(t => t.order === invoice._id);
 
-        if (payments.length > 0) {
+        if (payments.length > 0 || invoice.status === 0) {
           const paid = payments
             .reduce((a, c) => a + c.actual, 0)
             .toPrecision(12)

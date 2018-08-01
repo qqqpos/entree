@@ -21,7 +21,7 @@ const state = {
         type: ""
     },
     device: {
-        callid: false,
+        callerID: 0,
         scale: false,
         terminal: false,
         poleDisplay: false,
@@ -58,7 +58,14 @@ const mutations = {
         state.ticket = Object.assign({}, state.ticket, data)
     },
     [types.SET_DEVICE](state, data) {
-        state.device = Object.assign({}, state.device, data)
+        const value = Object.values(data)[0];
+        const key = Object.keys(data)[0];
+
+        if (typeof value === Boolean) {
+            state.device = Object.assign({}, state.device, data)
+        } else {
+            state.device[key] += value;
+        }
     },
     [types.SET_TEMPLATES](state, templates) {
         state.templates = templates;
@@ -76,12 +83,12 @@ const mutations = {
         state.layouts = Object.assign({}, state.layouts, layouts);
     },
     [types.SET_MENU](state, menu) {
-        const { alphabetical = false } = state.config.defaults;
+        const { defaults = {} } = state.config;
         const format = menu ? arrayToObject(menu) : state.menu;
 
         Object.keys(format).forEach(key => {
             format[key].sort((a, b) => {
-                if (alphabetical) {
+                if (defaults.alphabetical) {
                     // sort by a-z
                     const hanz = !!a.zhCN.match(/[\u3400-\u9FBF]/);
 
@@ -127,11 +134,11 @@ const mutations = {
     },
     [types.PHONE_RING](state, data) {
         if (data) {
-            let { phone, name } = data;
+            let { line, forward, phone, name } = data;
             phone = /^1/.test(phone) ? String(phone).slice(1) : String(phone);
             name = name && name.length > 3 ? name : "";
 
-            state.ring = { phone, name };
+            state.ring = { line, forward, phone, name };
         } else {
             state.ring = null;
         }
@@ -151,10 +158,15 @@ const mutations = {
         index !== -1 && state.tables[zone].splice(index, 1, table);
     },
     [types.REPLACE_TABLE](state, table) {
-        const { zone, grid } = table;
+        const { _id, zone } = table;
 
         if (state.tables[zone]) {
-            state.tables[zone].splice(grid, 1, table);
+            const index = state.tables[zone].findIndex(table => table._id === _id);
+
+            index !== -1
+                ? state.tables[zone].splice(index, 1, table)
+                : state.tables[zone].push(table);
+
         } else {
             state.tables[zone] = [table];
         }

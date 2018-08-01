@@ -24,7 +24,7 @@
           </div>
           <div class="misc">
             <div class="status" v-if="$route.name === 'Dashboard'">
-              <i class="fa fa-phone-square" :class="{off:!device.callid}"></i>
+              <i class="fa fa-phone relative phone" :class="{off:device.callerID === 0}" :data-device="device.callerID"></i>
               <i class="fa fa-credit-card" :class="{off:!device.terminal}"></i>
               <i class="fa fa-desktop" :class="{off:!device.poleDisplay}"></i>
               <i class="fa fa-globe" :class="{off:!device.online}"></i>
@@ -109,12 +109,7 @@ export default {
   },
   watch: {
     ring(caller) {
-      caller
-        ? this.$socket.emit("[PHONE] RING", caller, customer => {
-            this.newPhoneCall(customer);
-            this.$open("callerModule", { customer });
-          })
-        : this.exitComponent();
+      caller ? this.ringHandler(caller) : this.exitComponent();
     },
     time(tick) {
       this.app.autoLock &&
@@ -152,6 +147,22 @@ export default {
             this.openPanel({ cashCtrl: false });
         }
       }
+    },
+    ringHandler(data) {
+      const { forward, line } = data;
+      const { callerID = {} } = this.station;
+
+      this.$socket.emit("[PHONE] RING", data, customer => {
+        this.newPhoneCall(customer);
+
+        this.$route.name !== "Dashboard" && callerID.autoForward && data.forward
+          ? this.$socket.emit("[PHONE] FORWARDING", {
+              station: data.forward,
+              line: data.line,
+              customer
+            })
+          : this.$open("callerModule", { customer, line: caller.line });
+      });
     },
     switchServer() {
       this.$route.name === "Menu" &&
@@ -265,6 +276,7 @@ export default {
       "setOrder",
       "setBooks",
       "resetAll",
+      "phoneRing",
       "setTicket",
       "updateMenu",
       "updateTable",
@@ -328,6 +340,10 @@ export default {
     },
     UPDATE_BOOK(data) {
       this.setBooks(data);
+    },
+    PHONE_FORWARDING({ station, line, customer }) {
+      station === this.station.alias &&
+        this.$open("callerModule", { customer, line });
     },
     SERVO_CTRL(action) {
       switch (action) {

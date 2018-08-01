@@ -10,7 +10,7 @@
             <div class="banner"></div>
             <div class="wrap">
                 <div class="input">
-                    <inputer title="text.alias" v-model.trim="tax.alias"></inputer>
+                    <inputer title="text.alias" v-model.trim="tax.alias" :disabled="init.edit"></inputer>
                     <inputer title="text.taxRate" v-model.number="tax.rate"></inputer>
                 </div>
                 <div class="options">
