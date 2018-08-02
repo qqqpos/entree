@@ -472,7 +472,7 @@ export default {
       } else {
         const prompt = {
           title: "dialog.staffBankMode",
-          msg: "dialog.staffBankModeTip",
+          msg: "dialog.underStaffBankMode",
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 

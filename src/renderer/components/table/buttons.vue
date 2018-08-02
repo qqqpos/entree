@@ -4,7 +4,7 @@
       <i class="fa fa-edit"></i>
       <span class="text">{{$t('button.edit')}}</span>
     </button>
-    <button class="btn" @click="$emit('switch',false)" v-if="transfer">
+    <button class="btn" @click="$emit('update:transfer',false)" v-if="transfer">
       <i class="fas fa-ban"></i>
       <span class="text">{{$t("button.cancel")}}</span>
     </button>

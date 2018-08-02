@@ -55,14 +55,14 @@ export default {
   methods: {
     change(type) {
       const msg = [
-        "dialog.orderTypeSwitchTip",
+        "dialog.orderTypeSwitchFrom",
         this.$t("type." + this.ticket.type),
         this.$t("type." + type)
       ];
 
       const prompt = {
         type: "question",
-        title: "dialog.orderTypeSwitchConfirm",
+        title: "dialog.switchOrderType",
         msg
       };
 

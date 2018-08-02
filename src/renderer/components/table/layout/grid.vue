@@ -202,9 +202,22 @@ export default {
     checkIfSwitch(table) {
       return new Promise((next, stop) => {
         if (this.transfer) {
-          this.swapTable(table);
-          this.$emit("update:transfer", false);
-          stop();
+          const prompt = {
+            type: "question",
+            title: "dialog.tableSwitch",
+            msg: ["dialog.tableSwitchConfirm", this.table.name, table.name]
+          };
+
+          this.$dialog(prompt)
+            .then(() => {
+              this.swapTable(table);
+              this.$emit("update:transfer", false);
+              this.exitComponent();
+            })
+            .catch(() => {
+              this.exitComponent();
+              stop();
+            });
         } else {
           this.setViewTable(table);
           next();

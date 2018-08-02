@@ -177,42 +177,38 @@ export default {
       if (this.items.length) {
         order.content = this.items;
         Printer.setTarget("Order").print(order);
-
-        // mark update
-      } else {
-        Object.keys(this.course).forEach(time => {
-          const delay = +moment().add(time, "minutes");
-          const ticket = Object.assign({}, order, {
-            content: this.course[time],
-            schedule: delay
-          });
-
-          const job = {
-            type: "Delay",
-            target: "Order",
-            schedule: delay,
-            creator: this.op.name,
-            station: this.station.alias,
-            order: ticket
-          };
-          
-          this.delayPrint(job);
-        });
       }
+
+      Object.keys(this.course).forEach(time => {
+        const delay = +moment().add(time, "minutes");
+        const ticket = Object.assign({}, order, {
+          content: this.course[time],
+          schedule: delay
+        });
+
+        const job = {
+          type: "Delay",
+          target: "Order",
+          schedule: delay,
+          creator: this.op.name,
+          station: this.station.alias,
+          order: ticket
+        };
+
+        this.delayPrint(job);
+      });
 
       this.quit();
     },
     quit() {
-      this.resetAll();
-
       const { done } = this.station.autoLock;
       const { lockOnDone } = this.dineInOpt;
 
       if (lockOnDone || done) {
+        this.resetAll();
         this.setOperator(null);
         this.$router.push({ path: "/main/lock" });
       } else {
-        this.setOrder(this.order);
         this.$router.push({ path: "/main/table" });
       }
     },
