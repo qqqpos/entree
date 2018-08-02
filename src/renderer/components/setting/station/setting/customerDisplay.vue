@@ -97,7 +97,7 @@ export default {
         key: "customerDisplay",
         value: this.customerDisplay
       });
-      this.$router.push({ name: "Setting.station" });
+      this.$router.push({ name: "Setting.station.device" });
     }
   }
 };

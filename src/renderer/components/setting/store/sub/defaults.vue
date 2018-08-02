@@ -1,7 +1,8 @@
 <template>
   <div>
-    <header class="nav">
-      <div class="back" @click="$router.push({ name: 'Setting.store.payment' })">
+    <div class="tab-content">
+      <header class="nav">
+      <div class="back" @click="$router.push({ name: 'Setting.payment' })">
         <i class="fa fa-chevron-left"></i>
       </div>
       <div class="title">{{$t('setting.default.setValue')}}</div>
@@ -9,6 +10,7 @@
     <text-list title="setting.default.paymentType" :opts="paymentTypes" v-model="defaults.paymentType"></text-list>
     <toggle title="setting.default.discount" v-model="defaults.percentageDiscount" trueTooltip="tip.default.percentageDiscount" falseTooltip="tip.default.dollarDiscount" :conditionalTooltip="true"></toggle>
     <toggle title="setting.default.tip" v-model="defaults.percentageTip" trueTooltip="tip.default.percentageTip" falseTooltip="tip.default.dollarTip" :conditionalTooltip="true"></toggle>
+    </div>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>

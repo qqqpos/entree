@@ -24,12 +24,8 @@ export default {
   props: ["init"],
   data() {
     return {
-      customer: {}
+      customer: this.init.customer || {}
     };
-  },
-  created() {
-    this.customer = this.init.customer;
-    console.log(this.init);
   },
   methods: {
     go() {

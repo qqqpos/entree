@@ -1,48 +1,49 @@
 <template>
   <div>
-    <header class="nav">
-      <div class="back" @click="$router.push({ name: 'Setting.store.payment' })">
-        <i class="fa fa-chevron-left"></i>
-      </div>
-      <div class="title">{{$t('title.deliveryRelated')}}</div>
-      <nav>
-        <span @click="create">{{$t('button.create')}}</span>
-      </nav>
-    </header>
-    <toggle title="setting.delivery.tax" tooltip="tip.delivery.tax" v-model="tax.deliveryTax" @update="updateDeliveryTax"></toggle>
-    <toggle title="setting.delivery.charge" true-tooltip="tip.delivery.charge" false-tooltip="tip.delivery.free" v-model="store.deliver.charge" :conditionalTooltip="true">
-      <transition name="dropdown">
-        <div class="opt" v-if="store.deliver.charge">
-          <inputer title="text.amount" v-model.number="store.deliver.baseFee"></inputer>
+    <div class="tab-content">
+      <header class="nav">
+        <div class="back" @click="$router.push({ name: 'Setting.payment' })">
+          <i class="fa fa-chevron-left"></i>
         </div>
-      </transition>
-    </toggle>
-    <!-- <toggle title="setting.delivery.adjustTip" v-model="store.deliver.adjustTip" @update="updateDeliveryTip"></toggle> -->
-    <toggle title="setting.delivery.surcharge" v-model="store.deliver.surcharge">
-      <transition name="dropdown">
-        <div v-if="store.deliver.surcharge">
-          <table class="setting">
-            <thead>
-              <tr>
-                <th>{{$t('thead.condition')}}</th>
-                <th>{{$t('thead.amount')}}</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(rule,index) in store.deliver.rules" :key="index">
-                <td class="guest">{{$t('text.overMile',rule.distance)}}</td>
-                <td class="amount">$ {{rule.fee | decimal}}</td>
-                <td @click="edit(rule,index)" class="opt" colspan="2">
-                  <i class="fa fa-pencil-square"></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </transition>
-    </toggle>
+        <h3 class="title">{{$t('setting.title.delivery')}}</h3>
+        <nav>
+          <span @click="create">{{$t('button.create')}}</span>
+        </nav>
+      </header>
+      <toggle title="setting.delivery.tax" tooltip="tip.delivery.tax" v-model="tax.deliveryTax" @update="updateDeliveryTax"></toggle>
+      <toggle title="setting.delivery.charge" true-tooltip="tip.delivery.charge" false-tooltip="tip.delivery.free" v-model="store.deliver.charge" :conditionalTooltip="true">
+        <transition name="dropdown">
+          <div class="opt" v-if="store.deliver.charge">
+            <inputer title="text.amount" v-model.number="store.deliver.baseFee"></inputer>
+          </div>
+        </transition>
+      </toggle>
+      <toggle title="setting.delivery.surcharge" v-model="store.deliver.surcharge">
+        <transition name="dropdown">
+          <div v-if="store.deliver.surcharge">
+            <table class="setting">
+              <thead>
+                <tr>
+                  <th>{{$t('thead.condition')}}</th>
+                  <th>{{$t('thead.amount')}}</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(rule,index) in store.deliver.rules" :key="index">
+                  <td class="guest">{{$t('text.overMile',rule.distance)}}</td>
+                  <td class="amount">$ {{rule.fee | decimal}}</td>
+                  <td @click="edit(rule,index)" class="opt" colspan="2">
+                    <i class="fa fa-pencil-square"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </transition>
+      </toggle>
+    </div>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>

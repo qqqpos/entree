@@ -155,13 +155,13 @@ export default {
       this.$socket.emit("[PHONE] RING", data, customer => {
         this.newPhoneCall(customer);
 
-        this.$route.name !== "Dashboard" && callerID.autoForward && data.forward
+        this.$route.name !== "Dashboard" && callerID.autoForward && forward
           ? this.$socket.emit("[PHONE] FORWARDING", {
               station: data.forward,
               line: data.line,
               customer
             })
-          : this.$open("callerModule", { customer, line: caller.line });
+          : this.$open("callerModule", { customer, line });
       });
     },
     switchServer() {

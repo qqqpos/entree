@@ -1,218 +1,208 @@
 <template>
-  <div class="popupMask center dark">
-    <div class="course window">
-      <header class="title">
-        <span>{{$t('title.course')}}</span>
-        <i class="fa fa-times" @click="init.reject"></i>
-      </header>
-      <div class="inner">
-        <div class="indicator">
-          <div class="step" v-for="(course,index) in steps" @click="jumpStep(index)" :class="{active:step===index,done:course.contain.length !== 0}" :key="index">
-            <div class="name">{{$t('text.'+course.name)}}
-              <span v-show="course.delay" class="delay">[{{course.delay | moment('hh:mm')}}]</span>
+    <div class="popupMask center dark">
+        <div class="editor">
+            <header class="title relative">
+                <div>
+                    <h5></h5>
+                    <h3>{{$t('title.timer')}}</h3>
+                </div>
+                <i class="fa fa-times" @click.self="init.reject(false)"></i>
+            </header>
+            <div class="banner"></div>
+            <div class="wrap">
+                <div class="schedule">
+                    <div v-for="(items,time,index) in course" :key="index" class="course">
+                        <div class="time">{{time}} Minute</div>
+                        <ul>
+                            <li v-for="(item,idx) in items" :key="idx" @click="touch(item.unique)" :class="{active:isReturn(item.unique)}">
+                                <div class="main"><span class="qty">{{item.qty}}</span>{{item[language]}}<span class="side">{{item.side[language]}}</span></div>
+                                <div class="sub" v-for="(sub,idx) in item.choiceSet" :key="idx"><span class="qty" v-show="sub.qty > 1">{{sub.qty}}</span>{{sub[language]}}</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <ul class="timer">
+                    <div class="f1">
+                        <button class="mini-btn" @click="delay(5)" :disabled="queue.length === 0">5 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(10)" :disabled="queue.length === 0">10 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(15)" :disabled="queue.length === 0">15 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(20)" :disabled="queue.length === 0">20 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(25)" :disabled="queue.length === 0">25 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(30)" :disabled="queue.length === 0">30 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(35)" :disabled="queue.length === 0">35 {{$t('text.minute')}}</button>
+                        <button class="mini-btn" @click="delay(40)" :disabled="queue.length === 0">40 {{$t('text.minute')}}</button>
+                        <!-- <button class="mini-btn">自定义</button> -->
+                    </div>
+                    <div>
+                        <button class="mini-btn" @click="reset">{{$t('button.reset')}}</button>
+                    </div>
+                </ul>
+                <ul class="list">
+                    <li v-for="(item,index) in items" :key="index" @click="tap(item.unique)" :class="{active:isSelected(item.unique)}">
+                        <div class="main"><span class="qty">{{item.qty}}</span>{{item[language]}}<span class="side">{{item.side[language]}}</span></div>
+                        <div class="sub" v-for="(sub,idx) in item.choiceSet" :key="idx"><span class="qty" v-show="sub.qty > 1">{{sub.qty}}</span>{{sub[language]}}</div>
+                    </li>
+                </ul>
             </div>
-            <ul>
-              <li v-for="(item,i) in course.contain" :key="i">{{item[language]}}
-                <i class="fa fa-times" @click="remove(item,i)"></i>
-              </li>
-            </ul>
-          </div>
+            <footer>
+                <button class="btn" @click="initital" v-show="Object.keys(course).length">{{$t('button.reset')}}</button>
+                <button class="btn" @click="confirmDialog">{{$t('button.confirm')}}</button>
+            </footer>
         </div>
-        <div class="content" v-if="list.length !== 0">
-          <ul>
-            <li v-for="(item,index) in list" class="order" @click="addToCourse(item,index)" :key="index">
-              <span class="f1">{{item.qty}}</span>
-              <span class="f4">{{item[language]}}</span>
-              <span class="f1">{{item.total}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="timer" v-else>
-          <header class="display">
-            <div class="time" @click="target = 'hour'" :class="{active:target ==='hour'}">
-              <h3>{{$t('text.hour')}}</h3>
-              <div class="value">{{hour}}</div>
-            </div>
-            <div class="time" @click="target = 'minute'" :class="{active:target === 'minute'}">
-              <h3>{{$t('text.minute')}}</h3>
-              <div class="value">{{minute}}</div>
-            </div>
-          </header>
-          <article>
-            <section class="numpad">
-              <div @click="input('7')" class="numKey">7</div>
-              <div @click="input('8')" class="numKey">8</div>
-              <div @click="input('9')" class="numKey">9</div>
-              <div @click="input('4')" class="numKey">4</div>
-              <div @click="input('5')" class="numKey">5</div>
-              <div @click="input('6')" class="numKey">6</div>
-              <div @click="input('1')" class="numKey">1</div>
-              <div @click="input('2')" class="numKey">2</div>
-              <div @click="input('3')" class="numKey">3</div>
-              <div @click="input('0')" class="numKey">0</div>
-              <div @click="del" class="del numKey">←</div>
-            </section>
-          </article>
-        </div>
-      </div>
-      <footer>
-        <div class="btn" @click="init.reject">{{$t('button.cancel')}}</div>
-        <div class="btn" @click="confirm">{{$t('button.confirm')}}</div>
-      </footer>
+        <div :is="component" :init="componentData"></div>
     </div>
-    <div :is="component" :init="componentData"></div>
-  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import dialogModule from "../../common/dialog";
+
 export default {
   props: ["init"],
+  components: { dialogModule },
   data() {
     return {
-      list: [],
-      component: null,
       componentData: null,
-      steps: ["starter", "appetizer", "entree", "dessert"].map(name => ({
-        name,
-        delay: null,
-        contain: []
-      })),
-      step: 0,
-      target: "minute",
-      hour: "00",
-      minute: "00"
+      component: null,
+      course: {},
+      items: [],
+      queue: [],
+      dequeue: []
     };
   },
   created() {
-    const content = JSON.parse(
-      JSON.stringify(this.$store.getters.order.content)
-    );
-    this.list = content.filter(item => !item.print);
+    this.initital();
   },
   methods: {
-    jumpStep(index) {
-      const current = this.step;
-      const hour = this.hour;
-      const minute = this.minute;
-      if (this.list.length === 0 && (hour !== "00" || minute !== "00"))
-        this.steps[current].delay = moment()
-          .add(~~hour, "h")
-          .add(~~minute, "m")
-          .format("x");
-      if (this.steps[index].delay) {
-        let minutes =
-          moment(Number(this.steps[index].delay)).diff(moment(), "minutes") + 1;
-        this.hour = ("0" + Math.floor(minutes / 60)).slice(-2);
-        this.minute = ("0" + minutes % 60).slice(-2);
-      } else {
-        this.hour = "00";
-        this.minute = "00";
-      }
-      this.step = index;
-      this.target = "minute";
+    initital() {
+      this.items = JSON.parse(
+        JSON.stringify(
+          this.order.content.filter(item => !item.print && !item.pending)
+        )
+      );
+      this.course = {};
+      this.queue = [];
+      this.dequeue = [];
     },
-    addToCourse(item, index) {
-      this.steps[this.step].contain.push(item);
-      this.list.splice(index, 1);
-      if (this.list.length === 0) this.step = 0;
-    },
-    remove(item, index) {
-      this.steps[this.step].contain.splice(index, 1);
-      this.list.push(item);
-    },
-    input(num) {
-      let time = this[this.target];
-      time = ("0" + Number(time + num)).slice(-2);
-      this[this.target] = time;
-    },
-    del() {
-      let time = this[this.target];
-      time = ("0" + time).slice(0, -1);
-      this[this.target] = time;
-    },
-    confirm() {
-      if (this.list.length !== 0) return;
-      this.jumpStep(3);
-      this.steps
-        .filter(step => step.contain.length)
-        .map(schedule => {
-          let delay = Number(schedule.delay);
-          let order = JSON.parse(JSON.stringify(this.$store.getters.order));
-          delete order.payment;
-
-          Object.assign(order, {
-            type: this.app.newTicket ? this.ticket.type : order.type,
-            number: this.app.newTicket ? this.ticket.number : order.number,
-            customer: this.customer,
-            course: schedule.name,
-            schedule: delay,
-            time: +new Date(),
-            content: schedule.contain.map(item => {
-              item.pending = true;
-              return item;
-            })
-          });
-          return order;
-        })
-        .forEach(order =>
-          this.delayPrint(
-            Object.assign(
-              {},
-              {
-                type: "Course",
-                target: "Order",
-                schedule: order.schedule,
-                creator: this.op.name,
-                station: this.station.alias,
-                order
-              }
-            )
-          )
+    reset() {
+      Object.keys(this.course).forEach(time => {
+        this.course[time] = this.course[time].filter(
+          item => !this.dequeue.includes(item.unique)
         );
-      this.exit();
+
+        if (this.course[time].length === 0) delete this.course[time];
+      });
+
+      const items = this.order.content.filter(item =>
+        this.dequeue.includes(item.unique)
+      );
+      this.items.push(...JSON.parse(JSON.stringify(items)));
+      this.dequeue = [];
     },
-    exit() {
-      let order = this.$store.getters.order;
-      const customer = this.$minifyCustomer(this.customer);
+    tap(unique) {
+      const index = this.queue.findIndex(u => u === unique);
+      index !== -1 ? this.queue.splice(index, 1) : this.queue.push(unique);
+    },
+    touch(unique) {
+      const index = this.dequeue.findIndex(u => u === unique);
+      index !== -1 ? this.dequeue.splice(index, 1) : this.dequeue.push(unique);
+    },
+    delay(min) {
+      const items = this.items.filter(item => this.queue.includes(item.unique));
 
-      if (this.app.newTicket) {
-        Object.assign(order, {
-          type: this.ticket.type,
-          number: this.ticket.number,
-          modify: 0,
-          status: 1,
-          settle: false,
-          customer,
-          date: today(),
-          time: Date.now(),
-          content: order.content.map(item => {
-            item.pending = true;
-            return item;
-          })
-        });
+      this.course[min]
+        ? this.course[min].push(...items)
+        : (this.course[min] = [...items]);
 
-        this.$socket.emit("[TABLE] INVOICE", order);
-      } else {
-        const pending = this.list.map(item => item.unique);
-        const content = order.content.map(item => {
-          pending.includes(item.unique) &&
-            Object.assign(item, { pending: true });
+      this.items = this.items.filter(item => !this.queue.includes(item.unique));
+      this.queue = [];
+    },
+    isSelected(unique) {
+      return this.queue.includes(unique);
+    },
+    isReturn(unique) {
+      return this.dequeue.includes(unique);
+    },
+    confirmDialog() {
+      const prompt = {
+        type: "question",
+        title: "dialog.courseTime",
+        msg: "dialog.courseTimeConfirm"
+      };
 
-          return item;
-        });
+      this.items.length || Object.keys(this.course).length
+        ? this.$dialog(prompt)
+            .then(this.save)
+            .then(this.print)
+            .catch(this.exitComponent)
+        : this.init.resolve();
+    },
+    save() {
+      this.exitComponent();
 
-        this.$socket.emit(
-          "[ORDER] UPDATE",
-          Object.assign(order, {
-            settle: false,
-            date: today(),
+      const printed = this.items.map(item => item.unique);
+      this.order.content.forEach(item => {
+        printed.includes(item.unique)
+          ? Object.assign(item, { print: true })
+          : Object.assign(item, { pending: true });
+      });
+
+      return new Promise(next => {
+        if (this.app.newTicket) {
+          Object.assign(this.order, {
+            customer: this.$minifyCustomer(this.customer),
             time: Date.now(),
-            content
-          })
-        );
+            date: today()
+          });
+
+          if (this.dineInOpt.useTable && this.table) {
+            Object.assign(this.table, {
+              invoice: [this.order._id],
+              status: 2
+            });
+
+            this.$socket.emit("[TABLE] UPDATE", this.table);
+
+            this.$socket.emit("[ORDER] SAVE", this.order, false, order => {
+              order.content = [];
+              next(order);
+            });
+          }
+        } else {
+          next(this.order);
+        }
+      });
+    },
+    print(order) {
+      if (this.items.length) {
+        order.content = this.items;
+        Printer.setTarget("Order").print(order);
+
+        // mark update
+      } else {
+        Object.keys(this.course).forEach(time => {
+          const delay = +moment().add(time, "minutes");
+          const ticket = Object.assign({}, order, {
+            content: this.course[time],
+            schedule: delay
+          });
+
+          const job = {
+            type: "Delay",
+            target: "Order",
+            schedule: delay,
+            creator: this.op.name,
+            station: this.station.alias,
+            order: ticket
+          };
+          
+          this.delayPrint(job);
+        });
       }
 
+      this.quit();
+    },
+    quit() {
       this.resetAll();
 
       const { done } = this.station.autoLock;
@@ -222,7 +212,7 @@ export default {
         this.setOperator(null);
         this.$router.push({ path: "/main/lock" });
       } else {
-        this.setOrder(order);
+        this.setOrder(this.order);
         this.$router.push({ path: "/main/table" });
       }
     },
@@ -232,9 +222,10 @@ export default {
     ...mapGetters([
       "op",
       "app",
-      "ticket",
-      "dineInOpt",
+      "order",
+      "table",
       "station",
+      "dineInOpt",
       "customer",
       "language"
     ])
@@ -243,180 +234,78 @@ export default {
 </script>
 
 <style scoped>
-.course {
-  width: 605px;
+.wrap {
+  display: grid;
+  grid-gap: 10px;
+  padding: initial;
+  grid-template-columns: 1fr 110px 1fr;
 }
 
-.btn {
-  flex: 1;
-}
-
-.course .inner {
-  display: flex;
-  min-height: 458px;
-}
-
-.indicator {
-  border-right: 1px solid #ddd;
-  flex: 1;
+ul.timer {
+  padding: 10px 0;
+  text-align: center;
+  border: 1px solid #eee;
+  border-top: none;
+  border-bottom: none;
+  background: #fff;
+  height: 500px;
   display: flex;
   flex-direction: column;
-  padding-bottom: 1em;
 }
 
-.content {
-  flex: 2;
-  background: #fff;
+ul.list {
+  padding: 10px 15px 10px 5px;
+  width: 250px;
 }
 
-.step {
-  flex: 1;
-  position: relative;
-  cursor: pointer;
-  transition: color 0.3s linear;
+li {
+  padding: 7px 5px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid #eee;
 }
 
-.name {
-  padding: 1em 0 0 2em;
-  display: inline-block;
-  width: 225px;
+li.active {
+  color: #fff;
+  background: #bdbdbd;
+  text-shadow: 0 0px 1px #333;
+  border-radius: 4px;
 }
 
-.step:before {
-  content: "\f10c";
-  font-family: fontAwesome;
-  position: absolute;
-  top: 16px;
-  left: 12px;
-  background: whitesmoke;
+.active .sub {
+  color: #fff3e0;
 }
 
-.step.done:before {
-  content: "\f058";
-  color: #4caf50;
-}
-
-.step.active {
-  color: #2196f3;
-}
-
-.step.active:before {
-  content: "\f111";
-  color: #2196f3;
-}
-
-.step:after {
-  content: " ";
-  width: 2px;
-  background: #607d8b;
-  height: 100%;
-  position: absolute;
-  left: 18px;
-  top: 32px;
-}
-
-.step:last-child:after {
-  content: none;
-}
-
-ul {
-  max-height: 525px;
-  overflow-y: auto;
-}
-
-.indicator li {
-  margin-left: 3em;
-  list-style-type: circle;
-  color: #555;
-}
-
-.indicator .active li {
-  list-style-type: disc;
-}
-
-.indicator li i {
-  display: none;
-  color: #ff7043;
-  float: right;
-  padding-right: 10px;
-}
-
-.active li i {
-  display: inline-block;
-}
-
-.content li {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.main,
+.sub {
   display: flex;
 }
 
-.content li:nth-child(2n) {
-  background: #eceff1;
-}
-
-section.numpad {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.timer {
-  width: 320px;
-}
-
-.timer article {
-  padding-left: 5px;
-}
-
-.time {
-  flex: 1;
-  height: 90px;
-  margin: 6px;
-  border-radius: 2px;
-  background: #fff;
-  box-shadow: var(--shadow);
-}
-
-header.display {
-  display: flex;
+.qty {
+  width: 20px;
   text-align: center;
 }
 
-h3 {
-  padding: 8px 5px;
-  border-bottom: 1px solid #eee;
-  background: #b0bec5;
-  color: #fff;
+ul.timer button {
+  margin-bottom: 8px;
 }
 
-.value {
-  font-size: 43px;
-  font-family: "Agency FB";
-  font-weight: bold;
-  color: #cfd8dc;
-  letter-spacing: 4px;
+.schedule {
+  padding: 5px 0 5px 5px;
 }
 
-.active h3 {
-  background: #607d8b;
+.time {
+  text-align: center;
+  background: #cfd8dc;
+  border-radius: 4px;
 }
 
-.active .value {
-  color: #616161;
+.course {
+  margin-bottom: 5px;
 }
 
-.del {
-  width: 205px;
-  background: #78909c;
-}
-
-span.delay {
-  float: right;
-  padding-right: 25px;
-}
-
-.f4 {
-  flex: 4;
+.sub {
+  color: #ff9800;
+  font-size: 0.8em;
+  text-indent: 2em;
 }
 </style>

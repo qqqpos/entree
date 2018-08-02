@@ -70,12 +70,12 @@ export default {
     this.isCategorySorted && this.updateSortedCategory();
   },
   methods: {
-    setCategory(index) {
+    setCategory(contain, index) {
       this.isItemSorted && this.updateSortedItem();
-      this.getItems(index);
+      this.categoryIndex = index;
+      this.getItems(contain, index);
     },
     getItems(categories, index = this.categoryIndex) {
-      this.categoryIndex = index;
       categories = categories || this.layouts.request[index].contain;
 
       let request = [];
@@ -138,6 +138,7 @@ export default {
           price: 0,
           affix: ""
         });
+        console.log(this.layouts.request, categoryIndex, groupIndex);
       }
 
       new Promise((resolve, reject) => {

@@ -326,14 +326,14 @@ header {
   overflow: hidden;
 }
 section.list {
+  flex: 1;
   padding: 15px;
-  flex: 2;
   height: 652px;
   overflow: auto;
 }
 
 section.overview {
-  flex: 1;
+  width: 306px;
 }
 
 .overview .wrap {

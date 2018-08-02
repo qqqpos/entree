@@ -466,7 +466,6 @@ export default {
     setDate: "Set Date",
     payout: "Payout Record",
     payoutRecord: "Employee Payout",
-    deliveryRelated: "Delivery Related",
     optionList: "Options",
     thirdPartyOrder: "Third Party Order",
     timeSession: "Time Session",
@@ -1433,7 +1432,9 @@ export default {
       other: "Other Setting",
       table: "Dine in Related Setting",
       giftcard: "Gift Card Setting",
-      department: "Department Setup"
+      department: "Department Setup",
+      timecard: "Timecard Setting",
+      delivery: "Delivery Related Setting"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",

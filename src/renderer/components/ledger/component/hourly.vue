@@ -114,11 +114,11 @@ export default {
         startDuration: 1,
         export: {
           enabled: true,
-          fileName: this.setDate + " Hourly Sales"
+          fileName: "Hourly Sales"
         },
         dataProvider: this.dataProvider
       });
-      
+
       this.$emit("ready");
     }
   }

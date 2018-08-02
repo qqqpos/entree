@@ -3,7 +3,9 @@
       <header @click="expand = !expand">
           <h3>{{sheet.name}}</h3>
           <h5>{{$t('type.'+sheet.role)}}</h5>
-          <span v-show="sheet.overAlert > 0" class="overTime">{{$t('setting.timecard.foundOverTime',sheet.overAlert)}}</span>
+          <div class="overTime">
+            <span v-show="sheet.overAlert > 0" >{{$t('setting.timecard.foundOverTime',sheet.overAlert)}}</span>
+          </div>
           <span class="pay" v-show="!expand">$ {{sheet.unpaid | decimal}}</span>
           <i class="fa fa-chevron-up" v-if="expand"></i>
           <i class="fa fa-chevron-down" v-else></i>
@@ -78,7 +80,6 @@ header {
 h5 {
   font-weight: normal;
   margin-left: 5px;
-  flex: 1;
 }
 
 header i {
@@ -130,9 +131,11 @@ header i {
 }
 
 .overTime {
-  width: 180px;
+  flex: 1;
   font-weight: bold;
   color: red;
+  text-align: right;
+  padding: 0 50px;
 }
 </style>
 

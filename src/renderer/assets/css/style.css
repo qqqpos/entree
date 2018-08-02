@@ -137,7 +137,7 @@ input[type="radio"] {
 }
 
 .popupMask.setting {
-  width: 949px;
+  width: calc(100% - 75px);
   left: 75px;
   display: flex;
   justify-content: center;
@@ -381,7 +381,6 @@ input[type="text"]:disabled {
 }
 
 .title > i {
-  color: #fff;
   font-style: normal;
   cursor: pointer;
   position: absolute;

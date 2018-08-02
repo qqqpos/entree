@@ -502,20 +502,15 @@ export default {
       if (this.app.newTicket) {
         delete customer.favorite;
         Object.assign(order, {
-          customer,
-          type: this.ticket.type,
-          number: this.ticket.number,
-          modify: 0,
-          status: 1,
           time: Date.now(),
-          date: today()
+          date: today(),
+          customer
         });
       } else {
         Object.assign(order, {
-          customer,
-          time: order.time || Date.now(),
           lastEdit: Date.now(),
-          editor: this.op.name
+          editor: this.op.name,
+          customer
         });
       }
       return Object.assign({}, order, extra);
