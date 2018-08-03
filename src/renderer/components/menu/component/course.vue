@@ -31,7 +31,6 @@
                         <button class="mini-btn" @click="delay(30)" :disabled="queue.length === 0">30 {{$t('text.minute')}}</button>
                         <button class="mini-btn" @click="delay(35)" :disabled="queue.length === 0">35 {{$t('text.minute')}}</button>
                         <button class="mini-btn" @click="delay(40)" :disabled="queue.length === 0">40 {{$t('text.minute')}}</button>
-                        <!-- <button class="mini-btn">自定义</button> -->
                     </div>
                     <div>
                         <button class="mini-btn" @click="reset">{{$t('button.reset')}}</button>

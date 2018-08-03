@@ -66,6 +66,8 @@ export default {
       );
     },
     confirm() {
+      if (!this.item.zhCN) this.item.zhCN = this.item.usEN;
+
       this.$socket.emit("[REQUEST] UPDATE_ITEM", this.item, item =>
         this.init.resolve(item)
       );
