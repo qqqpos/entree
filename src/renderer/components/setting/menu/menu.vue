@@ -264,6 +264,7 @@ export default {
 .items div {
   display: inline-flex;
   width: calc(100% / 3 - 4px);
+  max-width: initial;
   height: 63px;
 }
 

@@ -1,3 +1,4 @@
+import ObjectId from "bson-objectid";
 import * as types from "../mutation-types";
 
 const state = {
@@ -26,7 +27,8 @@ const state = {
         coupons: [],
         printCount: 0,
         source: "POS",
-        status: 1
+        status: 1,
+        _id: ObjectId().toString()
     },
     instance: null,
     archivedOrder: null,

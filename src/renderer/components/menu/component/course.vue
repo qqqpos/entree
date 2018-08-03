@@ -169,14 +169,19 @@ export default {
             });
           }
         } else {
+          this.$socket.emit("[ORDER] UPDATE", this.order, false);
           next(this.order);
         }
       });
     },
     print(order) {
       if (this.items.length) {
-        order.content = this.items;
-        Printer.setTarget("Order").print(order);
+        Printer.setTarget("Order").print(
+          Object.assign({}, order, {
+            content: this.items,
+            print: false
+          })
+        );
       }
 
       Object.keys(this.course).forEach(time => {
@@ -209,10 +214,17 @@ export default {
         this.setOperator(null);
         this.$router.push({ path: "/main/lock" });
       } else {
+        this.setApp({ newTicket: true });
         this.$router.push({ path: "/main/table" });
       }
     },
-    ...mapActions(["setOperator", "setOrder", "resetAll", "delayPrint"])
+    ...mapActions([
+      "setApp",
+      "setOperator",
+      "setOrder",
+      "resetAll",
+      "delayPrint"
+    ])
   },
   computed: {
     ...mapGetters([

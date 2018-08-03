@@ -80,6 +80,7 @@ export default {
       }
     },
     setSeat(seat) {
+      console.log(this.seats);
       this.$emit("update", seat);
       let dom = document.querySelector(".seat.current");
       dom && dom.classList.remove("current");

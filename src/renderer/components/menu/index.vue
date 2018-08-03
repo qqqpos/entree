@@ -132,7 +132,7 @@ export default {
       this.setSides(this.fillOption([]));
 
       if (this.order.hasOwnProperty("seats")) {
-        this.seats = this.order.seats.map(seat => seat.name);
+        this.seats = this.order.seats.map(name => name);
         this.seat = this.seats[0];
       }
 
@@ -148,7 +148,6 @@ export default {
             : 0;
 
         this.setOrder({
-          _id: ObjectId().toString(),
           server: this.op.name,
           station: this.station.alias,
           type: this.ticket.type,
@@ -559,3 +558,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.items div {
+  max-width: 109.65px;
+}
+</style>

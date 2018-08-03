@@ -52,6 +52,14 @@ export default {
         plainText: true,
         value: name
       }));
+
+    if (!this.station.callerID) {
+      this.station.callerID = {
+        enable: false,
+        autoForward: false,
+        devices: []
+      };
+    }
   },
   methods: {
     update(data) {

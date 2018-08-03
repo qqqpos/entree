@@ -24,10 +24,10 @@ var Preset = function () {
         enable: false,
         port: 'COM1'
       },
-      callid: {
+      callerID: {
         enable: false,
-        port: 'COM3',
-        command: ""
+        autoForward:false,
+        devices:[]
       },
       receipt: "",
       printers: [],
