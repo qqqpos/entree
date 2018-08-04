@@ -328,9 +328,6 @@ function createList(printer, setting, invoice, preview) {
     const idEN = primary.id ? item.menuID + " " : "";
     const nameCN = replace ? idCN + zhCN : idCN + (item.zhCN || "");
     const nameEN = replace ? idEN + usEN : idEN + (item.usEN || "");
-
-    //if (nameCN === "" && nameEN === "" && item.choiceSet.length === 0) return;
-
     const singleLanguage = item.zhCN === item.usEN && languages[0].enable && languages[1].enable;
     const sideCN = item.side.zhCN || "";
     const sideEN = item.side.usEN || "";

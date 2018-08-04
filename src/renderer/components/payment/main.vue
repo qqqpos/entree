@@ -1152,6 +1152,8 @@ export default {
     setPaid(value) {
       this.paid = value.toFixed(2);
       this.willResetFieldValue = true;
+
+      this.config.defaults.instantPay && this.charge();
     },
     setExternalType(newType) {
       this.externalPaymentType = newType;

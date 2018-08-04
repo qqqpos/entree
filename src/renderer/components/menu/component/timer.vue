@@ -11,7 +11,7 @@
             <div class="timer">
               <div class="outer">
                     <i class="fa fa-angle-up" @click="addMonth"></i>
-                    <span class="time extend">{{time[0]}}<span class="annot">{{timer | moment('MMMM')}}</span></span>
+                    <span class="time extend" >{{time[0]}}<span class="annot">{{timer | moment('MMMM')}}</span></span>
                     <i class="fa fa-angle-down" @click="subMonth"></i>
                 </div>
                 <div class="outer">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="outer">
                     <i class="fa fa-angle-up" @click="addHour(1)"></i>
-                    <span class="time">{{time[3]}}</span>
+                    <span class="time" @dblclick="resetHour">{{time[3]}}</span>
                     <i class="fa fa-angle-down" @click="subHour(1)"></i>
                 </div>
                 <div class="blink">:</div>
@@ -119,6 +119,10 @@ export default {
     },
     subHour(t) {
       this.timer.subtract(t, "hours");
+      this.generate();
+    },
+    resetHour() {
+      this.timer.set("minute", 0);
       this.generate();
     },
     addMin(t) {

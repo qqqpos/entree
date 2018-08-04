@@ -10,6 +10,7 @@
     <text-list title="setting.default.paymentType" :opts="paymentTypes" v-model="defaults.paymentType"></text-list>
     <toggle title="setting.default.discount" v-model="defaults.percentageDiscount" trueTooltip="tip.default.percentageDiscount" falseTooltip="tip.default.dollarDiscount" :conditionalTooltip="true"></toggle>
     <toggle title="setting.default.tip" v-model="defaults.percentageTip" trueTooltip="tip.default.percentageTip" falseTooltip="tip.default.dollarTip" :conditionalTooltip="true"></toggle>
+    <toggle title="setting.default.instantPay" v-model="defaults.instantPay" trueTooltip="tip.default.instantProcess" falseTooltip="tip.default.defaultProcess" :conditionalTooltip="true"></toggle>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>
