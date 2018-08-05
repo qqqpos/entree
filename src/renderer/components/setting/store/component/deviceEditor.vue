@@ -2,11 +2,13 @@
     <div class="popupMask setting center dark" @click.self="init.reject(false)">
         <div class="editor" v-show="!component">
             <header>
-                <div>
+                <div class="f1">
                   <h5>{{$t(init.edit ? 'title.edit': 'title.create')}}</h5>
                   <h3>{{$t('title.device')}}</h3>
                 </div>
+                <button class="mini-btn" @click="search">{{$t('button.search')}}</button>
             </header>
+            <div class="banner"></div>
             <div class="wrap">
                 <div class="input">
                     <inputer title="text.alias" v-model.trim="device.alias" :disabled="init.edit"></inputer>
@@ -16,6 +18,7 @@
                     <inputer title="text.model" v-model="device.model"></inputer>
                     <inputer title="text.S/N" v-model.trim="device.sn"></inputer>
                     <switches title="text.printReceipt" v-model="device.print"></switches>
+                    <switches title="text.eSignature" v-model="device.eSignature" :disabled="true"></switches>
                     <switches title="setting.tipSuggestion" v-model="device.tipSuggestion"></switches>
                 </div>
             </div>
@@ -23,7 +26,6 @@
                 <div class="opt">
                     <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
                 </div>
-                <button class="btn" @click="search">{{$t('button.search')}}</button>
                 <button class="btn" @click="confirm" :disabled="invalid">{{$t('button.confirm')}}</button>
             </footer>
         </div>
@@ -75,5 +77,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

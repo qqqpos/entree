@@ -192,25 +192,29 @@ export default {
         msg: "dialog.printSplitTicketTip",
         buttons: [
           { text: "button.combinePrint", fn: "reject" },
-          { text: "button.splitPrint", fn: "resolve" }
+          { text: "button.splitPrint", fn: "resolve" },
+          { text: "button.cancel", fn: "cancel" }
         ]
       };
 
       this.$dialog(prompt)
         .then(this.printSplitReceipt)
-        .catch(this.printReceipt);
+        .catch(exit => {
+          exit ? this.exitComponent() : this.printReceipt();
+        });
     },
     printSplitReceipt() {
       this.exitComponent();
 
       this.$socket.emit("[SPLIT] GET", this.order._id, splits =>
         splits.forEach(ticket =>
-          Printer.setTarget("Receipt").print(
+          Printer.print(
             Object.assign(ticket, {
               type: this.order.togo ? ticket.type : "PRE_PAYMENT",
               cashier: this.op.name
             }),
-            true
+            true,
+            "Receipt"
           )
         )
       );

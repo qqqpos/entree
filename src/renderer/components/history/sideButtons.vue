@@ -439,7 +439,7 @@ export default {
       this.$socket.emit("[SPLIT] GET", order._id, splits => {
         splits.forEach(ticket => {
           receipt
-            ? Printer.setTarget("Receipt").print(ticket, true)
+            ? Printer.print(ticket, true, "Receipt")
             : Printer.setTarget("All").print(ticket);
         });
       });

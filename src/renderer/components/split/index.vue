@@ -35,7 +35,7 @@
           <div class="swipe" ref="pan">{{$t('text.swipeArea')}}</div>
         </div>
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
-        <button class="btn" @click="call('printTicket',true)" :disabled="!done">{{$t('button.printAll')}}</button>
+        <button class="btn" @click="call('printTicket',true)" :disabled="!done || $route.name === 'Menu'">{{$t('button.printAll')}}</button>
         <button class="btn" @click="call('confirmSplit',false)" :disabled="!done">{{$t('button.confirm')}}</button>
       </footer>
     </div>
@@ -279,8 +279,10 @@ export default {
         )
         .map(instance => instance.order)
         .forEach((ticket, index) =>
-          Printer.setTarget("Receipt").print(
-            Object.assign(ticket, { time, number: `${number}-${index + 1}` })
+          Printer.print(
+            Object.assign(ticket, { time, number: `${number}-${index + 1}` }),
+            true,
+            "Receipt"
           )
         );
 
@@ -338,7 +340,9 @@ export default {
 
         this.$socket.emit("[SPLIT] SAVE", { splits, parent });
 
-        this.order.content.forEach(item => (item.split = true));
+        this.order.content.forEach(item =>
+          Object.assign(item, { split: true })
+        );
         this.order.children = splits.map(i => i._id);
         this.order.split = true;
 

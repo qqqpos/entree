@@ -6,6 +6,7 @@
           <h3>{{$t('title.scanner')}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <div class="search">
           <i class="fa fa-search"></i>

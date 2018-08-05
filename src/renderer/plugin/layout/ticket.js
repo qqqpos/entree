@@ -1,5 +1,5 @@
-const ticket = function (raw, receipt) {
-  const printers = this.getPrinters();
+const ticket = function (raw, receipt, target) {
+  const printers = this.getPrinters(target);
   console.log("target printers", printers);
   const ticket = raw.type;
 

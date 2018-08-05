@@ -65,6 +65,8 @@ const ip =
     .splice(0, 3)
     .join(".") + ".";
 
+const { ipcRenderer } = require("electron");
+
 new Promise((resolve, reject) => {
   const args = require("electron").remote.process.argv.slice(1);
 
@@ -84,30 +86,16 @@ new Promise((resolve, reject) => {
     return;
   }
 
-  let start = 0;
+  const client = require("dgram").createSocket("udp4");
+  const secret = Buffer.from("Entree POS");
+  client.bind(() => client.setBroadcast(true));
+  client.send(secret, 15666, '255.255.255.255', (error) => error && reject(error));
 
-  while (start <= 255) {
-    const target = ip + start;
-    (function (target) {
-      const scanner = Net.connect(
-        {
-          host: target,
-          port: 8888
-        },
-        () => {
-          scanner.destroy();
-          resolve(target);
-        }
-      );
-
-      setTimeout(() => {
-        scanner.destroy();
-      }, 2000);
-      scanner.on("error", () => scanner.destroy());
-    })(target);
-    start++;
-  }
+  client.on('message', (msg, server) =>
+    msg.toString() === "Hello Entree POS" && resolve(server.address)
+  );
 }).then(async (ip) => {
+  ipcRenderer.send("Loading", `Connecting to server: ${ip}`);
   Vue.use(VueSocketio, `http://${ip}:8888`);
 
   await connectPrinter(ip);
@@ -156,7 +144,9 @@ new Promise((resolve, reject) => {
     router,
     template: "<App/>"
   }).$mount("#app");
-});
+}).catch(() =>
+  ipcRenderer.send("Loading", "Error: Server is offline")
+);
 
 
 function connectPrinter(ip) {

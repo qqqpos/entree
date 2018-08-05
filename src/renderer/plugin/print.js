@@ -44,9 +44,11 @@ const Printer = function (plugin, config, station) {
     return this;
   };
 
-  this.getPrinters = function () {
+  this.getPrinters = function (target) {
     let printer = [];
-    switch (this.target) {
+    target = target || this.target;
+
+    switch (target) {
       case "All":
       case "Ticket":
         printer = this.devices.filter(device => !/cashier/i.test(device));
@@ -99,7 +101,7 @@ const Printer = function (plugin, config, station) {
 
   const self = this;
 
-  this.print = (raw, receipt) => checkStatus().then(() => Ticket.bind(self)(raw, receipt));
+  this.print = (raw, receipt,target) => checkStatus().then(() => Ticket.bind(self)(raw, receipt,target));
   this.preview = (printer, ticket) => Preview.bind(self)(printer, ticket);
   this.printReport = data => checkStatus().then(() => Report.bind(self)(data));
   this.printLabel = (printer, order) => checkStatus().then(() => Label.bind(self)(printer, order));

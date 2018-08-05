@@ -66,7 +66,7 @@ const Pax = function () {
 
     return device;
   };
-  this.charge = function (data, ticket) {
+  this.charge = function (data) {
     const {
       number,
       date
@@ -244,7 +244,7 @@ const Pax = function () {
             debit: (amount[1] / 100).toFixed(2),
             ebt: (amount[2] / 100).toFixed(2)
           },
-          result: host[0], 
+          result: host[0],
           number: host[5],
           status: hostResponse,
           batch
@@ -361,10 +361,12 @@ const Pax = function () {
 };
 
 const Encode = function (d) {
-  d = d.replace(/[_]/g, String.fromCharCode(0x1c));
-  d = d.replace(/[|]/g, String.fromCharCode(0x1f));
-  const l = lrc(d + String.fromCharCode(0x03));
-  return String.fromCharCode(0x3F) + new Buffer(String.fromCharCode(0x02) + d + String.fromCharCode(0x03) + l).toString('base64');
+  const char = c => String.fromCharCode(c);
+
+  d = d.replace(/[_]/g, char(0x1c));
+  d = d.replace(/[|]/g, char(0x1f));
+
+  return char(0x3F) + new Buffer(char(0x02) + d + char(0x03) + lrc(d + char(0x03))).toString('base64');
 };
 
 const Decode = function (d) {
@@ -399,6 +401,8 @@ const Draw = function (path) {
       context.stroke();
     }
   }
+
+  return canvas.toDataURL()
 };
 
 export default function () {
