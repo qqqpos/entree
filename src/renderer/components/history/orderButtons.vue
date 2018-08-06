@@ -31,12 +31,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import inputModule from "../component/inputer";
+import splitModule from "../split/index";
 import dialogModule from "../common/dialog";
 import paymentMarker from "../payment/mark";
 import paymentModule from "../payment/main";
-import splitModule from "../split/index";
 import driverModule from "./component/driver";
+import inputModule from "../component/inputer";
 
 export default {
   props: ["date"],

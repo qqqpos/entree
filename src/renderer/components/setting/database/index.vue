@@ -1,15 +1,9 @@
 <template>
     <div>
         <header class="nav">
-            <nav>
-                <span @click="backup" v-show="isHost">{{$t('button.backup')}}</span>
-            </nav>
             <div class="title">
                 <h3>{{$t('title.databaseHealth')}}</h3>
             </div>
-            <nav>
-                <span>{{$t('button.restore')}}</span>
-            </nav>
         </header>
         <div class="data-status">
             <h3>{{$t('database.dataSize')}}</h3>

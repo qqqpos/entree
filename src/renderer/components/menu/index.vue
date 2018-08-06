@@ -31,7 +31,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 import buttons from "./buttons";
-import Holiday from "moment-holiday";
+//import Holiday from "moment-holiday";
 import modify from "./component/modify";
 import request from "./component/request";
 import weightItem from "./component/scale";
@@ -298,7 +298,7 @@ export default {
             stop("typeRestricted");
           } else if (!days.includes(day)) {
             stop("dayRestricted");
-          } else if (holiday && !Holiday().isHoliday()) {
+          } else if (holiday && momment().holiday()) {
             stop("holidayRestricted");
           } else {
             const time = moment(this.order.create);

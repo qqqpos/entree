@@ -16,7 +16,7 @@
                         <div class="input-wrap">
                             <i class="far fa-clock light space"></i>
                             <input type="text" v-model="book.time" placeholder="HH:mm (24 Hours)">
-                            <i class="fas fa-caret-right dialog"></i>
+                            <i class="fas fa-caret-right dialog" @click="openTimePicker"></i>
                         </div>                      
                     </div>
                 </section>                
@@ -114,15 +114,16 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Holiday from "moment-holiday";
+//import Holiday from "moment-holiday";
 import dialogModule from "../common/dialog";
+import timePicker from "./helper/timePicker";
 import reservation from "./component/reservation";
 import calendar from "../history/component/calendar";
 import dropdown from "../history/component/dropdown";
 
 export default {
   props: ["init"],
-  components: { calendar, dialogModule, reservation, dropdown },
+  components: { calendar, timePicker, dialogModule, reservation, dropdown },
   data() {
     return {
       filter: null,
@@ -166,7 +167,7 @@ export default {
   },
   filters: {
     isHoliday(date) {
-      return Holiday(date).isHoliday() ? Holiday(date).isHoliday() : "";
+      return util.isHoliday(date); //Holiday(date).isHoliday() ? Holiday(date).isHoliday() : "";
     }
   },
   computed: {
@@ -219,6 +220,17 @@ export default {
           this.book.date = date;
           this.calendarDate = moment(date, "YYYY-MM-DD", true);
           date !== today() && this.getBookingList(date);
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
+    },
+    openTimePicker() {
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject };
+        this.component = "timePicker";
+      })
+        .then(time => {
+          this.book.time = time;
           this.exitComponent();
         })
         .catch(this.exitComponent);

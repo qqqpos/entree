@@ -58,7 +58,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import holiday from "moment-holiday";
+//import holiday from "moment-holiday";
 
 export default {
   props: ["target", "reset", "data", "date", "on", "discountTag"],
@@ -92,7 +92,7 @@ export default {
       return moment(date, "YYYY-MM-DD").format("dddd");
     },
     event(date) {
-      return holiday(moment(date, "YYYY-MM-DD")).isHoliday() || "";
+      return util.isHoliday(moment(date, "YYYY-MM-DD"));
     }
   },
   methods: {

@@ -1322,7 +1322,8 @@ export default {
     discountTag: "折扣标签",
     show: "显示",
     hide: "隐藏",
-    forward: "转向"
+    forward: "转向",
+    militaryTime: "24 小时"
   },
   nav: {
     store: "店面",
@@ -1750,6 +1751,13 @@ export default {
       defaultProcess: "需回车确认支付订单",
       autoStackItemQty: "选择相同物品时会自动增加数量",
       matchItemQty: "子菜品的数量默认与主菜品的相同",
+    },
+    peak: {
+      idle: "空闲",
+      normal:"比较空闲",
+      busy: "忙碌",
+      rush: "非常忙碌",
+      fullHouse: "满座"
     },
     tax: "编辑税率",
     taxApply: "是否默认征税",

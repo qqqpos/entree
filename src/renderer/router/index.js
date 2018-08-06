@@ -494,6 +494,11 @@ export default new Router({
                   path: "payout",
                   name: "Setting.database.payout",
                   component: require("../components/setting/database/payout")
+                },
+                {
+                  path: "config",
+                  name: "Setting.database.config",
+                  component: require("../components/setting/database/config")
                 }
               ]
             },

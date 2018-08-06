@@ -30,8 +30,8 @@ export default {
     this.ready = true;
   },
   methods: {
-    view(book){
-      console.log(book)
+    view(book) {
+      console.log(book);
     },
     initial(data) {
       const hours = {};
@@ -132,7 +132,7 @@ export default {
           .querySelector(`.detail header`)
           .getBoundingClientRect();
         const { top: targetTop } = document
-          .querySelector(`[data-hour='${hour}']`)
+          .querySelector(`[data-hour='${targetHour}']`)
           .getBoundingClientRect();
 
         this.lastVerticalDelta = this.vertical = -(

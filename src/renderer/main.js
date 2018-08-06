@@ -5,7 +5,6 @@ import moment from "moment";
 import VueTouch from "vue-touch";
 import Electron from "vue-electron";
 import VueSocketio from "vue-socket.io";
-// import SocialSharing from "vue-social-sharing";
 import { Mask, OuterClick } from "./plugin/directive"
 
 import AmCharts from 'amcharts3'
@@ -23,8 +22,8 @@ import i18n from "./plugin/dict";
 import util from "./plugin/util";
 import VueBus from "./plugin/bus";
 
+
 Vue.use(VueTouch, { name: "v-touch" });
-// Vue.use(SocialSharing);
 Vue.use(Electron);
 Vue.use(VueBus);
 Vue.use(Trend);

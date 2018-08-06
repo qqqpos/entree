@@ -204,8 +204,8 @@ export default {
 
         if (this.store.deliver.surcharge) {
           const addressDistance = order.customer.distance || this.customer.distance;
-          const duration = parseFloat(addressDistance.replace(/[^\d.]/g, ""));
-          const distance = isNumber(duration) ? duration : 0;
+          const duration = parseFloat(addressDistance) || 0;
+          const distance = addressDistance.includes("ft") ? duration / 100 : duration;
           const surcharge = this.store.deliver.rules
             .sort((a, b) => a.distance < b.distance)
             .find(rule => rule.distance < distance);
@@ -623,6 +623,36 @@ export default {
           xLeft + xWidth < (yLeft / tolerate) ||
           (xLeft / tolerate) > yLeft + yWidth
         );
+      },
+      isHoliday(date) {
+        const holidays = {
+          'M': {//Month, Day
+            '01/01': "New Year's Day",
+            '02/14': "Valentine's Day",
+            '04/01': "April Fool's Day",
+            '07/04': "Independence Day",
+            '10/31': "Halloween",
+            '11/11': "Veteran's Day",
+            '12/24': "Christmas Eve",
+            '12/25': "Christmas Day",
+            '12/31': "New Year's Eve"
+          },
+          'W': {//Month, Week of Month, Day of Week
+            '1/3/1': "Martin Luther King Jr. Day",
+            '2/3/1': "Washington's Birthday",
+            '5/5/1': "Memorial Day",
+            '5/2/0': "Mother's Day",
+            '6/3/0': "Father's Day",
+            '9/1/1': "Labor Day",
+            '10/2/1': "Columbus Day",
+            '11/4/4': "Thanksgiving Day",
+            '11/4/5': "Black Friday"
+          }
+        };
+        const diff = 1 + (0 | (new Date(date).getDate() - 1) / 7);
+        const memorial = (new Date(date).getDay() === 1 && (new Date(date).getDate() + 7) > 30) ? "5" : null;
+
+        return (holidays['M'][moment(date).format('MM/DD')] || holidays['W'][moment(date).format('M/' + (memorial || diff) + '/d')]);
       }
     };
 

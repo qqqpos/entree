@@ -161,3 +161,9 @@
         transform: rotate(360deg);
     }
 }
+
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

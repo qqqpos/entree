@@ -1334,7 +1334,8 @@ export default {
     discountTag: "Discount Tag",
     show: "Show",
     hide: "Hide",
-    forward: "Forward"
+    forward: "Forward",
+    militaryTime: "24 Hour"
   },
   nav: {
     store: "Store",
@@ -1759,6 +1760,13 @@ export default {
       defaultProcess: "Payment amount needs enter to confirm",
       autoStackItemQty: "Auto stacking item quantity",
       matchItemQty: "Subitem quantity match main item's quantity",
+    },
+    peak: {
+      idle: "Idle",
+      normal: "Slow",
+      busy: "Busy",
+      rush: "Very Busy",
+      fullHouse: "Full House"
     },
     tax: "Store tax setting",
     taxApply: "Setup default apply tax",

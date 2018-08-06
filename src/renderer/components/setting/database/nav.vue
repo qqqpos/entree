@@ -18,6 +18,10 @@
                     <i class="fas fa-money-check-alt"></i>
                     <span class="text">{{$t('nav.payout')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.database.config'}">
+                    <i class="fas fa-cogs"></i>
+                    <span class="text">{{$t('nav.setting')}}</span>
+                </router-link>                    
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>
                 <i class="fa fa-arrow-circle-left"></i>

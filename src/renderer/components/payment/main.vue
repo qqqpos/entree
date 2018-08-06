@@ -181,7 +181,8 @@ export default {
         msg: "dialog.splitTicketPaymentMethod",
         buttons: [
           { text: "button.payBalanceDue", fn: "reject" },
-          { text: "button.splitPay", fn: "resolve" }
+          { text: "button.splitPay", fn: "resolve" },
+          { text: "button.cancel", fn: "exit" }
         ]
       };
 
@@ -192,7 +193,9 @@ export default {
           this.invoice.split
             ? this.$dialog(prompt)
                 .then(() => split(true))
-                .catch(() => split(false))
+                .catch(exit => {
+                  exit ? this.init.reject() : split(false);
+                })
             : split(false);
         }
       });

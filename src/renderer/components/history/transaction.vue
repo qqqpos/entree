@@ -64,7 +64,7 @@
             <td></td>
             <td class="settlement"></td>
             <td class="amount">$ {{totalTip | decimal}}</td>
-            <td class="amount">$ {{totalAmount | decimal}}</td>
+            <td class="amount" :class="{invisible:!totalViewable}">$ {{totalAmount | decimal}}</td>
             <td class="split"></td>
           </tr>
         </tfoot>
@@ -136,6 +136,7 @@ export default {
       transactions: [],
       editable: false,
       reportable: false,
+      totalViewable: false,
       cashiers: [],
       servers: [],
       payments: [],
@@ -163,6 +164,7 @@ export default {
     checkPermission() {
       return new Promise(next => {
         this.editable = this.approval(this.op.modify, "tip");
+        this.totalViewable = this.approval(this.op.view, "summary");
         this.reportable = true;
         next();
       });
@@ -338,12 +340,9 @@ footer {
 
 tfoot tr {
   border-top: 1px solid #e0e0e0;
-  text-align: center;
-}
-
-tfoot td {
   padding: 5px 0;
-  background: #eeeeee;
+  background: #eee;
+  text-align: center;
 }
 
 .num {

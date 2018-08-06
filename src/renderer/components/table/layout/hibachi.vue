@@ -16,10 +16,12 @@
 import { mapGetters, mapActions } from "vuex";
 import dialogModule from "../../common/dialog";
 import unlockModule from "../../common/unlock";
+import tableCreate from "../../../mixins/tableCreate";
 
 export default {
   props: ["tables", "transfer"],
   components: { dialogModule, unlockModule },
+  mixins: [tableCreate],
   data() {
     return {
       componentData: null,
@@ -45,10 +47,10 @@ export default {
     viewTicket(_id) {
       const invoice = this.history.find(t => t._id === _id);
 
-      invoice ? this.viewHibachi(invoice) : this.noFoundDialog();
+      invoice ? this.viewHibachi(invoice) : this.noFoundDialog("HIBACHI",_id);
     },
     viewHibachi(invoice) {
-      const { _id, tableID,seats } = invoice;
+      const { _id, tableID, seats } = invoice;
       this.setViewOrder(invoice);
     },
     selectSeat(e, target, seat) {
@@ -75,28 +77,6 @@ export default {
         .querySelectorAll(".active")
         .forEach(dom => dom.classList.remove("active"));
     },
-    noFoundDialog() {
-      const prompt = {
-        title: "dialog.ticketNotFound",
-        msg: "dialog.actionProcess",
-        buttons: [
-          { text: "button.resetTable", fn: "reject" },
-          { text: "button.sync", fn: "resolve" }
-        ]
-      };
-
-      this.$dialog(prompt)
-        .then(() => {
-          this.$socket.emit("[ORDER] SYNC", orders => {
-            this.setTodayOrder(orders);
-            this.exitComponent();
-          });
-        })
-        .catch(() => {
-          this.$socket.emit("[HIBACHI] RESET", { session });
-          this.exitComponent();
-        });
-    },
     cancel() {
       this.target = null;
       this.seats = [];
@@ -106,64 +86,6 @@ export default {
       this.checkAccessPin()
         .then(this.createTable)
         .catch(this.exitComponent);
-    },
-    checkAccessPin() {
-      return new Promise((next, stop) => {
-        if (this.dineInOpt.passwordRequire) {
-          // password required to create new table
-          new Promise((resolve, reject) => {
-            this.componentData = { resolve, reject };
-            this.component = "unlockModule";
-          })
-            .then(operator => {
-              if (operator._id === this.op._id) {
-                // move next if same person
-                next();
-              } else {
-                const prompt = {
-                  type: "question",
-                  title: "dialog.switchOperator",
-                  msg: [
-                    "dialog.switchCurrentOperator",
-                    this.op.name,
-                    operator.name
-                  ]
-                };
-
-                this.$dialog(prompt)
-                  .then(() => this.switchOperator(operator, next))
-                  .catch(() => {
-                    this.exitComponent();
-                    stop();
-                  });
-              }
-            })
-            .catch(this.pinIncorrectDialog);
-        } else {
-          next();
-        }
-      });
-    },
-    pinIncorrectDialog(exit) {
-      const prompt = {
-        title: "dialog.accessDenied",
-        msg: "dialog.accessPinNotMatch",
-        buttons: [{ text: "button.confirm", fn: "resolve" }]
-      };
-
-      exit
-        ? this.exitComponent()
-        : this.$dialog(prompt).then(this.exitComponent);
-    },
-    switchOperator(operator, next) {
-      this.exitComponent();
-      const language = operator.language || "usEN";
-      moment.locale(language === "usEN" ? "en" : "zh-cn");
-
-      this.$setLanguage(language);
-      this.setApp({ language, newTicket: true });
-      this.setOperator(operator);
-      next();
     },
     createTable() {
       this.resetMenu();

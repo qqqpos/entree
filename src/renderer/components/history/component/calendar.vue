@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import holiday from "moment-holiday";
-
 export default {
   props: ["init"],
   data() {
@@ -54,7 +52,7 @@ export default {
   },
   filters: {
     isHoliday(date) {
-      return holiday(date).isHoliday() || "";
+      return util.isHoliday(date);
     }
   },
   methods: {
