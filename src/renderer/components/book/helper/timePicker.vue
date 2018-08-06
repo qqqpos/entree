@@ -176,7 +176,7 @@ export default {
 }
 
 .wrap {
-  padding: 10px 15px;
+  padding: 10px 15px 5px;
   background: #fff;
 }
 
@@ -196,8 +196,8 @@ export default {
 .bar {
   flex: 1;
   margin-right: 1px;
-  border-radius: 3px 3px 0 0;
-  background: #7baaf7;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(to bottom, #64c9ff, #1c92d2);
   position: relative;
   transition: background-color 0.3s ease-out;
 }
@@ -262,7 +262,7 @@ export default {
   background: #eceff1;
   color: #37474f;
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
 }
 </style>
 

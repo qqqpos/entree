@@ -1426,7 +1426,8 @@ export default {
       department: "Dept.",
       other: "Others",
       tool: "Tool",
-      tutorial: "Tutorial"
+      tutorial: "Tutorial",
+      sales: "Sales"
     },
     title: {
       store: "Store Information",
@@ -1438,7 +1439,10 @@ export default {
       giftcard: "Gift Card Setting",
       department: "Department Setup",
       timecard: "Timecard Setting",
-      delivery: "Delivery Related Setting"
+      delivery: "Delivery Related Setting",
+      payroll: "Payroll list",
+      batch: "Batch Records",
+      salesSummary: "Sales Summary"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",
@@ -1745,6 +1749,7 @@ export default {
     payrolls: "Time card payroll list",
     noForward: "No Forwarding",
     forwardToStation: "Forwarding to {i}",
+    terminalBatchRecords: "Credit card terminal batch records",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

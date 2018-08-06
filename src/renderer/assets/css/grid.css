@@ -93,3 +93,28 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
 }
+
+/* setting summary style */
+
+.summary-wrap{
+    display: grid;
+    height: calc(100% - 50px);
+    grid-template-columns: 1fr 305px;
+}
+
+.summary-wrap section.list{
+    flex: 1;
+    padding: 15px;
+    overflow: auto;
+    background: #eceff1;
+}
+
+.summary-wrap section.overview{
+    position: fixed;
+    right:0;
+    background: #fff;
+    width: 276px;
+    padding: 0px 15px;
+    box-shadow: -2px 0 6px -5px;
+    height: calc(100vh - 50px);
+}

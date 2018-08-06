@@ -380,6 +380,22 @@ export default {
           ? print ? 1 : 0
           : print ? this.order.printCount + 1 : this.order.printCount;
 
+        // update table status
+
+        if (
+          this.isDineInTicket &&
+          useTable &&
+          this.table &&
+          this.table.status === -1
+        ) {
+          Object.assign(this.table, {
+            invoice: [this.order._id],
+            status: 2
+          });
+
+          this.$socket.emit("[TABLE] UPDATE", this.table);
+        }
+
         let order = this.combineOrderInfo({ printCount });
         let todo = !!document.querySelector(".item.todo");
 
@@ -399,14 +415,7 @@ export default {
                   })
                 : [];
 
-          if (this.isDineInTicket && useTable) {
-            Object.assign(this.table, {
-              invoice: [order._id],
-              status: 2
-            });
-
-            this.$socket.emit("[TABLE] UPDATE", this.table);
-
+          if (this.isDineInTicket) {
             this.$socket.emit("[ORDER] SAVE", order, false, () => {
               if (items.length === 0) return;
 
@@ -434,14 +443,14 @@ export default {
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
                 Printer.setTarget("All").print(diffs);
               } else {
-                this.dineInOpt.printOnDone
+                printOnDone
                   ? Printer.setTarget("All").print(diffs)
                   : Printer.setTarget("Order").print(diffs);
               }
             }
             this.$socket.emit("[ORDER] UPDATE", order, print);
           } else {
-            Printer.setTarget("Order").print(this.order);
+            print && Printer.setTarget("Order").print(this.order);
           }
         }
 
@@ -464,24 +473,25 @@ export default {
       const { done } = this.station.autoLock;
       const { lockOnDone, useTable } = this.dineInOpt;
 
+      this.setApp({ newTicket: true });
+
       if (this.isDineInTicket && useTable) {
         if (lockOnDone || done) {
+          this.resetAll();
           this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
-          this.resetAll();
         } else {
-          this.setOrder(this.order);
-          this.setApp({ newTicket: true });
+          this.archivedOrder && this.setOrder(this.archivedOrder);
           this.$router.push({ name: "Table" });
         }
       } else {
         if (done) {
+          this.resetAll();
           this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
         } else {
           this.$router.push({ path: "/main" });
         }
-        this.resetAll();
       }
     },
     quit() {

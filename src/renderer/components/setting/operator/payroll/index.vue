@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="f1">
-          <h3>{{$t('nav.payroll')}}</h3>
+          <h3>{{$t('setting.title.payroll')}}</h3>
           <p>{{$t('tip.payrolls')}}</p>
       </div>
       <date-picker @update="fetchData"></date-picker>
@@ -330,6 +330,7 @@ section.list {
   padding: 15px;
   height: 652px;
   overflow: auto;
+  background: #eceff1;
 }
 
 section.overview {

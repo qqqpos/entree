@@ -52,7 +52,6 @@ export const setViewOrder = ({ commit }, order) => commit(types.SET_VIEW_ORDER, 
 export const setDevice = ({ commit }, data) => commit(types.SET_DEVICE, data);
 export const phoneRing = ({ commit }, data) => commit(types.PHONE_RING, data);
 export const resetTable = ({ commit }) => commit(types.RESET_TABLE);
-export const resetOrder = ({ commit }) => commit(types.RESET_ORDER);
 export const delayPrint = ({ commit }, order) => commit(types.ADD_SPOOLER, order);
 export const removeSpooler = ({ commit }, index) => commit(types.REMOVE_SPOOLER, index);
 export const addToOrder = ({ commit, getters }, item) => commit(types.ADD_TO_ORDER, { item, autoStack: getters.config.defaults.autoStackItem });
@@ -90,6 +89,13 @@ export const alterItemOption = ({ commit, getters }, data) => {
   data.side.sub
     ? commit(types.SET_CHOICE_SET, { subitem, matchItemQty: getters.config.defaults.matchItemQty })
     : commit(types.ALTER_ITEM_OPTION, data);
+};
+
+export const resetOrder = ({ commit }) => {
+  commit(types.RESET_ORDER);
+  commit(types.EMPTY_ARCHIVE_ORDER);
+  commit(types.SET_TICKET, { type: "" });
+  commit(types.SET_APP, { newTicket: true });
 };
 
 export const resetAll = ({ commit }) => {
@@ -177,7 +183,7 @@ export const updateMenu = ({ commit }, { target, action, data }) => {
     case "TABLE":
       switch (action) {
         case "SWAP":
-          commit(types.UPDATE_SECTION_TABLES,data)
+          commit(types.UPDATE_SECTION_TABLES, data)
           break;
         case "REPLACE":
           commit(types.REPLACE_TABLE, data)

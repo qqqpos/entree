@@ -167,11 +167,11 @@ label .tooltip {
   border-bottom: none;
 }
 
-header.chart {
+header.date-picker {
   display: flex;
-  border-bottom: 1px solid #eeeeee;
-  padding: 10px;
-  background: #fafafa;
+  background: #fff;
+  padding: 5px 15px;
+  border-bottom: 1px solid #E0E0E0;
 }
 
 header.nav {

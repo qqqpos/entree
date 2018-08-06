@@ -11,12 +11,12 @@
       <div class="wrap">
         <ul>
           <li v-for="(page,i) in template.contain" @click="index = i" class="page" :key="i">
-            <span class="page">{{page.name}}<span class="count" v-show="itemCount[i] > 0">{{itemCount[i]}}</span></span>
+            <span class="f1">{{page.name}}<span class="count" v-show="itemCount[i] > 0">{{itemCount[i]}}</span></span>
             <i class="fa fa-caret-right"></i>
           </li>
         </ul>
         <div class="items">
-          <div class="item" v-for="(item,index) in items" :key="index" @click="moreQty(item)">
+          <div class="item" v-for="(item,index) in items" :key="index" @click="moreQty(item)" :class="{placeholder:item.placeholder}">
             <span>{{item[language]}}</span>
             <span class="qty" @click.stop="resetQty(item,index)" v-show="item.qty > 0">{{item.qty}}</span>
           </div>
@@ -128,6 +128,8 @@ export default {
       this.saved[index] = this.items.filter(i => i.qty > 0);
     },
     moreQty(item) {
+      if (item.placeholder) return;
+
       const { autoJump } = this.template;
       let increased = false;
       let max = this.option.max * this.init.item.qty;
@@ -353,10 +355,6 @@ li {
   align-items: center;
 }
 
-.page {
-  flex: 1;
-}
-
 i {
   opacity: 0;
   transition: opacity 0.3s ease-out;
@@ -375,6 +373,11 @@ li.current {
   margin-right: 5px;
   color: #009688;
   float: right;
+}
+
+.placeholder {
+  opacity: 0.25;
+  border: 1px dashed #607d8b;
 }
 </style>
 

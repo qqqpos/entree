@@ -1,14 +1,16 @@
 <template>
   <div class="payroll">
       <header @click="expand = !expand">
-          <h3>{{sheet.name}}</h3>
-          <h5>{{$t('type.'+sheet.role)}}</h5>
+          <div class="name">
+            {{sheet.name}}
+            <span class="role">{{$t('type.'+sheet.role)}}</span>
+          </div>
           <div class="overTime">
             <span v-show="sheet.overAlert > 0" >{{$t('setting.timecard.foundOverTime',sheet.overAlert)}}</span>
           </div>
           <span class="pay" v-show="!expand">$ {{sheet.unpaid | decimal}}</span>
-          <i class="fa fa-chevron-up" v-if="expand"></i>
-          <i class="fa fa-chevron-down" v-else></i>
+          <i class="fa fa-chevron-up light" v-if="expand"></i>
+          <i class="fa fa-chevron-down light" v-else></i>
       </header>
       <div class="detail" v-if="expand">
           <div class="stats f1">
@@ -68,6 +70,7 @@ export default {
   margin: 5px 10px;
   padding: 15px;
   background: #fff;
+  border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
@@ -77,13 +80,18 @@ header {
   align-items: baseline;
 }
 
-h5 {
-  font-weight: normal;
-  margin-left: 5px;
-}
-
 header i {
   color: #666;
+}
+
+.name {
+  width: 215px;
+  font-weight: bold;
+}
+
+.role {
+  font-weight: lighter;
+  color: #8d6e63;
 }
 
 .pay {
@@ -134,8 +142,6 @@ header i {
   flex: 1;
   font-weight: bold;
   color: red;
-  text-align: right;
-  padding: 0 50px;
 }
 </style>
 

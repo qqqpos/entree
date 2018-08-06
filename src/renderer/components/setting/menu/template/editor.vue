@@ -4,7 +4,7 @@
             <header>
                 <div>
                     <h5></h5>
-                    <h3>{{$t('title.template')}}</h3>
+                    <h3>{{$t('title.item')}}</h3>
                 </div>
             </header>
             <div class="banner"></div>
@@ -18,6 +18,7 @@
                         <checkbox :title="name" v-model="printer" :val="name" v-for="(name,index) in printers" :key="index" :multiple="true" :translate="false"></checkbox>
                     </div>
                 </div>
+                <switches v-model="item.placeholder" title="text.placeholder"></switches>
             </div>
             <footer>
                 <div class="opt">
@@ -32,10 +33,11 @@
 <script>
 import inputer from "../../common/inputer";
 import checkbox from "../../common/checkbox";
+import switches from "../../common/switches";
 
 export default {
   props: ["init"],
-  components: { inputer, checkbox },
+  components: { inputer, checkbox, switches },
   data() {
     return {
       item: JSON.parse(JSON.stringify(this.init.item)),

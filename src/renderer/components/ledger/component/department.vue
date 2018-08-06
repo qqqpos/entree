@@ -16,7 +16,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(department,index) in deps" :key="index">
+            <tr v-for="(department,index) in departments" :key="index">
                 <td>{{department[language]}}</td>
                 <td>{{department.WALK_IN.subtotal | decimal}}</td>
                 <td>{{department.PICK_UP.subtotal | decimal}}</td>
@@ -39,11 +39,11 @@ import { mapGetters } from "vuex";
 export default {
   props: ["transactions", "invoices"],
   computed: {
-    ...mapGetters(["departments", "language", "tax"])
+    ...mapGetters(["language", "tax"])
   },
   data() {
     return {
-      deps: []
+      departments: []
     };
   },
   created() {
@@ -53,10 +53,10 @@ export default {
   },
   methods: {
     initialDepartment() {
-      const departments = JSON.parse(JSON.stringify(this.departments));
+      const departments = JSON.parse(JSON.stringify(this.$store.getters.departments));
 
       return new Promise(next => {
-        this.deps = departments.map(department => {
+        this.departments = departments.map(department => {
           Object.assign(department, {
             WALK_IN: {
               count: 0,
@@ -119,7 +119,7 @@ export default {
           return department;
         });
 
-        this.deps.push({
+        this.departments.push({
           zhCN: this.$t("type.other"),
           usEN: "Other",
           contain: [],
@@ -186,7 +186,7 @@ export default {
       });
     },
     process() {
-      const departments = this.deps.map(d => d.contain);
+      const departments = this.departments.map(d => d.contain);
       const last = departments.length - 1;
 
       this.invoices.forEach(invoice => {
@@ -217,13 +217,13 @@ export default {
               tax += toFixed(Tax.rate / 100 * amount, 2);
 
             if (index !== -1) {
-              let pointer = this.deps[index][type];
+              let pointer = this.departments[index][type];
               pointer.count += qty;
               pointer.tax += tax;
               pointer.subtotal += subtotal;
               pointer.total += subtotal + tax;
             } else {
-              let pointer = this.deps[last][type];
+              let pointer = this.departments[last][type];
               pointer.count += qty;
               pointer.tax += tax;
               pointer.subtotal += subtotal;
@@ -233,7 +233,7 @@ export default {
         }
       });
 
-      this.deps.forEach(department => {
+      this.departments.forEach(department => {
         let subtotal = 0;
         let tax = 0;
         let total = 0;
@@ -252,27 +252,27 @@ export default {
 
       this.calculateCommission();
 
-      this.deps.push({
+      this.departments.push({
         zhCN: this.$t("report.overallTotal"),
         usEN: "Overall",
         WALK_IN: {
-          subtotal: this.deps.reduce((a, c) => a + c.WALK_IN.subtotal, 0)
+          subtotal: this.departments.reduce((a, c) => a + c.WALK_IN.subtotal, 0)
         },
         PICK_UP: {
-          subtotal: this.deps.reduce((a, c) => a + c.PICK_UP.subtotal, 0)
+          subtotal: this.departments.reduce((a, c) => a + c.PICK_UP.subtotal, 0)
         },
         DELIVERY: {
-          subtotal: this.deps.reduce((a, c) => a + c.DELIVERY.subtotal, 0)
+          subtotal: this.departments.reduce((a, c) => a + c.DELIVERY.subtotal, 0)
         },
         DINE_IN: {
-          subtotal: this.deps.reduce((a, c) => a + c.DINE_IN.subtotal, 0)
+          subtotal: this.departments.reduce((a, c) => a + c.DINE_IN.subtotal, 0)
         },
         HIBACHI: {
-          subtotal: this.deps.reduce((a, c) => a + c.HIBACHI.subtotal, 0)
+          subtotal: this.departments.reduce((a, c) => a + c.HIBACHI.subtotal, 0)
         },
-        subtotal: this.deps.reduce((a, c) => a + c.subtotal, 0),
-        tax: this.deps.reduce((a, c) => a + c.tax, 0),
-        total: this.deps.reduce((a, c) => a + c.total, 0)
+        subtotal: this.departments.reduce((a, c) => a + c.subtotal, 0),
+        tax: this.departments.reduce((a, c) => a + c.tax, 0),
+        total: this.departments.reduce((a, c) => a + c.total, 0)
       });
     },
     calculateCommission() {
@@ -280,16 +280,19 @@ export default {
 
       departments.forEach(dep => {
         if (isNumber(dep.commission)) {
-          const index = this.deps.findIndex(
+          const index = this.departments.findIndex(
             each => each.usEN === dep.usEN && each.zhCN === dep.zhCN
           );
 
           if (index !== -1) {
-            this.deps[index].commission =
-              this.deps[index].subtotal * dep.commission / 100;
+            this.departments[index].commission =
+              this.departments[index].subtotal * dep.commission / 100;
           }
         }
       });
+    },
+    failed(){
+      
     }
   }
 };

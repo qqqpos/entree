@@ -3,17 +3,17 @@
         <ul class="nav">
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.sales'}" exact>
-                    <i class="fas fa-chart-area"></i>
-                    <span class="text">{{$t('nav.revenue')}}</span>
-                </router-link>
-                <router-link tag="li" :to="{name:'Setting.sales.giftcard'}" exact>
-                    <i class="fa fa-gift"></i>
-                    <span class="text">{{$t('text.giftCard')}}</span>
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span class="text">{{$t('setting.nav.sales')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.sales.batch'}" exact>
                     <i class="fas fa-mobile-alt"></i>
                     <span class="text">{{$t('nav.batch')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.sales.giftcard'}" exact>
+                    <i class="fa fa-gift"></i>
+                    <span class="text">{{$t('text.giftCard')}}</span>
+                </router-link>                
                 <router-link tag="li" :to="{name:'Setting.sales.cashflow'}" exact>
                     <i class="fas fa-hand-holding-usd"></i>
                     <span class="text">{{$t('nav.cashFlow')}}</span>

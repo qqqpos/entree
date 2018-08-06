@@ -1,9 +1,9 @@
 <template>
-    <div>
-      <header class="date-picker">
+  <div>
+    <header class="date-picker">
         <div class="f1">
-            <h3>{{$t('setting.title.batch')}}</h3>
-            <p>{{$t('tip.batchSummary')}}</p>
+            <h3>{{$t('setting.title.salesSummary')}}</h3>
+            <p>Daily Sales Summary</p>
         </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
@@ -14,15 +14,16 @@
       <section class="overview">
 
       </section>
-      </div>
     </div>
+  </div>
 </template>
 
 <script>
+import loader from "../../common/loader";
 import datePicker from "../common/datePicker";
 
 export default {
-  components: { datePicker },
+  components: { loader, datePicker },
   data() {
     return {
       componentData: null,
@@ -31,7 +32,19 @@ export default {
     };
   },
   methods: {
-    fetchData() {}
+    fetchData([from, to]) {
+      this.$socket.emit(
+        "[REPORT] INITIAL_DATA",
+        {
+          from: +from,
+          to: +to
+        },
+        payrolls => {
+          this.payrolls = payrolls;
+          this.analyze();
+        }
+      );
+    }
   }
 };
 </script>

@@ -8,9 +8,9 @@
         <div class="dialog" v-show="visible">
             <div class="calendar">
                 <header>
-                    <i class="fa fa-chevron-left" @click="prev"></i>
+                    <i class="fa fa-chevron-left mini-btn" @click="prev"></i>
                     <h3>{{date | moment('MMMM YYYY')}}</h3>
-                    <i class="fa fa-chevron-right" @click="next"></i>
+                    <i class="fa fa-chevron-right mini-btn" @click="next"></i>
                 </header>
                 <div class="wrap">
                     <div class="title">
@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  props:["init"],
+  props: ["init"],
   data() {
     return {
       range: "today",
@@ -294,10 +294,10 @@ export default {
   width: 680px;
   height: 350px;
   background: #fff;
-  border-radius: 4px;
+  border-radius: 0 0 4px 4px;
   padding: 5px;
   z-index: 10;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.25);
 }
 
 .calendar {
@@ -329,6 +329,8 @@ export default {
 
 .calendar h3 {
   margin: 0 10px;
+  width: 150px;
+  text-align: center;
 }
 
 .selection {

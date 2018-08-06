@@ -1415,7 +1415,8 @@ export default {
       department: "部门",
       other: "其它",
       tool: "工具",
-      tutorial: "教程"
+      tutorial: "教程",
+      sales: "营业额"
     },
     title: {
       store: "店面基本资料",
@@ -1427,7 +1428,10 @@ export default {
       table: "堂吃下单设定",
       other: "其它设定",
       timecard: "打卡设定",
-      delivery: "送餐相关设定"
+      delivery: "送餐相关设定",
+      payroll: "工资单列表",
+      batch: "过账记录",
+      salesSummary: "营业额总览"
     },
     receiptDialog: "打印收据",
     others: "其它设置",
@@ -1736,6 +1740,7 @@ export default {
     payrolls: "打卡工资单列表",
     noForward: "不转向其它工作站",
     forwardToStation: "转向 {i} 工作站",
+    terminalBatchRecords: "信用卡终端过账记录",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",
@@ -1754,7 +1759,7 @@ export default {
     },
     peak: {
       idle: "空闲",
-      normal:"比较空闲",
+      normal: "比较空闲",
       busy: "忙碌",
       rush: "非常忙碌",
       fullHouse: "满座"

@@ -22,7 +22,7 @@
                 <div class="opt">
                     <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.remove')}}</span>
                 </div>
-                <button class="btn" @click="confirm" :disabled="department.contain.length === 0">{{$t( init.edit ? 'button.save':'button.create')}}</button>
+                <button class="btn" @click="confirm" :disabled="department.contain.length === 0 || !department.usEN">{{$t( init.edit ? 'button.save':'button.create')}}</button>
             </footer>
         </div>
     </div>
@@ -56,6 +56,7 @@ export default {
       return !this.selected.includes(category);
     },
     confirm() {
+      if (!this.department.zhCN) this.department.zhCN = this.department.usEN;
       this.init.resolve(this.department);
     }
   }

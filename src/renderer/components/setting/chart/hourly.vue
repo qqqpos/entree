@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="chart">
+    <header class="date-picker">
       <div class="f1">
           <h3>{{$t('title.hourlySaleSummary')}}</h3>
           <p>Hourly sales Summary</p>

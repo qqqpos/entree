@@ -6,7 +6,7 @@
                 <h3>{{$t('setting.title.indexing')}}</h3>
             </div>
         </header>  
-            <toggle title="text.enable" v-model="enable" @input="index" :disabled="true"></toggle>
+            <toggle title="text.enable" v-model="enable" @input="index"></toggle>
         </div>
     </div>
 </template>
@@ -23,8 +23,7 @@ export default {
   },
   methods: {
     index() {
-      console.log("toggle");
-      this.$socket.emit("[INDEX] START");
+      this.$socket.emit("[INDEX] CREATE");
     }
   }
 };

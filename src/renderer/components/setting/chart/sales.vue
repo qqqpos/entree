@@ -1,9 +1,9 @@
 <template>
   <div>
-    <header class="chart">
+    <header class="date-picker">
       <div class="f1">
-          <h3>{{$t('title.dailySaleSummary')}}</h3>
-          <p>Sales Summary</p>
+          <h3>{{$t('setting.title.dailySales')}}</h3>
+          <p>Period Sales Summary</p>
       </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
@@ -139,7 +139,7 @@ export default {
       });
 
       //this.analyzeData({ labels, data });
-    },
+    }
 
     // analyzeData({ labels, data }) {
     //   if (data.length === 0) {
@@ -195,10 +195,6 @@ export default {
 </script>
 
 <style scoped>
-.chart {
-  background: #fff;
-}
-
 thead th {
   background: #607d8b;
   color: #fff;

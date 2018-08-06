@@ -509,7 +509,7 @@ export default new Router({
                 {
                   path: "/",
                   name: "Setting.sales",
-                  component: require("../components/setting/sales/revenue")
+                  component: require("../components/setting/sales/sales")
                 },
                 {
                   path: "giftcard",
