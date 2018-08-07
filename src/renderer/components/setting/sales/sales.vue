@@ -9,7 +9,7 @@
     </header>
     <div class="summary-wrap">
       <section class="list">
-
+        <daily v-for="(date,index) in dates" :key="index" :sales="date"></daily>
       </section>
       <section class="overview">
 
@@ -19,31 +19,33 @@
 </template>
 
 <script>
+import daily from "./helper/daily";
 import loader from "../../common/loader";
 import datePicker from "../common/datePicker";
 
 export default {
-  components: { loader, datePicker },
+  components: { daily, loader, datePicker },
   data() {
     return {
       componentData: null,
       component: null,
-      ledgers: []
+      indexed: false,
+      dates: []
     };
   },
+  created() {
+    this.indexed = this.$store.getters.config.database.index;
+  },
   methods: {
-    fetchData([from, to]) {
-      this.$socket.emit(
-        "[REPORT] INITIAL_DATA",
-        {
-          from: +from,
-          to: +to
-        },
-        payrolls => {
-          this.payrolls = payrolls;
-          this.analyze();
-        }
-      );
+    fetchData([from, to], group = "DAILY") {
+      this.indexed &&
+        this.$socket.emit(
+          "[REPORT] DAILY",
+          { from: +from, to: +to, group },
+          dates => {
+            this.dates = dates.sort((a, b) => a.time > b.time);
+          }
+        );
     }
   }
 };

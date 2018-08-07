@@ -188,7 +188,6 @@ export default {
     "Order Combined": "被合并至 #{i}"
   },
   dock: {
-    missInfo: "缺少资料",
     clockIn: "打卡上班",
     clockOut: "打卡下班",
     giftCard: "礼物卡",
@@ -240,7 +239,6 @@ export default {
     hold: "延迟",
     modify: "修改",
     exit: "退出",
-    setDriver: "设定司机",
     language: "语言",
     confirm: "确定",
     cancel: "取消",
@@ -355,7 +353,6 @@ export default {
     search: "搜索",
     stats: "数据",
     voidNote: "作废原因",
-    databaseHealth: "数据库健康",
     operators: "员工列表",
     setDriver: "设定司机",
     timecard: "打卡记录",
@@ -378,7 +375,7 @@ export default {
     payLog: "付款记录",
     setTips: "调整小费",
     report: "报表",
-    paymentHistory: "付款交易记录",
+    paymentHistory: "付款记录",
     customerList: "客户列表",
     callList: "来电记录",
     profile: "用户资料",
@@ -418,7 +415,6 @@ export default {
     ticketProfile: "订单信息",
     reportTip: "上报本次小费",
     giftcardSummary: "礼物卡概览",
-    dailySaleSummary: "每日销售总数",
     hourlySaleSummary: "每小时销售总数",
     evenSplit: "订单均分",
     refund: "退款金额",
@@ -613,7 +609,7 @@ export default {
     itemRestricted: "{i} 被限制",
     itemNotAvailable: "此物品无法在 {i} 使用",
     itemNotAvailableNow: "此物品只能在 {i} 到 {i} 之间使用",
-    holidayOnly: "此物品只能在法定节假日时使用",
+    holidayOnly: "此物品只能在节假日时使用",
     addressMismatch: "地址不一致",
     replaceAddressConfirm: "是否要将地址 {i} 替换成 {i} ?",
     invalidDate: "日期错误",
@@ -931,12 +927,6 @@ export default {
     lapse: "历时",
     action: "操作",
     todo: "完成",
-    currentWeek: "本周",
-    lastWeek: "上周",
-    currentMonth: "本月",
-    lastMonth: "上个月",
-    currentQuarter: "本季度",
-    firstHalf: "上半年",
     start: "开始",
     end: "结束",
     workHour: "工时",
@@ -967,7 +957,6 @@ export default {
     address: "地址",
     name: "名字",
     count: "计数",
-    lastUpdate: "最后一次",
     type: "类别",
     station: "工作站",
     for: "用于",
@@ -980,9 +969,7 @@ export default {
     location: "位置",
     condition: "条件",
     terminal: "终端",
-    baseWage: "基础时薪",
-    totalWorkTime: "总工时",
-    validWorkTime: "有效工时"
+    baseWage: "基础时薪"
   },
   flow: {
     START: "初始金额",
@@ -1416,7 +1403,8 @@ export default {
       other: "其它",
       tool: "工具",
       tutorial: "教程",
-      sales: "营业额"
+      sales: "营业额",
+      printers: "打印机"
     },
     title: {
       store: "店面基本资料",
@@ -1431,7 +1419,8 @@ export default {
       delivery: "送餐相关设定",
       payroll: "工资单列表",
       batch: "过账记录",
-      salesSummary: "营业额总览"
+      salesSummary: "营业额总览",
+      database: "数据库设定"
     },
     receiptDialog: "打印收据",
     others: "其它设置",
@@ -1639,7 +1628,9 @@ export default {
     extraInfo: "额外信息",
     pageFaults: "页错误次数",
     resident: "物理内存",
-    virtual: "虚拟内存"
+    virtual: "虚拟内存",
+    autoBackup: "自动备份数据库",
+    index: "自动索引"
   },
   print: {
     printTicket: "订单打印",
@@ -1741,6 +1732,7 @@ export default {
     noForward: "不转向其它工作站",
     forwardToStation: "转向 {i} 工作站",
     terminalBatchRecords: "信用卡终端过账记录",
+    databaseBackupPath: "数据库备份路径",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

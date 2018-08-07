@@ -3,27 +3,65 @@
         <div class="tab-content">
         <header class="nav">
             <div class="title">
-                <h3>{{$t('setting.title.indexing')}}</h3>
+                <h3>{{$t('setting.title.database')}}</h3>
             </div>
         </header>  
-            <toggle title="text.enable" v-model="enable" @input="index"></toggle>
+            <toggle title="database.index" v-model="database.index" @input="toggleIndex"></toggle>
+            <toggle title="database.autoBackup" v-model="database.backup" @input="updateBackup">
+              <transition name="dropdown">
+                <div v-if="database.backup" class="opt">
+                  <external title="tip.databaseBackupPath" @open="showDialog"></external>
+                </div>
+              </transition>
+            </toggle>
         </div>
     </div>
 </template>
 
 <script>
 import toggle from "../common/toggle";
+import external from "../common/external";
 
 export default {
-  components: { toggle },
+  components: { toggle, external },
   data() {
     return {
-      enable: false
+      database: {}
+    };
+  },
+  created() {
+    this.database = this.$store.getters.config.database || {
+      index: false,
+      backup: false,
+      backupPath: ""
     };
   },
   methods: {
-    index() {
-      this.$socket.emit("[INDEX] CREATE");
+    update(data) {
+      this.$socket.emit("[CONFIG] UPDATE", data);
+    },
+    toggleIndex(enable) {
+      this.update({
+        key: "database.index",
+        value: enable
+      });
+
+      enable && this.$socket.emit("[INDEX] CREATE", { ALL: true });
+    },
+    updateBackup(value) {
+      this.update({
+        key: "database.backup",
+        value
+      });
+    },
+    showDialog() {
+      const { dialog } = this.$electron.remote;
+
+      const directory = dialog.showOpenDialog({
+        properties: ["openFile", "openDirectory"]
+      });
+
+      Object.assign(this.database, { backupPath: directory[0] });
     }
   }
 };

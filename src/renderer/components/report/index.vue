@@ -263,11 +263,11 @@ export default {
       this.init.resolve();
     },
     fetchData() {
-      return new Promise(next => {
-        this.$socket.emit("[REPORT] INITIAL_DATA", this.reportRange, data => {
-          next(data);
-        });
-      });
+      return new Promise(next =>
+        this.$socket.emit("[REPORT] INITIAL_DATA", this.reportRange, data =>
+          next(data)
+        )
+      );
     },
     dataAnalysis(range, data) {
       return new Promise(next => {

@@ -80,10 +80,6 @@ header {
   align-items: baseline;
 }
 
-header i {
-  color: #666;
-}
-
 .name {
   width: 215px;
   font-weight: bold;

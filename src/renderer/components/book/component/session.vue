@@ -4,7 +4,7 @@
             <div class="session" v-for="(books,frame) of session" :key="frame">
                 <div class="time">{{hour + frame}}</div>
                 <div class="books" ref="children">
-                    <div class="details" v-for="(book,i) in books" :key="i" @click="$emit('select',book)">
+                    <div class="content" v-for="(book,i) in books" :key="i" @click="$emit('select',book)">
                         <h5>{{book.name}}</h5>
                         <h5 class="phone">{{book.phone | phone}}</h5>
                         <p>
@@ -131,7 +131,7 @@ export default {
   padding: 0 5px;
 }
 
-.details {
+.content {
   padding: 8px;
   margin: 5px;
   width: 100px;
@@ -148,7 +148,7 @@ export default {
   color: #fff;
 }
 
-.details p {
+.content p {
   display: flex;
   border-top: 1px solid #eee;
   margin-top: 3px;
@@ -158,7 +158,7 @@ export default {
   justify-content: space-between;
 }
 
-.details h5 {
+.content h5 {
   text-align: left;
   height: 20px;
   line-height: 20px;

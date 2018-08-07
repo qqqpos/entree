@@ -486,12 +486,12 @@ export default {
         }
       } else {
         if (done) {
-          this.resetAll();
           this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
         } else {
           this.$router.push({ path: "/main" });
         }
+        this.resetAll();
       }
     },
     quit() {

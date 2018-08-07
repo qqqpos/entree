@@ -196,7 +196,6 @@ export default {
     "Order Combined": "Combined To #{i}"
   },
   dock: {
-    missInfo: "Miss Info",
     clockIn: "Clock In",
     clockOut: "Clock Out",
     giftCard: "Gift Card",
@@ -248,7 +247,6 @@ export default {
     hold: "Hold",
     modify: "Modify",
     exit: "Exit",
-    setDriver: "Set Driver",
     language: "Language",
     confirm: "Confirm",
     cancel: "Cancel",
@@ -382,12 +380,6 @@ export default {
     lapse: "Lapse",
     action: "Action",
     todo: "Todo",
-    currentWeek: "Current Week",
-    lastWeek: "Last Week",
-    currentMonth: "Current Month",
-    lastMonth: "Last Month",
-    currentQuarter: "Current Quarter",
-    firstHalf: "First Half",
     start: "Start",
     end: "End",
     workHour: "Work Hour",
@@ -418,7 +410,6 @@ export default {
     address: "Address",
     name: "Name",
     count: "Count",
-    lastUpdate: "Last Update",
     type: "Type",
     station: "Station",
     for: "For",
@@ -431,9 +422,7 @@ export default {
     location: "Location",
     condition: "Condition",
     terminal: "Terminal",
-    baseWage: "Base Wage",
-    totalWorkTime: "Total Work Time",
-    validWorkTime: "Valid Work Time"
+    baseWage: "Base Wage"
   },
   flow: {
     START: "Deposit",
@@ -449,7 +438,6 @@ export default {
     search: "Search",
     stats: "Stats",
     voidNote: "Void Note",
-    databaseHealth: "Database Health Report",
     operators: "Employees",
     setDriver: "Set Driver",
     timecard: "Timecard Records",
@@ -512,7 +500,6 @@ export default {
     ticketProfile: "Ticket Info",
     reportTip: "Report Tips",
     giftcardSummary: "Gift Card Summary",
-    dailySaleSummary: "Daily Sales Summary",
     hourlySaleSummary: "Hourly Sales Summary",
     evenSplit: "Ticket Even Split",
     refund: "Refund Amount",
@@ -1427,7 +1414,8 @@ export default {
       other: "Others",
       tool: "Tool",
       tutorial: "Tutorial",
-      sales: "Sales"
+      sales: "Sales",
+      printers: "Printers"
     },
     title: {
       store: "Store Information",
@@ -1442,7 +1430,8 @@ export default {
       delivery: "Delivery Related Setting",
       payroll: "Payroll list",
       batch: "Batch Records",
-      salesSummary: "Sales Summary"
+      salesSummary: "Sales Summary",
+      database: "Database Setting"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",
@@ -1647,7 +1636,9 @@ export default {
     extraInfo: "Extra Information",
     pageFaults: "Page Faults",
     resident: "Physical Memory",
-    virtual: "Virtual Memory"
+    virtual: "Virtual Memory",
+    autoBackup: "Auto Backup Database",
+    index: "Auto Index"
   },
   print: {
     printTicket: "Print Ticket",
@@ -1750,6 +1741,7 @@ export default {
     noForward: "No Forwarding",
     forwardToStation: "Forwarding to {i}",
     terminalBatchRecords: "Credit card terminal batch records",
+    databaseBackupPath: "Database Backup Path",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

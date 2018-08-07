@@ -1,11 +1,11 @@
 <template>
-    <div class="relative" v-outer-click="close">
-        <div class="button" @click="toggle">
+    <div class="date-picker" v-outer-click="closeDialog">
+        <div class="button" @click="toggleCalendar">
             <i class="far fa-calendar-alt"></i>
             <span class="text">{{$t('report.'+range)}}</span>
             <i class="fa fa-sort"></i>
         </div>
-        <div class="dialog" v-show="visible">
+        <div class="dialog" v-show="calendarVisible">
             <div class="calendar">
                 <header>
                     <i class="fa fa-chevron-left mini-btn" @click="prev"></i>
@@ -37,20 +37,28 @@
                 <button class="btn" @click="apply">{{$t('button.view')}}</button>
             </div>
         </div>
+        <template v-if="groupable">
+          <div class="button" @click="toggleGroup"></div>
+        </template>
     </div>
 </template>
 
 <script>
 export default {
-  props: ["init"],
+  props: ["init", "groupable"],
   data() {
     return {
       range: "today",
       temp: "today",
-      visible: false,
+      calendarVisible: false,
+      groupVisible: false,
       date: moment(),
       calendar: [],
       dates: [moment().startOf("day"), moment().endOf("day")],
+      groups: ["daily", "weekly", "monthly", "quarterly"].map(text => ({
+        label: this.$t("report." + text),
+        value: text
+      })),
       presets: [
         "today",
         "currentWeek",
@@ -65,19 +73,32 @@ export default {
   },
   created() {
     this.range = this.init || "today";
+    this.setRange(this.range);
     this.initialCalendar();
   },
   mounted() {
     this.apply();
   },
   methods: {
-    close() {
-      this.visible = false;
+    toggleCalendar() {
+      this.calendarVisible
+        ? this.closeCalendar()
+        : (this.calendarVisible = true);
+    },
+    toggleGroup() {
+      this.groupVisible ? this.closeGroup() : (this.groupVisible = true);
+    },
+    closeCalendar() {
+      this.calendarVisible = false;
       this.range = this.temp;
       this.setRange(this.temp);
     },
-    toggle() {
-      this.visible ? this.close() : (this.visible = true);
+    closeGroup() {
+      this.groupVisible = false;
+    },
+    closeDialog(){
+      this.closeCalendar();
+      this.closeGroup();
     },
     apply() {
       switch (this.range) {
@@ -156,7 +177,7 @@ export default {
         default:
       }
 
-      this.visible = false;
+      this.calendarVisible = false;
       this.temp = this.range;
     },
     prev() {
@@ -273,6 +294,11 @@ export default {
 </script>
 
 <style scoped>
+.date-picker {
+  display: flex;
+  position: relative;
+}
+
 .button {
   padding: 10px;
 }

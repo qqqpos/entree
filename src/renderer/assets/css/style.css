@@ -1125,6 +1125,15 @@ thead.title td {
   height: 58px;
 }
 
+.details {
+  display: flex;
+  padding: 15px;
+  margin: 5px 10px;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
 
 /* style overwrite */
 .timeSession .title,
