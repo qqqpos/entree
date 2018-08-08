@@ -64,19 +64,20 @@
         </div>
       </section>
     </div>
-    <div :is="component" :init="componentData" @reload="fetchData" @refresh="fetchData"></div>
+    <div :is="component" :init="componentData" @reload="fetchData" @refresh="fetchData" :alert="hourOverAlert" :display="loading"></div>
   </div>
 </template>
 
 <script>
 import dialogModule from "../../../common/dialog";
 import datePicker from "../../common/datePicker";
+import loader from "../../../common/loader";
 import payroll from "../component/payroll";
 import slider from "../../common/slider";
 import viewer from "../component/viewer";
 
 export default {
-  components: { dialogModule, datePicker, payroll, viewer, slider },
+  components: { dialogModule, datePicker, payroll, viewer, slider, loader },
   data() {
     return {
       config: this.$store.getters.store.timecard,
@@ -85,6 +86,7 @@ export default {
       componentData: null,
       component: null,
       reversed: false,
+      loading: true,
       payrolls: [],
       payables: [],
       range: [],
@@ -210,6 +212,8 @@ export default {
         .catch(this.exitComponent);
     },
     fetchData(range) {
+      this.loading = true;
+      this.$open("loader");
       range = range || this.range;
       const [from, to] = range;
 
@@ -221,6 +225,7 @@ export default {
         },
         payrolls => {
           this.payrolls = payrolls;
+          this.loading = false;
           this.analyze();
         }
       );
@@ -325,6 +330,7 @@ header {
   height: 682px;
   overflow: hidden;
 }
+
 section.list {
   flex: 1;
   padding: 15px;

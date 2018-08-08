@@ -1135,6 +1135,18 @@ thead.title td {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+.details .date {
+  font-weight: bold;
+  margin-right: 5px;
+  min-width: 90px;
+}
+
+.details .decimal {
+  margin-right: 15px;
+  font-family: "Agency FB";
+  font-weight: bold;
+}
+
 /* style overwrite */
 .timeSession .title,
 .timeSession label {

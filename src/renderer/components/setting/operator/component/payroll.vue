@@ -91,11 +91,10 @@ header {
 }
 
 .pay {
-  margin-right: 10px;
+  margin-right: 15px;
   color: #009688;
   font-family: "Agency FB";
   font-weight: bold;
-  width: 65px;
 }
 
 .detail {

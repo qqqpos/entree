@@ -1122,7 +1122,8 @@ export default {
     },
     save() {
       this.setOrder(this.invoice);
-      this.$socket.emit("[ORDER] UPDATE", this.invoice, false);
+      this.$route.name !== "Menu" &&
+        this.$socket.emit("[ORDER] UPDATE", this.invoice, false);
       this.exitPaymentModule();
     },
     setSplit(number) {

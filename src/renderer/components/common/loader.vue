@@ -25,7 +25,7 @@ export default {
 <style scoped>
 .circularLoader {
   position: absolute;
-  z-index: 1000;
+  z-index: 10;
   background-color: hsla(0, 0%, 100%, 0.9);
   margin: 0;
   top: 0;

@@ -4,6 +4,7 @@
             <div class="form">
                 <header>
                     <h3>{{$t("title.book")}}</h3>
+                    <p class="estimate">{{$t('tip.estimateWaitTime',currentWaitTime)}}</p>
                 </header>
                 <section>
                     <h5>{{$t('booking.date')}}</h5>
@@ -114,7 +115,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-//import Holiday from "moment-holiday";
 import dialogModule from "../common/dialog";
 import timePicker from "./helper/timePicker";
 import reservation from "./component/reservation";
@@ -131,6 +131,7 @@ export default {
       component: null,
       componentData: null,
       calendarDate: moment().subtract(4, "h"),
+      currentWaitTime: "N/A",
       book: {
         type: "WALK_IN",
         date: today(),
@@ -167,7 +168,7 @@ export default {
   },
   filters: {
     isHoliday(date) {
-      return util.isHoliday(date); //Holiday(date).isHoliday() ? Holiday(date).isHoliday() : "";
+      return util.isHoliday(date);
     }
   },
   computed: {
@@ -226,7 +227,7 @@ export default {
     },
     openTimePicker() {
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject };
+        this.componentData = { resolve, reject, date: this.book.date };
         this.component = "timePicker";
       })
         .then(time => {
@@ -347,10 +348,16 @@ export default {
   border-right: 1px solid #e0e0e0;
 }
 
-.form h3 {
-  text-align: left;
-  padding: 20px 0 15px 20px;
+header {
+  padding: 12px 0 5px 20px;
   border-bottom: 10px solid #009688;
+  text-align: left;
+}
+
+p.estimate{
+  font-size: 0.8em;
+  margin-top: 4px;
+  opacity: 0.7;
 }
 
 h5 {

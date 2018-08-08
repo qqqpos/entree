@@ -1733,6 +1733,7 @@ export default {
     forwardToStation: "转向 {i} 工作站",
     terminalBatchRecords: "信用卡终端过账记录",
     databaseBackupPath: "数据库备份路径",
+    estimateWaitTime: "预计等待时间为 {i} 分钟",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

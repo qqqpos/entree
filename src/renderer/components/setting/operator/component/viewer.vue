@@ -14,7 +14,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(record,index) in init.payroll.timecard" :key="index" :class="{settled:record.settled}">
+          <tr v-for="(record,index) in init.payroll.timecard" :key="index" :class="{settled:record.settled,alert:check(record.clockIn,record.clockOut)}">
             <td class="status">
               <i class="fa fa-check-circle" v-if="record.valid"></i>
               <i class="fa fa-exclamation-circle" v-else></i>
@@ -58,7 +58,7 @@ import editor from "./timecardEditor";
 import dialogModule from "../../../common/dialog";
 
 export default {
-  props: ["init"],
+  props: ["init", "alert"],
   components: { editor, dialogModule },
   data() {
     return {
@@ -107,6 +107,9 @@ export default {
           this.exitComponent();
         })
         .catch(this.exitComponent);
+    },
+    check(clockIn, clockOut) {
+      return Math.ceil((clockOut - clockIn) / 3.6e6) > this.alert;
     }
   }
 };
@@ -202,6 +205,10 @@ tfoot tr {
 tr.settled {
   filter: grayscale(0.8) opacity(0.5);
   pointer-events: none;
+}
+
+.alert {
+  background: #ef9a9a;
 }
 </style>
 

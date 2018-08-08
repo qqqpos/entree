@@ -3,7 +3,7 @@
         <div class="editor">
           <header>
               <div>
-                  <h3>{{$t('title.timer')}}</h3>
+                  <h3>{{$t('thead.time')}}</h3>
               </div>
             </header>
             <div class="banner"></div>
@@ -38,7 +38,7 @@
             </div>
             <div class="popular-hour">
               <div class="bars">
-                <div class="bar" v-for="(value,hour,index) in popular" :key="index" :style="{height:value+'px'}" :data-hour="hour" @click="setHour(hour)" :data-desc="getDetail(hour)"></div>
+                <div class="bar" v-for="(count,hour,index) in popular" :key="index" :style="{height:count+'px'}" :data-hour="hour" @click="setHour(hour)" :data-desc="getDetail(hour)"></div>
               </div>
               <div class="hours">
                 <div class="hour" v-for="(value,hour,index) in popular" :key="'h'+index" :data-hour="hour" :class="{time:hour % 3=== 0}"></div>
@@ -63,24 +63,7 @@ export default {
   components: { switches },
   data() {
     return {
-      popular: {
-        9: 0,
-        10: 0,
-        11: 32,
-        12: 43,
-        13: 33,
-        14: 50,
-        15: 31,
-        16: 70,
-        17: 30,
-        18: 56,
-        19: 47,
-        20: 70,
-        21: 75,
-        22: 38,
-        23: 40,
-        24: 0
-      },
+      popular: {},
       militaryTime: true,
       timer: moment(),
       time: null
@@ -88,6 +71,7 @@ export default {
   },
   created() {
     this.generate();
+    this.processIndexData();
   },
   methods: {
     addHour(t, reset) {
@@ -140,16 +124,55 @@ export default {
       dom = document.querySelector(`[data-hour='${hour}'].bar`);
       dom && dom.classList.add("active");
     },
+    processIndexData() {
+      this.$socket.emit("[POPULAR] GET_HOURLY", this.init.date, data => {
+        const stats = data.reduce((a, c) => {
+          Object.keys(c.hourly).forEach(hour => {
+            if (a[hour]) {
+              a[hour].sales += parseInt(c.hourly[hour].salesTotal);
+              a[hour].count += c.hourly[hour].dineInCount;
+              a[hour].guest += c.hourly[hour].dineInGuest;
+              a[hour].time += c.hourly[hour].dineInTime;
+            } else {
+              a[hour] = {
+                sales: parseInt(c.hourly[hour].salesTotal),
+                count: c.hourly[hour].dineInCount,
+                guest: c.hourly[hour].dineInGuest,
+                time: c.hourly[hour].dineInTime
+              };
+            }
+          });
+
+          return a;
+        }, {});
+        const hours = Object.keys(stats);
+        const popular = {};
+
+        hours.forEach(time => {
+          popular[time] = stats[time].count;
+        });
+        const maxPopular = Object.values(popular).reduce(
+          (a, c) => (a > c ? a : c),
+          0
+        );
+
+        const ratio = 80 / maxPopular;
+
+        hours.forEach(hour => {
+          popular[hour] = Math.floor(popular[hour] * ratio);
+        });
+
+        this.popular = popular;
+
+        this.$nextTick(this.focus);
+      });
+    },
     getDetail(hour) {
       const target = this.popular[hour];
-      if (!target) return "No-data";
-
       const data = Object.values(this.popular).filter(v => v > 0);
       const average = data.reduce((a, c) => a + c, 0) / data.length;
 
       if (target > average * 1.7) {
-        return this.$t("tip.peak.fullHouse");
-      } else if (target > average * 1.3) {
         return this.$t("tip.peak.rush");
       } else if (target > average * 1) {
         return this.$t("tip.peak.busy");
@@ -196,7 +219,7 @@ export default {
 .bar {
   flex: 1;
   margin-right: 1px;
-  border-radius: 6px 6px 0 0;
+  border-radius: 3px 3px 0 0;
   background: linear-gradient(to bottom, #64c9ff, #1c92d2);
   position: relative;
   transition: background-color 0.3s ease-out;

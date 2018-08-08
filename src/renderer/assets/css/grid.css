@@ -118,3 +118,28 @@
     box-shadow: -2px 0 6px -5px;
     height: calc(100vh - 50px);
 }
+
+.summary-wrap .overview h3{
+    padding: 15px 5px 5px;
+}
+
+.summary-wrap .overview p {
+  padding: 5px 10px;
+  display: flex;
+}
+
+.summary-wrap .group {
+    margin: 10px 0;
+    background: #eceff1;
+    border-radius: 6px;
+}
+  
+.summary-wrap .group h4 {
+    padding: 6px 0 2px;
+}
+
+.summary-wrap .value {
+    font-family: "Agency FB";
+    font-weight: bold;
+    color: #4b5086;
+  }

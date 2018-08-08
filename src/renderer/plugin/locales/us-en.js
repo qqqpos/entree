@@ -1729,8 +1729,7 @@ export default {
     foundRecords: "Found {i} records",
     forGiftCard: "Gift Card ( {i} )",
     payout: "Detail note on purchasing",
-    receiptDefaultAction:
-      "Default action for receipt dialog after each settlement",
+    receiptDefaultAction: "Default action for receipt dialog after each settlement",
     alwaysAskReceipt: "Always prompt dialog",
     doNotPrintReceipt: "Never print receipt",
     alwaysPrintReceipt: "Always print receipt",
@@ -1742,6 +1741,7 @@ export default {
     forwardToStation: "Forwarding to {i}",
     terminalBatchRecords: "Credit card terminal batch records",
     databaseBackupPath: "Database Backup Path",
+    estimateWaitTime: "Estimate wait time: {i} Minutes",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",
