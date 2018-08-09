@@ -8,8 +8,11 @@
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
     <div class="summary-wrap">
-      <section class="list">
+      <section class="list" v-if="dates.length">
         <daily v-for="(date,index) in dates" :key="index" :sales="date"></daily>
+      </section>
+      <section class="list empty" v-else>
+        No Data
       </section>
       <section class="overview">
          <div class="wrap relative">
@@ -18,10 +21,24 @@
             <span class="f1">Days</span>
             <span class="value">{{summary.days}}</span>
           </p>
-          <p>
-            <span class="f1">Sales Total</span>
-            <span class="value">$ {{summary.salesTotal | decimal}}</span>
-          </p>
+          <div class="group">
+            <p>
+              <span class="f1">Item Sales</span>
+              <span class="value">$ {{summary.subtotal | decimal}}</span>
+            </p>
+            <p>
+              <span class="f1">Sales Tax</span>
+              <span class="value">$ {{summary.tax | decimal}}</span>
+            </p>
+            <p>
+              <span class="f1">Discount</span>
+              <span class="value">$ {{summary.discount | decimal}}</span>
+            </p>
+            <p>
+              <span class="f1">Sales Total</span>
+              <span class="value">$ {{summary.total | decimal}}</span>
+            </p>
+          </div>
           <div class="group">
             <p>
               <span class="f1"></span>
@@ -93,12 +110,21 @@ export default {
   computed: {
     summary() {
       const days = this.dates.length;
-      const salesTotal = this.dates.reduce(
-        (a, c) => a + c.summary.sales.total,
-        0
-      );
+      let subtotal = 0;
+      let tax = 0;
+      let discount = 0;
+      let rounding = 0;
+      let total = 0;
 
-      return { days, salesTotal };
+      this.dates.forEach(date => {
+        subtotal += date.summary.sales.subtotal;
+        tax += date.summary.sales.tax;
+        discount += date.summary.sales.discount;
+        rounding == date.summary.sales.rounding;
+        total += date.summary.sales.total;
+      });
+
+      return { days, subtotal, tax, discount, total };
     }
   }
 };

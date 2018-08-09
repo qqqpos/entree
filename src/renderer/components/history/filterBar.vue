@@ -171,7 +171,9 @@ export default {
 
       invoices.forEach(({ type, modify, status, settled, payment, server }) => {
         servers.add(server);
-        const { balance } = payment;
+        const { subtotal, tax, discount } = payment;
+        const balance = toFixed(subtotal + tax - discount, 2);
+
         if (status === 1) {
           //if not void
           filters["ALL_INVOICES"].count++;

@@ -1172,7 +1172,6 @@ export default {
     coupon: "优惠",
     tipPercentage: "小费百分比",
     openFood: "临时物品",
-    alphabetical: "按字母排列",
     maxItem: "选择上限",
     overCharge: "额外价格",
     subItemGroup: "子菜单组",
@@ -1435,6 +1434,7 @@ export default {
       instantPay: "快速付款",
       autoStack: "自动叠加",
       matchQty: "物品数量对齐",
+      menuSort: "菜单物品排列方式"
     },
     taxBeforeDiscount: "折扣前征税",
     taxBeforeCredit: "积分前征税",
@@ -1711,7 +1711,6 @@ export default {
     insertTemplateItem: "永远添加选中的物品",
     dynamicPrint: "根据所选的子物品的打印配置的集合打印",
     autoJumpNext: "满足条件时自动转跳到下一页",
-    alphabetical: "按字母排序菜单 (中文则按拼音排序)",
     reportBeforeBatch: "过账前是否详细的打印每笔交易信息",
     lockWhenCompleteOrder: "完成订单之后锁定界面",
     doNotAskReceiptAfterSettle: "结账之后不弹出收据打印确认框",
@@ -1839,6 +1838,13 @@ export default {
     averageTipAmount: "人均小费",
     previousPayout: "已结款",
     currentPayout: "本次工资出款"
+  },
+  sort: {
+    DEFAULT: "默认排版",
+    ID: "按菜单号",
+    ALPHABETICAL: "按字母",
+    PINYIN: "按拼音",
+    PRICE: "按价格"
   },
   spec: {
     version: "版本号",

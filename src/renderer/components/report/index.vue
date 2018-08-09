@@ -208,6 +208,7 @@ export default {
           break;
       }
       this.reportRange = { from, to };
+      console.log(from,to)
     },
     openCalendar() {
       new Promise((resolve, reject) => {
@@ -216,6 +217,7 @@ export default {
       })
         .then(date => {
           this.reportRange = date;
+          console.log(this.reportRange)
           this.exitComponent();
         })
         .catch(() => {

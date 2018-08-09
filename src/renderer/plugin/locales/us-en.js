@@ -1185,7 +1185,6 @@ export default {
     coupon: "Coupon",
     tipPercentage: "Tip Percentage",
     openFood: "Open Food",
-    alphabetical: "Alphabetical",
     maxItem: "Max Item",
     overCharge: "Extra Chrg.",
     records: "{i} Records",
@@ -1445,6 +1444,7 @@ export default {
       instantPay: "Instant Pay",
       autoStack: "Auto Stack",
       matchQty: "Match Quantity",
+      menuSort: "Menu Item Sort By"
     },
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Discount",
@@ -1719,7 +1719,6 @@ export default {
     insertTemplateItem: "Always insert selected item to main item",
     dynamicPrint: "Dynamic select printer base on selected subitem",
     autoJumpNext: "Auto jump to next page when condition met",
-    alphabetical: "Sort menu item by alphabet",
     reportBeforeBatch: "Print each credit card transaction before batch report",
     lockWhenCompleteOrder: "Lock screen when complete order",
     doNotAskReceiptAfterSettle: 'Do not prompt "Print Receipt" dialog',
@@ -1853,6 +1852,13 @@ export default {
     averageTipAmount: "Average Tip Amount",
     previousPayout: "Previous Payout",
     currentPayout: "Current Payout Amount"
+  },
+  sort: {
+    DEFAULT: "By Default",
+    ID: "By Menu ID",
+    ALPHABETICAL: "By Alphabetical",
+    PINYIN: "By PinYin",
+    PRICE: "By Price"
   },
   spec: {
     version: "Version",

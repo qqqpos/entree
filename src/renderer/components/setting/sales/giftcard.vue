@@ -2,14 +2,13 @@
     <div>
       <header class="date-picker">
         <div class="f1">
-            <h3>{{$t('setting.title.cashFlow')}}</h3>
-            <p>{{$t('tip.cashflowList')}}</p>
+            <h3>{{$t('setting.title.giftcard')}}</h3>
+            <p>{{$t('tip.giftcardList')}}</p>
         </div>
-      <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
     <div class="summary-wrap">
       <section class="list">
-
+          <gift-card v-for="(giftcard,index) in cards" :key="index" :card="giftcard"></gift-card>
       </section>
       <section class="overview">
 
@@ -20,18 +19,17 @@
 
 <script>
 import datePicker from "../common/datePicker";
+import giftCard from "./helper/giftcard";
 
 export default {
-  components: { datePicker },
+  components: { datePicker, giftCard },
   data() {
     return {
       componentData: null,
       component: null,
-      records: []
+      cards: []
     };
   },
-  methods: {
-    fetchData() {}
-  }
+  methods: {}
 };
 </script>

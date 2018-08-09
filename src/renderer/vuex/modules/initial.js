@@ -88,21 +88,18 @@ const mutations = {
 
         Object.keys(format).forEach(key => {
             format[key].sort((a, b) => {
-                if (defaults.alphabetical) {
-                    // sort by a-z
-                    const hanz = !!a.zhCN.match(/[\u3400-\u9FBF]/);
-
-                    return hanz ?
-                        a.zhCN.localeCompare(b.zhCN, 'zh-Hans-CN', {
-                            sensitivity: 'accent'
-                        }) :
-                        a.usEN.localeCompare(b.usEN)
-
-                } else {
-                    // sort by item num
-                    return a.num > b.num ? 1 : -1
+                switch (defaults.menuSortBy) {
+                    case "ALPHABETICAL":
+                        return a.usEN.localeCompare(b.usEN);
+                    case "PINYIN":
+                        return a.zhCN.localeCompare(b.zhCN, 'zh-Hans-CN', { sensitivity: 'accent' })
+                    case "PRICE":
+                        return a.price > b.price ? 1 : -1
+                    case "ID":
+                        return (a.menuID || 0) > (b.menuID || 0) ? 1 : -1
+                    default:
+                        return a.num > b.num ? 1 : -1
                 }
-
             })
         })
 

@@ -20,6 +20,7 @@
     section.items div{
         font-size: 1.3vw;
         max-height: initial;
+        max-width: initial!important;
     }
 
     .category-wrap .category{
