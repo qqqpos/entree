@@ -1430,7 +1430,8 @@ export default {
       payroll: "Payroll list",
       batch: "Batch Records",
       salesSummary: "Sales Summary",
-      database: "Database Setting"
+      database: "Database Setting",
+      stationDevice: "Station Device"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",

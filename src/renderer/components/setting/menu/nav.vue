@@ -15,7 +15,7 @@
                     <span class="text">{{$t('nav.template')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.menu.config'}">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('nav.setting')}}</span>
                 </router-link>                
             </div>

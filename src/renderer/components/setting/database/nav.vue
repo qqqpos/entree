@@ -19,7 +19,7 @@
                     <span class="text">{{$t('nav.payout')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.database.config'}">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('nav.setting')}}</span>
                 </router-link>                    
             </div>

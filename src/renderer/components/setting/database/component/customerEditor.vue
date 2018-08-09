@@ -7,11 +7,14 @@
           <h3>{{$t('title.profile')}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer title="text.phone" v-model="customer.phone" mask="(###) ### - ####" :autoFocus="true"></inputer>
         <inputer title="text.name" v-model.trim="customer.name"></inputer>
         <inputer title="text.address" v-model.trim="customer.address"></inputer>
         <inputer title="text.city" v-model.trim="customer.city"></inputer>
+        <inputer title="text.email" v-model.trim="customer.email"></inputer>
+        <inputer title="text.dob" v-model="customer.dob" placeholder="MM-DD"></inputer>
       </div>
       <footer>
         <button class="btn" @click="confirm" :disabled="!valid">{{$t('button.confirm')}}</button>

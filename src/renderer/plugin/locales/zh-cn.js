@@ -1419,7 +1419,8 @@ export default {
       payroll: "工资单列表",
       batch: "过账记录",
       salesSummary: "营业额总览",
-      database: "数据库设定"
+      database: "数据库设定",
+      stationDevice:"工作站设备"
     },
     receiptDialog: "打印收据",
     others: "其它设置",

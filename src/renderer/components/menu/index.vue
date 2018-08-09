@@ -104,7 +104,6 @@ export default {
 
     if (this.archivedOrder) {
       const { session, table, tableID } = this.order;
-      //this.setApp({ newTicket: false });
       this.createOrderInstance(this.archivedOrder);
       this.setOrder({ ...this.archivedOrder, session, table, tableID });
       this.emptyArchiveOrder();
@@ -217,8 +216,10 @@ export default {
     },
     getItems(contain) {
       console.time("Flatten");
+      const lastIndex = contain.length - 1;
       let menu = [];
-      contain.forEach(category => {
+
+      contain.forEach((category, index) => {
         let items = (this.menu[category] || []).map(item => {
           if (this.favorites.includes(item._id)) {
             item = clone(item);
@@ -228,8 +229,13 @@ export default {
           return item;
         });
 
-        let align = 6 - items.length % 3;
-        if (align === 6) align = 3;
+        let align =
+          index !== lastIndex ? 6 - items.length % 3 : 3 - items.length % 3;
+
+        align =
+          index !== lastIndex
+            ? align === 6 ? 3 : align
+            : align === 3 ? 0 : align;
 
         Array(align)
           .fill()

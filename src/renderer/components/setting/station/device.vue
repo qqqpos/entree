@@ -2,7 +2,7 @@
     <div>
         <div class="tab-content">
             <header class="nav">
-              <h3 class="title">{{$t('setting.device')}}</h3>
+              <h3 class="title">{{$t('setting.title.stationDevice')}}</h3>
             </header>          
             <external title="setting.cashDrawer" @open="$router.push({ name: 'Setting.station.cashdrawer'})" :tooltip="station.cashDrawer.enable ? 'text.enable':'text.disable'"></external>
             <text-list title="setting.terminal" v-model="station.terminal" :opts="terminals" @update="updateTerminal"></text-list>

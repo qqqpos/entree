@@ -7,7 +7,7 @@
                     <span class="text">{{$t('nav.seat')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.dineIn.config'}">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('nav.setting')}}</span>
                 </router-link>      
             </div>

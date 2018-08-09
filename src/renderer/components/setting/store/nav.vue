@@ -3,7 +3,7 @@
         <ul class="nav">
             <div class="wrap">
                 <router-link tag="li" :to="{name:'Setting.store'}" exact>
-                    <i class="fa fa-home"></i>
+                    <i class="fas fa-store"></i>
                     <span class="text">{{$t('setting.nav.store')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.payment'}" exact>
@@ -27,7 +27,7 @@
                     <span class="text">{{$t('setting.nav.promotion')}}</span>
                 </router-link>
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('setting.nav.other')}}</span>
                 </router-link>                
             </div>

@@ -106,7 +106,8 @@ ul {
   background: #fff;
   width: 154px;
   z-index: 2;
-  border: 1px solid #fff;
+  border: 1px solid #f5f5f5;
+  border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.5);
 }
 

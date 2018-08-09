@@ -33,7 +33,7 @@
         <p>{{$t('setting.printTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.operator'}">
-        <i class="fa fa-2x fa-users"></i>
+        <i class="fas fa-2x fa-users-cog"></i>
         <figcaption>{{$t('setting.operator')}}</figcaption>
         <p>{{$t('setting.operatorTip')}}</p>
       </router-link>
