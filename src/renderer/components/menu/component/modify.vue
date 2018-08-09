@@ -219,6 +219,7 @@ export default {
         : single * this.item.qty * (this.discount / 100);
       let item = Object.assign({}, this.item, {
         single,
+        discount,
         price: [single],
         qty: ~~this.item.qty,
         total: (single * this.item.qty).toFixed(2)

@@ -10,7 +10,7 @@
             </div>
             <nav></nav>
         </header>
-        <checkbox title="setting.modify.less" v-model="operator.less" val="table" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.modify.less" v-model="operator.modify" val="less" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.discount" v-model="operator.modify" val="discount" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.price" v-model="operator.modify" val="price" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.item" v-model="operator.modify" val="item" :multiple="true" class="list"></checkbox>
