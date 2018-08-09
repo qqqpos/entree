@@ -786,8 +786,8 @@ export default {
     copyOrderContentConfirm: "Are you sure to copy items from the record?",
     addToOrderContent: "Additional Item",
     addToOrderContentConfirm: "Are you sure to copy item to the current list form the record?",
-    templateMissing: "Template {i} configuration is missing.",
-    unableTraceRecord: "Unable Trace",
+    templateMissing: "Template {i} configuration is missing. Please check the menu setting.",
+    unableTraceRecord: "Unable To Trace",
     recordMissingOrDeleted: "The change log is missing or deleted.",
     courseTime: "Course Time Confirm",
     courseTimeConfirm: "All items not set with time will print immediately."

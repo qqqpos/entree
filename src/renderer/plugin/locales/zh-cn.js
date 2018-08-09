@@ -699,7 +699,7 @@ export default {
     existOrderContentReplace: "您想要替换掉列表上已有的物品吗?",
     copyOrderContent: "重复下单",
     copyOrderContentConfirm: "您确定要从旧订单中复制所有的物品吗?",
-    templateMissing: "{i} 模版信息丢失!",
+    templateMissing: "无法找到 {i} 的模版信息, 请检查一下菜单设定!",
     unableTraceRecord: "无法追溯",
     recordMissingOrDeleted: "此订单的历史记录丢失或者已经被删除",
     courseTime: "确认出餐定时",

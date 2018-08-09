@@ -1,6 +1,6 @@
 <template>
   <div class="popupMask dark center" @click.self="init.reject">
-    <div class="editor">
+    <div class="editor" v-show="!component">
       <header>
         <div>
           <h5>{{template.name}}</h5>
@@ -117,8 +117,9 @@ export default {
     },
     templateFailed() {
       const prompt = {
+        type: "error",
         title: "dialog.somethingWrong",
-        msg: "dialog.templateMissing",
+        msg: ["dialog.templateMissing",this.init.side.template],
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
