@@ -2,7 +2,7 @@
     <div>
       <header class="date-picker">
         <div class="f1">
-            <h3>{{$t('setting.title.giftcard')}}</h3>
+            <h3>{{$t('setting.title.giftcardList')}}</h3>
             <p>{{$t('tip.giftcardList')}}</p>
         </div>
     </header>

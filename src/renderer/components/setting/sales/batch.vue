@@ -35,7 +35,7 @@
           <div class="group">
             <p>
               <span class="f1">Average Charge</span>
-              <span class="value">$ {{summary.transactionAverage}}</span>
+              <span class="value">$ {{summary.transactionAverage | decimal}}</span>
             </p>
           </div>   
           <p>
@@ -90,8 +90,8 @@ export default {
         0
       );
 
-      const transactionPerDay = Math.ceil(transactionCount / count);
-      const transactionAverage = toFixed(total / transactionCount, 2);
+      const transactionPerDay = Math.ceil(transactionCount / count) || 0;
+      const transactionAverage = toFixed(total / transactionCount, 2) || 0;
 
       return {
         count,

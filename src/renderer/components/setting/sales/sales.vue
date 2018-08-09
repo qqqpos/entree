@@ -11,8 +11,8 @@
       <section class="list" v-if="dates.length">
         <daily v-for="(date,index) in dates" :key="index" :sales="date"></daily>
       </section>
-      <section class="list empty" v-else>
-        No Data
+      <section class="empty" v-else>
+        Database Has No Index 
       </section>
       <section class="overview">
          <div class="wrap relative">
@@ -91,7 +91,8 @@ export default {
     };
   },
   created() {
-    this.indexed = this.$store.getters.config.database.index;
+    const { database = {} } = this.$store.getters.config;
+    this.indexed = database.index;
   },
   methods: {
     fetchData([from, to], group = "DAILY") {
