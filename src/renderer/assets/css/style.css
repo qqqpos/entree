@@ -817,7 +817,7 @@ div.pageButton {
 }
 .keyboard .alphabetic,
 .keyboard .numeric {
-  display: inline-flex;
+  display: flex;
   vertical-align: top;
 }
 .keyboard .alphabetic div,
@@ -855,8 +855,9 @@ div.pageButton {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 .keyboard div.space {
-  width: 307px;
+  flex:1;
 }
+
 .keyboard div.double,
 .keyboard i.double {
   width: 149.4px;
