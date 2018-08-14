@@ -428,9 +428,11 @@ export default {
     attemptRecover: "正在尝试自动修复这个错误...",
     attemptFailed: "无法自动修复系统错误，请立即拨打技术部门热线",
     supportHotLine: "(888)299-0524",
-    exitConfirm: "您确定要退出吗？",
+    exitConfirm: "您确定要退出吗?",
+    saveConfirm: "您确定要保存吗?",
     unsaveOrderWarning: "未保存的订单将会被删除",
     unsavePaymentWarning: "未保存的付款设置将会被还原",
+    unprintItemWarning: "订单中的物品将不会被打印",
     systemProcessing: "系统处理中...",
     switchOrderType: "更改订单类别",
     orderTypeSwitchFrom: "订单类别将从 {i} 变成 {i}",
@@ -1420,7 +1422,7 @@ export default {
       batch: "过账记录",
       salesSummary: "营业额总览",
       database: "数据库设定",
-      stationDevice:"工作站设备"
+      stationDevice: "工作站设备"
     },
     receiptDialog: "打印收据",
     others: "其它设置",
@@ -1433,9 +1435,12 @@ export default {
       discount: "按百分比折扣",
       tip: "按百分比小费",
       instantPay: "快速付款",
+      printedWhenPaid: "结账后将所有物品设为已打印",
+      allowNoPrint: "允许付款后不打印订单",
       autoStack: "自动叠加",
       matchQty: "物品数量对齐",
-      menuSort: "菜单物品排列方式"
+      menuSort: "菜单物品排列方式",
+      saveConfirm: "保存确认"
     },
     taxBeforeDiscount: "折扣前征税",
     taxBeforeCredit: "积分前征税",
@@ -1557,9 +1562,10 @@ export default {
       order: "修改订单",
       void: "允许 作废/还原 订单",
       table: "修改座位",
-      tip: "修改小费",
-      transaction: "修改信用卡交易",
-      server: "更改服务员",
+      tip: "修改订单小费",
+      gratuity: "修改订单服务费",
+      transaction: "取消信用卡交易",
+      server: "修改服务员",
       driver: "修改订单的派送司机",
     },
     view: {
@@ -1595,7 +1601,7 @@ export default {
     request: "特殊备注",
     adult: "成人",
     kid: "儿童",
-    elder: "老人"
+    senior: "老人"
   },
   database: {
     dataSize: "数据库大小",
@@ -1749,6 +1755,7 @@ export default {
       defaultProcess: "需回车确认支付订单",
       autoStackItemQty: "选择相同物品时会自动增加数量",
       matchItemQty: "子菜品的数量默认与主菜品的相同",
+      saveConfirm: "保存订单时需要确认提示"
     },
     peak: {
       idle: "空闲",

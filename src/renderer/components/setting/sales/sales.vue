@@ -101,7 +101,7 @@ export default {
           "[REPORT] DAILY",
           { from: +from, to: +to, group },
           dates => {
-            this.dates = dates.sort((a, b) => (a.time > b.time ? 1 : -1));
+            this.dates = Object.freeze(dates.sort((a, b) => (a.time > b.time ? 1 : -1)));
             this.analizeData();
           }
         );

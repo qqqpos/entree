@@ -10,7 +10,7 @@
             <div class="banner"></div>
             <div class="wrap">
                 <div class="input">
-                    <inputer title="text.alias" v-model.trim="tax.alias" :disabled="init.edit"></inputer>
+                    <inputer title="text.alias" v-model.trim="tax.alias"></inputer>
                     <inputer title="text.taxRate" v-model.number="tax.rate"></inputer>
                 </div>
                 <div class="options">
@@ -30,7 +30,7 @@
             </div>
             <footer>
                 <div class="opt">
-                    <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
+                    <span class="del" @click="init.reject(true)" v-show="authorized">{{$t('button.delete')}}</span>
                 </div>
                 <button class="btn" @click="confirm" :disabled="invalid">{{$t('button.confirm')}}</button>
             </footer>
@@ -41,11 +41,13 @@
 <script>
 import inputer from "../../common/inputer";
 import checkbox from "../../common/checkbox";
+
 export default {
   props: ["init"],
   components: { inputer, checkbox },
   data() {
     return {
+      authorized: this.$store.getters.authorized,
       tax: JSON.parse(JSON.stringify(this.init.tax))
     };
   },

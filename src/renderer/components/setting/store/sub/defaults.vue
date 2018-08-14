@@ -11,6 +11,8 @@
     <toggle title="setting.default.discount" v-model="defaults.percentageDiscount" trueTooltip="tip.default.percentageDiscount" falseTooltip="tip.default.dollarDiscount" :conditionalTooltip="true"></toggle>
     <toggle title="setting.default.tip" v-model="defaults.percentageTip" trueTooltip="tip.default.percentageTip" falseTooltip="tip.default.dollarTip" :conditionalTooltip="true"></toggle>
     <toggle title="setting.default.instantPay" v-model="defaults.instantPay" trueTooltip="tip.default.instantProcess" falseTooltip="tip.default.defaultProcess" :conditionalTooltip="true"></toggle>
+    <toggle title="setting.default.printedWhenPaid" v-model="defaults.printedWhenPaid"></toggle>
+    <toggle title="setting.default.allowNoPrint" v-model="defaults.allowNoPrint"></toggle>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>
@@ -53,7 +55,9 @@ export default {
       percentageDiscount: true,
       percentageTip: true,
       autoStackItem: false,
-      matchItemQty: false
+      matchItemQty: false,
+      printedWhenPaid:false,
+      allowNoPrint:false
     };
 
     this.defaults = this.$store.getters.config.defaults || defaults;

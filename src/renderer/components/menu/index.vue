@@ -226,7 +226,7 @@ export default {
             item.like = true;
           }
 
-          return item;
+          return Object.freeze(item);
         });
 
         let align =

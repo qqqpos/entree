@@ -120,11 +120,12 @@ export default {
       return this.app.newTicket && this.$route.name === "Menu";
     },
     changeDue() {
-      if (this.order.payment && this.order.payment.balance) {
+      if (this.order.payment && this.order.payment.remain) {
         const tender =
-          this.order.payment.balance +
+          this.order.payment.remain +
           parseFloat(this.tip) -
           parseFloat(this.paid);
+
         return tender > 0 ? 0 : Math.abs(tender);
       } else {
         return 0;

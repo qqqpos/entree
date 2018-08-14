@@ -513,9 +513,11 @@ export default {
     attemptRecover: "Attempting To Recovery...",
     attemptFailed: "Recovery has failed. Please call Support for troubleshooting.",
     supportHotLine: "(888)299-0524",
-    exitConfirm: "Are you sure you want to exit?",
+    exitConfirm: "Are you sure you want to EXIT?",
+    saveConfirm: "Are you sure you want to SAVE?",
     unsaveOrderWarning: "Unsaved order will be removed.",
     unsavePaymentWarning: "Unsaved payment will be restored",
+    unprintItemWarning: "The items from the list will not be printed.",
     systemProcessing: "System Processing...",
     switchOrderType: "Change Order Type",
     orderTypeSwitchFrom: "Order Type {i} will change to {i}",
@@ -1443,9 +1445,12 @@ export default {
       discount: "Discount",
       tip: "Tip",
       instantPay: "Instant Pay",
+      printedWhenPaid: "Set ticket print after settlement",
+      allowNoPrint: "Allow 'Do Not Print' on each payment",
       autoStack: "Auto Stack",
       matchQty: "Match Quantity",
-      menuSort: "Menu Item Sort By"
+      menuSort: "Menu Item Sort By",
+      saveConfirm: "Save Confirm"
     },
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Discount",
@@ -1566,8 +1571,9 @@ export default {
       void: "Allow to Void / Reopen Ticket",
       table: "Modify Table Ticket",
       tip: "Adjust Tips",
+      gratuity: "Modify Ticket's Gratuity",
       driver: "Assign Driver To Ticket",
-      transaction: "Modify Credit Card Transaction",
+      transaction: "Void Credit Card Transaction",
       server: "Reassign Server"
     },
     view: {
@@ -1603,7 +1609,7 @@ export default {
     request: "Special Request",
     adult: "Adult",
     kid: "Kid",
-    elder: "Elder"
+    senior: "Senior"
   },
   database: {
     dataSize: "Data Size",
@@ -1757,6 +1763,7 @@ export default {
       defaultProcess: "Payment amount needs enter to confirm",
       autoStackItemQty: "Auto stacking item quantity",
       matchItemQty: "Subitem quantity match main item's quantity",
+      saveConfirm: "Prompt dialog when attempt to save order"
     },
     peak: {
       idle: "Idle",

@@ -71,7 +71,7 @@ export default {
         "[BATCH] HISTORY",
         { from: +from, to: +to, group },
         records => {
-          this.records = records;
+          this.records = Object.freeze(records);
           this.analizeData();
         }
       );

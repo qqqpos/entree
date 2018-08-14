@@ -288,11 +288,36 @@ export default {
     done(print) {
       if (this.isEmptyTicket) return;
 
-      this.checkPendingItem(print)
+      this.promptConfirm(print)
+        .then(this.checkPendingItem)
         .then(this.initialPrint)
         .then(this.save.bind(null, print))
         .then(this.exit)
         .catch(this.placeFailed);
+    },
+    promptConfirm(print) {
+      const { defaults = {} } = this.$store.getters.config;
+
+      return new Promise((next, stop) => {
+        if (defaults.saveConfirm && !print) {
+          const prompt = {
+            title: "dialog.saveConfirm",
+            msg: "dialog.unprintItemWarning"
+          };
+
+          this.$dialog(prompt)
+            .then(() => {
+              this.exitComponent();
+              next(print);
+            })
+            .catch(() => {
+              this.exitComponent();
+              stop();
+            });
+        } else {
+          next(print);
+        }
+      });
     },
     placeFailed(error) {
       error && console.error(error);
@@ -723,7 +748,6 @@ export default {
       "item",
       "order",
       "table",
-      "store",
       "ticket",
       "station",
       "spooler",

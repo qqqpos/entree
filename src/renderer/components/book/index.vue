@@ -50,7 +50,7 @@
                             </span>
                         </div>
                         <div class="age">
-                            <span>{{$t('booking.elder')}}</span>
+                            <span>{{$t('booking.senior')}}</span>
                             <span class="button-wrap">
                                 <i class="fas fa-minus-square" @click="less(2)"></i>
                                     <span class="count">{{book.guest[2]}}</span>

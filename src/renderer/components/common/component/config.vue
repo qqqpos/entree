@@ -52,7 +52,7 @@
           <i class="fas fa-user-plus"></i>
           {{$t('text.setGuest')}}
         </button>
-        <button @click="setGratuity" v-show="gratuitySettable">
+        <button @click="setGratuityDialog" v-show="gratuitySettable">
           <i class="fas fa-hand-holding-usd"></i>
           {{$t('button.setGratuity')}}
         </button>
@@ -66,11 +66,12 @@
 import { mapActions, mapGetters } from "vuex";
 
 import dialogModule from "../dialog";
+import unlockModule from "../unlock";
 import inputModule from "../../component/inputer";
 
 export default {
   props: ["init"],
-  components: { inputModule, dialogModule },
+  components: { inputModule, unlockModule, dialogModule },
   mounted() {
     const dom = document.querySelector(".order.showCategory");
     if (dom) this.viewCategory = true;
@@ -145,6 +146,11 @@ export default {
           this.init.resolve();
         })
         .catch(this.exitComponent);
+    },
+    setGratuityDialog() {
+      this.$checkPermission("modify", "gratuity")
+        .then(this.setGratuity)
+        .catch(()=>{});
     },
     setGratuity() {
       new Promise((resolve, reject) => {
@@ -237,7 +243,7 @@ export default {
 
       return !this.init.gratuityFree && correctType;
     },
-    ...mapGetters(["config", "tax", "store", "dineInOpt", "order"])
+    ...mapGetters(["op", "tax", "store", "config", "dineInOpt", "order"])
   }
 };
 </script>

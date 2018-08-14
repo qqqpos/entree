@@ -8,6 +8,7 @@
     <toggle title="text.favoriteItem" v-model="defaults.favorite"></toggle>
     <toggle title="setting.default.autoStack" tooltip="tip.default.autoStackItemQty" v-model="defaults.autoStackItem"></toggle>
     <toggle title="setting.default.matchQty" tooltip="tip.default.matchItemQty" v-model="defaults.matchItemQty"></toggle>
+    <toggle title="setting.default.saveConfirm" tooltip="tip.default.saveConfirm" v-model="defaults.saveConfirm"></toggle>
     <text-list title="setting.default.menuSort" v-model="defaults.menuSortBy" :opts="types"></text-list>
   </div>
 </div>
@@ -49,7 +50,7 @@ export default {
     this.sort = this.defaults.menuSortBy;
   },
   beforeDestroy() {
-    this.alphabetical !== this.defaults.alphabetical && this.setMenu();
+    this.sort !== this.defaults.alphabetical && this.setMenu();
   },
   beforeRouteLeave(to, from, next) {
     this.$socket.emit("[CONFIG] UPDATE", {
