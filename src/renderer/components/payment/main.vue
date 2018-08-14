@@ -858,10 +858,10 @@ export default {
               settled
             });
 
-            this.$socket.emit("[ORDER] SAVE", this.order, false, data => {
+            this.$socket.emit("[ORDER] SAVE", this.order, false, invoice => {
               this.willTicketNumberUpdate = false;
               this.setApp({ newTicket: false });
-              this.order = data;
+              this.order = invoice;
               next();
             });
           } else {

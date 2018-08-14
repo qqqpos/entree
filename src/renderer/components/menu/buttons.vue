@@ -416,10 +416,13 @@ export default {
                 : [];
 
           if (this.isDineInTicket) {
-            this.$socket.emit("[ORDER] SAVE", order, false, () => {
+            this.$socket.emit("[ORDER] SAVE", order, false, ({ number }) => {
               if (items.length === 0) return;
 
-              const ticket = Object.assign({}, order, { content: items });
+              const ticket = Object.assign({}, order, {
+                number,
+                content: items
+              });
 
               printOnDone
                 ? Printer.setTarget("All").print(ticket)
