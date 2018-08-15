@@ -212,7 +212,7 @@ export default {
 
       this.resetOrder();
       this.setTicket({ type: "DINE_IN" });
-      this.setApp({ newTicekt: true });
+      this.setApp({ newTicket: true });
       this.setOrder({
         type: "DINE_IN",
         tableID: _id,

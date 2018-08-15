@@ -198,11 +198,7 @@ export default {
         this.$checkPermission("modify", "item")
           .then(() => this.lessQty(boolean))
           .catch(() =>
-            this.$log({
-              eventID: 1210,
-              type: "failure",
-              note: `Operator unable to delete exist item due to permission deny.`
-            })
+            this.$log(`Delete item is prohibit to operator [${this.op.name}]`)
           );
       }
     },
@@ -295,6 +291,48 @@ export default {
         .then(this.exit)
         .catch(this.placeFailed);
     },
+    async _done(printTicket) {
+      if (this.isEmptyTicket) return;
+
+      // items holds condition filtered item
+      // it will replace current item
+      let items = [];
+
+      // if saveConfirm is enable
+      // it will prompt a dialog to ask operator
+      const { defaults = {} } = this.$store.getters.config;
+      if (defaults.saveConfirm && !printTicket) {
+        try {
+          await this.saveConfirmDialog();
+        } catch (e) {
+          this.$log(`[#${this.ticket.number}] Ticket save abort.`);
+        } finally {
+          this.exitComponent();
+        }
+      }
+
+      // then we check if there is any pending item on the list
+      const pendingItems = this.order.content.filter(item => item.pending);
+      if (!this.app.newTicket && print && pendingItems.length > 0) {
+        try {
+          items = await this.checkPendingItem();
+        } catch (e) {
+        } finally {
+        }
+      }
+    },
+    saveConfirmDialog() {
+      return new Promise((next, stop) => {
+        const prompt = {
+          title: "dialog.saveConfirm",
+          msg: "dialog.unprintItemWarning"
+        };
+
+        this.$dialog(prompt)
+          .then(next)
+          .catch(stop);
+      });
+    },
     promptConfirm(print) {
       const { defaults = {} } = this.$store.getters.config;
 
@@ -323,7 +361,6 @@ export default {
       error && console.error(error);
       if (error) {
         this.$log({
-          eventID: 9005,
           type: "bug",
           data: this.order._id,
           note: `An error occurred when save the order. \n\nError Message:\n${error}`
@@ -586,7 +623,6 @@ export default {
     },
     abandon() {
       this.$log({
-        eventID: 4001,
         data: this.order._id,
         note: `#${this.ticket.number} Invoice was abandoned.`
       });
@@ -746,6 +782,7 @@ export default {
       "app",
       "tax",
       "item",
+      "store",
       "order",
       "table",
       "ticket",
