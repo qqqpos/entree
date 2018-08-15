@@ -233,7 +233,9 @@ export default {
       let items = [];
 
       this.spooler[i].order.content.forEach(({ unique }) => items.push(unique));
-      Printer.setTarget(target).print(this.spooler[0].order);
+      Printer.setTarget(target).print(
+        Object.assign(this.spooler[0].order, { print: false })
+      );
       this.removeSpooler(i);
 
       let index = this.history.findIndex(order => order._id === _id);

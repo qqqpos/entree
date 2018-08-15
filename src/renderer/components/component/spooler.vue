@@ -11,7 +11,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 import dialogModule from "../common/dialog";
-import task from "./task";
+import task from "./helper/task";
 
 export default {
   props: ["init"],
