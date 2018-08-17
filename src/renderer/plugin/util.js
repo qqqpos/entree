@@ -200,18 +200,19 @@ export default {
     Vue.prototype.$calculatePayment = function (order, params = {}) {
       // private methods
       const getDeliveryCharge = () => {
-        let delivery = this.store.deliver.charge ? parseFloat(this.store.deliver.baseFee) : 0;
+        const { charge, baseFee, surcharge, rules } = this.store.deliver;
+        let delivery = charge ? parseFloat(baseFee) : 0;
 
-        if (this.store.deliver.surcharge) {
+        if (surcharge) {
           const addressDistance = order.customer.distance || this.customer.distance;
           const duration = parseFloat(addressDistance) || 0;
           const distance = addressDistance.includes("ft") ? duration / 100 : duration;
-          const surcharge = this.store.deliver.rules
+          const rule = rules
             .sort((a, b) => a.distance < b.distance)
             .find(rule => rule.distance < distance);
 
-          if (surcharge && isNumber(surcharge))
-            delivery += parseFloat(surcharge.fee);
+          if (rule && isNumber(rule.fee))
+            delivery += parseFloat(rule.fee);
         }
 
         delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliveryFee) : delivery;

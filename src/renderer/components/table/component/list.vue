@@ -204,7 +204,7 @@ th.table{
 
 td.icon {
   width: 20px;
-  padding-left: 15px;
+  padding-left: 13px;
 }
 
 .action.gray {
