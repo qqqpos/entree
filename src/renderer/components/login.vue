@@ -198,6 +198,32 @@ export default {
     syncData() {
       this.$socket.emit("[INITIAL] POS", data => this.setAppEnvironment(data));
     },
+    indexDatabase() {
+      const { database = {} } = this.config;
+      return new Promise((resolve, reject) => {
+        if (isHost && database.index) {
+          this.$socket.emit(
+            "[DATABASE] INDEX",
+            { All: false, date: today() },
+            () => resolve()
+          );
+        } else {
+          resolve();
+        }
+      });
+    },
+    backupDatabase() {
+      const { database = {} } = this.config;
+      const path = database.backupPath || "c:\\database";
+
+      return new Promise((resolve, reject) => {
+        if (isHost && database.backup) {
+          this.$socket.emit("[DATABASE] BACKUP", path, () => resolve());
+        } else {
+          resolve();
+        }
+      });
+    },
     shutdownAll() {
       const prompt = {
         type: "question",
@@ -209,7 +235,9 @@ export default {
         .then(() => this.$socket.emit("[STATION] CTRL", "SHUTDOWN"))
         .catch(this.exitComponent);
     },
-    shutdown() {
+    async shutdown() {
+      await this.indexDatabase();
+      await this.backupDatabase();
       this.$electron.ipcRenderer.send("Shutdown");
     },
     restart() {
@@ -229,7 +257,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["sync", "store", "station"])
+    ...mapGetters(["config", "sync", "store", "station"])
   },
   sockets: {
     AUTHORIZATION(operator) {

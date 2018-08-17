@@ -208,7 +208,16 @@ export default {
     },
     createTable({ _id, name, guest }) {
       const session = ObjectId().toString();
-      const type = this.table.type === "regular" ? "DINE_IN" : "BAR";
+
+      let type;
+      switch (this.table.type) {
+        case "bar":
+          type = "BAR";
+          break;
+        default:
+          type = "DINE_IN";
+          break;
+      }
 
       this.resetOrder();
       this.setTicket({ type });

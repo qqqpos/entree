@@ -84,17 +84,15 @@ const Printer = function (plugin, config, station) {
   };
 
   this.buzzer = function (device) {
-    checkStatus().then(() => {
-      this.plugin.PRINT_INIT("Buzzer");
-      this.plugin.SET_PRINTER_INDEX(device);
-      this.plugin.SEND_PRINT_RAWDATA(
-        String.fromCharCode(27) +
-        String.fromCharCode(67) +
-        String.fromCharCode(4) +
-        String.fromCharCode(2) +
-        String.fromCharCode(3)
-      );
-    })
+    this.plugin.PRINT_INIT("Buzzer");
+    this.plugin.SET_PRINTER_INDEX(device);
+    this.plugin.SEND_PRINT_RAWDATA(
+      String.fromCharCode(27) +
+      String.fromCharCode(67) +
+      String.fromCharCode(4) +
+      String.fromCharCode(2) +
+      String.fromCharCode(3)
+    );
 
     return this;
   };

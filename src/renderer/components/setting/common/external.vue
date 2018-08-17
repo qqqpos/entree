@@ -1,8 +1,11 @@
 <template>
   <div class="external" :class="{style:defaultStyle,disabled}">
     <div class="inner">
-      <span>{{translate ? $t(title) : title}}</span>
-      <span class="tooltip">{{$t(tooltip)}}</span>
+      <div class="title">
+        <span>{{translate ? $t(title) : title}}</span>
+        <span class="tooltip">{{$t(tooltip)}}</span>
+      </div>
+      <slot name="value"></slot>
     </div>
     <slot>
       <div class="icon" @click="$emit('open')">
@@ -54,12 +57,22 @@ export default {
 .inner {
   flex: 1;
   display: flex;
+  flex-direction: column;
+}
+
+.title{
+  display: flex;
 }
 
 .tooltip {
   color: #9e9e9e;
   flex: 1;
   text-align: right;
+}
+
+.value {
+  margin-top: 1px;
+  color: #2196f3;
 }
 
 .style .icon {

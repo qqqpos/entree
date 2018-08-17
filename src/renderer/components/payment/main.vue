@@ -885,6 +885,7 @@ export default {
       return new Promise(next => {
         const paid = this.paid.toFixed(2);
         const tender = this.currentTender.toFixed(2);
+        const { defaults = {} } = this.config;
 
         this.poleDisplay(["Paid CASH", paid], ["Change Due", tender]);
 
@@ -899,10 +900,15 @@ export default {
           msg: ["dialog.cashChangeDetail", paid],
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
-            { text: "button.receiptOnly", fn: "resolve" },
-            { text: "button.print", fn: "print" }
+            { text: "button.print", fn: "resolve" }
           ]
         };
+
+        defaults.allowNoPrint &&
+          tenderWithDialog.buttons.unshift({
+            text: "button.noPrint",
+            fn: "noPrint"
+          });
 
         if (this.currentTender > 0) {
           switch (this.store.receipt) {
@@ -917,8 +923,12 @@ export default {
               break;
             default:
               this.$dialog(tenderWithDialog)
-                .then(() => this.printReceipt(next))
-                .catch(print => this.printTicket(print, next));
+                .then(() => this.printTicket("All", next))
+                .catch(noPrint => {
+                  noPrint
+                    ? this.printTicket(false, next)
+                    : this.printTicket("Order", next);
+                });
           }
         } else {
           this.askReceipt().then(() => next());
@@ -927,16 +937,22 @@ export default {
     },
     askReceipt() {
       return new Promise(next => {
+        const { defaults = {} } = this.config;
+
         const prompt = {
-          type: "question",
-          title: "dialog.printReceipt",
-          msg: "dialog.printReceiptConfirm",
+          title: ["dialog.cashChange", tender],
+          msg: ["dialog.cashChangeDetail", paid],
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
-            { text: "button.receiptOnly", fn: "resolve" },
-            { text: "button.print", fn: "print" }
+            { text: "button.print", fn: "resolve" }
           ]
         };
+
+        defaults.allowNoPrint &&
+          prompt.buttons.unshift({
+            text: "button.noPrint",
+            fn: "noPrint"
+          });
 
         switch (this.store.receipt) {
           case "never":
@@ -946,22 +962,30 @@ export default {
             this.printReceipt(next);
             break;
           default:
-            this.$dialog(prompt)
-              .then(() => this.printReceipt(next))
-              .catch(print => this.printTicket(print, next));
+            this.$dialog(tenderWithDialog)
+              .then(() => this.printTicket("All", next))
+              .catch(noPrint => {
+                noPrint
+                  ? this.printTicket(false, next)
+                  : this.printTicket("Order", next);
+              });
         }
       });
     },
-    printTicket(print, next) {
-      print && Printer.setTarget("All").print(this.order);
+    printTicket(target, next) {
+      switch (target) {
+        case "All":
+        case "Receipt":
+        case "Order":
+          Printer.setTarget(target).print(this.order);
+          break;
+        default:
+      }
+
       const markPrint = this.order.payment.remain === 0 || print;
       this.$socket.emit("[ORDER] UPDATE", this.order, markPrint);
 
       this.exitComponent();
-      next();
-    },
-    printReceipt(next) {
-      Printer.setTarget("Receipt").print(this.order, true);
       next();
     },
     checkBalance() {

@@ -4,7 +4,7 @@
             <header>
                 <div class="f1">
                     <h3>{{$t('title.orderList')}}</h3>
-                    <h5></h5>
+                    <h5>{{$t('tip.foundRecords',tickets.length)}}</h5>
                 </div>
                 <button class="remove" @click="reset" v-show="queue.length >0">{{$t('button.reset')}}</button>
             </header>
@@ -16,13 +16,13 @@
                           <th>{{$t('thead.ticket')}}</th>
                           <th class="table">{{$t('thead.table')}}</th>
                           <th>{{$t('thead.time')}}</th>
-                          <th>Duration</th>
+                          <th>{{$t('thead.duration')}}</th>
                           <th>{{$t('thead.server')}}</th>
                           <th>{{$t('thead.status')}}</th>
                           <th class="actions">{{$t('thead.action')}}</th>
                       </tr>
                   </thead>
-                  <tbody>
+                  <tbody :class="{highlight:queue.length}">
                       <tr v-for="(ticket,index) in tickets" :key="index" @click="addQueue(ticket._id)" :class="{active:inQueue(ticket._id)}">
                           <td class="icon">
                             <i class="fas fa-check-circle check"></i>
@@ -95,7 +95,7 @@ export default {
               ticket.server === this.op.name
           );
     },
-    reset(){
+    reset() {
       this.queue = [];
     },
     setPage(n) {
@@ -148,7 +148,7 @@ export default {
           this.$socket.emit("[ORDER] COMBINE", { splits, parent }, () => {
             this.queue = [];
             this.exitComponent();
-            this.$nextTick(this.initialData)
+            this.$nextTick(this.initialData);
           })
         )
         .catch(this.exitComponent);
@@ -187,8 +187,16 @@ tbody tr:nth-child(even) {
   background: #eeeeee;
 }
 
-th.table{
+th.table {
   width: 78px;
+}
+
+.highlight tr {
+  opacity: 0.3;
+}
+
+tbody tr.active {
+  opacity: 1;
 }
 
 .actions {

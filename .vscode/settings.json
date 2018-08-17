@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
+        "anydate",
         "cashdrawer",
         "cashflow",
+        "check",
         "creditcard",
         "dataset",
         "giftcard",
@@ -9,10 +11,14 @@
         "mini",
         "paginator",
         "payment",
+        "prevs",
+        "stringify",
+        "tbody",
         "thead",
         "uncheck",
         "unprint",
         "unsave",
+        "unshift",
         "vuex",
         "warning"
     ],

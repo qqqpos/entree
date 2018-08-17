@@ -37,18 +37,16 @@
             <p>
               <span class="f1">Sales Total</span>
               <span class="value">$ {{summary.total | decimal}}</span>
-            </p>
+            </p>          
           </div>
           <div class="group">
             <p>
-              <span class="f1"></span>
-              <span class="value"></span>
-              <span class="unit"></span>
-            </p>
+              <span class="f1">Rounding</span>
+              <span class="value">$ {{summary.rounding | decimal}}</span>
+            </p>  
             <p>
-              <span class="f1"></span>
-              <span class="value"></span>
-              <span class="unit"></span>
+              <span class="f1">Gratuity</span>
+              <span class="value">$ {{summary.gratuity | decimal}}</span>
             </p>
           </div>
           <div class="group">
@@ -101,7 +99,9 @@ export default {
           "[REPORT] DAILY",
           { from: +from, to: +to, group },
           dates => {
-            this.dates = Object.freeze(dates.sort((a, b) => (a.time > b.time ? 1 : -1)));
+            this.dates = Object.freeze(
+              dates.sort((a, b) => (a.time > b.time ? 1 : -1))
+            );
             this.analizeData();
           }
         );
@@ -115,17 +115,19 @@ export default {
       let tax = 0;
       let discount = 0;
       let rounding = 0;
+      let gratuity = 0;
       let total = 0;
 
       this.dates.forEach(date => {
         subtotal += date.summary.sales.subtotal;
         tax += date.summary.sales.tax;
         discount += date.summary.sales.discount;
-        rounding == date.summary.sales.rounding;
+        rounding += date.summary.sales.rounding;
+        gratuity += date.summary.sales.gratuity;
         total += date.summary.sales.total;
       });
 
-      return { days, subtotal, tax, discount, total };
+      return { days, subtotal, tax, discount, rounding, gratuity, total };
     }
   }
 };

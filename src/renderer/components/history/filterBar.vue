@@ -247,9 +247,13 @@ export default {
       });
 
       if (filters.hasOwnProperty("BAR")) {
-        Array.isArray(filters["DINE_IN"].subTypes)
-          ? filters["DINE_IN"].subTypes.push(filters["BAR"])
-          : (filters["DINE_IN"].subTypes = [filters["BAR"]]);
+        if (Object.keys(filters).length > 6 && filters["DINE_IN"]) {
+          Array.isArray(filters["DINE_IN"].subTypes)
+            ? filters["DINE_IN"].subTypes.push(filters["BAR"])
+            : (filters["DINE_IN"].subTypes = [filters["BAR"]]);
+        }else{
+          sort.splice(5,1,"BAR");
+        }
       }
 
       if (filters.hasOwnProperty("HIBACHI")) {

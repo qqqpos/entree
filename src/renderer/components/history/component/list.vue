@@ -16,12 +16,13 @@
                           <th>{{$t('thead.ticket')}}</th>
                           <th>{{$t('thead.type')}}</th>
                           <th>{{$t('thead.time')}}</th>
-                          <th>Duration</th>
+                          <th>{{$t('thead.duration')}}</th>
                           <th>{{$t('thead.server')}}</th>
+                          <th>{{$t('thead.amount')}}</th>
                           <th class="actions">{{$t('thead.action')}}</th>
                       </tr>
                   </thead>
-                  <tbody>
+                  <tbody :class="{highlight:queue.length}">
                       <tr v-for="(ticket,index) in tickets" :key="index" @click="addQueue(ticket._id)" :class="{active:inQueue(ticket._id)}">
                           <td class="icon">
                             <i class="fas fa-check-circle check"></i>
@@ -35,6 +36,7 @@
                             <div>{{ticket.server}}</div>
                             <div class="extra-info">{{ticket.lastEdit | fromNow}}</div>
                           </td>
+                          <td><i class="fas fa-dollar-sign light space"></i>{{ticket.payment.balance | decimal}}</td>
                           <td class="actions">
                             <span class="action yellow" @click.stop="$open('ticket',{ticket})">{{$t('button.view')}}</span>
                             <span class="action gray" :class="{disable:queue.length < 2}" @click.stop="combineDialog(ticket)">{{$t('button.combine')}}</span>
@@ -165,6 +167,14 @@ tbody tr:nth-child(even) {
 
 th.table {
   width: 78px;
+}
+
+.highlight tr {
+  opacity: 0.3;
+}
+
+tbody tr.active {
+  opacity: 1;
 }
 
 .actions {

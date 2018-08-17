@@ -10,7 +10,9 @@
             <toggle title="database.autoBackup" v-model="database.backup" @input="updateBackup">
               <transition name="dropdown">
                 <div v-if="database.backup" class="opt">
-                  <external title="tip.databaseBackupPath" @open="showDialog"></external>
+                  <external title="tip.databaseBackupPath" @open="showDialog">
+                    <p slot="value" class="value">{{database.backupPath}}</p>
+                  </external>
                 </div>
               </transition>
             </toggle>
@@ -46,7 +48,7 @@ export default {
         value: enable
       });
 
-      enable && this.$socket.emit("[INDEX] CREATE", { ALL: true });
+      enable && this.$socket.emit("[DATABASE] INDEX", { ALL: true });
     },
     updateBackup(value) {
       this.update({
@@ -61,7 +63,10 @@ export default {
         properties: ["openFile", "openDirectory"]
       });
 
-      Object.assign(this.database, { backupPath: directory[0] });
+      this.update({
+        key: "database",
+        value: Object.assign(this.database, { backupPath: directory[0] })
+      });
     }
   }
 };
