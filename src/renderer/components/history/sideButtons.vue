@@ -16,9 +16,9 @@
       <i class="fas fa-file-invoice"></i>
       <span class="text">{{$t('button.receipt')}}</span>
     </button>
-    <button class="btn" @click="combine" :disabled="true">
-      <i class="fa fa-link"></i>
-      <span class="text">{{$t('button.combine')}}</span>
+    <button class="btn" @click="$open('listModule')">
+      <i class="fas fa-list-ol"></i>
+      <span class="text">{{$t('button.list')}}</span>
     </button>
     <button class="btn" @click="print">
       <i class="fa fa-print"></i>
@@ -56,10 +56,11 @@ import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
 import reportModule from "../report/index";
 import ledgerModule from "../ledger/index";
+import listModule from "./component/list";
 import terminalModule from "./terminal";
 import transaction from "./transaction";
 import Reason from "./component/reason";
-import loger from "../payment/loger";
+import logger from "../payment/logger";
 
 export default {
   props: ["date", "splitMode"],
@@ -71,8 +72,9 @@ export default {
     unlockModule,
     ledgerModule,
     transaction,
+    listModule,
     Reason,
-    loger
+    logger
   },
   data() {
     return {
@@ -248,7 +250,7 @@ export default {
 
         this.$socket.emit(query, _id, logs => {
           this.componentData = { resolve, reject, number, logs };
-          this.component = "loger";
+          this.component = "logger";
         });
       }).then(this.exitComponent);
     },

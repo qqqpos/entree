@@ -76,7 +76,7 @@ export default {
                         this.component = "inputModule";
                     })
                         .then(({ amount }) =>
-                            next(Object.assign(table, { guest: amount || 1 }))
+                            next(Object.assign(table, { guest: parseInt(amount) || defaultGuest }))
                         )
                         .catch(() => {
                             stop();

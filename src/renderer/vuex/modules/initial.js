@@ -120,6 +120,8 @@ const mutations = {
         state.orders = orders;
     },
     [types.ADD_SPOOLER](state, data) {
+        data.order.print = false;
+        
         state.spooler.push(data);
         state.spooler.sort((a, b) => (a.schedule - b.schedule))
     },

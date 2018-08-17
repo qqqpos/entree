@@ -21,7 +21,7 @@
       </header>
       <table>
         <thead>
-          <tr>
+          <tr class="banner">
             <th class="index" @click="sortBy('id')">ID<i class="fas fa-sort"></i></th>
             <th>{{$t('thead.type')}}</th>
             <th>{{$t('thead.time')}}</th>
@@ -32,7 +32,7 @@
             <th>{{$t('thead.auth')}}</th>
             <th>{{$t('thead.amount')}}</th>
             <th>{{$t('thead.tip')}}</th>
-            <th class="action">{{$t('thead.action')}}</th>
+            <th class="actions">{{$t('thead.action')}}</th>
           </tr>
         </thead>
         <tbody>
@@ -56,14 +56,14 @@
             </td>
             <td class="amount">$ {{record.amount.approve}}</td>
             <td class="amount" :class="{zero:record.amount.tip === '0.00'}">$ {{record.amount.tip}}</td>
-            <td v-if="!record.close" class="action">
-              <span class="print" @click="adjustTipDialog(record)">{{$t('button.adjust')}}</span>
-              <span class="print" @click="print(record)">{{$t('button.print')}}</span>
-              <span class="void" @click="voidSale(record)">{{$t('button.void')}}</span>
+            <td v-if="!record.close" class="actions">
+              <span class="action gray" @click="adjustTipDialog(record)">{{$t('button.adjust')}}</span>
+              <span class="action gray" @click="print(record)">{{$t('button.print')}}</span>
+              <span class="action red" @click="voidSale(record)">{{$t('button.void')}}</span>
             </td>
-            <td v-else class="action">
-              <span class="print" @click="print(record)">{{$t('button.print')}}</span>
-              <span class="refund" @click="askRefund(record)">{{$t('button.refund')}}</span>
+            <td v-else class="actions">
+              <span class="action gray" @click="print(record)">{{$t('button.print')}}</span>
+              <span class="action yellow" @click="askRefund(record)">{{$t('button.refund')}}</span>
             </td>
           </tr>
         </tbody>
@@ -657,18 +657,6 @@ nav.filter {
   justify-content: flex-end;
 }
 
-thead tr {
-  background: #009688;
-  color: #fff;
-  text-shadow: 0 1px 1px #333;
-}
-
-thead th {
-  font-weight: normal;
-  padding: 5px 0;
-  border-bottom: 1px solid #eeeeee;
-}
-
 tbody {
   display: block;
   height: 500px;
@@ -717,18 +705,6 @@ footer {
   border-top: 1px solid #e0e0e0;
 }
 
-.print {
-  background: #607d8b;
-}
-
-.void {
-  background: #f44336;
-}
-
-.refund {
-  background: #ff9800;
-}
-
 .fa-cc-visa {
   color: #5050e2;
 }
@@ -759,7 +735,7 @@ footer {
   color: #3c3c3c;
 }
 
-.action {
+.actions {
   width: 170px;
 }
 
@@ -779,11 +755,6 @@ footer {
   cursor: pointer;
   border-radius: 2px;
   box-shadow: 0 1px 1px #b5afaf;
-}
-
-.adjustable {
-  cursor: pointer;
-  color: #ff9800;
 }
 
 .sub {

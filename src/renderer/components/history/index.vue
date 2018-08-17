@@ -137,9 +137,9 @@ export default {
     setCalendar(date) {
       this.calendarDate = date;
       this.$socket.emit("[ORDER] HISTORY", date, invoices => {
-        this.prevHistory = invoices;
-        this.splits = [];
+        this.prevHistory = date !== today() ? invoices : null;
         this.page = 0;
+        this.splits = [];
         this.resetViewOrder();
         this.exitComponent();
       });

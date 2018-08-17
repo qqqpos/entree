@@ -835,14 +835,14 @@ export default {
           Object.assign(transaction, { splitPayment: index - 1 });
         }
 
-        //hot fix
+        resolve();
+
         if (!this.order.logs) this.order.logs = [];
 
         this.order.logs.push(transaction);
         this.order.payment.paid += parseFloat(actual);
         this.$socket.emit("[TRANSACTION] SAVE", transaction);
         this.recalculatePayment();
-        resolve();
       });
     },
     postToDatabase() {

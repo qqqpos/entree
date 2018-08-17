@@ -396,7 +396,7 @@ header.tab {
   background: #fafafa;
 }
 
-.editor .banner {
+.editor div.banner {
   height: 10px;
   align-items: center;
   display: flex;
@@ -431,6 +431,18 @@ header.tab {
   text-shadow: 0 1px 1px #333;
   box-shadow: 0px 2px 1px #123344;
   cursor: pointer;
+}
+
+tr.banner {
+  background: #009688;
+  color: #fff;
+  text-shadow: 0 1px 1px #333;
+}
+
+tr.banner th {
+  font-weight: normal;
+  padding: 5px 0;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .clickable {

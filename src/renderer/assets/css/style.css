@@ -1264,3 +1264,24 @@ thead.title td {
   grid-column: 1/4;
   grid-row: 2/4;
 }
+
+.actions span.action{
+  padding: 4px 6px;
+  margin: 0 2px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px #b5afaf;
+}
+
+span.action.red{
+  background: #f44336;
+}
+
+span.action.gray{
+  background: #607d8b;
+}
+
+span.action.yellow{
+  background: #ff9800;
+}

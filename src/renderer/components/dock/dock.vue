@@ -202,57 +202,68 @@ export default {
         };
 
         this.setApp({ autoLock: false });
+
         this.$dialog(prompt)
-          .then(() => {
-            this.exitComponent();
-            this.doubleCheck();
-            this.resetAll();
-            this.$router.push({ path: "/main/lock" });
-          })
+          .then(this.lockStation)
           .catch(() => {
             this.exitComponent();
             this.setApp({ lastActivity: Date.now(), autoLock: true });
           });
       }
     },
-    doubleCheck() {
-      if (this.$route.name === "Menu" && this.order.type === "DINE_IN") {
-        const { _id } = this.table;
-        this.app.newTicket && this.$socket.emit("[TABLE] RESET", { _id });
-      }
-
-      if (this.order.pending) {
-        Object.assign(this.order, { pending: false });
-        this.$socket.emit("[ORDER] UPDATE", this.order);
-      }
-    },
-    printFromSpooler(i) {
-      const { target = "All" } = this.spooler[i];
-      const { _id } = this.spooler[i].order;
-
-      let items = [];
-
-      this.spooler[i].order.content.forEach(({ unique }) => items.push(unique));
-      Printer.setTarget(target).print(
-        Object.assign(this.spooler[0].order, { print: false })
-      );
-      this.removeSpooler(i);
-
-      let index = this.history.findIndex(order => order._id === _id);
-
-      if (index !== -1) {
-        let order = Object.assign({}, this.history[index]);
-        items.forEach(unique => {
-          for (let i = 0; i < order.content.length; i++) {
-            if (order.content[i].unique === unique) {
-              order.content[i].print = true;
-              order.content[i].pending = false;
-              break;
-            }
-          }
+    lockStation() {
+      if (
+        this.$route.name === "Menu" &&
+        this.table &&
+        this.table.status === -1
+      ) {
+        Object.assign(this.table, {
+          invoice: [],
+          server: null,
+          session: null,
+          time: null,
+          status: 1
         });
 
-        this.$socket.emit("[ORDER] UPDATE", order);
+        this.$socket.emit("[TABLE] UPDATE", this.table);
+      }
+
+      // if (this.order.pending) {
+      //   Object.assign(this.order, { pending: false });
+      //   this.$socket.emit("[ORDER] UPDATE", this.order);
+      // }
+
+      this.resetAll();
+      this.exitComponent();
+      this.$router.push({ path: "/main/lock" });
+    },
+    printFromSpooler(i) {
+      const { order } = this.spooler[i];
+      const { target = "Order" } = this.spooler[i];
+      let invoice = this.history.find(ticket => ticket._id === order._id);
+
+      // filter printed items
+      const printedItem = invoice.content
+        .filter(item => item.print)
+        .map(item => item.unique);
+
+      order.content = order.content.filter(
+        item => !printedItem.includes(item.unique)
+      );
+
+      Printer.setTarget(target).print(Object.assign(order, { print: false }));
+      this.removeSpooler(i);
+
+      // Update Order item status
+      let items = [];
+      order.content.forEach(({ unique }) => items.push(unique));
+      if (invoice) {
+        invoice.content.forEach(item => {
+          items.includes(item.unique) &&
+            Object.assign(item, { print: true, pending: false });
+        });
+
+        this.$socket.emit("[ORDER] UPDATE", invoice);
       }
     },
     editProfile() {

@@ -12,9 +12,9 @@
       <i class="fas fa-exchange-alt"></i>
       <span class="text">{{$t('button.switchTable')}}</span>
     </button>
-    <button class="btn" @click="combineTicket">
-      <i class="fa fa-link"></i>
-      <span class="text">{{$t('button.combineTicket')}}</span>
+    <button class="btn" @click="$open('listModule')">
+      <i class="fas fa-list-ol"></i>
+      <span class="text">{{$t('button.list')}}</span>
     </button>
     <button class="btn" @click="invoke('settle')" :disabled="!table">
       <i class="fas fa-hand-holding-usd"></i>
@@ -50,11 +50,19 @@ import { mapGetters, mapActions } from "vuex";
 import paymentModule from "../payment/main";
 import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
+import listModule from "./component/list";
 import splitModule from "../split/index";
 import staff from "../component/staffs";
 
 export default {
-  components: { dialogModule, unlockModule, paymentModule, splitModule, staff },
+  components: {
+    dialogModule,
+    unlockModule,
+    paymentModule,
+    splitModule,
+    listModule,
+    staff
+  },
   props: ["transfer"],
   data() {
     return {
@@ -65,7 +73,7 @@ export default {
   methods: {
     editOrder() {
       this.checkStatus()
-        .then(this.checkPremission)
+        .then(this.checkPermission)
         .then(this.edit)
         .catch(this.editFailed);
     },
@@ -101,7 +109,7 @@ export default {
         }
       });
     },
-    checkPremission() {
+    checkPermission() {
       this.exitComponent();
       return new Promise((pass, denied) => {
         this.table.server !== this.op.name
@@ -122,7 +130,6 @@ export default {
       };
       this.$dialog(prompt).then(this.exitComponent);
     },
-    combineTicket() {},
     invoke(fn) {
       if (this.isEmptyTicket) return;
       if (this.order.settled) {

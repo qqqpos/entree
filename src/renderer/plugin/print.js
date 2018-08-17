@@ -67,31 +67,35 @@ const Printer = function (plugin, config, station) {
   };
 
   this.openCashDrawer = function () {
-    if (this.station.cashDrawer.enable) {
-      this.plugin.PRINT_INIT("Open");
-      this.plugin.SET_PRINTER_INDEX(
-        this.station.cashDrawer.bind || this.station.receipt
-      );
-      this.plugin.SEND_PRINT_RAWDATA(
-        String.fromCharCode(27) +
-        String.fromCharCode(112) +
-        String.fromCharCode(48) +
-        String.fromCharCode(55) +
-        String.fromCharCode(221)
-      );
-    }
+    this.station.cashDrawer.enable &&
+      checkStatus().then(() => {
+        this.plugin.PRINT_INIT("Open");
+        this.plugin.SET_PRINTER_INDEX(
+          this.station.cashDrawer.bind || this.station.receipt
+        );
+        this.plugin.SEND_PRINT_RAWDATA(
+          String.fromCharCode(27) +
+          String.fromCharCode(112) +
+          String.fromCharCode(48) +
+          String.fromCharCode(55) +
+          String.fromCharCode(221)
+        );
+      })
   };
 
   this.buzzer = function (device) {
-    this.plugin.PRINT_INIT("Buzzer");
-    this.plugin.SET_PRINTER_INDEX(device);
-    this.plugin.SEND_PRINT_RAWDATA(
-      String.fromCharCode(27) +
-      String.fromCharCode(67) +
-      String.fromCharCode(4) +
-      String.fromCharCode(2) +
-      String.fromCharCode(3)
-    );
+    checkStatus().then(() => {
+      this.plugin.PRINT_INIT("Buzzer");
+      this.plugin.SET_PRINTER_INDEX(device);
+      this.plugin.SEND_PRINT_RAWDATA(
+        String.fromCharCode(27) +
+        String.fromCharCode(67) +
+        String.fromCharCode(4) +
+        String.fromCharCode(2) +
+        String.fromCharCode(3)
+      );
+    })
+
     return this;
   };
 
@@ -101,7 +105,7 @@ const Printer = function (plugin, config, station) {
 
   const self = this;
 
-  this.print = (raw, receipt,target) => checkStatus().then(() => Ticket.bind(self)(raw, receipt,target));
+  this.print = (raw, receipt, target) => checkStatus().then(() => Ticket.bind(self)(raw, receipt, target));
   this.preview = (printer, ticket) => Preview.bind(self)(printer, ticket);
   this.printReport = data => checkStatus().then(() => Report.bind(self)(data));
   this.printLabel = (printer, order) => checkStatus().then(() => Label.bind(self)(printer, order));

@@ -15,7 +15,7 @@
       </header>
       <table>
         <thead>
-          <tr>
+          <tr class="banner">
             <th class="num">{{$t('thead.ticket')}}</th>
             <th class="type" @click="toggleType" v-if="!showTable">{{$t('thead.orderType')}}</th>
             <th class="type" @click="toggleType" v-else>{{$t('thead.table')}}</th>
@@ -277,17 +277,6 @@ table {
   border-spacing: 0;
   table-layout: auto;
   width: 100%;
-}
-thead tr {
-  background: #009688;
-  color: #fff;
-  text-shadow: 0 1px 1px #333;
-}
-
-thead th {
-  font-weight: normal;
-  padding: 3px 0;
-  border-bottom: 1px solid #eeeeee;
 }
 
 .wrap header {

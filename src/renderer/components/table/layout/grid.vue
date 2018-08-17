@@ -206,18 +206,18 @@ export default {
         }
       });
     },
-
     createTable({ _id, name, guest }) {
       const session = ObjectId().toString();
+      const type = this.table.type === "regular" ? "DINE_IN" : "BAR";
 
       this.resetOrder();
-      this.setTicket({ type: "DINE_IN" });
+      this.setTicket({ type });
       this.setApp({ newTicket: true });
       this.setOrder({
-        type: "DINE_IN",
         tableID: _id,
         table: name,
         session,
+        type,
         guest
       });
 

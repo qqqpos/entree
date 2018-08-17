@@ -12,7 +12,7 @@
       <i class="fab fa-google-wallet"></i>
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
-    <button class="btn" @click="openDiscountModule">
+    <button class="btn" @click="openDiscountModule" :disabled="order.settled">
       <i class="fa fa-tags"></i>
       <span class="text">{{$t('button.discount')}}</span>
     </button>
@@ -58,6 +58,10 @@ export default {
   },
   created() {
     this.assignable = this.approval(this.op.modify, "driver");
+    this.$bus.on("pay", this.openPaymentModule);
+  },
+  beforeDestroy() {
+    this.$bus.off("pay", this.openPaymentModule);
   },
   methods: {
     thirdParty() {

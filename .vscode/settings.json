@@ -3,13 +3,17 @@
         "cashdrawer",
         "cashflow",
         "creditcard",
+        "dataset",
         "giftcard",
         "mastercard",
         "mini",
         "paginator",
         "payment",
+        "thead",
+        "uncheck",
         "unprint",
         "unsave",
+        "vuex",
         "warning"
     ],
     "cSpell.enabledLanguageIds": [
