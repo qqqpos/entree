@@ -2,11 +2,15 @@
     <div class="hibachi-grid">
         <div class="hibachi-seat" :class="[table.layout,table.orientation]" v-for="(table,index) in tables" :key="index" :data-hibachi="table._id">
             <div class="table-name create" v-if="target === table.name && seats.length">
-              <div class="mini-btn" @click="cancel"><i class="fas fa-hand-paper light space"></i>{{$t('button.cancel')}}</div>
+              <div class="mini-btn" @click="cancel"><i class="fas fa-ban light space"></i>{{$t('button.cancel')}}</div>
               <div class="mini-btn" @click="create"><i class="fas fa-utensils light space"></i>{{$t('button.create')}}</div>
             </div>
             <span class="table-name" v-else>{{table.name}}</span>
-            <span v-for="(seat,idx) in table.seats" :key="idx" :index="idx" :data-seat="seat.name" class="seat" tag="span" @click="tap($event,table,seat)">{{seat.name}}</span>
+            <span v-for="(seat,idx) in table.seats" :key="idx" :index="idx" :data-seat="seat.name" class="seat" tag="span" @click="tap($event,table,seat)" @contextmenu="resetTableDialog(table._id,seat)">
+              <span class="ticket" v-show="seat.number"># {{seat.number}}</span>
+              <span class="server">{{seat.server}}</span>
+              {{seat.name}}
+            </span>
         </div>
         <div :is="component" :init="componentData"></div>
     </div>
@@ -47,7 +51,7 @@ export default {
     viewTicket(_id) {
       const invoice = this.history.find(t => t._id === _id);
 
-      invoice ? this.viewHibachi(invoice) : this.noFoundDialog("HIBACHI",_id);
+      invoice ? this.viewHibachi(invoice) : this.noFoundDialog("HIBACHI", _id);
     },
     viewHibachi(invoice) {
       const { _id, tableID, seats } = invoice;
@@ -88,7 +92,7 @@ export default {
         .catch(this.exitComponent);
     },
     createTable() {
-      this.resetMenu();
+      this.resetOrder();
       this.exitComponent();
 
       const session = ObjectId().toString();
@@ -122,10 +126,34 @@ export default {
       this.$socket.emit("[TABLE] UPDATE", this.table);
       this.$router.push({ path: "/main/menu" });
     },
+    resetTableDialog(_id, { name, server, session }) {
+      const { role } = this.op;
+
+      const prompt = {
+        title: "dialog.forceClearTable",
+        msg: server
+          ? ["dialog.forceClearTableConfirm", server, name]
+          : "dialog.resetTableConfirm",
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.clear", fn: "resolve" }
+        ]
+      };
+
+      if (role === "Manager" || role === "Owner" || role === "Developer") {
+        this.$dialog(prompt)
+          .then(() => {
+            this.$socket.emit("[HIBACHI] RESET", { _id, session });
+            this.resetOrder();
+            this.exitComponent();
+          })
+          .catch(this.exitComponent);
+      }
+    },
     ...mapActions([
       "setApp",
-      "resetMenu",
       "setTicket",
+      "resetOrder",
       "setOperator",
       "setViewTable",
       "setViewOrder"
@@ -174,5 +202,29 @@ export default {
 .active {
   background: #607d8b;
   color: #fff;
+}
+
+.server {
+  bottom: 15px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  background: #03a9f4;
+  color: #fff;
+  text-shadow: 0 1px 1px #333;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 1px #badefb;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticket {
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  font-family: "Agency FB";
+  font-weight: bold;
+  color: #607d8b;
 }
 </style>

@@ -9,6 +9,7 @@
         "giftcard",
         "mastercard",
         "mini",
+        "mixins",
         "paginator",
         "payment",
         "prevs",

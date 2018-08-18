@@ -589,7 +589,7 @@ export default {
     batchCloseConfirm: "Please Check if you have entered tips for all Invoices.",
     batchFailed: "Batch Failed",
     batchFailErrorCode: "Fail Code: {i}",
-    cashChange: "Change: ${i}",
+    cashChange: "Change: $ {i}",
     cashChangeDetail: "Customer has paid ($ {i})",
     printReceipt: "Print Receipt",
     printReceiptConfirm: "Do you want to print a receipt to customer?",

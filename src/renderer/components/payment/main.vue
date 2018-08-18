@@ -112,7 +112,8 @@ export default {
       releaseComponentLock: true,
       componentData: null,
       component: null,
-      payment: {}
+      payment: {},
+      defaults: {}
     };
   },
   computed: {
@@ -227,7 +228,6 @@ export default {
     },
     initialData(split) {
       this.exitComponent();
-
       this.willTicketNumberUpdate = this.isNewTicket;
 
       return new Promise((next, stop) => {
@@ -293,9 +293,16 @@ export default {
 
       const {
         defaults = {
-          paymentType: "CASH"
+          instantPay: false,
+          paymentType: "CASH",
+          allowNoPrint: false,
+          percentageTip: false,
+          percentageDiscount: false,
+          markPrintWhenSettled: false
         }
       } = this.config;
+
+      this.defaults = defaults;
 
       const defaultType = this.isThirdPartyPayment
         ? "THIRD"
@@ -332,16 +339,11 @@ export default {
     },
     changePaymentType(newType) {
       //apply default payment type
-      const {
-        defaults = {
-          paymentType: "CASH"
-        }
-      } = this.config;
-
-      newType = newType || defaults.paymentType;
+      newType = newType || this.defaults.paymentType;
 
       this.anchor = "paid";
       this.paymentType = newType;
+      this.willResetFieldValue = true;
       this.paid =
         newType === "CASH" ? "0.00" : this.order.payment.remain.toFixed(2);
 
@@ -885,7 +887,6 @@ export default {
       return new Promise(next => {
         const paid = this.paid.toFixed(2);
         const tender = this.currentTender.toFixed(2);
-        const { defaults = {} } = this.config;
 
         this.poleDisplay(["Paid CASH", paid], ["Change Due", tender]);
 
@@ -904,7 +905,7 @@ export default {
           ]
         };
 
-        defaults.allowNoPrint &&
+        this.defaults.allowNoPrint &&
           tenderWithDialog.buttons.unshift({
             text: "button.noPrint",
             fn: "noPrint"
@@ -931,14 +932,12 @@ export default {
                 });
           }
         } else {
-          this.askReceipt().then(() => next());
+          this.askReceipt(tender, paid).then(() => next());
         }
       });
     },
-    askReceipt() {
+    askReceipt(tender, paid) {
       return new Promise(next => {
-        const { defaults = {} } = this.config;
-
         const prompt = {
           title: ["dialog.cashChange", tender],
           msg: ["dialog.cashChangeDetail", paid],
@@ -948,7 +947,7 @@ export default {
           ]
         };
 
-        defaults.allowNoPrint &&
+        this.defaults.allowNoPrint &&
           prompt.buttons.unshift({
             text: "button.noPrint",
             fn: "noPrint"
@@ -962,7 +961,7 @@ export default {
             this.printReceipt(next);
             break;
           default:
-            this.$dialog(tenderWithDialog)
+            this.$dialog(prompt)
               .then(() => this.printTicket("All", next))
               .catch(noPrint => {
                 noPrint
@@ -973,16 +972,22 @@ export default {
       });
     },
     printTicket(target, next) {
+      let print = false;
+
       switch (target) {
         case "All":
         case "Receipt":
         case "Order":
+          print = true;
           Printer.setTarget(target).print(this.order);
           break;
         default:
       }
 
-      const markPrint = this.order.payment.remain === 0 || print;
+      const markPrint = this.defaults.markPrintWhenSettled
+        ? this.order.payment.remain === 0 || print
+        : print;
+
       this.$socket.emit("[ORDER] UPDATE", this.order, markPrint);
 
       this.exitComponent();
@@ -1030,16 +1035,10 @@ export default {
     },
     setTip() {
       new Promise((resolve, reject) => {
-        const {
-          defaults = {
-            percentageTip: false
-          }
-        } = this.config;
-
         const config = {
           title: "title.tip",
-          type: defaults.percentageTip ? "number" : "decimal",
-          percentage: defaults.percentageTip,
+          type: this.defaults.percentageTip ? "number" : "decimal",
+          percentage: this.defaults.percentageTip,
           allowPercentage: true,
           amount: "0.00"
         };
@@ -1061,15 +1060,10 @@ export default {
     },
     setDiscount() {
       new Promise((resolve, reject) => {
-        const {
-          defaults = {
-            percentageDiscount: false
-          }
-        } = this.config;
         const config = {
           title: "title.discount",
-          type: defaults.percentageDiscount ? "number" : "decimal",
-          percentage: defaults.percentageDiscount,
+          type: this.defaults.percentageDiscount ? "number" : "decimal",
+          percentage: this.defaults.percentageDiscount,
           allowPercentage: true,
           amount: "0.00"
         };
@@ -1182,7 +1176,7 @@ export default {
       this.paid = value.toFixed(2);
       this.willResetFieldValue = true;
 
-      this.config.defaults.instantPay && this.charge();
+      this.defaults.instantPay && this.charge();
     },
     setExternalType(newType) {
       this.externalPaymentType = newType;
@@ -1315,10 +1309,12 @@ export default {
         : this.exitComponent();
     },
     closeTicket() {
+      const print = this.defaults.markPrintWhenSettled;
+
       this.$socket.emit(
         "[ORDER] UPDATE",
         Object.assign(this.invoice, { settled: true }),
-        true
+        print
       );
 
       switch (this.$route.name) {

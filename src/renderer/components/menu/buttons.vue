@@ -458,6 +458,24 @@ export default {
           this.$socket.emit("[TABLE] UPDATE", this.table);
         }
 
+        if (
+          this.order.type === "HIBACHI" &&
+          this.table &&
+          Array.isArray(this.table.seats)
+        ) {
+          this.table.seats.forEach(seat => {
+            this.order.seats.includes(seat.name) &&
+              Object.assign(seat, {
+                invoice: this.order._id,
+                session: this.order.session,
+                number: this.order.number,
+                status: 2
+              });
+          });
+
+          this.$socket.emit("[TABLE] UPDATE", this.table);
+        }
+
         let order = this.combineOrderInfo({ printCount });
         let todo = !!document.querySelector(".item.todo");
 
@@ -614,10 +632,18 @@ export default {
     },
     resetTableExit() {
       if (this.table) {
-        const { _id, status } = this.table;
+        const { _id, status, seats } = this.table;
 
-        if (this.app.newTicket || status === -1)
+        if (this.app.newTicket || status === -1) {
           this.$socket.emit("[TABLE] RESET", { _id });
+        }
+
+        if (this.app.newTicket || Array.isArray(seats)) {
+          this.$socket.emit("[HIBACHI] RESET", {
+            _id,
+            session: this.order.session
+          });
+        }
       }
       this.abandon();
     },

@@ -2,7 +2,7 @@
   <div>
     <draggable v-model="station.interface" :options="{animation: 300,ghostClass: 'ghost'}">
       <transition-group tag="article" class="grid" :class="{enlarge:station.enlarge}">
-        <div v-for="(grid,index) in station.interface" :key="index" class="block" @click.prevent.stop="edit(grid,index)" :class="{disable:!grid.enable}">
+        <div v-for="(grid,index) in station.interface" :key="index" class="route" @click.prevent.stop="edit(grid,index)" :class="{disable:!grid.enable}">
           <i class="fa icon" :class="[grid.icon]"></i>
           <h1>{{grid.head}}</h1>
           <h4>{{grid.subhead}}</h4>
@@ -61,7 +61,7 @@ export default {
   grid-template-columns: repeat(4, 1fr);
 }
 
-.block {
+.route {
   width: 175px;
   padding: 40px 20px 17px;
   border: 1px solid #e0e0e0;
@@ -80,7 +80,7 @@ i.icon {
   color: var(--deepBlue);
 }
 
-.block h4 {
+.route h4 {
   font-weight: normal;
   color: gray;
 }

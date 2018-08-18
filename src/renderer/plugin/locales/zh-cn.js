@@ -516,7 +516,7 @@ export default {
     batchCloseConfirm: "请您确认已经输入完所有订单上的小费",
     batchFailed: "过账失败",
     batchFailErrorCode: "过账错误代码: {i}",
-    cashChange: "请找 ${i}",
+    cashChange: "请找 $ {i}",
     cashChangeDetail: "客人支付现金 ($ {i})",
     printReceipt: "打印收据",
     printReceiptConfirm: "是否需要打印收据给客人？",

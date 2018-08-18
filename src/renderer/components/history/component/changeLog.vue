@@ -267,7 +267,7 @@ li:nth-child(even) {
 }
 
 .diff {
-  width: 140px;
+  width: 135px;
 }
 
 ul.log:after {

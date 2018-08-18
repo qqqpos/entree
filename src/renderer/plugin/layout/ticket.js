@@ -473,11 +473,11 @@ function createStyle(setting) {
               .payment .value{min-width:40%;text-align:right;}\
               .ticket-settle{${payment ? "" : "display:none;"}}\
               .payment p.bold{font-weight:bold;font-size:22px;}\
-              .details{border:1px dashed #000;margin-top:5px;text-align:center;}\
-              .details h3{letter-spacing:1px;}\
-              .details p{display:flex;}\
-              .details .text{text-align:right;padding-right:20px;flex:5;}\
-              .details .value{text-align:left;flex:6}\
+              .dashed-wrap{border:1px dashed #000;margin-top:5px;text-align:center;}\
+              .dashed-wrap h3{letter-spacing:1px;}\
+              .dashed-wrap p{display:flex;}\
+              .dashed-wrap .text{text-align:right;padding-right:20px;flex:5;}\
+              .dashed-wrap .value{text-align:left;flex:6}\
               .suggestion{border:1px dashed #000;padding:5px;display:flex;flex-direction:column;text-align:center;}\
               .suggestion h5{font-size:22px;}\
               .suggestion i{font-style: italic;font-size:14px;}\
@@ -536,34 +536,34 @@ function createFooter(config, setting, printer, ticket) {
 
   let settle = [];
 
-  coupons.forEach(coupon => settle.push(`<section class="details"><h3>${coupon.alias}</h3><p>${coupon.slogan || ''}</p></section>`));
+  coupons.forEach(coupon => settle.push(`<section class="dashed-wrap"><h3>${coupon.alias}</h3><p>${coupon.slogan || ''}</p></section>`));
 
   (logs || payment.log || []).forEach(log => {
     const { type, subType, lfd, paid, tip, change } = log;
     const tipText = tip > 0 ? `<p><span class="text">Tip:</span><span class="value">$ ${tip.toFixed(2)}</span></p>` : "";
     switch (type) {
       case "CASH":
-        settle.push(`<section class="details">\
+        settle.push(`<section class="dashed-wrap">\
                         <h3>Paid by Cash - Thank You</h3>\
                         <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>\
                         <p><span class="text">Change:</span><span class="value">$ ${change.toFixed(2)}</span></p>\
                     </section>`);
         break;
       case "CREDIT":
-        settle.push(`<section class="details">\
+        settle.push(`<section class="dashed-wrap">\
                         <h3>CREDIT CARD - ${subType} ( ${lfd} )</h3>\
                         <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>${tipText}
                     </section>`);
         break;
       case "GIFT":
-        settle.push(`<section class="details">\
+        settle.push(`<section class="dashed-wrap">\
                         <h3>Paid by GIFT Card - Thank You</h3>\
                         <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>
                     </section>`);
         break;
       default:
         settle.push(
-          `<section class="details">\
+          `<section class="dashed-wrap">\
           <h3>Paid by ${subType} - Thank You</h3>\
           <p>\
               <span class="text">Paid:</span>\
@@ -575,12 +575,12 @@ function createFooter(config, setting, printer, ticket) {
   });
 
   if (payment.paid > 0 && payment.remain > 0)
-    settle.push(`<section class="details"><h3>Balance Due: $ ${payment.remain.toFixed(2)}</h3></section>`);
+    settle.push(`<section class="dashed-wrap"><h3>Balance Due: $ ${payment.remain.toFixed(2)}</h3></section>`);
 
   if (ticket.status === 0) {
     const voidNote = `Void by: ${ticket.void.by} @ ${moment(ticket.void.time).format("HH:mm:ss")}`;
 
-    settle.push(`<section class="details">\
+    settle.push(`<section class="dashed-wrap">\
                     <h3>*** Ticket Voided ***</h3>\
                     <p>\
                         <span class="text">Reason:</span>\

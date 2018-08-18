@@ -60,13 +60,14 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
+import transfer from "./transfer";
 import ticket from "../../common/ticket";
 import dialogModule from "../../common/dialog";
 import paginator from "../../common/paginator";
 
 export default {
   props: ["init"],
-  components: { ticket, dialogModule, paginator },
+  components: { ticket, transfer, dialogModule, paginator },
   data() {
     return {
       componentData: null,
@@ -105,7 +106,10 @@ export default {
       const index = Object.keys(this.tables).findIndex(section =>
         this.tables[section].find(table => table.name === name)
       );
-      return this.layouts.table[index][this.language];
+
+      return this.layouts.table[index]
+        ? this.layouts.table[index][this.language]
+        : "";
     },
     getStatus(items) {
       const done = items.every(item => item.print);
@@ -124,7 +128,10 @@ export default {
     inQueue(id) {
       return this.queue.includes(id);
     },
-    swapDialog() {},
+    swapDialog() {
+      const invoices = this.history.filter(t => this.queue.includes(t._id));
+      this.$open("transfer", { invoices });
+    },
     combineDialog(parent) {
       const queues = this.queue.filter(_id => _id !== parent._id);
       const splits = this.history.filter(t => queues.includes(t._id));

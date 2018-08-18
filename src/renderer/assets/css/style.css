@@ -1207,12 +1207,13 @@ thead.title td {
 }
 
 /* hibachi style */
-.hibachi-seat span {
+.hibachi-seat > span {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #fff;
   border-radius: 4px;
+  position: relative;
 }
 .hibachi-seat .table-name {
   font-weight: bold;
