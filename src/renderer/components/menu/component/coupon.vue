@@ -9,7 +9,7 @@
       </header>
       <div class="banner"></div>
       <div class="wrap">
-        <offer v-for="(coupon,index) in coupons" :key="index" :promotion="coupon" :overstack="stack" @change="checkStack"></offer>
+        <offer v-for="(coupon,index) in coupons" :key="index" :promotion="coupon" :stack="stack" @change="checkStack"></offer>
       </div>
       <footer>
         <div class="opt">

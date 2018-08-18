@@ -10,7 +10,6 @@
           <span @click="create">{{$t('button.create')}}</span>
         </nav>
       </header>
-      <toggle title="setting.delivery.tax" tooltip="tip.delivery.tax" v-model="tax.deliveryTax" @update="updateDeliveryTax"></toggle>
       <toggle title="setting.delivery.charge" true-tooltip="tip.delivery.charge" false-tooltip="tip.delivery.free" v-model="store.deliver.charge" :conditionalTooltip="true">
         <transition name="dropdown">
           <div class="opt" v-if="store.deliver.charge">
@@ -18,6 +17,7 @@
           </div>
         </transition>
       </toggle>
+      <toggle title="setting.delivery.tax" tooltip="tip.delivery.tax" v-model="tax.deliveryTax"></toggle>
       <toggle title="setting.delivery.surcharge" v-model="store.deliver.surcharge">
         <transition name="dropdown">
           <div v-if="store.deliver.surcharge">
@@ -35,7 +35,7 @@
                   <td class="guest">{{$t('text.overMile',rule.distance)}}</td>
                   <td class="amount">$ {{rule.fee | decimal}}</td>
                   <td @click="edit(rule,index)" class="opt" colspan="2">
-                    <i class="fa fa-pencil-square"></i>
+                    <i class="fas fa-ellipsis-v light"></i>
                   </td>
                 </tr>
               </tbody>
@@ -50,9 +50,10 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
-import editor from "../component/deliveryEditor";
+import editor from "../editor/delivery";
 
 export default {
   components: { toggle, inputer, editor },
@@ -62,11 +63,11 @@ export default {
   data() {
     return {
       store: null,
-      component: null,
-      componentData: null
+      componentData: null,
+      component: null
     };
   },
-  created() {
+  created(){
     this.store = Object.assign({}, this.config.store);
   },
   beforeDestroy() {
@@ -79,45 +80,9 @@ export default {
     update(data) {
       this.$socket.emit("[CONFIG] UPDATE", data);
     },
-    updateDelivery(value) {
-      this.update({
-        key: "store.deliver.charge",
-        value
-      });
-    },
-    updateDeliveryFee(value) {
-      this.update({
-        key: "store.deliver.baseFee",
-        value: parseFloat(value)
-      });
-    },
-    updateDeliveryTax(value) {
-      this.update({
-        key: "tax.deliveryTax",
-        value
-      });
-    },
-    updateDeliveryTip(value) {
-      this.update({
-        key: "store.deliver.adjustTip",
-        value: parseFloat(value)
-      });
-    },
-    updateChargeRules() {
-      this.update({
-        key: "store.deliver.rules",
-        value: this.store.deliver.rules
-      });
-    },
-    updateDeliverySurcharge(value) {
-      this.update({
-        key: "store.deliver.surcharge.enable",
-        value
-      });
-    },
     create() {
       const rule = {
-        distance: "",
+        distance: 0,
         fee: 0
       };
 
@@ -125,9 +90,8 @@ export default {
         this.componentData = { resolve, reject, rule, edit: false };
         this.component = "editor";
       })
-        .then(_rule => {
-          this.store.deliver.rules.push(_rule);
-          this.updateChargeRules();
+        .then(update => {
+          this.store.deliver.rules.push(update);
           this.exitComponent();
         })
         .catch(this.exitComponent);
@@ -137,17 +101,13 @@ export default {
         this.componentData = { resolve, reject, rule, edit: true };
         this.component = "editor";
       })
-        .then(_rule => {
-          this.store.deliver.rules.splice(index, 1, _rule);
-          this.updateChargeRules();
+        .then(update => {
+          this.store.deliver.rules.splice(index, 1, update);
           this.exitComponent();
         })
-        .catch(del => {
-          if (del) {
-            this.store.deliver.rules.splice(index, 1);
-            this.updateChargeRules();
-          }
+        .catch(remove => {
           this.exitComponent();
+          remove && this.store.deliver.rules.splice(index, 1);
         });
     }
   }

@@ -40,7 +40,7 @@
                           <td class="actions">
                             <span class="action yellow" @click.stop="$open('ticket',{ticket})">{{$t('button.view')}}</span>
                             <span class="action gray" :class="{disable:queue.length < 2}" @click.stop="combineDialog(ticket)">{{$t('button.combine')}}</span>
-                            <span class="action yellow" :class="{disable:queue.length > 0}" @click.stop="pay(ticket)">{{$t('button.pay')}}</span>
+                            <span class="action yellow" :class="{disable:queue.length > 0}" @click.stop="$bus.emit('pay', {order:ticket})">{{$t('button.pay')}}</span>
                           </td>
                       </tr>
                   </tbody>
@@ -92,10 +92,6 @@ export default {
     setPage(n) {
       this.page = n;
     },
-    pay(ticket) {
-      this.init.resolve();
-      this.$bus.emit("pay", ticket);
-    },
     addQueue(id) {
       const index = this.queue.findIndex(_id => _id === id);
       index === -1 ? this.queue.push(id) : this.queue.splice(index, 1);
@@ -140,6 +136,9 @@ export default {
       return this.invoices.slice(min, max);
     },
     ...mapGetters(["op", "history", "tables", "layouts", "language"])
+  },
+  watch: {
+    history: "initialData"
   }
 };
 </script>

@@ -1,45 +1,44 @@
 <template>
   <div>
-    <header class="nav">
-      <router-link tag="div" :to="{name:'Setting.promotion'}" class="back">
-        <i class="fa fa-chevron-left"></i>
-      </router-link>
-      <div class="title">
-        <h3>{{$t('title.couponList')}}</h3>
-      </div>
-      <nav>
-        <span @click="create">{{$t('button.new')}}</span>
-      </nav>
-    </header>
-    <table class="setting">
-      <thead>
-        <tr>
-          <th>{{$t('thead.name')}}</th>
-          <th>{{$t('thead.discount')}}</th>
-          <th>{{$t('thead.expire')}}</th>
-          <th>{{$t('thead.count')}}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(coupon,index) in coupons" :key="index">
-          <td>{{coupon.alias}}</td>
-          <td class="amount" v-if="coupon.type === 'discount'">{{coupon.discount}} %</td>
-          <td class="amount" v-else>$ {{coupon.discount | decimal}}</td>
-          <td :class="{expired: (coupon.expire.enable && today > coupon.expire.date)}">{{format(coupon.expire.date)}}</td>
-          <td>{{coupon.count}}</td>
-          <td class="opt" @click="edit(coupon,index)">
-            <i class="fa fa-ellipsis-v"></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="tab-content">
+      <header class="nav">
+        <div class="title">
+          <h3>{{$t('setting.title.couponList')}}</h3>
+        </div>
+        <nav>
+          <span @click="create">{{$t('button.new')}}</span>
+        </nav>
+      </header>
+      <table class="setting">
+        <thead>
+          <tr>
+            <th>{{$t('thead.name')}}</th>
+            <th>{{$t('thead.discount')}}</th>
+            <th>{{$t('thead.expire')}}</th>
+            <th>{{$t('thead.count')}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(coupon,index) in coupons" :key="index">
+            <td>{{coupon.alias}}</td>
+            <td class="amount" v-if="coupon.type === 'discount'">{{coupon.discount}} %</td>
+            <td class="amount" v-else>$ {{coupon.discount | decimal}}</td>
+            <td :class="{expired: (coupon.expire.enable && today > coupon.expire.date)}">{{format(coupon.expire.date)}}</td>
+            <td>{{coupon.count}}</td>
+            <td class="opt" @click="edit(coupon,index)">
+              <i class="fa fa-ellipsis-v"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>
 
 <script>
-import editor from "../component/couponEditor";
+import editor from "./editor/coupon";
 export default {
   props: ["init"],
   components: { editor },
@@ -48,7 +47,7 @@ export default {
       componentData: null,
       component: null,
       coupons: [],
-      today: +new Date()
+      today: Date.now()
     };
   },
   beforeRouteEnter: (to, from, next) => {
@@ -100,22 +99,21 @@ export default {
         this.componentData = { resolve, reject, coupon, edit: !!coupon._id };
         this.component = "editor";
       })
-        .then(_coupon => {
-          this.$socket.emit("[COUPON] UPDATE", _coupon, data => {
+        .then(update => {
+          this.$socket.emit("[COUPON] UPDATE", update, data => {
             this.coupons.splice(index, 1, data);
             this.$socket.emit("[COUPON] LIST", coupons => {
               this.coupons = coupons;
               this.exitComponent();
-            })
+            });
           });
         })
-        .catch(del => {
-          if (del) {
+        .catch(remove => {
+          this.exitComponent();
+          remove &&
             this.$socket.emit("[COUPON] REMOVE", coupon._id, () => {
               this.coupons.splice(index, 1);
             });
-          }
-          this.exitComponent();
         });
     }
   }

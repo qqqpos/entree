@@ -102,16 +102,16 @@ export default new Router({
                 {
                   path: "tax",
                   name: "Setting.store.tax",
-                  component: require("../components/setting/store/sub/tax")
+                  component: require("../components/setting/store/component/tax")
                 },
                 {
                   path: "delivery",
                   name: "Setting.store.delivery",
-                  component: require("../components/setting/store/sub/delivery")
+                  component: require("../components/setting/store/component/delivery")
                 }, {
                   path: "defaults",
                   name: "Setting.store.defaults",
-                  component: require("../components/setting/store/sub/defaults")
+                  component: require("../components/setting/store/component/defaults")
                 },
                 {
                   path: "giftcard",
@@ -131,12 +131,12 @@ export default new Router({
                 {
                   path: "timecard",
                   name: "Setting.store.timecard",
-                  component: require("../components/setting/store/sub/timecard")
+                  component: require("../components/setting/store/component/timecard")
                 },
                 {
                   path: 'openHour',
                   name: 'Setting.store.openHour',
-                  component: require('../components/setting/store/sub/openHour')
+                  component: require('../components/setting/store/component/openHour')
                 },
                 {
                   path: "payment",
@@ -145,19 +145,8 @@ export default new Router({
                 },
                 {
                   path: "promotion",
-                  component: require("../components/setting/store/promotionTab"),
-                  children: [
-                    {
-                      path: "/",
-                      name: "Setting.promotion",
-                      component: require("../components/setting/store/promotion")
-                    },
-                    {
-                      path: "coupon",
-                      name: "Setting.promotion.coupon",
-                      component: require("../components/setting/store/sub/coupon")
-                    }
-                  ]
+                  name: "Setting.promotion",
+                  component: require("../components/setting/store/coupon"),
                 },
                 {
                   path: "terminal",

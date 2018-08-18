@@ -439,11 +439,11 @@ div.options {
 }
 
 label.title {
-  width: 80px;
+  width: 85px;
 }
 
 div.options .inner {
-  width: 189px;
+  width: 179px;
   height: 178px;
   border: 1px solid #eee;
   background: #fff;

@@ -228,7 +228,7 @@ const mutations = {
                     sideIndex: index,
                     total: single.toFixed(2),
                     unique: String().random(),
-                    side: { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` },
+                    side: ignore ? {} : { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` },
                 });
 
                 //apply style
@@ -241,9 +241,10 @@ const mutations = {
 
                 state.item = newItem;
 
-                setTimeout(() =>
-                    document.querySelectorAll("li.item")[itemIndex].classList.add("active")
-                );
+                itemIndex !== state.order.content.length - 1 &&
+                    setTimeout(() =>
+                        document.querySelectorAll("li.item")[itemIndex].classList.add("active")
+                    );
             }
         }
     },

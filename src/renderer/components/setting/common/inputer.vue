@@ -65,7 +65,7 @@ input {
 }
 
 label {
-  min-width: 80px;
+  min-width: 85px;
 }
 
 textarea {

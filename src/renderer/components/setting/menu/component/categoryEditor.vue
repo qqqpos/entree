@@ -29,6 +29,7 @@
         <div class="wrap">
           <inputer title="text.primary" v-model.trim="category.usEN" length="20"></inputer>
           <inputer title="text.secondary" v-model.trim="category.zhCN" length="20"></inputer>
+          <inputer title="text.description" v-model.trim="category.description" length="50"></inputer>
           <inputer title="text.contain" v-model="category.contain" v-if="manual"></inputer>
           <div class="checkboxes categories" v-else>
             <checkbox :title="name" v-model="category.contain" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false" :class="{missing:check(name)}"></checkbox>

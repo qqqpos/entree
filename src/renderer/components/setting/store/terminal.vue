@@ -37,8 +37,8 @@
 </template>
 
 <script>
+import editor from "./editor/device";
 import toggle from "../common/toggle";
-import editor from "./component/deviceEditor";
 
 export default {
   components: { toggle, editor },

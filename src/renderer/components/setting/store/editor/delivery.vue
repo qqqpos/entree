@@ -16,7 +16,7 @@
                 <div class="opt">
                     <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
                 </div>
-                <button class="btn" @click="confirm">{{$t('button.done')}}</button>
+                <button class="btn" @click="init.resolve(rule)">{{$t('button.done')}}</button>
             </footer>
         </div>
     </div>
@@ -26,23 +26,12 @@
 import inputer from "../../common/inputer";
 
 export default {
-    props: ["init"],
-    components: { inputer },
-    data() {
-        return {
-            rule: clone(this.init.rule)
-        };
-    },
-    methods: {
-        confirm() {
-            this.init.resolve(this.rule);
-        }
-    }
+  props: ["init"],
+  components: { inputer },
+  data() {
+    return {
+      rule: clone(this.init.rule)
+    };
+  }
 };
 </script>
-
-<style scoped>
-div.checkbox {
-  min-width: 120px;
-}
-</style>

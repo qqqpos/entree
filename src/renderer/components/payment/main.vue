@@ -295,6 +295,7 @@ export default {
         defaults = {
           instantPay: false,
           paymentType: "CASH",
+          autoSaveCard:false,
           allowNoPrint: false,
           percentageTip: false,
           percentageDiscount: false,
@@ -780,7 +781,7 @@ export default {
             delete this.order.__creditPayment__;
 
             //save credit card
-            if (this.store.autoSaveCard) {
+            if (this.defaults.autoSaveCard) {
               const { _id } = this.invoice.customer;
               const card = [this.creditCard, this.expDate, ""];
               const key = "whoisyourdaddy";
@@ -1399,6 +1400,7 @@ export default {
     },
     UPDATE_ORDER(invoice) {
       if (invoice._id === this.invoice._id) this.invoice = invoice;
+      if (invoice._id === this.order._id) this.order = invoice;
     }
   }
 };

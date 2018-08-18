@@ -77,7 +77,7 @@ export default {
 }
 
 label.title {
-  min-width: 80px;
+  min-width: 85px;
 }
 
 .inner {

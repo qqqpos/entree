@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import openTime from "../component/time";
+import openTime from "../editor/openTime";
 
 export default {
   components: { openTime },
@@ -32,7 +32,7 @@ export default {
     };
   },
   created() {
-    this.openingHours = this.$store.getters.store.openingHours;
+    this.openingHours = this.$store.getters.store.openingHours || {};
   },
   beforeDestroy() {
     this.$socket.emit("[CONFIG] UPDATE", {

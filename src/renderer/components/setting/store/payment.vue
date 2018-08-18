@@ -6,8 +6,6 @@
     </header>
     <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
     <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
-    <external title="setting.default.setValue" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
-    <toggle title="setting.autoSaveCreditCard" v-model="store.autoSaveCard" v-show="authorized" @update="updateAutoSave"></toggle>
     <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
       <transition name="dropdown">
@@ -18,12 +16,14 @@
       </transition>
     </toggle>
     <options title="setting.receiptDialog" tooltip="tip.receiptDefaultAction" v-model="store.receipt" :opts="receiptOption" @update="updateReceipt"></options>
+    <external title="text.advance" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
 import toggle from "../common/toggle";
 import inputer from "../common/inputer";
 import options from "../common/options";
@@ -86,15 +86,7 @@ export default {
     };
   },
   created() {
-    //patch
     this.store = Object.assign({}, this.config.store);
-    // !this.store.hasOwnProperty("tipSuggestion") &&
-    //   Object.assign(this.store, {
-    //     tipSuggestion: {
-    //       enable: false,
-    //       percentages: "15,18,20"
-    //     }
-    //   });
   },
   methods: {
     update(data) {
@@ -130,12 +122,6 @@ export default {
     updatePaymentType(value) {
       this.update({
         key: "store.defaultPaymentType",
-        value
-      });
-    },
-    updateDiscountType(value) {
-      this.update({
-        key: "store.defaultDiscountUnit",
         value
       });
     },

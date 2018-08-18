@@ -24,10 +24,10 @@
 
 <script>
 import toggle from "../common/toggle";
+import register from "./editor/register";
 import external from "../common/external";
 import textList from "../common/textList";
 import textInput from "../common/textInput";
-import register from "./component/register";
 
 export default {
   components: { toggle, external, textInput, textList, register },

@@ -321,10 +321,6 @@ export default {
     },
     TICKET_NUMBER(number) {
       this.setTicket({ number });
-
-      // this.app.newTicket &&
-      //   this.$route.name === "Menu" &&
-      //   this.setOrder({ number });
     },
     UPDATE_CONFIG({ target, data }) {
       Object.assign(this.config, { [target]: data });

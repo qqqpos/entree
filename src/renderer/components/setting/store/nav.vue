@@ -24,7 +24,7 @@
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.promotion'}">
                     <i class="fa fa-tags"></i>
-                    <span class="text">{{$t('setting.nav.promotion')}}</span>
+                    <span class="text">{{$t('setting.nav.coupon')}}</span>
                 </router-link>
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">
                     <i class="fas fa-sliders-h"></i>

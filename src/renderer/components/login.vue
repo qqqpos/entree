@@ -236,8 +236,8 @@ export default {
         .catch(this.exitComponent);
     },
     async shutdown() {
-      await this.indexDatabase();
-      await this.backupDatabase();
+      // await this.indexDatabase();
+      // await this.backupDatabase();
       this.$electron.ipcRenderer.send("Shutdown");
     },
     restart() {

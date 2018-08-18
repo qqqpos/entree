@@ -180,8 +180,8 @@ header.nav {
   padding: 6px;
   height: 38px;
   align-items: center;
-  background: #fcfcfc;
-  border-bottom: 1px solid #eee;
+  background: linear-gradient(to bottom, #fff 0%, #F5F5F5 100%);
+  border-bottom: 1px solid #EEEEEE;
 }
 
 header.nav .back {
@@ -199,6 +199,7 @@ header.nav .back {
 header.nav .title {
   flex: 1;
   text-align: center;
+  color: #263238;
 }
 
 header.nav .title h5 {

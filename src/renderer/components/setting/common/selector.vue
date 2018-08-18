@@ -122,7 +122,7 @@ input {
 }
 
 .title {
-  min-width: 80px;
+  min-width: 85px;
 }
 
 label {

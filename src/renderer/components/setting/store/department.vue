@@ -17,7 +17,7 @@
 
 <script>
 import external from "../common/external";
-import editor from "./component/departmentEditor";
+import editor from "./editor/department";
 
 export default {
   components: { external, editor },

@@ -392,7 +392,6 @@ export default {
     coupon: "折价卷",
     batch: "过账",
     printerList: "打印机列表",
-    couponList: "折扣卷列表",
     taxList: "税种列表",
     receiptTitle: "收据抬头",
     discount: "设折扣",
@@ -1411,7 +1410,8 @@ export default {
       batch: "过账记录",
       salesSummary: "营业额总览",
       database: "数据库设定",
-      stationDevice: "工作站设备"
+      stationDevice: "工作站设备",
+      couponList: "折扣卷列表",
     },
     receiptDialog: "打印收据",
     others: "其它设置",

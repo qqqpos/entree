@@ -2,13 +2,13 @@
   <div class="offer" :class="{invalid}" @click.stop="toggle">
     <div class="header">
       <span>{{coupon.alias}}</span>
-      <switches v-model="coupon.redeem" :disabled="unqualify || !coupon.enable" @input="$emit('change',coupon)"></switches>
+      <switches v-model="coupon.redeem" :disabled="unqualified || !coupon.enable" @input="$emit('change',coupon)"></switches>
     </div>
     <div class="inner">
       <p>{{coupon.description}}</p>
     </div>
     <div class="info">
-      <span class="tip" :class="{unqualify}">{{tooltip}}</span>
+      <span class="tip" :class="{unqualified}">{{tooltip}}</span>
       <span class="type">{{$t('type.'+coupon.type)}}</span>
     </div>
   </div>
@@ -19,7 +19,7 @@ import { mapGetters } from "vuex";
 import switches from "../../../setting/common/switches";
 
 export default {
-  props: ["promotion", "overstack"],
+  props: ["promotion", "stack"],
   components: { switches },
   computed: {
     invalid() {
@@ -34,7 +34,7 @@ export default {
 
       return false;
     },
-    unqualify() {
+    unqualified() {
       const { enable, amount, item, exclude } = this.coupon.require;
 
       if (!enable) {
@@ -164,7 +164,7 @@ p {
   color: #009688;
 }
 
-.tip.unqualify {
+.tip.unqualified {
   color: #ff9800;
 }
 

@@ -27,7 +27,8 @@
         </transition>
       </toggle>
       <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
-      <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>      
+      <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>     
+      <toggle title="setting.rewardSystem" v-model="store.reward" @update="updateReward" :disabled="operator.role !== 'Developer'"></toggle> 
     </div>
   </div>
 </template>

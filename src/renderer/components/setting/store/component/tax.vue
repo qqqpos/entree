@@ -22,24 +22,24 @@
       <table class="setting">
         <thead>
           <tr>
+            <th>{{$t('thead.default')}}</th>
             <th>{{$t('thead.name')}}</th>
             <th>{{$t('text.taxRate')}}</th>
-            <th>{{$t('thead.default')}}</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(tax,index) in tax.class" :key="index">
-            <td>{{tax.alias}}</td>
-            <td class="amount">{{tax.rate}} %</td>
             <td v-if="tax.default">
               <i class="fa fa-check-circle"></i>
             </td>
             <td v-else class="clickable" @click="setDefault(tax)">
               <i class="fa fa-check-o"></i>
             </td>
+            <td>{{tax.alias}}</td>
+            <td class="amount">{{tax.rate}} %</td>
             <td class="opt" @click="edit(tax,index,true)">
-              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v light"></i>
             </td>
           </tr>
         </tbody>
@@ -50,8 +50,8 @@
 </template>
 
 <script>
+import editor from "../editor/tax";
 import toggle from "../../common/toggle";
-import editor from "../component/taxEditor";
 import inputer from "../../common/inputer";
 
 export default {
@@ -62,6 +62,12 @@ export default {
       componentData: null,
       tax: Object.assign({}, this.$store.getters.tax)
     };
+  },
+  created() {
+    // hot fix
+    this.tax.plasticCharge = isNumber(this.tax.plasticCharge)
+      ? this.tax.plasticCharge
+      : 0.05;
   },
   methods: {
     create() {
