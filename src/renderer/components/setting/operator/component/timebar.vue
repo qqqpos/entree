@@ -107,7 +107,7 @@ export default {
 .progress {
   width: 100%;
   height: 15px;
-  border-radius: 6px;
+  border-radius: 7px;
   background: #e0e0e0;
   position: relative;
 }
@@ -116,15 +116,14 @@ export default {
   position: absolute;
   max-width: 386px;
   background: #81d4fa;
-  box-shadow: 0 2px 3px rgba(140, 173, 189, 0.46);
-  border-radius: 6px;
+  border-radius: 7px;
   height: 15px;
 }
 
 .shift:hover {
   filter: brightness(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
+
 .progress .shift:before,
 .progress .shift:after {
   position: absolute;
@@ -139,13 +138,13 @@ export default {
 }
 .progress .shift:before {
   content: attr(data-clock-in);
-  left: -13px;
+  left: 0;
   bottom: 16px;
 }
 
 .shift:after {
   content: attr(data-clock-out);
-  right: -17px;
+  right: 0;
   top: 16px;
 }
 

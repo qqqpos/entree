@@ -31,11 +31,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import driverModule from "./driver";
 import splitModule from "../split/index";
 import dialogModule from "../common/dialog";
 import paymentMarker from "../payment/mark";
 import paymentModule from "../payment/main";
-import driverModule from "./component/driver";
 import inputModule from "../component/inputer";
 
 export default {
@@ -286,12 +286,16 @@ export default {
         if (date !== this.today) {
           this.$socket.emit("[ORDER] HISTORY", date, data =>
             this.$open("driverModule", {
-              invoices: data.filter(i => i.type === "DELIVERY"),
+              invoices: data.filter(
+                i => i.type === "DELIVERY" && i.status === 1
+              ),
               drivers
             })
           );
         } else {
-          const invoices = this.history.filter(i => i.type === "DELIVERY");
+          const invoices = this.history.filter(
+            i => i.type === "DELIVERY" && i.status === 1
+          );
           this.$open("driverModule", {
             invoices,
             drivers,

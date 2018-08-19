@@ -99,7 +99,8 @@ export default {
     Bartender: "Bartender",
     Driver: "Driver",
     Worker: "Worker",
-    delay: "Delay"
+    delay: "Delay",
+    unassigned: "Unassigned"
   },
   CHANGE: {
     'UNCHANGED': 'No changes',
@@ -304,6 +305,7 @@ export default {
     discount: "Discount",
     thirdParty: "ThirdParty",
     driver: "Driver",
+    addDriver: "Add Driver",
     scan: "Scan",
     lock: "Lock",
     unlock: "Unlock",
@@ -1707,6 +1709,13 @@ export default {
     orientation: "Orientation",
     left: "Left",
     right: "Right"
+  },
+  select: {
+    selected:"Selected ({i})",
+    all: "Select All",
+    reverse: "Reverse",
+    assigned: "Assigned",
+    unassigned: "Unassigned"
   },
   tip: {
     autoLogin: "Operator auto login when pin is entered",

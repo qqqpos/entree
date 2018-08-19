@@ -169,6 +169,9 @@ export default {
       return this.invoices.slice(min, max);
     },
     ...mapGetters(["op", "history", "tables", "layouts", "language"])
+  },
+  watch: {
+    history: "initialData"
   }
 };
 </script>

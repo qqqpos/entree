@@ -142,6 +142,7 @@ export default {
             "Cashier",
             "Waitstaff",
             "Bartender",
+            "Driver",
             "Worker"
           ];
           this.payables = this.payables.sort(

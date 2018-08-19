@@ -91,7 +91,8 @@ export default {
     Bartender: "酒保",
     Driver: "司机",
     Worker: "员工",
-    delay: "延迟出单"
+    delay: "延迟出单",
+    unassigned: "未分配"
   },
   CHANGE: {
     'UNCHANGED': '无改动',
@@ -296,6 +297,7 @@ export default {
     discount: "折扣",
     thirdParty: "第三方",
     driver: "司机",
+    addDriver: "添加司机",
     scan: "扫描",
     lock: "锁定",
     unlock: "解锁",
@@ -1700,6 +1702,13 @@ export default {
     orientation: "方位",
     left: "朝左边",
     right: "朝右边"
+  },
+  select: {
+    selected:"已选 ({i})",
+    all: "全选",
+    reverse: "反选",
+    assigned: "已指定",
+    unassigned: "未指定"
   },
   tip: {
     autoLogin: "自动尝试用当前的密码登录用户",

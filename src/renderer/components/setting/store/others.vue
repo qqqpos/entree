@@ -109,6 +109,12 @@ export default {
         value
       });
     },
+    updateReward() {
+      this.update({
+        key: "store.reward",
+        value
+      });
+    },
     ...mapActions(["setMenu"])
   }
 };

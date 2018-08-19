@@ -319,10 +319,6 @@ export default {
   padding: 10px;
 }
 
-.scrollable {
-  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
 li {
   display: flex;
   padding: 0 11px;

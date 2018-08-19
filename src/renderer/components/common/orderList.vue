@@ -524,10 +524,6 @@ header.info {
   position: relative;
 }
 
-.scrollable {
-  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
 .mark {
   position: absolute;
   width: 100%;

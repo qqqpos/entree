@@ -346,8 +346,4 @@ span.driver {
   color: #009688;
   text-shadow: 0 1px 1px #607d8b;
 }
-
-.scrollable {
-  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
 </style>

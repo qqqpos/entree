@@ -208,7 +208,7 @@ tr.settled {
 }
 
 .alert {
-  background: #ef9a9a;
+  background: #ffccbc;
 }
 </style>
 

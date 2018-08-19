@@ -59,6 +59,7 @@ export default {
           "Cashier",
           "Waitstaff",
           "Bartender",
+          "Driver",
           "Worker"
         ];
         vm.operators = data

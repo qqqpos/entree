@@ -42,6 +42,7 @@ export default {
           "Cashier",
           "Waitstaff",
           "Bartender",
+          "Driver",
           "Worker"
         ];
         vm.list = data.sort(
@@ -71,6 +72,7 @@ export default {
               "Cashier",
               "Waitstaff",
               "Bartender",
+              "Driver",
               "Worker"
             ];
 
