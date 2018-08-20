@@ -295,7 +295,7 @@ export default {
         defaults = {
           instantPay: false,
           paymentType: "CASH",
-          autoSaveCard:false,
+          autoSaveCard: false,
           allowNoPrint: false,
           percentageTip: false,
           percentageDiscount: false,
@@ -939,14 +939,24 @@ export default {
     },
     askReceipt(tender, paid) {
       return new Promise(next => {
-        const prompt = {
-          title: ["dialog.cashChange", tender],
-          msg: ["dialog.cashChangeDetail", paid],
-          buttons: [
-            { text: "button.noReceipt", fn: "reject" },
-            { text: "button.print", fn: "resolve" }
-          ]
-        };
+        const prompt = tender
+          ? {
+              title: ["dialog.cashChange", tender],
+              msg: ["dialog.cashChangeDetail", paid],
+              buttons: [
+                { text: "button.noReceipt", fn: "reject" },
+                { text: "button.print", fn: "resolve" }
+              ]
+            }
+          : {
+              type: "question",
+              title: "dialog.printReceipt",
+              msg: "dialog.printReceiptConfirm",
+              buttons: [
+                { text: "button.noReceipt", fn: "reject" },
+                { text: "button.print", fn: "resolve" }
+              ]
+            };
 
         this.defaults.allowNoPrint &&
           prompt.buttons.unshift({

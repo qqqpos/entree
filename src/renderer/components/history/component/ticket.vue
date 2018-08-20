@@ -85,7 +85,7 @@ export default {
 .data {
   white-space: nowrap;
   overflow: hidden;
-  width: 110px;
+  width: 118px;
   text-overflow: ellipsis;
 }
 

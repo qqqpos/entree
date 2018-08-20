@@ -423,17 +423,18 @@ ul.drivers {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 42px;
+  height: 44px;
   margin: 4px 8px 4px 4px;
   cursor: pointer;
   background: #fff;
-  border: 1px solid #eee;
   position: relative;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
 
 .drivers li.active {
-  border: 1px solid #b0bec5;
-  background: #eceff1;
+  background: #607d8b;
+  color: #fff;
 }
 
 .drivers li.active:after {
@@ -444,7 +445,7 @@ ul.drivers {
   height: 0;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-left: 8px solid #b0bec5;
+  border-left: 8px solid #607d8b;
 }
 
 .tickets li {
