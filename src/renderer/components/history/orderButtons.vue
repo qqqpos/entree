@@ -20,7 +20,7 @@
       <i class="fa fa-times"></i>
       <span class="text">{{$t('button.exit')}}</span>
     </button>
-    <button class="btn" @click="driver" :disabled="!assignable">
+    <button class="btn" @click="driver">
       <i class="far fa-id-card"></i>
       <span class="text">{{$t('button.driver')}}</span>
     </button>
@@ -51,13 +51,11 @@ export default {
   data() {
     return {
       today: today(),
-      assignable: false,
       componentData: null,
       component: null
     };
   },
   created() {
-    this.assignable = this.approval(this.op.modify, "driver");
     this.$bus.on("pay", this.openPaymentModule);
   },
   beforeDestroy() {
@@ -289,7 +287,8 @@ export default {
               invoices: data.filter(
                 i => i.type === "DELIVERY" && i.status === 1
               ),
-              drivers
+              drivers,
+              date
             })
           );
         } else {

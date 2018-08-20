@@ -2,9 +2,10 @@
   <div class="popupMask center dark">
     <div class="editor" v-show="!component">
       <header>
-        <div>
+        <div class="f1">
             <h3>{{$t('title.markPaymentType')}}</h3>
         </div>
+        <i class="fa fa-times close clickable" @click="init.reject(false)"></i>
       </header>
       <div class="banner"></div>
       <div class="inner">

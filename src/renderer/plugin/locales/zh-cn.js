@@ -270,7 +270,7 @@ export default {
     remove: "移除",
     printAll: "全部打印",
     extend: "延迟",
-    printDetail: "打印详细记录",
+    printDetail: "详细打印",
     activation: "激活",
     back: "返回",
     viewMore: "查看更多",
@@ -347,7 +347,8 @@ export default {
     chargeRemain: "支付余额",
     copy: "复制",
     reimburse: "偿还",
-    additional: "追加物品"
+    additional: "追加物品",
+    received: "已收 ({i})"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -391,7 +392,7 @@ export default {
     terminalDevice: "刷卡设备",
     category: "菜单类别",
     item: "菜单物品",
-    coupon: "折价卷",
+    coupon: "优惠券",
     batch: "过账",
     printerList: "打印机列表",
     taxList: "税种列表",
@@ -676,8 +677,8 @@ export default {
     ticketUnsettleAlert: "您还有订单尚未结账，请先处理订单",
     printReport: "打印报表",
     printSessionReport: "您需要打印一份从开始到当前时段的{i}报表吗？",
-    settleConfirm: "确认结账",
-    settleDeliveryCashTicket: "请确定您已经收到送餐订单的尾款",
+    driverSettle: "确认结账",
+    driverSettledConfirm: "请确定您已收到 {i} 司机送餐订单的尾款",
     splitItemRemove: "移除分单物品",
     splitItemRemoveConfirm: "您确定要从此分单中里删除选定的 {i} 个物品吗？",
     printTimecardRecord: "您确定要打印一份 {i} 的打卡记录吗？",
@@ -707,7 +708,9 @@ export default {
     unableTraceRecord: "无法追溯",
     recordMissingOrDeleted: "此订单的历史记录丢失或者已经被删除",
     courseTime: "确认出餐定时",
-    courseTimeConfirm: "所有未设定时间的餐会立刻打印出来"
+    courseTimeConfirm: "所有未设定时间的餐会立刻打印出来",
+    driverReport: "司机报表",
+    driverReportDetail: "您确定要打印 {i} 司机的报表?"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1147,7 +1150,6 @@ export default {
     from: "从",
     to: "到",
     allDay: "全天",
-    enlargeTitle: "放大标题",
     message: "消息",
     queue: "队列",
     selectQty: "选择{i}个",
@@ -1301,7 +1303,9 @@ export default {
     show: "显示",
     hide: "隐藏",
     forward: "转向",
-    militaryTime: "24 小时"
+    militaryTime: "24 小时",
+    assignTo: "分配给 {i}",
+    deassign: "取消分配"
   },
   nav: {
     store: "店面",
@@ -1389,6 +1393,7 @@ export default {
       payment: "付款",
       terminal: "终端",
       promotion: "促销",
+      coupon: "优惠券",
       giftcard: "礼物卡",
       department: "部门",
       other: "其它",
@@ -1704,7 +1709,7 @@ export default {
     right: "朝右边"
   },
   select: {
-    selected:"已选 ({i})",
+    selected: "已选 ({i})",
     all: "全选",
     reverse: "反选",
     assigned: "已指定",
@@ -1738,6 +1743,7 @@ export default {
     terminalBatchRecords: "信用卡终端过账记录",
     databaseBackupPath: "数据库备份路径",
     estimateWaitTime: "预计等待时间为 {i} 分钟",
+    temporaryDriver: "设定一个临时司机的名称",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

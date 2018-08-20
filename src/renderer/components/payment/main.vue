@@ -8,7 +8,7 @@
                         <h3>{{$t('title.payment')}}</h3>
                     </div>
                     <splitor :tickets="splits" v-model="splitIndex" @preview="previewTicket" @switch="switchInvoice" :disable="payWhole"></splitor>
-                    <i class="fa fa-times exit" @click="safeExit"></i>
+                    <i class="fa fa-times exit clickable" @click="safeExit"></i>
                 </header>
                 <div class="banner"></div>
                 <div class="wrap">
@@ -1417,8 +1417,7 @@ export default {
 header .exit {
   position: absolute;
   right: 0;
-  padding: 18px 25px;
-  cursor: pointer;
+  padding: 16px 25px;
 }
 
 .flex {

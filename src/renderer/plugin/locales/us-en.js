@@ -355,7 +355,8 @@ export default {
     chargeRemain: "Charge Remain Balance",
     copy: "Copy",
     reimburse: "Reimburse",
-    additional: "Additional Order"
+    additional: "Additional Order",
+    received: "Received ({i})"
   },
   thead: {
     orderType: "Order Type",
@@ -749,8 +750,8 @@ export default {
     ticketUnsettleAlert: "You still have ticket unsettled. Please close them first.",
     printReport: "Print Report",
     printSessionReport: "Would you like to print a {i} session report? ",
-    settleConfirm: "Settle Confirm",
-    settleDeliveryCashTicket: "Please make sure that you have received the correct amount of cash from the drivers.",
+    driverSettle: "Driver Settle",
+    driverSettledConfirm: "Please make sure that you have received correct amount from driver {i}.",
     splitItemRemove: "Item Remove Confirm",
     splitItemRemoveConfirm: "Are you sure to remove selected {i} items from split ticket?",
     printTimecardRecord: "Are you sure to print out {i}'s timecard record?",
@@ -782,7 +783,9 @@ export default {
     unableTraceRecord: "Unable To Trace",
     recordMissingOrDeleted: "The change log is missing or deleted.",
     courseTime: "Course Time Confirm",
-    courseTimeConfirm: "All items not set with time will print immediately."
+    courseTimeConfirm: "All items not set with time will print immediately.",
+    driverReport: "Driver Report",
+    driverReportDetail: "Are you sure to print out driver {i}'s summary report?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1160,7 +1163,6 @@ export default {
     from: "From",
     to: "To",
     allDay: "All Day",
-    enlargeTitle: "Enlarge Title",
     message: "Message",
     queue: "Queue",
     selectQty: "Max {i} Items",
@@ -1312,7 +1314,9 @@ export default {
     show: "Show",
     hide: "Hide",
     forward: "Forward",
-    militaryTime: "24 Hour"
+    militaryTime: "24 Hour",
+    assignTo: "Assign To {i}",
+    deassign: "Deassign"
   },
   nav: {
     store: "Store",
@@ -1399,6 +1403,7 @@ export default {
       payment: "Payment",
       terminal: "Terminal",
       promotion: "Promo.",
+      coupon: "Coupon",
       giftcard: "GiftCard",
       department: "Dept.",
       other: "Others",
@@ -1711,7 +1716,7 @@ export default {
     right: "Right"
   },
   select: {
-    selected:"Selected ({i})",
+    selected: "Selected ({i})",
     all: "Select All",
     reverse: "Reverse",
     assigned: "Assigned",
@@ -1745,6 +1750,7 @@ export default {
     terminalBatchRecords: "Credit card terminal batch records",
     databaseBackupPath: "Database Backup Path",
     estimateWaitTime: "Estimate wait time: {i} Minutes",
+    temporaryDriver: "Name a temporary driver",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

@@ -28,9 +28,12 @@
         "payables",
         "payment",
         "prevs",
+        "print",
+        "rawdata",
         "rect",
         "rgba",
         "scrollable",
+        "send",
         "sessionize",
         "stringify",
         "tbody",
@@ -41,7 +44,8 @@
         "unsave",
         "unshift",
         "vuex",
-        "warning"
+        "warning",
+        "webskt"
     ],
     "cSpell.enabledLanguageIds": [
         "asciidoc",

@@ -7,6 +7,7 @@ import Hibachi from "./layout/hibachi";
 import Reserve from "./layout/reserve";
 import Session from "./layout/session";
 import CashOut from "./layout/cashout";
+import Driver from "./layout/driver";
 import CashIn from "./layout/cashin";
 import Report from "./layout/report";
 import Label from "./layout/label";
@@ -111,9 +112,10 @@ const Printer = function (plugin, config, station) {
   this.printGiftCard = (title, card, bonus) => checkStatus().then(() => Giftcard.bind(self)(title, card, bonus));
   this.printCreditCard = (trans, config, reprint) => checkStatus().then(() => Creditcard.bind(self)(trans, config, reprint));
   this.printBatchReport = (data, detail) => checkStatus().then(() => BatchReport.bind(self)(data, detail));
-  this.printTimecardReport = data => checkStatus().then(() => Timecard.bind(self)(data));
-  this.printCashInReport = data => checkStatus().then(() => CashIn.bind(self)(data));
   this.printCashOutReport = (data, detail) => checkStatus().then(() => CashOut.bind(self)(data, detail));
+  this.printDriverReport = data => checkStatus().then(() => Driver.bind(self)(data));
+  this.printCashInReport = data => checkStatus().then(() => CashIn.bind(self)(data));
+  this.printTimecardReport = data => checkStatus().then(() => Timecard.bind(self)(data));
   this.printSessionReport = data => checkStatus().then(() => Session.bind(self)(data));
   this.printReserveTicket = data => checkStatus().then(() => Reserve.bind(self)(data));
 

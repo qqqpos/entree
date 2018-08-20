@@ -10,8 +10,8 @@
             <div class="banner"></div>
             <div class="wrap">
                 <ul class="drivers">
-                    <li @click="setFilter('ALL')" data-filter="ALL">{{$t('type.allInvoice')}}<span class="count">({{invoices.length}})</span></li>
                     <li @click="setFilter('UNASSIGNED')" data-filter="UNASSIGNED">{{$t('type.unassigned')}}<span class="count">({{unassignedCount}})</span></li>
+                    <li @click="setFilter('ALL')" data-filter="ALL">{{$t('type.allInvoice')}}<span class="count">({{invoices.length}})</span></li>
                     <li @click="setFilter(driver.name)" :data-filter="driver.name" v-for="(driver,index) in drivers" :key="index">{{driver.name}}<span class="count">({{driver.count}})</span></li>
                     <li @click="addDriver" v-show="drivers.length < 10">{{$t('button.addDriver')}}</li>
                 </ul>
@@ -23,6 +23,7 @@
                             <div class="info">
                                 <span>{{invoice.address}}</span>
                                 <p>
+                                    <span>{{invoice.city}}</span>
                                     <span>{{invoice.distance}}</span>
                                     <span>{{invoice.duration}}</span>
                                     <span>{{invoice.time}}</span>
@@ -41,17 +42,23 @@
                         <span class="number f1">$ {{totalDue | decimal}}</span>
                     </div>
                 </div>
-                <ul class="report" v-if="selectedCount === 0">
-                    <li>
-
+                <ul class="report relative" v-if="selectedCount === 0">
+                    <li v-for="(filed,index) in summary" :key="index">
+                      <h5>{{filed.text}}</h5>
+                      <h3>{{filed.value}}</h3>
                     </li>
+                    <div class="settlement" v-show="report">
+                      <button class="mini-btn" @click="printDialog"><i class="fa fa-print space"></i>{{$t('button.print')}}</button>
+                      <button class="mini-btn" @click="settleDialog" :disabled="driverSettled"><i class="fas fa-hand-holding-usd space"></i>{{$t('button.settle')}}</button>
+                    </div>
                 </ul>
                 <ul class="assign" v-else>
-                    <li v-for="(driver,index) in drivers" :key="index" @click="assign(driver.name)" class="mini-btn">Assign To {{driver.name}}</li>
-                    <li @click="assign(null)" class="mini-btn"><i class="fas fa-user-times space light"></i>Deassign</li>
+                    <li v-for="(driver,index) in drivers" :key="index" @click="assign(driver.name)" class="mini-btn" v-show="driver.name !== filter">{{$t('text.assignTo',driver.name)}}</li>
+                    <li @click="assign(null)" class="mini-btn"><i class="fas fa-user-times space light"></i>{{$t('text.deassign')}}</li>
                 </ul>
             </div>
         </div>
+        <div :is="component" :init="componentData"></div>
     </div>
 </template>
 
@@ -59,18 +66,22 @@
 import { mapActions, mapGetters } from "vuex";
 
 import dialogModule from "../common/dialog";
+import unlockModule from "../common/unlock";
+import driverInput from "./helper/driverInput";
 import checkbox from "../setting/common/checkbox";
 
 export default {
   props: ["init"],
-  components: { checkbox, dialogModule },
+  components: { checkbox, dialogModule, unlockModule, driverInput },
   data() {
     return {
+      filter: "UNASSIGNED",
       componentData: null,
       component: null,
+      temporary: [],
       invoices: [],
       selected: [],
-      filter: "ALL",
+      report: false,
       lastDelta: 0,
       offset: 0
     };
@@ -93,6 +104,8 @@ export default {
         duration: invoice.customer.duration,
         settled: invoice.settled,
         charge: invoice.payment.delivery,
+        tip: invoice.payment.tip,
+        due: invoice.payment.due,
         total: toFixed(invoice.payment.due - invoice.payment.delivery, 2),
         amount: invoice.payment.balance
       }));
@@ -127,15 +140,29 @@ export default {
       }
     },
     assign(name) {
-      const targets = this.invoices.filter(i => i.select).map(i => i._id);
+      this.$checkPermission("modify", "driver")
+        .then(() => {
+          const invoices = this.invoices.filter(i => i.select);
+          invoices.forEach(i =>
+            Object.assign(i, { select: false, driver: name })
+          );
 
-      this.invoices
-        .filter(i => i.select)
-        .forEach(i => Object.assign(i, { select: false, driver: name }));
-
-      //update tickets
+          //update tickets
+          this.$socket.emit("[ORDER] DRIVER", name, invoices.map(i => i._id));
+        })
+        .catch(() => {});
     },
-    addDriver() {},
+    addDriver() {
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject };
+        this.component = "driverInput";
+      })
+        .then(name => {
+          this.temporary.push(name);
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
+    },
     panStart() {
       const dom = document.querySelector(".tickets ul.scrollable");
       dom && dom.classList.remove("scrollable");
@@ -165,6 +192,70 @@ export default {
     },
     move(e) {
       this.offset = this.lastDelta + e.deltaY;
+    },
+    printDialog() {
+      const prompt = {
+        type: "question",
+        title: "dialog.driverReport",
+        msg: ["dialog.driverReportDetail", this.filter],
+        buttons: [
+          {
+            text: "button.cancel",
+            fn: "resolve"
+          },
+          {
+            text: "button.printDetail",
+            fn: "detail"
+          },
+          {
+            text: "button.print",
+            fn: "reject"
+          }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(this.exitComponent)
+        .catch(this.printReport);
+    },
+    printReport(detail) {
+      this.exitComponent();
+
+      const invoices = detail ? this.filteredInvoices : [];
+
+      Printer.printDriverReport({
+        title: `Driver Report`,
+        driver: this.filter,
+        date: this.init.date,
+        summary: this.summary,
+        invoices
+      });
+    },
+    settleDialog() {
+      const driver = this.filter;
+      const amount = this.summary.last().value;
+
+      const prompt = {
+        type: "question",
+        title: "dialog.driverSettle",
+        msg: ["dialog.driverSettledConfirm", this.filter],
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: ["button.received", amount], fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          const invoices = this.invoices.filter(
+            i => i.driver === driver && !i.settled
+          );
+          this.$socket.emit("[DRIVER] SETTLE", invoices.map(i => i._id), () => {
+            invoices.forEach(i => Object.assign(i, { settled: true }));
+            this.exitComponent();
+          });
+        })
+        .catch(this.exitComponent);
     }
   },
   computed: {
@@ -172,13 +263,25 @@ export default {
       const drivers = new Set();
       this.init.drivers.forEach(name => drivers.add(name));
       this.init.invoices.forEach(i => i.driver && drivers.add(i.driver));
+
+      this.temporary.length &&
+        this.temporary.forEach(name => drivers.add(name));
+
       return Array.from(drivers).map(name => {
         const invoices = this.invoices.filter(i => i.driver === name);
+        const settled = invoices.filter(i => i.settled);
+        const unsettled = invoices.filter(i => !i.settled);
 
         return {
           name,
           count: invoices.length,
-          amount: invoices.reduce((a, c) => a + c.total, 0)
+          settledCount: settled.length,
+          unsettledCount: unsettled.length,
+          tip: invoices.reduce((a, c) => a + c.tip, 0),
+          charge: invoices.reduce((a, c) => a + c.charge, 0),
+          amount: invoices.reduce((a, c) => a + c.total, 0),
+          settledAmount: settled.reduce((a, c) => a + c.due, 0),
+          unsettledAmount: unsettled.reduce((a, c) => a + c.due, 0)
         };
       });
     },
@@ -189,6 +292,8 @@ export default {
       return this.invoices.filter(i => i.select).length;
     },
     filteredInvoices() {
+      this.offset = 0;
+      this.lastDelta = 0;
       this.invoices.forEach(i => Object.assign(i, { select: false }));
 
       switch (this.filter) {
@@ -208,19 +313,74 @@ export default {
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };
     },
-    summary() {}
+    summary() {
+      switch (this.filter) {
+        case "ALL":
+        case "UNASSIGNED":
+        case "SELECTED":
+          this.report = false;
+          return [];
+        default:
+          const {
+            name,
+            count,
+            settledCount,
+            unsettledCount,
+            charge,
+            tip,
+            amount,
+            settledAmount,
+            unsettledAmount
+          } = this.drivers.find(driver => driver.name === this.filter);
+          this.report = true;
+
+          return [
+            { text: this.$t("report.driver"), value: name },
+            { text: this.$t("report.count"), value: count },
+            {
+              text: this.$t("report.deliveryFee"),
+              value: "$ " + charge.toFixed(2)
+            },
+            { text: this.$t("text.tip"), value: "$ " + tip.toFixed(2) },
+            {
+              text: this.$t("report.settled") + ` ( ${settledCount} )`,
+              value: "$ " + settledAmount.toFixed(2)
+            },
+            {
+              text: this.$t("report.unsettled") + ` ( ${unsettledCount} )`,
+              value: "$ " + unsettledAmount.toFixed(2)
+            },
+            {
+              text:
+                this.$t("report.accountsPayable") +
+                ` (${this.$t("text.tip")}+${this.$t("report.deliveryFee")})`,
+              value: "$ " + (charge + tip).toFixed(2)
+            },
+            {
+              text: this.$t("report.expectTotal"),
+              value:
+                "$ " + Math.max(0, unsettledAmount - charge - tip).toFixed(2)
+            }
+          ];
+      }
+    },
+    driverSettled() {
+      return this.filteredInvoices.every(i => i.settled);
+    },
+    ...mapGetters(["op"])
   },
   watch: {
     filter: {
-      handler(n) {
-        this.$nextTick(() => {
-          const dom = document.querySelector(".drivers li.active");
-          dom && dom.classList.remove("active");
+      handler(target) {
+        target !== "SELECTED" &&
+          this.$nextTick(() => {
+            const dom = document.querySelector(".drivers li.active");
+            dom && dom.classList.remove("active");
 
-          document
-            .querySelector(`[data-filter="${n}"]`)
-            .classList.add("active");
-        });
+            document
+              .querySelector(`[data-filter="${target}"]`)
+              .classList.add("active");
+          });
       },
       immediate: true
     }
@@ -234,7 +394,7 @@ export default {
   width: 925px;
   height: 580px;
   display: grid;
-  grid-template-columns: 130px 1fr 200px;
+  grid-template-columns: 135px 1fr 200px;
 }
 
 ul.drivers {
@@ -301,6 +461,7 @@ ul.drivers {
 .number {
   font-family: "Agency FB";
   font-weight: bold;
+  min-width: 40px;
 }
 
 .info {
@@ -322,12 +483,12 @@ ul.drivers {
 .info p {
   font-size: 0.7em;
   display: flex;
-  width: 70%;
 }
 
 .info p span {
   flex: 1;
   color: #424242;
+  margin-right: 5px;
 }
 
 .noWidth {
@@ -371,8 +532,31 @@ ul.assign li {
   padding: 15px 0;
 }
 
-i.close {
-  padding: 15px 22px;
+ul.report {
+  padding: 15px;
+}
+
+ul.report li {
+  margin-bottom: 15px;
+}
+
+ul.report h3 {
+  font-family: "Agency FB";
+  margin: 2px 0 0 0px;
+}
+
+ul.report h5 {
+  font-weight: normal;
+  color: #3c3c3c;
+}
+
+.settlement {
+  position: absolute;
+  left: 0;
+  bottom: 60px;
+  display: flex;
+  justify-content: space-evenly;
+  width: 200px;
 }
 </style>
 

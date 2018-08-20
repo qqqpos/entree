@@ -323,6 +323,10 @@ header.tab {
   min-width: 35px;
 }
 
+.editor header i.close{
+  padding: 15px 22px;
+}
+
 .editor .wrap {
   padding: 15px 25px;
   background: #f5f6f7;
