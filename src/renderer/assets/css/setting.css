@@ -84,10 +84,11 @@ ul.tabs li.router-link-exact-active {
 }
 
 .tab-content {
-  margin: 10px auto;
   width: 450px;
+  margin: 10px auto;
   background: #fff;
   box-shadow: var(--shadow);
+  border-radius: 6px 6px 0 0;
 }
 
 .wide.tab-content {
@@ -180,8 +181,9 @@ header.nav {
   padding: 6px;
   height: 38px;
   align-items: center;
-  background: linear-gradient(to bottom, #fff 0%, #F5F5F5 100%);
+  border-radius: 6px 6px 0 0;
   border-bottom: 1px solid #EEEEEE;
+  background: linear-gradient(to bottom, #fff 0%, #F5F5F5 100%);
 }
 
 header.nav .back {

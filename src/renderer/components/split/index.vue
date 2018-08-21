@@ -34,7 +34,7 @@
         <div class="opt">
           <div class="swipe" ref="pan">{{$t('text.swipeArea')}}</div>
         </div>
-        <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
+        <button class="btn" @click="init.reject">{{$t('button.exit')}}</button>
         <button class="btn" @click="call('printTicket',true)" :disabled="!done || $route.name === 'Menu'">{{$t('button.printAll')}}</button>
         <button class="btn" @click="call('confirmSplit',false)" :disabled="!done">{{$t('button.confirm')}}</button>
       </footer>

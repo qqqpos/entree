@@ -201,8 +201,8 @@ li {
   height: 18px;
 }
 
-.togo{
-  color: #D84315;
+.togo {
+  color: #d84315;
 }
 
 li.disable {

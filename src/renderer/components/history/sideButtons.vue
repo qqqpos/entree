@@ -465,10 +465,9 @@ export default {
         .catch(() => this.accessFailedLog("ledger"));
     },
     accessFailedLog(component) {
-      this.$log({
-        eventID: 5000,
-        note: `Permission Denied. Failed to access ${component}.`
-      });
+      this.$log(
+        `Permission Denied.[${this.op.name}] Failed to access ${component}.`
+      );
     },
     updateInvoice(ticket, print) {
       this.$socket.emit("[ORDER] UPDATE", ticket, print);

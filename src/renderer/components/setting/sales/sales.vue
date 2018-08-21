@@ -3,7 +3,7 @@
     <header class="date-picker">
         <div class="f1">
             <h3>{{$t('setting.title.salesSummary')}}</h3>
-            <p>Daily Sales Summary</p>
+            <p>{{$t('title.summary.sales')}}</p>
         </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>

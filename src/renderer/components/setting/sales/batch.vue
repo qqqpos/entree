@@ -3,7 +3,7 @@
       <header class="date-picker">
         <div class="f1">
             <h3>{{$t('setting.title.batch')}}</h3>
-            <p>{{$t('tip.batchSummary')}}</p>
+            <p>{{$t('title.summary.batch')}}</p>
         </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
@@ -72,15 +72,19 @@ export default {
         { from: +from, to: +to, group },
         records => {
           this.records = Object.freeze(records);
-          this.analizeData();
         }
       );
-    },
-    analizeData() {}
+    }
   },
   computed: {
     summary() {
       const count = this.records.length;
+
+      const dates = new Set();
+      this.records.forEach(record => dates.add(record.date));
+
+      const days = Array.from(dates).length;
+
       const total = this.records.reduce(
         (a, c) => a + parseFloat(c.amount.credit),
         0
@@ -90,7 +94,7 @@ export default {
         0
       );
 
-      const transactionPerDay = Math.ceil(transactionCount / count) || 0;
+      const transactionPerDay = Math.ceil(transactionCount / days) || 0;
       const transactionAverage = toFixed(total / transactionCount, 2) || 0;
 
       return {

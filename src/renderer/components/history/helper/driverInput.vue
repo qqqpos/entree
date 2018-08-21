@@ -81,7 +81,7 @@ ul.letters {
   width: 70px;
   height: 60px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
-  background: #fff;
+  background: linear-gradient(#fff, #eee);
   margin: 2px;
   border-radius: 3px;
   display: flex;

@@ -441,11 +441,7 @@ export default {
               this.device.code === "000000" ? next() : stop();
             });
         } catch (error) {
-          this.$log({
-            eventID: 9010,
-            type: "failure",
-            note: `Can not find terminal config. \n\nError Message:\n${error}`
-          });
+          this.$log(`Can not find terminal config. \nError Message:\n${error}`);
 
           stop();
         }

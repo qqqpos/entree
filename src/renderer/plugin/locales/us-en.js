@@ -494,7 +494,12 @@ export default {
     evenSplit: "Ticket Even Split",
     refund: "Refund Amount",
     changeLog: "Change Log",
-    book: "Reservation"
+    book: "Reservation",
+    summary: {
+      sales: "Daily sales record from {i} to {i}",
+      batch: "Terminals batch record from {i} to {i}",
+      cashflow: "Cash in/out record from {i} to {i}"
+    },
   },
   dialog: {
     maintenance: "Maintenance",
@@ -1316,7 +1321,8 @@ export default {
     forward: "Forward",
     militaryTime: "24 Hour",
     assignTo: "Assign To {i}",
-    deassign: "Deassign"
+    deassign: "Deassign",
+    placeholder: "Placeholder"
   },
   nav: {
     store: "Store",

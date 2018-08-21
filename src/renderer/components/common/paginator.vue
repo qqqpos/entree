@@ -127,9 +127,9 @@ export default {
 
 .page.active {
   font-weight: bold;
-  background: #676767;
+  background: linear-gradient(#676767, #424242);
   color: #fff;
-  text-shadow: 0 1px 1px #000;
+  text-shadow: 0 1px 2px #000;
   box-shadow: rgba(0, 0, 0, 0.75) 0 0 0 0 inset;
 }
 </style>

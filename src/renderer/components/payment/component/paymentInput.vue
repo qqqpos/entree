@@ -30,7 +30,7 @@
                 <div class="field relative" id="creditCard" @click="$emit('changeAnchor','creditCard')" data-format="number" data-length="16">
                     <h3 class="text">{{$t('card.number')}}</h3>
                     <i class="fas fa-history" @click="toggleCardList" v-show="creditCards.length"></i>
-                    <input class="value" :value="creditCard" v-mask.card.check>
+                    <input class="value" :value="creditCard" v-mask.card.check @input="$emit('update:creditCard',$event.target.value)">
                     <i class="fas fa-exclamation-triangle check"></i>
                     <transition name="fadeUp">
                         <ul v-show="showPrevsList" class="cardList">
@@ -46,7 +46,7 @@
                 </div>  
                 <div class="field" id="expDate" @click="$emit('changeAnchor','expDate')" data-format="number" data-length="4">
                     <h3 class="text">{{$t('card.expirationDate')}}</h3>
-                    <input :value="expDate" class="value" v-mask.date.check>
+                    <input :value="expDate" class="value" v-mask.date.check @input="$emit('update:expDate',$event.target.value)">
                     <i class="fas fa-exclamation-triangle check"></i>
                 </div>                  
             </template>
@@ -121,8 +121,8 @@ export default {
       return (
         this.paid === "0.00" ||
         (this.type === "CREDIT" &&
-          this.creditCard.length > 0 &&
-          this.expDate.length !== 4)
+          this.creditCard.replace(/\D+/g, "").length > 0 &&
+          this.expDate.replace(/\D+/g, "").length !== 4)
       );
     }
   },

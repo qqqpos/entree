@@ -245,12 +245,7 @@ export default {
     openPayout() {
       this.$checkPermission("permission", "payout")
         .then(() => this.$open("payout"))
-        .catch(() =>
-          this.$log({
-            eventID: 9100,
-            note: `${this.op.name} was attempt to access payout.`
-          })
-        );
+        .catch(() => this.$log(`[${this.op.name}] attempt to access payout.`));
     },
     openSetting() {
       this.$checkPermission("access", "setting")
@@ -259,10 +254,7 @@ export default {
           this.$router.push({ path: "/main/setting" });
         })
         .catch(() =>
-          this.$log({
-            eventID: 9100,
-            note: `${this.op.name} was attempt to access back office setting.`
-          })
+          this.$log(`${this.op.name} attempt to access back office setting.`)
         );
     },
     askClockIn() {
@@ -271,14 +263,16 @@ export default {
         title: "dialog.clockInConfirm",
         msg: ["dialog.clockInTime", moment(this.time).format("hh:mm:ss a")]
       };
-      
-      this.$dialog(prompt)
-        .then(() => {
-          this.setOperator({ clockIn: this.time, session: ObjectId().toString() });
-          this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
-          this.exitComponent();
-        })
-        //.catch(this.exitComponent);
+
+      this.$dialog(prompt).then(() => {
+        this.setOperator({
+          clockIn: this.time,
+          session: ObjectId().toString()
+        });
+        this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
+        this.exitComponent();
+      });
+      //.catch(this.exitComponent);
     },
     askClockOut() {
       const diff = moment().diff(moment(this.op.clockIn));

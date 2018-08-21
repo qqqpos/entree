@@ -18,12 +18,7 @@ export default {
             ? true
             : credential.includes(permit);
       } catch (error) {
-        this.$log({
-          eventID: 9000,
-          type: "bug",
-          source: "plugin/util.js [function] approval",
-          note: `Operator seems does not have ${permit} setting. \nTo fix this issue, please add ${permit}:[] to profile.`
-        });
+        this.$log(`[${this.op.name}] does not have ${permit} setting. \nTo fix this issue, please add ${permit}:[] to profile.`);
       }
       return approve;
     };
@@ -97,36 +92,22 @@ export default {
             this.component = "unlockModule";
           })
             .then(operator => {
-              let _approve = false;
-              const _permission = operator[credential];
-              _approve =
+              let approved = false;
+              const permissions = operator[credential];
+
+              approved =
                 operator.role === "Developer" || operator.role === "Owner"
                   ? true
-                  : _permission.includes(permit);
+                  : permissions.includes(permit);
 
-              if (_approve) {
+              if (approved) {
+                this.$log(`[${name}] has inherited [${permit}] permission from ${operator.name}`);
                 this.exitComponent();
                 authorized();
-                this.$log({
-                  eventID: 8000,
-                  type: "success",
-                  source: "plugin/dialog.js",
-                  note: `${name} has inherited ${permit} permission from ${
-                    operator.name
-                    }`
-                });
               } else {
+                this.$log(`[${name}] tried to inherited permission from ${operator.name} but neither has ${permit} permission.`);
                 this.$accessDenied();
                 unauthorized();
-                const note = `${name} attempted to grant permission from ${
-                  operator.name
-                  } but neither has ${permit} permission.`;
-                this.$log({
-                  eventID: 8001,
-                  type: "failure",
-                  source: "plugin/dialog.js",
-                  note
-                });
               }
             })
             .catch(() => {

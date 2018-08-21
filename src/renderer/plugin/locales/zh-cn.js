@@ -421,7 +421,12 @@ export default {
     evenSplit: "订单均分",
     refund: "退款金额",
     changeLog: "改动日志",
-    book: "预约"
+    book: "预约",
+    summary: {
+      sales: "每日销售记录 从 {i} 到 {i}",
+      batch: "信用卡过账记录 从{i} 到 {i}",
+      cashflow: "钱箱现金记录 从 {i} 到 {i}"
+    }
   },
   dialog: {
     maintenance: "维护",
@@ -1305,7 +1310,8 @@ export default {
     forward: "转向",
     militaryTime: "24 小时",
     assignTo: "分配给 {i}",
-    deassign: "取消分配"
+    deassign: "取消分配",
+    placeholder: "占位符"
   },
   nav: {
     store: "店面",

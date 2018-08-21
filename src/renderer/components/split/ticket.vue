@@ -805,6 +805,7 @@ li.picked .sub {
   font-weight: bold;
   top: -10px;
   left: 5px;
+  z-index: 2;
   position: absolute;
 }
 

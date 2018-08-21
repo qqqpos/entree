@@ -110,11 +110,10 @@ export default {
         scale.enable && this.initScale(scale.port);
         this.initCustomerDisplay(customerDisplay);
       } catch (error) {
-        this.$log({
-          eventID: 9002,
-          type: "failure",
-          note: `Initial device failed. Please check device configuration.\n\nError Message:\n${error.toString()}`
-        });
+        this.$log(
+          `Initial device failed. Please check station device configuration.\nError Message:\n${error.toString()}`,
+          "error"
+        );
       }
     },
     initCallerID(devices) {

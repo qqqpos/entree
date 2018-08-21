@@ -67,6 +67,7 @@ const Mask = {
             } else if (date) {
                 el.dateHandler(value)
             }
+            
         }
         el.addEventListener('input', inputHandler);
         el.$destroy = () => el.removeEventListener('input', inputHandler)

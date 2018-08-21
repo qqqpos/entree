@@ -360,11 +360,12 @@ export default {
     placeFailed(error) {
       error && console.error(error);
       if (error) {
-        this.$log({
-          type: "bug",
-          data: this.order._id,
-          note: `An error occurred when save the order. \n\nError Message:\n${error}`
-        });
+        this.$log(
+          `An error occurred when save the order #${
+            this.order.number
+          }. \nError Message:\n${error}`,
+          "fatal"
+        );
 
         const prompt = {
           type: "error",
@@ -648,13 +649,9 @@ export default {
       this.abandon();
     },
     abandon() {
-      this.$log({
-        data: this.order._id,
-        note: `#${this.ticket.number} Invoice was abandoned.`
-      });
-
       this.resetAll();
       this.$router.push({ path: "/main" });
+      this.$log(`#${this.ticket.number} Invoice was abandoned.`);
     },
     switchLanguage() {
       const language = this.app.language === "usEN" ? "zhCN" : "usEN";
@@ -699,7 +696,7 @@ export default {
               })
             );
 
-            //item quantaty changes
+            //item qty changes
             Object.assign(item, {
               originQty: oldItem.qty,
               diffs: "DIFFERENT",

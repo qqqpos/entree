@@ -178,12 +178,11 @@ export default {
       this.$checkPermission("modify", "discount")
         .then(this.setDiscount)
         .catch(() =>
-          this.$log({
-            eventID: 5000,
-            note: `${this.op.name} attempt to set discount on ticket # ${
+          this.$log(
+            `${this.op.name} attempt to set discount on ticket # [${
               this.order.number
-            } (Total: $${this.order.payment.balance})`
-          })
+            }] (Total: $${this.order.payment.balance})`
+          )
         );
     },
     setDiscount() {

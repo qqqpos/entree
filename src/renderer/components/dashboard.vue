@@ -71,7 +71,7 @@ export default {
       .then(this.initialized)
       .catch(this.initialFailed);
 
-      window.ring = this.phoneRing;
+    window.ring = this.phoneRing;
   },
   mounted() {
     this.$electron.ipcRenderer.send("External::stage", "idle");
@@ -304,23 +304,13 @@ export default {
         case "history":
           this.$checkPermission("access", route)
             .then(() => this.$router.push({ path: "/main/history" }))
-            .catch(() =>
-              this.$log({
-                eventID: 9100,
-                type: "failure",
-                note: "Access Denied when attempt access history."
-              })
-            );
+            .catch(() => this.$log(`History page entry denied.`));
           break;
         case "setting":
           this.$checkPermission("access", route)
             .then(() => this.$router.push({ path: "/main/setting" }))
             .catch(() =>
-              this.$log({
-                eventID: 9100,
-                type: "failure",
-                note: "Access Denied when attempt access back office setting."
-              })
+              this.$log(`[${this.op.name}] POS Setting entry denied.`)
             );
           break;
         case "cashDrawer":

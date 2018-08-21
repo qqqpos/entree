@@ -32,8 +32,8 @@
                                 :changeDue="changeDue" 
                                 :paid="paid" 
                                 :tip="tip" 
-                                :creditCard="creditCard" 
-                                :expDate="expDate" 
+                                :creditCard.sync="creditCard" 
+                                :expDate.sync="expDate" 
                                 :split="splitTarget" 
                                 :splitable="invoice.split" 
                                 :external="externalPaymentType"
@@ -383,7 +383,7 @@ export default {
           break;
       }
 
-      this[this.anchor] = isNumber(length) ? value.slice(0, 16) : value;
+      this[this.anchor] = isNumber(length) ? value.replace(/\D+/g, "").slice(0, length) : value;
       this.willResetFieldValue = false;
       this.updateTip();
     },
@@ -561,8 +561,8 @@ export default {
     checkEntryInput() {
       return new Promise(next => {
         const tip = parseFloat(this.tip);
-        const number = this.creditCard;
-        const date = this.expDate;
+        const number = this.creditCard.replace(/\D+/g, "");
+        const date = this.expDate.replace(/\D+/g, "");
 
         next({
           creditCard: { number, date },
