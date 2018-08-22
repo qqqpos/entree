@@ -44,6 +44,7 @@
                             <span class="action yellow" @click.stop="$open('ticket',{ticket})">{{$t('button.view')}}</span>
                             <span class="action gray" :class="{disable:queue.length !== 2}" @click.stop="swapDialog">{{$t('button.swap')}}</span>
                             <span class="action gray" :class="{disable:queue.length < 2}" @click.stop="combineDialog(ticket)">{{$t('button.combine')}}</span>
+                            <span class="action red" :class="{disable:!ticket.link}" @click.stop="$open('unlink',{ticket})">{{$t('button.unlink')}}</span>
                           </td>
                       </tr>
                   </tbody>
@@ -61,13 +62,14 @@
 import { mapActions, mapGetters } from "vuex";
 
 import transfer from "./transfer";
+import unlink from "../helper/unlink";
 import ticket from "../../common/ticket";
 import dialogModule from "../../common/dialog";
 import paginator from "../../common/paginator";
 
 export default {
   props: ["init"],
-  components: { ticket, transfer, dialogModule, paginator },
+  components: { ticket, unlink, transfer, dialogModule, paginator },
   data() {
     return {
       componentData: null,
@@ -210,7 +212,7 @@ tbody tr.active {
 }
 
 .actions {
-  width: 250px;
+  width: 255px;
 }
 .action {
   display: inline-block;

@@ -26,6 +26,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import checkbox from "../../setting/common/checkbox";
+import { setTimeout, clearTimeout } from "timers";
 
 export default {
   props: ["type", "item", "ignore", "checkbox"],
@@ -40,11 +41,29 @@ export default {
     },
     ...mapGetters(["language", "choiceSet"])
   },
+  directives: {
+    // press: {
+    //   isFn: true,
+    //   bind(el, binding) {
+    //     el.timeout = () => setTimeout(() => binding.value(), 1000);
+    //     el.removeTimeout = () => clearTimeout(el.timeout);
+    //     el.addEventListener("mousedown", el.timeout);
+    //     el.addEventListener("mouseup", el.removeTimeout);
+    //   },
+    //   unbind(el) {
+    //     el.removeEventListener("mousedown", el.timeout);
+    //     el.addEventListener("mouseup", el.removeTimeout);
+    //   }
+    // }
+  },
   methods: {
     select(item, e) {
       if (this.ignore) return;
 
       this.$route.name === "Menu" && this.focus(item, e);
+    },
+    edit() {
+      console.log("edit", this.item);
     },
     focus(item, e) {
       if (

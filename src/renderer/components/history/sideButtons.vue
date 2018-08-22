@@ -4,7 +4,7 @@
       <i class="fas fa-edit"></i>
       <span class="text">{{$t('button.edit')}}</span>
     </button>
-    <button class="btn" @click="reOpenOrder" v-if="order && order.status !== 1">
+    <button class="btn" @click="recoverTicketDialog" v-if="order && order.status !== 1">
       <i class="fas fa-redo-alt"></i>
       <span class="text">{{$t('button.recover')}}</span>
     </button>
@@ -254,35 +254,49 @@ export default {
         });
       }).then(this.exitComponent);
     },
-    reOpenOrder() {
+    recoverTicketDialog() {
       if (this.isEmptyTicket) return;
 
+      if (this.order.void.irrevocable) {
+        // this is a ticket has been combined
+        // operator is not allow to recover
+
+        const prompt = {
+          title: "dialog.cantExecute",
+          msg: ["dialog.ticketCombined", this.order.void.join],
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
+
+        this.$dialog(prompt).then(this.exitComponent);
+      } else {
+        this.$checkPermission("modify", "void")
+          .then(this.reopenOrder)
+          .catch(() => {});
+      }
+    },
+    reopenOrder() {
       const prompt = {
         type: "question",
-        title: ["dialog.restoreOrder", this.order.number],
+        title: ["dialog.recoverTicket", this.order.number],
         msg: [
-          "dialog.restoreOrderConfirm",
+          "dialog.recoverTicketConfirm",
           this.order.void.by,
           this.$t("reason." + this.order.void.note)
         ]
       };
 
-      this.$checkPermission("modify", "void")
+      this.$dialog(prompt)
         .then(() => {
-          this.$dialog(prompt)
-            .then(() => {
-              let order = JSON.parse(JSON.stringify(this.order));
-              order.status = 1;
-              delete order.void;
-              this.updateInvoice(order, true);
+          let order = JSON.parse(JSON.stringify(this.order));
+          order.status = 1;
+          delete order.void;
+          this.updateInvoice(order, true);
 
-              this.isDineInTicket(order.type)
-                ? this.reOpenTableDialog(order.tableID)
-                : this.exitComponent();
-            })
-            .catch(this.exitComponent);
+          this.isDineInTicket(order.type)
+            ? this.reOpenTableDialog(order.tableID)
+            : this.exitComponent();
         })
-        .catch(() => {});
+        .catch(this.exitComponent);
     },
     isDineInTicket(type) {
       return type === "DINE_IN" || type === "BAR" || type === "HIBACHI";
