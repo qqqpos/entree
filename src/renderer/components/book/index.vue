@@ -8,7 +8,7 @@
                 </header>
                 <section>
                     <h5>{{$t('booking.date')}}</h5>
-                    <div class="content center">
+                    <div class="content text-center">
                         <div class="input-wrap">
                             <i class="far fa-calendar-alt light space"></i>
                             <input type="text" v-model="book.date" placeholder="YYYY-MM-DD">
@@ -23,7 +23,7 @@
                 </section>                
                 <section>
                     <h5>{{$t('booking.type')}}</h5>
-                    <div class="content center">
+                    <div class="content text-center">
                         <input type="radio" name="type" v-model="book.type" value="WALK_IN" id="WALK_IN">
                         <label for="WALK_IN" class="mini-btn"><i class="fas fa-user-friends light space"></i>{{$t('type.WALK_IN')}}</label>
                         <input type="radio" name="type" v-model="book.type" value="PHONE" id="PHONE">
@@ -32,7 +32,7 @@
                 </section>
                 <section>
                     <h5>{{$t('booking.partySize')}}</h5>
-                    <div class="content center">
+                    <div class="content text-center">
                         <div class="age">
                             <span>{{$t('booking.adult')}}</span>
                             <span class="button-wrap">
@@ -61,7 +61,7 @@
                 </section>
                 <section>
                     <h5>{{$t('booking.contact')}}</h5>
-                    <div class="content center">
+                    <div class="content text-center">
                         <div class="input-wrap">
                             <i class="fas fa-phone light space"></i>
                             <input type="text" v-model="book.phone" :placeholder="$t('text.phone')">
@@ -75,11 +75,11 @@
                 </section>
                 <section>
                     <h5>{{$t('booking.request')}}</h5>
-                    <div class="content center">
+                    <div class="content text-center">
                         <textarea v-model="book.note"></textarea>
                     </div>
                 </section>
-                <section class="center">   
+                <section class="text-center">   
                     <button class="btn" v-if="changed" @click="init.resolve">
                         <i class="fa fa-times"></i>
                         <span>{{$t('button.exit')}}</span>
@@ -106,7 +106,7 @@
                 </div>
                 <dropdown label="filter.category" :options="types" filter="filter"></dropdown>
               </header>
-              <reservation :books="sortedList"></reservation>
+              <reservation :books="sortedList" @view="view"></reservation>
             </div>
         </div>
         <div :is="component" :init="componentData"></div>
@@ -115,6 +115,8 @@
 
 <script>
 import { mapGetters } from "vuex";
+
+import viewer from "./component/view";
 import dialogModule from "../common/dialog";
 import timePicker from "./helper/timePicker";
 import reservation from "./component/reservation";
@@ -123,7 +125,14 @@ import dropdown from "../history/component/dropdown";
 
 export default {
   props: ["init"],
-  components: { calendar, timePicker, dialogModule, reservation, dropdown },
+  components: {
+    viewer,
+    calendar,
+    dropdown,
+    timePicker,
+    reservation,
+    dialogModule
+  },
   data() {
     return {
       filter: null,
@@ -155,7 +164,7 @@ export default {
         },
         {
           text: this.$t("filter.noShows"),
-          value: "NOSHOWS"
+          value: "NO-SHOWS"
         }
       ]
     };
@@ -173,7 +182,21 @@ export default {
   },
   computed: {
     sortedList() {
-      return Array.isArray(this.bookingList) ? this.bookingList : this.books;
+      let list = Array.isArray(this.bookingList)
+        ? this.bookingList
+        : this.books;
+
+      switch (this.filter) {
+        case "ALL":
+          return list;
+        case "CANCELLED":
+          const time = Date.now();
+          return list.filter(book => book.timestamp < time && book.status === 1);
+        case "NO-SHOWS":
+          return list.filter(book => book.status === 0);
+        default:
+          return list.filter(book => book.status === 1);
+      }
     },
     changed() {
       const book = {
@@ -203,7 +226,9 @@ export default {
       const value = this.book.guest[i] + 1;
       this.book.guest.splice(i, 1, value);
     },
-    applyFilter(value) {},
+    applyFilter({ value }) {
+      this.filter = value;
+    },
     prevDate() {
       this.calendarDate = moment(this.calendarDate).subtract(1, "d");
       this.getBookingList();
@@ -239,9 +264,11 @@ export default {
     getBookingList(date) {
       date = date || this.calendarDate.format("YYYY-MM-DD");
 
-      this.$socket.emit("[BOOK] LIST", date, list => {
-        this.bookingList = list;
-      });
+      date === today()
+        ? (this.bookingList = null)
+        : this.$socket.emit("[BOOK] LIST", date, list => {
+            this.bookingList = list;
+          });
     },
     reset() {
       this.book = {
@@ -293,16 +320,32 @@ export default {
         );
         const prompt = {
           title: "dialog.bookingConfirm",
-          msg: ["dialog.bookingTimeDetail", readable]
+          msg: ["dialog.bookingTimeDetail", readable],
+          buttons: [
+            {
+              text: "button.cancel",
+              fn: "resolve"
+            },
+            {
+              text: "button.confirmPrint",
+              fn: "print"
+            },
+            {
+              text: "button.confirm",
+              fn: "reject"
+            }
+          ]
         };
 
         this.$dialog(prompt)
-          .then(() => {
+          .then(this.exitComponent)
+          .catch(print => {
+            print && Printer.printReservation(this.book);
+
             this.$socket.emit("[BOOK] SAVE", this.book);
             this.exitComponent();
             next();
-          })
-          .catch(this.exitComponent);
+          });
       });
     },
     exception(error) {
@@ -325,6 +368,9 @@ export default {
       }
 
       this.$dialog(prompt).then(this.exitComponent);
+    },
+    view(book) {
+      this.$open("viewer", { book });
     }
   }
 };
@@ -354,7 +400,7 @@ header {
   text-align: left;
 }
 
-p.estimate{
+p.estimate {
   font-size: 0.8em;
   margin-top: 4px;
   opacity: 0.7;
@@ -367,10 +413,6 @@ h5 {
   text-align: left;
 }
 
-.center {
-  text-align: center;
-}
-
 .content label {
   margin: 4px 6px;
   display: inline-block;
@@ -379,34 +421,6 @@ h5 {
 
 input:checked + label {
   opacity: 1;
-}
-
-.input-wrap {
-  position: relative;
-  display: flex;
-  border: 2px solid #eee;
-  width: 220px;
-  background: #fff;
-  border-radius: 4px;
-  margin: 5px auto;
-  align-items: baseline;
-  padding: 5px;
-}
-
-.input-wrap input {
-  border: none;
-  background: transparent;
-  outline: none;
-  text-indent: 5px;
-  font-family: "Yuanti-SC";
-  color: #333;
-  font-size: 18px;
-}
-
-.input-wrap i {
-  width: 35px;
-  font-size: 16px;
-  padding-left: 5px;
 }
 
 .age {

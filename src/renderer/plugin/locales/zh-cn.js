@@ -151,7 +151,7 @@ export default {
     category: "按类别",
     allBooks: "所有预定",
     cancelled: "已取消",
-    noShows: "已放弃"
+    noShows: "客人没来"
   },
   tag: {
     goodCustomer: "好客人",
@@ -538,9 +538,9 @@ export default {
     reopenSettledOrderTip: "您要先移除此单的 {i}结账 记录后才能修改订单",
     recoverTicket: "您确定要恢复 {i}号 订单吗？",
     recoverTicketConfirm: "该订单是由 {i} 取消。原因: {i}",
-    ticketCombined:"订单已经被合并至 #{i}",
+    ticketCombined: "订单已经被合并至 #{i}",
     unlinkTicket: "取消合并订单",
-    unlinkTicketConfirm:"您确定要把 {i} 从合并订单中移除吗?",
+    unlinkTicketConfirm: "您确定要把 {i} 从合并订单中移除吗?",
     restoreTable: "还原座位",
     restoreTableInvoiceConfirm: "您需要同时还原对应的座位信息吗?",
     unableAccess: "无法访问",
@@ -719,7 +719,8 @@ export default {
     courseTime: "确认出餐定时",
     courseTimeConfirm: "所有未设定时间的餐会立刻打印出来",
     driverReport: "司机报表",
-    driverReportDetail: "您确定要打印 {i} 司机的报表?"
+    driverReportDetail: "您确定要打印 {i} 司机的报表?",
+    removeBook: "您确定要移除 {i} 的预约吗?"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1203,7 +1204,7 @@ export default {
     tenderDetail: "支付: $ {i}\n找零: ${i}",
     readyBatch: "准备过账",
     commission: "佣金",
-    totalCustomer: "用户统计: ",
+    totalCustomer: "客户统计: ",
     totalAddress: "地址统计: ",
     totalGiftCard: "礼物卡总计: ",
     dob: "生日",
@@ -1315,7 +1316,8 @@ export default {
     militaryTime: "24 小时",
     assignTo: "分配给 {i}",
     deassign: "取消分配",
-    placeholder: "占位符"
+    placeholder: "占位符",
+    checkIn: "签到"
   },
   nav: {
     store: "店面",

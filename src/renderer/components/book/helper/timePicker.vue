@@ -281,11 +281,11 @@ export default {
   padding: 4px 10px;
   white-space: nowrap;
   text-align: center;
-  transform: translateX(-50%);
-  background: #eceff1;
   color: #37474f;
   border-radius: 4px;
+  background: #eceff1;
   border: 1px solid #e0e0e0;
+  transform: translateX(-25%);
 }
 </style>
 

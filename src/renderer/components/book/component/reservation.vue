@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     view(book) {
-      console.log(book);
+      this.$emit("view", book);
     },
     initial(data) {
       const hours = {};

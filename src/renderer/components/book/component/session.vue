@@ -2,9 +2,11 @@
     <div class="outer-wrap" ref="parent">
         <v-touch class="inner-wrap" :style="horizontalStyle" @panleft="horizontalPan" @panright="horizontalPan" @panstart="horizontalStart" @panend="horizontalEnd">
             <div class="session" v-for="(books,frame) of session" :key="frame">
-                <div class="time">{{hour + frame}}</div>
+                <div class="time text-center">{{hour + frame}}</div>
                 <div class="books" ref="children">
-                    <div class="content" v-for="(book,i) in books" :key="i" @click="$emit('select',book)">
+                    <div class="content relative" v-for="(book,i) in books" :key="i" @click="$emit('select',book)" :title="book.note">
+                        <i class="fas fa-user-slash no-show" v-if="book.status === 0"></i>
+                        <i class="far fa-comment-dots note" v-show="book.note" v-else></i>
                         <h5>{{book.name}}</h5>
                         <h5 class="phone">{{book.phone | phone}}</h5>
                         <p>
@@ -71,7 +73,7 @@ export default {
 
           util.ease({
             start: this.horizontal,
-            end: this.horizontal - diffs + 5,
+            end: this.horizontal - diffs + 10,
             progress: value => {
               this.horizontal = value;
             },
@@ -142,9 +144,10 @@ export default {
 
 .session .time {
   background: #00bcd4;
-  box-shadow: 0 1px 1px rgba(8, 138, 126, 0.92);
+  text-shadow: 0 1px 1px #333;
+  box-shadow: 0 1px 1px #b0bec5;
   margin: 5px 2px 5px;
-  border-radius: 10px;
+  border-radius: 4px;
   color: #fff;
 }
 
@@ -173,6 +176,18 @@ h5.phone {
 
 .hourly:nth-child(even) .hour {
   background: #fafafa;
+}
+
+i.note,
+.no-show {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  color: #ffa726;
+}
+
+.no-show {
+  color: #ff5722;
 }
 </style>
 

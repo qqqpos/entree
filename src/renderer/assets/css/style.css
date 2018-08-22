@@ -1286,3 +1286,31 @@ span.action.gray{
 span.action.yellow{
   background: #ff9800;
 }
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  border: 2px solid #eee;
+  width: 220px;
+  background: #fff;
+  border-radius: 4px;
+  margin: 5px auto;
+  align-items: baseline;
+  padding: 5px;
+}
+
+.input-wrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  text-indent: 5px;
+  font-family: "Yuanti-SC";
+  color: #333;
+  font-size: 18px;
+}
+
+.input-wrap i {
+  width: 35px;
+  font-size: 16px;
+  padding-left: 5px;
+}

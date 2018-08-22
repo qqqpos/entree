@@ -613,7 +613,7 @@ export default {
     recoverTicketConfirm: "This ticket is voided by {i}. ( Reason: {i} )",
     ticketCombined: "This ticket has been combined to #{i}",
     unlinkTicket: "Cancel Combined Ticket",
-    unlinkTicketConfirm:"Are you sure to remove {i} from combined ticket?",
+    unlinkTicketConfirm: "Are you sure to remove {i} from combined ticket?",
     restoreTable: "Restore Table",
     restoreTableInvoiceConfirm: "Do you want to restore table status as well?",
     unableAccess: "Unable Access",
@@ -794,7 +794,8 @@ export default {
     courseTime: "Course Time Confirm",
     courseTimeConfirm: "All items not set with time will print immediately.",
     driverReport: "Driver Report",
-    driverReportDetail: "Are you sure to print out driver {i}'s summary report?"
+    driverReportDetail: "Are you sure to print out driver {i}'s summary report?",
+    removeBook: "Are you sure to remove {i}'s reservation?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1326,7 +1327,8 @@ export default {
     militaryTime: "24 Hour",
     assignTo: "Assign To {i}",
     deassign: "Deassign",
-    placeholder: "Placeholder"
+    placeholder: "Placeholder",
+    checkIn: "Check In"
   },
   nav: {
     store: "Store",
