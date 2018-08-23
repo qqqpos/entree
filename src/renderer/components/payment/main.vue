@@ -20,7 +20,7 @@
                         <div class="flex">
                             <balance-display :payment="order.payment"></balance-display>
                             <div class="btns">
-                                <button class="btn" @click="openTipComponent">{{$t('button.setTip')}}</button>
+                                <button class="btn" @click="openTipComponent" @contextmenu="gratuityToTip">{{$t('button.setTip')}}</button>
                                 <button class="btn" @click="openDiscountComponent">{{$t('button.setDiscount')}}</button>
                                 <button class="btn" @click="save">{{$t('button.save')}}</button>
                             </div>
@@ -379,11 +379,13 @@ export default {
 
           break;
         case "number":
-          value = this.willResetFieldValue ? string : value + string;
+          value = this.willResetFieldValue
+            ? string
+            : (value + string).replace(/\D+/g, "");
           break;
       }
 
-      this[this.anchor] = isNumber(length) ? value.replace(/\D+/g, "").slice(0, length) : value;
+      this[this.anchor] = isNumber(length) ? value.slice(0, length) : value;
       this.willResetFieldValue = false;
       this.updateTip();
     },
@@ -1036,6 +1038,27 @@ export default {
         .catch(() => {
           //set tip failed log
         });
+    },
+    gratuityToTip() {
+      const { gratuity } = this.order.payment;
+      const prompt = {
+        type: "question",
+        title: "dialog.tipConfirm",
+        msg: ["dialog.setGratuityAsTip", gratuity.toFixed(2)]
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.tip = gratuity.toFixed(2);
+          this.order.payment.gratuity = 0;
+          this.order.payment.tip = gratuity;
+
+          this.recalculatePayment();
+          this.paid = (this.payment.remain - gratuity).toFixed(2);
+
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
     },
     openDiscountComponent() {
       this.$checkPermission("modify", "discount")

@@ -720,7 +720,8 @@ export default {
     courseTimeConfirm: "所有未设定时间的餐会立刻打印出来",
     driverReport: "司机报表",
     driverReportDetail: "您确定要打印 {i} 司机的报表?",
-    removeBook: "您确定要移除 {i} 的预约吗?"
+    removeBook: "您确定要移除 {i} 的预约吗?",
+    setGratuityAsTip:"您确定要将服务费 ($ {i}) 改成小费吗?"
   },
   terminal: {
     initial: "正在初始化 {i}...",

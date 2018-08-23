@@ -77,7 +77,9 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
     const ticketInfo = (trans.order && trans.order.hasOwnProperty("type") && trans.order.hasOwnProperty("number")) ?
       `<p><span class="text">Ticket</span><span class="value">( # ${trans.order.number} ) ${trans.order.type.replace("_", " ")}</span></p>\
        <p><span class="text">${trans.order.server ? 'Server' : 'Cashier'}</span><span class="value">${trans.order.server || trans.order.cashier}</span></p>` : "";
-
+    const tipLine = parseFloat(trans.amount.tip) > 0 ?
+      `<p class="bold"><span class="text">Tip:</span><span class="value ul">$ ${trans.amount.tip}</span></p><p class="bold"><span class="text">Extra Tip:</span><span class="value ul">$ </span></p>` :
+      `<p class="bold"><span class="text">Tip:</span><span class="value ul">$ </span></p>`
     return `<section class="header">\
               <div class="store">\
                 <h3>${store.name}</h3>\
@@ -97,8 +99,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
               <p><span class="text">Entry</span><span class="value">${trans.account.entry}</span></p>\
               <p><span class="text">Present</span><span class="value">${trans.account.present}</span></p>\
               <p class="bold amount"><span class="text">Amount:</span><span class="value">$ ${(trans.amount.approve - trans.amount.tip).toFixed(2)}</span></p>\
-              ${due}
-              <p class="bold"><span class="text">Tip:</span><span class="value ul">$ ${parseFloat(trans.amount.tip) > 0 ? trans.amount.tip : ''}</span></p>\
+              ${due + tipLine}
               <p class="bold"><span class="text">Total:</span><span class="value ul">$</span></p>\
               <p><span class="text">Auth Code</span><span class="value">${trans.host.auth}</span></p>\
               <p><span class="text">Response</span><span class="value">${trans.host.msg}</span></p>\

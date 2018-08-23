@@ -795,7 +795,8 @@ export default {
     courseTimeConfirm: "All items not set with time will print immediately.",
     driverReport: "Driver Report",
     driverReportDetail: "Are you sure to print out driver {i}'s summary report?",
-    removeBook: "Are you sure to remove {i}'s reservation?"
+    removeBook: "Are you sure to remove {i}'s reservation?",
+    setGratuityAsTip:"Are you sure to set gratuity ($ {i}) as tip?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
