@@ -85,7 +85,7 @@ ul.tabs li.router-link-exact-active {
 
 .tab-content {
   width: 450px;
-  margin: 10px auto;
+  margin: 9px auto;
   background: #fff;
   box-shadow: var(--shadow);
   border-radius: 6px 6px 0 0;
@@ -188,13 +188,13 @@ header.nav {
 
 header.nav .back {
   padding: 10px 25px;
-  color: #555;
   cursor: pointer;
   position: absolute;
 }
 
 header.nav .back {
-  background: #eee;
+  background: linear-gradient(to bottom, #EEEEEE 0%, #E0E0E0 100%);
+  box-shadow: inset 0 -1px 5px 0px rgba(0,0,0,0.1);
   border-radius: 4px;
 }
 

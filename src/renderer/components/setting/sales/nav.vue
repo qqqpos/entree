@@ -18,6 +18,10 @@
                     <i class="fas fa-hand-holding-usd"></i>
                     <span class="text">{{$t('nav.cashFlow')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.sales.payout'}">
+                    <i class="fas fa-money-check-alt"></i>
+                    <span class="text">{{$t('nav.payout')}}</span>
+                </router-link>                
             </div>
             <router-link tag="li" :to="{name:'Setting.index'}" exact>
                 <i class="fa fa-arrow-circle-left"></i>

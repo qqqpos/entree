@@ -2,7 +2,7 @@
     <div>
         <header class="nav">
             <div class="title">
-                <h3>{{$t('title.databaseHealth')}}</h3>
+                <h3>{{$t('setting.title.database')}}</h3>
             </div>
         </header>
         <div class="data-status">

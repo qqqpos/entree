@@ -14,10 +14,6 @@
                     <i class="fas fa-map-marked-alt"></i>
                     <span class="text">{{$t('nav.address')}}</span>
                 </router-link>
-                <router-link tag="li" :to="{name:'Setting.database.payout'}">
-                    <i class="fas fa-money-check-alt"></i>
-                    <span class="text">{{$t('nav.payout')}}</span>
-                </router-link>
                 <router-link tag="li" :to="{name:'Setting.database.config'}">
                     <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('nav.setting')}}</span>

@@ -56,7 +56,7 @@ export default {
       componentData: null,
       component: null,
       actions: null,
-      page:0
+      page: 0
     };
   },
   methods: {
@@ -135,7 +135,7 @@ export default {
             .join("");
       }
     },
-    setPage(n){
+    setPage(n) {
       this.page = n;
     }
   },
@@ -153,12 +153,13 @@ export default {
 <style scoped>
 .wrap {
   padding: initial;
+  background: #fafafa;
 }
 
 ul.record {
-  margin-left: 75px;
   height: 100%;
-  border-left: 2px solid #f5f5f5;
+  margin-left: 75px;
+  border-left: 1px solid #f5f5f5;
 }
 
 ul.log {
@@ -179,6 +180,8 @@ ul.log {
   position: relative;
   padding: 8px 0 8px 20px;
   min-width: 320px;
+  border-bottom: 1px solid #eceff1;
+  background: #fff;
 }
 
 .record li:before {
@@ -192,17 +195,12 @@ ul.log {
 
 .record li:after {
   content: "\F017";
-  left: -9px;
-  top: 9px;
+  left: -8px;
+  top: 8px;
   font-family: fontAwesome;
   position: absolute;
   background: #fcfcfc;
   color: #009688;
-  border-radius: 50%;
-}
-
-li:nth-child(even) {
-  background: #f5f5f5;
 }
 
 .info {

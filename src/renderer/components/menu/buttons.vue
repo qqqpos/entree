@@ -19,10 +19,10 @@
         <i class="fa fa-users"></i>
         <span class="text">{{$t('button.switch')}}</span>
       </div>
-      <div class="btn" @click="openSplit" v-else>
+      <button class="btn" @click="openSplit" :disabled="order.hasOwnProperty('parent')" v-else>
         <i class="fa fa-columns"></i>
         <span class="text">{{$t('button.split')}}</span>
-      </div>
+      </button>
       <div class="btn" @click="courseTime">
         <i class="fas fa-user-clock"></i>
         <span class="text">{{$t('button.timer')}}</span>
@@ -73,10 +73,10 @@
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
-    <div class="btn split" @click="openSplit">
+    <button class="btn split" @click="openSplit" :disabled="order.hasOwnProperty('parent')">
       <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
-    </div>
+    </button>
     <div class="btn" @click="done(false)">
       <i class="fa fa-save"></i>
       <span class="text">{{$t('button.save')}}</span>
@@ -120,10 +120,10 @@
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
-    <div class="btn" @click="openSplit">
+    <button class="btn" @click="openSplit" :disabled="order.hasOwnProperty('parent')">
       <i class="fa fa-copy"></i>
       <span class="text">{{$t("button.split")}}</span>
-    </div>
+    </button>
     <button class="btn" @click="done(false)">
       <i class="fa fa-save"></i>
       <span class="text">{{$t("button.save")}}</span>

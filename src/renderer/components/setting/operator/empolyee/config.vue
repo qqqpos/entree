@@ -16,8 +16,7 @@
       <i class="fa fa-eye view" v-if="view === 'password'" @click="view = 'text'"></i>
       <i class="fa fa-eye-slash view" v-else @click="view = 'password'"></i>
     </text-input>
-    <external title="setting.employeeCardRegistration" @open="swipe" v-if="!operator.card"></external>
-    <external title="card.removeEmployeeCard" @open="unregister" v-else></external>
+    <text-input v-model="operator.name" title="text.name"></text-input>
     <text-list v-model="operator.role" title="text.role" :opts="roles" v-show="authorized"></text-list>
     <text-input v-model.number="operator.wage" title="text.salary"></text-input>
     <toggle v-model="operator.timecard" title="text.timecard" tooltip="tip.timecard.forOne"></toggle>
@@ -29,6 +28,8 @@
       <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})"></external>
       <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})"></external>
       <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})"></external>
+      <external title="setting.employeeCardRegistration" @open="swipe" v-if="!operator.card"></external>
+      <external title="card.removeEmployeeCard" @open="unregister" v-else></external>
       <toggle v-model="operator.restrict" title="text.restrict" true-tooltip="tip.restrictPermission" false-tooltip="tip.temporaryPermission" :conditionalTooltip="true"></toggle>
     </template>
     <div :is="component" :init="componentData"></div>

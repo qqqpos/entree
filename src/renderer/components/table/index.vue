@@ -95,7 +95,8 @@ export default {
       const after = now + 3.6e6;
 
       return this.books.filter(
-        ({ timestamp }) => timestamp > before && timestamp < after
+        ({ timestamp, status }) =>
+          timestamp > before && timestamp < after && status === 1
       ).length;
     },
     ...mapGetters([

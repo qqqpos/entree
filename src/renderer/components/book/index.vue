@@ -372,6 +372,11 @@ export default {
     view(book) {
       this.$open("viewer", { book });
     }
+  },
+  sockets:{
+    REFRESH_BOOK(list){
+      this.bookingList = list;
+    }
   }
 };
 </script>

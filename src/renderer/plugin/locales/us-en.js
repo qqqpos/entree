@@ -1441,6 +1441,7 @@ export default {
       database: "Database Setting",
       stationDevice: "Station Device",
       couponList: "Coupon List",
+      database: "About Database"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",

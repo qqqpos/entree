@@ -1431,6 +1431,7 @@ export default {
       database: "数据库设定",
       stationDevice: "工作站设备",
       couponList: "优惠券列表",
+      database: "关于数据库"
     },
     receiptDialog: "打印收据",
     others: "其它设置",

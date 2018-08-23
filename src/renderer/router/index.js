@@ -500,27 +500,6 @@ export default new Router({
                   name: "Setting.sales",
                   component: require("../components/setting/sales/sales")
                 },
-                // {
-                //   path: "giftcard",
-                //   component: require("../components/setting/sales/giftcardTab"),
-                //   children: [
-                //     {
-                //       path: "/",
-                //       name: "Setting.sales.giftcard",
-                //       component: require("../components/setting/sales/giftcard/index")
-                //     },
-                //     {
-                //       path: "list",
-                //       name: "Setting.sales.giftcard.list",
-                //       component: require("../components/setting/sales/giftcard/list")
-                //     },
-                //     {
-                //       path: "history",
-                //       name: "Setting.sales.giftcard.history",
-                //       component: require("../components/setting/sales/giftcard/history")
-                //     }
-                //   ]
-                // },
                 {
                   path: "batch",
                   name: "Setting.sales.batch",
@@ -535,6 +514,11 @@ export default new Router({
                   path: "giftcard",
                   name: "Setting.sales.giftcard",
                   component: require("../components/setting/sales/giftcard")
+                },
+                {
+                  path: "payout",
+                  name: "Setting.sales.payout",
+                  component: require("../components/setting/sales/payout")
                 }
               ]
             },

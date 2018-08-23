@@ -8,7 +8,7 @@
                 </div>
                 <div class="f1"></div>
                 <nav>
-                    <span class="mini-btn">{{$t('button.sms')}}</span>
+                    <span class="mini-btn" v-show="book.status === 1">{{$t('button.sms')}}</span>
                 </nav>
             </header>
             <div class="banner"></div>
@@ -50,8 +50,8 @@
                 <div class="opt">
                     <span class="del" @click="removeDialog">{{$t('button.remove')}}</span>
                 </div>
-                <button class="btn" @click="save">{{$t('button.save')}}</button>
-                <button class="btn" @click="checkIn">{{$t('text.checkIn')}}</button>
+                <button class="btn" @click="save" :disabled="book.status === 2">{{$t('button.save')}}</button>
+                <button class="btn" @click="checkIn" :disabled="book.status === 2">{{$t('text.checkIn')}}</button>
             </footer>
         </div>
         <div :is="component" :init="componentData"></div>
