@@ -113,7 +113,7 @@ export default {
     },
     confirm() {
       this.init.resolve({
-        amount: parseFloat(this.amount),
+        amount: parseFloat(this.amount) || 0,
         percentage: this.percentage
       });
     }

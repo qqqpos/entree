@@ -90,7 +90,7 @@ export default {
 
           if (paid !== balance) {
             Object.assign(record, {
-              status: -1,
+              status: 0,
               info: balance > paid ? "Paid less" : "Over Paid",
               miss: Math.abs(balance - paid)
             });
