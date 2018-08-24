@@ -426,17 +426,17 @@ export default {
     changeLog: "改动日志",
     book: "预约",
     summary: {
-      sales: "每日销售记录 从 {i} 到 {i}",
-      batch: "信用卡过账记录 从{i} 到 {i}",
-      cashflow: "钱箱现金记录 从 {i} 到 {i}"
+      sales: "从 {i} 到 {i} 的销售记录",
+      batch: "从 {i} 到 {i} 的过账记录",
+      cashflow: "从 {i} 到 {i} 的钱箱现金流水"
     }
   },
   dialog: {
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
     criticalError: "发生了一个严重的系统错误",
-    attemptRecover: "正在尝试自动修复这个错误...",
-    attemptFailed: "无法自动修复系统错误，请立即拨打技术部门热线",
+    attemptReconnect: "正在尝试与主机通信中...",
+    attemptFailed: "无法与主机通信，请立即拨打技术部门热线",
     supportHotLine: "(888)299-0524",
     exitConfirm: "您确定要退出吗?",
     saveConfirm: "您确定要保存吗?",
@@ -725,7 +725,8 @@ export default {
     removeBook: "您确定要移除 {i} 的预约吗?",
     setGratuityAsTip: "您确定要将服务费 ($ {i}) 改成小费吗?",
     importedSuccessful: "导入成功",
-    itemImported: "成功从CSV文件中导入 {i} 个物品"
+    itemImported: "成功从CSV文件中导入 {i} 个物品",
+    cashPaymentNotAllow: "您无权进行现金支付"
   },
   terminal: {
     initial: "正在初始化 {i}...",

@@ -1,13 +1,15 @@
 <template>
   <div>
-    <header class="nav">
-      <div class="back" @click="$router.push({ name: 'Setting.store' })">
-        <i class="fa fa-chevron-left"></i>
+    <div class="tab-content">
+      <header class="nav">
+        <div class="back" @click="$router.push({ name: 'Setting.store' })">
+          <i class="fa fa-chevron-left"></i>
+        </div>
+        <h3 class="title">{{$t('text.openHour')}}</h3>
+      </header>
+      <div>
+        <open-time v-for="(rule,index) in openingHours.rules" :key="index" :rule="rule" :day="$t(weekdays[index])"></open-time> 
       </div>
-      <div class="title">{{$t('text.openHour')}}</div>
-    </header>
-    <div>
-      <open-time v-for="(rule,index) in openingHours.rules" :key="index" :rule="rule" :day="$t(weekdays[index])"></open-time> 
     </div>
   </div>
 </template>

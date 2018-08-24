@@ -3,13 +3,13 @@
     <header class="date-picker">
         <div class="f1">
             <h3>{{$t('setting.title.salesSummary')}}</h3>
-            <p>{{$t('title.summary.sales')}}</p>
+            <p>{{$t('title.summary.sales',from,to)}}</p>
         </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
     <div class="summary-wrap">
-      <section class="list" v-if="dates.length">
-        <daily v-for="(date,index) in dates" :key="index" :sales="date"></daily>
+      <section class="list" v-if="data.length">
+        <daily v-for="(sale,index) in data" :key="index" :sales="sale"></daily>
       </section>
       <section class="empty" v-else>
         Database Has No Index 
@@ -85,7 +85,9 @@ export default {
       componentData: null,
       component: null,
       indexed: false,
-      dates: []
+      data: [],
+      from: "",
+      to: ""
     };
   },
   created() {
@@ -94,23 +96,24 @@ export default {
   },
   methods: {
     fetchData([from, to], group = "DAILY") {
+      this.from = from.format("YYYY-MM-DD");
+      this.to = to.format("YYYY-MM-DD");
+
       this.indexed &&
         this.$socket.emit(
           "[REPORT] DAILY",
           { from: +from, to: +to, group },
-          dates => {
-            this.dates = Object.freeze(
-              dates.sort((a, b) => (a.time > b.time ? 1 : -1))
+          data => {
+            this.data = Object.freeze(
+              data.sort((a, b) => (a.time > b.time ? 1 : -1))
             );
-            this.analizeData();
           }
         );
-    },
-    analizeData() {}
+    }
   },
   computed: {
     summary() {
-      const days = this.dates.length;
+      const days = this.data.length;
       let subtotal = 0;
       let tax = 0;
       let discount = 0;
@@ -118,7 +121,7 @@ export default {
       let gratuity = 0;
       let total = 0;
 
-      this.dates.forEach(date => {
+      this.data.forEach(date => {
         subtotal += date.summary.sales.subtotal;
         tax += date.summary.sales.tax;
         discount += date.summary.sales.discount;

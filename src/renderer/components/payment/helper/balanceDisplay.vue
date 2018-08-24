@@ -5,15 +5,15 @@
             <div class="f1"></div>
             <div class="due">
                 <i class="fas fa-dollar-sign symbol"></i>
-                <span>{{remain + tip | decimal}}</span>
+                <span>{{remain + tip - paid | decimal}}</span>
             </div>
             <div class="addition" v-show="discount > 0">
                 <span class="text">{{$t('text.discount')}}</span>
                 <span>({{discount | decimal}})</span>
               </div>
-            <div class="addition" v-show="tip > 0">
+            <div class="addition" v-show="Math.max(0,tip - paid) > 0">
                 <span class="text">{{$t('text.tip')}}</span>
-                <span>({{tip | decimal}})</span>
+                <span>({{Math.max(0,tip - paid) | decimal}})</span>
             </div>
             <div class="addition" v-show="gratuity > 0">
                 <span class="text">{{$t('text.gratuity')}}</span>
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  props: ["payment"],
+  props: ["payment", "paid"],
   data() {
     return {
       remain: 0,

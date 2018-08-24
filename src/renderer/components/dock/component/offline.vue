@@ -10,7 +10,7 @@
             </h5>
             <div v-show="!autoFix" class="shutdown" @click="shutdown">{{$t('login.shutdown')}}</div>
             <footer>
-                <p v-if="autoFix">{{$t('dialog.attemptRecover')}}</p>
+                <p v-if="autoFix">{{$t('dialog.attemptReconnect')}}</p>
                 <template v-else>
                     <p>{{$t('dialog.attemptFailed')}}</p>
                     <p>{{$t('dialog.supportHotLine')}}</p>

@@ -508,8 +508,8 @@ export default {
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
     criticalError: "System Has Encountered A Critical Problem",
-    attemptRecover: "Attempting To Recovery...",
-    attemptFailed: "Recovery has failed. Please call Support for troubleshooting.",
+    attemptReconnect: "Reconnecting to the server...",
+    attemptFailed: "Couldn't reconnect to the server. Please call Support for troubleshooting.",
     supportHotLine: "(888)299-0524",
     exitConfirm: "Are you sure you want to EXIT?",
     saveConfirm: "Are you sure you want to SAVE?",
@@ -800,7 +800,8 @@ export default {
     removeBook: "Are you sure to remove {i}'s reservation?",
     setGratuityAsTip: "Are you sure to set gratuity ($ {i}) as tip?",
     importedSuccessful: "Item Imported",
-    itemImported: "Successfully imported {i} items from CSV file."
+    itemImported: "Successfully imported {i} items from CSV file.",
+    cashPaymentNotAllow: "You are not allow to pay with cash."
   },
   terminal: {
     initial: "Initializing terminal {i}...",

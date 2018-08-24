@@ -18,7 +18,7 @@
                     </section>
                     <section class="right">
                         <div class="flex">
-                            <balance-display :payment="order.payment"></balance-display>
+                            <balance-display :payment="order.payment" :paid="paidTip"></balance-display>
                             <div class="btns">
                                 <button class="btn" @contextmenu.stop="gratuityToTip" @click.stop="openTipComponent">{{$t('button.setTip')}}</button>
                                 <button class="btn" @click="openDiscountComponent">{{$t('button.setDiscount')}}</button>
@@ -100,6 +100,7 @@ export default {
       payWhole: true,
       paid: "0.00",
       tip: "0.00",
+      paidTip: 0,
       anchor: "paid",
       creditCard: "",
       expDate: "",
@@ -257,7 +258,7 @@ export default {
                   stop({ error: "SPLIT_TICKET_NOT_FUND" });
                 }
               })
-            : stop({ error: "ITEM_REMAIN_UNSPLIT", param: remain });
+            : stop({ error: "ITEM_NOT_SPLIT", param: remain });
         } else {
           this.order = this.invoice;
           next();
@@ -273,7 +274,7 @@ export default {
 
         this.$socket.emit("[PAYMENT] CHECK", query, ({ paid, tip }) => {
           const { balance } = this.order.payment;
-
+          this.paidTip = parseFloat(tip) || 0;
           this.order.payment.remain = toFixed(Math.max(0, balance - paid), 2);
           next();
         });
@@ -484,9 +485,15 @@ export default {
           msg: "dialog.stationCashDrawerRequired",
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
+        const cashPaymentNotAllow = {
+          title: "dialog.cantExecute",
+          msg: "dialog.cashPaymentNotAllow",
+          buttons: [{ text: "button.confirm", fn: "resolve" }]
+        };
 
         if (this.paidTotal === 0) throw paidZeroError;
         if (!allow) throw noCashDrawerError;
+        if (this.op.cashCtrl === "creditOnly") throw cashPaymentNotAllow;
 
         next();
       });
@@ -1298,7 +1305,7 @@ export default {
           };
           this.$dialog(prompt).then(this.exitPaymentModule);
           break;
-        case "ITEM_REMAIN_UNSPLIT":
+        case "ITEM_NOT_SPLIT":
           prompt = {
             type: "error",
             title: "dialog.cantExecute",

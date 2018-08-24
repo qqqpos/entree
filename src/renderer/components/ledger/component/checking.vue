@@ -41,32 +41,15 @@ export default {
       this.invoices.forEach(invoice => {
         const { discount } = invoice.payment;
 
-        const {
-          subtotal,
-          plasticTax,
-          delivery,
-          tax,
-          gratuity,
-          rounding
-        } = this.$calculatePayment(invoice, {
+        const { balance } = this.$calculatePayment(invoice, {
           selfAssign: false,
           callback: true
         });
 
-        const balance = +(
-          subtotal +
-          plasticTax +
-          tax +
-          delivery +
-          gratuity +
-          rounding -
-          discount
-        ).toFixed(2);
-
         if (invoice.status === 1) {
-          this.ticketAmount += balance - discount;
+          this.ticketAmount += balance;
         } else {
-          this.voidAmount += balance - discount;
+          this.voidAmount += balance;
         }
 
         const payments = this.transactions.filter(t => t.order === invoice._id);
@@ -88,7 +71,7 @@ export default {
             cashier: invoice.cashier
           };
 
-          if (paid !== balance) {
+          if (paid > 0 && paid !== balance) {
             Object.assign(record, {
               status: 0,
               info: balance > paid ? "Paid less" : "Over Paid",

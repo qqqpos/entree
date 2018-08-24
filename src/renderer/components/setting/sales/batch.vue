@@ -3,7 +3,7 @@
       <header class="date-picker">
         <div class="f1">
             <h3>{{$t('setting.title.batch')}}</h3>
-            <p>{{$t('title.summary.batch')}}</p>
+            <p>{{$t('title.summary.batch',from,to)}}</p>
         </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
@@ -62,11 +62,16 @@ export default {
     return {
       componentData: null,
       component: null,
-      records: []
+      records: [],
+      from: "",
+      to: ""
     };
   },
   methods: {
     fetchData([from, to], group = "DAILY") {
+      this.from = from.format("YYYY-MM-DD");
+      this.to = to.format("YYYY-MM-DD");
+
       this.$socket.emit(
         "[BATCH] HISTORY",
         { from: +from, to: +to, group },
