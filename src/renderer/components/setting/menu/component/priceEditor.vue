@@ -7,6 +7,7 @@
           <h3>{{$t('text.price')}}</h3>
         </div>
       </header>
+      <div class="banner"></div>
       <div class="wrap">
         <inputer title="type.WALK_IN" v-model="prices.WALK_IN" :placeholder="placeholder"></inputer>
         <inputer title="type.PICK_UP" v-model="prices.PICK_UP" :placeholder="placeholder"></inputer>

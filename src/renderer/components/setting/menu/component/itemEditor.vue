@@ -357,15 +357,15 @@ export default {
     },
     patchItem() {
       //update commission
-      if (!this.item.commission) {
-        Object.assign(this.item, {
-          commission: {
-            enable: false,
-            percentage: false,
-            value: 0
-          }
-        });
-      }
+      // if (!this.item.commission) {
+      //   Object.assign(this.item, {
+      //     commission: {
+      //       enable: false,
+      //       percentage: false,
+      //       value: 0
+      //     }
+      //   });
+      // }
 
       //update weight
       if (!this.item.weightItem) {

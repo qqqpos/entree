@@ -11,15 +11,17 @@
         <thead>
           <tr>
             <th>{{$t('thead.time')}}</th>
+            <th>{{$t('thead.operator')}}</th>
             <th>{{$t('thead.paymentType')}}</th>
             <th>{{$t('thead.amount')}}</th>
             <th>{{$t('thead.tip')}}</th>
-            <th class="action"></th>
+            <th class="action">{{$t('thead.action')}}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(log,index) in logs" :key="index">
             <td>{{log.time | moment("HH:mm:ss")}}</td>
+            <td>{{log.cashier}}</td>
             <td v-if="log.type ==='CASH'">{{$t('type.'+log.type)}}</td>
             <td v-else-if="log.type === 'CREDIT'" class="info">
               <span>{{$t('type.'+log.type)}}
@@ -40,7 +42,7 @@
             <td class="amount" :class="{zero:log.tip === 0}">$ {{log.tip | decimal}}</td>
             <td class="action">
               <button @click="removeConfirm(log,index)">{{$t("button.remove")}}</button>
-              <span v-if="log.hasOwnProperty('splitPayment')" class="split">#{{log.splitPayment + 1}}</span>
+              <span v-if="log.splitPayment" class="split">#{{log.splitPayment + 1}}</span>
             </td>
           </tr>
         </tbody>
@@ -239,7 +241,7 @@ export default {
 <style scoped>
 .record {
   background: #fff;
-  width: 500px;
+  width: 550px;
   border-radius: 4px 4px 0 0;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
 }

@@ -639,7 +639,7 @@ export default {
           this.$socket.emit("[TABLE] RESET", { _id });
         }
 
-        if (this.app.newTicket || Array.isArray(seats)) {
+        if (this.app.newTicket && Array.isArray(seats)) {
           this.$socket.emit("[HIBACHI] RESET", {
             _id,
             session: this.order.session

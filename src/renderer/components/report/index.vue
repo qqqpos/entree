@@ -1222,15 +1222,8 @@ export default {
     },
     getTransactionsFromInvoices() {},
     reportError(error) {
-      console.log(error);
       this.exitComponent();
-      this.$socket.emit("[SYS] RECORD", {
-        type: "Software",
-        event: "reportError",
-        status: 0,
-        cause: error,
-        data: this.reportRange
-      });
+      this.$log(`Report Error:${i}`,"fatal")
     }
   }
 };

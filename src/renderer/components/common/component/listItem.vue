@@ -26,7 +26,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import checkbox from "../../setting/common/checkbox";
-import { setTimeout, clearTimeout } from "timers";
 
 export default {
   props: ["type", "item", "ignore", "checkbox"],

@@ -349,7 +349,9 @@ export default {
     copy: "复制",
     reimburse: "偿还",
     additional: "追加物品",
-    received: "已收 ({i})"
+    received: "已收 ({i})",
+    import: "导入",
+    export: "导出"
   },
   title: {
     markPaymentType: "标记付款方式",
@@ -721,7 +723,9 @@ export default {
     driverReport: "司机报表",
     driverReportDetail: "您确定要打印 {i} 司机的报表?",
     removeBook: "您确定要移除 {i} 的预约吗?",
-    setGratuityAsTip:"您确定要将服务费 ($ {i}) 改成小费吗?"
+    setGratuityAsTip: "您确定要将服务费 ($ {i}) 改成小费吗?",
+    importedSuccessful: "导入成功",
+    itemImported: "成功从CSV文件中导入 {i} 个物品"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1432,7 +1436,8 @@ export default {
       database: "数据库设定",
       stationDevice: "工作站设备",
       couponList: "优惠券列表",
-      database: "关于数据库"
+      database: "关于数据库",
+      menuImport: "菜单导入"
     },
     receiptDialog: "打印收据",
     others: "其它设置",

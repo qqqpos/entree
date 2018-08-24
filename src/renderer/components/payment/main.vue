@@ -20,7 +20,7 @@
                         <div class="flex">
                             <balance-display :payment="order.payment"></balance-display>
                             <div class="btns">
-                                <button class="btn" @click="openTipComponent" @contextmenu="gratuityToTip">{{$t('button.setTip')}}</button>
+                                <button class="btn" @contextmenu.stop="gratuityToTip" @click.stop="openTipComponent">{{$t('button.setTip')}}</button>
                                 <button class="btn" @click="openDiscountComponent">{{$t('button.setDiscount')}}</button>
                                 <button class="btn" @click="save">{{$t('button.save')}}</button>
                             </div>

@@ -357,7 +357,9 @@ export default {
     copy: "Copy",
     reimburse: "Reimburse",
     additional: "Additional Order",
-    received: "Received ({i})"
+    received: "Received ({i})",
+    import: "Import",
+    export: "Export"
   },
   thead: {
     orderType: "Order Type",
@@ -796,7 +798,9 @@ export default {
     driverReport: "Driver Report",
     driverReportDetail: "Are you sure to print out driver {i}'s summary report?",
     removeBook: "Are you sure to remove {i}'s reservation?",
-    setGratuityAsTip:"Are you sure to set gratuity ($ {i}) as tip?"
+    setGratuityAsTip: "Are you sure to set gratuity ($ {i}) as tip?",
+    importedSuccessful: "Item Imported",
+    itemImported: "Successfully imported {i} items from CSV file."
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1442,7 +1446,8 @@ export default {
       database: "Database Setting",
       stationDevice: "Station Device",
       couponList: "Coupon List",
-      database: "About Database"
+      database: "About Database",
+      menuImport: "Menu Import"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",

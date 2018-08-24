@@ -335,6 +335,10 @@ header.tab {
   min-width: 350px;
 }
 
+.editor .wrap.no-padding{
+  padding:initial;
+}
+
 .editor .wrap > .options {
   display: flex;
   flex-wrap: wrap;

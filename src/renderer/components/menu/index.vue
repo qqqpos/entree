@@ -31,7 +31,6 @@
 import { mapGetters, mapActions } from "vuex";
 
 import buttons from "./buttons";
-//import Holiday from "moment-holiday";
 import modify from "./component/modify";
 import request from "./component/request";
 import weightItem from "./component/scale";
