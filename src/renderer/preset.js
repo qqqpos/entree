@@ -26,8 +26,8 @@ var Preset = function () {
       },
       callerID: {
         enable: false,
-        autoForward:false,
-        devices:[]
+        autoForward: false,
+        devices: []
       },
       receipt: "",
       printers: [],
@@ -150,6 +150,7 @@ var Preset = function () {
           lineHeight: 1,
           subFontSize: 0.8,
           price: true,
+          qty: true,
           id: false
         }, {
           ref: "usEN",
@@ -159,6 +160,7 @@ var Preset = function () {
           lineHeight: 1,
           subFontSize: 0.8,
           price: true,
+          qty: true,
           id: false
         }]
       }

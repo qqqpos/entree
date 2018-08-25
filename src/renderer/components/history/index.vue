@@ -327,6 +327,18 @@ export default {
 
         order._id === this.order._id && this.setViewOrder(order);
       }
+    },
+    UPDATE_ORDER(order) {
+      if (order.date !== today() && order.date === this.calendarDate) {
+        const index = this.prevHistory.findIndex(t => t._id === order._id);
+
+        if (index !== -1) {
+          this.prevHistory.splice(index, 1, order);
+
+          this.order._id === order._id && this.setViewOrder(order);
+          //this.highlightTicket(order);
+        }
+      }
     }
   }
 };

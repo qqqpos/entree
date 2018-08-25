@@ -754,7 +754,7 @@ export default {
           }
 
           items.push(item);
-        } else {
+        } else if (!item.print) {
           //this item is new
           item.diffs = "NEW";
           item.print = false;

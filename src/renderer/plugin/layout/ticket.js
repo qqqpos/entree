@@ -338,6 +338,8 @@ function createList(printer, setting, invoice, preview) {
     const qty = renderQty
       ? `<span class="qty">${item.qty === 1 ? "" : item.qty}</span>`
       : "";
+    const printPrimaryQty = primary.hasOwnProperty('qty') ? primary.qty : true;
+    const printSecondaryQty = secondary.hasOwnProperty('qty') ? secondary.qty : true;
     const diffs = item.diffs || "";
 
     let chineseItem = "";
@@ -371,7 +373,7 @@ function createList(printer, setting, invoice, preview) {
         ? `<div class="zhCN">\
                 <div class="main">\
                     <del></del>\
-                    ${qty}
+                    ${printSecondaryQty && qty}
                     <div class="wrap">\
                         <span class="item">${nameCN}</span>\
                         <span class="side">${sideCN}</span>\
@@ -385,7 +387,7 @@ function createList(printer, setting, invoice, preview) {
         ? `<div class="usEN">\
                 <div class="main">\
                     <del></del>\
-                    ${qty}
+                    ${printPrimaryQty && qty}
                     <div class="wrap">\
                         <span class="item">${nameEN}</span>\
                         <span class="side">${sideEN}</span>\
@@ -399,7 +401,7 @@ function createList(printer, setting, invoice, preview) {
       chineseItem = enableChinese
         ? `<div class="zhCN">\
                 <div class="main">\
-                    ${qty}
+                    ${printSecondaryQty && qty}
                     <div class="wrap">\
                         <span class="item">${nameCN}</span>\
                         <span class="side">${sideCN}</span>\
@@ -412,7 +414,7 @@ function createList(printer, setting, invoice, preview) {
       englishItem = enableEnglish
         ? `<div class="usEN">\
                 <div class="main">\
-                    ${qty}
+                    ${printPrimaryQty && qty}
                     <div class="wrap">\
                         <span class="item">${nameEN}</span>\
                         <span class="side">${sideEN}</span>\

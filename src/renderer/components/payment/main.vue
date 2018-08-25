@@ -507,13 +507,13 @@ export default {
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
-        //Paid zero dollar is not allowed
+        // Paid zero dollar is not allowed
         if (parseFloat(this.paid) === 0 && parseFloat(this.tip) === 0)
           throw paidZeroError;
 
-        //if cashier perform a payment that paid amount is greather than remain balance
-        //we should consider it as a shortcut of paid + tip
-        //prompt a dialog to confirm
+        // if cashier perform a payment that paid amount is greater than remain balance
+        // we should consider it as a shortcut of paid + tip
+        // prompt a dialog to confirm
         if (this.paid > this.order.payment.remain) {
           const extraAsTip = toFixed(this.paid - this.order.payment.remain, 2);
 
@@ -1235,30 +1235,32 @@ export default {
       this.$open("preview", { ticket, exit: true });
     },
     recalculatePayment() {
+      
       const {
         subtotal,
         tax,
-        plasticTax = 0,
+        total,
         discount,
-        paid,
         delivery,
         tip,
         gratuity,
-        rounding
+        paid,
       } = this.order.payment;
 
-      const total = toFixed(subtotal + tax + plasticTax, 2);
-      const due = toFixed(total + delivery - discount, 2);
-      const balance = toFixed(due + gratuity + rounding, 2);
+      const totalCharge = total + delivery;
+      const due = toFixed(Math.max(0, totalCharge - discount), 2);
+      const grandTotal = toFixed((due + gratuity) * 100, 2);
+      const rounding = this.$rounding(grandTotal);
+      const balance = due + gratuity + rounding;
       const remain = Math.max(0, +(balance - paid).toFixed(2));
 
       Object.assign(this.order.payment, {
-        total,
-        due,
-        tip,
+        total: toFixed(total, 2),
+        due: toFixed(due, 2),
+        balance: toFixed(balance, 2),
+        remain: toFixed(remain, 2),
         discount,
-        balance,
-        remain
+        tip
       });
     },
     poleDisplay(line1, line2) {

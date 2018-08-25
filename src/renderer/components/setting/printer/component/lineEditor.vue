@@ -14,6 +14,7 @@
                 <range title="print.subFontSize" :min="0.5" :max="1.5" :step="0.1" v-model="language.subFontSize"></range>
                 <range title="print.lineHeight" :min="1" :max="2" :step="0.1" v-model="language.lineHeight"></range>
                 <switches title="button.print" v-model="language.enable" @update="doubleCheck(index)"></switches>
+                <switches title="print.itemQty" v-model="language.qty"></switches>
                 <switches title="print.itemPrice" v-model="language.price"></switches>
                 <switches title="print.menuID" v-model="language.id"></switches>
             </div>

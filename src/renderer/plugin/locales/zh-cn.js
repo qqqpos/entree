@@ -1669,6 +1669,7 @@ export default {
     subFontSize: "次字体大小",
     lineHeight: "字间行距",
     itemPrice: "打印价格",
+    itemQty: "打印数量",
     storeContact: "店面信息",
     customer: "客人资料",
     jobTime: "出单时间信息",

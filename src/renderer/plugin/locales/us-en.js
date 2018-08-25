@@ -1676,6 +1676,7 @@ export default {
     subFontSize: "Sub Size",
     lineHeight: "Line Height",
     itemPrice: "Item Price",
+    itemQty: "Item Quantity",
     storeContact: "Store Contact",
     customer: "Customer Information",
     jobTime: "Print Time",

@@ -334,7 +334,7 @@ export default {
           }
         });
 
-        discount += offer;
+        discount = toFixed(discount + offer, 2);
       }
 
       const total = subtotal + plasticTax + toFixed(tax, 2);
@@ -350,15 +350,15 @@ export default {
         tax: toFixed(tax, 2),
         plasticTax: toFixed(plasticTax, 2),
         total: toFixed(total, 2),
-        discount: toFixed(discount, 2),
-        due: toFixed(due, 2),
         balance: toFixed(balance, 2),
         paid: toFixed(paid, 2),
         remain: toFixed(remain, 2),
         tip: toFixed(tip, 2),
         gratuity: toFixed(gratuity, 2),
         delivery: toFixed(delivery, 2),
-        rounding: toFixed(rounding, 2)
+        rounding: toFixed(rounding, 2),
+        discount,
+        due
       }
 
       selfAssign && Object.assign(order, { payment });
