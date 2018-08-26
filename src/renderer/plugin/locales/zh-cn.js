@@ -501,6 +501,7 @@ export default {
     whatNext: "您想要执行什么动作？",
     removePayment: "移除{i}付款记录",
     removePaymentConfirm: "您确定要移除这笔 $ {i} 的付款记录吗？",
+    removePaymentAndTipConfirm:"您确定要移除这笔 $ {i} 的付款记录吗？ (同时也会抹去小费 $ {i})",
     paymentRemoved: "付款记录已移除",
     paymentRemovedTip: "#{i} 订单的付款记录已经移除",
     switchTable: "{i} 换座位",

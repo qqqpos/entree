@@ -4,7 +4,7 @@
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
-    <button class="btn" @contextmenu.stop="evenSplit" @click.stop="split" :disabled="disableSplit">
+    <button class="btn" v-press="evenSplit" @click="split" :disabled="disableSplit">
       <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
@@ -31,6 +31,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import Hammer from "hammerjs";
 import driverModule from "./driver";
 import splitModule from "../split/index";
 import dialogModule from "../common/dialog";
@@ -60,6 +61,15 @@ export default {
   },
   beforeDestroy() {
     this.$bus.off("pay", this.openPaymentModule);
+  },
+  directives: {
+    press: {
+      bind(el, binding, vNode) {
+        const target = new Hammer(el);
+
+        target.on("press", e => binding.value(e));
+      }
+    }
   },
   methods: {
     thirdParty() {

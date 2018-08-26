@@ -373,7 +373,7 @@ function createList(printer, setting, invoice, preview) {
         ? `<div class="zhCN">\
                 <div class="main">\
                     <del></del>\
-                    ${printSecondaryQty && qty}
+                    ${printSecondaryQty ? qty : ""}
                     <div class="wrap">\
                         <span class="item">${nameCN}</span>\
                         <span class="side">${sideCN}</span>\
@@ -387,7 +387,7 @@ function createList(printer, setting, invoice, preview) {
         ? `<div class="usEN">\
                 <div class="main">\
                     <del></del>\
-                    ${printPrimaryQty && qty}
+                    ${printPrimaryQty ? qty : ""}
                     <div class="wrap">\
                         <span class="item">${nameEN}</span>\
                         <span class="side">${sideEN}</span>\
@@ -401,7 +401,7 @@ function createList(printer, setting, invoice, preview) {
       chineseItem = enableChinese
         ? `<div class="zhCN">\
                 <div class="main">\
-                    ${printSecondaryQty && qty}
+                    ${printSecondaryQty ? qty : ""}
                     <div class="wrap">\
                         <span class="item">${nameCN}</span>\
                         <span class="side">${sideCN}</span>\
@@ -414,7 +414,7 @@ function createList(printer, setting, invoice, preview) {
       englishItem = enableEnglish
         ? `<div class="usEN">\
                 <div class="main">\
-                    ${printPrimaryQty && qty}
+                    ${printPrimaryQty ? qty : ""}
                     <div class="wrap">\
                         <span class="item">${nameEN}</span>\
                         <span class="side">${sideEN}</span>\

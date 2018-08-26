@@ -19,8 +19,8 @@
                     <section class="right">
                         <div class="flex">
                             <balance-display :payment="order.payment" :paid="paidTip"></balance-display>
-                            <div class="btns">
-                                <button class="btn" @contextmenu.stop="gratuityToTip" @click.stop="openTipComponent">{{$t('button.setTip')}}</button>
+                            <div class="functions">
+                                <button class="btn" v-press="gratuityToTip" @click.stop="openTipComponent">{{$t('button.setTip')}}</button>
                                 <button class="btn" @click="openDiscountComponent">{{$t('button.setDiscount')}}</button>
                                 <button class="btn" @click="save">{{$t('button.save')}}</button>
                             </div>
@@ -154,6 +154,15 @@ export default {
       "customer",
       "dineInOpt"
     ])
+  },
+  directives: {
+    press: {
+      bind(el, binding, vNode) {
+        const target = new Hammer(el);
+
+        target.on("press", e => binding.value(e));
+      }
+    }
   },
   created() {
     this.checkPaymentMethod()
@@ -1235,7 +1244,6 @@ export default {
       this.$open("preview", { ticket, exit: true });
     },
     recalculatePayment() {
-      
       const {
         subtotal,
         tax,
@@ -1244,7 +1252,7 @@ export default {
         delivery,
         tip,
         gratuity,
-        paid,
+        paid
       } = this.order.payment;
 
       const totalCharge = total + delivery;
@@ -1466,7 +1474,7 @@ header .exit {
   display: flex;
 }
 
-.btns {
+.functions {
   margin: -2px 0 0 4px;
 }
 

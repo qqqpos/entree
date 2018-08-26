@@ -150,7 +150,7 @@ export default {
     setGratuityDialog() {
       this.$checkPermission("modify", "gratuity")
         .then(this.setGratuity)
-        .catch(()=>{});
+        .catch(() => {});
     },
     setGratuity() {
       new Promise((resolve, reject) => {

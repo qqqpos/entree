@@ -96,17 +96,23 @@ export default {
     },
     removeConfirm(payment, index) {
       const paid = (payment.actual || 0).toFixed(2);
-      const data = {
+      const tip = (payment.tip || 0).toFixed(2);
+      const msg =
+        payment.tip > 0
+          ? ["dialog.removePaymentAndTipConfirm", paid, tip]
+          : ["dialog.removePaymentConfirm", paid];
+
+      const prompt = {
         type: "warning",
         title: ["dialog.removePayment", this.$t("type." + payment.type)],
-        msg: ["dialog.removePaymentConfirm", paid.toFixed(2)],
+        msg,
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.remove", fn: "resolve", load: true }
         ]
       };
 
-      this.$dialog(data)
+      this.$dialog(prompt)
         .then(() => {
           switch (payment.type) {
             case "CASH":
