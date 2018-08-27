@@ -15,20 +15,20 @@ const ticket = function (raw, receipt, target) {
 
     const items = raw.content.filter(item => item.printer[printer]);
 
-    if (setting.type === "hibachi" && items.length > 0) {
-      const slicer = array => {
-        let next = [];
-        let current = [];
-        array.filter(item => {
-          const index = current.findIndex(i => i.seat === item.seat);
-          index === -1 ? current.push(item) : next.push(item);
-        });
-        current.length && this.printHibachi(printer, raw, current);
-        next.length && slicer(next);
-      };
-      slicer(items.filter(i => !i.print));
-      return false;
-    }
+    // if (setting.type === "hibachi" && items.length > 0) {
+    //   const slicer = array => {
+    //     let next = [];
+    //     let current = [];
+    //     array.filter(item => {
+    //       const index = current.findIndex(i => i.seat === item.seat);
+    //       index === -1 ? current.push(item) : next.push(item);
+    //     });
+    //     current.length && this.printHibachi(printer, raw, current);
+    //     next.length && slicer(next);
+    //   };
+    //   slicer(items.filter(i => !i.print));
+    //   return false;
+    // }
 
     if (items.length === 0) return false;
 
@@ -290,11 +290,26 @@ function createList(printer, setting, invoice, preview) {
     items = items.filter(i => i.orderType !== 'TO_GO');
   }
 
-  if (categorize) {
+  if (setting.type === "hibachi" && invoice.type === "HIBACHI" && categorize) {
+    let sorted = [];
+
+    for (let i = 0; i < items.length; i++) {
+      const { seat } = items[i];
+
+      sorted[seat] ? sorted[seat].push(items[i]) : (sorted[seat] = [items[i]]);
+    }
+
+    Object.keys(sorted).forEach(seat => {
+      const title = `<p class="title">Seat ${seat}</p>`;
+      const categorized = sorted[seat].map(item => mockup(item, renderQty)).join("").toString();
+      content += `<div class="categorize">${title + categorized}</div>`
+    })
+  } else if (categorize) {
     let sorted = [];
 
     for (let i = 0; i < items.length; i++) {
       const { category } = items[i];
+
       sorted[category] ? sorted[category].push(items[i]) : (sorted[category] = [items[i]]);
     }
 

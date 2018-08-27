@@ -1062,7 +1062,7 @@ export default {
         title: "dialog.tipConfirm",
         msg: ["dialog.setGratuityAsTip", gratuity.toFixed(2)]
       };
-
+      gratuity > 0 ?
       this.$dialog(prompt)
         .then(() => {
           this.tip = gratuity.toFixed(2);
@@ -1074,7 +1074,8 @@ export default {
 
           this.exitComponent();
         })
-        .catch(this.exitComponent);
+        .catch(this.exitComponent)
+        :this.openTipComponent();
     },
     openDiscountComponent() {
       this.$checkPermission("modify", "discount")

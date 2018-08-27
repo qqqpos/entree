@@ -58,7 +58,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-//import holiday from "moment-holiday";
 
 export default {
   props: ["target", "reset", "data", "date", "on", "discountTag"],
@@ -251,15 +250,19 @@ export default {
           Array.isArray(filters["DINE_IN"].subTypes)
             ? filters["DINE_IN"].subTypes.push(filters["BAR"])
             : (filters["DINE_IN"].subTypes = [filters["BAR"]]);
-        }else{
-          sort.splice(5,1,"BAR");
+        } else {
+          sort.splice(5, 1, "BAR");
         }
       }
 
       if (filters.hasOwnProperty("HIBACHI")) {
-        Array.isArray(filters["DINE_IN"].subTypes)
-          ? filters["DINE_IN"].subTypes.push(filters["HIBACHI"])
-          : (filters["DINE_IN"].subTypes = [filters["HIBACHI"]]);
+        if (Object.keys(filters).length > 6 && filters["DINE_IN"]) {
+          Array.isArray(filters["DINE_IN"].subTypes)
+            ? filters["DINE_IN"].subTypes.push(filters["HIBACHI"])
+            : (filters["DINE_IN"].subTypes = [filters["HIBACHI"]]);
+        } else {
+          sort.splice(5, 1, "HIBACHI");
+        }
       }
 
       if (subTypes.hasOwnProperty("SETTLED")) {

@@ -60,7 +60,7 @@
         </template>
       </div>
     </header>
-    <div class="order" v-if="order.type === 'HIBACHI' && $route.name === 'Menu'">
+    <div class="order" v-if="order.type === 'HIBACHI'">
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd">
         <group-item :items="order.content" :seats="seats" @update="setSeat"></group-item>
       </v-touch>

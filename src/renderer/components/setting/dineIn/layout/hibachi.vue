@@ -93,11 +93,11 @@ export default {
             })),
           layout: "six",
           orientation: "left",
+          type: "hibachi",
           zone: this.zone,
           grid: this.items.length,
           _id: ObjectId().toString()
         };
-        console.log(this.items);
       }
 
       new Promise((resolve, reject) => {

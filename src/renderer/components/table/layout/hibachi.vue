@@ -75,6 +75,8 @@ export default {
           e.target.classList.remove("active");
         }
       }
+      
+      this.resetOrder();
     },
     resetStyle() {
       document

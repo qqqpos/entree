@@ -1,7 +1,7 @@
 <template>
   <div class="groups">
-    <div class="group" v-for="(group,index) in groups" :key="index" @click="setSeat(seats[index])">
-      <div class="seat" :data-seat="'seat'+seats[index]">{{seats[index]}}</div>
+    <div class="group" v-for="(group,index) in groups" :key="index" @click="setSeat(places[index])">
+      <div class="seat" :data-seat="'seat'+places[index]">{{places[index]}}</div>
       <div class="list">
         <div v-for="(item,idx) in group" :key="idx">
           <div class="main" @click.stop="select(item,index,idx)">
@@ -75,12 +75,11 @@ export default {
 
         document
           .querySelectorAll(".group")
-        [g].children[1].children[i].classList.add("active");
+          [g].children[1].children[i].classList.add("active");
         this.setPointer(item);
       }
     },
     setSeat(seat) {
-      console.log(this.seats);
       this.$emit("update", seat);
       let dom = document.querySelector(".seat.current");
       dom && dom.classList.remove("current");
@@ -124,7 +123,6 @@ export default {
   align-items: center;
   background: #b0bec5;
   color: #fff;
-  margin-left: 1px;
 }
 .list {
   background: #eee;
@@ -138,7 +136,7 @@ export default {
   min-height: 29px;
   justify-content: center;
   padding: 5px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px dashed #eee;
 }
 
 .main {

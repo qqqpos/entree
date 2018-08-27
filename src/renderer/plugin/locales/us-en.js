@@ -1688,6 +1688,7 @@ export default {
     footer: "Ticket Footer",
     priority: "By Priority",
     category: "By Category",
+    seat: "By Seat",
     mode: "Printer Mode",
     normal: "Normal",
     difference: "Difference",

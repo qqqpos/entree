@@ -8,7 +8,7 @@
       <i class="fas fa-ban"></i>
       <span class="text">{{$t("button.cancel")}}</span>
     </button>
-    <button class="btn" @click="invoke('switchTableDialog')" v-else :disabled="!table">
+    <button class="btn" @click="invoke('switchTableDialog')" v-else :disabled="!table || order.type === 'HIBACHI'">
       <i class="fas fa-exchange-alt"></i>
       <span class="text">{{$t('button.switchTable')}}</span>
     </button>
