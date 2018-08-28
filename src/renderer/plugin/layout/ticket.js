@@ -300,7 +300,7 @@ function createList(printer, setting, invoice, preview) {
     }
 
     Object.keys(sorted).forEach(seat => {
-      const title = `<p class="title">Seat ${seat}</p>`;
+      const title = `<p class="title">Seat ${seat || ""}</p>`;
       const categorized = sorted[seat].map(item => mockup(item, renderQty)).join("").toString();
       content += `<div class="categorize">${title + categorized}</div>`
     })

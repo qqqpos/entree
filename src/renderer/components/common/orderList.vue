@@ -13,7 +13,7 @@
                 <i class="fas fa-user-tie light"></i>
                 <span class="filed">{{order.server}}</span>
                 <i class="fas fa-clock light"></i>
-                <span>{{order.time | moment('MMM,DD HH:mm',time)}}</span>
+                <span>{{order.time | moment('MMM, DD HH:mm',time)}}</span>
               </p>
               <p>
                 <i class="fas fa-tablets light"></i>

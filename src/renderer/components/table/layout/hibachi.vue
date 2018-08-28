@@ -1,14 +1,17 @@
 <template>
     <div class="hibachi-grid">
         <div class="hibachi-seat" :class="[table.layout,table.orientation]" v-for="(table,index) in tables" :key="index" :data-hibachi="table._id">
-            <div class="table-name create" v-if="target === table.name && seats.length">
+          <div class="table-name print" v-if="hibachiReady(table)">
+            <div class="mini-btn" @click="print"><i class="fas fa-printer light space"></i>{{$t('button.cancel')}}</div>
+          </div>
+            <div class="table-name create" v-else-if="target === table.name && seats.length">
               <div class="mini-btn" @click="cancel"><i class="fas fa-ban light space"></i>{{$t('button.cancel')}}</div>
               <div class="mini-btn" @click="create"><i class="fas fa-utensils light space"></i>{{$t('button.create')}}</div>
             </div>
             <span class="table-name" v-else>{{table.name}}</span>
             <span v-for="(seat,idx) in table.seats" :key="idx" :index="idx" :data-seat="seat.name" class="seat" tag="span" @click="tap($event,table,seat)" @contextmenu="resetTableDialog(table._id,seat)">
               <span class="ticket" v-show="seat.number"># {{seat.number}}</span>
-              <span class="server">{{seat.server}}</span>
+              <span class="status">{{getStatus(seat)}}</span>
               {{seat.name}}
             </span>
         </div>
@@ -35,6 +38,15 @@ export default {
     };
   },
   methods: {
+    hibachiReady(table) {
+      if (this.target !== table.name && this.seats.length !== 0) return false;
+
+      let tickets = new Set();
+
+      table.seats.forEach(seat => seat.invoice && tickets.add(seat.invoice));
+
+      Array.from(tickets).forEach(id => {});
+    },
     tap(e, hibachi, seat) {
       if (!this.table || this.table._id === hibachi._id) {
         seat.status === 1
@@ -75,7 +87,7 @@ export default {
           e.target.classList.remove("active");
         }
       }
-      
+
       this.resetOrder();
     },
     resetStyle() {
@@ -152,6 +164,17 @@ export default {
           .catch(this.exitComponent);
       }
     },
+    getStatus({ invoice }) {
+      if (!invoice) return "";
+
+      const order = this.history.find(t => t._id === invoice);
+
+      if (order) {
+        return order.print ? "Cooked" : "Placed";
+      } else {
+        return "Missing";
+      }
+    },
     ...mapActions([
       "setApp",
       "setTicket",
@@ -163,6 +186,9 @@ export default {
   },
   computed: {
     ...mapGetters(["op", "table", "order", "history", "dineInOpt"])
+  },
+  watch: {
+    tables: "cancel"
   }
 };
 </script>
@@ -206,19 +232,19 @@ export default {
   color: #fff;
 }
 
-.server {
-  bottom: 15px;
-  left: 0;
-  width: 100%;
+.status {
+  bottom: 8px;
   position: absolute;
-  background: #03a9f4;
-  color: #fff;
-  text-shadow: 0 1px 1px #333;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 1px #badefb;
   text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  color: #fff;
+  background: #455a64;
+  padding: 0px 8px;
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: lighter;
 }
 
 .ticket {

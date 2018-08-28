@@ -446,9 +446,9 @@ export default {
         // update table status
 
         if (
-          this.isDineInTicket &&
           useTable &&
           this.table &&
+          this.isDineInTicket &&
           this.table.status === -1
         ) {
           Object.assign(this.table, {
@@ -460,8 +460,8 @@ export default {
         }
 
         if (
-          this.order.type === "HIBACHI" &&
           this.table &&
+          this.order.type === "HIBACHI" &&
           Array.isArray(this.table.seats)
         ) {
           this.table.seats.forEach(seat => {
@@ -474,7 +474,13 @@ export default {
               });
           });
 
+          // update hibachi table seats
           this.$socket.emit("[TABLE] UPDATE", this.table);
+
+          // set print status to false
+          // hibachi order must send at once
+          
+          // print = false;
         }
 
         let order = this.combineOrderInfo({ printCount });

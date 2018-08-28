@@ -29,29 +29,26 @@ export default {
   props: ["items", "seats"],
   data() {
     return {
-      language: this.$store.getters.language,
       places: [],
       groups: []
     };
   },
-  created() {
-    if (!this.seats) {
-      let seats = new Set();
-
-      this.items
-        .filter(item => item.hasOwnProperty("seat"))
-        .forEach(item => seats.add(item.seat));
-
-      this.places = Array.from(seats);
-    } else {
-      this.places = this.seats;
-    }
-  },
   mounted() {
-    this.groupify(this.items);
     this.setSeat(this.places[0]);
   },
   methods: {
+    initial() {
+      if (!this.seats) {
+        const seats = new Set();
+
+        this.items.forEach(item => item.seat && seats.add(item.seat));
+        this.places = Array.from(seats);
+      } else {
+        this.places = this.seats;
+      }
+
+      this.groupItem(this.items);
+    },
     select(item, g, i) {
       this.$route.name === "Menu" && this.focus(item, g, i);
     },
@@ -89,7 +86,7 @@ export default {
         dom && dom.classList.add("current");
       });
     },
-    groupify(items) {
+    groupItem(items) {
       let groups = [];
       this.places.forEach((seat, index) =>
         groups.push(items.filter(item => item.seat === seat))
@@ -101,10 +98,17 @@ export default {
   watch: {
     items: {
       handler(items) {
-        this.groupify(items);
+        this.groupItem(items);
       },
       deep: true
+    },
+    "order._id": {
+      handler: "initial",
+      immediate: true
     }
+  },
+  computed: {
+    ...mapGetters(["language", "order"])
   }
 };
 </script>
