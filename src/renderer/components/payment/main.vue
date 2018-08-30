@@ -1008,7 +1008,7 @@ export default {
         case "Receipt":
         case "Order":
           print = true;
-          Printer.setTarget(target).print(this.order);
+          Printer.setTarget(target).print(this.order,true);
           break;
         default:
       }
@@ -1373,8 +1373,9 @@ export default {
         case "Menu":
           if (this.invoice.type === "BUFFET") {
             //buffet mode only reset current order status
-            this.setApp({ newTicket: true });
             this.resetOrder();
+            this.setApp({ newTicket: true });
+            this.setTicket({type:"BUFFET"});
             this.setOrder({
               type: "BUFFET",
               number: this.ticket.number,
@@ -1436,6 +1437,7 @@ export default {
       "setApp",
       "setOrder",
       "resetAll",
+      "setTicket",
       "resetOrder",
       "setOperator"
     ])
