@@ -128,7 +128,8 @@ export default {
 
           break;
         case "price":
-          target.value = ((target.value * 100).toFixed(0).slice(0, -1) / 100
+          target.value = (
+            (target.value * 100).toFixed(0).slice(0, -1) / 100
           ).toFixed(2);
           break;
       }
@@ -145,14 +146,15 @@ export default {
       target.dispatchEvent(new Event("input"));
     },
     confirm() {
-      let single = isNumber(this.price) ? parseFloat(this.price) : 0;
+      const single = isNumber(this.price) ? parseFloat(this.price) : 0;
+
       Object.assign(this.item, {
         qty: isNumber(this.qty) ? ~~this.qty : 1,
         zhCN: this.item.zhCN || this.keywords,
         usEN: this.item.usEN || this.keywords,
-        single,
         print: this.devices.length > 0 ? this.devices : undefined,
-        price: single.toFixed(2)
+        price: single.toFixed(2),
+        single
       });
       this.setChoiceSet(this.item);
       this.init.resolve();

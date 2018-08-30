@@ -94,14 +94,14 @@ export default {
 
             this.$dialog(prompt).then(this.exitComponent);
         },
-        noFoundDialog(type, _id) {
+        noFoundDialog(type, _id, session) {
             const prompt = {
                 title: "dialog.ticketNotFound",
                 msg: "dialog.actionProcess",
                 buttons: [
-                    { text: "button.resetTable", fn: "reject" },
+                    { text: "button.resetTable", fn: "reset" },
                     { text: "button.sync", fn: "resolve", load: true },
-                    { text: "button.cancel", fn: "cancel" }
+                    { text: "button.cancel", fn: "reject" }
                 ]
             };
             this.$dialog(prompt)
@@ -111,15 +111,14 @@ export default {
                         this.exitComponent();
                     });
                 })
-                .catch(exit => {
-                    if (exit) {
-                        this.exitComponent();
-                    } else {
+                .catch(reset => {
+                    if (reset) {
                         type === "HIBACHI"
-                            ? this.$socket.emit("[HIBACHI] RESET", { _id })
+                            ? this.$socket.emit("[HIBACHI] RESET", { _id, session })
                             : this.$socket.emit("[TABLE] RESET", { _id });
-                        this.exitComponent();
                     }
+
+                    this.exitComponent();
                 });
         }
     }

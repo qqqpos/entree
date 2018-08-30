@@ -306,7 +306,6 @@ export default {
         .then(() => {
           this.$dialog(prompt)
             .then(() => {
-              console.log(this.store.timecard);
               this.store.timecard.tipReport
                 ? this.reportTip()
                 : this.clockOut();

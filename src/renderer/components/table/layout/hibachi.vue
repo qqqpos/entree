@@ -51,7 +51,7 @@ export default {
       if (!this.table || this.table._id === hibachi._id) {
         seat.status === 1
           ? this.selectSeat(e, hibachi.name, seat.name)
-          : this.viewTicket(seat.invoice);
+          : this.viewTicket(hibachi, seat);
         this.setViewTable(hibachi);
       } else {
         this.seats = [];
@@ -60,10 +60,13 @@ export default {
         this.tap(e, hibachi, seat);
       }
     },
-    viewTicket(_id) {
+    viewTicket(table, seat) {
+      const _id = seat.invoice;
       const invoice = this.history.find(t => t._id === _id);
 
-      invoice ? this.viewHibachi(invoice) : this.noFoundDialog("HIBACHI", _id);
+      invoice
+        ? this.viewHibachi(invoice)
+        : this.noFoundDialog("HIBACHI", table._id, seat.session);
     },
     viewHibachi(invoice) {
       const { _id, tableID, seats } = invoice;

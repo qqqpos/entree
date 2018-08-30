@@ -127,7 +127,8 @@ export default {
     input(num) {
       switch (this.target) {
         case "single":
-          if (this.item.single > 100) return;
+          if (this.item.single > 1000) return;
+
           if (this.reset) {
             this.item.single = (parseFloat(num) / 100).toFixed(2);
           } else {
