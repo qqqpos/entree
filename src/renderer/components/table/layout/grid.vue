@@ -11,6 +11,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 import dialogModule from "../../common/dialog";
 import unlockModule from "../../common/unlock";
 import inputModule from "../../component/inputer";
@@ -54,6 +55,9 @@ export default {
       });
 
       this.sectionTables = seats;
+
+      // reset order list if order is settled
+      this.order.settled && this.resetOrder();
     },
     getTableStatus({ status, session, invoice, server }) {
       switch (status) {
@@ -93,7 +97,7 @@ export default {
           };
 
           this.$dialog(alert)
-            .then(() => this.exitComponent())
+            .then(this.exitComponent)
             .catch(() => {
               this.$emit("update:transfer", false);
               this.exitComponent();
@@ -291,6 +295,7 @@ export default {
       "time",
       "table",
       "books",
+      "order",
       "history",
       "customer",
       "dineInOpt"

@@ -89,11 +89,12 @@ export default {
           });
         });
 
-        let template = Object.assign({}, source, {
+        const template = Object.assign({}, source, {
           _id: ObjectId().toString(),
           name: this.init.template.name,
           note: this.init.template.note
         });
+
         this.init.resolve(template);
       } else {
         this.init.resolve(this.init.template);

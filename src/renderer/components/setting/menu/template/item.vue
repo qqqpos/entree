@@ -22,7 +22,7 @@
                     <h5>{{$t("text.items",template.contain[index].contain.length)}}</h5>
                 </div>
                 <nav>
-                    <span @click="setOperatortion">{{$t('button.option')}}</span>
+                    <span @click="setOption">{{$t('button.option')}}</span>
                 </nav>
             </header>
             <div>
@@ -73,7 +73,7 @@ export default {
           max: 0,
           contain: []
         });
-      !this.template.contain[0].name && this.setOperatortion();
+      !this.template.contain[0].name && this.setOption();
     }, 500);
   },
   methods: {
@@ -104,12 +104,13 @@ export default {
           this.template.contain[this.index].contain.splice(index, 1, _item);
           this.exitComponent();
         })
-        .catch(del => {
-          if (del) this.template.contain[this.index].contain.splice(index, 1);
+        .catch(remove => {
+          if (remove)
+            this.template.contain[this.index].contain.splice(index, 1);
           this.exitComponent();
         });
     },
-    setOperatortion() {
+    setOption() {
       const {
         addition,
         startAt,
@@ -123,16 +124,17 @@ export default {
         this.componentData = { resolve, reject, option, edit: true };
         this.component = "opt";
       })
-        .then(_option => {
-          Object.assign(this.template.contain[this.index], _option);
+        .then(update => {
+          Object.assign(this.template.contain[this.index], update);
           this.exitComponent();
         })
-        .catch(del => {
-          if (del) {
+        .catch(remove => {
+          if (remove) {
             const index = this.index;
             this.index = 0;
             this.template.contain.splice(index, 1);
           }
+
           this.exitComponent();
         });
     },
@@ -143,9 +145,9 @@ export default {
         this.componentData = { resolve, reject, option, edit: false };
         this.component = "opt";
       })
-        .then(_option => {
-          Object.assign(_option, { contain: [] });
-          this.template.contain.push(_option);
+        .then(update => {
+          Object.assign(update, { contain: [] });
+          this.template.contain.push(update);
           this.exitComponent();
         })
         .catch(this.exitComponent);
@@ -220,8 +222,8 @@ li span {
   flex: 1;
 }
 
-.placeholder{
+.placeholder {
   opacity: 0.25;
-  border:1px dashed #333;
+  border: 1px dashed #333;
 }
 </style>

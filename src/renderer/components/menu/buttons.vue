@@ -291,36 +291,6 @@ export default {
         .then(this.exit)
         .catch(this.placeFailed);
     },
-    async _done(printTicket) {
-      if (this.isEmptyTicket) return;
-
-      // items holds condition filtered item
-      // it will replace current item
-      let items = [];
-
-      // if saveConfirm is enable
-      // it will prompt a dialog to ask operator
-      const { defaults = {} } = this.$store.getters.config;
-      if (defaults.saveConfirm && !printTicket) {
-        try {
-          await this.saveConfirmDialog();
-        } catch (e) {
-          this.$log(`[#${this.ticket.number}] Ticket save abort.`);
-        } finally {
-          this.exitComponent();
-        }
-      }
-
-      // then we check if there is any pending item on the list
-      const pendingItems = this.order.content.filter(item => item.pending);
-      if (!this.app.newTicket && print && pendingItems.length > 0) {
-        try {
-          items = await this.checkPendingItem();
-        } catch (e) {
-        } finally {
-        }
-      }
-    },
     saveConfirmDialog() {
       return new Promise((next, stop) => {
         const prompt = {
@@ -410,7 +380,7 @@ export default {
 
       this.spooler.forEach(task => {
         task.order.content = task.order.content.filter(
-          item => !uniques.includes(item.unique)
+          i => !uniques.includes(i.unique)
         );
       });
 
@@ -479,7 +449,7 @@ export default {
 
           // set print status to false
           // hibachi order must send at once
-          
+
           // print = false;
         }
 

@@ -1,5 +1,5 @@
 <template>
-  <li class="item" :class="{disable:$route.name === 'Menu' && (item.split || item.pending)}" @contextmenu.stop="edit(item)" @click.stop="select(item,$event)" v-if="!checkbox">
+  <li class="item" :class="{disable:$route.name === 'Menu' && (item.split || item.pending)}" @click.stop="select(item,$event)" v-if="!checkbox">
     <div class="main">
       <span class="itemQty">{{item.qty}}</span>
       <div class="wrap">
@@ -39,21 +39,6 @@ export default {
       );
     },
     ...mapGetters(["language", "choiceSet"])
-  },
-  directives: {
-    // press: {
-    //   isFn: true,
-    //   bind(el, binding) {
-    //     el.timeout = () => setTimeout(() => binding.value(), 1000);
-    //     el.removeTimeout = () => clearTimeout(el.timeout);
-    //     el.addEventListener("mousedown", el.timeout);
-    //     el.addEventListener("mouseup", el.removeTimeout);
-    //   },
-    //   unbind(el) {
-    //     el.removeEventListener("mousedown", el.timeout);
-    //     el.addEventListener("mouseup", el.removeTimeout);
-    //   }
-    // }
   },
   methods: {
     select(item, e) {

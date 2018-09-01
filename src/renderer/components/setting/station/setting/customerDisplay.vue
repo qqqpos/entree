@@ -2,10 +2,12 @@
   <div>
       <div class="tab-content">
           <header class="nav">
-            <div class="back" @click="save">
+            <div class="back" @click="$router.push({ name: 'Setting.station.device' })">
                 <i class="fa fa-chevron-left"></i>
             </div>
-            <nav></nav>
+            <h3 class="title">
+              {{$t('setting.title.customerDisplay')}}
+            </h3>
           </header>
           <toggle title="setting.poleDisplay" v-model="customerDisplay.poleDisplay.enable">
             <transition name="dropdown">
@@ -21,7 +23,7 @@
             <transition name="dropdown">
               <div class="opt" v-if="customerDisplay.ledDisplay.enable">
                 <range title="setting.playDuration" :min="5" :max="30" :step="1" v-model.number="customerDisplay.ledDisplay.duration"></range>
-                <external title="text.gallery" @open="showDialog"></external>
+                <external title="text.gallery" @open="showDialog" :tooltip="customerDisplay.ledDisplay.gallery"></external>
               </div>
             </transition>
           </toggle>
@@ -80,6 +82,12 @@ export default {
   beforeDestroy() {
     const { gallery, duration } = this.customerDisplay.ledDisplay;
     this.$electron.ipcRenderer.send("External::config", { gallery, duration });
+
+    this.$socket.emit("[STATION] UPDATE", {
+      _id: this.$store.getters.station._id,
+      key: "customerDisplay",
+      value: this.customerDisplay
+    });
   },
   methods: {
     showDialog() {
@@ -90,14 +98,6 @@ export default {
       });
 
       Object.assign(this.customerDisplay.ledDisplay, { gallery: directory[0] });
-    },
-    save() {
-      this.$socket.emit("[STATION] UPDATE", {
-        _id: this.$store.getters.station._id,
-        key: "customerDisplay",
-        value: this.customerDisplay
-      });
-      this.$router.push({ name: "Setting.station.device" });
     }
   }
 };

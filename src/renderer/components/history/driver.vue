@@ -29,7 +29,7 @@
                                     <span>{{invoice.time}}</span>
                                 </p>
                             </div>
-                            <span class="number">$ {{invoice.total| decimal}}</span>
+                            <span class="number">$ {{invoice.amount | decimal}}</span>
                             <span class="driver">{{invoice.driver}}</span>
                         </li>
                     </v-touch>
@@ -107,7 +107,9 @@ export default {
         tip: invoice.payment.tip,
         due: invoice.payment.due,
         total: toFixed(invoice.payment.due - invoice.payment.delivery, 2),
-        amount: invoice.payment.balance
+        paid: invoice.payment.paid,
+        amount: invoice.payment.balance,
+        remain: invoice.payment.remain
       }));
     },
     toggle(invoice) {
@@ -269,19 +271,24 @@ export default {
 
       return Array.from(drivers).map(name => {
         const invoices = this.invoices.filter(i => i.driver === name);
-        const settled = invoices.filter(i => i.settled);
-        const unsettled = invoices.filter(i => !i.settled);
+        const settled = invoices.filter(i => i.settled || i.paid > 0);
+        const unsettled = invoices.filter(
+          i => !i.settled && i.amount === i.remain
+        );
+        const partially = invoices.filter(i => i.amount !== i.remain);
+        const unsettledAmount = unsettled.reduce((a, c) => a + c.due, 0);
+        const partiallyAmount = invoices.reduce((a, c) => a + c.remain, 0);
 
         return {
           name,
           count: invoices.length,
           settledCount: settled.length,
-          unsettledCount: unsettled.length,
+          unsettledCount: unsettled.length + partially.length,
           tip: invoices.reduce((a, c) => a + c.tip, 0),
           charge: invoices.reduce((a, c) => a + c.charge, 0),
           amount: invoices.reduce((a, c) => a + c.total, 0),
-          settledAmount: settled.reduce((a, c) => a + c.due, 0),
-          unsettledAmount: unsettled.reduce((a, c) => a + c.due, 0)
+          settledAmount: settled.reduce((a, c) => a + c.paid, 0),
+          unsettledAmount: unsettledAmount + partiallyAmount
         };
       });
     },
@@ -308,7 +315,7 @@ export default {
       }
     },
     totalDue() {
-      return this.filteredInvoices.reduce((a, c) => a + c.total, 0);
+      return this.filteredInvoices.reduce((a, c) => a + c.amount, 0);
     },
     scroll() {
       return { transform: `translate3d(0,${this.offset}px,0)` };
