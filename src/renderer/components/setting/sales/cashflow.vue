@@ -2,8 +2,8 @@
     <div>
       <header class="date-picker">
         <div class="f1">
-            <h3>{{$t('setting.title.cashFlow')}}</h3>
-            <p>{{$t('tip.cashflowList')}}</p>
+            <h3>{{$t('setting.title.cashflow')}}</h3>
+            <p>{{$t('title.summary.cashflow',from,to)}}</p>
         </div>
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
@@ -27,11 +27,20 @@ export default {
     return {
       componentData: null,
       component: null,
-      records: []
+      records: [],
+      from: "",
+      to: ""
     };
   },
   methods: {
-    fetchData() {}
+    fetchData([from, to], group = "DAILY") {
+      this.from = from.format("YYYY-MM-DD");
+      this.to = to.format("YYYY-MM-DD");
+
+      this.$socket.emit("[CASHFLOW] HISTORY", { from, to }, records => {
+        this.records = records;
+      });
+    }
   }
 };
 </script>

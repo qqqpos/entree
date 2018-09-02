@@ -274,7 +274,7 @@ export default {
         plasticTax = toFixed(plasticBag * fine, 2);
       }
 
-      if (type === "DINE_IN" && !gratuityFree) {
+      if ((type === "DINE_IN" || type === "HIBACHI" || type === "BAR" || type === "BUFFET") && !gratuityFree) {
         if (enable) {
           //find rule
           try {

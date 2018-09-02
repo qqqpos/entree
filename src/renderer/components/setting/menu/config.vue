@@ -10,6 +10,7 @@
     <toggle title="setting.default.matchQty" tooltip="tip.default.matchItemQty" v-model="defaults.matchItemQty"></toggle>
     <toggle title="setting.default.saveConfirm" tooltip="tip.default.saveConfirm" v-model="defaults.saveConfirm"></toggle>
     <text-list title="setting.default.menuSort" v-model="defaults.menuSortBy" :opts="types"></text-list>
+    <text-list title="setting.default.requestSort" v-model="defaults.requestSortBy" :opts="types.slice(0,3)"></text-list>
   </div>
   <div class="tab-content">
     <header class="nav">

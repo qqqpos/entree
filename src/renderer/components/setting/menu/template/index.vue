@@ -12,7 +12,7 @@
       </header>
       <external v-for="(template,index) in templates" :key="index" :title="template.name" :tooltip="template.note" :translate="false" @open="$emit('set',template)"></external>
       <div class="pages" v-if="list.length > 12">
-        <paginator :of="list" :max="5" :contain="12" @page="setPage" class="f1"></paginator>
+        <paginator :of="list" :maxPage="5" :perPage="12" @page="setPage" class="f1"></paginator>
       </div>
       <div :is="component" :init="componentData"></div>
     </div>

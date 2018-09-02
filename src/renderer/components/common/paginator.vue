@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  props: ["of", "contain", "max"],
+  props: ["of", "perPage", "maxPage"],
   data() {
     return {
       style: "full",
@@ -93,7 +93,7 @@ export default {
   },
   computed: {
     totalPage() {
-      return Math.ceil(this.of.length / this.contain);
+      return Math.ceil(this.of.length / this.perPage);
     }
   },
   watch: {

@@ -67,7 +67,7 @@ export default {
       component: null
     };
   },
-  created(){
+  created() {
     this.store = Object.assign({}, this.config.store);
   },
   beforeDestroy() {

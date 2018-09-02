@@ -29,7 +29,8 @@ export default {
       sectionTables: [],
       sections: [],
       layout: null,
-      zone: ""
+      zone: "",
+      index: 0
     };
   },
   created() {
@@ -43,8 +44,10 @@ export default {
         const { layout = "grid", zone } = this.layouts.table[index];
 
         this.sectionTables = this.tables[zone];
-        this.zone = zone;
+
         this.layout = layout;
+        this.index = index;
+        this.zone = zone;
       }
     },
     edit(section, index) {
@@ -73,6 +76,7 @@ export default {
           }
 
           this.$socket.emit("[TABLE] SAVE_SECTION", this.layouts.table);
+          this.$nextTick(() => this.initialData(this.index));
           this.exitComponent();
         })
         .catch(removeSection => {

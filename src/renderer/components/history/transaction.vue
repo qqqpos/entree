@@ -71,7 +71,7 @@
       </table>
       <footer>
         <div class="f1">
-          <paginator :of="filteredTransactions" :max="12" :contain="13" @page="setPage"></paginator>
+          <paginator :of="filteredTransactions" :maxPage="12" :perPage="13" @page="setPage"></paginator>
         </div>
         <div class="btn" @click="init.resolve">{{$t('button.exit')}}</div>
       </footer>

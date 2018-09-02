@@ -33,7 +33,7 @@
             </table>
             <footer>
                 <div class="f1">
-                    <paginator :of="init.log.activity" @page="setPage" :contain="15" :max="6"></paginator>
+                    <paginator :of="init.log.activity" @page="setPage" :perPage="15" :maxPage="6"></paginator>
                 </div>
                 <button class="btn" @click="print">{{$t('button.print')}}</button>
             </footer>

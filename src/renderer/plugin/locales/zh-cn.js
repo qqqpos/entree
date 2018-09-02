@@ -428,7 +428,8 @@ export default {
     summary: {
       sales: "从 {i} 到 {i} 的销售记录",
       batch: "从 {i} 到 {i} 的过账记录",
-      cashflow: "从 {i} 到 {i} 的钱箱现金流水"
+      cashflow: "从 {i} 到 {i} 的钱箱现金流水",
+      payout: "从 {i} 到 {i} 的支出记录"
     }
   },
   dialog: {
@@ -1427,6 +1428,7 @@ export default {
       terminal: "信用卡设备列表",
       promotion: "促销折扣设定",
       giftcard: "礼物卡设置",
+      giftcardSummary: "礼物卡总览",
       department: "部门分类",
       table: "堂吃下单设定",
       other: "其它设定",
@@ -1439,7 +1441,9 @@ export default {
       stationDevice: "工作站设备",
       couponList: "优惠券列表",
       database: "关于数据库",
-      menuImport: "菜单导入"
+      menuImport: "菜单导入",
+      cashflow: "现金流水记录",
+      payoutRecord: "支出记录"
     },
     receiptDialog: "打印收据",
     others: "其它设置",
@@ -1457,6 +1461,7 @@ export default {
       autoStack: "自动叠加",
       matchQty: "物品数量对齐",
       menuSort: "菜单物品排列方式",
+      requestSort: "要求物品排列方式",
       saveConfirm: "保存确认"
     },
     taxBeforeDiscount: "折扣前征税",

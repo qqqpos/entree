@@ -106,7 +106,25 @@ const mutations = {
         state.menu = format;
     },
     [types.SET_REQUEST](state, request) {
-        state.request = arrayToObject(request);
+        const { defaults = {} } = state.config;
+        const format = request ? arrayToObject(request) : state.request;
+
+        Object.keys(format).forEach(key => {
+            format[key].sort((a, b) => {
+                switch (defaults.requestSortBy) {
+                    case "ALPHABETICAL":
+                        return a.usEN.localeCompare(b.usEN);
+                    case "PINYIN":
+                        return a.zhCN.localeCompare(b.zhCN, 'zh-Hans-CN', { sensitivity: 'accent' })
+                    case "PRICE":
+                        return a.price > b.price ? 1 : -1
+                    default:
+                        return a.num > b.num ? 1 : -1
+                }
+            })
+        })
+
+        state.request = format;
     },
     [types.SET_TABLES](state, tables) {
         state.tables = tables.reduce((obj, table) => {
@@ -121,7 +139,7 @@ const mutations = {
     },
     [types.ADD_SPOOLER](state, data) {
         data.order.print = false;
-        
+
         state.spooler.push(data);
         state.spooler.sort((a, b) => (a.schedule - b.schedule))
     },

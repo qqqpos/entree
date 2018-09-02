@@ -11,7 +11,7 @@
     </header>
     <external :title="op.name" :tooltip="'type.'+op.role" v-for="(op,index) in operators" :key="index" @open="$emit('set',op)" :disabled="op.role === 'Owner' && !authorized" :translate="false"></external>
     <div class="pages" v-if="list.length > 12">
-      <paginator :of="list" :max="5" :contain="12" @page="setPage" class="f1"></paginator>
+      <paginator :of="list" :maxPage="5" :perPage="12" @page="setPage" class="f1"></paginator>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>

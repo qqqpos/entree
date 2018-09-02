@@ -10,7 +10,7 @@
     </header>
     <external :title="printer" v-for="(printer,index) in printers" :key="index" @open="$emit('click',printer)"></external>
     <div class="pages" v-if="printers.length === 12">
-      <paginator :of="list" :max="5" :contain="12" @page="setPage" class="f1"></paginator>
+      <paginator :of="list" :maxPage="5" :perPage="12" @page="setPage" class="f1"></paginator>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>

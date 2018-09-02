@@ -1,46 +1,45 @@
 <template>
     <div>
-        <range-tab @update="fetchData" initial="currentWeek"></range-tab>
-        <section>
+      <header class="date-picker">
+        <div class="f1">
+            <h3>{{$t('setting.title.payoutRecord')}}</h3>
+            <p>{{$t('title.summary.payout',from,to)}}</p>
+        </div>
+      <date-picker @update="fetchData" init="currentWeek"></date-picker>
+    </header>
+    <div class="summary-wrap">
+      <section class="list">
 
-        </section>
+      </section>
+      <section class="overview">
+
+      </section>
+      </div>
     </div>
 </template>
 
 <script>
-import rangeTab from "../common/rangeTab";
+import datePicker from "../common/datePicker";
+
 export default {
-  components: { rangeTab },
+  components: { datePicker },
   data() {
     return {
-      range: {}
+      componentData: null,
+      component: null,
+      records: [],
+      from: "",
+      to: ""
     };
   },
-  created() {
-    this.fetchData();
-  },
   methods: {
-    fetchData(range) {
-      if (!range) {
-        const from = +moment()
-          .startOf("w")
-          .hours(4);
-        const to = +moment()
-          .endOf("w")
-          .add(4, "h");
+    fetchData([from, to], group = "DAILY") {
+      this.from = from.format("YYYY-MM-DD");
+      this.to = to.format("YYYY-MM-DD");
 
-        this.$socket.emit("[PAYOUT] LIST", { from, to }, result =>
-          console.log(result)
-        );
-        range = { from, to };
-      } else {
-        const { from, to } = range;
-        this.$socket.emit("[PAYOUT] LIST", { from, to }, result =>
-          console.log(result)
-        );
-      }
-
-      this.range = range;
+      this.$socket.emit("[PAYOUT] LIST", { from, to }, result =>
+        console.log(result)
+      );
     }
   }
 };

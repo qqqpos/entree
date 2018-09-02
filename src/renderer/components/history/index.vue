@@ -6,7 +6,7 @@
         <div class="wrap">
           <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" :discountTag="discountTag" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
         </div>
-        <paginator :of="orders" @page="setPage" :contain="30" :max="12"></paginator>
+        <paginator :of="orders" @page="setPage" :perPage="30" :maxPage="12"></paginator>
       </section>
       <section class="ticket">
         <order-list layout="display" :display="true"></order-list>

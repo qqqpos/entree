@@ -108,7 +108,7 @@
                 </tr>
               </tbody>
             </table>
-            <paginator :of="logs" @page="setPage" :max="10" :contain="15"></paginator>
+            <paginator :of="logs" @page="setPage" :maxPage="10" :perPage="15"></paginator>
           </div>
         </template>
       </transition>

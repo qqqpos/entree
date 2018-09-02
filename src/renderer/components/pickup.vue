@@ -24,7 +24,7 @@
             </div>
           </li>
         </ul>
-        <paginator :of="invoices" @page="setPage" :contain="14" :max="10"></paginator>
+        <paginator :of="invoices" @page="setPage" :perPage="14" :maxPage="10"></paginator>
       </article>
       <article v-else>
         <div class="placeholder">

@@ -31,7 +31,7 @@
                         </div>
                     </li>
                 </ul>
-                <paginator :of="init.records" :max="5" :contain="10" @page="setPage"></paginator>
+                <paginator :of="init.records" :maxPage="5" :perPage="10" @page="setPage"></paginator>
             </div>
         </div>
         <ul class="log relative" v-show="actions">

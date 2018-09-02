@@ -89,7 +89,7 @@
       <footer>
         <button class="btn" @click="openAdjuster">{{$t('button.adjustTips')}}</button>
         <div class="f1">
-          <paginator :of="filteredTransactions" :max="12" :contain="10" @page="setPage"></paginator>
+          <paginator :of="filteredTransactions" :maxPage="12" :perPage="10" @page="setPage"></paginator>
         </div>
         <button class="btn" @click="exit">{{$t('button.exit')}}</button>
       </footer>

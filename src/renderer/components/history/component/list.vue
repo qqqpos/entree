@@ -46,7 +46,7 @@
                   </tbody>
               </table>
             </div>
-            <paginator :of="invoices" @page="setPage" :contain="10" :max="12"></paginator>
+            <paginator :of="invoices" @page="setPage" :perPage="10" :maxPage="12"></paginator>
         </div>
         <div class="popupMask dark center" v-if="component" @click.self="exitComponent">
           <div :is="component" :init="componentData" class="component"></div>

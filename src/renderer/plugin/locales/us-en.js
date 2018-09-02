@@ -127,11 +127,11 @@ export default {
     'ITEM_ADD': 'Add|{i}|of item|{i}',
     'ITEM_REMOVE': 'Remove|{i}|of item|{i}',
     'ITEM_PRINT': 'Print|{i}|of Item',
-    'COUPON_APPLY': 'New coupon apply cause balance due change from|$ {i}|to|$ {i}',
-    'COUPON_REMOVE': 'Remove exist coupon cause balance due change from|$ {i}|to|$ {i}',
-    'DISCOUNT': 'Ticket discount has changed. Discount amount from|$ {i}|to|$ {i}',
-    'DELIVERY_CHARGE': 'Delivery charge has changed. Fees from|$ {i}|change to|$ {i}',
-    'GRATUITY': 'Gratuity Has changed. Fees from|$ {i}|change to|$ {i}'
+    'COUPON_APPLY': 'Coupon applied. Balance due changed from|$ {i}|to|$ {i}',
+    'COUPON_REMOVE': 'Coupon Removed. Balance due changed from|$ {i}|to|$ {i}',
+    'DISCOUNT': 'Ticket discount has changed from|$ {i}|to|$ {i}',
+    'DELIVERY_CHARGE': 'Delivery charge has changed from|$ {i}|to|$ {i}',
+    'GRATUITY': 'Gratuity fees has changed from|$ {i}|to|$ {i}'
   },
   allergy: {
     "MILK": "Milk",
@@ -501,7 +501,8 @@ export default {
     summary: {
       sales: "Daily sales record from {i} to {i}",
       batch: "Terminals batch record from {i} to {i}",
-      cashflow: "Cash in/out record from {i} to {i}"
+      cashflow: "Cash in/out record from {i} to {i}",
+      payout: "Payout record from {i} to {i}"
     },
   },
   dialog: {
@@ -1439,6 +1440,7 @@ export default {
       other: "Other Setting",
       table: "Dine in Related Setting",
       giftcard: "Gift Card Setting",
+      giftcardSummary: "Gift Card Summary",
       department: "Department Setup",
       timecard: "Timecard Setting",
       delivery: "Delivery Related Setting",
@@ -1449,7 +1451,9 @@ export default {
       stationDevice: "Station Device",
       couponList: "Coupon List",
       database: "About Database",
-      menuImport: "Menu Import"
+      menuImport: "Menu Import",
+      cashflow: "Cash Flow Summary",
+      payoutRecord: "Payout Record"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",
@@ -1466,6 +1470,7 @@ export default {
       autoStack: "Auto Stack",
       matchQty: "Match Quantity",
       menuSort: "Menu Item Sort By",
+      requestSort: "Request Item Sort By",
       saveConfirm: "Save Confirm"
     },
     tax: "Tax",

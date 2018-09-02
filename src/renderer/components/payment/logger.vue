@@ -49,7 +49,7 @@
       </table>
       <footer>
         <div class="f1">
-          <paginator :of="init.logs" @page="setPage" :contain="10" :max="6"></paginator>
+          <paginator :of="init.logs" @page="setPage" :perPage="10" :maxPage="6"></paginator>
         </div>
         <button class="btn" @click="edit">{{$t('button.edit')}}</button>
         <button class="btn" @click="close">{{$t('button.close')}}</button>

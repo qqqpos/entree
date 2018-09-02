@@ -12,9 +12,13 @@
       <i class="fab fa-google-wallet"></i>
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
-    <button class="btn" @click="openDiscountModule" :disabled="order.settled">
+    <!-- <button class="btn" @click="openDiscountModule" :disabled="order.settled">
       <i class="fa fa-tags"></i>
       <span class="text">{{$t('button.discount')}}</span>
+    </button> -->
+    <button class="btn" @click="openGratuityDialog" :disabled="order.settled">
+      <i class="fas fa-money-bill-alt"></i>
+      <span class="text">{{$t('text.gratuity')}}</span> 
     </button>
     <button class="btn" @click="exit">
       <i class="fa fa-times"></i>
@@ -35,6 +39,7 @@ import Hammer from "hammerjs";
 import driverModule from "./driver";
 import splitModule from "../split/index";
 import dialogModule from "../common/dialog";
+import unlockModule from "../common/unlock";
 import paymentMarker from "../payment/mark";
 import paymentModule from "../payment/main";
 import inputModule from "../component/inputer";
@@ -46,6 +51,7 @@ export default {
     inputModule,
     driverModule,
     dialogModule,
+    unlockModule,
     paymentMarker,
     paymentModule
   },
@@ -312,11 +318,77 @@ export default {
         }
       });
     },
+    openGratuityDialog() {
+      if (this.isEmptyTicket) return;
+      
+      this.$checkPermission("modify", "gratuity")
+        .then(this.setGratuity)
+        .catch(() => {});
+    },
+    setGratuity() {
+      new Promise((resolve, reject) => {
+        const title = "button.setGratuity";
+        const amount =
+          this.order.gratuityPercentage || this.order.gratuityFee || 0;
+        const percentage = true;
+        const allowPercentage = true;
+        this.componentData = {
+          resolve,
+          reject,
+          title,
+          amount,
+          percentage,
+          allowPercentage,
+          type: "number"
+        };
+        this.component = "inputModule";
+      })
+        .then(({ amount, percentage }) => {
+          const prompt = {
+            type: "warning",
+            title: "dialog.entryInvalid",
+            msg: "dialog.exceedAllowLimit",
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+
+          //invalid checking
+
+          if (percentage && amount >= 100) {
+            this.$dialog(prompt).then(this.exitComponent);
+          } else if (!percentage && amount > this.order.payment.subtotal) {
+            this.$dialog(prompt).then(this.exitComponent);
+          } else if (amount > 0) {
+            if (percentage) {
+              delete this.order.gratuityFee;
+              this.setOrder({ gratuityPercentage: amount });
+            } else {
+              delete this.order.gratuityPercentage;
+              this.setOrder({ gratuityFee: amount });
+            }
+            this.updatePayment();
+          } else {
+            delete this.order.gratuityFee;
+            delete this.order.gratuityPercentage;
+            this.order.payment.gratuity = 0;
+            this.updatePayment();
+          }
+        })
+        .catch(this.exitComponent);
+    },
+    updatePayment() {
+      this.$calculatePayment(this.order, {
+        selfAssign: true,
+        callback: false
+      });
+      this.$socket.emit("[ORDER] UPDATE", this.order, false, () =>
+        this.exitComponent()
+      );
+    },
     exit() {
       this.resetOrder();
       this.$router.push({ path: "/main" });
     },
-    ...mapActions(["resetOrder", "setOrder"])
+    ...mapActions(["setOrder", "resetOrder"])
   },
   computed: {
     disable() {

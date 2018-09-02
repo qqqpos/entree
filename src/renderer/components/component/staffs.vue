@@ -15,7 +15,7 @@
             <span class="role">{{$t('type.'+operator.role)}}</span>
           </div>
         </div>
-        <paginator :of="employees" @page="setPage" :contain="24" :max="5"></paginator>
+        <paginator :of="employees" @page="setPage" :perPage="24" :maxPage="5"></paginator>
       </div>
       <footer>
         <button class="btn" @click="confirm" :disabled="!operator">{{$t('button.confirm')}}</button>
