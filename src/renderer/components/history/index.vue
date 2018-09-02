@@ -2,11 +2,12 @@
   <div class="history-grid">
     <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" :discountTag.sync="discountTag" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
       <side-buttons :date="calendarDate || today" @change="setCalendar" :splitMode="splits.length > 0"></side-buttons>
-      <section class="invoices">
+      <section class="invoices relative">
         <div class="wrap">
           <ticket v-for="(invoice,index) in invoices" :key="index" :invoice="invoice" :discountTag="discountTag" @recall="recall" @splits="getSplits" @dblclick.native="getSplits(invoice)"></ticket>
         </div>
         <paginator :of="orders" @page="setPage" :perPage="30" :maxPage="12"></paginator>
+        <loader :display="isLoading" :tooltip="$t('text.loading')"></loader>
       </section>
       <section class="ticket">
         <order-list layout="display" :display="true"></order-list>
@@ -28,6 +29,7 @@ import dialogModule from "../common/dialog";
 import orderButtons from "./orderButtons";
 import ticket from "./component/ticket";
 import sideButtons from "./sideButtons";
+import loader from "../common/loader";
 import filterBar from "./filterBar";
 
 export default {
@@ -41,7 +43,8 @@ export default {
     paginator,
     filterBar,
     orderList,
-    ticket
+    ticket,
+    loader
   },
   data() {
     return {
@@ -49,6 +52,7 @@ export default {
       componentData: null,
       calendarDate: null,
       prevHistory: null,
+      isLoading: false,
       targetName: null,
       component: null,
       today: today(),
@@ -135,13 +139,20 @@ export default {
       this.summary = data;
     },
     setCalendar(date) {
+      this.isLoading = true;
       this.calendarDate = date;
+
       this.$socket.emit("[ORDER] HISTORY", date, invoices => {
         this.prevHistory = date !== today() ? invoices : null;
         this.page = 0;
         this.splits = [];
+
         this.resetViewOrder();
         this.exitComponent();
+
+        this.$nextTick(() => {
+          this.isLoading = false;
+        });
       });
     },
     highlightTicket(ticket) {

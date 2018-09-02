@@ -450,7 +450,7 @@ export default {
           // set print status to false
           // hibachi order must send at once
 
-          // print = false;
+          print = false;
         }
 
         let order = this.combineOrderInfo({ printCount });

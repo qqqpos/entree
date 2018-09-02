@@ -69,7 +69,7 @@ export default {
       let array;
       this.pages = [...Array(this.totalPage).keys()].map((e, i) => i + 1);
 
-      if (this.totalPage <= this.max) {
+      if (this.totalPage <= this.maxPage) {
         this.style = "full";
       } else if (page < 6) {
         this.style = "begin";

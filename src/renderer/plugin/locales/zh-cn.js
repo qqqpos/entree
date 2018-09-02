@@ -1325,7 +1325,8 @@ export default {
     assignTo: "分配给 {i}",
     deassign: "取消分配",
     placeholder: "占位符",
-    checkIn: "签到"
+    checkIn: "签到",
+    loading: "加载中"
   },
   nav: {
     store: "店面",

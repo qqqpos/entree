@@ -1,10 +1,11 @@
 <template>
-  <transition name="fadeIn">
+  <transition>
     <div class="circularLoader" v-if="display">
       <div class="spinner">
         <svg viewBox="25 25 50 50" class="circular">
           <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
         </svg>
+        <h4 v-if="tooltip">{{tooltip}}</h4>
       </div>
     </div>
   </transition>
@@ -25,7 +26,7 @@ export default {
 <style scoped>
 .circularLoader {
   position: absolute;
-  z-index: 10;
+  z-index: 2;
   background-color: hsla(0, 0%, 100%, 0.9);
   margin: 0;
   top: 0;
@@ -36,7 +37,7 @@ export default {
 }
 
 .spinner {
-  top: 50%;
+  top: 45%;
   margin-top: -21px;
   width: 100%;
   text-align: center;
@@ -56,6 +57,11 @@ export default {
   stroke-width: 2;
   stroke: #409eff;
   stroke-linecap: round;
+}
+
+h4 {
+  margin-top: 15px;
+  color: #1565c0;
 }
 
 @keyframes circular-rotate {

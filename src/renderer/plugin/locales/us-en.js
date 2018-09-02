@@ -1336,7 +1336,8 @@ export default {
     assignTo: "Assign To {i}",
     deassign: "Deassign",
     placeholder: "Placeholder",
-    checkIn: "Check In"
+    checkIn: "Check In",
+    loading: "Loading"
   },
   nav: {
     store: "Store",
