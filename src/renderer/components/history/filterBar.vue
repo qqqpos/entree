@@ -171,7 +171,7 @@ export default {
       invoices.forEach(({ type, modify, status, settled, payment, server }) => {
         servers.add(server);
         const { subtotal, tax, discount } = payment;
-        const balance = toFixed(subtotal + tax - discount, 2);
+        const balance = +(subtotal + tax - discount, 2).toFixed(2);
 
         if (status === 1) {
           //if not void

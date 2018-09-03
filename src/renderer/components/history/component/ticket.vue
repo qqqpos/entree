@@ -79,14 +79,13 @@ export default {
 .list {
   display: flex;
   flex-direction: column;
-  line-height: 14px;
 }
 
 .data {
   white-space: nowrap;
   overflow: hidden;
-  width: 118px;
   text-overflow: ellipsis;
+  max-width: 119px;
 }
 
 .price {
