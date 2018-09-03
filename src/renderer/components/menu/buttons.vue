@@ -534,7 +534,6 @@ export default {
       const { lockOnDone, useTable } = this.dineInOpt;
 
       this.setApp({ newTicket: true });
-
       if (this.isDineInTicket && useTable) {
         if (lockOnDone || done) {
           this.resetAll();
@@ -542,7 +541,10 @@ export default {
           this.$router.push({ path: "/main/lock" });
         } else {
           this.archivedOrder && this.setOrder(this.archivedOrder);
-          this.$router.push({ name: "Table" });
+          this.$router.push({
+            name: "Table",
+            params: { section: this.table.zone }
+          });
         }
       } else {
         if (done) {

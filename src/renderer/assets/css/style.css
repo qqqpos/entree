@@ -475,6 +475,7 @@ header.dock .text{
 }
 
 .dock .center-wrap{
+  height: 30px;
   display: flex;
   flex:1;
 }

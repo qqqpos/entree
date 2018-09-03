@@ -728,7 +728,9 @@ export default {
     setGratuityAsTip: "您确定要将服务费 ($ {i}) 改成小费吗?",
     importedSuccessful: "导入成功",
     itemImported: "成功从CSV文件中导入 {i} 个物品",
-    cashPaymentNotAllow: "您无权进行现金支付"
+    cashPaymentNotAllow: "您无权进行现金支付",
+    printHibachi: "打印铁板订单",
+    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -922,7 +924,7 @@ export default {
     giftcard: {
       activation: "礼物卡激活",
       reload: "礼物卡充值",
-      spends: "礼物卡消费",
+      redeem: "礼物卡消费",
       purchase: "购买礼物卡",
       bonus: "充值奖励"
     }

@@ -607,16 +607,16 @@ export default {
           value: giftcardSales.toFixed(2)
         });
 
-      const giftcardSpends = giftcards
+      const giftcardRedeem = giftcards
         .filter(t => t.type === "Purchase")
         .reduce((a, c) => a + c.change, 0);
-      giftcardSpends &&
+      giftcardRedeem &&
         report.push({
           text:
-            this.$t("report.giftcard.spends") +
+            this.$t("report.giftcard.redeem") +
             `( ${giftcards.filter(t => t.type === "Purchase").length} )`,
           style: "space",
-          value: Math.abs(giftcardSpends).toFixed(2)
+          value: Math.abs(giftcardRedeem).toFixed(2)
         });
 
       const settledTotal = orderPayments.reduce((a, c) => a + c.actual, 0);

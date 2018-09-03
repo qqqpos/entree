@@ -290,7 +290,7 @@ export default {
 }
 
 function arrayToObject(array) {
-    return array.reduce((obj, item) => {
+    return (array || []).reduce((obj, item) => {
         obj[item.category]
             ? obj[item.category].push(item)
             : obj[item.category] = [item];

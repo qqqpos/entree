@@ -26,15 +26,16 @@
 </template>
 
 <script>
-import dialogModule from "../common/dialog";
-import paginator from "../common/paginator";
+import { mapGetters } from "vuex";
+
+import dialogModule from "../../common/dialog";
+import paginator from "../../common/paginator";
 
 export default {
   props: ["init"],
   components: { dialogModule, paginator },
   data() {
     return {
-      order: this.$store.getters.order,
       componentData: null,
       component: null,
       operator: null,
@@ -72,7 +73,12 @@ export default {
 
       this.$dialog(prompt)
         .then(() => {
+          this.table &&
+            this.table.server &&
+            Object.assign(this.table, { server: this.operator.name });
+            
           Object.assign(this.order, { server: this.operator.name });
+
           this.$socket.emit("[ORDER] CHANGE_SERVER", this.order);
           this.init.resolve();
         })
@@ -88,7 +94,8 @@ export default {
       const max = min + 24;
 
       return this.employees.slice(min, max);
-    }
+    },
+    ...mapGetters(["order", "table"])
   }
 };
 </script>

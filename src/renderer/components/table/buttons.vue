@@ -52,7 +52,7 @@ import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
 import listModule from "./component/list";
 import splitModule from "../split/index";
-import staff from "../component/staffs";
+import staff from "./component/staffs";
 
 export default {
   components: {

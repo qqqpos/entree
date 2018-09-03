@@ -1,11 +1,10 @@
 import Vue from "vue";
-import Ip from "ip";
 import Net from "net";
 import moment from "moment";
 import VueTouch from "vue-touch";
 import Electron from "vue-electron";
 import VueSocketio from "vue-socket.io";
-import { Mask, OuterClick } from "./plugin/directive"
+import { Mask, OuterClick, Press } from "./plugin/directive"
 
 import AmCharts from 'amcharts3'
 import AmExport from "amcharts3/amcharts/plugins/export"
@@ -32,9 +31,11 @@ Vue.use(util);
 Vue.use(i18n);
 
 Vue.directive('mask', Mask);
+Vue.directive('press', Press);
 Vue.directive('outer-click', OuterClick);
 
-Vue.config.debug = true;
+Vue.config.debug = process.env.NODE_ENV !== 'production';
+
 window.moment = moment;
 window.ObjectId = require("bson-objectid");
 
@@ -59,7 +60,7 @@ moment.updateLocale("en", {
 });
 
 const ip =
-  Ip.address()
+  require("ip").address()
     .split(".")
     .splice(0, 3)
     .join(".") + ".";

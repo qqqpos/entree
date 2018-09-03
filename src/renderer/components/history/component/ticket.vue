@@ -45,7 +45,7 @@ export default {
 .ticket:before {
   position: absolute;
   top: -6px;
-  left: -6px;
+  left: -5px;
   content: attr(data-number);
   min-width: 37px;
   height: 32px;
@@ -60,7 +60,7 @@ export default {
 }
 
 .type {
-  margin-left: 33px;
+  margin-left: 34px;
   padding: 4px 0;
   font-size: 1.5vw;
 }

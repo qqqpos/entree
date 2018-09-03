@@ -37,8 +37,8 @@
               <span class="value">$ {{summary.reloadAmount | decimal}}</span>
             </p>
             <p>
-              <span class="f1">Spend</span>
-              <span class="value">$ {{summary.spendAmount | decimal}}</span>
+              <span class="f1">Redeem</span>
+              <span class="value">$ {{summary.redeemAmount | decimal}}</span>
             </p>            
           </div>
         </div>

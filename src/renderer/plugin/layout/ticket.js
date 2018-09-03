@@ -7,7 +7,9 @@ const ticket = function (raw, receipt, target) {
     const setting = this.setting[printer];
 
     if (!setting) return false;
-    if (!receipt && !setting.print.includes(ticket)) return false;
+
+    if(!setting.print.includes(ticket) && !(receipt && /cashier/i.test(printer))) return false;
+
     if (setting.type === "label") {
       this.printLabel(printer, raw);
       return false;
@@ -15,22 +17,7 @@ const ticket = function (raw, receipt, target) {
 
     const items = raw.content.filter(item => item.printer[printer]);
 
-    // if (setting.type === "hibachi" && items.length > 0) {
-    //   const slicer = array => {
-    //     let next = [];
-    //     let current = [];
-    //     array.filter(item => {
-    //       const index = current.findIndex(i => i.seat === item.seat);
-    //       index === -1 ? current.push(item) : next.push(item);
-    //     });
-    //     current.length && this.printHibachi(printer, raw, current);
-    //     next.length && slicer(next);
-    //   };
-    //   slicer(items.filter(i => !i.print));
-    //   return false;
-    // }
-
-    if (items.length === 0) return false;
+    if (setting.type === "hibachi" || items.length === 0) return false;
 
     const header = createHeader(this.config, setting, raw);
     const list = createList(printer, setting, raw, false);
@@ -290,7 +277,7 @@ function createList(printer, setting, invoice, preview) {
     items = items.filter(i => i.orderType !== 'TO_GO');
   }
 
-  if (setting.type === "hibachi" && invoice.type === "HIBACHI" && categorize) {
+  if (invoice.type === "HIBACHI") {
     let sorted = [];
 
     for (let i = 0; i < items.length; i++) {
@@ -503,6 +490,7 @@ function createStyle(setting) {
               .tips .tip {flex: 1;text-align: left;text-indent: 10px;}\
               .tips .val {min-width: 40px;text-align: left;}\
               footer p,.geo h1{text-align:center;}\
+              .printTime{font-weight:bold;font-size:1.1em;}
               .slogan{font-weight:lighter;margin-top:10px;border-top:1px solid #000;position:relative;}\
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
               ${zhCN}${usEN}

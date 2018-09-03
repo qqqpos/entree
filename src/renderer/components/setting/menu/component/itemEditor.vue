@@ -90,14 +90,14 @@
                 </div>
               </transition>
             </toggle>
-            <toggle title="text.commission" v-model="item.commission.enable" :defaultStyle="false">
+            <!-- <toggle title="text.commission" v-model="commission.enable" :defaultStyle="false">
               <transition name="dropdown">
-                <div class="opt" v-if="item.commission.enable">
-                  <inputer title="text.amount" v-model="item.commission.value"></inputer>
-                  <switches title="text.percentage" v-model="item.commission.percentage"></switches>
+                <div class="opt" v-if="commission.enable">
+                  <inputer title="text.amount" v-model="commission.value"></inputer>
+                  <switches title="text.percentage" v-model="commission.percentage"></switches>
                 </div>
               </transition>
-            </toggle>
+            </toggle> -->
           </div>
           <div class="others">
             <switches title="text.openFood" v-model="item.temporary"></switches>
@@ -162,6 +162,7 @@ export default {
       deprecated: false,
       language: this.$store.getters.language,
       printerList: Object.keys(this.$store.getters.config.printers),
+      commission: {},
       printer: [],
       item: JSON.parse(JSON.stringify(this.init.item)),
       taxes: Object.keys(this.$store.getters.tax.class).map(name => ({

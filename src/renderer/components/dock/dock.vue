@@ -18,7 +18,7 @@
             <span v-if="customer.name" class="text">{{customer.name}}</span>
             <span v-else>{{$t('text.viewRecords')}}</span>
           </div>
-          <div class="operator text" @click="initialPanel" @dblclick="switchServer">
+          <div class="operator text" @click="initialPanel" v-press="switchServer">
             <i class="fas fa-user-tie"></i>
             <span>{{op.name}}</span>
           </div>
@@ -47,8 +47,8 @@ import { mapGetters, mapActions } from "vuex";
 import offlineModule from "./component/offline";
 import portalModule from "./component/portal";
 import callerModule from "./component/caller";
+import staff from "../table/component/staffs";
 import dialogModule from "../common/dialog";
-import staff from "../component/staffs";
 import profiles from "./profiles";
 import switcher from "./switcher";
 

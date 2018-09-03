@@ -1,10 +1,10 @@
 <template>
     <div class="hibachi-grid">
         <div class="hibachi-seat" :class="[table.layout,table.orientation]" v-for="(table,index) in tables" :key="index" :data-hibachi="table._id">
-          <div class="table-name print" v-if="hibachiReady(table)">
-            <div class="mini-btn" @click="print"><i class="fas fa-printer light space"></i>{{$t('button.cancel')}}</div>
+          <div class="table-name fn" v-if="hibachiReady(table)">
+            <div class="mini-btn" @click="printDialog(table)"><i class="fas fa-print light space"></i>{{$t('button.print')}}</div>
           </div>
-            <div class="table-name create" v-else-if="target === table.name && seats.length">
+            <div class="table-name fn" v-else-if="target === table.name && seats.length">
               <div class="mini-btn" @click="cancel"><i class="fas fa-ban light space"></i>{{$t('button.cancel')}}</div>
               <div class="mini-btn" @click="create"><i class="fas fa-utensils light space"></i>{{$t('button.create')}}</div>
             </div>
@@ -39,13 +39,18 @@ export default {
   },
   methods: {
     hibachiReady(table) {
-      if (this.target !== table.name && this.seats.length !== 0) return false;
-
+      if (this.target === table.name && this.seats.length !== 0) return false;
       let tickets = new Set();
+      let print = false;
 
       table.seats.forEach(seat => seat.invoice && tickets.add(seat.invoice));
 
-      Array.from(tickets).forEach(id => {});
+      Array.from(tickets).forEach(id => {
+        const order = this.history.find(ticket => ticket._id === id) || {};
+        print = print || !order.print;
+      });
+
+      return print;
     },
     tap(e, hibachi, seat) {
       if (!this.table || this.table._id === hibachi._id) {
@@ -65,12 +70,13 @@ export default {
       const invoice = this.history.find(t => t._id === _id);
 
       invoice
-        ? this.viewHibachi(invoice)
+        ? this.viewHibachi(invoice, seat.name)
         : this.noFoundDialog("HIBACHI", table._id, seat.session);
     },
-    viewHibachi(invoice) {
-      const { _id, tableID, seats } = invoice;
+    viewHibachi(invoice, seat) {
+      //const { _id, tableID, seats } = invoice;
       this.setViewOrder(invoice);
+      invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat);
     },
     selectSeat(e, target, seat) {
       if (this.target === null) this.target = target;
@@ -97,6 +103,69 @@ export default {
       document
         .querySelectorAll(".active")
         .forEach(dom => dom.classList.remove("active"));
+    },
+    printDialog(table) {
+      const prompt = {
+        type: "question",
+        title: "dialog.printHibachi",
+        msg: ["dialog.printHibachiConfirm", table.name],
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.print", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.printHibachi(table);
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
+    },
+    printHibachi(table) {
+      const ids = new Set();
+      const items = [];
+
+      table.seats.forEach(seat => seat.invoice && ids.add(seat.invoice));
+
+      Array.from(ids).forEach(id => {
+        const ticket = this.history.find(ticket => ticket._id === id);
+
+        if (ticket) {
+          ticket.content
+            .filter(item => !item.print)
+            .forEach(item => items.push(item));
+
+          Printer.print(ticket, false, "Order");
+        }
+      });
+
+      const order = {
+        server: this.op.name,
+        date: today(),
+        time: Date.now(),
+        table: table.name,
+        layout: table.orientation,
+        payment: {},
+        content: items
+      };
+
+      const print = (array, printer) => {
+        let next = [];
+        let current = [];
+        array.filter(item => {
+          const index = current.findIndex(i => i.seat === item.seat);
+          index === -1 ? current.push(item) : next.push(item);
+        });
+        
+        current.length && Printer.printHibachi(printer, order, current);
+        next.length && print(next);
+      };
+
+      Object.entries(this.config.printers)
+        .filter(printer => printer[1].type === "hibachi")
+        .map(printer => printer[0])
+        .forEach(printer => print(items.filter(i => !i.print), printer));
     },
     cancel() {
       this.target = null;
@@ -188,7 +257,7 @@ export default {
     ])
   },
   computed: {
-    ...mapGetters(["op", "table", "order", "history", "dineInOpt"])
+    ...mapGetters(["op", "config", "table", "order", "history", "dineInOpt"])
   },
   watch: {
     tables: "cancel"
@@ -217,7 +286,7 @@ export default {
   padding: 4px;
 }
 
-.create {
+.fn {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -226,7 +295,7 @@ export default {
   font-weight: inherit;
 }
 
-.create div {
+.fn div {
   margin: 7px 0;
 }
 

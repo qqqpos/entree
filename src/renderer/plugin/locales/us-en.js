@@ -803,7 +803,9 @@ export default {
     setGratuityAsTip: "Are you sure to set gratuity ($ {i}) as tip?",
     importedSuccessful: "Item Imported",
     itemImported: "Successfully imported {i} items from CSV file.",
-    cashPaymentNotAllow: "You are not allow to pay with cash."
+    cashPaymentNotAllow: "You are not allow to pay with cash.",
+    printHibachi: "Print Hibachi Tickets",
+    printHibachiConfirm: "Are you sure to print all ticket on hibachi table {i}?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -882,7 +884,7 @@ export default {
     activation: "Activation",
     deactivation: "Deactivation",
     giftCardCredit: "Gift Card Reload",
-    giftCardDebit: "Gift Card Spends",
+    giftCardDebit: "Gift Card Redeem",
     bonus: "(Bonus: $ {i})",
     swipeGiftCard: "Please Swipe Gift Card",
     swipeVipCard: "Please Swipe VIP Card",
@@ -999,7 +1001,7 @@ export default {
     giftcard: {
       activation: "Gift Card Activation",
       reload: "Gift Card Reload",
-      spends: "Gift Card Spends",
+      redeem: "Gift Card Redeem",
       purchase: "Purchase Gift Card",
       bonus: "Reload Bonus"
     }

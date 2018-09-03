@@ -155,15 +155,6 @@ export default {
       "dineInOpt"
     ])
   },
-  directives: {
-    press: {
-      bind(el, binding, vNode) {
-        const target = new Hammer(el);
-
-        target.on("press", e => binding.value(e));
-      }
-    }
-  },
   created() {
     this.checkPaymentMethod()
       .then(this.initialData)
@@ -1006,9 +997,12 @@ export default {
       switch (target) {
         case "All":
         case "Receipt":
+          print = true;
+          Printer.setTarget(target).print(this.order, true);
+          break;
         case "Order":
           print = true;
-          Printer.setTarget(target).print(this.order,true);
+          Printer.setTarget(target).print(this.order);
           break;
         default:
       }
@@ -1062,20 +1056,20 @@ export default {
         title: "dialog.tipConfirm",
         msg: ["dialog.setGratuityAsTip", gratuity.toFixed(2)]
       };
-      gratuity > 0 ?
-      this.$dialog(prompt)
-        .then(() => {
-          this.tip = gratuity.toFixed(2);
-          this.order.payment.gratuity = 0;
-          this.order.payment.tip = gratuity;
+      gratuity > 0
+        ? this.$dialog(prompt)
+            .then(() => {
+              this.tip = gratuity.toFixed(2);
+              this.order.payment.gratuity = 0;
+              this.order.payment.tip = gratuity;
 
-          this.recalculatePayment();
-          this.paid = (this.payment.remain - gratuity).toFixed(2);
+              this.recalculatePayment();
+              this.paid = (this.payment.remain - gratuity).toFixed(2);
 
-          this.exitComponent();
-        })
-        .catch(this.exitComponent)
-        :this.openTipComponent();
+              this.exitComponent();
+            })
+            .catch(this.exitComponent)
+        : this.openTipComponent();
     },
     openDiscountComponent() {
       this.$checkPermission("modify", "discount")
@@ -1375,7 +1369,7 @@ export default {
             //buffet mode only reset current order status
             this.resetOrder();
             this.setApp({ newTicket: true });
-            this.setTicket({type:"BUFFET"});
+            this.setTicket({ type: "BUFFET" });
             this.setOrder({
               type: "BUFFET",
               number: this.ticket.number,

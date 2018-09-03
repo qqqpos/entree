@@ -11,10 +11,6 @@
                         <i class="far fa-calendar-check"></i>
                         <span class="text">{{$t('button.booking')}}</span>
                     </button>
-                    <!-- <button class="btn" @click="viewList">
-                        <i class="fas fa-list-ol"></i>
-                        <span class="text">{{$t('button.viewList')}}</span>
-                    </button> -->
                 </div>
             </aside>
             <component :is="layout" :tables="sectionTables" :transfer.sync="transfer"></component>

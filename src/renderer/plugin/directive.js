@@ -1,3 +1,5 @@
+import Hammer from "hammerjs";
+
 const Mask = {
     bind(el, binding) {
         function verify(number) {
@@ -67,7 +69,7 @@ const Mask = {
             } else if (date) {
                 el.dateHandler(value)
             }
-            
+
         }
         el.addEventListener('input', inputHandler);
         el.$destroy = () => el.removeEventListener('input', inputHandler)
@@ -119,4 +121,12 @@ const OuterClick = {
     }
 }
 
-export { Mask, OuterClick }
+const Press = {
+    bind(el, binding, vNode) {
+        const target = new Hammer(el);
+
+        target.on("press", e => binding.value(e));
+    }
+}
+
+export { Mask, OuterClick, Press }

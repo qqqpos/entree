@@ -33,8 +33,14 @@ export default {
       groups: []
     };
   },
+  created() {
+    this.$bus.on("SET_HIBACHI_SEAT", this.setSeat);
+  },
   mounted() {
     this.setSeat(this.places[0]);
+  },
+  beforeDestroy() {
+    this.$bus.off("SET_HIBACHI_SEAT", this.setSeat);
   },
   methods: {
     initial() {
@@ -76,6 +82,20 @@ export default {
         this.setPointer(item);
       }
     },
+    adjustChoiceSet(choice, e) {
+      if (this.ignore) return;
+      if (this.$route.name !== "Menu") return;
+
+      const dom = document.querySelector(".sub.target");
+      dom && dom.classList.remove("target");
+
+      if (this.choiceSet === choice) {
+        this.setChoiceSetTarget(null);
+      } else {
+        e.currentTarget.classList.add("target");
+        this.setChoiceSetTarget(choice);
+      }
+    },
     setSeat(seat) {
       this.$emit("update", seat);
       let dom = document.querySelector(".seat.current");
@@ -93,7 +113,7 @@ export default {
       );
       this.groups = groups;
     },
-    ...mapActions(["resetPointer", "resetChoiceSet", "setPointer"])
+    ...mapActions(["setPointer", "resetPointer", "resetChoiceSet","setChoiceSetTarget"])
   },
   watch: {
     items: {
@@ -128,6 +148,7 @@ export default {
   background: #b0bec5;
   color: #fff;
 }
+
 .list {
   background: #eee;
   border-bottom: 1px dashed #ccc;
@@ -140,7 +161,11 @@ export default {
   min-height: 29px;
   justify-content: center;
   padding: 5px 0;
-  border-bottom: 1px dashed #eee;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.list > div:last-child {
+  border-bottom: none;
 }
 
 .main {
@@ -185,5 +210,9 @@ export default {
 
 .seat.current {
   background: #607d8b;
+}
+
+.seat.current + .list > div {
+  background: #eceff1;
 }
 </style>
