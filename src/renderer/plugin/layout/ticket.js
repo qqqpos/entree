@@ -229,7 +229,7 @@ function createList(printer, setting, invoice, preview) {
           .filter(
             item =>
               item.printer[printer] &&
-              (item.diffs === "UNCHANGED" || item.diffs === "NEW" || item.diffs === "DIFFERENT")
+              (item.diffs === "UNCHANGED" || item.diffs === "NEW" || item.diffs === "DIFFERENT" || item.diffs === "REMOVED")
           )
           .map(item => {
             switch (item.diffs) {
@@ -252,6 +252,14 @@ function createList(printer, setting, invoice, preview) {
                   item.usEN = "☐ " + item.usEN;
                 }
                 break;
+              case "REMOVED":
+               if (printBothText) {
+                item.zhCN = firstLineChinese ? "⌧ " + item.zhCN : item.zhCN;
+                item.usEN = firstLineEnglish ? "⌧ " + item.usEN : item.usEN;
+              } else {
+                item.zhCN = "⌧ " + item.zhCN;
+                item.usEN = "⌧ " + item.usEN;
+              }
               default:
             }
             return item;
@@ -494,7 +502,7 @@ function createStyle(setting) {
               .slogan{font-weight:lighter;margin-top:10px;border-top:1px solid #000;position:relative;}\
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
               ${zhCN}${usEN}
-              del{display:block;position:absolute;width:inherit;height:2px;background:#000;top:40%;}\
+              del{display:block;position:absolute;width:inherit;height:2px;background:#000;top:50%;transition:translateY(-50%);}\
           </style>`;
 }
 
@@ -637,7 +645,7 @@ function createFooter(config, setting, printer, ticket) {
       ? `<p class="tm"><span class="tradeMark">${ticket.tradeMark}</span></p>`
       : "";
   const printStatus = ticket.printCount > 1 && /cashier/i.test(printer)
-    ? `<p class="printTime">***** ${printer} reprint ${ticket.printCount - 1} @ ${moment().format("hh:mm:ss")} *****</p>`
+    ? `<p class="printTime">**** ${printer} reprint ${ticket.printCount - 1} @ ${moment().format("hh:mm:ss")} ****</p>`
     : `<p class="printTime">${printer} print @ ${moment().format("hh:mm:ss")}</p>`;
 
   const _time = jobTime ? printStatus : "";

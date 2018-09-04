@@ -36,12 +36,12 @@ export default {
   created() {
     this.sections = this.layouts.table;
 
-    this.initialData();
+    this.initialData(0, this.sections);
   },
   methods: {
-    initialData(index = 0) {
-      if (this.layouts.table[index]) {
-        const { layout = "grid", zone } = this.layouts.table[index];
+    initialData(index = 0, tables = this.sections) {
+      if (tables[index]) {
+        const { layout = "grid", zone } = tables[index];
 
         this.sectionTables = this.tables[zone];
 
@@ -69,21 +69,22 @@ export default {
         this.component = "editor";
       })
         .then(update => {
-          if (edit) {
-            this.layouts.table.splice(index, 1, update);
-          } else {
-            this.layouts.table.push(update);
-          }
+          const tables = this.sections;
 
-          this.$socket.emit("[TABLE] SAVE_SECTION", this.layouts.table);
-          this.$nextTick(() => this.initialData(this.index));
+          edit ? tables.splice(index, 1, update) : tables.push(update);
+
+          this.$socket.emit("[TABLE] SAVE_SECTION", tables);
+          console.log(tables);
+          this.$nextTick(() => {
+            this.initialData(this.index, tables);
+          });
           this.exitComponent();
         })
         .catch(removeSection => {
           this.exitComponent();
 
           if (removeSection) {
-            this.layouts.table.splice(index, 1);
+            this.sections.splice(index, 1);
             this.$socket.emit("[TABLE] REMOVE_SECTION", index);
           }
         });

@@ -26,7 +26,7 @@
                     <div @mousedown.prevent="input('L')">L</div>
                 </section>
                 <section class="alphabetic" :class="{uppercase:shift}">
-                    <div class="fn" @mousedown.prevent="shift = !shift">shift</div>
+                    <div class="fn" @click.prevent="shift = !shift">shift</div>
                     <div @mousedown.prevent="input('Z')">Z</div>
                     <div @mousedown.prevent="input('X')">X</div>
                     <div @mousedown.prevent="input('C')">C</div>
@@ -34,7 +34,7 @@
                     <div @mousedown.prevent="input('B')">B</div>
                     <div @mousedown.prevent="input('N')">N</div>
                     <div @mousedown.prevent="input('M')">M</div>
-                    <div class="fn" @mousedown.prevent="$emit('backspace')">delete</div>
+                    <i class="fas fa-backspace fn" @mousedown.prevent="$emit('backspace')"></i>
                 </section>
             </template>
             <template v-else>
@@ -70,11 +70,11 @@
                     <div @mousedown.prevent="input(':')">:</div>
                     <div @mousedown.prevent="input(';')">;</div>
                     <div @mousedown.prevent="input('/')">/</div>
-                    <div class="fn" @mousedown.prevent="$emit('backspace')">delete</div>
+                    <i class="fas fa-backspace fn" @mousedown.prevent="$emit('backspace')"></i>
                 </section>
             </template>
-            <section class="alphabetic ">
-                <div class="fn" @mousedown.prevent="$emit('update:alphabet',!alphabet)">{{alphabet ? '123' : 'abc'}}</div>
+            <section class="alphabetic">
+                <div class="fn" @mousedown.prevent="alphabet = !alphabet">{{alphabet ? '123' : 'abc'}}</div>
                 <div @mousedown.prevent="input(',')">,</div>
                 <div class="space" @mousedown.prevent="space"></div>
                 <div @mousedown.prevent="input('.')">.</div>
@@ -92,14 +92,11 @@ export default {
     executeText: {
       type: String,
       default: "Enter"
-    },
-    alphabet: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
     return {
+      alphabet: true,
       capLock: false,
       shift: true,
       layout: true
@@ -118,8 +115,8 @@ export default {
     singleQuote() {
       this.$emit("input", "'");
     },
-    space(){
-      this.$emit("input"," ");
+    space() {
+      this.$emit("input", " ");
       this.shift = true;
     }
   }
@@ -128,7 +125,9 @@ export default {
 
 <style scoped>
 .keyboard {
+  width: 788px;
   flex-direction: column;
+  border-radius: 4px 4px 0 0;
 }
 
 .keyboard > section {
@@ -148,5 +147,10 @@ div .fn {
 
 .alphabetic.uppercase {
   text-transform: uppercase;
+}
+
+div.space {
+  width: 385px;
+  flex: initial;
 }
 </style>

@@ -1,6 +1,20 @@
 <template>
     <div class="popupMask dark" @click.self="init.reject">
-        <section class="input">
+      <section class="input">
+        <div class="wrap">
+          <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty')">
+          <div class="item">
+            <input type="text" v-model="keywords" class="item" ref="item" @click="focus('item')">
+          </div>
+          <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price')">
+          <i class="fas fa-check fa-2x confirm" @click="confirm"></i>
+        </div>
+        <!-- <div class="options">
+          <i class="fas fa-search light"></i>
+          <i class="fas fa-print light"></i>
+        </div> -->
+      </section>
+        <!-- <section class="input">
             <div class="wrap">
                 <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty')">
                 <div class="item">
@@ -22,15 +36,15 @@
                     <span>{{list[language]}}</span>
                 </li>
             </ul>
-        </section>
-        <keyboard></keyboard>
+        </section> -->
+        <keyboard :display="true" :alphabet="false" @input="input" @backspace="backspace" @enter="confirm"></keyboard>
     </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import checkbox from "../../setting/common/checkbox";
-import keyboard from "./keyboard";
+import keyboard from "../../common/keyboard";
 export default {
   props: ["init"],
   components: { keyboard, checkbox },
@@ -50,12 +64,8 @@ export default {
     };
   },
   created() {
-    this.$bus.on("input", this.input);
-    this.$bus.on("backspace", this.backspace);
-    this.$bus.on("clear", this.clear);
-
-    this.printers = Object.keys(this.config.printers);
-    this.devices = this.printers.slice();
+    this.devices = Object.keys(this.config.printers);
+    this.printers = this.$store.getters.item ? Object.keys(this.$store.getters.item.printer) : this.devices.slice();
   },
   mounted() {
     this.$refs.item.focus();
@@ -146,13 +156,13 @@ export default {
       target.dispatchEvent(new Event("input"));
     },
     confirm() {
-      const single = isNumber(this.price) ? parseFloat(this.price) : 0;
+      const single = parseFloat(this.price) || 0;
 
       Object.assign(this.item, {
-        qty: isNumber(this.qty) ? ~~this.qty : 1,
+        qty: parseInt(this.qty) || 1,
         zhCN: this.item.zhCN || this.keywords,
         usEN: this.item.usEN || this.keywords,
-        print: this.devices.length > 0 ? this.devices : undefined,
+        print: this.printers.length > 0 ? this.printers : undefined,
         price: single.toFixed(2),
         single
       });
@@ -177,13 +187,8 @@ export default {
     },
     ...mapActions(["setChoiceSet"])
   },
-  beforeDestroy() {
-    this.$bus.off("input", this.input);
-    this.$bus.off("backspace", this.backspace);
-    this.$bus.off("clear", this.clear);
-  },
   computed: {
-    ...mapGetters(["language", "config"])
+    ...mapGetters(["config", "language"])
   },
   watch: {
     keywords(n) {
@@ -200,6 +205,19 @@ export default {
 </script>
 
 <style scoped>
+section.input {
+  width: 808px;
+  margin: auto;
+  transform: translateY(100px);
+  background: #fff;
+}
+
+.input .wrap {
+  height: 65px;
+  display: flex;
+  justify-content: center;
+}
+
 input {
   background: none;
   border: none;
@@ -207,24 +225,16 @@ input {
   font-size: 40px;
   width: 100%;
   font-family: "Yuanti-SC";
-  text-transform: uppercase;
   color: #444;
-  padding: 0 10px;
-  margin-right: 10px;
-  border-radius: 6px;
+  padding: 0 16px;
   background: #fff;
   opacity: 0.7;
-  transition: opacity 0.3s ease;
+  transition: opacity, box-shadow 0.3s ease;
 }
 
 input.active {
   opacity: 1;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
-}
-
-section.input {
-  width: 100%;
-  margin-top: 100px;
+  box-shadow: inset 0 3px 6px -2px rgba(0, 0, 0, 0.75);
 }
 
 input.qty {
@@ -241,71 +251,14 @@ input.item {
   width: 450px;
 }
 
-.input .wrap {
-  height: 65px;
-  display: flex;
-  justify-content: center;
-}
-
-ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 25px;
-}
-
-li {
-  background: #fff;
-  margin: 5px;
-  border-radius: 4px;
-  width: 119px;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-  text-align: center;
-}
-
 i.confirm {
-  background: #fff;
   display: flex;
-  justify-content: center;
   align-items: center;
   padding: 0 30px;
-  border-radius: 6px;
-  color: #555;
+  border-left: 1px solid #eeeeee;
 }
 
 .item {
   display: flex;
-  position: relative;
-}
-
-.item i {
-  position: absolute;
-  right: 10px;
-  top: 0px;
-  padding: 17px 29px;
-  cursor: pointer;
-  color: #555;
-}
-
-.dropDown {
-  position: absolute;
-  background: #fff;
-  z-index: -1;
-  top: 50px;
-  padding: 20px 10px 10px;
-  margin: 10px;
-  width: 430px;
-  display: flex;
-  flex-wrap: wrap;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-}
-
-.dropDown > div {
-  width: 120px;
-  padding: 5px 0;
 }
 </style>

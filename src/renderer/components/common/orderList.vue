@@ -82,7 +82,7 @@
         <button class="fn fas fa-ellipsis-h" @click="separator" :disabled="$route.name !== 'Menu'"></button>
         <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'" :disabled="spooler.length === 0"></button>
         <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="disableTodo"></button>
-        <button class="fn far fa-keyboard" @click="openKeyboard" :disabled="$route.name !== 'Menu'"></button>
+        <button class="fn far fa-keyboard" @click="$open('entry')" :disabled="$route.name !== 'Menu'"></button>
       </div>
       <div class="settle" @click="openConfig">
         <template v-if="payment.discount === 0">
@@ -329,12 +329,6 @@ export default {
       };
 
       this.setChoiceSet(content);
-    },
-    openKeyboard() {
-      if (this.isEmptyTicket) return;
-      this.component === "entry"
-        ? (this.component = null)
-        : this.$open("entry");
     },
     update(config) {
       this.setOrder(config);
