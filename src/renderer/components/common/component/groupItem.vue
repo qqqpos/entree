@@ -113,7 +113,12 @@ export default {
       );
       this.groups = groups;
     },
-    ...mapActions(["setPointer", "resetPointer", "resetChoiceSet","setChoiceSetTarget"])
+    ...mapActions([
+      "setPointer",
+      "resetPointer",
+      "resetChoiceSet",
+      "setChoiceSetTarget"
+    ])
   },
   watch: {
     items: {
@@ -125,7 +130,8 @@ export default {
     "order._id": {
       handler: "initial",
       immediate: true
-    }
+    },
+    "order.number": "initial"
   },
   computed: {
     ...mapGetters(["language", "order"])

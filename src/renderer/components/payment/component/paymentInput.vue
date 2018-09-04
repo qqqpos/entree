@@ -1,9 +1,15 @@
 <template>
     <div class="inputField">
         <div class="inner">
-            <div class="field" id="paid" @click="$emit('changeAnchor','paid')" data-format="decimal">
+            <div class="field relative" id="paid" @click="$emit('changeAnchor','paid')" data-format="decimal">
+              <template v-if="parseFloat(tip) === 0">
                 <h3 class="text">{{$t('text.pay')}}</h3>
-                <span class="value"><i class="fas fa-dollar-sign space"></i>{{paid}}</span>
+                <span class="value"><i class="fas fa-dollar-sign space"></i>{{paid}}</span>                
+              </template>
+              <template v-else>
+                <h3 class="text">{{$t('text.paid')}} {{$t('type.'+type)}}<span class="paid"><i class="fas fa-dollar-sign space"></i>{{paid}}</span></h3>
+                <span class="value"><i class="fas fa-dollar-sign space"></i>{{inTotal}}</span>
+              </template>
             </div>
             <div class="field" id="tip" @click="$emit('changeAnchor','tip')" data-format="decimal">
                 <h3 class="text">{{$t('text.tip')}}</h3>
@@ -124,6 +130,9 @@ export default {
           this.creditCard.replace(/\D+/g, "").length > 0 &&
           this.expDate.replace(/\D+/g, "").length !== 4)
       );
+    },
+    inTotal() {
+      return (parseFloat(this.paid) + parseFloat(this.tip)).toFixed(2);
     }
   },
   created() {
@@ -378,6 +387,15 @@ ul.cardList {
   bottom: -2px;
   right: 5px;
   transform: rotate(20deg);
+}
+
+.paid {
+  position: absolute;
+  right: 12px;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 3px;
+  font-family: "Agency FB";
+  font-weight: bold;
 }
 </style>
 

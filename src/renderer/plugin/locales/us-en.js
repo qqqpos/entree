@@ -602,6 +602,8 @@ export default {
     batchFailed: "Batch Failed",
     batchFailErrorCode: "Fail Code: {i}",
     cashChange: "Change: $ {i}",
+    cashPaymentDetail: "Customer has paid ($ {i})",
+    cashPaymentWithTipDetail: "Customer has paid total ($ {i}), including tip ($ {i})",
     cashChangeDetail: "Customer has paid ($ {i})",
     printReceipt: "Print Receipt",
     printReceiptConfirm: "Do you want to print a receipt to customer?",

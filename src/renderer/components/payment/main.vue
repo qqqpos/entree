@@ -896,13 +896,21 @@ export default {
     tenderCash() {
       return new Promise(next => {
         const paid = this.paid.toFixed(2);
+        const tip = this.tip.toFixed(2);
         const tender = this.currentTender.toFixed(2);
 
         this.poleDisplay(["Paid CASH", paid], ["Change Due", tender]);
 
         const tenderWithoutDialog = {
           title: ["dialog.cashChange", tender],
-          msg: ["dialog.cashChangeDetail", paid],
+          msg:
+            tip > 0
+              ? [
+                  "dialog.cashPaymentWithTipDetail",
+                  (parseFloat(paid) + parseFloat(tip)).toFixed(2),
+                  tip
+                ]
+              : ["dialog.cashPaymentDetail", paid],
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 
@@ -942,16 +950,23 @@ export default {
                 });
           }
         } else {
-          this.askReceipt(tender, paid).then(() => next());
+          this.askReceipt(tender, paid, tip).then(() => next());
         }
       });
     },
-    askReceipt(tender, paid) {
+    askReceipt(tender, paid, tip) {
       return new Promise(next => {
         const prompt = tender
           ? {
               title: ["dialog.cashChange", tender],
-              msg: ["dialog.cashChangeDetail", paid],
+              msg:
+                tip > 0
+                  ? [
+                      "dialog.cashPaymentWithTipDetail",
+                      (parseFloat(paid) + parseFloat(tip)).toFixed(2),
+                      tip
+                    ]
+                  : ["dialog.cashPaymentDetail", paid],
               buttons: [
                 { text: "button.noReceipt", fn: "reject" },
                 { text: "button.print", fn: "resolve" }

@@ -84,11 +84,16 @@ export default {
       const prompt = {
         title: "dialog.cantExecute",
         msg: "dialog.ticketAlreadySplit",
-        buttons: [{ text: "button.confirm", fn: "resolve" }]
+        buttons: [
+          { text: "button.confirm", fn: "reject" },
+          { text: "button.view", fn: "resolve" }
+        ]
       };
 
       this.order.split
-        ? this.$dialog(prompt).then(this.exitComponent)
+        ? this.$dialog(prompt)
+            .then(this.split)
+            .reject(this.exitComponent)
         : new Promise((resolve, reject) => {
             const config = {
               title: "title.evenSplit",
@@ -310,7 +315,7 @@ export default {
     },
     openGratuityDialog() {
       if (this.isEmptyTicket) return;
-      
+
       this.$checkPermission("modify", "gratuity")
         .then(this.setGratuity)
         .catch(() => {});
