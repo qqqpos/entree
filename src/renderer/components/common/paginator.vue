@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  props: ["of", "perPage", "maxPage"],
+  props: ["of", "perPage", "maxPage", "static"],
   data() {
     return {
       style: "full",
@@ -98,8 +98,10 @@ export default {
   },
   watch: {
     of() {
-      this.page = 1;
-      this.format(0);
+      if (!this.static) {
+        this.page = 1;
+        this.format(0);
+      }
     }
   }
 };

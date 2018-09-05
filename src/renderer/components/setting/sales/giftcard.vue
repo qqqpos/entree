@@ -9,7 +9,7 @@
     <div class="summary-wrap">
       <section class="list relative">
           <gift-card v-for="(giftcard,index) in cards" :key="index" :card="giftcard"></gift-card>
-          <paginator :of="Array(summary.count).fill()" @page="setPage" :perPage="11" :maxPage="15" v-if="summary.count > 11"></paginator>
+          <paginator :of="Array(summary.count).fill()" @page="setPage" :perPage="11" :maxPage="15" :static="true" v-if="summary.count > 11" class="bottom-page"></paginator>
       </section>
       <section class="overview">
         <div class="wrap relative">
@@ -76,6 +76,7 @@ export default {
   methods: {
     fetchData() {
       this.$socket.emit("[GIFTCARD] LIST", this.page, cards => {
+        console.log(this.page, cards);
         this.cards = cards;
       });
     },
@@ -86,3 +87,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.bottom-page {
+  position: absolute;
+  width: 611px;
+  bottom: 15px;
+}
+</style>

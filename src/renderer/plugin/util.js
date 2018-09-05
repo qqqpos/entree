@@ -335,6 +335,9 @@ export default {
         });
 
         discount = toFixed(discount + offer, 2);
+
+        //discount will never greater than subtotal
+        discount = this.tax.beforeDiscount ? Math.max(subtotal, discount) : Math.max(toFixed(subtotal + tax, 2), discount);
       }
 
       const total = subtotal + plasticTax + toFixed(tax, 2);
