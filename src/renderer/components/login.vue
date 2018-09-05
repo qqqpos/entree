@@ -143,6 +143,9 @@ export default {
       });
     },
     initialized() {
+      // reset operator information
+      this.setOperator(null);
+
       this.isHost = window.isServer === true;
     },
     initialFailed({ reason, prompt }) {

@@ -59,6 +59,7 @@ export default new Router({
         {
           path: "table",
           name: "Table",
+          props: true,
           component: require("../components/table/index")
         },
         {

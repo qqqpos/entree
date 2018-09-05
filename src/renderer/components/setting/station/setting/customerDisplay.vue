@@ -12,8 +12,8 @@
           <toggle title="setting.poleDisplay" v-model="customerDisplay.poleDisplay.enable">
             <transition name="dropdown">
               <div class="opt" v-if="customerDisplay.poleDisplay.enable">
-                <inputer title="text.firstLine" v-model="customerDisplay.poleDisplay.top"></inputer>
-                <inputer title="text.secondLine" v-model="customerDisplay.poleDisplay.bot"></inputer>
+                <inputer title="text.lineOne" v-model="customerDisplay.poleDisplay.top"></inputer>
+                <inputer title="text.lineTwo" v-model="customerDisplay.poleDisplay.bot"></inputer>
                 <text-list title="text.port" v-model="customerDisplay.poleDisplay.port" :opts="ports"></text-list>
                 <toggle title="setting.animation" tooltip="tip.poleDisplayAnimation" v-model="customerDisplay.poleDisplay.animation" :disabled="true"></toggle>
               </div>

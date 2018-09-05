@@ -125,6 +125,7 @@ export default {
     printHibachi(table) {
       const ids = new Set();
       const items = [];
+      let tickets = [];
 
       table.seats.forEach(seat => seat.invoice && ids.add(seat.invoice));
 
@@ -137,6 +138,7 @@ export default {
             .forEach(item => items.push(item));
 
           Printer.print(ticket, false, "Order");
+          tickets.push(ticket);
         }
       });
 
@@ -155,17 +157,24 @@ export default {
         let current = [];
         array.filter(item => {
           const index = current.findIndex(i => i.seat === item.seat);
-          index === -1 ? current.push(item) : next.push(item);
+          index === -1
+            ? current.push(item)
+            : Object.keys(item.printer).includes(printer) && next.push(item);
         });
-        
+
         current.length && Printer.printHibachi(printer, order, current);
-        next.length && print(next);
+        next.length && print(next, printer);
       };
 
       Object.entries(this.config.printers)
         .filter(printer => printer[1].type === "hibachi")
         .map(printer => printer[0])
         .forEach(printer => print(items.filter(i => !i.print), printer));
+
+      // mark all tickets printed
+      tickets.forEach(ticket =>
+        this.$socket.emit("[ORDER] UPDATE", ticket, true)
+      );
     },
     cancel() {
       this.target = null;

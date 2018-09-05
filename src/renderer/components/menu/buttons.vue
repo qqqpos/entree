@@ -534,25 +534,28 @@ export default {
       const { lockOnDone, useTable } = this.dineInOpt;
 
       this.setApp({ newTicket: true });
+
       if (this.isDineInTicket && useTable) {
-        if (lockOnDone || done) {
+        if ((lockOnDone || done) && this.order.type !== "HIBACHI") {
+          // make exception for hibachi type ticket
+          // since hibachi requires multiple order entry
+          // for whole hibachi table
           this.resetAll();
-          this.setOperator(null);
           this.$router.push({ path: "/main/lock" });
         } else {
           this.archivedOrder && this.setOrder(this.archivedOrder);
           this.$router.push({
             name: "Table",
-            params: { section: this.table.zone }
+            params: { zone: this.table.zone }
           });
         }
       } else {
-        if (done) {
-          this.setOperator(null);
-          this.$router.push({ path: "/main/lock" });
-        } else {
-          this.$router.push({ path: "/main" });
-        }
+        // if it is not dine in ticket
+        // either lock station or return to main screen
+        done
+          ? this.$router.push({ path: "/main/lock" })
+          : this.$router.push({ path: "/main" });
+
         this.resetAll();
       }
     },
@@ -571,6 +574,7 @@ export default {
     combineOrderInfo(extra) {
       const customer = this.$minifyCustomer(this.customer);
       let order = Object.assign({}, this.order);
+
       if (this.app.newTicket) {
         delete customer.favorite;
         Object.assign(order, {
@@ -764,7 +768,6 @@ export default {
       "moreQty",
       "resetAll",
       "setOrder",
-      "setOperator",
       "setTableInfo",
       "archiveOrder"
     ])
@@ -773,8 +776,8 @@ export default {
     isDineInTicket() {
       return (
         this.order.type === "DINE_IN" ||
-        this.order.type === "BAR" ||
         this.order.type === "HIBACHI" ||
+        this.order.type === "BAR" ||
         this.order.type === "TO_GO"
       );
     },

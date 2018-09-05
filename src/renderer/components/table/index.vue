@@ -44,6 +44,7 @@ export default {
     grid,
     flow
   },
+  props: ["zone"],
   data() {
     return {
       viewTables: false,
@@ -53,6 +54,15 @@ export default {
       layout: "grid",
       section: 0
     };
+  },
+  created() {
+    if (this.zone) {
+      // auto jump to section
+      const index = this.layouts.table.findIndex(t => t.zone === this.zone);
+      this.section = index !== -1 ? index : 0;
+
+      console.log(this.section, index, this.zone);
+    }
   },
   methods: {
     setSection(index) {
