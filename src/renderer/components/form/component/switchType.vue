@@ -1,11 +1,11 @@
 <template>
   <div>
     <figure @click="$emit('change','PICK_UP')" :class="{active:type === 'PICK_UP'}">
-      <i class="fa fa-user"></i>
+      <i class="fa fa-user space"></i>
       <span class="text">{{$t('type.PICK_UP')}}</span>
     </figure>
     <figure @click="$emit('change','DELIVERY')" :class="{active:type === 'DELIVERY'}">
-      <i class="fa fa-car"></i>
+      <i class="fa fa-car space"></i>
       <span class="text">{{$t('type.DELIVERY')}}</span>
     </figure>
   </div>
@@ -34,6 +34,7 @@ div figure {
   min-width: 90px;
   text-align: center;
   border-radius: 4px 4px 0 0;
+  font-weight: bold;
 }
 
 figure.active {

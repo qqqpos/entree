@@ -1312,7 +1312,7 @@ export default {
     plasticBag: "塑料袋",
     foodAllergy: "食物过敏",
     searchTicket: "查找订单",
-    placedItemFor: "点了 {i}个 单品",
+    placedItemFor: "点了 {i}个单品",
     voidTicketFor: " 取消了订单, 原因是",
     gallery: "图片库",
     itemInline: "物品内联",
@@ -1424,7 +1424,8 @@ export default {
       tool: "工具",
       tutorial: "教程",
       sales: "营业额",
-      printers: "打印机"
+      printers: "打印机",
+      reward: "积分"
     },
     title: {
       store: "店面基本资料",
@@ -1483,7 +1484,7 @@ export default {
     interface: "界面",
     autoLock: "自动锁定",
     timeout: "超时",
-    rewardSystem: "积分系统",
+    rewardProgram: "积分计划",
     coupon: "折价卷",
     googleMatrix: "谷歌矩阵服务",
     emailService: "电子邮箱",
@@ -1613,10 +1614,18 @@ export default {
     },
     giftcard: {
       enable: "启用礼物卡",
-      expire: "礼物卡过期",
-      period: "过期年限",
+      expire: "过期年限",
       bonus: "充值奖励",
-      format: "卡号格式"
+      format: "卡号格式",
+      length: "{i}位数卡号"
+    },
+    reward: {
+      point: "积分点数",
+      value: "积分价值",
+      unit: "积分转换",
+      beforeTax: "税前积分",
+      eachPenny: "每分",
+      eachDollar: "每元"
     }
   },
   booking: {
@@ -1799,6 +1808,10 @@ export default {
       busy: "忙碌",
       rush: "非常忙碌",
       fullHouse: "满座"
+    },
+    reward: {
+      pennyEachPoint: "每消费一分钱换 1点 积分",
+      dollarEachPoint: "每消费一块钱换 1点 积分"
     },
     tax: "编辑税率",
     taxApply: "是否默认征税",

@@ -41,6 +41,7 @@
               <span class="value">$ {{summary.redeemAmount | decimal}}</span>
             </p>            
           </div>
+          <h3>{{$t('button.search')}}</h3>
         </div>
       </section>
       </div>

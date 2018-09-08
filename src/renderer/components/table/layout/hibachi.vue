@@ -1,14 +1,14 @@
 <template>
     <div class="hibachi-grid">
         <div class="hibachi-seat" :class="[table.layout,table.orientation]" v-for="(table,index) in tables" :key="index" :data-hibachi="table._id">
-          <div class="table-name fn" v-if="hibachiReady(table)">
+          <div class="table-name fn" v-if="hibachiReady(table)" @dblclick="selectAll(table)">
             <div class="mini-btn" @click="printDialog(table)"><i class="fas fa-print light space"></i>{{$t('button.print')}}</div>
           </div>
             <div class="table-name fn" v-else-if="target === table.name && seats.length">
               <div class="mini-btn" @click="cancel"><i class="fas fa-ban light space"></i>{{$t('button.cancel')}}</div>
               <div class="mini-btn" @click="create"><i class="fas fa-utensils light space"></i>{{$t('button.create')}}</div>
             </div>
-            <span class="table-name" v-else>{{table.name}}</span>
+            <span class="table-name" v-else @dblclick="selectAll(table)">{{table.name}}</span>
             <span v-for="(seat,idx) in table.seats" :key="idx" :index="idx" :data-seat="seat.name" class="seat" tag="span" @click="tap($event,table,seat)" @contextmenu="resetTableDialog(table._id,seat)">
               <span class="ticket" v-show="seat.number"># {{seat.number}}</span>
               <span class="status">{{getStatus(seat)}}</span>
@@ -77,6 +77,24 @@ export default {
       //const { _id, tableID, seats } = invoice;
       this.setViewOrder(invoice);
       invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat);
+    },
+    selectAll(hibachi) {
+      this.seats = [];
+      this.target = hibachi.name;
+      this.setViewTable(hibachi);
+
+      hibachi.seats.forEach(seat => {
+        if (seat.status === 1) {
+          this.seats.push(seat.name);
+          document
+            .querySelector(
+              `[data-hibachi="${hibachi._id}"] [data-seat="${seat.name}"]`
+            )
+            .classList.add("active");
+        }
+      });
+
+      this.seats.sort((a, b) => (a > b ? 1 : -1));
     },
     selectSeat(e, target, seat) {
       if (this.target === null) this.target = target;

@@ -26,6 +26,10 @@
                     <i class="fa fa-tags"></i>
                     <span class="text">{{$t('setting.nav.coupon')}}</span>
                 </router-link>
+                <router-link tag="li" :to="{name:'Setting.reward'}">
+                    <i class="fas fa-certificate"></i>
+                    <span class="text">{{$t('setting.nav.reward')}}</span>
+                </router-link>                
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">
                     <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('setting.nav.other')}}</span>

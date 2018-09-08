@@ -1435,7 +1435,8 @@ export default {
       tool: "Tool",
       tutorial: "Tutorial",
       sales: "Sales",
-      printers: "Printers"
+      printers: "Printers",
+      reward: "Reward"
     },
     title: {
       store: "Store Information",
@@ -1494,7 +1495,7 @@ export default {
     interface: "Interface",
     autoLock: "Auto Lock",
     timeout: "Timeout",
-    rewardSystem: "Reward System",
+    rewardProgram: "Reward Program",
     coupon: "Coupon",
     googleMatrix: "Google Matrix",
     emailService: "Email Service",
@@ -1622,9 +1623,17 @@ export default {
     giftcard: {
       enable: "Enable Gift Card",
       expire: "Gift Card Expire",
-      period: "Expire Period",
       bonus: "Reload Bonus",
-      format: "Card Number Format"
+      format: "Card Format",
+      length: "{i} digits length"
+    },
+    reward: {
+      point: "Total Point",
+      value: "Value of Point",
+      unit: "Point Unit",
+      beforeTax: "Point Calculate Before Tax",
+      eachPenny: "Penny",
+      eachDollar: "Dollar"
     }
   },
   booking: {
@@ -1807,6 +1816,10 @@ export default {
       busy: "Busy",
       rush: "Very Busy",
       fullHouse: "Full House"
+    },
+    reward: {
+      pennyEachPoint: "Each penny earn 1 point",
+      dollarEachPoint: "Each dollar earn 1 point"
     },
     tax: "Store tax setting",
     taxApply: "Setup default apply tax",

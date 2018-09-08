@@ -153,6 +153,11 @@ export default new Router({
                   path: "terminal",
                   name: "Setting.terminal",
                   component: require("../components/setting/store/terminal")
+                },
+                {
+                  path: "reward",
+                  name: "Setting.reward",
+                  component: require("../components/setting/store/reward")
                 }
               ]
             },

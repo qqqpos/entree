@@ -136,7 +136,7 @@ ul {
   background: #fff;
   border: 1px solid #eee;
   border-top: none;
-  z-index: 2;
+  z-index: 3;
   width: calc(100% - 2px);
   box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.5);
   max-height: 250px;

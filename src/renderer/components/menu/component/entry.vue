@@ -9,10 +9,6 @@
           <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price')">
           <i class="fas fa-check fa-2x confirm" @click="confirm"></i>
         </div>
-        <!-- <div class="options">
-          <i class="fas fa-search light"></i>
-          <i class="fas fa-print light"></i>
-        </div> -->
       </section>
         <!-- <section class="input">
             <div class="wrap">
@@ -37,7 +33,7 @@
                 </li>
             </ul>
         </section> -->
-        <keyboard :display="true" :alphabet="false" @input="input" @backspace="backspace" @enter="confirm"></keyboard>
+        <keyboard :display="true" :alphabet="false" :length="keywords.length" @input="input" @backspace="backspace" @enter="confirm"></keyboard>
     </div>
 </template>
 
@@ -65,7 +61,9 @@ export default {
   },
   created() {
     this.devices = Object.keys(this.config.printers);
-    this.printers = this.$store.getters.item ? Object.keys(this.$store.getters.item.printer) : this.devices.slice();
+    this.printers = this.$store.getters.item
+      ? Object.keys(this.$store.getters.item.printer)
+      : this.devices.slice();
   },
   mounted() {
     this.$refs.item.focus();
@@ -82,14 +80,15 @@ export default {
       document.activeElement.classList.add("active");
     },
     input(s) {
+      if ((this.anchor === "price" || this.anchor === "qty") && !isNumber(s))
+        return;
+
       let target = this.$refs[this.anchor];
       let caret = target.selectionStart;
-      let a = target.value.substr(0, caret);
-      let b = target.value.substr(caret);
+      const a = target.value.substr(0, caret);
+      const b = target.value.substr(caret);
 
       if (this.anchor === "price") {
-        if (!isNumber(s)) return;
-
         if (this.reset) {
           target.value = "0.0" + s;
         } else {
@@ -234,7 +233,7 @@ input {
 
 input.active {
   opacity: 1;
-  box-shadow: inset 0 3px 6px -2px rgba(0, 0, 0, 0.75);
+  box-shadow: inset 0 1px 6px -1px rgba(0, 0, 0, 0.75);
 }
 
 input.qty {

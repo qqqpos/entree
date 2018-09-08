@@ -21,6 +21,7 @@
         <checkbox title="setting.modify.transaction" v-model="operator.modify" val="transaction" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.modify.server" v-model="operator.modify" val="server" :multiple="true" class="list"></checkbox>        
         <checkbox title="setting.modify.driver" v-model="operator.modify" val="driver" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.modify.restriction" v-model="operator.modify" val="restriction" :multiple="true" class="list"></checkbox>
     </div>
 </template>
 

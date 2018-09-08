@@ -92,7 +92,8 @@ export default {
     executeText: {
       type: String,
       default: "Enter"
-    }
+    },
+    length: Number
   },
   data() {
     return {
@@ -118,6 +119,11 @@ export default {
     space() {
       this.$emit("input", " ");
       this.shift = true;
+    }
+  },
+  watch: {
+    length(value) {
+      if (value === 0) this.shift = true;
     }
   }
 };

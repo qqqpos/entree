@@ -10,7 +10,7 @@
         <i class="fa fa-trash" @click.stop="remove(index)"></i>
       </div>
       <div class="profile new" @click="create">
-        <i class="fa fa-plus"></i>
+        <i class="fas fa-user-plus"></i>
         <span>{{$t('button.new')}}</span>
       </div>
     </div>

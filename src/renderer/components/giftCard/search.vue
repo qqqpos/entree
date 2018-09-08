@@ -8,7 +8,7 @@
             <h3>{{$t('title.search')}}</h3>
           </div>
         </header>
-        <div class="banner"></div>
+        <div class="banner"></div> 
         <div class="wrap">
           <inputer title="card.giftCard" v-model="number" mask="#### #### #### ####" :autoFocus="true" model="number" @click.native="setInput(false)" @focus="setCaret"></inputer>
           <inputer title="text.phone" v-model="phone" mask="### ### ####" model="phone" @click.native="setInput(false)" @focus="setCaret"></inputer>
@@ -106,9 +106,9 @@ export default {
           value.substr(0, this.caret - 1) + value.substr(this.caret);
         this.caret--;
 
-        this.$nextTick(() => {
-          document.activeElement.setSelectionRange(this.caret, this.caret);
-        });
+        this.$nextTick(() =>
+          document.activeElement.setSelectionRange(this.caret, this.caret)
+        );
       }
     },
     search() {
@@ -119,8 +119,11 @@ export default {
       };
 
       this.$socket.emit("[GIFTCARD] SEARCH", query, results => {
-        this.keyboard = false;
-        this.results = results;
+        if (results.length) {
+          this.keyboard = false;
+          this.results = results;
+        } else {
+        }
       });
     },
     pick(card) {

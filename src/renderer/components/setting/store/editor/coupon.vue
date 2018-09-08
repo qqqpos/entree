@@ -38,6 +38,14 @@
       </template>
       <template v-else-if="tab === 'condition'">
         <div class="wrap">
+          <toggle title="text.setCondition" v-model="coupon.require.enable" :defaultStyle="false">
+            <transition name="dropdown">
+              <div class="opt" v-if="coupon.require.enable">
+                <inputer title="text.amountGreaterThan" v-model.number="coupon.require.amount"></inputer>
+              </div>
+            </transition>
+          </toggle>
+          <switches title="text.couponStack" v-model="coupon.stack"></switches>          
           <toggle v-model="coupon.expire.enable" title="text.expiration" :defaultStyle="false">
             <transition name="dropdown">
               <div class="opt" v-if="coupon.expire.enable">
@@ -46,14 +54,6 @@
               </div>
             </transition>
           </toggle>
-          <toggle title="text.setCondition" v-model="coupon.require.enable" :defaultStyle="false">
-            <transition name="dropdown">
-              <div class="opt" v-if="coupon.require.enable">
-                <inputer title="text.amountGreaterThan" v-model.number="coupon.require.amount"></inputer>
-              </div>
-            </transition>
-          </toggle>
-          <switches title="text.couponStack" v-model="coupon.stack"></switches>
           <selector title="text.apply" v-model="coupon.apply" :opts="applyTargets"></selector>
           <template v-if="coupon.apply === 'category'">
             <div class="checkboxes">
@@ -195,5 +195,10 @@ p {
 
 .item {
   flex: 1;
+}
+
+.checkboxes{
+  max-height: 300px;
+  overflow: auto;
 }
 </style>

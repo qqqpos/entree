@@ -37,12 +37,14 @@ import weightItem from "./component/scale";
 import queryBar from "./component/queryBar";
 import orderList from "../common/orderList";
 import dialogModule from "../common/dialog";
+import unlockModule from "../common/unlock";
 import templateModule from "./component/template";
 import temporaryItem from "./component/temporaryItem";
 
 export default {
   components: {
     dialogModule,
+    unlockModule,
     templateModule,
     temporaryItem,
     modify,
@@ -279,11 +281,11 @@ export default {
       this.categoryIndex = index;
       this.getItems(this.layouts.menu[index].contain);
     },
-    pick(item) {
+    pick(item, skip = false) {
       item = JSON.parse(JSON.stringify(item));
       !this.app.newTicket && Object.assign(item, { new: true });
 
-      this.checkItemAvailable(item)
+      this.checkItemAvailable(item, skip)
         .then(this.checkAllergy)
         .then(this.conditionalPrice)
         .then(this.checkOption)
@@ -291,11 +293,11 @@ export default {
         .then(this.addToOrder)
         .catch(this.specialItemHandler.bind(null, item));
     },
-    checkItemAvailable(item) {
+    checkItemAvailable(item, skip) {
       return new Promise((next, stop) => {
         if (item.disable) {
           stop("unavailable");
-        } else if (item.restrict) {
+        } else if (item.restrict && !skip) {
           const { from, to, days, types, holiday = false } = item.restrict;
           const day = moment().format("d");
 
@@ -508,10 +510,22 @@ export default {
                         "dialog.itemNotAvailable",
                         this.$t("type." + this.order.type)
                       ],
-            buttons: [{ text: "button.confirm", fn: "resolve" }]
+            buttons: [
+              { text: "button.confirm", fn: "reject" },
+              { text: "button.processAnyway", fn: "resolve" }
+            ]
           };
 
-          this.$dialog(prompt).then(this.exitComponent);
+          this.$dialog(prompt)
+            .then(() =>
+              this.$checkPermission("modify", "restriction")
+                .then(() => {
+                  this.exitComponent();
+                  this.pick(item, true);
+                })
+                .catch(() => {})
+            )
+            .catch(this.exitComponent);
           break;
         default:
           this.exitComponent();

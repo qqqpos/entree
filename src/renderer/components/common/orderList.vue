@@ -429,6 +429,7 @@ export default {
       deep: true
     },
     customer: "calculate",
+    language: "$forceUpdate",
     payment() {
       this.$nextTick(() => {
         const dom = document.querySelector(".order .inner");

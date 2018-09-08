@@ -18,9 +18,14 @@
     </text-input>
     <text-input v-model="operator.name" title="text.name"></text-input>
     <text-list v-model="operator.role" title="text.role" :opts="roles" v-show="authorized"></text-list>
-    <text-input v-model.number="operator.wage" title="text.salary"></text-input>
-    <toggle v-model="operator.timecard" title="text.timecard" tooltip="tip.timecard.forOne"></toggle>
-    <toggle v-model="operator.sessionReport" title="text.sessionReport" tooltip="tip.sessionReport"></toggle>
+    <template v-if="operator.role !== 'Owner'">
+      <text-input v-model.number="operator.wage" title="text.salary"></text-input>
+      <toggle v-model="operator.timecard" title="text.timecard" tooltip="tip.timecard.forOne"></toggle>
+      <toggle v-model="operator.sessionReport" title="text.sessionReport" tooltip="tip.sessionReport"></toggle>
+    </template>
+    <template v-else>
+      <text-input v-model="operator.email" title="text.email"></text-input>
+    </template>
     <template v-if="operator.role !== 'Worker' || operator.role !== 'Driver'">
       <text-list v-model="operator.language" title="text.defaultLanguage" :opts="languages"></text-list>
       <text-list v-model="operator.cashCtrl" title="setting.cashDrawer" :opts="ctrl"></text-list>

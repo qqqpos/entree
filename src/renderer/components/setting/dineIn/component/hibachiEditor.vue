@@ -32,7 +32,7 @@ export default {
   components: { inputer, selector },
   data() {
     return {
-      layouts: ["six", "eight", "ten"].map(layout => ({
+      layouts: ["six", "eight", "ten", "twelve"].map(layout => ({
         label: this.$t(`table.${layout}Seats`),
         tooltip: "",
         value: layout
@@ -56,6 +56,9 @@ export default {
           break;
         case "ten":
           this.table.seat = 10;
+          break;
+        case "twelve":
+          this.table.seat = 12;
           break;
       }
       this.table.seats = Array(this.table.seat)

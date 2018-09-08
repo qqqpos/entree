@@ -483,6 +483,7 @@ header.dock .text{
 .dock .client {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex: 1;
 }
 
@@ -1232,7 +1233,8 @@ thead.title td {
   grid-template-rows: 1fr 1fr 1fr 1fr;
 }
 
-.hibachi-seat.ten {
+.hibachi-seat.ten,
+.hibachi-seat.twelve {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
 }
@@ -1265,6 +1267,12 @@ thead.title td {
 .ten.right .table-name {
   grid-column: 1/4;
   grid-row: 2/4;
+}
+
+.twelve.left .table-name,
+.twelve.right .table-name{
+  grid-column:2/4;
+  grid-row:2/4;
 }
 
 .actions span.action{

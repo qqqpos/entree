@@ -8,6 +8,37 @@
              @copy="copy(invoice)"
              @reimburse="reimburse(invoice)"></story>
           </ul>
+          <div class="card">
+            <h5>{{$t('text.rewardPoint')}}<i class="fas fa-ellipsis-h light more"></i></h5>
+            <div class="wrap">
+              <div class="column f1">
+                <span class="value">{{reward.point}}</span>
+                <span class="text">{{$t('setting.reward.point')}}</span>
+              </div>
+              <div class="row f2">
+                <div class="column">
+                  <span class="value">$ {{reward.value | decimal}}</span>
+                  <span class="text">{{$t('setting.reward.value')}}</span>
+                </div>
+                <div class="column mini-btn redeem" v-show="reward.value > 0">
+                  <i class="fas fa-exchange-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h5>{{$t('card.giftCard')}}<i class="fas fa-ellipsis-h light more"></i></h5>
+            <div class="wrap">
+              <div class="column f1">
+                <span class="value">1234 1234 1234 1234</span>
+                <span class="text">{{$t('card.number')}}</span>
+              </div>
+              <div class="column">
+                <span class="value">$ 0.00</span>
+                <span class="text">{{$t('card.balance')}}</span>
+              </div>              
+            </div>
+          </div>
         </div>
         <transition name="fade">
           <div :is="module" :init="moduleData" class="preview"></div>
@@ -33,8 +64,20 @@ export default {
       invoices: this.init.invoices || [],
       moduleData: null,
       module: null,
+      giftcard: {},
+      reward: {
+        point: 0,
+        value: 0
+      },
       view: null
     };
+  },
+  created() {
+    const { _id } = this.$store.getters.customer;
+    _id &&
+      this.$socket.emit("[REWARD] GET_POINT", _id, point => {
+        this.reward.point = point;
+      });
   },
   methods: {
     toggle(index) {
@@ -134,6 +177,61 @@ export default {
   position: fixed;
   left: 37px;
   top: 0;
+}
+
+.card {
+  background: #fff;
+  margin: 5px 5px 0;
+  border-radius: 6px;
+  padding: 6px 12px;
+  position: relative;
+}
+
+.card h5 {
+  margin-bottom: 5px;
+  color: #3c3c3c;
+}
+
+.card .wrap {
+  display: flex;
+}
+
+.card .wrap > div {
+  padding: 0 7px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.card .value {
+  font-family: "Agency FB";
+  font-weight: bold;
+  font-size: 24px;
+  color: #333;
+}
+
+.card .text {
+  color: #3666d4;
+  font-size: 12px;
+}
+
+.card i.more {
+  cursor: pointer;
+  float: right;
+  padding-left: 15px;
+}
+
+.redeem {
+  padding: 8px 20px;
+  position: absolute;
+  right: 15px;
+  bottom: 18px;
 }
 </style>
 

@@ -181,11 +181,6 @@ var Preset = function () {
       num: 0,
       priority: 0,
       stock: 0,
-      commission: {
-        enable: false,
-        percentage: false,
-        value: 0
-      },
       taxClass: null,
       disable: false,
       temporary: false,
@@ -230,7 +225,7 @@ var Preset = function () {
   };
   this.operator = function (name, role, pin, wage) {
     let access = [], modify = [], view = [], permission = [], cashCtrl = "disable";
-    switch (role) {
+    switch (role) {     
       case "Manager":
         access = ["setting", "cashdrawer", "report", "terminal", "history", "exit"];
         view = ["summary", "invoices", "tables"];
