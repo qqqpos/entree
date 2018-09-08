@@ -278,11 +278,28 @@ export default {
     },
     openPortal() {
       if (this.$route.name !== "Menu") return;
-      this.customer._id
-        ? this.$socket.emit("[CUSTOMER] HISTORY", this.customer._id, invoices =>
-            this.$open("portalModule", { invoices })
-          )
-        : this.$open("portalModule", { invoices: [] });
+      const { _id, phone } = this.customer;
+
+      if (_id) {
+        this.$socket.emit(
+          "[CUSTOMER] PORTAL",
+          { _id, phone },
+          ({ invoices, rewardPoint, cards }) =>
+            this.$open("portalModule", {
+              cards,
+              invoices,
+              rewardPoint,
+              profile: true
+            })
+        );
+      } else {
+        this.$open("portalModule", {
+          profile: false,
+          rewardPoint: 0,
+          invoices: [],
+          cards: []
+        });
+      }
     },
     ...mapActions([
       "setApp",

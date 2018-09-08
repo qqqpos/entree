@@ -5,7 +5,6 @@
         <h3 class="title">{{$t('setting.title.giftcard')}}</h3>
       </header>
       <toggle title="setting.giftcard.enable" v-model="giftcard.enable"></toggle>
-      <toggle title="card.vip" v-model="giftcard.vip"></toggle>
       <div class="slider">
         <label>{{$t('setting.giftcard.expire')}}<span class="value">{{periods[giftcard.expire]}}</span></label>
         <slider v-model="giftcard.expire" :min="0" :max="5" :piecewise="true" tooltip="hover" :lazy="true"></slider>        

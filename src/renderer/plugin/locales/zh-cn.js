@@ -776,7 +776,7 @@ export default {
       connectError: "连接错误",
       sendError: "数据发送错误",
       receiveError: "数据接收错误",
-      commError: "在与信用卡伺服器的通信发生错误",
+      commError: "与信用卡交易中心的通信中发生错误",
       duplicated: "重复的过账信息",
       noFound: "没有需要过账的交易",
       error: "过账失败,错误代码 {i}",
@@ -797,8 +797,6 @@ export default {
     number: "卡号",
     holder: "持卡人",
     phone: "联系电话",
-    vip: "会员",
-    vipCard: "会员卡",
     info: "信息",
     balance: "余额",
     giftCardNumber: "礼物卡号 ({i})",
@@ -813,11 +811,11 @@ export default {
     giftCardDebit: "礼物卡消费",
     bonus: "(奖励: $ {i})",
     swipeGiftCard: "请刷礼物卡",
-    swipeVipCard: "请刷会员卡",
     cantReadTack: "礼物卡读取失败",
     history: "消费记录",
     printBalance: "打印余额",
     readTrackFailed: "无法读取磁条信息",
+    customerNoGiftcard: "客户没有礼物卡",
     activationBonus: "开卡奖励",
     swipeEmployeeCard: "请刷员工卡",
     swipeEmployeeCardAgain: "请再刷一次员工卡",
@@ -825,11 +823,9 @@ export default {
     removeEmployeeCardConfirm: "您确定要移除这个绑定的员工卡吗？",
     employeeCardRegisterFailed: "员工卡注册失败",
     employeeCardRegistered: "此员工卡已经分配给另外的员工",
-    notVipCard: "此卡并不是会员卡, 请换卡重试",
     stats: {
       giftcardCount: "礼物卡发行计数",
       giftcardTotal: "礼物卡总余额",
-      vipCount: "会员卡计数",
       giftcardSalesToday: "今日礼物卡销售统计",
       latestGiftcardList: "近期激活的礼物卡列表"
     }
@@ -1312,7 +1308,7 @@ export default {
     plasticBag: "塑料袋",
     foodAllergy: "食物过敏",
     searchTicket: "查找订单",
-    placedItemFor: "点了 {i}个单品",
+    placedItemFor: "购买 {i}个单品 ",
     voidTicketFor: " 取消了订单, 原因是",
     gallery: "图片库",
     itemInline: "物品内联",
@@ -1625,7 +1621,9 @@ export default {
       unit: "积分转换",
       beforeTax: "税前积分",
       eachPenny: "每分",
-      eachDollar: "每元"
+      eachDollar: "每元",
+      ratio: "兑换比例",
+      redeemable: "允许兑换积分"
     }
   },
   booking: {

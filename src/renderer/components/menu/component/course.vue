@@ -230,7 +230,12 @@ export default {
         this.setOperator(null);
         this.$router.push({ path: "/main/lock" });
       } else {
+        const { _id } = this.order;
+        const ticket = this.history.find(t => t._id === _id);
+
+        this.resetOrder();
         this.setApp({ newTicket: true });
+        ticket && this.setViewOrder(ticket);
         this.$router.push({ path: "/main/table" });
       }
     },
@@ -239,7 +244,9 @@ export default {
       "setOrder",
       "resetAll",
       "delayPrint",
-      "setOperator"
+      "resetOrder",
+      "setOperator",
+      "setViewOrder"
     ])
   },
   computed: {
@@ -251,6 +258,7 @@ export default {
       "order",
       "table",
       "ticket",
+      "history",
       "station",
       "customer",
       "language",

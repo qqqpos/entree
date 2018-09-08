@@ -30,11 +30,9 @@
         <template v-if="tab === 'activation'">
           <div>
             <div class="wrap">
-              <inputer title="card.number" v-model="giftcard.number" :disabled="true"></inputer>
+              <inputer title="card.number" v-model="cardNumber" :disabled="true"></inputer>
+              <inputer title="card.phone" v-model="phoneNumber"></inputer>
               <inputer title="card.holder" v-model="giftcard.holder"></inputer>
-              <inputer title="card.phone" v-model="giftcard.phone" mask="### ### ####"></inputer>
-              <inputer title="card.expirationDate" v-model="giftcard.expiration" mask="####-##-##"></inputer>
-              <switches title="card.vip" v-model="giftcard.vip"></switches>
             </div>
             <footer>
               <button class="btn" @click="tab = 'reload'">{{$t('button.activation')}}</button>
@@ -44,12 +42,11 @@
         <template v-else-if="tab === 'info'">
           <div>
             <div class="wrap">
-              <inputer title="card.number" v-model="giftcard.number" :disabled="true" mask="#### #### #### ####"></inputer>
+              <inputer title="card.number" v-model="cardNumber" :disabled="true"></inputer>
+              <inputer title="card.phone" v-model="giftcard.phone"></inputer>
               <inputer title="card.holder" v-model="giftcard.holder"></inputer>
-              <inputer title="card.phone" v-model="giftcard.phone" mask="### ### ####"></inputer>
-              <inputer title="card.expirationDate" v-model="giftcard.expiration" mask="####-##-##"></inputer>
+              <inputer title="card.expirationDate" v-model="giftcard.expiration"></inputer>
               <inputer title="card.balance" v-model="giftcard.balance" :disabled="true"></inputer>
-              <switches title="card.vip" v-model="giftcard.vip"></switches>
             </div>
             <footer>
               <div class="opt">
@@ -168,6 +165,33 @@ export default {
       const max = min + 15;
 
       return this.logs.slice(min, max);
+    },
+    cardNumber: {
+      get() {
+        return this.giftcard.number
+          ? this.giftcard.number.replace(/(.{4})/g, "$1 ").trim()
+          : "";
+      },
+      set(value) {
+        const number = parseInt(value.replace(/\D+/g, ""));
+        this.giftcard.number = number;
+      }
+    },
+    phoneNumber: {
+      get() {
+        return this.giftcard.phone
+          ? this.giftcard.phone
+              .slice(0, 10)
+              .replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "($1) $2-$3")
+          : this.giftcard.phone || "";
+      },
+      set(value) {
+        const phone = String(value)
+          .replace(/\D+/g, "")
+          .slice(0, 10);
+
+        Object.assign(this.giftcard, { phone });
+      }
     },
     ...mapGetters(["op", "station"])
   },

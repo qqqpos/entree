@@ -200,7 +200,7 @@ export default {
     clockIn: "Clock In",
     clockOut: "Clock Out",
     giftCard: "Gift Card",
-    giftCardTip: "Loyalty Program & VIP Card",
+    giftCardTip: "Gift Card Sales",
     terminal: "Terminal",
     terminalTip: "View All Transaction",
     station: "Station",
@@ -873,8 +873,6 @@ export default {
     number: "Card Number",
     holder: "Holder",
     phone: "Phone",
-    vip: "VIP",
-    vipCard: "VIP Card",
     info: "Info",
     balance: "Balance",
     giftCardNumber: "Gift card number ({i})",
@@ -889,11 +887,11 @@ export default {
     giftCardDebit: "Gift Card Redeem",
     bonus: "(Bonus: $ {i})",
     swipeGiftCard: "Please Swipe Gift Card",
-    swipeVipCard: "Please Swipe VIP Card",
     cantReadTack: "Can not read tack",
     history: "History",
     printBalance: "Print Bal.",
     readTrackFailed: "Read Track Failed",
+    customerNoGiftcard: "Customer does not have gift card",
     activationBonus: "Bonus",
     swipeEmployeeCard: "Please Swipe Employee Card",
     swipeEmployeeCardAgain: "Please Swipe Employee Card Again",
@@ -901,11 +899,9 @@ export default {
     removeEmployeeCardConfirm: "Are you sure to remove this employee card?",
     employeeCardRegisterFailed: "Employee Card Register Failed",
     employeeCardRegistered: "This employee card already assign to another employee",
-    notVipCard: "This is not a VIP card. Please try another card.",
     stats: {
       giftcardCount: "Gift Card Count",
       giftcardTotal: "Gift Card Remain Balance",
-      vipCount: "VIP Card Count",
       giftcardSalesToday: "Gift Card Sales Of The Day",
       latestGiftcardList: "Latest Gift Card List"
     }
@@ -1633,7 +1629,9 @@ export default {
       unit: "Point Unit",
       beforeTax: "Point Calculate Before Tax",
       eachPenny: "Penny",
-      eachDollar: "Dollar"
+      eachDollar: "Dollar",
+      ratio: "Conversion Ratio",
+      redeemable: "Reward Point Redeemable"
     }
   },
   booking: {

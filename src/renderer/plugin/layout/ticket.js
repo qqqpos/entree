@@ -8,7 +8,7 @@ const ticket = function (raw, receipt, target) {
 
     if (!setting) return false;
 
-    if(!setting.print.includes(ticket) && !(receipt && /cashier/i.test(printer))) return false;
+    if (!setting.print.includes(ticket) && !(receipt && /cashier/i.test(printer))) return false;
 
     if (setting.type === "label") {
       this.printLabel(printer, raw);
@@ -253,13 +253,13 @@ function createList(printer, setting, invoice, preview) {
                 }
                 break;
               case "REMOVED":
-               if (printBothText) {
-                item.zhCN = firstLineChinese ? "⌧ " + item.zhCN : item.zhCN;
-                item.usEN = firstLineEnglish ? "⌧ " + item.usEN : item.usEN;
-              } else {
-                item.zhCN = "⌧ " + item.zhCN;
-                item.usEN = "⌧ " + item.usEN;
-              }
+                if (printBothText) {
+                  item.zhCN = firstLineChinese ? "⌧ " + item.zhCN : item.zhCN;
+                  item.usEN = firstLineEnglish ? "⌧ " + item.usEN : item.usEN;
+                } else {
+                  item.zhCN = "⌧ " + item.zhCN;
+                  item.usEN = "⌧ " + item.usEN;
+                }
               default:
             }
             return item;
@@ -320,7 +320,7 @@ function createList(printer, setting, invoice, preview) {
       .toString();
   }
   const delay = invoice.delay ? `<h1 class="delay">${moment(invoice.delay).locale("en").format('MM-DD hh:mm A')}</h1>` : '';
-  const togo = invoice.togo
+  const togo = invoice.togo && togoItems.length
     ? `<div class="categorize"><p class="title">${setting.title['TO_GO']}</p>${togoItems}</div>`
     : '';
 

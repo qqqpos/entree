@@ -16,10 +16,8 @@ export default {
   props: ["init"],
   data() {
     return {
-      format: this.$store.getters.store.giftcard.format || "\\d{16,16}",
-      message: this.init.vip
-        ? this.$t("card.swipeVipCard")
-        : this.$t("card.swipeGiftCard"),
+      format: parseInt(this.$store.getters.store.giftcard.format) || 16,
+      message: this.$t("card.swipeGiftCard"),
       timeout: null,
       buffer: ""
     };
@@ -38,7 +36,7 @@ export default {
 
       this.timeout = setTimeout(() => {
         this.buffer = "";
-      }, 300);
+      }, 250);
 
       e.key.length === 1 && (this.buffer += e.key);
       e.key === "Enter" && this.parser(this.buffer);
@@ -49,7 +47,7 @@ export default {
         this.buffer = "";
       } else {
         try {
-          const regExp = new RegExp(this.format);
+          const regExp = new RegExp(`\\d{${this.format},${this.format}}`);
           const number = buffer.match(regExp)[0]; //buffer.match(/\d{16,16}/)[0];
           this.$socket.emit("[GIFTCARD] QUERY", number, card => {
             card ? this.init.resolve(card) : this.init.reject(number);

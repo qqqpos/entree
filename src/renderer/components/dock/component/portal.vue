@@ -21,24 +21,32 @@
                   <span class="text">{{$t('setting.reward.value')}}</span>
                 </div>
                 <div class="column mini-btn redeem" v-show="reward.value > 0">
-                  <i class="fas fa-exchange-alt"></i>
+                  <i class="fas fa-exchange-alt" @click="redeemDialog"></i>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card" v-for="(card,index) in giftCards" :key="index">
-            <h5>{{$t('card.giftCard')}}<i class="fas fa-ellipsis-h light more"></i></h5>
-            <div class="wrap">
-              <div class="column f1">
-                <span class="value">{{card.number | card}}</span>
-                <span class="text">{{$t('card.number')}}</span>
+          <template v-if="cards.length">
+            <div class="card" v-for="(card,index) in cards" :key="index">
+              <h5>{{$t('card.giftCard')}}<i class="fas fa-ellipsis-h light more"></i></h5>
+              <div class="wrap">
+                <div class="column f1">
+                  <span class="value">{{card.number | card}}</span>
+                  <span class="text">{{$t('card.number')}}</span>
+                </div>
+                <div class="column">
+                  <span class="value">$ {{card.balance | decimal}}</span>
+                  <span class="text">{{$t('card.balance')}}</span>
+                </div>              
               </div>
-              <div class="column">
-                <span class="value">$ {{card.balance |decimal}}</span>
-                <span class="text">{{$t('card.balance')}}</span>
-              </div>              
             </div>
-          </div>
+          </template>
+          <template v-else-if="!init.profile">
+            <div class="card" @click="$open('giftcardModule')">
+              <h5 class="text-center">{{$t('card.customerNoGiftcard')}}</h5>
+              <h3 class="text-center">{{$t('card.activation')}}</h3>
+            </div>
+          </template>
         </div>
         <transition name="fade">
           <div :is="module" :init="moduleData" class="preview"></div>
@@ -53,18 +61,20 @@ import { mapActions } from "vuex";
 import story from "./helper/story";
 import ticket from "../../common/ticket";
 import dialogModule from "../../common/dialog";
+import giftcardModule from "../../giftcard/index";
 
 export default {
-  components: { story, ticket, dialogModule },
+  components: { story, ticket, dialogModule, giftcardModule },
   props: ["init"],
   data() {
     return {
+      customer: this.$store.getters.customer,
+      invoices: [],
       componentData: null,
       component: null,
-      invoices: this.init.invoices || [],
       moduleData: null,
       module: null,
-      giftCards: [],
+      cards: [],
       reward: {
         point: 0,
         value: 0
@@ -73,16 +83,24 @@ export default {
     };
   },
   created() {
-    const { _id, phone } = this.$store.getters.customer;
-    if (_id) {
-      this.$socket.emit("[REWARD] GET_POINT", _id, point => {
-        this.reward.point = point;
-      });
+    this.cards = this.init.cards;
+    this.invoices = this.init.invoices;
 
-      this.$socket.emit("[GIFTCARD] SEARCH", { phone }, cards => {
-        this.giftCards = cards;
-      });
-    }
+    const {
+      reward = {
+        perPoint: 1,
+        asValue: 0
+      }
+    } = this.$store.getters.store;
+
+    const rewardPoint = this.init.rewardPoint;
+    const each =
+      isNumber(reward.perPoint) && reward.perPoint > 0 ? reward.perPoint : 1;
+
+    Object.assign(this.reward, {
+      point: rewardPoint,
+      value: toFixed(rewardPoint / each * reward.asValue, 2)
+    });
   },
   methods: {
     toggle(index) {
@@ -158,6 +176,7 @@ export default {
       );
     },
     reimburse(invoice) {},
+    redeemDialog() {},
     exitModule() {
       this.module = null;
       this.moduleData = null;

@@ -418,6 +418,7 @@ export default {
         if (
           useTable &&
           this.table &&
+          //this.app.newTicket &&
           this.isDineInTicket &&
           this.table.status === -1
         ) {
@@ -546,6 +547,7 @@ export default {
           const { _id } = this.order;
           const ticket = this.history.find(t => t._id === _id);
 
+          this.resetOrder();
           ticket && this.setViewOrder(ticket);
 
           this.table
@@ -773,6 +775,7 @@ export default {
       "moreQty",
       "resetAll",
       "setOrder",
+      "resetOrder",
       "setViewOrder",
       "setTableInfo",
       "archiveOrder"
