@@ -26,15 +26,15 @@
               </div>
             </div>
           </div>
-          <div class="card">
+          <div class="card" v-for="(card,index) in giftCards" :key="index">
             <h5>{{$t('card.giftCard')}}<i class="fas fa-ellipsis-h light more"></i></h5>
             <div class="wrap">
               <div class="column f1">
-                <span class="value">1234 1234 1234 1234</span>
+                <span class="value">{{card.number | card}}</span>
                 <span class="text">{{$t('card.number')}}</span>
               </div>
               <div class="column">
-                <span class="value">$ 0.00</span>
+                <span class="value">$ {{card.balance |decimal}}</span>
                 <span class="text">{{$t('card.balance')}}</span>
               </div>              
             </div>
@@ -64,7 +64,7 @@ export default {
       invoices: this.init.invoices || [],
       moduleData: null,
       module: null,
-      giftcard: {},
+      giftCards: [],
       reward: {
         point: 0,
         value: 0
@@ -73,11 +73,16 @@ export default {
     };
   },
   created() {
-    const { _id } = this.$store.getters.customer;
-    _id &&
+    const { _id, phone } = this.$store.getters.customer;
+    if (_id) {
       this.$socket.emit("[REWARD] GET_POINT", _id, point => {
         this.reward.point = point;
       });
+
+      this.$socket.emit("[GIFTCARD] SEARCH", { phone }, cards => {
+        this.giftCards = cards;
+      });
+    }
   },
   methods: {
     toggle(index) {

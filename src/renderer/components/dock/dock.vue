@@ -243,21 +243,22 @@ export default {
       let invoice = this.history.find(ticket => ticket._id === order._id);
 
       // filter printed items
-      const printedItem = invoice.content
-        .filter(item => item.print)
-        .map(item => item.unique);
-
-      order.content = order.content.filter(
-        item => !printedItem.includes(item.unique)
-      );
-
-      Printer.setTarget(target).print(Object.assign(order, { print: false }));
-      this.removeSpooler(i);
-
-      // Update Order item status
-      let items = [];
-      order.content.forEach(({ unique }) => items.push(unique));
       if (invoice) {
+        const printedItem = invoice.content
+          .filter(item => item.print)
+          .map(item => item.unique);
+
+        order.content = order.content.filter(
+          item => !printedItem.includes(item.unique)
+        );
+
+        Printer.setTarget(target).print(Object.assign(order, { print: false }));
+        this.removeSpooler(i);
+
+        // Update Order item status
+        let items = [];
+        order.content.forEach(({ unique }) => items.push(unique));
+
         invoice.content.forEach(item => {
           items.includes(item.unique) &&
             Object.assign(item, { print: true, pending: false });

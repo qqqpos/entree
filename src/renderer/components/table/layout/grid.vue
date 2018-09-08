@@ -103,9 +103,9 @@ export default {
               this.exitComponent();
             });
           return;
-        } else {
-          this.setViewTable(table);
-        }
+        } 
+         
+         this.setViewTable(table);
       }
 
       let prompt;

@@ -304,7 +304,7 @@ export default {
       });
     },
     promptConfirm(print) {
-      const { defaults = {} } = this.$store.getters.config;
+      const { defaults = {} } = this.config;
 
       return new Promise((next, stop) => {
         if (defaults.saveConfirm && !print) {
@@ -543,11 +543,17 @@ export default {
           this.resetAll();
           this.$router.push({ path: "/main/lock" });
         } else {
-          this.archivedOrder && this.setOrder(this.archivedOrder);
-          this.$router.push({
-            name: "Table",
-            params: { zone: this.table.zone }
-          });
+          const { _id } = this.order;
+          const ticket = this.history.find(t => t._id === _id);
+
+          ticket && this.setViewOrder(ticket);
+
+          this.table
+            ? this.$router.push({
+                name: "Table",
+                params: { zone: this.table.zone }
+              })
+            : this.$router.push({ name: "Table" });
         }
       } else {
         // if it is not dine in ticket
@@ -595,7 +601,6 @@ export default {
       this.archiveOrder(this.order);
       Object.assign(this.ticket, { type: "TO_GO" });
       this.setOrder({
-        _id: ObjectId().toString(),
         type: "TO_GO",
         print: false,
         content: []
@@ -768,6 +773,7 @@ export default {
       "moreQty",
       "resetAll",
       "setOrder",
+      "setViewOrder",
       "setTableInfo",
       "archiveOrder"
     ])
@@ -789,7 +795,9 @@ export default {
       "store",
       "order",
       "table",
+      "config",
       "ticket",
+      "history",
       "station",
       "spooler",
       "customer",

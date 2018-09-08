@@ -60,8 +60,6 @@ export default {
       // auto jump to section
       const index = this.layouts.table.findIndex(t => t.zone === this.zone);
       this.section = index !== -1 ? index : 0;
-
-      console.log(this.section, index, this.zone);
     }
   },
   methods: {

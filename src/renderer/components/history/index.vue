@@ -192,8 +192,9 @@ export default {
     getSplits(invoice) {
       invoice.split &&
         this.$socket.emit("[SPLIT] GET", invoice._id, splits => {
+          console.log(splits);
           this.page = 0;
-          this.splits = splits.sort((a, b) => a.number.localeCompare(b.number));
+          this.splits = splits.sort((a, b) => String(a.number).localeCompare(String(b.number)));
           this.resetViewOrder();
         });
     },

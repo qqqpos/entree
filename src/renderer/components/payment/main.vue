@@ -916,7 +916,7 @@ export default {
 
         const tenderWithDialog = {
           title: ["dialog.cashChange", tender],
-          msg: ["dialog.cashChangeDetail", paid],
+          msg: ["dialog.cashPaymentDetail", paid],
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
             { text: "button.print", fn: "resolve" }

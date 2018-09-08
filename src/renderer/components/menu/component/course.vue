@@ -44,7 +44,7 @@
                 </ul>
             </div>
             <footer>
-                <button class="btn" @click="initital" v-show="Object.keys(course).length">{{$t('button.reset')}}</button>
+                <button class="btn" @click="initial" v-show="Object.keys(course).length">{{$t('button.reset')}}</button>
                 <button class="btn" @click="confirmDialog">{{$t('button.confirm')}}</button>
             </footer>
         </div>
@@ -70,10 +70,10 @@ export default {
     };
   },
   created() {
-    this.initital();
+    this.initial();
   },
   methods: {
-    initital() {
+    initial() {
       this.items = JSON.parse(
         JSON.stringify(
           this.order.content.filter(item => !item.print && !item.pending)
@@ -131,16 +131,33 @@ export default {
 
       this.items.length || Object.keys(this.course).length
         ? this.$dialog(prompt)
+            .then(this.checkOrder)
             .then(this.save)
             .then(this.print)
             .catch(this.exitComponent)
         : this.init.resolve();
     },
-    save() {
+    checkOrder() {
       this.exitComponent();
 
+      return new Promise(next => {
+        if (this.ticket.type === "TO_GO") {
+          let order = this.archivedOrder;
+          let items = this.order.content.map(item =>
+            Object.assign({}, item, { print, orderType: "TO_GO" })
+          );
+          order.content.push(...items);
+
+          this.$calculatePayment(order);
+          next(order);
+        } else {
+          next(this.order);
+        }
+      });
+    },
+    save(ticket) {
       const printed = this.items.map(item => item.unique);
-      this.order.content.forEach(item => {
+      ticket.content.forEach(item => {
         printed.includes(item.unique)
           ? Object.assign(item, { print: true })
           : Object.assign(item, { pending: true });
@@ -148,7 +165,7 @@ export default {
 
       return new Promise(next => {
         if (this.app.newTicket) {
-          Object.assign(this.order, {
+          Object.assign(ticket, {
             customer: this.$minifyCustomer(this.customer),
             time: Date.now(),
             date: today()
@@ -156,20 +173,20 @@ export default {
 
           if (this.dineInOpt.useTable && this.table) {
             Object.assign(this.table, {
-              invoice: [this.order._id],
+              invoice: [ticket._id],
               status: 2
             });
 
             this.$socket.emit("[TABLE] UPDATE", this.table);
 
-            this.$socket.emit("[ORDER] SAVE", this.order, false, order => {
+            this.$socket.emit("[ORDER] SAVE", ticket, false, order => {
               order.content = [];
               next(order);
             });
           }
         } else {
-          this.$socket.emit("[ORDER] UPDATE", this.order, false);
-          next(this.order);
+          this.$socket.emit("[ORDER] UPDATE", ticket, false);
+          next(ticket);
         }
       });
     },
@@ -219,22 +236,26 @@ export default {
     },
     ...mapActions([
       "setApp",
-      "setOperator",
       "setOrder",
       "resetAll",
-      "delayPrint"
+      "delayPrint",
+      "setOperator"
     ])
   },
   computed: {
     ...mapGetters([
       "op",
       "app",
+      "tax",
+      "store",
       "order",
       "table",
+      "ticket",
       "station",
-      "dineInOpt",
       "customer",
-      "language"
+      "language",
+      "dineInOpt",
+      "archivedOrder"
     ])
   }
 };
