@@ -5,11 +5,11 @@
                 <h3 class="title">{{$t('setting.rewardProgram')}}</h3>
             </header>
             <toggle title="text.enable" v-model="reward.enable"></toggle>
-            <toggle title="setting.reward.beforeTax" v-model="reward.beforeTax" ></toggle>
-            <toggle title="setting.reward.redeemable" v-model="reward.redeemable"></toggle>
-            <text-list title="setting.reward.unit" tooltip="tip.reward.unit" :opts="units" v-model="reward.unit"></text-list>
+            <toggle title="reward.beforeTax" v-model="reward.beforeTax" ></toggle>
+            <toggle title="reward.redeemable" v-model="reward.redeemable"></toggle>
+            <text-list title="reward.unit" tooltip="tip.reward.unit" :opts="units" v-model="reward.unit"></text-list>
             <div class="ratio">
-              <label>{{$t('setting.reward.ratio')}}</label>
+              <label>{{$t('reward.ratio')}}</label>
               <div class="wrap">
                 <input type="text" placeholder="1000 Points" v-model="point">
                 <i class="fas fa-exchange-alt light"></i>
@@ -32,12 +32,12 @@ export default {
       reward: {},
       units: [
         {
-          label: "setting.reward.eachPenny",
+          label: "reward.eachPenny",
           tooltip: "tip.reward.pennyEachPoint",
           value: "PENNY"
         },
         {
-          label: "setting.reward.eachDollar",
+          label: "reward.eachDollar",
           tooltip: "tip.reward.dollarEachPoint",
           value: "DOLLAR"
         }

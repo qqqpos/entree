@@ -77,6 +77,7 @@ export default {
     Bonus: "奖励",
     Activation: "激活",
     Deactivation: "注销",
+    REWARD: "积分兑换",
     Order: "订单",
     rebate: "回扣券",
     giveaway: "礼品券",
@@ -731,7 +732,10 @@ export default {
     itemImported: "成功从CSV文件中导入 {i} 个物品",
     cashPaymentNotAllow: "您无权进行现金支付",
     printHibachi: "打印铁板订单",
-    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?"
+    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?",
+    redeemReward: "确认兑换积分",
+    redeemRewardToTicket: "您确定将积分兑换成 $ {i} 来支付订单吗?",
+    redeemRewardToGiftcard: "您确定要兑换 $ {i} 等价积分到礼物卡上吗?"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -923,7 +927,8 @@ export default {
       reload: "礼物卡充值",
       redeem: "礼物卡消费",
       purchase: "购买礼物卡",
-      bonus: "充值奖励"
+      bonus: "充值奖励",
+      reward: "积分奖励"
     }
   },
   thead: {
@@ -1106,7 +1111,7 @@ export default {
     spicy: "辣",
     priority: "优先值",
     inventory: "库存量",
-    rewardPoint: "积分数",
+    rewardPoint: "奖励积分",
     manualSideOption: "手动选择配菜",
     sideItem: "附菜",
     priceExtra: "加价",
@@ -1614,16 +1619,6 @@ export default {
       bonus: "充值奖励",
       format: "卡号格式",
       length: "{i}位数卡号"
-    },
-    reward: {
-      point: "积分点数",
-      value: "积分价值",
-      unit: "积分转换",
-      beforeTax: "税前积分",
-      eachPenny: "每分",
-      eachDollar: "每元",
-      ratio: "兑换比例",
-      redeemable: "允许兑换积分"
     }
   },
   booking: {
@@ -1909,6 +1904,17 @@ export default {
     platform: "构架",
     engine: "引擎",
     servo: "伺服器"
+  },
+  reward: {
+    point: "积分点数",
+    value: "积分价值",
+    unit: "积分转换",
+    beforeTax: "税前积分",
+    eachPenny: "每分",
+    eachDollar: "每元",
+    ratio: "兑换比例",
+    redeemable: "允许兑换积分",
+    redeemPoint: "兑换积分点数"
   },
   online: {
     about: "介绍",

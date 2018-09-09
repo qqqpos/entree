@@ -43,7 +43,7 @@
           <div>
             <div class="wrap">
               <inputer title="card.number" v-model="cardNumber" :disabled="true"></inputer>
-              <inputer title="card.phone" v-model="giftcard.phone"></inputer>
+              <inputer title="card.phone" v-model="phoneNumber"></inputer>
               <inputer title="card.holder" v-model="giftcard.holder"></inputer>
               <inputer title="card.expirationDate" v-model="giftcard.expiration"></inputer>
               <inputer title="card.balance" v-model="giftcard.balance" :disabled="true"></inputer>

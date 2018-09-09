@@ -43,6 +43,7 @@
         "tbody",
         "tfoot",
         "thead",
+        "trunc",
         "typeof",
         "uncheck",
         "unprint",

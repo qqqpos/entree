@@ -85,6 +85,7 @@ export default {
     Bonus: "Bonus",
     Activation: "Activation",
     Deactivation: "Deactivation",
+    REWARD: "Reward Redeem",
     Order: "Ticket",
     rebate: "Rebate",
     giveaway: "Giveaway",
@@ -807,7 +808,10 @@ export default {
     itemImported: "Successfully imported {i} items from CSV file.",
     cashPaymentNotAllow: "You are not allow to pay with cash.",
     printHibachi: "Print Hibachi Tickets",
-    printHibachiConfirm: "Are you sure to print all ticket on hibachi table {i}?"
+    printHibachiConfirm: "Are you sure to print all ticket on hibachi table {i}?",
+    redeemReward: "Redeem Reward Point Confirm",
+    redeemRewardToTicket: "Are you sure to redeem $ {i} to pay ticket from reward point?",
+    redeemRewardToGiftcard: "Are you sure to redeem $ {i} to gift card from reward point?"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1001,7 +1005,8 @@ export default {
       reload: "Gift Card Reload",
       redeem: "Gift Card Redeem",
       purchase: "Purchase Gift Card",
-      bonus: "Reload Bonus"
+      bonus: "Reload Bonus",
+      reward: "Reward Bonus"
     }
   },
   text: {
@@ -1622,16 +1627,6 @@ export default {
       bonus: "Reload Bonus",
       format: "Card Format",
       length: "{i} digits length"
-    },
-    reward: {
-      point: "Total Point",
-      value: "Value of Point",
-      unit: "Point Unit",
-      beforeTax: "Point Calculate Before Tax",
-      eachPenny: "Penny",
-      eachDollar: "Dollar",
-      ratio: "Conversion Ratio",
-      redeemable: "Reward Point Redeemable"
     }
   },
   booking: {
@@ -1923,6 +1918,17 @@ export default {
     platform: "Platform",
     engine: "Engine",
     servo: "Servo"
+  },
+  reward: {
+    point: "Total Point",
+    value: "Value of Point",
+    unit: "Point Unit",
+    beforeTax: "Point Calculate Before Tax",
+    eachPenny: "Penny",
+    eachDollar: "Dollar",
+    ratio: "Conversion Ratio",
+    redeemable: "Reward Point Redeemable",
+    redeemPoint: "Redeem Reward Point"
   },
   online: {
     about: "About",

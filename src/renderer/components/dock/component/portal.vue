@@ -8,21 +8,21 @@
              @copy="copy(invoice)"
              @reimburse="reimburse(invoice)"></story>
           </ul>
-          <div class="card">
+          <div class="card" v-if="reward.enable && init.profile">
             <h5>{{$t('text.rewardPoint')}}<i class="fas fa-ellipsis-h light more"></i></h5>
             <div class="wrap">
               <div class="column f1">
                 <span class="value">{{reward.point}}</span>
-                <span class="text">{{$t('setting.reward.point')}}</span>
+                <span class="text">{{$t('reward.point')}}</span>
               </div>
               <div class="row f2">
                 <div class="column">
                   <span class="value">$ {{reward.value | decimal}}</span>
-                  <span class="text">{{$t('setting.reward.value')}}</span>
+                  <span class="text">{{$t('reward.value')}}</span>
                 </div>
-                <div class="column mini-btn redeem" v-show="reward.value > 0">
-                  <i class="fas fa-exchange-alt" @click="redeemDialog"></i>
-                </div>
+                <button class="column mini-btn redeem" :disabled="(reward.value <= 0 || !reward.redeemable)" @click="redeemDialog()">
+                  <i class="fas fa-exchange-alt"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@
               </div>
             </div>
           </template>
-          <template v-else-if="!init.profile">
+          <template v-else-if="init.profile">
             <div class="card" @click="$open('giftcardModule')">
               <h5 class="text-center">{{$t('card.customerNoGiftcard')}}</h5>
               <h3 class="text-center">{{$t('card.activation')}}</h3>
@@ -59,23 +59,28 @@
 import { mapActions } from "vuex";
 
 import story from "./helper/story";
+import redeem from "./helper/redeem";
 import ticket from "../../common/ticket";
 import dialogModule from "../../common/dialog";
 import giftcardModule from "../../giftcard/index";
 
 export default {
-  components: { story, ticket, dialogModule, giftcardModule },
+  components: { story, ticket, redeem, dialogModule, giftcardModule },
   props: ["init"],
   data() {
     return {
       customer: this.$store.getters.customer,
-      invoices: [],
       componentData: null,
       component: null,
       moduleData: null,
       module: null,
+      invoices: [],
       cards: [],
       reward: {
+        enable: false,
+        redeemable: false,
+        perPoint: 1,
+        asValue: 0,
         point: 0,
         value: 0
       },
@@ -85,22 +90,7 @@ export default {
   created() {
     this.cards = this.init.cards;
     this.invoices = this.init.invoices;
-
-    const {
-      reward = {
-        perPoint: 1,
-        asValue: 0
-      }
-    } = this.$store.getters.store;
-
-    const rewardPoint = this.init.rewardPoint;
-    const each =
-      isNumber(reward.perPoint) && reward.perPoint > 0 ? reward.perPoint : 1;
-
-    Object.assign(this.reward, {
-      point: rewardPoint,
-      value: toFixed(rewardPoint / each * reward.asValue, 2)
-    });
+    this.calculateRewardValue(this.init.rewardPoint);
   },
   methods: {
     toggle(index) {
@@ -176,7 +166,130 @@ export default {
       );
     },
     reimburse(invoice) {},
-    redeemDialog() {},
+    calculateRewardValue(point) {
+      const {
+        reward = {
+          enable: false,
+          perPoint: 1,
+          asValue: 0,
+          redeemable: false
+        }
+      } = this.$store.getters.store;
+
+      const rewardPoint = point;
+      const each =
+        isNumber(reward.perPoint) && reward.perPoint > 0 ? reward.perPoint : 1;
+
+      Object.assign(this.reward, {
+        enable: reward.enable,
+        redeemable: reward.redeemable,
+        perPoint: reward.perPoint,
+        asValue: reward.asValue,
+        point: rewardPoint,
+        value: Math.trunc(rewardPoint / each * reward.asValue * 100) / 100
+      });
+    },
+    reloadData() {
+      const { _id, phone } = this.customer;
+
+      this.$socket.emit(
+        "[CUSTOMER] PORTAL",
+        { _id, phone },
+        ({ invoices, rewardPoint, cards }) => {
+          this.cards = cards;
+          this.invoices = invoices;
+          this.calculateRewardValue(rewardPoint);
+        }
+      );
+    },
+    redeemDialog(redeem) {
+      new Promise((resolve, reject) => {
+        const cards = this.cards;
+        const { value } = this.reward;
+        redeem = redeem || value;
+
+        this.componentData = { resolve, reject, value, redeem, cards };
+        this.component = "redeem";
+      })
+        .then(({ type, redeem, card }) => {
+          switch (type) {
+            case "REDUCE":
+              this.$dialog({
+                type: "question",
+                title: "dialog.redeemReward",
+                msg: ["dialog.redeemRewardToTicket", redeem.toFixed(2)],
+                buttons: [
+                  { text: "button.cancel", fn: "reject" },
+                  { text: "button.modify", fn: "retry" },
+                  { text: "button.confirm", fn: "resolve" }
+                ]
+              })
+                .then(() => this.redeemValueToTicket(redeem))
+                .catch(retry => {
+                  retry ? this.redeemDialog(redeem) : this.exitComponent();
+                });
+              break;
+            case "TRANSFER":
+              this.$dialog({
+                type: "question",
+                title: "dialog.redeemReward",
+                msg: ["dialog.redeemRewardToGiftcard", redeem.toFixed(2)],
+                buttons: [
+                  { text: "button.cancel", fn: "reject" },
+                  { text: "button.modify", fn: "retry" },
+                  { text: "button.confirm", fn: "resolve" }
+                ]
+              })
+                .then(() => this.redeemValueToCard(card, redeem))
+                .catch(retry => {
+                  retry ? this.redeemDialog(redeem) : this.exitComponent();
+                });
+              break;
+            default:
+          }
+        })
+        .catch(this.exitComponent);
+    },
+    redeemValueToTicket(value) {
+      this.exitComponent();
+    },
+    redeemValueToCard(card, amount) {
+      this.exitComponent();
+
+      const { asValue, perPoint } = this.reward;
+      const redeemRatio = `${perPoint}:${asValue}`;
+      const redeemPoint = Math.trunc(amount / asValue * perPoint);
+      const giftcard = this.cards.find(giftcard => giftcard.number === card);
+
+      this.reward.point = this.reward.point - redeemPoint;
+      this.calculateRewardValue(this.reward.point);
+
+      giftcard.balance = toFixed(
+        parseFloat(giftcard.balance) + parseFloat(amount),
+        2
+      );
+
+      const record = {
+        type: "REDEEM",
+        point: -redeemPoint,
+        ratio: redeemRatio,
+        settled: true,
+        status: 1,
+        customer: this.customer._id
+      };
+
+      const reload = {
+        type: "REWARD",
+        cashier: this.$store.getters.op.name,
+        number: giftcard.number,
+        change: parseFloat(amount),
+        balance: giftcard.balance
+      };
+
+      this.$socket.emit("[REWARD] REDEEM_TO_GIFTCARD", record, reload, () =>
+        this.reloadData()
+      );
+    },
     exitModule() {
       this.module = null;
       this.moduleData = null;
