@@ -1812,7 +1812,9 @@ export default {
     },
     reward: {
       pennyEachPoint: "Each penny earn 1 point",
-      dollarEachPoint: "Each dollar earn 1 point"
+      dollarEachPoint: "Each dollar earn 1 point",
+      customEachPoint: "Customize earn point",
+      percentageEachPoint: "Earn point on percentage of purchase"
     },
     tax: "Store tax setting",
     taxApply: "Setup default apply tax",
@@ -1926,6 +1928,8 @@ export default {
     beforeTax: "Point Calculate Before Tax",
     eachPenny: "Penny",
     eachDollar: "Dollar",
+    custom: "Customize",
+    percentage: "Percentage",
     ratio: "Conversion Ratio",
     redeemable: "Reward Point Redeemable",
     redeemPoint: "Redeem Reward Point",

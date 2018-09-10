@@ -360,20 +360,30 @@ export default {
       if (order.hasOwnProperty('reward')) {
         // calculate current earn reward point
         const { reward } = this.store;
-        let earn = 0;
+        let point = 0;
 
         switch (reward.unit) {
           case "PENNY":
-            earn = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
+            point = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
             break;
           case "DOLLAR":
-            earn = reward.beforeTax ? parseInt(subtotal) : parseInt(balance);
+            point = reward.beforeTax ? parseInt(subtotal) : parseInt(balance);
+            break;
+          case "CUSTOM":
+            point = reward.beforeTax
+              ? Math.trunc(subtotal / reward.custom * reward.toPoint)
+              : Math.trunc(balance / reward.custom * reward.toPoint);
+            break;
+          case "PERCENTAGE":
+            point = reward.beforeTax
+              ? Math.trunc(subtotal * reward.percentage / 100 * reward.toPoint)
+              : Math.trunc(balance * reward.percentage / 100 * reward.toPoint);
             break;
           default:
-            earn = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
+            point = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
         }
 
-        order.reward.earn = earn;
+        order.reward.earn = parseInt(point) || 0;
       }
 
       const payment = {

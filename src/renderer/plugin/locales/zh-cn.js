@@ -1804,7 +1804,9 @@ export default {
     },
     reward: {
       pennyEachPoint: "每消费一分钱换 1点 积分",
-      dollarEachPoint: "每消费一块钱换 1点 积分"
+      dollarEachPoint: "每消费一块钱换 1点 积分",
+      customEachPoint: "定义消费返还积分",
+      percentageEachPoint: "按消费百分比返还积分"
     },
     tax: "编辑税率",
     taxApply: "是否默认征税",
@@ -1912,6 +1914,8 @@ export default {
     beforeTax: "税前积分",
     eachPenny: "每分",
     eachDollar: "每元",
+    custom: "自定义",
+    percentage: "百分比",
     ratio: "兑换比例",
     redeemable: "允许兑换积分",
     redeemPoint: "兑换积分点数",

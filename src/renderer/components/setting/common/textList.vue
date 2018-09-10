@@ -124,7 +124,7 @@ i {
 
 ul {
   position: absolute;
-  z-index: 2;
+  z-index: 5;
   left: 1px;
   background: #fff;
   width: calc(100% - 4px);

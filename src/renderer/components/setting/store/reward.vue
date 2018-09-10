@@ -8,6 +8,22 @@
             <toggle title="reward.beforeTax" v-model="reward.beforeTax" ></toggle>
             <toggle title="reward.redeemable" v-model="reward.redeemable"></toggle>
             <text-list title="reward.unit" tooltip="tip.reward.unit" :opts="units" v-model="reward.unit"></text-list>
+            <div class="setting" v-if="reward.unit === 'CUSTOM'">
+              <label>{{$t('reward.custom')}}</label>
+              <div class="wrap">
+                <input type="text" placeholder="$ 1.00" v-model="custom">
+                <i class="fas fa-long-arrow-alt-right light"></i>
+                <input type="text" placeholder="10 Point" v-model="toPoint">
+              </div>
+            </div>
+            <div class="setting" v-else-if="reward.unit === 'PERCENTAGE'">
+              <label>{{$t('reward.percentage')}}</label>
+              <div class="wrap">
+                <input type="text" placeholder="10 %" v-model="percentage">
+                <i class="fas fa-times light"></i>
+                <input type="text" placeholder="10 Point" v-model="toPoint">
+              </div>
+            </div>
             <div class="setting">
               <label>{{$t('reward.ratio')}}</label>
               <div class="wrap">
@@ -18,10 +34,19 @@
             </div>
             <div class="setting column">
               <label>{{$t('reward.message')}}</label>
-              <textarea v-model="reward.message" cols="65" wrap="hard" placeholder="Use {value} to display reward value
-Use {point} to display reward point
-<i> to display italy style
-<b> to display bold style"></textarea>
+              <div class="rich-text">
+                <div class="row">
+                  <i class="fas fa-bold" title="bold" @mousedown.prevent="input('<b>','</b>')"></i>
+                  <i class="fas fa-italic" title="italic" @mousedown.prevent="input('<i>','</i>')"></i>
+                  <i class="fab fa-markdown" title="mark" @mousedown.prevent="input('<mark>','</mark>')"></i>
+                  <i class="fas fa-star" @mousedown.prevent="input('⋆')"></i>
+                  <i class="fas fa-heart" @mousedown.prevent="input('♥')"></i>
+                  <span @mousedown.prevent="input('{value}')">{value}</span>
+                  <span @mousedown.prevent="input('{point}')">{point}</span>
+                  <span @mousedown.prevent="input('{earn}')">{earn}</span>
+                </div>
+                <textarea v-model="reward.message" ref="input"></textarea>
+              </div>
             </div>
         </div>
     </div>
@@ -47,6 +72,16 @@ export default {
           label: "reward.eachDollar",
           tooltip: "tip.reward.dollarEachPoint",
           value: "DOLLAR"
+        },
+        {
+          label: "reward.custom",
+          tooltip: "tip.reward.customEachPoint",
+          value: "CUSTOM"
+        },
+        {
+          label: "reward.percentage",
+          tooltip: "tip.reward.percentageEachPoint",
+          value: "PERCENTAGE"
         }
       ]
     };
@@ -57,9 +92,13 @@ export default {
         enable: false,
         beforeTax: false,
         unit: "PENNY",
+        percentage: 10,
+        custom: 0,
+        toPoint: 1,
         perPoint: 1000,
         asValue: 1,
-        message: "Total Point <b>{point}</b>"
+        message:
+          "<i>Congratulations! You have earned {earn} Pts</i>\nYour Total Point {point}\nAny Questions About How to Redeem Reward Point\nPlease Ask Store Manager For Details"
       }
     } = this.$store.getters.config.store;
 
@@ -70,6 +109,30 @@ export default {
       key: "store.reward",
       value: this.reward
     });
+  },
+  methods: {
+    input(char1, char2 = "") {
+      const selection = window.getSelection();
+      if (selection.toString().length && char2) {
+        // if has highlight
+        const text = selection.toString();
+        this.reward.message = this.reward.message.replace(
+          text,
+          char1 + text + char2
+        );
+      } else {
+        let pt = this.$refs.input.selectionStart;
+
+        const start = this.reward.message.substr(0, pt);
+        const end = this.reward.message.substr(pt);
+
+        this.reward.message = start + char1 + char2 + end;
+
+        pt = pt + char1.length;
+
+        this.$nextTick(() => this.$refs.input.setSelectionRange(pt, pt));
+      }
+    }
   },
   computed: {
     point: {
@@ -91,6 +154,36 @@ export default {
       set(value) {
         const v = parseFloat(value.replace(/[^\d\.]/g, "")) || 0;
         this.reward.asValue = v;
+      }
+    },
+    percentage: {
+      get() {
+        const value = Math.abs(parseInt(this.reward.percentage)) || 0;
+        return value + " %";
+      },
+      set(value) {
+        const pct = Math.abs(parseInt(value)) || 0;
+        this.reward.percentage = pct;
+      }
+    },
+    custom: {
+      get() {
+        const value = Math.abs(parseFloat(this.reward.custom)) || 0;
+        return "$ " + value.toFixed(2);
+      },
+      set(value) {
+        const v = parseFloat(value.replace(/[^\d\.]/g, "")) || 0;
+        this.reward.custom = v;
+      }
+    },
+    toPoint: {
+      get() {
+        const value = Math.abs(parseInt(this.reward.toPoint)) || 0;
+        return value + " Pts";
+      },
+      set(value) {
+        const v = parseFloat(value.replace(/[^\d\.]/g, "")) || 0;
+        this.reward.toPoint = v;
       }
     }
   }
@@ -120,17 +213,44 @@ input {
   border-radius: 6px;
 }
 
+.rich-text {
+  margin: 5px 0;
+}
+
+.row {
+  background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
+  border: 1px solid #e0e0e0;
+  border-radius: 3px 3px 0 0;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.row i {
+  padding: 5px;
+  width: 25px;
+  text-align: center;
+}
+
+.row span {
+  margin: 0 5px;
+  padding: 1px 5px;
+  background: #333;
+  color: #fff;
+  border-radius: 5px;
+}
+
 textarea {
-  border: 2px solid #e0e0e0;
+  border: 1px solid #eeeeee;
+  border-top: none;
   font-family: "Yuanti-SC";
   text-align: center;
-  border-radius: 6px;
+  background: #fafafa;
   resize: none;
-  width: 370px;
+  width: 394px;
   outline: none;
-  margin: 7px 10px 8px;
+  border-radius: 0 0 3px 3px;
   padding: 5px 7px;
-  font-size: 16px;
+  font-size: 14px;
   height: 75px;
 }
 </style>

@@ -504,6 +504,7 @@ function createStyle(setting) {
               .slogan{font-weight:lighter;margin-top:10px;border-top:1px solid #000;position:relative;}\
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
               pre{font-family: "Agency FB";font-size: 16px;}\
+              mark{background:#000;color:#fff;padding:0 4px;margin:0 2px;font-style:normal;font-weight:bold;}
               ${zhCN}${usEN}
               del{display:block;position:absolute;width:inherit;height:2px;background:#000;top:50%;transition:translateY(-50%);}\
           </style>`;
