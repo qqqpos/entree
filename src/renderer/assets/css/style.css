@@ -370,6 +370,16 @@ input[type="text"]:disabled {
   opacity: 0.5;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 /* Define window */
 
 .window {

@@ -1914,7 +1914,10 @@ export default {
     eachDollar: "每元",
     ratio: "兑换比例",
     redeemable: "允许兑换积分",
-    redeemPoint: "兑换积分点数"
+    redeemPoint: "兑换积分点数",
+    redeemToTicket: "订单折扣",
+    redeemToCard: "充值礼卡",
+    message: "推广信息"
   },
   online: {
     about: "介绍",

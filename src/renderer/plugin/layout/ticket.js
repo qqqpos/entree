@@ -1,3 +1,5 @@
+import { parseTwoDigitYear } from "moment";
+
 const ticket = function (raw, receipt, target) {
   const printers = this.getPrinters(target);
   console.log("target printers", printers);
@@ -478,7 +480,7 @@ function createStyle(setting) {
               .sub p{position:relative;width:100%;}\
               .qty{min-width:15px;margin-right:5px;}\     
               footer{font-family:'Agency FB';}\
-              section.column{display:flex;}\
+              section.flex{display:flex;}\
               .payment{min-width:150px;${payment ? "display:flex;flex-direction:column;" : "display:none;"}}\
               .payment p{display:flex;font-family:'Tensentype RuiHeiJ-W2';width:200px;}\
               .payment .text{flex:1;text-align:right;}\
@@ -492,7 +494,7 @@ function createStyle(setting) {
               .dashed-wrap .value{text-align:left;flex:6}\
               .suggestion{border:1px dashed #000;padding:5px;display:flex;flex-direction:column;text-align:center;}\
               .suggestion h5{font-size:22px;}\
-              .suggestion i{font-style: italic;font-size:14px;}\
+              .suggestion i,.dashed-wrap i{font-style: italic;font-size:14px;}\
               .suggestion .tips{display:flex;justify-content: center;width:80%;margin:auto;}\
               .tips .pct {width: 50px;text-align: right; padding: 0 20px 0 10px;}\
               .tips .tip {flex: 1;text-align: left;text-indent: 10px;}\
@@ -501,6 +503,7 @@ function createStyle(setting) {
               .printTime{font-weight:bold;font-size:1.1em;}
               .slogan{font-weight:lighter;margin-top:10px;border-top:1px solid #000;position:relative;}\
               .tradeMark {font-weight: bold;display: inline-block;padding: 5px 7px;background: #000;color: #fff;}\
+              pre{font-family: "Agency FB";font-size: 16px;}\
               ${zhCN}${usEN}
               del{display:block;position:absolute;width:inherit;height:2px;background:#000;top:50%;transition:translateY(-50%);}\
           </style>`;
@@ -513,6 +516,7 @@ function createFooter(config, setting, printer, ticket) {
   const { type, payment, logs, coupons, number, table, customer } = ticket;
   const { tipSuggestion, ticketNumber, tableName, jobTime, tradeMark, geo, content } = setting.control.footer;
 
+  let reward = "";
   let suggestions = "";
 
   if ((enable && type === "PRE_PAYMENT") || tipSuggestion) {
@@ -540,6 +544,20 @@ function createFooter(config, setting, printer, ticket) {
                     <i>These tip amounts are provided for your convenience.</i>\
                     ${data}\
                 </section>`;
+  }
+
+  // if ticket has reward params
+  if (ticket.reward) {
+    const message = config.reward.message || "Total Point <b>{point}</b>";
+    const template = message.replace(/{(.*?)}/g, (m, c) => ({
+      "value": `$ ${ticket.reward.value.toFixed(2)}`,
+      "point": ticket.reward.point + ticket.reward.earn,
+      "earn": ticket.reward.earn,
+      "pending": ticket.reward.pending,
+      "date": ticket.date
+    })[c.trim().toLowerCase()]);
+
+    reward = `<section class="dashed-wrap"><h3>Reward Point</h3><pre>${template}</pre></section>`;
   }
 
   const slogan = content
@@ -663,15 +681,11 @@ function createFooter(config, setting, printer, ticket) {
     : "";
 
   return `<footer>\
-            <section class="column">\
-            <div class="empty">${_geo}</div>\
-            <div class="payment">${detail.join("").toString()}</div>\
+            <section class="flex">\
+              <div class="empty">${_geo}</div><div class="payment">${detail.join("").toString()}</div>
             </section>\
-            <div class="ticket-settle">${suggestions + settle.join("").toString()}</div>\
-            <div class="slogan">\
-            ${slogan}
-            ${extraInfo}
-            </div>\
+            <div class="ticket-settle">${reward + suggestions + settle.join("").toString()}</div>\
+            <div class="slogan">${slogan + extraInfo}</div>\
         </footer>`;
 }
 

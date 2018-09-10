@@ -42,16 +42,23 @@
             </div>
           </template>
           <template v-else-if="init.profile">
-            <div class="card" @click="$open('giftcardModule')">
+            <div class="card" @click="activateGiftcard">
               <h5 class="text-center">{{$t('card.customerNoGiftcard')}}</h5>
               <h3 class="text-center">{{$t('card.activation')}}</h3>
+              <p class="ads"><i class="fas fa-info-circle space"></i><span>Buy Gift Card Call 888-888-8888</span></p>
             </div>
+          </template>
+          <template v-else>
+            <div class="card" @click="swipeGiftcard">
+              <h5 class="text-center">{{$t('title.customerProfile')}}</h5>
+              <h3 class="text-center">{{$t('card.swipeGiftCard')}}</h3>
+            </div>            
           </template>
         </div>
         <transition name="fade">
           <div :is="module" :init="moduleData" class="preview"></div>
         </transition>
-        <div :is="component" :init="componentData"></div>
+        <div :is="component" :init="componentData" @reload="reloadData"></div>
     </div>
 </template>
 
@@ -290,6 +297,20 @@ export default {
         this.reloadData()
       );
     },
+    activateGiftcard() {
+      const { phone, name } = this.customer;
+
+      this.$open("giftcardModule", {
+        reload: true,
+        preset: {
+          phone,
+          holder: name
+        }
+      });
+    },
+    swipeGiftcard() {
+      this.$open("giftcardModule", { reload: true });
+    },
     exitModule() {
       this.module = null;
       this.moduleData = null;
@@ -325,25 +346,20 @@ export default {
 }
 
 .card h5 {
-  margin-bottom: 5px;
   color: #3c3c3c;
+}
+
+.card h3 {
+  margin: 2px 0;
 }
 
 .card .wrap {
   display: flex;
+  margin-top: 2px;
 }
 
 .card .wrap > div {
   padding: 0 7px;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-}
-
-.row {
-  display: flex;
 }
 
 .card .value {
@@ -369,6 +385,15 @@ export default {
   position: absolute;
   right: 15px;
   bottom: 18px;
+}
+
+.ads {
+  font-size: 12px;
+  text-align: center;
+  color: #ff9800;
+}
+.ads i {
+  color: #ff9800;
 }
 </style>
 

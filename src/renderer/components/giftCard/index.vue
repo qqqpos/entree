@@ -1,5 +1,5 @@
 <template>
-  <div class="popupMask dark center" @click.self="init.reject(false)">
+  <div class="popupMask dark center" @click.self="exit">
     <div class="editor" v-show="!component">
       <header class="tab">
         <div>
@@ -155,7 +155,7 @@ export default {
     };
   },
   mounted() {
-    this.swipeCard(this.init.vip)
+    this.swipeCard()
       .then(this.initialData)
       .catch(this.initialFailed);
   },
@@ -196,9 +196,9 @@ export default {
     ...mapGetters(["op", "station"])
   },
   methods: {
-    swipeCard(vip) {
+    swipeCard() {
       return new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, vip };
+        this.componentData = { resolve, reject };
         this.component = "capture";
       });
     },
@@ -240,24 +240,26 @@ export default {
         title: "dialog.cardActivation",
         msg: ["dialog.cardActivationConfirm", number]
       };
-      const cashier = this.op.name;
 
       this.$dialog(prompt)
         .then(() => {
-          this.giftcard = {
+          let giftcard = {
             number: card,
             date: today(),
             time: Date.now(),
             phone: "",
-            name: "",
-            cashier,
+            holder: "",
+            cashier: this.op.name,
             balance: 0,
             activation: Date.now(),
             transaction: 0,
-            vip: false,
             expiration: null
           };
+
+          this.init.preset && Object.assign(giftcard, this.init.preset);
+          this.giftcard = giftcard;
           this.activation = true;
+
           this.exitComponent();
         })
         .catch(this.init.reject);
@@ -566,7 +568,12 @@ export default {
         .catch(this.exitComponent);
     },
     applyCard() {
+      this.init.reload && this.$emit("reload");
       this.init.resolve(this.giftcard);
+    },
+    exit() {
+      this.init.reload && this.$emit("reload");
+      this.init.reject(false);
     }
   }
 };

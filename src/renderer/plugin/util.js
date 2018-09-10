@@ -1,3 +1,5 @@
+import { configureRequestOptions } from "builder-util-runtime";
+
 export default {
   install(Vue, options) {
     Vue.mixin({
@@ -336,7 +338,7 @@ export default {
 
         discount = toFixed(discount + offer, 2);
 
-        //discount will never greater than subtotal
+        // discount will never greater than subtotal
         if (this.tax.beforeDiscount) {
           discount = discount > subtotal ? subtotal : discount;
         } else {
@@ -351,6 +353,28 @@ export default {
       const rounding = this.$rounding(grandTotal);
       const balance = due + gratuity + rounding;
       const remain = balance - paid;
+
+      // Reward Program 
+      // when POS enables reward program
+      // The order will have reward params
+      if (order.hasOwnProperty('reward')) {
+        // calculate current earn reward point
+        const { reward } = this.store;
+        let earn = 0;
+
+        switch (reward.unit) {
+          case "PENNY":
+            earn = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
+            break;
+          case "DOLLAR":
+            earn = reward.beforeTax ? parseInt(subtotal) : parseInt(balance);
+            break;
+          default:
+            earn = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
+        }
+
+        order.reward.earn = earn;
+      }
 
       const payment = {
         subtotal: toFixed(subtotal, 2),
@@ -404,6 +428,22 @@ export default {
 
       return rounding
     };
+
+    Vue.prototype.$calculateRewardPoint = function (value, reverse) {
+      const { reward = {
+        perPoint: 1,
+        asValue: 0
+      } } = this.store || this.$store.getters.store;
+
+      if (!reward) return 0;
+
+      const each =
+        isNumber(reward.perPoint) && reward.perPoint > 0 ? reward.perPoint : 1;
+
+      return reverse
+        ? Math.trunc(value / reward.asValue * reward.perPoint)
+        : Math.trunc(value / each * reward.asValue * 100) / 100;
+    }
 
     Vue.prototype.$splitEvenly = function (target) {
 

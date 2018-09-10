@@ -115,6 +115,26 @@ export default {
       number => this.app.newTicket && this.setTicket({ number })
     );
 
+    this.customer._id &&
+      this.$socket.emit("[REWARD] GET_POINT", this.customer._id, reward => {
+        if (this.config.store.reward.enable) {
+          if (reward) {
+            Object.assign(reward, {
+              value: this.$calculateRewardPoint(reward.point)
+            });
+            this.setOrder({ reward });
+          } else {
+            this.setOrder({
+              reward: {
+                point: 0,
+                pending: 0,
+                value: 0
+              }
+            });
+          }
+        }
+      });
+
     this.resetPointer();
     window.addEventListener("keydown", this.entry, false);
     this.$electron.ipcRenderer.send("External::stage", "order");

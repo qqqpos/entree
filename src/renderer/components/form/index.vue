@@ -119,11 +119,11 @@ export default {
         value.substr(0, this.caret) + char + value.substr(this.caret);
       this.caret++;
 
-      this.$nextTick(() => {
+      this.$nextTick(() =>
         document
           .querySelector(".wrap.active input")
-          .setSelectionRange(this.caret, this.caret);
-      });
+          .setSelectionRange(this.caret, this.caret)
+      );
     },
     reset() {
       switch (this.entry) {
@@ -151,11 +151,11 @@ export default {
         value.substr(0, this.caret - 1) + value.substr(this.caret);
       this.caret = this.caret !== 0 ? this.caret - 1 : 0;
 
-      this.$nextTick(() => {
+      this.$nextTick(() => 
         document
           .querySelector(".wrap.active input")
-          .setSelectionRange(this.caret, this.caret);
-      });
+          .setSelectionRange(this.caret, this.caret)
+      );
     },
     cancel() {
       this.resetAll();

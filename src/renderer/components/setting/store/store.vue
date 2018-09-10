@@ -9,7 +9,9 @@
                 <span>{{$t('button.register')}}</span>
             </div>
         </text-input>
-        <text-input title="text.address" v-model="store.address" @update="updateAddress"></text-input>
+        <text-input title="text.address" v-model="store.address" @update="updateAddress">
+          
+        </text-input>
         <text-input title="text.city" v-model="store.city" @update="updateCity"></text-input>
         <text-input title="text.state" v-model="store.state" @update="updateState"></text-input>
         <text-input title="text.zipCode" v-model="store.zipCode" @update="updateZipCode"></text-input>

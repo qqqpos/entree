@@ -3,10 +3,10 @@
         <div class="redeem">
             <h5 class="light">{{$t('reward.redeemPoint')}}</h5>
             <h1 class="agency">$ {{redeem | decimal}}</h1>
-            <slider v-model="redeem" :dotSize="22" tooltip="hover" :min="1" :max="init.value" :piecewise="true" :interval="interval"></slider>
+            <slider v-model="redeem" :dotSize="22" tooltip="hover" :min="0" :max="init.value" :piecewise="true" :interval="interval"></slider>
             <ul>
-                <li class="mini-btn" @click="select('REDUCE')">Reduce Ticket Price</li>
-                <li v-for="(card,index) in init.cards" :key="index" class="mini-btn" @click="select('TRANSFER',card.number)">Redeem Value to <i class="far fa-credit-card space"></i><span class="agency">{{card.number | card}}</span></li>
+                <li class="mini-btn" @click="select('REDUCE')">{{$t('reward.redeemToTicket')}}</li>
+                <li v-for="(card,index) in init.cards" :key="index" class="mini-btn" @click="select('TRANSFER',card.number)">{{$t('reward.redeemToCard')}} <i class="far fa-credit-card space"></i><span class="agency">{{card.number | card}}</span></li>
                 <li class="mini-btn" @click="init.reject"><i class="far fa-times-circle space"></i>{{$t('button.cancel')}}</li>
             </ul>
         </div>
@@ -27,11 +27,13 @@ export default {
   },
   methods: {
     select(type, card) {
-      this.init.resolve({
-        redeem: this.redeem,
-        type,
-        card
-      });
+      this.redeem > 0
+        ? this.init.resolve({
+            redeem: this.redeem,
+            type,
+            card
+          })
+        : this.init.reject();
     }
   }
 };
@@ -57,5 +59,6 @@ li {
   padding: 14px 20px;
   margin-top: 5px;
   cursor: pointer;
+  min-width: 175px;
 }
 </style>

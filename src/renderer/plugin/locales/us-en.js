@@ -874,7 +874,7 @@ export default {
     debitCard: "Debit Card",
     periodYears: "In {i} years",
     lifetime: "Lifetime",
-    number: "Card Number",
+    number: "Card",
     holder: "Holder",
     phone: "Phone",
     info: "Info",
@@ -1928,7 +1928,10 @@ export default {
     eachDollar: "Dollar",
     ratio: "Conversion Ratio",
     redeemable: "Reward Point Redeemable",
-    redeemPoint: "Redeem Reward Point"
+    redeemPoint: "Redeem Reward Point",
+    redeemToTicket: "Redeem As Ticket Coupon",
+    redeemToCard: "Redeem Value To",
+    message: "Marketing Message"
   },
   online: {
     about: "About",
