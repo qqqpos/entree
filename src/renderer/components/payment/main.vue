@@ -932,12 +932,12 @@ export default {
         if (this.currentTender > 0) {
           switch (this.store.receipt) {
             case "always":
-              this.printReceipt(next);
+              this.printTicket("All", next);
               break;
             case "never":
               this.$dialog(tenderWithoutDialog).then(() => {
+                this.printTicket("Order", next);
                 this.exitComponent();
-                next();
               });
               break;
             default:
@@ -989,11 +989,11 @@ export default {
           });
 
         switch (this.store.receipt) {
-          case "never":
-            next();
-            break;
           case "always":
-            this.printReceipt(next);
+            this.printTicket("All", next);
+            break;
+          case "never":
+            this.printTicket("Order", next);
             break;
           default:
             this.$dialog(prompt)
@@ -1089,9 +1089,7 @@ export default {
     openDiscountComponent() {
       this.$checkPermission("modify", "discount")
         .then(this.setDiscount)
-        .catch(() => {
-          //set discount failed log
-        });
+        .catch(() => {});
     },
     setTip() {
       new Promise((resolve, reject) => {
@@ -1398,7 +1396,6 @@ export default {
             const { done } = this.station.autoLock;
             if (done) {
               //auto lock screen after paid
-              this.setOperator(null);
               this.resetAll();
               this.$router.push({ path: "/main/lock" });
             } else {

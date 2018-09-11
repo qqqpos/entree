@@ -39,6 +39,6 @@ export default {
 @import url(./assets/css/style.css);
 @import url(./assets/css/setting.css);
 @import url(./assets/css/animation.css);
-@import url(./assets/fontAwesome/css/all.css);
+@import url(./assets/fontAwesome/css/all.min.css);
 @import url(./assets/css/wide.css);
 </style>

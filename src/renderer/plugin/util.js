@@ -198,7 +198,7 @@ export default {
             delivery += parseFloat(rule.fee);
         }
 
-        delivery = isNumber(order.deliveryFee) ? parseFloat(order.deliveryFee) : delivery;
+        delivery = parseFloat(order.deliveryFee) || toFixed(delivery, 2) || 0;
 
         return delivery;
       }
@@ -229,7 +229,7 @@ export default {
 
       // double check paid params
       // if it is illegal value then reset to 0
-      paid = isNumber(paid) ? parseFloat(paid) : 0;
+      paid = isNumber(paid) ? toFixed(paid, 2) : 0;
 
       order.content.forEach(item => {
         if (item.void) return;
@@ -265,6 +265,9 @@ export default {
 
         tax += delivery * defaultTaxRate / 100;
       }
+
+      // tax rounding
+      tax = toFixed(tax, 2);
 
       let plasticTax = 0;
       if (this.tax.plasticPenalty) {
@@ -346,13 +349,13 @@ export default {
         }
       }
 
-      const total = subtotal + plasticTax + toFixed(tax, 2);
-      const totalCharge = total + delivery;
+      const total = Math.round((subtotal + plasticTax + tax) * 100) / 100;
+      const totalCharge = toFixed(total + delivery, 2);
       const due = toFixed(Math.max(0, totalCharge - discount), 2);
       const grandTotal = toFixed((due + gratuity) * 100, 2);
       const rounding = this.$rounding(grandTotal);
-      const balance = due + gratuity + rounding;
-      const remain = balance - paid;
+      const balance = toFixed(due + gratuity + rounding, 2);
+      const remain = toFixed(balance - paid, 2);
 
       // Reward Program 
       // when POS enables reward program
@@ -364,42 +367,41 @@ export default {
 
         switch (reward.unit) {
           case "PENNY":
-            point = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
+            point = reward.beforeTax ? toFixed(subtotal * 100, 0) : toFixed(balance * 100, 0);
             break;
           case "DOLLAR":
             point = reward.beforeTax ? parseInt(subtotal) : parseInt(balance);
             break;
           case "CUSTOM":
             point = reward.beforeTax
-              ? Math.trunc(subtotal / reward.custom * reward.toPoint)
-              : Math.trunc(balance / reward.custom * reward.toPoint);
+              ? toFixed(subtotal / reward.custom * reward.toPoint, 0)
+              : toFixed(balance / reward.custom * reward.toPoint, 0);
             break;
           case "PERCENTAGE":
             point = reward.beforeTax
-              ? Math.trunc(subtotal * reward.percentage / 100 * reward.toPoint)
-              : Math.trunc(balance * reward.percentage / 100 * reward.toPoint);
+              ? toFixed(subtotal * reward.percentage / 100 * reward.toPoint, 0)
+              : toFixed(balance * reward.percentage / 100 * reward.toPoint, 0);
             break;
           default:
-            point = reward.beforeTax ? parseInt(subtotal * 100) : parseInt(balance * 100);
+            point = reward.beforeTax ? toFixed(subtotal * 100, 0) : toFixed(balance * 100, 0);
         }
-
-        order.reward.earn = parseInt(point) || 0;
+        order.reward.earn = Math.trunc(point) || 0;
       }
 
       const payment = {
         subtotal: toFixed(subtotal, 2),
-        tax: toFixed(tax, 2),
-        plasticTax: toFixed(plasticTax, 2),
         total: toFixed(total, 2),
-        balance: toFixed(balance, 2),
-        paid: toFixed(paid, 2),
-        remain: toFixed(remain, 2),
         tip: toFixed(tip, 2),
-        gratuity: toFixed(gratuity, 2),
-        delivery: toFixed(delivery, 2),
-        rounding: toFixed(rounding, 2),
+        tax,
+        gratuity,
+        plasticTax,
+        delivery,
+        rounding,
         discount,
-        due
+        due,
+        balance,
+        paid,
+        remain,
       }
 
       selfAssign && Object.assign(order, { payment });

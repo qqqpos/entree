@@ -45,7 +45,7 @@
             <div class="card" @click="activateGiftcard">
               <h5 class="text-center">{{$t('card.customerNoGiftcard')}}</h5>
               <h3 class="text-center">{{$t('card.activation')}}</h3>
-              <p class="ads"><i class="fas fa-info-circle space"></i><span>Buy Gift Card Call 888-299-0521</span></p>
+              <p class="ads boxCenter"><i class="fas fa-ad space"></i><span>{{$t('reward.marketing')}}</span></p>
             </div>
           </template>
           <template v-else>
@@ -279,6 +279,7 @@ export default {
       const record = {
         type: "REDEEM",
         point: -redeemPoint,
+        value: this.$calculateRewardValue(redeemPoint),
         ratio: redeemRatio,
         settled: true,
         status: 1,
@@ -398,12 +399,14 @@ export default {
 }
 
 .ads {
-  font-size: 12px;
-  text-align: center;
+  font-size: 14px;
   color: #ff9800;
+  font-weight: lighter;
 }
+
 .ads i {
   color: #ff9800;
+  font-size: 16px;
 }
 </style>
 

@@ -8,7 +8,7 @@
                 <span>:</span>
                 <span>{{pass.second}}</span>
             </h5>
-            <div v-show="!autoFix" class="shutdown" @click="shutdown">{{$t('login.shutdown')}}</div>
+            <div v-show="!autoFix" class="shutdown" @click="shutdown">{{$t('control.shutdown')}}</div>
             <footer>
                 <p v-if="autoFix">{{$t('dialog.attemptReconnect')}}</p>
                 <template v-else>

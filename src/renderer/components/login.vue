@@ -31,19 +31,19 @@
           <ul v-if="toggleMenu">
             <li @click="shutdownAll" v-if="isHost">
               <i class="fas fa-power-off"></i>
-              <span>{{$t('login.shutdownAll')}}</span>
+              <span>{{$t('control.shutdownAll')}}</span>
             </li>
             <li @click.exact="shutdown" @click.ctrl="shutdownAll">
               <i class="fas fa-power-off"></i>
-              <span>{{$t('login.shutdown')}}</span>
+              <span>{{$t('control.shutdown')}}</span>
             </li>
             <li @click.exact="restart" @click.ctrl="restartAll">
               <i class="fa fa-retweet"></i>
-              <span>{{$t('login.restart')}}</span>
+              <span>{{$t('control.restart')}}</span>
             </li>
             <li @click="exit">
               <i class="fas fa-window-close"></i>
-              <span>{{$t('login.exit')}}</span>
+              <span>{{$t('control.exit')}}</span>
             </li>
           </ul>
         </transition>
