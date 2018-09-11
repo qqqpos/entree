@@ -14,13 +14,13 @@
                 </header>
                 <div class="wrap">
                     <div class="title">
-                        <span>{{$t('calendar.mon')}}</span>
-                        <span>{{$t('calendar.tue')}}</span>
-                        <span>{{$t('calendar.wed')}}</span>
-                        <span>{{$t('calendar.thu')}}</span>
-                        <span>{{$t('calendar.fri')}}</span>
-                        <span>{{$t('calendar.sat')}}</span>
-                        <span>{{$t('calendar.sun')}}</span>
+                      <span>{{$t('date.monday')}}</span>
+                      <span>{{$t('date.tuesday')}}</span>
+                      <span>{{$t('date.wednesday')}}</span>
+                      <span>{{$t('date.thursday')}}</span>
+                      <span>{{$t('date.friday')}}</span>
+                      <span>{{$t('date.saturday')}}</span>
+                      <span>{{$t('date.sunday')}}</span>
                     </div>
                     <div class="dates">
                         <div class="week" v-for="(week,index) in calendar" :key="index">
@@ -56,7 +56,7 @@ export default {
       calendar: [],
       dates: [moment().startOf("day"), moment().endOf("day")],
       groups: ["daily", "weekly", "monthly", "quarterly"].map(text => ({
-        label: this.$t("report." + text),
+        label: this.$t("date." + text),
         value: text
       })),
       presets: [
@@ -66,7 +66,7 @@ export default {
         "currentMonth",
         "lastMonth"
       ].map(text => ({
-        label: this.$t("report." + text),
+        label: this.$t("date." + text),
         value: text
       }))
     };

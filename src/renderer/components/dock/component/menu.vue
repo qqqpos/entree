@@ -260,7 +260,7 @@ export default {
     askClockIn() {
       const prompt = {
         type: "question",
-        title: "dialog.clockInConfirm",
+        title: "dialog.confirm.clockIn",
         msg: ["dialog.clockInTime", moment(this.time).format("hh:mm:ss a")]
       };
 
@@ -300,7 +300,11 @@ export default {
         ];
       }
 
-      const prompt = { type: "question", title: "dialog.clockOutConfirm", msg };
+      const prompt = {
+        type: "question",
+        title: "dialog.confirm.clockOut",
+        msg
+      };
 
       this.checkOpenTicket()
         .then(() => {
@@ -317,7 +321,7 @@ export default {
     reportTip() {
       new Promise((resolve, reject) => {
         const config = {
-          title: "title.reportTip",
+          title: "title.reportTips",
           type: "decimal",
           percentage: false,
           allowPercentage: false,
@@ -410,7 +414,7 @@ export default {
     },
     askCashDrawerCashIn() {
       const amount = this.station.cashDrawer.initialAmount;
-      const prompt = { title: "dialog.cashIn", msg: "dialog.cashInTip" };
+      const prompt = { title: "dialog.initialCash", msg: "dialog.cashInTip" };
 
       this.$dialog(prompt)
         .then(this.countInitialCash)
@@ -429,7 +433,10 @@ export default {
         .catch(this.exit);
     },
     askStaffCashIn() {
-      this.$dialog({ title: "dialog.selfCashIn", msg: "dialog.selfCashInTip" })
+      this.$dialog({
+        title: "dialog.initialStaffCash",
+        msg: "dialog.selfCashInTip"
+      })
         .then(this.countSelfCash)
         .catch(this.exitComponent);
     },
@@ -437,7 +444,7 @@ export default {
       const { name } = this.op;
       const prompt = {
         type: "question",
-        title: "dialog.staffCashOut",
+        title: "dialog.confirm.staffCashOut",
         msg: "dialog.staffCashOutTip"
       };
 
@@ -446,11 +453,13 @@ export default {
         .catch(this.exit);
     },
     countSelfCash(amount) {
+      const prompt = {
+        title: "dialog.confirm.staffCashIn",
+        msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
+      };
+
       if (isNumber(amount)) {
-        this.$dialog({
-          title: "dialog.selfCashInConfirm",
-          msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
-        })
+        this.$dialog(prompt)
           .then(() => this.acceptCashIn(amount))
           .catch(this.countSelfCash);
       } else {
@@ -466,7 +475,7 @@ export default {
     countInitialCash(amount) {
       if (isNumber(amount)) {
         const prompt = {
-          title: "dialog.cashInConfirm",
+          title: "dialog.confirm.cashIn",
           msg: ["dialog.cashInConfirmTip", amount.toFixed(2)],
           buttons: [
             { text: "button.modify", fn: "reject" },

@@ -2,11 +2,15 @@
     <div>
         <div class="tab-content">
             <header class="nav">
-                <h3 class="title">{{$t('setting.rewardProgram')}}</h3>
+                <h3 class="title">{{$t('reward.setting')}}</h3>
             </header>
             <toggle title="text.enable" v-model="reward.enable"></toggle>
             <toggle title="reward.beforeTax" v-model="reward.beforeTax" ></toggle>
             <toggle title="reward.redeemable" v-model="reward.redeemable"></toggle>
+            <!-- <div class="setting">
+              <label>{{$t('reward.expire')}}</label>
+              <slider v-model="reward.expire"></slider>
+            </div> -->
             <text-list title="reward.unit" tooltip="tip.reward.unit" :opts="units" v-model="reward.unit"></text-list>
             <div class="setting" v-if="reward.unit === 'CUSTOM'">
               <label>{{$t('reward.custom')}}</label>
@@ -36,14 +40,14 @@
               <label>{{$t('reward.message')}}</label>
               <div class="rich-text">
                 <div class="row">
-                  <i class="fas fa-bold" title="bold" @mousedown.prevent="input('<b>','</b>')"></i>
-                  <i class="fas fa-italic" title="italic" @mousedown.prevent="input('<i>','</i>')"></i>
-                  <i class="fab fa-markdown" title="mark" @mousedown.prevent="input('<mark>','</mark>')"></i>
+                  <i class="fas fa-bold" title="Bold" @mousedown.prevent="input('<b>','</b>')"></i>
+                  <i class="fas fa-italic" title="Italic" @mousedown.prevent="input('<i>','</i>')"></i>
+                  <i class="fab fa-markdown" title="Mark" @mousedown.prevent="input('<mark>','</mark>')"></i>
                   <i class="fas fa-star" @mousedown.prevent="input('⋆')"></i>
                   <i class="fas fa-heart" @mousedown.prevent="input('♥')"></i>
-                  <span @mousedown.prevent="input('{value}')">{value}</span>
-                  <span @mousedown.prevent="input('{point}')">{point}</span>
-                  <span @mousedown.prevent="input('{earn}')">{earn}</span>
+                  <span :title="$t('reward.value')" @mousedown.prevent="input('{value}')">{value}</span>
+                  <span :title="$t('reward.point')" @mousedown.prevent="input('{point}')">{point}</span>
+                  <span :title="$t('reward.earn')" @mousedown.prevent="input('{earn}')">{earn}</span>
                 </div>
                 <textarea v-model="reward.message" ref="input"></textarea>
               </div>
@@ -55,35 +59,37 @@
 <script>
 import editor from "./editor/reward";
 import toggle from "../common/toggle";
+import slider from "../common/slider";
 import textList from "../common/textList";
 
 export default {
-  components: { editor, toggle, textList },
+  components: { editor, toggle, slider, textList },
   data() {
     return {
       reward: {},
       units: [
         {
           label: "reward.eachPenny",
-          tooltip: "tip.reward.pennyEachPoint",
+          tooltip: "reward.tip.pennyEachPoint",
           value: "PENNY"
         },
         {
           label: "reward.eachDollar",
-          tooltip: "tip.reward.dollarEachPoint",
+          tooltip: "reward.tip.dollarEachPoint",
           value: "DOLLAR"
         },
         {
-          label: "reward.custom",
-          tooltip: "tip.reward.customEachPoint",
-          value: "CUSTOM"
+          label: "reward.percentage",
+          tooltip: "reward.tip.percentageEachPoint",
+          value: "PERCENTAGE"
         },
         {
-          label: "reward.percentage",
-          tooltip: "tip.reward.percentageEachPoint",
-          value: "PERCENTAGE"
+          label: "reward.custom",
+          tooltip: "reward.tip.customEachPoint",
+          value: "CUSTOM"
         }
-      ]
+      ],
+      dates: [this.$t("date.lifetime")]
     };
   },
   created() {

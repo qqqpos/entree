@@ -319,7 +319,7 @@ export default {
           "MMM DD ddd hh:mm a"
         );
         const prompt = {
-          title: "dialog.bookingConfirm",
+          title: "dialog.confirm.booking",
           msg: ["dialog.bookingTimeDetail", readable],
           buttons: [
             {

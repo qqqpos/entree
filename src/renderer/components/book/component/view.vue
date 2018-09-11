@@ -77,7 +77,7 @@ export default {
     },
     removeDialog() {
       const prompt = {
-        title: "dialog.removeConfirm",
+        title: "dialog.confirm.remove",
         msg: ["dialog.removeBook",this.book.name || this.$t('nav.customer')],
         buttons: [
           {

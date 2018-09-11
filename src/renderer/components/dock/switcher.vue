@@ -106,8 +106,8 @@ export default {
     togo() {
       const prompt = {
         type: "question",
-        title: "dialog.foodTogo",
-        msg: "dialog.togoConfirm"
+        title: "dialog.createTogo",
+        msg: "dialog.tip.createTogoList"
       };
 
       this.$dialog(prompt)

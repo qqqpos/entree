@@ -16,23 +16,23 @@
           <div class="rangeWrap">
             <div>
               <input type="radio" name="range" v-model="range" value="today" id="today" @click="getRange('today')">
-              <label for="today">{{$t('report.today')}}</label>
+              <label for="today">{{$t('date.today')}}</label>
             </div>
             <div>
               <input type="radio" name="range" v-model="range" value="week" id="week" @click="getRange('week')">
-              <label for="week">{{$t('report.currentWeek')}}</label>
+              <label for="week">{{$t('date.currentWeek')}}</label>
             </div>
             <div>
               <input type="radio" name="range" v-model="range" value="month" id="month" @click="getRange('month')">
-              <label for="month">{{$t('report.currentMonth')}}</label>
+              <label for="month">{{$t('date.currentMonth')}}</label>
             </div>
             <div>
               <input type="radio" name="range" v-model="range" value="last" id="last" @click="getRange('last')">
-              <label for="last">{{$t('report.lastMonth')}}</label>
+              <label for="last">{{$t('date.lastMonth')}}</label>
             </div>
             <div>
               <input type="radio" name="range" v-model="range" value="custom" id="custom" @click="openCalendar">
-              <label for="custom">{{$t('report.custom')}}</label>
+              <label for="custom">{{$t('date.custom')}}</label>
             </div>
           </div>
         </section>

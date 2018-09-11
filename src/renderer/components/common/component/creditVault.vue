@@ -30,7 +30,7 @@
               <header>
                 <div>
                   <h5>{{$t('title.create')}}</h5>
-                  <h3>{{$t('button.newRecord')}}</h3>
+                  <h3></h3>
                 </div>
               </header>
               <div class="inner">
@@ -167,8 +167,8 @@ export default {
     remove(index) {
       const data = {
         type: "question",
-        title: "dialog.removeConfirm",
-        msg: "dialog.removeCreditCardConfirm",
+        title: "dialog.confirm.remove",
+        msg: "dialog.tip.removeCreditCardConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.confirm", fn: "resolve" }

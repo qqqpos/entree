@@ -4,7 +4,7 @@
             <header>
                 <div>
                     <h5></h5>
-                    <h3>{{$t('title.historyLogs')}}</h3>
+                    <h3>{{$t('title.historyLog')}}</h3>
                 </div>
             </header>
             <table class="event">

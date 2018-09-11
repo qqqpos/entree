@@ -3,7 +3,6 @@
         <div class="editor">
             <header>
               <div>
-                <h5></h5>
                 <h3>{{$t('title.registration')}}</h3>
               </div>
             </header>

@@ -81,8 +81,8 @@ export default {
     remove() {
       const prompt = {
         type: "question",
-        title: "dialog.removeConfirm",
-        msg: "dialog.removeCustomerConfirm"
+        title: "dialog.confirm.remove",
+        msg: "dialog.tip.removeCustomerConfirm"
       };
       this.$dialog(prompt)
         .then(() => {

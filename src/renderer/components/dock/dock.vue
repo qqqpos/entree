@@ -195,7 +195,7 @@ export default {
 
       if (lapse >= timeout) {
         const prompt = {
-          title: "dialog.autoLock",
+          title: "dialog.confirm.autoLock",
           msg: ["dialog.timeoutAutoLock", timeout],
           timeout: { fn: "resolve", duration: 10000 },
           buttons: [{ text: "button.extend", fn: "reject" }]

@@ -1,7 +1,7 @@
 <template>
   <div class="source">
     <header>
-      <h3>{{$t('title.thirdPartyOrder')}}</h3>
+      <h3>{{$t('title.thirdPartyTicket')}}</h3>
       <h5>{{$t('tip.thirdPartyProvider')}}</h5>
     </header>
     <ul>

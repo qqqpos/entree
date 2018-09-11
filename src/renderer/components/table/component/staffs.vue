@@ -63,7 +63,7 @@ export default {
     },
     confirm() {
       const prompt = {
-        title: "dialog.switchServer",
+        title: "dialog.confirm.switchServer",
         msg: [
           "dialog.switchServerConfirm",
           this.order.server,

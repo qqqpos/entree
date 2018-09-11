@@ -219,7 +219,7 @@ export default {
     setTip(record) {
       new Promise((resolve, reject) => {
         const config = {
-          title: "title.tip",
+          title: "title.setTips",
           type: "decimal",
           percentage: false,
           allowPercentage: false,

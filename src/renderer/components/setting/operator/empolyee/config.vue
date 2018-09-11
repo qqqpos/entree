@@ -108,7 +108,7 @@ export default {
     remove() {
       const content = {
         type: "question",
-        title: "dialog.deleteOperator",
+        title: "dialog.removeOperator",
         msg: ["dialog.deleteOperatorConfirm", this.operator.name]
       };
 

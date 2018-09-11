@@ -125,7 +125,7 @@ export default {
     confirmDialog() {
       const prompt = {
         type: "question",
-        title: "dialog.courseTime",
+        title: "dialog.confirm.courseTime",
         msg: "dialog.courseTimeConfirm"
       };
 

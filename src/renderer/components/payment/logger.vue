@@ -3,7 +3,7 @@
     <div class="record">
       <header>
         <div>
-          <h3>{{$t('title.payLog')}}</h3>
+          <h3>{{$t('title.paymentLog')}}</h3>
           <h5>{{$t('tip.paidRecords',init.number,init.logs.length)}}</h5>
         </div>
       </header>

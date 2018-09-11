@@ -569,8 +569,8 @@ export default {
     },
     quit() {
       const prompt = {
-        title: "dialog.exitConfirm",
-        msg: "dialog.unsaveOrderWarning"
+        title: "dialog.confirm.exit",
+        msg: "dialog.tip.unsavedOrderWarning"
       };
 
       this.isEmptyTicket
@@ -610,8 +610,8 @@ export default {
     },
     dineInQuit() {
       const prompt = {
-        title: "dialog.exitConfirm",
-        msg: "dialog.unsaveOrderWarning"
+        title: "dialog.confirm.exit",
+        msg: "dialog.tip.unsavedOrderWarning"
       };
 
       this.isEmptyTicket

@@ -190,7 +190,7 @@ export default {
         if (this.transfer) {
           const prompt = {
             type: "question",
-            title: "dialog.tableSwitch",
+            title: "dialog.confirm.tableSwitch",
             msg: ["dialog.tableSwitchConfirm", this.table.name, table.name]
           };
 

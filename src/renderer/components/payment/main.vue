@@ -1096,7 +1096,7 @@ export default {
     setTip() {
       new Promise((resolve, reject) => {
         const config = {
-          title: "title.tip",
+          title: "title.setTips",
           type: this.defaults.percentageTip ? "number" : "decimal",
           percentage: this.defaults.percentageTip,
           allowPercentage: true,
@@ -1121,7 +1121,7 @@ export default {
     setDiscount() {
       new Promise((resolve, reject) => {
         const config = {
-          title: "title.discount",
+          title: "title.setDiscount",
           type: this.defaults.percentageDiscount ? "number" : "decimal",
           percentage: this.defaults.percentageDiscount,
           allowPercentage: true,
@@ -1427,7 +1427,7 @@ export default {
         this.exitPaymentModule();
       } else {
         const prompt = {
-          title: "dialog.exitConfirm",
+          title: "dialog.confirm.exit",
           msg: "dialog.unsavePaymentWarning"
         };
 

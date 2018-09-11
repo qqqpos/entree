@@ -364,7 +364,7 @@ export default {
         }
       } = this.config;
 
-      const title = "title.discount";
+      const title = "title.setDiscount";
       const type = defaults.percentageDiscount ? "number" : "decimal";
       const percentage = defaults.percentageDiscount;
 

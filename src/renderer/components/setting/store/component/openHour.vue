@@ -22,13 +22,13 @@ export default {
   data() {
     return {
       weekdays: [
-        "calendar.sun",
-        "calendar.mon",
-        "calendar.tue",
-        "calendar.wed",
-        "calendar.thu",
-        "calendar.fri",
-        "calendar.sat"
+        "date.sunday",
+        "date.monday",
+        "date.tuesday",
+        "date.wednesday",
+        "date.thursday",
+        "date.friday",
+        "date.saturday"
       ],
       openingHours: []
     };

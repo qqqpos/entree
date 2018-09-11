@@ -14,13 +14,13 @@
             </header>
             <div class="wrap">
                 <div class="title">
-                    <span>{{$t('calendar.mon')}}</span>
-                    <span>{{$t('calendar.tue')}}</span>
-                    <span>{{$t('calendar.wed')}}</span>
-                    <span>{{$t('calendar.thu')}}</span>
-                    <span>{{$t('calendar.fri')}}</span>
-                    <span>{{$t('calendar.sat')}}</span>
-                    <span>{{$t('calendar.sun')}}</span>
+                    <span>{{$t('date.monday')}}</span>
+                    <span>{{$t('date.tuesday')}}</span>
+                    <span>{{$t('date.wednesdays')}}</span>
+                    <span>{{$t('date.thursday')}}</span>
+                    <span>{{$t('date.friday')}}</span>
+                    <span>{{$t('date.saturday')}}</span>
+                    <span>{{$t('date.sunday')}}</span>
                 </div>
                 <div class="calendar">
                     <div class="week" v-for="(week,index) in calendar" :key="index">

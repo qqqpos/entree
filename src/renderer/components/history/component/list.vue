@@ -105,7 +105,7 @@ export default {
 
       const prompt = {
         type: "question",
-        title: "dialog.combineTickets",
+        title: "dialog.confirm.combineTickets",
         msg: [
           "dialog.combineTicketsConfirm",
           splits.map(i => `#${i.number}`),

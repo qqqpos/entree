@@ -141,7 +141,7 @@ export default {
     },
     itemDeleteDialog(item) {
       const prompt = {
-        title: "dialog.deleteConfirm",
+        title: "dialog.confirm.remove",
         msg: ["dialog.deleteItemConfirm", item[this.language]],
         buttons: [
           { text: "button.cancel", fn: "reject" },
