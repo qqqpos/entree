@@ -301,6 +301,7 @@ export default {
       const { phone, name } = this.customer;
 
       this.$open("giftcardModule", {
+        assign: true,
         reload: true,
         preset: {
           phone,
@@ -309,7 +310,16 @@ export default {
       });
     },
     swipeGiftcard() {
-      this.$open("giftcardModule", { reload: true });
+      const { phone, name } = this.customer;
+
+      this.$open("giftcardModule", {
+        assign: true,
+        reload: true,
+        preset: {
+          phone,
+          holder: name
+        }
+      });
     },
     exitModule() {
       this.module = null;

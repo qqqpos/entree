@@ -2,7 +2,7 @@
     <div class="date-picker" v-outer-click="closeDialog">
         <div class="button" @click="toggleCalendar">
             <i class="far fa-calendar-alt"></i>
-            <span class="text">{{$t('report.'+range)}}</span>
+            <span class="text">{{$t('date.'+range)}}</span>
             <i class="fa fa-sort"></i>
         </div>
         <div class="dialog" v-show="calendarVisible">
@@ -96,7 +96,7 @@ export default {
     closeGroup() {
       this.groupVisible = false;
     },
-    closeDialog(){
+    closeDialog() {
       this.closeCalendar();
       this.closeGroup();
     },

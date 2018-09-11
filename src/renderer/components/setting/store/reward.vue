@@ -3,6 +3,9 @@
         <div class="tab-content">
             <header class="nav">
                 <h3 class="title">{{$t('reward.setting')}}</h3>
+            <nav>
+              <span @click="reset" v-if="resettable" class="remove">{{$t('button.reset')}}</span>
+            </nav>
             </header>
             <toggle title="text.enable" v-model="reward.enable"></toggle>
             <toggle title="reward.beforeTax" v-model="reward.beforeTax" ></toggle>
@@ -66,6 +69,7 @@ export default {
   components: { editor, toggle, slider, textList },
   data() {
     return {
+      resettable: false,
       reward: {},
       units: [
         {
@@ -104,11 +108,12 @@ export default {
         perPoint: 1000,
         asValue: 1,
         message:
-          "<i>Congratulations! You have earned {earn} Pts</i>\nYour Total Point {point}\nAny Questions About How to Redeem Reward Point\nPlease Ask Store Manager For Details"
+          "<i>Congratulations! You have earned {earn} Pts</i>\nYour Total Point <mark>{point}</mark>\nAny Questions About How to Redeem Reward Point\nPlease Ask Store Manager For Details"
       }
     } = this.$store.getters.config.store;
 
     this.reward = reward;
+    this.resettable = this.$store.getters.authorized;
   },
   beforeDestroy() {
     this.$socket.emit("[CONFIG] UPDATE", {
@@ -138,6 +143,20 @@ export default {
 
         this.$nextTick(() => this.$refs.input.setSelectionRange(pt, pt));
       }
+    },
+    reset() {
+      this.reward = {
+        enable: false,
+        beforeTax: false,
+        unit: "PENNY",
+        percentage: 10,
+        custom: 0,
+        toPoint: 1,
+        perPoint: 1000,
+        asValue: 1,
+        message:
+          "<i>Congratulations! You have earned {earn} Pts</i>\nYour Total Point <mark>{point}</mark>\nAny Questions About How to Redeem Reward Point\nPlease Ask Store Manager For Details"
+      };
     }
   },
   computed: {

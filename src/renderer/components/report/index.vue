@@ -208,7 +208,7 @@ export default {
           break;
       }
       this.reportRange = { from, to };
-      console.log(from,to)
+      console.log(from, to);
     },
     openCalendar() {
       new Promise((resolve, reject) => {
@@ -217,7 +217,7 @@ export default {
       })
         .then(date => {
           this.reportRange = date;
-          console.log(this.reportRange)
+          console.log(this.reportRange);
           this.exitComponent();
         })
         .catch(() => {
@@ -273,20 +273,27 @@ export default {
     },
     dataAnalysis(range, data) {
       return new Promise(next => {
-        let { invoices, transactions } = data;
+        let { invoices, transactions, rewards } = data;
 
         if (transactions.length === 0)
           transactions = this.getTransactionsFromInvoices(invoices);
 
         this.report["General Report"] = this.salesAnalysis(range, data);
+
+        if (rewards && rewards.length)
+          this.report["Reward Summary"] = this.rewardAnalysis(rewards);
+
         if (this.hourly)
           this.report["Hourly Report"] = this.hourlySalesReport(invoices);
+
         if (this.managerWaive)
           this.report["Manager Waived Report"] = this.managerWaiveReport(
             invoices
           );
+
         if (this.itemSales)
           this.report["Item Sales"] = this.itemSalesReport(invoices);
+
         if (this.categorySales)
           this.report["Category Sales"] = this.categorySalesReport(invoices);
 
@@ -297,14 +304,18 @@ export default {
 
         if (this.voidedTicket)
           this.report["Voided Tickets"] = this.voidedTicketReport(invoices);
+
         if (this.cashier)
           this.report["Cashier Report"] = this.cashierReport(data);
+
         if (this.waitStaff)
           this.report["Waitstaff Report"] = this.waitStaffReport(transactions);
+
         if (this.thirdParty)
           this.report["Third Party Report"] = this.thirdPartyReport(invoices);
 
         if (this.driver) this.report["Driver Report"] = this.driverReport(data);
+
         next();
       });
     },
@@ -1205,6 +1216,49 @@ export default {
       });
       return report;
     },
+    rewardAnalysis(rewards) {
+      let summary = {
+        point: 0,
+        generatedValue: 0,
+        pending: 0,
+        redeem: 0,
+        redeemValue: 0
+      };
+
+      rewards.forEach(reward => {
+        switch (reward.type) {
+          case "EARN":
+            summary.point += reward.point;
+
+            if (!reward.settled) summary.pending += reward.point;
+            break;
+          case "REDEEM":
+            summary.redeem += reward.point;
+            break;
+        }
+      });
+
+      summary.generatedValue = this.$calculateRewardPoint(summary.point);
+      summary.redeemValue = this.$calculateRewardPoint(summary.redeem);
+
+      return [
+        {
+          text: this.$t("report.reward.generated"),
+          style: "",
+          value: summary.point + " / $ " + summary.generatedValue.toFixed(2)
+        },
+        {
+          text: this.$t("report.reward.pending"),
+          style: "",
+          value: `( ${summary.pending} )`
+        },
+        {
+          text: this.$t("report.reward.redeem"),
+          style: "",
+          value: summary.redeem + " / $ " + summary.redeemValue.toFixed(2)
+        }
+      ];
+    },
     printReport(close) {
       Printer.printReport(this.report);
       close && this.init.resolve();
@@ -1223,7 +1277,7 @@ export default {
     getTransactionsFromInvoices() {},
     reportError(error) {
       this.exitComponent();
-      this.$log(`Report Error:${i}`,"fatal")
+      this.$log(`Report Error:${i}`, "fatal");
     }
   }
 };

@@ -106,8 +106,8 @@ export default {
       this.reset = false;
     },
     confirmPayout() {
-      return new Promise((resolve, reject) => {
-        this.$dialog({
+      return new Promise((next, stop) => {
+        const prompt = {
           type: "question",
           title: "dialog.payoutConfirm",
           msg: [
@@ -115,9 +115,11 @@ export default {
             this.amount.toFixed(2),
             this.receiver
           ]
-        })
-          .then(resolve)
-          .catch(reject);
+        };
+
+        this.$dialog(prompt)
+          .then(next)
+          .catch(stop);
       });
     },
     payoutFailed(error) {
@@ -148,9 +150,8 @@ export default {
     saveSignature() {
       return new Promise(next => {
         const data = {
-          date: today(),
-          time: Date.now(),
           for: "Payout",
+          note: this.note,
           signature: this.signaturePad.toDataURL()
         };
         this.$socket.emit("[SIGNATURE] SAVE", data, _id => next(_id));
@@ -213,8 +214,8 @@ export default {
 }
 
 header i {
-    padding: 18px 25px;
-    float: right;
+  padding: 18px 25px;
+  float: right;
 }
 
 .wrap {
@@ -240,10 +241,10 @@ textarea {
 
 .placeholder {
   position: absolute;
-  top: 25px;
-  left: 25px;
   font-style: italic;
   color: lightgray;
+  top: 16px;
+  left: 25px;
 }
 
 footer {

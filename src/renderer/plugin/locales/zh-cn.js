@@ -443,6 +443,9 @@ export default {
       switchServer: "切换服务员",
       createTogo: "创建带走物品",
     },
+    card: {
+      linkCustomer: "关联卡号"
+    },
     tip: {
       unsavedOrderWarning: "未保存的订单将会被删除",
       unsavedPaymentWarning: "未保存的付款设置将会被还原",
@@ -454,6 +457,7 @@ export default {
       removeSpoolerConfirm: "您确定要移除这个打印计划吗?",
       addressRemoveConfirm: "您确定要移除 {i} 地址吗?",
       deleteItemConfirm: "您确定要从菜单物品中删除 {i} 吗？",
+      cardLinkToCustomer: "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -905,6 +909,11 @@ export default {
       purchase: "购买礼物卡",
       bonus: "充值奖励",
       reward: "积分奖励"
+    },
+    reward: {
+      generated: "产生积分",
+      pending: "待定积分",
+      redeem: "已兑换积分"
     }
   },
   thead: {
@@ -1937,7 +1946,11 @@ export default {
     saturday: "周六",
     sunday: "周日",
     lifetime: "终身",
-    custom: "自定日期"
+    custom: "自定日期",
+    daily: "按每日",
+    weekly: "按每周",
+    monthly: "按每月",
+    quarterly: "按每季度"
   },
   support: {
     menuInput: "菜单输入: ",

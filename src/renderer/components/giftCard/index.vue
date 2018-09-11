@@ -210,10 +210,26 @@ export default {
     },
     initialData(card) {
       this.giftcard = card;
+
+      if (this.init.assign && card && !card.phone) {
+        const prompt = {
+          type: "question",
+          title: "dialog.card.linkCustomer",
+          msg: "dialog.tip.cardLinkToCustomer"
+        };
+
+        this.$dialog(prompt)
+          .then(() => {
+            Object.assign(card, this.init.preset);
+            this.exitComponent();
+          })
+          .catch(this.exitComponent);
+      }
+
       this.tab = "info";
       this.$socket.emit("[GIFTCARD] HISTORY", card.number, logs => {
+        !this.init.assign && this.exitComponent();
         this.logs = logs;
-        this.exitComponent();
       });
     },
     initialFailed(exception) {
@@ -426,7 +442,7 @@ export default {
           : "",
         balance: parseFloat(this.amount),
         transaction: 1,
-        activation: +new Date()
+        activation: Date.now()
       });
       this.tab = "info";
       this.$socket.emit("[GIFTCARD] ACTIVATION", this.giftcard, card => {

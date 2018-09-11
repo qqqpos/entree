@@ -492,7 +492,7 @@ export default {
       batch: "Terminals batch record from {i} to {i}",
       cashflow: "Cash in/out record from {i} to {i}",
       payout: "Payout record from {i} to {i}"
-    },
+    }
   },
   dialog: {
     confirm: {
@@ -515,6 +515,9 @@ export default {
       switchServer: "Switch Server",
       createTogo: "Create A ToGo List",
     },
+    card: {
+      linkCustomer: "Link Customer"
+    },
     tip: {
       unsavedOrderWarning: "Unsaved order will be removed.",
       unsavedPaymentWarning: "Unsaved payment will be restored",
@@ -526,6 +529,7 @@ export default {
       removeSpoolerConfirm: "Are you sure to remove this schedule?",
       addressRemoveConfirm: "Are you sure to remove {i} from the list?",
       deleteItemConfirm: "Are you sure to remove {i} from the menu item?",
+      cardLinkToCustomer: "This card did not link to any customer. Are you wish to link to current customer?"
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -989,6 +993,11 @@ export default {
       purchase: "Purchase Gift Card",
       bonus: "Reload Bonus",
       reward: "Reward Bonus"
+    },
+    reward: {
+      generated: "Point Generated",
+      pending: "Pending Point",
+      redeem: "Redeemed Point"
     }
   },
   text: {
@@ -1957,7 +1966,11 @@ export default {
     saturday: "SAT",
     sunday: "SUN",
     lifetime: "Life Time",
-    custom: "Custom Date"
+    custom: "Custom Date",
+    daily: "Daily",
+    weekly: "Weekly",
+    monthly: "Monthly",
+    quarterly: "Quarterly"
   },
   support: {
     menuInput: "Menu Input By: ",

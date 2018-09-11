@@ -264,15 +264,16 @@ export default {
         msg: ["dialog.clockInTime", moment(this.time).format("hh:mm:ss a")]
       };
 
-      this.$dialog(prompt).then(() => {
-        this.setOperator({
-          clockIn: this.time,
-          session: ObjectId().toString()
-        });
-        this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
-        this.exitComponent();
-      });
-      //.catch(this.exitComponent);
+      this.$dialog(prompt)
+        .then(() => {
+          this.setOperator({
+            clockIn: this.time,
+            session: ObjectId().toString()
+          });
+          this.$socket.emit("[TIMECARD] CLOCK_IN", this.op);
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
     },
     askClockOut() {
       const diff = moment().diff(moment(this.op.clockIn));
@@ -395,7 +396,7 @@ export default {
     },
     endBreakTime() {
       const duration = moment
-        .duration(+new Date() - this.op.break, "milliseconds")
+        .duration(Date.now() - this.op.break, "milliseconds")
         .humanize();
 
       const prompt = {
@@ -424,7 +425,7 @@ export default {
       const { name } = this.station.cashDrawer;
       const prompt = {
         type: "question",
-        title: "dialog.cashOut",
+        title: "dialog.confirm.cashOut",
         msg: ["dialog.cashOutTip", name]
       };
 
