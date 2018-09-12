@@ -18,7 +18,9 @@
         <text-input title="text.contactInfo" v-model="store.contact" @update="updateContact"></text-input>
         <text-list title="text.timezone" v-model="store.timeZone" :opts="timeZones" @update="updateTimeZone"></text-list>
         <text-list title="text.storeType" v-model="store.type" :opts="types" @update="updateStoreType"></text-list>
-        <external title="text.openHour" @open="$router.push({ name: 'Setting.store.openHour' })" :tooltip="getOpenHour()"></external>
+        <external title="text.openHour" @open="$router.push({ name: 'Setting.store.openHour' })" :tooltip="getOpenHour()">
+          <i class="fas fa-clock icon" slot="icon"></i>
+        </external>
         <div :is="component" :init="componentData"></div>
       </div>
     </div>

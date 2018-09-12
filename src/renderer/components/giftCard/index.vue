@@ -45,8 +45,7 @@
               <inputer title="card.number" v-model="cardNumber" :disabled="true"></inputer>
               <inputer title="card.phone" v-model="phoneNumber"></inputer>
               <inputer title="card.holder" v-model="giftcard.holder"></inputer>
-              <inputer title="card.expirationDate" v-model="giftcard.expiration"></inputer>
-              <inputer title="card.balance" v-model="giftcard.balance" :disabled="true"></inputer>
+              <inputer title="card.balance" v-model="cardBalance" :disabled="true"></inputer>
             </div>
             <footer>
               <div class="opt">
@@ -115,7 +114,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 import switches from "../setting/common/switches";
 import inputer from "../setting/common/inputer";
@@ -193,6 +192,9 @@ export default {
         Object.assign(this.giftcard, { phone });
       }
     },
+    cardBalance() {
+      return this.giftcard ? this.giftcard.balance.toFixed(2) : "0.00";
+    },
     ...mapGetters(["op", "station"])
   },
   methods: {
@@ -224,6 +226,12 @@ export default {
             this.exitComponent();
           })
           .catch(this.exitComponent);
+      } else if (this.init.callback && card && card.phone) {
+        this.$socket.emit("[CUSTOMER] FROM_PHONE", card.phone, profile => {
+          this.setCustomer(profile);
+          this.exit();
+        });
+        return;
       }
 
       this.tab = "info";
@@ -590,7 +598,8 @@ export default {
     exit() {
       this.init.reload && this.$emit("reload");
       this.init.reject(false);
-    }
+    },
+    ...mapActions(["setCustomer"])
   }
 };
 </script>

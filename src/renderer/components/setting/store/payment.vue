@@ -4,9 +4,15 @@
     <header class="nav">
       <h3 class="title">{{$t('setting.title.payment')}}</h3>
     </header>
-    <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })"></external>
-    <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })"></external>
-    <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding"></text-list>
+    <external title="setting.tax" tooltip="tip.tax" @open="$router.push({ name: 'Setting.store.tax' })">
+      <i class="fas fa-file-invoice-dollar icon" slot="icon"></i>
+    </external>
+    <external title="setting.delivery.config" tooltip="tip.delivery.setting" @open="$router.push({ name: 'Setting.store.delivery' })">
+      <i class="fas fa-car icon" slot="icon"></i>
+    </external>
+    <text-list title="setting.rounding" tooltip="tip.rounding.tooltip" :opts="roundingOption" v-model="store.rounding" @update="updateRounding">
+      <i class="fas fa-funnel-dollar icon" slot="icon"></i>
+    </text-list>
     <toggle title="setting.tipSuggestion" tooltip="tip.tipSuggestion" v-model="store.tipSuggestion.enable" @update="updateTipSuggestion">
       <transition name="dropdown">
         <div v-if="store.tipSuggestion.enable" class="fees">
@@ -16,7 +22,9 @@
       </transition>
     </toggle>
     <options title="setting.receiptDialog" tooltip="tip.receiptDefaultAction" v-model="store.receipt" :opts="receiptOption" @update="updateReceipt"></options>
-    <external title="text.advance" @open="$router.push({ name: 'Setting.store.defaults' })"></external>
+    <external title="text.advance" @open="$router.push({ name: 'Setting.store.defaults' })">
+      <i class="fas fa-cogs icon" slot="icon"></i>
+    </external>
     </div>
   </div>
 </template>

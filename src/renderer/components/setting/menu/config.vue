@@ -9,8 +9,12 @@
     <toggle title="setting.default.autoStack" tooltip="tip.default.autoStackItemQty" v-model="defaults.autoStackItem"></toggle>
     <toggle title="setting.default.matchQty" tooltip="tip.default.matchItemQty" v-model="defaults.matchItemQty"></toggle>
     <toggle title="setting.default.saveConfirm" tooltip="tip.default.saveConfirm" v-model="defaults.saveConfirm"></toggle>
-    <text-list title="setting.default.menuSort" v-model="defaults.menuSortBy" :opts="types"></text-list>
-    <text-list title="setting.default.requestSort" v-model="defaults.requestSortBy" :opts="types.slice(0,3)"></text-list>
+    <text-list title="setting.default.menuSort" v-model="defaults.menuSortBy" :opts="types">
+      <i class="fas fa-sort-numeric-down icon" slot="icon"></i>
+    </text-list>
+    <text-list title="setting.default.requestSort" v-model="defaults.requestSortBy" :opts="types.slice(0,3)">
+      <i class="fas fa-sort-amount-down icon" slot="icon"></i>
+    </text-list>
   </div>
   <div class="tab-content">
     <header class="nav">

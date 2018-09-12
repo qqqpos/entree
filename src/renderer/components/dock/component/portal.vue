@@ -8,7 +8,7 @@
              @copy="copy(invoice)"
              @reimburse="reimburse(invoice)"></story>
           </ul>
-          <div class="card" v-if="reward.enable && init.profile">
+          <div class="card" v-if="reward.enable && profile">
             <h5>{{$t('text.rewardPoint')}}<i class="fas fa-ellipsis-h light more"></i></h5>
             <div class="wrap">
               <div class="column f1">
@@ -41,7 +41,7 @@
               </div>
             </div>
           </template>
-          <template v-else-if="init.profile">
+          <template v-else-if="profile">
             <div class="card" @click="activateGiftcard">
               <h5 class="text-center">{{$t('card.customerNoGiftcard')}}</h5>
               <h3 class="text-center">{{$t('card.activation')}}</h3>
@@ -49,7 +49,7 @@
             </div>
           </template>
           <template v-else>
-            <div class="card" @click="swipeGiftcard">
+            <div class="card" @click="swipeCardGetCustomer">
               <h5 class="text-center">{{$t('title.customerProfile')}}</h5>
               <h3 class="text-center">{{$t('card.swipeGiftCard')}}</h3>
             </div>            
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import story from "./helper/story";
 import redeem from "./helper/redeem";
@@ -76,11 +76,11 @@ export default {
   props: ["init"],
   data() {
     return {
-      customer: this.$store.getters.customer,
       componentData: null,
       component: null,
       moduleData: null,
       module: null,
+      profile: false,
       invoices: [],
       cards: [],
       reward: {
@@ -94,8 +94,12 @@ export default {
       view: null
     };
   },
+  computed: {
+    ...mapGetters(["customer"])
+  },
   created() {
     this.cards = this.init.cards;
+    this.profile = this.init.profile;
     this.invoices = this.init.invoices;
     this.calculateRewardValue(this.init.rewardPoint);
   },
@@ -204,6 +208,7 @@ export default {
         { _id, phone },
         ({ invoices, rewardPoint, cards }) => {
           this.cards = cards;
+          this.profile = !!_id;
           this.invoices = invoices;
           this.calculateRewardValue(rewardPoint);
         }
@@ -310,11 +315,11 @@ export default {
         }
       });
     },
-    swipeGiftcard() {
+    swipeCardGetCustomer() {
       const { phone, name } = this.customer;
 
       this.$open("giftcardModule", {
-        assign: true,
+        callback: true,
         reload: true,
         preset: {
           phone,

@@ -4,13 +4,27 @@
             <header class="nav">
               <h3 class="title">{{$t('setting.title.stationDevice')}}</h3>
             </header>          
-            <external title="setting.cashDrawer" @open="$router.push({ name: 'Setting.station.cashdrawer'})" :tooltip="station.cashDrawer.enable ? 'text.enable':'text.disable'"></external>
-            <text-list title="setting.terminal" v-model="station.terminal" :opts="terminals" @update="updateTerminal"></text-list>
-            <text-list title="setting.receiptPrinter" v-model="station.receipt" :opts="printers" @update="updateReceipt"></text-list>
-            <external title="setting.printerGroup" @open="$router.push({name:'Setting.station.printers'})" :tooltip="$t('text.stationPrinters',station.printers.length)"></external>
-            <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callerID.enable ? 'text.enable':'text.disable'"></external>
-            <external title="setting.customerDisplay" @open="$router.push({name:'Setting.station.customerDisplay'})"></external>
-            <external title="setting.weightScale" @open="editScale"></external>
+            <external title="setting.cashDrawer" @open="$router.push({ name: 'Setting.station.cashdrawer'})" :tooltip="station.cashDrawer.enable ? 'text.enable':'text.disable'">
+              <i class="fas fa-donate icon" slot="icon"></i>
+            </external>
+            <text-list title="setting.terminal" v-model="station.terminal" :opts="terminals" @update="updateTerminal">
+              <i class="fas fa-credit-card icon" slot="icon"></i>
+            </text-list>
+            <text-list title="setting.receiptPrinter" v-model="station.receipt" :opts="printers" @update="updateReceipt">
+              <i class="fas fa-receipt icon" slot="icon"></i>
+            </text-list>
+            <external title="setting.printerGroup" @open="$router.push({name:'Setting.station.printers'})" :tooltip="$t('text.stationPrinters',station.printers.length)">
+              <i class="fas fa-print icon" slot="icon"></i>
+            </external>
+            <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callerID.enable ? 'text.enable':'text.disable'">
+              <i class="fas fa-phone icon" slot="icon"></i>
+            </external>
+            <external title="setting.customerDisplay" @open="$router.push({name:'Setting.station.customerDisplay'})">
+              <i class="fas fa-desktop icon" slot="icon"></i>
+            </external>
+            <external title="setting.weightScale" @open="editScale">
+              <i class="fas fa-weight icon" slot="icon"></i>
+            </external>
         </div>
     </div>
 </template>

@@ -1,14 +1,15 @@
 <template>
   <div class="external" :class="{style:defaultStyle,disabled}">
-    <div class="inner">
-      <div class="title">
+    <slot name="icon"></slot>
+    <div class="column f1">
+      <div class="row">
         <span>{{translate ? $t(title) : title}}</span>
         <span class="tooltip">{{$t(tooltip)}}</span>
       </div>
       <slot name="value"></slot>
     </div>
     <slot>
-      <div class="icon" @click="$emit('open')">
+      <div class="anchor" @click="$emit('open')">
         <i class="fa fa-caret-right"></i>
       </div>
     </slot>
@@ -50,18 +51,12 @@ export default {
 
 .external.style {
   min-height: 39px;
-  padding: 4px 0 4px 20px;
+  padding: 4px 0;
   border-bottom: 1px solid #eee;
 }
 
-.inner {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.title{
-  display: flex;
+.column {
+  padding-left: 20px;
 }
 
 .tooltip {
@@ -75,18 +70,26 @@ export default {
   color: #2196f3;
 }
 
-.style .icon {
+.style .anchor {
   margin: 0 10px;
 }
 
-.icon {
+.anchor {
   padding: 7px 25px;
   color: #555;
   cursor: pointer;
 }
 
-.icon:hover {
+.anchor:hover {
   background: #eee;
   border-radius: 4px;
+}
+
+.icon {
+  color: hsl(0, 0%, 53.3%);
+  padding-left: 20px;
+  text-align: center;
+  font-size: 26px;
+  width: 35px;
 }
 </style>

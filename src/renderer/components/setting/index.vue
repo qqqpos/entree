@@ -18,7 +18,7 @@
         <p>{{$t('setting.menuTip')}}</p>
       </router-link>
       <router-link tag="figure" :to="{name:'Setting.dineIn'}">
-        <i class="fa fa-2x fa-tablets"></i>
+        <i class="fas fa-2x fa-cocktail"></i>
         <figcaption>{{$t('setting.dineIn')}}</figcaption>
         <p>{{$t('setting.dineInTip')}}</p>
       </router-link>

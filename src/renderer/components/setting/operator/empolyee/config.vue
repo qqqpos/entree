@@ -24,15 +24,29 @@
       <toggle v-model="operator.sessionReport" title="text.sessionReport" tooltip="tip.sessionReport"></toggle>
     </template>
     <template v-else>
-      <text-input v-model="operator.email" title="text.email"></text-input>
+      <text-input v-model="operator.email" title="text.email">
+        <i class="fas fa-envelope icon" slot="icon"></i>
+      </text-input>
     </template>
     <template v-if="operator.role !== 'Worker' || operator.role !== 'Driver'">
-      <text-list v-model="operator.language" title="text.defaultLanguage" :opts="languages"></text-list>
-      <text-list v-model="operator.cashCtrl" title="setting.cashDrawer" :opts="ctrl"></text-list>
-      <external title="setting.permission.access" @open="$router.push({name:'Setting.operator.access',params:{operator}})"></external>
-      <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})"></external>
-      <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})"></external>
-      <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})"></external>
+      <text-list v-model="operator.language" title="text.defaultLanguage" :opts="languages">
+        <i class="fas fa-language icon" slot="icon"></i>
+      </text-list>
+      <text-list v-model="operator.cashCtrl" title="setting.cashDrawer" :opts="ctrl">
+        <i class="fas fa-donate icon" slot="icon"></i>
+      </text-list>
+      <external title="setting.permission.access" @open="$router.push({name:'Setting.operator.access',params:{operator}})">
+        <i class="fas fa-external-link-alt icon" slot="icon"></i>
+      </external>
+      <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})">
+        <i class="fas fa-user-edit icon" slot="icon"></i>
+      </external>
+      <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})">
+        <i class="fas fa-eye-slash icon" slot="icon"></i>
+      </external>
+      <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})">
+        <i class="fas fa-user-lock icon" slot="icon"></i>
+      </external>
       <external title="setting.employeeCardRegistration" @open="swipe" v-if="!operator.card"></external>
       <external title="card.removeEmployeeCard" @open="unregister" v-else></external>
       <toggle v-model="operator.restrict" title="text.restrict" true-tooltip="tip.restrictPermission" false-tooltip="tip.temporaryPermission" :conditionalTooltip="true"></toggle>

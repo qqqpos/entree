@@ -1,5 +1,6 @@
 <template>
   <div class="list">
+    <slot name="icon"></slot>
     <div class="wrap" @click.stop="isDisplay = !isDisplay">
       <div class="inner">
         <label>{{$t(title)}}</label>
@@ -115,7 +116,7 @@ p {
   color: #2196f3;
 }
 
-i {
+.wrap i {
   margin: 0 10px;
   padding: 10px 25px;
   color: #555;
@@ -160,5 +161,13 @@ li .tooltip {
 
 input:checked + label {
   border-left: 4px solid #009688;
+}
+
+.icon {
+  color: hsl(0, 0%, 53.3%);
+  padding-left: 20px;
+  text-align: center;
+  font-size: 26px;
+  width: 35px;
 }
 </style>

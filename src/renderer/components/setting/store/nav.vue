@@ -11,7 +11,7 @@
                     <span class="text">{{$t('setting.nav.payment')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.terminal'}">
-                    <i class="fa fa-tablet-alt"></i>
+                    <i class="fas fa-credit-card"></i>
                     <span class="text">{{$t('setting.nav.terminal')}}</span>
                 </router-link>
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.giftcard'}">
@@ -27,7 +27,7 @@
                     <span class="text">{{$t('setting.nav.coupon')}}</span>
                 </router-link>
                 <router-link tag="li" :to="{name:'Setting.reward'}">
-                    <i class="fas fa-certificate"></i>
+                    <i class="fas fa-award"></i>
                     <span class="text">{{$t('setting.nav.reward')}}</span>
                 </router-link>                
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">

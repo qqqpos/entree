@@ -1,5 +1,6 @@
 <template>
   <div class="input">
+    <slot name="icon" class="icon"></slot>
     <div class="wrap">
       <label>{{$t(title)}}</label>
       <template v-if="mask">
@@ -28,7 +29,7 @@ export default {
     }
   },
   watch: {
-    value() { }
+    value() {}
   }
 };
 </script>
@@ -67,5 +68,13 @@ input {
   outline: none;
   margin-top: 2px;
   color: #656565;
+}
+
+.icon {
+  color: hsl(0, 0%, 53.3%);
+  padding-left: 20px;
+  text-align: center;
+  font-size: 26px;
+  width: 35px;
 }
 </style>

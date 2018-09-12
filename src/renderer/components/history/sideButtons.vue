@@ -29,7 +29,7 @@
       <span class="text">{{$t('button.calendar')}}</span>
     </button>
     <button class="btn" @click="terminal">
-      <i class="fa fa-tablet-alt"></i>
+      <i class="fas fa-credit-card"></i>
       <span class="text">{{$t('button.terminal')}}</span>
     </button>
     <button class="btn" @click="report">

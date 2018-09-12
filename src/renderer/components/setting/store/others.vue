@@ -4,7 +4,9 @@
       <header class="nav">
         <h3 class="title">{{$t('setting.title.other')}}</h3>
       </header>
-      <external title="text.timecard" @open="$router.push({name:'Setting.store.timecard'})"></external>
+      <external title="text.timecard" @open="$router.push({name:'Setting.store.timecard'})">
+        <i class="fas fa-user-clock icon" slot="icon"></i>
+      </external>
       <toggle title="setting.googleMatrix" true-tooltip="tip.matrixService" false-tooltip="tip.disableMatrix" v-model="store.matrix.enable" :conditionalTooltip="true" @update="updateMatrix">
         <transition name="dropdown">
           <div v-if="store.matrix.enable" class="opt">

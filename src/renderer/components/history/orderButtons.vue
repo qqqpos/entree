@@ -17,7 +17,7 @@
       <span class="text">{{$t('button.discount')}}</span>
     </button> -->
     <button class="btn" @click="openGratuityDialog" :disabled="order.settled">
-      <i class="fas fa-money-bill-alt"></i>
+      <i class="fas fa-comments-dollar"></i>
       <span class="text">{{$t('text.gratuity')}}</span> 
     </button>
     <button class="btn" @click="exit">

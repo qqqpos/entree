@@ -54,8 +54,14 @@
             <span class="value">$ {{summary.payout | decimal}}</span>
           </p>    
           <p>
-            <button class="btn" @click="printAll">{{$t('button.printAll')}}</button>
-            <button class="btn" @click="payAll" :disabled="true">{{$t('button.pay')}}</button>
+            <button class="btn" @click="printAll">
+              <i class="fas fa-print"></i>
+              <span>{{$t('button.printAll')}}</span>
+            </button>
+            <button class="btn" @click="payAll" :disabled="true">
+              <i class="fas fa-hand-holding-usd"></i>
+              <span>{{$t('button.pay')}}</span>
+            </button>
           </p>  
           <div class="group bot">
             <h4 class="text-center">{{$t('setting.timecard.overTimeAlert')}}</h4>
