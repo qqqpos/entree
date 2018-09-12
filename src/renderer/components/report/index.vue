@@ -456,6 +456,17 @@ export default {
           value: `${rounding.toFixed(2)}`
         });
 
+      const payoutAmount = transactions
+        .filter(t => t.for === "Payout")
+        .reduce((a, c) => a + c.actual, 0);
+
+      payoutAmount > 0 &&
+        report.push({
+          text: this.$t("report.payout"),
+          style: "",
+          value: "- " + payoutAmount.toFixed(2)
+        });
+
       const activation = giftcards
         .filter(t => t.type === "Activation")
         .reduce((a, c) => a + c.change, 0);
@@ -501,7 +512,8 @@ export default {
         gratuity +
         rounding +
         activation +
-        reload
+        reload -
+        payoutAmount
       ).toFixed(2);
 
       report.push({
@@ -1277,7 +1289,7 @@ export default {
     getTransactionsFromInvoices() {},
     reportError(error) {
       this.exitComponent();
-      this.$log(`Report Error:${i}`, "fatal");
+      this.$log(`Report Error:${error}`, "fatal");
     }
   }
 };
