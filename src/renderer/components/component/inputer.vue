@@ -11,8 +11,8 @@
         <div class="display">
             <input type="text" v-model="amount" :placeholder="placeholder">
             <template v-if="allowPercentage">
-              <span class="unit" v-if="percentage" @click="toggle">%</span>
-              <span class="unit" v-else @click="toggle">$</span>
+              <span class="unit" v-if="percentage" @click="toggle"><i class="fas fa-percentage"></i></span>
+              <span class="unit" v-else @click="toggle"><i class="fas fa-dollar-sign"></i></span>
             </template>
         </div>
         <num-pad v-model="amount" @enter="confirm" :type="type"></num-pad>
@@ -78,9 +78,6 @@ export default {
     },
     entry(e) {
       switch (e.key) {
-        case "/":
-          this.transactions = this.transactions.reverse();
-          break;
         case "Escape":
           this.clear();
           break;

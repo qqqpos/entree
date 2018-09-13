@@ -75,10 +75,11 @@ input:checked + label:before {
 
 input:checked + label:after {
   position: absolute;
-  content: "✓";
-  bottom: -17px;
-  right: 5px;
-  transform: rotate(20deg);
+  content: "\f00c";
+  bottom: -18px;
+  right: 3px;
+  font-weight: bold;
+  font-family: fontAwesome;
 }
 </style>
 

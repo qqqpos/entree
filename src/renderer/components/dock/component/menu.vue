@@ -881,7 +881,7 @@ li:active {
 li > i {
   width: 50px;
   margin: 0 10px 0 0;
-  color: #363636;
+  color: #4a4a4a;
   text-align: center;
 }
 

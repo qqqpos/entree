@@ -184,9 +184,9 @@ input[type="radio"] {
 .button{
   border: none;
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
-  border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   font-family: "Yuanti-SC";
+  border-radius: 4px;
   cursor: pointer;
   outline: none;
 }
@@ -201,22 +201,23 @@ input[type="radio"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: none;
+  outline: none;
   width: 90px;
   height: 62px;
   font-size: 1.15em;
   font-weight: bold;
+  font-family: "Yuanti-SC";
   background: linear-gradient(#fefefe, #cfd0d3);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   text-shadow: 0 1px 1px white;
   border-radius: 4px;
   margin-bottom: 5px;
-  border: none;
-  outline: none;
-  font-family: "Yuanti-SC";
 }
 
 .btn i {
   margin-bottom:5px;
+  color:#3c3c3c;
 }
 
 footer .btn {
@@ -241,7 +242,7 @@ i.flip:active,
   font-family: "Agency FB";
   font-weight: bold;
   font-size: 40px;
-  border-radius: 2px;
+  border-radius: 3px;
   text-align: center;
   transition: background 0.2s ease-out;
   text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4);

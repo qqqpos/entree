@@ -2,7 +2,7 @@
   <transition name="fade">
     <div class="container">
       <div class="accessor shadow">
-        <h5>United POS</h5>
+        <h5>Entrée POS</h5>
         <h2>{{store.name}}</h2>
         <transition-group tag="div" class="input" name="pin">
           <span v-for="(circle,index) in pin" :key="index"></span>

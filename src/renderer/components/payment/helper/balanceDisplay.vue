@@ -4,18 +4,17 @@
         <div class="values">
             <div class="f1"></div>
             <div class="due">
-                <i class="fas fa-dollar-sign symbol"></i>
-                <span>{{remain + tip - paid | decimal}}</span>
+                <span class="balance agency">{{remain + tip - paid | decimal}}</span>
             </div>
-            <div class="addition" v-show="discount > 0">
+            <div class="column boxCenter" v-show="discount > 0">
                 <span class="text">{{$t('text.discount')}}</span>
                 <span>({{discount | decimal}})</span>
               </div>
-            <div class="addition" v-show="Math.max(0,tip - paid) > 0">
+            <div class="column boxCenter" v-show="Math.max(0,tip - paid) > 0">
                 <span class="text">{{$t('text.tip')}}</span>
                 <span>({{Math.max(0,tip - paid) | decimal}})</span>
             </div>
-            <div class="addition" v-show="gratuity > 0">
+            <div class="column boxCenter" v-show="gratuity > 0">
                 <span class="text">{{$t('text.gratuity')}}</span>
                 <span>({{gratuity | decimal}})</span>
             </div>
@@ -83,20 +82,22 @@ legend {
   font-size: 36px;
 }
 
-.symbol {
-  font-size: 26px;
-  font-weight: bold;
+.balance {
+  font-size: 36px;
+}
+
+.balance:before {
+  content: "\F155";
   color: #009688;
+  font-size: 24px;
+  padding: 0 5px 0 0;
+  font-family: fontAwesome;
 }
 
 .addition {
-  display: flex;
-  flex-direction: column;
   margin-left: 5px;
   color: #ff9800;
   font-size: 14px;
-  text-align: center;
-  justify-content: center;
 }
 
 .text {

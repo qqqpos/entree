@@ -17,7 +17,7 @@
                         <number-input @input="setInput"></number-input>
                     </section>
                     <section class="right">
-                        <div class="flex">
+                        <div class="row">
                             <balance-display :payment="order.payment" :paid="paidTip"></balance-display>
                             <div class="functions">
                                 <button class="btn" v-press="gratuityToTip" @click.stop="openTipComponent">{{$t('button.setTip')}}</button>
@@ -25,7 +25,7 @@
                                 <button class="btn" @click="save">{{$t('button.save')}}</button>
                             </div>
                         </div>
-                        <div class="flex">
+                        <div class="row">
                             <payment-input 
                                 :anchor="anchor"
                                 :type="paymentType" 
@@ -1474,13 +1474,10 @@ export default {
 }
 
 header .exit {
-  position: absolute;
   right: 0;
   padding: 16px 25px;
-}
-
-.flex {
-  display: flex;
+  color: #3c3c3c;
+  position: absolute;
 }
 
 .functions {

@@ -562,6 +562,7 @@ header.info {
   padding: 16px 0;
   border-radius: 4px;
   border: none;
+  color:#3c3c3c;
   font-family: fontAwesome;
   font-size: 18px;
   outline: none;
