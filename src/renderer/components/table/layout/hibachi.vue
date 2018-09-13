@@ -74,7 +74,6 @@ export default {
         : this.noFoundDialog("HIBACHI", table._id, seat.session);
     },
     viewHibachi(invoice, seat) {
-      //const { _id, tableID, seats } = invoice;
       this.setViewOrder(invoice);
       invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat);
     },
@@ -161,13 +160,13 @@ export default {
       });
 
       const order = {
-        server: this.op.name,
         date: today(),
         time: Date.now(),
         table: table.name,
+        server: this.op.name,
         layout: table.orientation,
-        payment: {},
-        content: items
+        content: items,
+        payment: {}
       };
 
       const print = (array, printer) => {

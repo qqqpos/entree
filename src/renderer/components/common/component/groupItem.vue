@@ -6,7 +6,7 @@
         <div v-for="(item,idx) in group" :key="idx">
           <div class="main" @click.stop="select(item,index,idx)">
             <span class="qty">{{item.qty}}</span>
-            <span class="wrap">
+            <span class="f1">
               <span class="item">{{item[language]}}</span>
               <span class="side">{{item.side[language]}}</span>
             </span>
@@ -183,12 +183,8 @@ export default {
   text-align: center;
 }
 
-.main .wrap {
-  flex: 1;
-}
-
 .main .price {
-  min-width: 36px;
+  padding-right: 6px;
 }
 
 .sub {

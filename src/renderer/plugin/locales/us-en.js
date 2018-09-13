@@ -1929,7 +1929,7 @@ export default {
     employeeCardRegistration: "Register employee card",
     settledReceipt: "Settle Payment Receipt",
     plasticPenaltyTax: "Plastic Bag Penalty Tax",
-    autoSaveCreditCard: "Auto Save Credit Card",
+    autoSaveCreditCard: "Auto save credit card",
     playDuration: "Duration",
     delivery: {
       config: "Delivery Config",

@@ -60,7 +60,7 @@ export default {
   methods: {
     format(expire) {
       return expire && expire.date
-        ? moment(date).format("YYYY-MM-DD")
+        ? moment(expire.date).format("YYYY-MM-DD")
         : this.$t("text.neverExpire");
     },
     create() {
