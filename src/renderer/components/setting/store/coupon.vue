@@ -12,7 +12,7 @@
       <table class="setting">
         <thead>
           <tr>
-            <th>{{$t('thead.name')}}</th>
+            <th>{{$t('text.coupon')}}</th>
             <th>{{$t('thead.discount')}}</th>
             <th>{{$t('thead.expire')}}</th>
             <th>{{$t('thead.count')}}</th>
@@ -24,7 +24,7 @@
             <td>{{coupon.alias}}</td>
             <td class="amount" v-if="coupon.type === 'discount'">{{coupon.discount}} %</td>
             <td class="amount" v-else>$ {{coupon.discount | decimal}}</td>
-            <td :class="{expired: (coupon.expire.enable && today > coupon.expire.date)}">{{format(coupon.expire.date)}}</td>
+            <td>{{format(coupon.expire)}}</td>
             <td>{{coupon.count}}</td>
             <td class="opt" @click="edit(coupon,index)">
               <i class="fa fa-ellipsis-v"></i>
@@ -53,13 +53,13 @@ export default {
   beforeRouteEnter: (to, from, next) => {
     appSocket.emit("[COUPON] LIST", data => {
       next(vm => {
-        vm.coupons = data;
+        vm.coupons = data || [];
       });
     });
   },
   methods: {
-    format(date) {
-      return date
+    format(expire) {
+      return expire && expire.date
         ? moment(date).format("YYYY-MM-DD")
         : this.$t("text.neverExpire");
     },
@@ -103,7 +103,7 @@ export default {
           this.$socket.emit("[COUPON] UPDATE", update, data => {
             this.coupons.splice(index, 1, data);
             this.$socket.emit("[COUPON] LIST", coupons => {
-              this.coupons = coupons;
+              this.coupons = coupons || [];
               this.exitComponent();
             });
           });

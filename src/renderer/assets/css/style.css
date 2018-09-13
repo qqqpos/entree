@@ -172,6 +172,15 @@ input[type="radio"] {
   background: #171718;
 }
 
+.hash:before {
+  content: "\f292";
+  font-family: fontAwesome;
+  opacity: 0.75;
+  font-weight: bold;
+  font-size: 0.8em;
+  margin-right: 4px;
+}
+
 .button{
   border: none;
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);

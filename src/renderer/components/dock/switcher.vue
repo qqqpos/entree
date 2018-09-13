@@ -82,21 +82,21 @@ export default {
         !this.order.deliveryFree
           ? parseFloat(this.store.deliver.baseFee)
           : 0;
-      Object.assign(this.order, { type });
-      this.setTicket({ type });
+
       this.applyPrice(type);
+      this.setTicket({ type });
 
       switch (type) {
         case "WALK_IN":
-          this.setOrder({ plasticBag: 1 });
+          this.setOrder({ type, plasticBag: 1 });
           break;
         case "PICK_UP":
         case "DELIVERY":
-          this.setOrder({ plasticBag: 1 });
+          this.setOrder({ type, plasticBag: 1 });
           this.$router.push({ name: "Information" });
           break;
         case "DINE_IN":
-          this.setOrder({ plasticBag: 0 });
+          this.setOrder({ type, plasticBag: 0 });
           this.archiveOrder(this.order);
           this.$router.push({ name: "Table" });
           break;
@@ -106,7 +106,7 @@ export default {
     togo() {
       const prompt = {
         type: "question",
-        title: "dialog.createTogo",
+        title: "dialog.confirm.createTogo",
         msg: "dialog.tip.createTogoList"
       };
 

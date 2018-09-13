@@ -392,6 +392,8 @@ export default {
       return new Promise(next => {
         if (this.ticket.type === "TO_GO") {
           let order = this.archivedOrder;
+          this.emptyArchiveOrder();
+
           let items = this.order.content.map(item =>
             Object.assign({}, item, { print, orderType: "TO_GO" })
           );
@@ -544,11 +546,10 @@ export default {
           this.resetAll();
           this.$router.push({ path: "/main/lock" });
         } else {
-          const { _id } = this.order;
-          const ticket = this.history.find(t => t._id === _id);
+          const ticket = this.order;
 
-          this.resetOrder();
-          ticket && this.setViewOrder(ticket);
+          this.resetOrder(true);
+          this.setViewOrder(ticket);
 
           this.table
             ? this.$router.push({
@@ -778,7 +779,8 @@ export default {
       "resetOrder",
       "setViewOrder",
       "setTableInfo",
-      "archiveOrder"
+      "archiveOrder",
+      "emptyArchiveOrder"
     ])
   },
   computed: {

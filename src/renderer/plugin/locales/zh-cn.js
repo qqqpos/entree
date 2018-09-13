@@ -1653,25 +1653,29 @@ export default {
     servo: "伺服器"
   },
   reward: {
-    setting: "积分计划",
     point: "积分点数",
     value: "积分价值",
     earn: "获得积分",
     pending: "待定积分",
-    unit: "积分转换",
-    beforeTax: "税前积分",
     expireDate: "积分过期",
     eachPenny: "每分",
     eachDollar: "每元",
     custom: "自定义",
     percentage: "百分比",
-    ratio: "兑换比例",
-    redeemable: "允许兑换积分",
     redeemPoint: "兑换积分点数",
     redeemToTicket: "订单折扣",
     redeemToCard: "充值礼卡",
-    message: "推广信息",
-    marketing: "要购买礼物卡? 联系 888-299-0521",
+    marketing: "要购买礼物卡? 联系 888-299-0524",
+    setting: {
+      title: "积分计划设置",
+      enable: "启用积分返点",
+      beforeTax: "税前积分",
+      expire: "积分过期",
+      unit: "积分兑换",
+      redeem: "允许兑换积分",
+      ratio: "兑换比例",
+      message: "推广信息"
+    },
     tip: {
       pennyEachPoint: "每消费一分钱换 1点 积分",
       dollarEachPoint: "每消费一块钱换 1点 积分",
@@ -1683,6 +1687,19 @@ export default {
       redeemRewardToTicket: "您确定将积分兑换成 $ {i} 来支付订单吗?",
       redeemRewardToGiftcard: "您确定要兑换 $ {i} 等价积分到礼物卡上吗?"
     }
+  },
+  giftcard: {
+    setting: {
+      title: "礼物卡设置",
+      enable: "启用礼物卡",
+      manual: "允许手动输入卡号",
+      expire: "过期年限",
+      bonus: "充值奖励",
+      format: "卡号格式",
+      length: "{i}位数卡号"
+    },
+    dialog: {},
+    tip: {},
   },
   online: {
     about: "介绍",
@@ -1955,13 +1972,6 @@ export default {
       payout: "允许现金支出",
       ledger: "允许核对销售账目",
       anydate: "允许操作任意时间的订单"
-    },
-    giftcard: {
-      enable: "启用礼物卡",
-      expire: "过期年限",
-      bonus: "充值奖励",
-      format: "卡号格式",
-      length: "{i}位数卡号"
     }
   }
 };

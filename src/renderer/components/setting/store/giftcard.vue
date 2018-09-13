@@ -2,18 +2,19 @@
   <div>
     <div class="tab-content">
       <header class="nav">
-        <h3 class="title">{{$t('setting.title.giftcard')}}</h3>
+        <h3 class="title">{{$t('giftcard.setting.title')}}</h3>
       </header>
-      <toggle title="setting.giftcard.enable" v-model="giftcard.enable"></toggle>
+      <toggle title="giftcard.setting.enable" v-model="giftcard.enable"></toggle>
+      <toggle title="giftcard.setting.manual" v-model="giftcard.manual"></toggle>
       <div class="slider">
-        <label>{{$t('setting.giftcard.expire')}}<span class="value">{{periods[giftcard.expire]}}</span></label>
+        <label>{{$t('giftcard.setting.expire')}}<span class="value">{{periods[giftcard.expire]}}</span></label>
         <slider v-model="giftcard.expire" :min="0" :max="5" :piecewise="true" tooltip="hover" :lazy="true"></slider>        
       </div>
       <div class="slider">
-        <label>{{$t('setting.giftcard.format')}}<span class="value">{{$t('setting.giftcard.length',giftcard.format)}}</span></label>
+        <label>{{$t('giftcard.setting.format')}}<span class="value">{{$t('giftcard.setting.length',giftcard.format)}}</span></label>
         <slider v-model="giftcard.format" :min="4" :max="16" :piecewise="true" tooltip="hover" :lazy="true"></slider>
       </div>
-      <toggle title="setting.giftcard.bonus" v-model="giftcard.bonus">
+      <toggle title="giftcard.setting.bonus" v-model="giftcard.bonus">
         <transition name="dropdown">
           <div v-if="giftcard.bonus" class="opt">
             

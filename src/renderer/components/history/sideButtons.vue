@@ -260,14 +260,31 @@ export default {
       if (this.order.void.irrevocable) {
         // this is a ticket has been combined
         // operator is not allow to recover
+        // unless it's under Owner or developer
 
-        const prompt = {
-          title: "dialog.cantExecute",
-          msg: ["dialog.ticketCombined", this.order.void.join],
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
-        };
+        if (this.authorized) {
+          const prompt = {
+            title: "dialog.cantExecute",
+            msg: ["dialog.ticketCombined", this.order.void.join],
+            buttons: [
+              { text: "button.confirm", fn: "reject" },
+              { text: "button.processAnyway", fn: "resolve" }
+            ]
+          };
 
-        this.$dialog(prompt).then(this.exitComponent);
+          this.$dialog(prompt)
+            .then(this.reopenOrder)
+            .catch(this.exitComponent);
+        } else {
+          // popup not allow alert
+          const prompt = {
+            title: "dialog.cantExecute",
+            msg: ["dialog.ticketCombined", this.order.void.join],
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+
+          this.$dialog(prompt).then(this.exitComponent);
+        }
       } else {
         this.$checkPermission("modify", "void")
           .then(this.reopenOrder)
@@ -514,7 +531,14 @@ export default {
     ])
   },
   computed: {
-    ...mapGetters(["op", "order", "station", "history", "isEmptyTicket"])
+    ...mapGetters([
+      "op",
+      "order",
+      "station",
+      "history",
+      "authorized",
+      "isEmptyTicket"
+    ])
   }
 };
 </script>

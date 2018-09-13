@@ -9,7 +9,7 @@
     </header>
     <div class="summary-wrap">
       <section class="list">
-
+        <payout v-for="(record,index) in records" :key="index" :record="record"></payout>
       </section>
       <section class="overview">
 
@@ -19,10 +19,11 @@
 </template>
 
 <script>
+import payout from "./helper/payout";
 import datePicker from "../common/datePicker";
 
 export default {
-  components: { datePicker },
+  components: { payout, datePicker },
   data() {
     return {
       componentData: null,
@@ -37,9 +38,10 @@ export default {
       this.from = from.format("YYYY-MM-DD");
       this.to = to.format("YYYY-MM-DD");
 
-      this.$socket.emit("[PAYOUT] LIST", { from, to }, result =>
-        console.log(result)
-      );
+      this.$socket.emit("[PAYOUT] LIST", { from: +from, to: +to }, records => {
+        console.log(records);
+        this.records = records;
+      });
     }
   }
 };

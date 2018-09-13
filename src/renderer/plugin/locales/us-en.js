@@ -1668,25 +1668,29 @@ export default {
     servo: "Servo"
   },
   reward: {
-    setting: "Reward",
     point: "Total Point",
     value: "Value of Point",
     earn: "Earn Point",
     pending: "Pending Point",
-    unit: "Point Unit",
-    beforeTax: "Point Calculate Before Tax",
     expireDate: "Reward Point Expire Date",
     eachPenny: "Penny",
     eachDollar: "Dollar",
     custom: "Customize",
     percentage: "Percentage",
-    ratio: "Conversion Ratio",
     redeemable: "Reward Point Redeemable",
-    redeemPoint: "Redeem Reward Point",
     redeemToTicket: "Redeem As Ticket Coupon",
     redeemToCard: "Redeem Value To",
-    message: "Marketing Message",
-    marketing: "Buy Gift Card Call 888-299-0521",
+    marketing: "Buy Gift Card Call 888-299-0524",
+    setting: {
+      title: "Reward Program Setting",
+      enable: "Enable Reward Program",
+      beforeTax: "Calculate Point Before Tax",
+      expire: "Point Expiration",
+      unit: "Point Unit",
+      redeem: "Allow Redeem Reward Point",
+      ratio: "Conversion Ratio",
+      message: "Marketing Message",
+    },
     tip: {
       pennyEachPoint: "Each penny earn 1 point",
       dollarEachPoint: "Each dollar earn 1 point",
@@ -1697,6 +1701,17 @@ export default {
       redeemReward: "Redeem Reward Point Confirm",
       redeemRewardToTicket: "Are you sure to redeem $ {i} to pay ticket from reward point?",
       redeemRewardToGiftcard: "Are you sure to redeem $ {i} to gift card from reward point?"
+    }
+  },
+  giftcard: {
+    setting: {
+      title:"Gift Card Setting",
+      enable: "Enable Gift Card",
+      expire: "Gift Card Expire",
+      manual: "Allow Manually Input Number",
+      bonus: "Reload Bonus",
+      format: "Card Format",
+      length: "{i} digits length"
     }
   },
   online: {
@@ -1967,13 +1982,6 @@ export default {
       payout: "Allow Payout From Cash Drawer",
       ledger: "Allow Review Ledger Summary",
       anydate: "Allow To Operate Ticket Without Date Limit"
-    },
-    giftcard: {
-      enable: "Enable Gift Card",
-      expire: "Gift Card Expire",
-      bonus: "Reload Bonus",
-      format: "Card Format",
-      length: "{i} digits length"
     }
   }
 };

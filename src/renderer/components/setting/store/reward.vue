@@ -2,19 +2,19 @@
     <div>
         <div class="tab-content">
             <header class="nav">
-                <h3 class="title">{{$t('reward.setting')}}</h3>
+                <h3 class="title">{{$t('reward.setting.title')}}</h3>
             <nav>
               <span @click="reset" v-if="resettable" class="remove">{{$t('button.reset')}}</span>
             </nav>
             </header>
-            <toggle title="text.enable" v-model="reward.enable"></toggle>
-            <toggle title="reward.beforeTax" v-model="reward.beforeTax" ></toggle>
-            <toggle title="reward.redeemable" v-model="reward.redeemable"></toggle>
+            <toggle title="reward.setting.enable" v-model="reward.enable"></toggle>
+            <toggle title="reward.setting.beforeTax" v-model="reward.beforeTax" ></toggle>
+            <toggle title="reward.setting.redeem" v-model="reward.redeemable"></toggle>
             <!-- <div class="setting">
               <label>{{$t('reward.expire')}}</label>
               <slider v-model="reward.expire"></slider>
             </div> -->
-            <text-list title="reward.unit" tooltip="tip.reward.unit" :opts="units" v-model="reward.unit"></text-list>
+            <text-list title="reward.setting.unit" tooltip="tip.reward.unit" :opts="units" v-model="reward.unit"></text-list>
             <div class="setting" v-if="reward.unit === 'CUSTOM'">
               <label>{{$t('reward.custom')}}</label>
               <div class="wrap">
@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="setting">
-              <label>{{$t('reward.ratio')}}</label>
+              <label>{{$t('reward.setting.ratio')}}</label>
               <div class="wrap">
                 <input type="text" placeholder="1000 Points" v-model="point">
                 <i class="fas fa-exchange-alt light"></i>
@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="setting column">
-              <label>{{$t('reward.message')}}</label>
+              <label>{{$t('reward.setting.message')}}</label>
               <div class="rich-text">
                 <div class="row">
                   <i class="fas fa-bold" title="Bold" @mousedown.prevent="input('<b>','</b>')"></i>

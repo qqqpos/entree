@@ -80,6 +80,8 @@ export default {
         case 3:
           return { receipted: true };
         case 4:
+          return { settled: true };
+        case 5:
           return { booked: true };
       }
     },
@@ -103,9 +105,9 @@ export default {
               this.exitComponent();
             });
           return;
-        } 
-         
-         this.setViewTable(table);
+        }
+
+        this.setViewTable(table);
       }
 
       let prompt;
@@ -223,7 +225,7 @@ export default {
           break;
       }
 
-      this.resetOrder();
+      this.resetOrder(false);
       this.setTicket({ type });
       this.setApp({ newTicket: true });
       this.setOrder({

@@ -101,14 +101,16 @@ export default {
     };
   },
   created() {
-    this.initialData();
-
     if (this.archivedOrder) {
       const { session, table, tableID } = this.order;
+
+      this.setApp({ newTicket: false });
       this.createOrderInstance(this.archivedOrder);
       this.setOrder({ ...this.archivedOrder, session, table, tableID });
       this.emptyArchiveOrder();
     }
+
+    this.initialData();
 
     this.$socket.emit(
       "[ORDER] QUERY_TICKET_NUMBER",

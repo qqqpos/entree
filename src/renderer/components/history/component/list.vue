@@ -28,7 +28,7 @@
                             <i class="fas fa-check-circle check"></i>
                             <i class="far fa-check-circle uncheck"></i>
                           </td>
-                          <td>#{{ticket.number}}</td>
+                          <td class="hash">{{ticket.number}}</td>
                           <td>{{$t('type.'+ticket.type)}}</td>
                           <td>{{ticket.time | moment("HH:mm:ss")}}</td>
                           <td>{{ticket.time | fromNow}}</td>
@@ -36,10 +36,11 @@
                             <div>{{ticket.server}}</div>
                             <div class="extra-info">{{ticket.lastEdit | fromNow}}</div>
                           </td>
-                          <td><i class="fas fa-dollar-sign light space"></i>{{ticket.payment.balance | decimal}}</td>
+                          <td class="agency light">$ {{ticket.payment.balance | decimal}}</td>
                           <td class="actions">
                             <span class="action yellow" @click.stop="$open('ticket',{ticket})">{{$t('button.view')}}</span>
                             <span class="action gray" :class="{disable:queue.length < 2}" @click.stop="combineDialog(ticket)">{{$t('button.combine')}}</span>
+                            <span class="action red" :class="{disable:!ticket.link}" @click.stop="$open('unlink',{ticket})">{{$t('button.unlink')}}</span>
                             <span class="action yellow" :class="{disable:queue.length > 0}" @click.stop="$bus.emit('pay', {order:ticket})">{{$t('button.pay')}}</span>
                           </td>
                       </tr>
@@ -60,10 +61,11 @@ import { mapActions, mapGetters } from "vuex";
 import ticket from "../../common/ticket";
 import dialogModule from "../../common/dialog";
 import paginator from "../../common/paginator";
+import unlink from "../../table/helper/unlink";
 
 export default {
   props: ["init"],
-  components: { ticket, dialogModule, paginator },
+  components: { ticket, unlink, dialogModule, paginator },
   data() {
     return {
       componentData: null,

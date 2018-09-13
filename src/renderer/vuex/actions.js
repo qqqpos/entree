@@ -91,9 +91,10 @@ export const alterItemOption = ({ commit, getters }, data) => {
     : commit(types.ALTER_ITEM_OPTION, data);
 };
 
-export const resetOrder = ({ commit }) => {
+export const resetOrder = ({ commit }, resetArchive) => {
+  resetArchive && commit(types.EMPTY_ARCHIVE_ORDER);
+  
   commit(types.RESET_ORDER);
-  commit(types.EMPTY_ARCHIVE_ORDER);
   commit(types.SET_TICKET, { type: "" });
   commit(types.SET_APP, { newTicket: true });
 };
