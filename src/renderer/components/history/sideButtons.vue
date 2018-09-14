@@ -491,7 +491,7 @@ export default {
         .catch(() => this.accessFailedLog("report"));
     },
     getLedger() {
-      this.$checkPermission("permission", "ledger")
+      this.$checkPermission("access", "ledger")
         .then(() => this.$open("ledgerModule"))
         .catch(() => this.accessFailedLog("ledger"));
     },

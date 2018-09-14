@@ -14,6 +14,7 @@
         <checkbox title="setting.access.report" v-model="operator.access" val="report" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.access.terminal" v-model="operator.access" val="terminal" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.access.history" v-model="operator.access" val="history" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.access.ledger" v-model="operator.access" val="ledger" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.access.exit" v-model="operator.access" val="exit" :multiple="true" class="list"></checkbox>
     </div>
 </template>

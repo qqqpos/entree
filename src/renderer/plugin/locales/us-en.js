@@ -1326,7 +1326,8 @@ export default {
     placeholder: "Placeholder",
     checkIn: "Check In",
     loading: "Loading",
-    separator: "Separator"
+    separator: "Separator",
+    description: "Description"
   },
   nav: {
     store: "Store",
@@ -1950,6 +1951,7 @@ export default {
       report: "Print Report",
       terminal: "View Terminal Records",
       history: "History Invoice",
+      ledger: "Ledger Summary",
       exit: "Exit Program"
     },
     modify: {
@@ -1963,7 +1965,7 @@ export default {
       tip: "Adjust Tips",
       gratuity: "Modify Ticket's Gratuity",
       driver: "Assign Driver To Ticket",
-      transaction: "Void Credit Card Transaction",
+      transaction: "Modify Credit Card Transaction",
       server: "Reassign Server",
       restriction: "Allow To Order Item Without Restriction Rules"
     },
@@ -1981,7 +1983,7 @@ export default {
       giftcard: "Allow Issue New Gift Card",
       promotion: "Allow Create New Promotion Rule",
       payout: "Allow Payout From Cash Drawer",
-      ledger: "Allow Review Ledger Summary",
+      transaction: "Void Credit Card Transaction",
       anydate: "Allow To Operate Ticket Without Date Limit"
     }
   }

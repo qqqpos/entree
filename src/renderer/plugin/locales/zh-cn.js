@@ -1315,7 +1315,8 @@ export default {
     placeholder: "占位符",
     checkIn: "签到",
     loading: "加载中",
-    separator: "分隔符"
+    separator: "分隔符",
+    description: "描述"
   },
   nav: {
     store: "店面",
@@ -1938,6 +1939,7 @@ export default {
       setting: "后台设定",
       report: "报表打印",
       terminal: "刷卡历史记录",
+      ledger: "打开扎帐",
       history: "历史订单",
       exit: "退出软件"
     },
@@ -1951,7 +1953,7 @@ export default {
       table: "修改座位",
       tip: "修改订单小费",
       gratuity: "修改订单服务费",
-      transaction: "取消信用卡交易",
+      transaction: "修改信用卡交易",
       server: "修改服务员",
       driver: "修改订单的派送司机",
       restriction: "允许下单不受物品条件的限制"
@@ -1970,7 +1972,7 @@ export default {
       giftcard: "允许发行礼物卡",
       promotion: "允许创建促销规则",
       payout: "允许现金支出",
-      ledger: "允许核对销售账目",
+      transaction: "允许作废信用卡交易",
       anydate: "允许操作任意时间的订单"
     }
   }

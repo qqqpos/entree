@@ -9,9 +9,9 @@
             <li><i class="fas fa-question-circle"></i>How to add / adjust Tip?</li>
             <li><i class="fas fa-question-circle"></i>How to add employee?</li>
             <li><i class="fas fa-question-circle"></i>How to add printer?</li> -->
-            <li @click="getVideo('g1UtIq6ks9Y')"><i class="fas fa-question-circle"></i>How to split a ticket?</li>
-            <li @click="getVideo('fMUCAuVneUs')"><i class="fas fa-question-circle"></i>How to customize a receipt ticket?</li>
-            <li @click="getVideo('4gPHD7aoxzE')"><i class="fas fa-info-circle"></i>Selling a gift card</li>
+            <li @click="getVideo('g1UtIq6ks9Y')"><i class="fas fa-question-circle light space"></i>How to split a ticket?</li>
+            <li @click="getVideo('fMUCAuVneUs')"><i class="fas fa-question-circle light space"></i>How to customize a receipt ticket?</li>
+            <li @click="getVideo('4gPHD7aoxzE')"><i class="fas fa-info-circle light space"></i>Selling a gift card</li>
             <!-- <li><i class="fas fa-question-circle"></i>How to evenly split a ticket?</li>
             <li><i class="fas fa-info-circle"></i>Selling a gift card</li>
             <li><i class="fas fa-question-circle"></i>Reload a gift card</li>
@@ -61,9 +61,5 @@ li {
   margin-bottom: 5px;
   color: #3c3c3c;
   cursor: pointer;
-}
-
-li i {
-  margin-right: 10px;
 }
 </style>

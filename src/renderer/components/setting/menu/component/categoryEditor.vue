@@ -27,9 +27,9 @@
       </header>
       <template v-if="tab === 'basic'">
         <div class="wrap">
-          <inputer title="text.primary" v-model.trim="category.usEN" length="20"></inputer>
-          <inputer title="text.secondary" v-model.trim="category.zhCN" length="20"></inputer>
-          <inputer title="text.description" v-model.trim="category.description" length="50"></inputer>
+          <inputer title="text.primary" v-model.trim="category.usEN"></inputer>
+          <inputer title="text.secondary" v-model.trim="category.zhCN"></inputer>
+          <inputer title="text.description" v-model.trim="category.description"></inputer>
           <inputer title="text.contain" v-model="category.contain" v-if="manual"></inputer>
           <div class="checkboxes categories" v-else>
             <checkbox :title="name" v-model="category.contain" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false" :class="{missing:check(name)}"></checkbox>
@@ -123,8 +123,22 @@ export default {
           .split(",")
           .map(name => name.trim());
 
+      let { usEN, zhCN } = this.category;
+
+      zhCN = zhCN || usEN;
+
+      this.category.usEN = this.safeStringLength(usEN);
+      this.category.zhCN = this.safeStringLength(zhCN);
+
       this.category.item = [];
       this.init.resolve(this.category);
+    },
+    safeStringLength(text) {
+      if (text.indexOf(" ") === -1 && text.length > 15) {
+        text = text.slice(0, 15) + " " + text.slice(15, text.length);
+      }
+
+      return text;
     },
     update() {
       this.tab = "basic";

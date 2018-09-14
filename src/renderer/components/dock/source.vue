@@ -12,7 +12,7 @@
     </ul>
     <footer>
       <button class="btn" @click="init.reject">{{$t('button.cancel')}}</button>
-      <button class="btn" :disabled="!service" @click="confirm">{{$t('button.confirm')}}</button>
+      <button class="btn" :disabled="!service" @click="init.resolve(this.service)">{{$t('button.confirm')}}</button>
     </footer>
   </div>
 </template>
@@ -39,12 +39,7 @@ export default {
     };
   },
   created() {
-    this.init.source !== "POS" && (this.service = this.init.source);
-  },
-  methods: {
-    confirm() {
-      this.init.resolve(this.service);
-    }
+    if (this.init.source !== "POS") this.service = this.init.source;
   }
 };
 </script>
@@ -57,6 +52,7 @@ export default {
   text-align: center;
   background: #f8f8f8;
 }
+
 .source header {
   background: #fff;
   border-bottom: 1px solid #eee;
