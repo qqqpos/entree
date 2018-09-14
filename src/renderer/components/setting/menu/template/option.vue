@@ -14,6 +14,7 @@
                 <inputer title="text.startAt" v-model.number="option.startAt"></inputer>
                 <inputer title="text.overCharge" v-model.number="option.addition"></inputer>
                 <switches title="text.itemInline" v-model="option.inline"></switches>
+                <inputer title="text.separator" v-model="option.separator" v-show="option.inline"></inputer>
             </div>
             <footer>
                 <div class="opt">

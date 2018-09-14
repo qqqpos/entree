@@ -517,7 +517,6 @@ export default {
     paymentRemovedTip: "#{i} 订单的付款记录已经移除",
     switchTable: "{i} 换座位",
     selectAnEmptyTable: "请选择一个空的座位",
-
     tableSwitchConfirm: "您确定要将 {i} 座位 转移到 {i} 座位吗?",
     tableSwitchFailed: "无法换桌",
     targetTableMustBeEmpty: "目标座位必须是空桌",
@@ -1315,7 +1314,8 @@ export default {
     deassign: "取消分配",
     placeholder: "占位符",
     checkIn: "签到",
-    loading: "加载中"
+    loading: "加载中",
+    separator: "分隔符"
   },
   nav: {
     store: "店面",

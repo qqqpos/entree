@@ -116,9 +116,10 @@ export default {
         startAt,
         max,
         name,
-        inline = false
+        inline = false,
+        separator
       } = this.template.contain[this.index];
-      const option = { addition, startAt, max, name, inline };
+      const option = { addition, startAt, max, name, inline, separator };
 
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, option, edit: true };

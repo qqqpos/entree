@@ -1325,7 +1325,8 @@ export default {
     deassign: "Deassign",
     placeholder: "Placeholder",
     checkIn: "Check In",
-    loading: "Loading"
+    loading: "Loading",
+    separator: "Separator"
   },
   nav: {
     store: "Store",
@@ -1705,7 +1706,7 @@ export default {
   },
   giftcard: {
     setting: {
-      title:"Gift Card Setting",
+      title: "Gift Card Setting",
       enable: "Enable Gift Card",
       expire: "Gift Card Expire",
       manual: "Allow Manually Input Number",

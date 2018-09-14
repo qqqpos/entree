@@ -119,7 +119,7 @@ export default {
       const prompt = {
         type: "error",
         title: "dialog.somethingWrong",
-        msg: ["dialog.templateMissing",this.init.side.template],
+        msg: ["dialog.templateMissing", this.init.side.template],
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
 
@@ -177,12 +177,19 @@ export default {
 
       this.saved.forEach((items, i) => {
         let count = 0;
-        let { startAt, addition, inline = false } = this.template.contain[i];
+        let {
+          startAt,
+          addition,
+          inline = false,
+          separator = " & "
+        } = this.template.contain[i];
 
         startAt = parseInt(startAt) || 0;
         addition = parseInt(addition) || 0;
 
-        count += inline ? this.inlineHanlder(items) : this.itemHanlder(items);
+        count += inline
+          ? this.inlineHandler(items, separator)
+          : this.itemHandler(items);
 
         if (startAt > 0 && count - startAt > 0) {
           const qty = count - startAt;
@@ -203,7 +210,7 @@ export default {
       this.template.dynamicPrint && this.setItemPrinter();
       this.init.resolve();
     },
-    itemHanlder(items) {
+    itemHandler(items) {
       let count = 0;
       items.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
         price = parseFloat(price) || 0;
@@ -224,7 +231,7 @@ export default {
 
       return count;
     },
-    inlineHanlder(items) {
+    inlineHandler(items, separator) {
       let count = 0;
       let primary = [];
       let secondary = [];
@@ -245,8 +252,8 @@ export default {
       this.setChoiceSet({
         qty: 1,
         key: keys,
-        zhCN: secondary.join(" & "),
-        usEN: primary.join(" & "),
+        zhCN: secondary.join(separator),
+        usEN: primary.join(separator),
         print: Array.from(printer),
         single: toFixed(total, 2),
         price: toFixed(total, 2),

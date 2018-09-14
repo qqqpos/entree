@@ -174,6 +174,7 @@ export default {
         let current = [];
         array.filter(item => {
           const index = current.findIndex(i => i.seat === item.seat);
+
           index === -1
             ? current.push(item)
             : Object.keys(item.printer).includes(printer) && next.push(item);
@@ -186,7 +187,14 @@ export default {
       Object.entries(this.config.printers)
         .filter(printer => printer[1].type === "hibachi")
         .map(printer => printer[0])
-        .forEach(printer => print(items.filter(i => !i.print), printer));
+        .forEach(printer =>
+          print(
+            items.filter(
+              i => !i.print && Object.keys(i.printer).includes(printer)
+            ),
+            printer
+          )
+        );
 
       // mark all tickets printed
       tickets.forEach(ticket =>
