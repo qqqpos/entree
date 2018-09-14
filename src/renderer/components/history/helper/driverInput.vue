@@ -68,7 +68,7 @@ export default {
 <style scoped>
 .wrap {
   padding: 5px;
-  background: #eceff1;
+  background: #e2e2e2;
 }
 
 ul.letters {

@@ -24,7 +24,7 @@
             <li><i class="fas fa-info-circle"></i>About your warranty</li> -->
         </ul>
         <div class="popupMask dark center setting" v-if="url" @click="close">
-            <iframe width="560" height="315" :src="url" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <iframe width="560" height="315" :src="url" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 </template>

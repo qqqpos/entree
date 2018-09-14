@@ -32,7 +32,8 @@ export default {
         },
         { name: "Uber Eats", img: "static/image/provider/ubereats.png" },
         { name: "EatStreet", img: "static/image/provider/eatstreet.png" },
-        { name: "Postmates", img: "static/image/provider/postmates.png" }
+        { name: "Postmates", img: "static/image/provider/postmates.png" },
+        { name: "Groupon", img: "static/image/provider/groupon.png" }
       ],
       service: null
     };
