@@ -135,6 +135,7 @@ export default {
 .wrap {
   max-width: 765px;
   min-width: 510px;
+  min-height: 350px;
   display: flex;
   flex-wrap: wrap;
 }

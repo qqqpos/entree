@@ -423,7 +423,6 @@ input[type="text"]:disabled {
   padding: 16px 20px;
 }
 
-.window footer,
 .editor footer {
   background: #eeeeee;
   border-top: 1px solid #e6e6e6;

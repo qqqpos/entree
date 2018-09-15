@@ -15,10 +15,10 @@
         </div>
       </div>
       <ul class="results">
-        <li v-for="(ip,index) in results" :key="index">
+        <li v-for="(ip,index) in results" :key="index" class="column">
           <input type="radio" name="ip" v-model="target" :id="'ip'+index" :value="ip">
           <label :for="'ip'+index">
-            <i class="fa fa-tablet-alt"></i>
+            <i class="fa fa-tablet-alt space"></i>
             <span>{{ip}}</span>
           </label>
         </li>
@@ -113,21 +113,12 @@ input[type="text"] {
   padding: 5px 10px;
 }
 
-input[type="radio"] {
-  display: none;
-}
-
 label {
   padding: 15px;
   background: #fff;
   margin: 3px 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-}
-
-li {
-  display: flex;
-  flex-direction: column;
 }
 
 li input:checked + label {

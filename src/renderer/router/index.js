@@ -191,9 +191,9 @@ export default new Router({
                   component: require("../components/setting/station/setting/printers")
                 },
                 {
-                  path: "callid",
-                  name: "Setting.station.callid",
-                  component: require("../components/setting/station/setting/callid")
+                  path: "callerId",
+                  name: "Setting.station.callerId",
+                  component: require("../components/setting/station/setting/callerId")
                 },
                 {
                   path: "customerDisplay",

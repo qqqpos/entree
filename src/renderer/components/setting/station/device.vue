@@ -16,7 +16,7 @@
             <external title="setting.printerGroup" @open="$router.push({name:'Setting.station.printers'})" :tooltip="$t('text.stationPrinters',station.printers.length)">
               <i class="fas fa-print icon" slot="icon"></i>
             </external>
-            <external title="setting.callerId" @open="$router.push({name:'Setting.station.callid'})" :tooltip="station.callerID.enable ? 'text.enable':'text.disable'">
+            <external title="setting.callerId" @open="$router.push({name:'Setting.station.callerId'})" :tooltip="station.callerID.enable ? 'text.enable':'text.disable'">
               <i class="fas fa-phone icon" slot="icon"></i>
             </external>
             <external title="setting.customerDisplay" @open="$router.push({name:'Setting.station.customerDisplay'})">
@@ -42,22 +42,52 @@ export default {
       printers: []
     };
   },
-  created() {
-    this.station = Object.assign({}, this.$store.getters.station);
-    this.$socket.emit("[TERMINAL] DEVICE", data => {
-      this.terminals = data.map(terminal => ({
-        label: `${terminal.alias} (${terminal.model})`,
-        tooltip: `${terminal.ip} - ${terminal.location}`,
-        plainText: true,
-        value: terminal.alias
-      }));
-      this.terminals.unshift({
-        label: this.$t("text.disable"),
-        tooltip: "",
-        plainText: true,
-        value: ""
+  beforeRouteEnter: (to, from, next) => {
+    appSocket.emit("[TERMINAL] DEVICE", data => {
+      next(vm => {
+        let devices = data.map(terminal => ({
+          label: `${terminal.alias} (${terminal.model})`,
+          tooltip: `${terminal.ip} - ${terminal.location}`,
+          plainText: true,
+          value: terminal.alias
+        }));
+
+        devices.unshift({
+          label: this.$t("text.disable"),
+          tooltip: "",
+          plainText: true,
+          value: ""
+        });
+
+        vm.terminals = devices;
       });
     });
+    appSocket.emit("[ADDRESS] COUNT", total => {
+      appSocket.emit("[ADDRESS] LIST", 0, addresses => {
+        next(vm => {
+          vm.total = total;
+          vm.addresses = addresses;
+        });
+      });
+    });
+  },
+  created() {
+    this.station = Object.assign({}, this.$store.getters.station);
+    // this.$socket.emit("[TERMINAL] DEVICE", data => {
+    //   this.terminals = data.map(terminal => ({
+    //     label: `${terminal.alias} (${terminal.model})`,
+    //     tooltip: `${terminal.ip} - ${terminal.location}`,
+    //     plainText: true,
+    //     value: terminal.alias
+    //   }));
+    //   this.terminals.unshift({
+    //     label: this.$t("text.disable"),
+    //     tooltip: "",
+    //     plainText: true,
+    //     value: ""
+    //   });
+    // });
+
     this.printers = Object.keys(this.$store.getters.config.printers)
       .filter(p => /cashier/i.test(p))
       .map(name => ({
