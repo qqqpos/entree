@@ -950,6 +950,7 @@ export default {
     voidedReport: "List Voided Ticket",
     settled: "Settled",
     unsettled: "Unsettled",
+    partiallyRemain: "Partially Unsettled",
     count: "Invoice Count",
     driver: "Driver",
     date: "Date",

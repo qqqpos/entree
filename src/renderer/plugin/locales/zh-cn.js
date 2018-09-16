@@ -883,6 +883,7 @@ export default {
     voidedReport: "列出取消订单",
     settled: "已结账",
     unsettled: "未结账",
+    partiallyRemain: "未付清",
     count: "订单数",
     driver: "司机",
     date: "日期",

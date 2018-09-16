@@ -275,20 +275,26 @@ export default {
         const unsettled = invoices.filter(
           i => !i.settled && i.amount === i.remain
         );
-        const partially = invoices.filter(i => i.amount !== i.remain);
+
+        const partially = invoices.filter(
+          i => i.amount !== i.remain && i.remain !== 0
+        );
+
         const unsettledAmount = unsettled.reduce((a, c) => a + c.due, 0);
-        const partiallyAmount = invoices.reduce((a, c) => a + c.remain, 0);
+        const remainAmount = partially.reduce((a, c) => a + c.remain, 0);
 
         return {
           name,
           count: invoices.length,
           settledCount: settled.length,
           unsettledCount: unsettled.length + partially.length,
+          partiallyCount: partially.length,
           tip: invoices.reduce((a, c) => a + c.tip, 0),
           charge: invoices.reduce((a, c) => a + c.charge, 0),
           amount: invoices.reduce((a, c) => a + c.total, 0),
           settledAmount: settled.reduce((a, c) => a + c.paid, 0),
-          unsettledAmount: unsettledAmount + partiallyAmount
+          unsettledAmount: unsettledAmount + remainAmount,
+          remainAmount
         };
       });
     },
@@ -333,11 +339,13 @@ export default {
             count,
             settledCount,
             unsettledCount,
+            partiallyCount,
             charge,
             tip,
             amount,
             settledAmount,
-            unsettledAmount
+            unsettledAmount,
+            remainAmount
           } = this.drivers.find(driver => driver.name === this.filter);
           this.report = true;
 
@@ -352,6 +360,11 @@ export default {
             {
               text: this.$t("report.settled") + ` ( ${settledCount} )`,
               value: "$ " + settledAmount.toFixed(2)
+            },
+            {
+              text:
+                this.$t("report.partiallyRemain") + ` ( ${partiallyCount} )`,
+              value: `( $ ${remainAmount.toFixed(2)} )`
             },
             {
               text: this.$t("report.unsettled") + ` ( ${unsettledCount} )`,
@@ -561,7 +574,7 @@ ul.report h5 {
 .settlement {
   position: absolute;
   left: 0;
-  bottom: 60px;
+  bottom: 30px;
   display: flex;
   justify-content: space-evenly;
   width: 200px;

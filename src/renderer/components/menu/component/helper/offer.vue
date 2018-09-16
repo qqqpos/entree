@@ -23,14 +23,10 @@ export default {
   components: { switches },
   computed: {
     invalid() {
-      const { enable, count, date } = this.coupon.expire;
+      const { count, maxCount = 0, expireDate } = this.coupon;
 
-      if (!enable) {
-        return false;
-      } else {
-        if (count > 0 && this.coupon.count >= count) return true;
-        if (!!date && date < today()) return true;
-      }
+      if (maxCount > 0 && maxCount >= count) return true;
+      if (expireDate && expireDate < today()) return true;
 
       return false;
     },
@@ -96,9 +92,9 @@ export default {
     this.$bus.off("Disable Coupon", this.disable);
   },
   methods: {
-    toggle(){
+    toggle() {
       this.coupon.redeem = !this.coupon.redeem;
-      this.$emit('change',this.coupon)
+      this.$emit("change", this.coupon);
     },
     enable(coupon) {
       this.coupon.enable = true;
@@ -169,6 +165,6 @@ p {
 }
 
 .type {
-  color: #cbcdd8;
+  color: #B0BEC5;
 }
 </style>

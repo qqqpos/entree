@@ -6,7 +6,9 @@
         <h5>All available coupon list below</h5>
       </header>
       <div class="wrap">
-        <offer v-for="(coupon,index) in coupons" :key="index" :promotion="coupon" :stack="stack" @change="checkStack"></offer>
+        <div class="row">
+          <offer v-for="(coupon,index) in coupons" :key="index" :promotion="coupon" :stack="stack" @change="checkStack"></offer>
+        </div>
       </div>
       <footer>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
@@ -127,7 +129,6 @@ export default {
 .wrap {
   width: 765px;
   height: 350px;
-  display: flex;
-  flex-wrap: wrap;
+  padding:15px;
 }
 </style>
