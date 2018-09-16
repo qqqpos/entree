@@ -65,7 +65,7 @@ export default {
                 this.dineInOpt.guestCount
                     ? new Promise((resolve, reject) => {
                         const config = {
-                            title: "text.setGuest",
+                            title: "title.setGuest",
                             subtitle: table.name,
                             type: "number",
                             percentage: false,

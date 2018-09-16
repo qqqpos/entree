@@ -1,53 +1,53 @@
 <template>
-  <div>
-    <div class="tab-content">
-      <header class="nav">
-        <div class="title">
-          <h3>{{$t('setting.title.couponList')}}</h3>
+    <div>
+        <div class="tab-content wide">
+            <header class="nav">
+                <h3>{{$t('setting.title.coupon')}}</h3>
+                <nav>
+                    <span @click="createCoupon">{{$t('button.new')}}</span>
+                </nav>
+            </header>
+            <div class="tableWrap relative">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{$t('text.enable')}}</th>
+                            <th>{{$t('coupon.type')}}</th>
+                            <th>{{$t('coupon.name')}}</th>
+                            <th>{{$t('coupon.expire')}}</th>
+                            <th>{{$t('coupon.performance')}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(coupon,index) in coupons" :key="index">
+                            <td><switches v-model="coupon.enable" class="boxCenter"></switches></td>
+                            <td class="text-center">{{$t('type.'+coupon.type)}}</td>
+                            <td class="text-center" :title="coupon.description">{{coupon.alias}}</td>
+                            <td class="text-center">{{getDate(coupon.expireDate)}}</td>
+                            <td class="text-center">{{$t('text.times',coupon.count)}} / {{coupon.maxCount ? coupon.maxCount : $t('coupon.infinity')}}</td>
+                            <td class="clickable text-center" @click="edit(coupon,false,index)"><i class="fas fa-pen-square light space"></i>{{$t('button.edit')}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <nav>
-          <span @click="create">{{$t('button.new')}}</span>
-        </nav>
-      </header>
-      <table class="setting">
-        <thead>
-          <tr>
-            <th>{{$t('text.coupon')}}</th>
-            <th>{{$t('thead.discount')}}</th>
-            <th>{{$t('thead.expire')}}</th>
-            <th>{{$t('thead.count')}}</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(coupon,index) in coupons" :key="index">
-            <td>{{coupon.alias}}</td>
-            <td class="amount" v-if="coupon.type === 'discount'">{{coupon.discount}} %</td>
-            <td class="amount" v-else>$ {{coupon.discount | decimal}}</td>
-            <td>{{format(coupon.expire)}}</td>
-            <td>{{coupon.count}}</td>
-            <td class="opt" @click="edit(coupon,index)">
-              <i class="fa fa-ellipsis-v"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div :is="component" :init="componentData"></div>
     </div>
-    <div :is="component" :init="componentData"></div>
-  </div>
 </template>
 
 <script>
 import editor from "./editor/coupon";
+import switches from "../common/switches";
+
 export default {
-  props: ["init"],
-  components: { editor },
+  components: { editor, switches },
   data() {
     return {
+      today: Date.now(),
       componentData: null,
       component: null,
-      coupons: [],
-      today: Date.now()
+      coupons: []
     };
   },
   beforeRouteEnter: (to, from, next) => {
@@ -58,64 +58,90 @@ export default {
     });
   },
   methods: {
-    format(expire) {
-      return expire && expire.date
-        ? moment(expire.date).format("YYYY-MM-DD")
-        : this.$t("text.neverExpire");
-    },
-    create() {
-      let coupon = {
+    createCoupon() {
+      const coupon = {
+        _id: ObjectId().toString(),
         code: "",
         alias: "",
-        discount: 0,
-        stack: false,
-        expire: {
-          enable: false,
-          count: 0,
-          date: ""
-        },
-        count: 0,
+        description: "",
         // 'rebate':        '满减券',
         // 'giveaway':      '礼物券',
         // 'voucher':       '现金券',
         // 'discount':      '折扣券',
-        // 'complimentary': '体验券'
         type: "",
+        discount: 0,
+        stack: false,
+        expireDate: null, // expire date
+        count: 0,
+        maxCount: 0, // expire count,
+        requireAmount: 0,
         require: {
           enable: false,
           amount: 0,
           item: [],
           exclude: []
         },
-        apply: "", // order , category, item,
+        apply: "",
         include: true,
         reference: []
       };
 
-      this.edit(coupon);
+      this.edit(coupon, true);
     },
-    edit(coupon, index) {
+    edit(coupon, create = false, index) {
       new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, coupon, edit: !!coupon._id };
+        this.componentData = { resolve, reject, coupon, edit: !create };
         this.component = "editor";
       })
         .then(update => {
           this.$socket.emit("[COUPON] UPDATE", update, data => {
-            this.coupons.splice(index, 1, data);
-            this.$socket.emit("[COUPON] LIST", coupons => {
-              this.coupons = coupons || [];
-              this.exitComponent();
-            });
+            create
+              ? this.coupons.push(update)
+              : this.coupons.splice(index, 1, data);
+
+            this.exitComponent();
           });
         })
         .catch(remove => {
           this.exitComponent();
+
           remove &&
             this.$socket.emit("[COUPON] REMOVE", coupon._id, () => {
               this.coupons.splice(index, 1);
             });
         });
+    },
+    getDate(date) {
+      return date
+        ? this.$t("coupon.expireAt", date)
+        : this.$t("coupon.neverExpire");
     }
   }
 };
 </script>
+
+<style scoped>
+.nav {
+  background: #fff;
+  color: #3c3c3c;
+}
+
+.tableWrap {
+  padding: 15px;
+  height: 639px;
+  background: #f1f1f1;
+}
+
+.tableWrap table {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+thead th {
+  color: #37474f;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+</style>
+
+

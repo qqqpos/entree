@@ -12,7 +12,7 @@
     </ul>
     <footer>
       <button class="btn" @click="init.reject">{{$t('button.cancel')}}</button>
-      <button class="btn" :disabled="!service" @click="init.resolve(this.service)">{{$t('button.confirm')}}</button>
+      <button class="btn" :disabled="!service" @click="init.resolve(service)">{{$t('button.confirm')}}</button>
     </footer>
   </div>
 </template>
@@ -26,10 +26,7 @@ export default {
         { name: "GrubHub", img: "static/image/provider/grubhub.png" },
         { name: "Seamless", img: "static/image/provider/seamless.png" },
         { name: "Delivery", img: "static/image/provider/delivery.png" },
-        {
-          name: "BeyondMenu",
-          img: "static/image/provider/beyondmenu.png"
-        },
+        { name: "BeyondMenu", img: "static/image/provider/beyondmenu.png" },
         { name: "Uber Eats", img: "static/image/provider/ubereats.png" },
         { name: "EatStreet", img: "static/image/provider/eatstreet.png" },
         { name: "Postmates", img: "static/image/provider/postmates.png" },

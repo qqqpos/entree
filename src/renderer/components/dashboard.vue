@@ -331,7 +331,7 @@ export default {
     countGuestDialog() {
       new Promise((resolve, reject) => {
         const config = {
-          title: "text.setGuest",
+          title: "title.setGuest",
           type: "number",
           percentage: false,
           allowPercentage: false,

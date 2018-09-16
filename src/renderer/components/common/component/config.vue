@@ -50,7 +50,7 @@
         </button>
         <button @click="setGuest" v-show="gratuitySettable">
           <i class="fas fa-user-plus"></i>
-          {{$t('text.setGuest')}}
+          {{$t('title.setGuest')}}
         </button>
         <button @click="setGratuityDialog" v-show="gratuitySettable">
           <i class="fas fa-hand-holding-usd"></i>
@@ -209,7 +209,7 @@ export default {
       new Promise((resolve, reject) => {
         const config = {
           type: "number",
-          title: "text.setGuest",
+          title: "title.setGuest",
           amount: this.order.guest || 1,
           percentage: false,
           allowPercentage: false

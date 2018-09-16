@@ -8,7 +8,7 @@
       <label class="label indent">{{$t(title)}}</label>
     </template>
     <template v-else>
-      <label class="label">{{$t(title)}}</label>
+      <label class="label" v-show="title">{{$t(title)}}</label>
       <label class="input-toggle">
         <input type="checkbox" :checked="value" @change="$emit('input',$event.target.checked),$emit('update',$event.target.checked)" :disabled="disabled">
         <span></span>

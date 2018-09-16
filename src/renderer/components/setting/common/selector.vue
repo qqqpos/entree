@@ -1,7 +1,8 @@
 <template>
   <div class="selector">
     <span class="title">{{$t(title)}}</span>
-    <div class="inner">
+    <div class="inputWrap row boxCenter">
+      <slot name="items"></slot>
       <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOperatorts">
       <template v-else>
         <span class="input" @click.stop="isDisplay = !isDisplay">{{label}}</span>
@@ -9,7 +10,7 @@
       </template>
       <transition name="menu">
         <ul v-if="isDisplay" v-outer-click="close">
-          <li v-for="(option,index) in opts" :key="index">
+          <li v-for="(option,index) in opts" :key="index" class="row">
             <input type="radio" :value="option.value" :id="id+index">
             <label :for="id+index" @click="pick(option.value)" v-if="option.plainText">
               <span class="label">{{option.label}}</span>
@@ -88,37 +89,37 @@ export default {
   align-items: center;
 }
 
-.inner {
+.inputWrap {
+  border: 1px solid #eee;
   position: relative;
+  border-radius: 2px;
+  background: #fff;
   flex: 1;
 }
 
-i {
+.fa-sort {
   color: #656565;
   position: absolute;
-  right: 5px;
+  right: 7px;
   top: 5px;
 }
 
 input {
   flex: 1;
-  border: 1px solid #eee;
-  border-radius: 2px;
   padding: 5px;
   cursor: pointer;
   outline: none;
+  border: none;
   width: calc(100% - 12px);
 }
 
-.input {
-  border: 1px solid #eee;
+span.input {
   display: flex;
-  align-items: center;
   height: 15px;
   border-radius: 2px;
-  background: #fff;
   padding: 5px;
   cursor: pointer;
+  flex: 1;
 }
 
 .title {
@@ -126,7 +127,7 @@ input {
 }
 
 label {
-  padding: 7px;
+  padding: 7px 5px;
   cursor: pointer;
   flex: 1;
 }
@@ -137,14 +138,11 @@ ul {
   border: 1px solid #eee;
   border-top: none;
   z-index: 3;
-  width: calc(100% - 2px);
+  width: calc(100% - 0px);
   box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.5);
   max-height: 250px;
   overflow: auto;
-}
-
-li {
-  display: flex;
+  top: 25px;
 }
 
 li:nth-child(even) {

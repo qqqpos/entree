@@ -1,7 +1,7 @@
 <template>
   <div class="popupMask setting dark center" @click.self="init.reject(false)">
     <div class="editor">
-      <header>
+      <header class="row">
         <div>
           <h5>{{$t(init.edit ? 'title.edit' : 'title.create')}}</h5>
           <h3>{{$t('title.coupon')}}</h3>
@@ -17,43 +17,28 @@
           </div>
         </nav>
       </header>
-      <template v-if="tab === 'basic'">
-        <div class="wrap">
-          <selector title="text.type" v-model="coupon.type" :opts="opts"></selector>
-          <inputer title="text.alias" v-model.trim="coupon.alias" :length="27"></inputer>
-          <inputer title="text.content" v-model="coupon.description" type="textarea"></inputer>
-          <inputer title="text.couponCode" v-model="coupon.code"></inputer>
-          <!-- <inputer title="text.customFooter" v-model="coupon.footer" type="textarea"></inputer> -->
+        <div class="wrap" v-if="tab === 'basic'" :key="1">
+          <selector title="coupon.type" v-model="coupon.type" :opts="opts"></selector>
+          <inputer title="text.alias" v-model.trim="coupon.alias" :length="25"></inputer>
+          <inputer title="text.description" v-model="coupon.description" type="textarea"></inputer>
           <template v-if="coupon.type === 'giveaway'">
-            <selector title="text.search" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference"></selector>
-            <div class="items" v-show="coupon.reference.length">
-              <p v-for="(item,index) in coupon.reference" :key="index">
-                <span class="item">{{item[language]}}</span>
-                <i class="fa fa-trash" @click="remove(index)"></i>
-              </p>
-            </div>
+            <selector title="text.item" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference">
+              <div class="items row" slot="items">
+                <p v-for="(item,index) in coupon.reference" :key="index" class="relative">
+                  <span class="f1">{{item[language]}}</span>
+                  <i class="fa fa-times light clickable" @click="remove(index)"></i>
+                </p>
+              </div>
+            </selector>
           </template>
           <inputer title="text.amount" v-model.number="coupon.discount" v-else></inputer>
+          <inputer title="coupon.code" v-model="coupon.code"></inputer>
+          <switches title="coupon.allowStack" v-model="coupon.stack"></switches>   
         </div>
-      </template>
-      <template v-else-if="tab === 'condition'">
-        <div class="wrap">
-          <toggle title="text.setCondition" v-model="coupon.require.enable" :defaultStyle="false">
-            <transition name="dropdown">
-              <div class="opt" v-if="coupon.require.enable">
-                <inputer title="text.amountGreaterThan" v-model.number="coupon.require.amount"></inputer>
-              </div>
-            </transition>
-          </toggle>
-          <switches title="text.couponStack" v-model="coupon.stack"></switches>          
-          <toggle v-model="coupon.expire.enable" title="text.expiration" :defaultStyle="false">
-            <transition name="dropdown">
-              <div class="opt" v-if="coupon.expire.enable">
-                <inputer title="thead.count" v-model.number="coupon.expire.count"></inputer>
-                <inputer title="thead.expire" v-model="coupon.expire.date" placeholder="YYYY-MM-DD"></inputer>
-              </div>
-            </transition>
-          </toggle>
+        <div class="wrap" v-else-if="tab === 'condition'" :key="2">
+          <inputer title="coupon.maxCount" v-model.number="coupon.maxCount"></inputer>
+          <inputer title="coupon.requireAmount" v-model.number="coupon.requireAmount"></inputer>
+          <inputer title="thead.expire" v-model="coupon.expireDate" placeholder="YYYY-MM-DD"></inputer>
           <selector title="text.apply" v-model="coupon.apply" :opts="applyTargets"></selector>
           <template v-if="coupon.apply === 'category'">
             <div class="checkboxes">
@@ -64,13 +49,12 @@
             <selector title="text.search" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference"></selector>
             <div class="items" v-show="coupon.reference.length">
               <p v-for="(item,index) in coupon.reference" :key="index">
-                <span class="item">{{item[language]}}</span>
+                <span class="f1">{{item[language]}}</span>
                 <i class="fa fa-trash" @click="remove(index)"></i>
               </p>
             </div>
           </template>
         </div>
-      </template>
       <footer>
         <div class="opt">
           <span class="del" @click="init.reject(true)" v-show="coupon._id">{{$t('button.delete')}}</span>
@@ -106,39 +90,39 @@ export default {
       opts: [
         {
           label: this.$t("type.rebate"),
-          tooltip: "tip.coupon.rebate",
+          tooltip: "coupon.tip.rebate",
           value: "rebate"
         },
         {
           label: this.$t("type.giveaway"),
-          tooltip: "tip.coupon.giveaway",
+          tooltip: "coupon.tip.giveaway",
           value: "giveaway"
         },
         {
           label: this.$t("type.voucher"),
-          tooltip: "tip.coupon.voucher",
+          tooltip: "coupon.tip.voucher",
           value: "voucher"
         },
         {
           label: this.$t("type.discount"),
-          tooltip: "tip.coupon.discount",
+          tooltip: "coupon.tip.discount",
           value: "discount"
         }
       ],
       applyTargets: [
         {
           label: this.$t("type.order"),
-          tooltip: "tip.coupon.order",
+          tooltip: "coupon.tip.order",
           value: "order"
         },
         {
           label: this.$t("type.category"),
-          tooltip: "tip.coupon.category",
+          tooltip: "coupon.tip.category",
           value: "category"
         },
         {
           label: this.$t("type.item"),
-          tooltip: "tip.coupon.item",
+          tooltip: "coupon.tip.item",
           value: "item"
         }
       ]
@@ -175,30 +159,13 @@ export default {
 </script>
 
 <style scoped>
-header {
-  flex-direction: row;
-}
-
-.items {
-  margin-left: 80px;
-  border: 1px solid #eee;
-  background: #fff;
-  border-radius: 2px;
-  padding: 10px 5px;
-  margin-top: 5px;
-}
-
 p {
   display: flex;
   padding: 0 10px;
 }
 
-.item {
-  flex: 1;
-}
-
-.checkboxes{
-  max-height: 300px;
+.checkboxes {
+  max-height: 252px;
   overflow: auto;
 }
 </style>

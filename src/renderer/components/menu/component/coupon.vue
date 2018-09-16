@@ -1,26 +1,18 @@
 <template>
-  <div class="popupMask dark center" @click.self="init.reject">
-    <div class="editor">
+  <dialog open class="boxCenter" @click.self="init.reject">
+    <div class="frame-common">
       <header>
-        <div>
-          <h5></h5>
-          <h3>{{$t('title.coupon')}}</h3>
-        </div>
+        <h3>{{$t('title.coupon')}}</h3>
+        <h5>All available coupon list below</h5>
       </header>
-      <div class="banner"></div>
       <div class="wrap">
         <offer v-for="(coupon,index) in coupons" :key="index" :promotion="coupon" :stack="stack" @change="checkStack"></offer>
       </div>
       <footer>
-        <div class="opt">
-
-        </div>
-        <button class="btn" @click="swipe" v-show="vip">{{$t('card.vip')}}</button>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
       </footer>
     </div>
-    <div :is="component" :init="componentData"></div>
-  </div>
+  </dialog>
 </template>
 
 <script>
@@ -133,9 +125,8 @@ export default {
 
 <style scoped>
 .wrap {
-  max-width: 765px;
-  min-width: 510px;
-  min-height: 350px;
+  width: 765px;
+  height: 350px;
   display: flex;
   flex-wrap: wrap;
 }
