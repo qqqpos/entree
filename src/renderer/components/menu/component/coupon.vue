@@ -6,8 +6,12 @@
         <h5>All available coupon list below</h5>
       </header>
       <div class="wrap">
-        <div class="row">
+        <div class="row" v-if="coupons.length">
           <offer v-for="(coupon,index) in coupons" :key="index" :promotion="coupon" :stack="stack" @change="checkStack"></offer>
+        </div>
+        <div class="placeholder" v-else>
+          <i class="far fa-smile"></i>
+          <p>{{$t('coupon.tip.noCoupon')}}</p>
         </div>
       </div>
       <footer>

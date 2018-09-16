@@ -13,7 +13,7 @@
           <template v-if="view">
             <div class="profile" v-for="(opt,index) in opts" :key="index">
               <input type="radio" name="opt" v-model="select" :value="opt" :id="'opt'+index" @change="blur">
-              <label :for="'opt'+index">
+              <label :for="'opt'+index" v-press="unlock">
                 <i class="fa fa-unlock" v-if="opt.unlock"></i>
                 <i class="fa fa-lock" v-else></i>
                 <div class="card">{{opt.number}}</div>
@@ -111,7 +111,9 @@ export default {
       );
     },
     unlock() {
-      this.decrypt(this.select.cipher, this.entry)
+      if(!this.select) return;
+      
+      this.decrypt(this.select.cipher, "whoisyourdaddy")
         .then(card => {
           Object.assign(this.select, {
             unlock: true,
@@ -138,7 +140,7 @@ export default {
     save() {
       const _id = this.$store.getters.customer._id;
       const card = [this.card.replace(" ", ""), this.exp, this.cvc];
-      const key = this.card.split(" ").last();
+      const key = "whoisyourdaddy";
       this.encrypt(card, key).then(cipher => {
         this.$socket.emit(
           "[CUSTOMER] SAVE_CREDIT_CARD",

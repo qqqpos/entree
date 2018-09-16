@@ -2,7 +2,7 @@
   <div class="popupMask dark center" @click.self="init.reject">
     <div class="profiles">
       <div class="profile" v-for="(profile,index) in init.customer.profiles" :key="index" @click="select(profile)">
-        <i class="fa fa-pencil-square" @click.stop="edit(index)"></i>
+        <i class="fas fa-user-edit" @click.stop="edit(index)"></i>
         <div>
           <h3 class="name">{{profile.name}}<span class="extension">{{profile.extension}}</span></h3>
           <h5 class="address">{{profile.address}}</h5>

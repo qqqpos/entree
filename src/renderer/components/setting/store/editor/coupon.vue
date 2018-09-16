@@ -21,6 +21,7 @@
           <selector title="coupon.type" v-model="coupon.type" :opts="opts"></selector>
           <inputer title="text.alias" v-model.trim="coupon.alias" :length="25"></inputer>
           <inputer title="text.description" v-model="coupon.description" type="textarea"></inputer>
+          <inputer title="coupon.requireAmount" v-model.number="coupon.requireAmount"></inputer>
           <template v-if="coupon.type === 'giveaway'">
             <selector title="text.item" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference">
               <div class="items row" slot="items">
@@ -31,13 +32,12 @@
               </div>
             </selector>
           </template>
-          <inputer title="text.amount" v-model.number="coupon.discount" v-else></inputer>
-          <inputer title="coupon.code" v-model="coupon.code"></inputer>
+          <inputer title="text.discount" v-model.number="coupon.discount" v-else></inputer>
           <switches title="coupon.allowStack" v-model="coupon.stack"></switches>   
         </div>
         <div class="wrap" v-else-if="tab === 'condition'" :key="2">
+          <inputer title="coupon.code" v-model="coupon.code"></inputer>
           <inputer title="coupon.maxCount" v-model.number="coupon.maxCount"></inputer>
-          <inputer title="coupon.requireAmount" v-model.number="coupon.requireAmount"></inputer>
           <inputer title="thead.expire" v-model="coupon.expireDate" placeholder="YYYY-MM-DD"></inputer>
           <selector title="text.apply" v-model="coupon.apply" :opts="applyTargets"></selector>
           <template v-if="coupon.apply === 'category'">
@@ -57,7 +57,7 @@
         </div>
       <footer>
         <div class="opt">
-          <span class="del" @click="init.reject(true)" v-show="coupon._id">{{$t('button.delete')}}</span>
+          <span class="del" @click="init.reject(true)" v-show="init.create">{{$t('button.delete')}}</span>
         </div>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
       </footer>
@@ -160,12 +160,19 @@ export default {
 
 <style scoped>
 p {
-  display: flex;
-  padding: 0 10px;
+  padding: 2px 7px;
+  border: 1px solid #ccc;
+  margin: 2px;
+  border-radius: 4px;
+  background: #f5f5f5;
 }
 
 .checkboxes {
   max-height: 252px;
   overflow: auto;
+}
+
+.items {
+  flex-wrap: wrap;
 }
 </style>

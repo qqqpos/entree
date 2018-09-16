@@ -1649,7 +1649,7 @@ export default {
   coupon: {
     name: "Name",
     expire: "Expiry date",
-    type: "Coupon Type",
+    type: "Type",
     performance: "Performance",
     setCondition: "Set Condition",
     allowStack: "Allow Stack",
@@ -1657,7 +1657,7 @@ export default {
     code: "Code",
     apply: "Apply",
     maxCount: "Max Count",
-    requireAmount: "Require Amount",
+    requireAmount: "Req. Amt",
     neverExpire: "Never Expire",
     infinity: "Infinity",
     expireAt: "Expire At {i}",
@@ -1671,7 +1671,8 @@ export default {
       item: "Apply to item",
       conditionMet: "Coupon eligible",
       requireItem: "Require item is missing",
-      requireAmount: "Require $ {i} more"
+      requireAmount: "Require $ {i} more",
+      noCoupon: "We are not offering ANY coupon."
     }
   },
   giftcard: {

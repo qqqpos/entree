@@ -8,7 +8,7 @@
                 </nav>
             </header>
             <div class="tableWrap relative">
-                <table>
+                <table v-if="coupons.length">
                     <thead>
                         <tr>
                             <th>{{$t('text.enable')}}</th>
@@ -30,6 +30,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="placeholder" v-else>
+                  <i class="far fa-grin-tongue-squint"></i>
+                  <p>{{$t('coupon.tip.noCoupon')}}</p>
+                </div>
             </div>
         </div>
         <div :is="component" :init="componentData"></div>

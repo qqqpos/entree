@@ -1664,7 +1664,8 @@ export default {
       item: "应用于某个物品",
       conditionMet: "优惠可用",
       requireItem: "指定物品不存在",
-      requireAmount: "还需要 $ {i}"
+      requireAmount: "还需要 $ {i}",
+      noCoupon: "我们不提供任何优惠券"
     }
   },
   giftcard: {

@@ -574,7 +574,7 @@ ul.report h5 {
 .settlement {
   position: absolute;
   left: 0;
-  bottom: 30px;
+  bottom: 20px;
   display: flex;
   justify-content: space-evenly;
   width: 200px;

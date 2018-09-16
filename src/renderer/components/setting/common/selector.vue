@@ -3,7 +3,7 @@
     <span class="title">{{$t(title)}}</span>
     <div class="inputWrap row boxCenter">
       <slot name="items"></slot>
-      <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOperatorts">
+      <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOpts">
       <template v-else>
         <span class="input" @click.stop="isDisplay = !isDisplay">{{label}}</span>
         <i class="fa fa-sort"></i>
@@ -66,7 +66,7 @@ export default {
       this.getLabel(value);
       this.value !== value && this.$emit("update", value);
     },
-    resetOperatorts() {
+    resetOpts() {
       this.isDisplay = false;
       Object.assign(this.opts, []);
     },
@@ -94,6 +94,8 @@ export default {
   position: relative;
   border-radius: 2px;
   background: #fff;
+  max-width: 263px;
+  flex-wrap: wrap;
   flex: 1;
 }
 

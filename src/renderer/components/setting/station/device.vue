@@ -53,7 +53,7 @@ export default {
         }));
 
         devices.unshift({
-          label: this.$t("text.disable"),
+          label: vm.$t("text.disable"),
           tooltip: "",
           plainText: true,
           value: ""
@@ -62,32 +62,9 @@ export default {
         vm.terminals = devices;
       });
     });
-    appSocket.emit("[ADDRESS] COUNT", total => {
-      appSocket.emit("[ADDRESS] LIST", 0, addresses => {
-        next(vm => {
-          vm.total = total;
-          vm.addresses = addresses;
-        });
-      });
-    });
   },
   created() {
     this.station = Object.assign({}, this.$store.getters.station);
-    // this.$socket.emit("[TERMINAL] DEVICE", data => {
-    //   this.terminals = data.map(terminal => ({
-    //     label: `${terminal.alias} (${terminal.model})`,
-    //     tooltip: `${terminal.ip} - ${terminal.location}`,
-    //     plainText: true,
-    //     value: terminal.alias
-    //   }));
-    //   this.terminals.unshift({
-    //     label: this.$t("text.disable"),
-    //     tooltip: "",
-    //     plainText: true,
-    //     value: ""
-    //   });
-    // });
-
     this.printers = Object.keys(this.$store.getters.config.printers)
       .filter(p => /cashier/i.test(p))
       .map(name => ({

@@ -86,9 +86,9 @@ ul.tabs li.router-link-exact-active {
 .tab-content {
   width: 450px;
   margin: 9px auto;
+  border-radius: 6px 6px 0 0;
   background: #fff;
   box-shadow: var(--shadow);
-  border-radius: 6px 6px 0 0;
 }
 
 .tab-content > .wrap{
@@ -623,4 +623,43 @@ table.event td button {
 
 table.event tbody tr:nth-child(odd) {
   background: #eeeeee;
+}
+
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.placeholder i {
+  font-size: 5em;
+  opacity: 0.5;
+  text-shadow: 0 1px 1px #fff;
+}
+
+.placeholder p {
+  position: relative;
+  margin-top: 25px;
+  color: #666;
+}
+
+.placeholder p:before {
+  font-family: fontAwesome;
+  content: "\f10d";
+  font-weight: bold;
+  position: absolute;
+  left: -22px;
+  top: -5px;
+}
+
+.placeholder p:after {
+  font-family: fontAwesome;
+  content: "\f10e";
+  font-weight: bold;
+  position: absolute;
+  right: -22px;
+  top: -5px;
 }
