@@ -1919,6 +1919,7 @@ export default {
       report: "报表打印",
       terminal: "刷卡历史记录",
       ledger: "打开扎帐",
+      payout: "允许现金支出",
       history: "历史订单",
       exit: "退出软件"
     },
@@ -1930,9 +1931,9 @@ export default {
       order: "修改订单",
       void: "允许 作废/还原 订单",
       table: "修改座位",
-      tip: "修改订单小费",
+      tip: "修改订单小费 / 调整信用卡小费",
       gratuity: "修改订单服务费",
-      transaction: "修改信用卡交易",
+      transaction: "允许作废信用卡交易",
       server: "修改服务员",
       driver: "修改订单的派送司机",
       restriction: "允许下单不受物品条件的限制"
@@ -1945,13 +1946,11 @@ export default {
     privilege: {
       batch: "允许信用卡过账",
       reprint: "允许重新发送订单",
-      employee: "允许管理员工信息",
+      employee: "允许 添加 / 删除 员工",
       database: "允许查看数据库",
-      timecard: "允许修改打卡时段",
-      giftcard: "允许发行礼物卡",
-      promotion: "允许创建促销规则",
-      payout: "允许现金支出",
-      transaction: "允许作废信用卡交易",
+      timecard: "允许修改员工打卡信息",
+      giftcard: "允许 创建 / 修改 礼物卡",
+      coupon: "允许 创建 / 修改 优惠券",
       anydate: "允许操作任意时间的订单"
     }
   }

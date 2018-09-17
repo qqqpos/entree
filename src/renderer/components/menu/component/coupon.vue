@@ -46,6 +46,7 @@ export default {
   },
   created() {
     let coupons = this.init.coupons;
+
     this.order.coupons.forEach(coupon => {
       const index = coupons.findIndex(offer => offer._id === coupon._id);
       if (index !== -1) {
@@ -133,6 +134,10 @@ export default {
 .wrap {
   width: 765px;
   height: 350px;
-  padding:15px;
+  padding: 15px;
+}
+
+.row {
+  flex-wrap: wrap;
 }
 </style>

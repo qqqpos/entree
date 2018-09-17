@@ -4,7 +4,7 @@
             <header class="nav">
                 <h3>{{$t('setting.title.coupon')}}</h3>
                 <nav>
-                    <span @click="createCoupon">{{$t('button.new')}}</span>
+                    <span @click="createCoupon" v-show="approval(op.permission,'coupon')">{{$t('button.new')}}</span>
                 </nav>
             </header>
             <div class="tableWrap relative">
@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(coupon,index) in coupons" :key="index">
-                            <td><switches v-model="coupon.enable" class="boxCenter"></switches></td>
+                            <td><switches v-model="coupon.enable" class="boxCenter" @update="save(coupon)"></switches></td>
                             <td class="text-center">{{$t('type.'+coupon.type)}}</td>
                             <td class="text-center" :title="coupon.description">{{coupon.alias}}</td>
                             <td class="text-center">{{getDate(coupon.expireDate)}}</td>
@@ -48,6 +48,7 @@ export default {
   components: { editor, switches },
   data() {
     return {
+      op: this.$store.getters.op,
       today: Date.now(),
       componentData: null,
       component: null,
@@ -65,6 +66,7 @@ export default {
     createCoupon() {
       const coupon = {
         _id: ObjectId().toString(),
+        enable: true,
         code: "",
         alias: "",
         description: "",
@@ -119,6 +121,9 @@ export default {
       return date
         ? this.$t("coupon.expireAt", date)
         : this.$t("coupon.neverExpire");
+    },
+    save(coupon) {
+      this.$socket.emit("[COUPON] UPDATE", coupon);
     }
   }
 };

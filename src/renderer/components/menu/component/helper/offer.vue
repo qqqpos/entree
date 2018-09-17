@@ -31,49 +31,68 @@ export default {
       return false;
     },
     unqualified() {
-      const { enable, amount, item, exclude } = this.coupon.require;
+      const items = this.order.content;
+      const { requireAmount = 0 } = this.coupon;
 
-      if (!enable) {
-        return false;
-      } else {
-        if (amount > 0) {
-          let items = this.order.content;
-          const reference = this.coupon.reference;
+      if (requireAmount > 0) {
+        const subtotal = items.reduce((a, c) => {
+          let total = c.single * c.qty;
+          let sum = c.choiceSet.reduce((a, c) => a + parseFloat(c.total), 0);
+          return a + total + sum;
+        }, 0);
 
-          if (exclude.length > 0) {
-            items = items.filter(i => !exclude.includes(i.category));
-          }
+        const insufficient = subtotal < requireAmount;
 
-          if (reference.length > 0) {
-            items = items.filter(i => reference.includes(i.category));
-          }
-          //check if qualify
-          const subtotal = items.reduce((a, c) => {
-            let total = c.single * c.qty;
-            let sum = c.choiceSet.reduce((a, c) => a + parseFloat(c.total), 0);
-            return a + total + sum;
-          }, 0);
+        this.tooltip = insufficient
+          ? this.$t("coupon.tip.requireAmount", (requireAmount - subtotal).toFixed(2))
+          : this.$t("coupon.tip.conditionMet");
 
-          const insufficient = subtotal < amount;
-          this.tooltip = insufficient
-            ? this.$t(
-                "tip.coupon.requireAmount",
-                (amount - subtotal).toFixed(2)
-              )
-            : this.$t("tip.coupon.conditionMet");
-          return insufficient;
-        }
-        if (item.length > 0) {
-          const unsatisfied =
-            this.order.content.filter(i => item.includes(i._id)).length === 0;
-          this.tooltip = unsatisfied
-            ? this.$t("tip.coupon.requireItem")
-            : this.$t("tip.coupon.conditionMet");
-          return unsatisfied;
-        }
+        return insufficient;
       }
 
-      return false;
+      // const { enable, amount, item, exclude } = this.coupon.require;
+
+      // if (!enable) {
+      //   return false;
+      // } else {
+      //   if (amount > 0) {
+      //     let items = this.order.content;
+      //     const reference = this.coupon.reference;
+
+      //     if (exclude.length > 0) {
+      //       items = items.filter(i => !exclude.includes(i.category));
+      //     }
+
+      //     if (reference.length > 0) {
+      //       items = items.filter(i => reference.includes(i.category));
+      //     }
+      //     //check if qualify
+      //     const subtotal = items.reduce((a, c) => {
+      //       let total = c.single * c.qty;
+      //       let sum = c.choiceSet.reduce((a, c) => a + parseFloat(c.total), 0);
+      //       return a + total + sum;
+      //     }, 0);
+
+      //     const insufficient = subtotal < amount;
+      //     this.tooltip = insufficient
+      //       ? this.$t(
+      //           "tip.coupon.requireAmount",
+      //           (amount - subtotal).toFixed(2)
+      //         )
+      //       : this.$t("tip.coupon.conditionMet");
+      //     return insufficient;
+      //   }
+      //   if (item.length > 0) {
+      //     const unsatisfied =
+      //       this.order.content.filter(i => item.includes(i._id)).length === 0;
+      //     this.tooltip = unsatisfied
+      //       ? this.$t("tip.coupon.requireItem")
+      //       : this.$t("tip.coupon.conditionMet");
+      //     return unsatisfied;
+      //   }
+      // }
+
+      //return false;
     },
     ...mapGetters(["order"])
   },
@@ -93,6 +112,8 @@ export default {
   },
   methods: {
     toggle() {
+      if (!this.coupon.enable || this.unqualified) return;
+
       this.coupon.redeem = !this.coupon.redeem;
       this.$emit("change", this.coupon);
     },
@@ -165,6 +186,6 @@ p {
 }
 
 .type {
-  color: #B0BEC5;
+  color: #b0bec5;
 }
 </style>

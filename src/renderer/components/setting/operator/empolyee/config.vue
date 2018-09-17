@@ -35,18 +35,20 @@
       <text-list v-model="operator.cashCtrl" title="setting.cashDrawer" :opts="ctrl">
         <i class="fas fa-donate icon" slot="icon"></i>
       </text-list>
-      <external title="setting.permission.access" @open="$router.push({name:'Setting.operator.access',params:{operator}})">
-        <i class="fas fa-external-link-alt icon" slot="icon"></i>
-      </external>
-      <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})">
-        <i class="fas fa-user-edit icon" slot="icon"></i>
-      </external>
-      <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})">
-        <i class="fas fa-eye-slash icon" slot="icon"></i>
-      </external>
-      <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})">
-        <i class="fas fa-user-lock icon" slot="icon"></i>
-      </external>
+      <template v-if="operator.role !== 'Owner'">
+        <external title="setting.permission.access" @open="$router.push({name:'Setting.operator.access',params:{operator}})">
+          <i class="fas fa-external-link-alt icon" slot="icon"></i>
+        </external>
+        <external title="setting.permission.modify" @open="$router.push({name:'Setting.operator.modify',params:{operator}})">
+          <i class="fas fa-user-edit icon" slot="icon"></i>
+        </external>
+        <external title="setting.permission.view" @open="$router.push({name:'Setting.operator.view',params:{operator}})">
+          <i class="fas fa-eye-slash icon" slot="icon"></i>
+        </external>
+        <external title="setting.permission.permission" :disabled="!authorized" @open="$router.push({name:'Setting.operator.permission',params:{operator}})">
+          <i class="fas fa-user-lock icon" slot="icon"></i>
+        </external>
+      </template>
       <external title="setting.employeeCardRegistration" @open="swipe" v-if="!operator.card"></external>
       <external title="card.removeEmployeeCard" @open="unregister" v-else></external>
       <toggle v-model="operator.restrict" title="text.restrict" true-tooltip="tip.restrictPermission" false-tooltip="tip.temporaryPermission" :conditionalTooltip="true"></toggle>

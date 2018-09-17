@@ -415,7 +415,10 @@ export default {
     },
     askCashDrawerCashIn() {
       const amount = this.station.cashDrawer.initialAmount;
-      const prompt = { title: "dialog.initialCash", msg: "dialog.cashInTip" };
+      const prompt = {
+        title: "dialog.confirm.initialCash",
+        msg: "dialog.cashInTip"
+      };
 
       this.$dialog(prompt)
         .then(this.countInitialCash)
@@ -671,7 +674,11 @@ export default {
           subtitle = "Payment Handled By " + name;
           invoices = transactions.filter(p => p.cashier === name);
           tickets = this.history.filter(
-            t => t.cashier === name && t.status === 1
+            t =>
+              t.status === 1 &&
+              (Array.isArray(t.cashier)
+                ? t.cashier.includes(name)
+                : t.cashier === name)
           );
           break;
         case "Waitstaff":
@@ -702,6 +709,7 @@ export default {
       const total = toFixed(subtotal + tax - discount + rounding, 2);
       const tip = invoices.reduce((a, c) => a + c.tip, 0);
       const gratuity = tickets.reduce((a, c) => a + c.payment.gratuity, 0);
+      const delivery = tickets.reduce((a, c) => a + c.payment.delivery, 0);
       const grandTotal = toFixed(total + tip + gratuity, 2);
       const settled = invoices.reduce((a, c) => a + c.actual, 0);
       const cash = invoices
@@ -817,6 +825,7 @@ export default {
         subtitle,
         for: name,
         date: today(),
+        count: tickets.length,
         payments,
         guest,
         subtotal,
@@ -824,6 +833,7 @@ export default {
         total,
         tip,
         gratuity,
+        delivery,
         discount,
         rounding,
         grandTotal,
@@ -835,7 +845,8 @@ export default {
         sessions,
         departments
       };
-      Printer.printSessionReport(report);
+      console.log(this.history, tickets, report);
+      //Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOperator"])
   }

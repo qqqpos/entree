@@ -881,7 +881,11 @@ export default {
 
       Array.from(cashiers).forEach(cashier => {
         const handledInvoice = invoices.filter(
-          i => i.status === 1 && i.cashier === cashier
+          i =>
+            i.status === 1 &&
+            (Array.isArray(i.cashier)
+              ? i.cashier.includes(cashier)
+              : i.cashier === cashier)
         );
         const handledTrans = transactions.filter(t => t.cashier === cashier);
 

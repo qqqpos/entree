@@ -1922,6 +1922,7 @@ export default {
       terminal: "View Terminal Records",
       history: "History Invoice",
       ledger: "Ledger Summary",
+      payout: "Allow Payout",
       exit: "Exit Program"
     },
     modify: {
@@ -1932,10 +1933,10 @@ export default {
       order: "Modify Exist Ticket",
       void: "Allow to Void / Reopen Ticket",
       table: "Modify Table Ticket",
-      tip: "Adjust Tips",
+      tip: "Adjust Ticket Tips / Modify Credit Card Tip",
       gratuity: "Modify Ticket's Gratuity",
       driver: "Assign Driver To Ticket",
-      transaction: "Modify Credit Card Transaction",
+      transaction: "Void Credit Card Transaction",
       server: "Reassign Server",
       restriction: "Allow To Order Item Without Restriction Rules"
     },
@@ -1947,14 +1948,12 @@ export default {
     privilege: {
       batch: "Allow Perform Batch Action",
       reprint: "Allow Reprint Ticket",
-      employee: "Allow Modify Employee",
+      employee: "Allow Add / Remove Employees",
       database: "Allow View Database",
       timecard: "Allow Modify Employee Time Card",
-      giftcard: "Allow Issue New Gift Card",
-      promotion: "Allow Create New Promotion Rule",
-      payout: "Allow Payout From Cash Drawer",
-      transaction: "Void Credit Card Transaction",
-      anydate: "Allow To Operate Ticket Without Date Limit"
+      giftcard: "Allow Create / Modify Gift Card",
+      coupon: "Allow Create / Modify Coupon",
+      anydate: "Allow To Modify / Pay Ticket Without Date Limit"
     }
   }
 };

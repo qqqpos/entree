@@ -378,8 +378,7 @@ export default {
             },
             {
               text: this.$t("report.expectTotal"),
-              value:
-                "$ " + Math.max(0, unsettledAmount - charge - tip).toFixed(2)
+              value: "$ " + (unsettledAmount - charge - tip).toFixed(2)
             }
           ];
       }

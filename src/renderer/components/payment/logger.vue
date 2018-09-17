@@ -63,11 +63,12 @@
 import { mapGetters, mapActions } from "vuex";
 
 import dialogModule from "../common/dialog";
+import unlockModule from "../common/unlock";
 import paginator from "../common/paginator";
 
 export default {
   props: ["init"],
-  components: { dialogModule, paginator },
+  components: { dialogModule, unlockModule, paginator },
   computed: {
     logs() {
       let min = this.page * 10;
@@ -120,11 +121,15 @@ export default {
               Printer.openCashDrawer();
               break;
             case "CREDIT":
-              this.getDetail(payment.credential)
-                .then(this.initialParser)
-                .then(this.voidTransaction)
-                .then(this.remove.bind(null, payment, index))
-                .catch(this.voidFailed);
+              this.$checkPermission("modify", "transaction")
+                .then(() => {
+                  this.getDetail(payment.credential)
+                    .then(this.initialParser)
+                    .then(this.voidTransaction)
+                    .then(this.remove.bind(null, payment, index))
+                    .catch(this.voidFailed);
+                })
+                .catch(() => {});
               break;
             case "GIFT":
               this.$socket.emit(

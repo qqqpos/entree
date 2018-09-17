@@ -6,7 +6,7 @@
         <h3>{{$t("title.operators")}}</h3>
       </div>
       <nav>
-        <span class="add" @click="create">{{$t('button.new')}}</span>
+        <span class="add" @click="create" v-show="manageable">{{$t('button.new')}}</span>
       </nav>
     </header>
     <external :title="op.name" :tooltip="'type.'+op.role" v-for="(op,index) in operators" :key="index" @open="$emit('set',op)" :disabled="op.role === 'Owner' && !authorized" :translate="false"></external>
@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       authorized: this.$store.getters.authorized,
+      op: this.$store.getters.op,
       componentData: null,
       component: null,
       list: [],
@@ -56,6 +57,9 @@ export default {
       const min = this.page * 12;
       const max = min + 12;
       return this.list.slice(min, max);
+    },
+    manageable() {
+      return this.authorized || this.approval(this.op.permission, "employee");
     }
   },
   methods: {

@@ -263,10 +263,9 @@ export default {
     promotion() {
       this.$socket.emit("[COUPON] LIST", coupons => {
         this.$open("coupon", {
-          coupons: coupons.map(coupon => {
-            Object.assign(coupon, { redeem: false, enable: true });
-            return coupon;
-          })
+          coupons: coupons
+            .filter(coupon => coupon.enable)
+            .map(coupon => Object.assign({}, coupon, { redeem: false }))
         });
       });
     },

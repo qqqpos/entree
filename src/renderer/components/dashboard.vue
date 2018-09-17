@@ -171,7 +171,7 @@ export default {
     },
     askCashIn() {
       const amount = parseFloat(this.station.cashDrawer.initialAmount) || 0;
-      const prompt = { title: "dialog.initialCash", msg: "dialog.cashInTip" };
+      const prompt = { title: "dialog.confirm.initialCash", msg: "dialog.cashInTip" };
 
       this.$dialog(prompt)
         .then(() => this.countInitialCash(amount))

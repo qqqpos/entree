@@ -55,6 +55,7 @@
         "typeof",
         "uncheck",
         "unprint",
+        "unregister",
         "unsave",
         "unshift",
         "vuex",

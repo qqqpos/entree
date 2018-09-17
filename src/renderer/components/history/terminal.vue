@@ -59,7 +59,7 @@
             <td v-if="!record.close" class="actions">
               <span class="action gray" @click="adjustTipDialog(record)">{{$t('button.adjust')}}</span>
               <span class="action gray" @click="print(record)">{{$t('button.print')}}</span>
-              <span class="action red" @click="voidSale(record)">{{$t('button.void')}}</span>
+              <span class="action red" @click="voidSaleDialog(record)">{{$t('button.void')}}</span>
             </td>
             <td v-else class="actions">
               <span class="action gray" @click="print(record)">{{$t('button.print')}}</span>
@@ -297,6 +297,11 @@ export default {
     print(record) {
       Printer.printCreditCard(record, {}, true);
     },
+    voidSaleDialog(record) {
+      this.$checkPermission("modify", "transaction")
+        .then(() => this.voidSale(record))
+        .catch(() => {});
+    },
     voidSale(record) {
       const msg =
         record.for === "Order"
@@ -487,11 +492,9 @@ export default {
       this.$dialog(prompt).then(this.exitComponent);
     },
     adjustTipDialog(record) {
-      this.$checkPermission("modify", "transaction")
+      this.$checkPermission("modify", "tip")
         .then(() => this.adjustTip(record))
-        .catch(() => {
-          console.log("error");
-        });
+        .catch(() => {});
     },
     adjustTip(record) {
       // Operator has permission to adjust tip

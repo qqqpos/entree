@@ -1,6 +1,6 @@
 <template>
   <div class="popupMask setting dark center" @click.self="init.reject(false)">
-    <div class="editor">
+    <div class="editor" v-show="!component">
       <header class="row">
         <div>
           <h5>{{$t(init.edit ? 'title.edit' : 'title.create')}}</h5>
@@ -23,11 +23,11 @@
           <inputer title="text.description" v-model="coupon.description" type="textarea"></inputer>
           <inputer title="coupon.requireAmount" v-model.number="coupon.requireAmount"></inputer>
           <template v-if="coupon.type === 'giveaway'">
-            <selector title="text.item" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference">
+            <selector title="text.item" v-model="search" :opts="itemOpts" :editable="true" @keydown.enter.native="query(search)" @update="addReference" class="width">
               <div class="items row" slot="items">
                 <p v-for="(item,index) in coupon.reference" :key="index" class="relative">
-                  <span class="f1">{{item[language]}}</span>
-                  <i class="fa fa-times light clickable" @click="remove(index)"></i>
+                  <span class="f1" :title="'$ ' + item.price[0].toFixed(2)">{{item[language]}}</span>
+                  <i class="fa fa-times light clickable" @click.stop="remove(index)"></i>
                 </p>
               </div>
             </selector>
@@ -39,7 +39,7 @@
           <inputer title="coupon.code" v-model="coupon.code"></inputer>
           <inputer title="coupon.maxCount" v-model.number="coupon.maxCount"></inputer>
           <inputer title="thead.expire" v-model="coupon.expireDate" placeholder="YYYY-MM-DD"></inputer>
-          <selector title="text.apply" v-model="coupon.apply" :opts="applyTargets"></selector>
+          <selector title="text.apply" v-model="coupon.apply" :opts="targets"></selector>
           <template v-if="coupon.apply === 'category'">
             <div class="checkboxes">
               <checkbox :title="name" v-model="coupon.reference" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false"></checkbox>
@@ -62,11 +62,12 @@
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
       </footer>
     </div>
-    <div :is="component" :init="componentData"></div>
+    <div :is="component" :init="componentData" v-show="component"></div>
   </div>
 </template>
 
 <script>
+import editor from "./helper/price";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 import switches from "../../common/switches";
@@ -75,7 +76,7 @@ import checkbox from "../../common/checkbox";
 
 export default {
   props: ["init"],
-  components: { inputer, switches, toggle, selector, checkbox },
+  components: { editor, inputer, switches, toggle, selector, checkbox },
   data() {
     return {
       tab: "basic",
@@ -109,7 +110,7 @@ export default {
           value: "discount"
         }
       ],
-      applyTargets: [
+      targets: [
         {
           label: this.$t("type.order"),
           tooltip: "coupon.tip.order",
@@ -148,8 +149,19 @@ export default {
       this.init.resolve(this.coupon);
     },
     addReference(item) {
-      this.search = "";
-      this.coupon.reference.push(item);
+      new Promise((resolve, reject) => {
+        this.componentData = { resolve, reject, item };
+        this.component = "editor";
+      })
+        .then(update => {
+          this.search = "";
+          this.coupon.reference.push(update);
+          this.exitComponent();
+        })
+        .catch(() => {
+          this.search = "";
+          this.exitComponent();
+        });
     },
     remove(index) {
       this.coupon.reference.splice(index, 1);
@@ -174,5 +186,9 @@ p {
 
 .items {
   flex-wrap: wrap;
+}
+
+.width >>> .inputWrap {
+  max-width: 263px;
 }
 </style>

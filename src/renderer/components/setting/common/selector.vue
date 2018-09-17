@@ -35,7 +35,7 @@ export default {
       default: "text"
     },
     title: String,
-    value: [String, Number],
+    value: [String, Number, Object],
     editable: {
       type: Boolean,
       default: false
@@ -94,7 +94,6 @@ export default {
   position: relative;
   border-radius: 2px;
   background: #fff;
-  max-width: 263px;
   flex-wrap: wrap;
   flex: 1;
 }
@@ -141,7 +140,7 @@ ul {
   border-top: none;
   z-index: 3;
   width: calc(100% - 0px);
-  box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.5);
   max-height: 250px;
   overflow: auto;
   top: 25px;
