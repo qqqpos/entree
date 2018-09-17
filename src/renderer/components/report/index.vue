@@ -880,13 +880,16 @@ export default {
       let report = [];
 
       Array.from(cashiers).forEach(cashier => {
-        const handledInvoice = invoices.filter(
-          i =>
-            i.status === 1 &&
-            (Array.isArray(i.cashier)
-              ? i.cashier.includes(cashier)
-              : i.cashier === cashier)
-        );
+        const handledInvoice = invoices.filter(i => {
+          if (i.split || !i.cashier || (i.logs || i.payment.log).length > 1) {
+            const logs = i.logs || i.payment.log || [];
+            return (
+              i.status === 1 && logs.map(log => log.cashier).includes(cashier)
+            );
+          }
+
+          return i.status === 1 && i.cashier === cashier;
+        });
         const handledTrans = transactions.filter(t => t.cashier === cashier);
 
         report.push({

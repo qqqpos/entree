@@ -19,7 +19,9 @@
     <text-input v-model="operator.name" title="text.name"></text-input>
     <text-list v-model="operator.role" title="text.role" :opts="roles" v-show="authorized"></text-list>
     <template v-if="operator.role !== 'Owner'">
-      <text-input v-model.number="operator.wage" title="text.salary"></text-input>
+      <text-input v-model.number="operator.wage" title="text.salary">
+        <i class="fas fa-caret-right view"></i>
+      </text-input>
       <toggle v-model="operator.timecard" title="text.timecard" tooltip="tip.timecard.forOne"></toggle>
       <toggle v-model="operator.sessionReport" title="text.sessionReport" tooltip="tip.sessionReport"></toggle>
     </template>
@@ -182,9 +184,11 @@ export default {
 
 <style scoped>
 i.view {
-  padding: 10px 21px;
+  padding: 10px 14px;
   color: #555;
   cursor: pointer;
   margin: 0 10px;
+  width: 30px;
+  text-align: center;
 }
 </style>

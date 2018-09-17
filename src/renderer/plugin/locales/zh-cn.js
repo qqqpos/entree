@@ -908,7 +908,8 @@ export default {
       redeem: "礼物卡消费",
       purchase: "购买礼物卡",
       bonus: "充值奖励",
-      reward: "积分奖励"
+      reward: "积分奖励",
+      remain: "礼物卡余额"
     },
     reward: {
       generated: "产生积分",

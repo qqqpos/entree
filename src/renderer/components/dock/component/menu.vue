@@ -670,16 +670,18 @@ export default {
           tickets = this.history.filter(t => t.status === 1);
           break;
         case "Cashier":
-        case "Bartender":
           subtitle = "Payment Handled By " + name;
           invoices = transactions.filter(p => p.cashier === name);
-          tickets = this.history.filter(
-            t =>
-              t.status === 1 &&
-              (Array.isArray(t.cashier)
-                ? t.cashier.includes(name)
-                : t.cashier === name)
-          );
+          tickets = this.history.filter(t => {
+            if (t.split || !t.cashier || t.logs.length > 1) {
+              const logs = t.logs || t.payment.log || [];
+              return (
+                t.status === 1 && logs.map(log => log.cashier).includes(name)
+              );
+            }
+
+            return t.status === 1 && t.cashier === name;
+          });
           break;
         case "Waitstaff":
           subtitle = "Order Taken By " + name;
@@ -687,6 +689,25 @@ export default {
           tickets = this.history.filter(
             t => t.server === name && t.status === 1
           );
+          break;
+        case "Bartender":
+          subtitle = "Payment & Ticket Handled By " + name;
+          invoices = transactions.filter(
+            p => p.cashier === name || p.server === name
+          );
+          tickets = this.history.filter(t => {
+            if (t.split || !t.cashier || t.logs.length > 1) {
+              const logs = t.logs || t.payment.log || [];
+              return (
+                t.status === 1 &&
+                (t.server === name ||
+                  logs.map(log => log.cashier).includes(name))
+              );
+            }
+
+            return t.status === 1 && (t.cashier === name || t.server === name);
+          });
+          break;
       }
 
       const payments = invoices.map(i => ({
@@ -710,16 +731,30 @@ export default {
       const tip = invoices.reduce((a, c) => a + c.tip, 0);
       const gratuity = tickets.reduce((a, c) => a + c.payment.gratuity, 0);
       const delivery = tickets.reduce((a, c) => a + c.payment.delivery, 0);
-      const grandTotal = toFixed(total + tip + gratuity, 2);
+      const grandTotal = toFixed(total + tip + gratuity + delivery, 2);
       const settled = invoices.reduce((a, c) => a + c.actual, 0);
-      const cash = invoices
-        .filter(t => t.type === "CASH" || t.subType === "CASH")
-        .reduce((a, c) => a + c.actual, 0);
       const settledCount = invoices.length;
       const unsettled = tickets
         .filter(t => !t.settled)
         .reduce((a, c) => a + c.payment.balance, 0);
       const unsettledCount = tickets.filter(t => !t.settled).length;
+
+      const cash = invoices
+        .filter(t => t.type === "CASH" || t.subType === "CASH")
+        .reduce((a, c) => a + c.actual, 0);
+
+      let paymentTypes = {};
+      payments.forEach(t => {
+        if (paymentTypes[t.payment]) {
+          paymentTypes[t.payment].count++;
+          paymentTypes[t.payment].amount += t.amount;
+        } else {
+          paymentTypes[t.payment] = {
+            count: 1,
+            amount: t.amount
+          };
+        }
+      });
 
       //session report
       const weekDay = moment().format("d");
@@ -841,12 +876,13 @@ export default {
         unsettled,
         settledCount,
         cash,
+        paymentTypes,
         unsettledCount,
         sessions,
         departments
       };
-      console.log(this.history, tickets, report);
-      //Printer.printSessionReport(report);
+
+      Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOperator"])
   }

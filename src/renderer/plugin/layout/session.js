@@ -49,24 +49,24 @@ const session = function (data) {
                 </thead>\
                 <tbody>\
                     ${data.sessions.map(i => {
-                        const total = `<tr class="bold">\
+                const total = `<tr class="bold">\
                                         <td>${i.alias}</td>\
                                         <td>${i.count}</td>\
                                         <td>${i.tip > 0 ? i.tip.toFixed(2) : ""}</td>\
                                         <td>${i.amount.toFixed(2)}</td>\
                                     </tr>`;
 
-                        const types = i.type.filter(t => t.count > 0).map(i => `
+                const types = i.type.filter(t => t.count > 0).map(i => `
                                     <tr>\
                                         <td>${i.type}</td>\
                                         <td>( ${i.count} )</td>\
-                                        <td>${i.tip > 0 ?  "( " + i.tip.toFixed(2) + " )" : ""}</td>\
+                                        <td>${i.tip > 0 ? "( " + i.tip.toFixed(2) + " )" : ""}</td>\
                                         <td>( ${i.amount.toFixed(2)} )</td>\
                                     </tr>`
-                        ).join("").toString();
+                ).join("").toString();
 
-                        return total + types;
-                }).join("").toString()}
+                return total + types;
+            }).join("").toString()}
                 </tbody>\
             </table></section>
         `;
@@ -85,7 +85,7 @@ const session = function (data) {
                         </tr>
                     </thead>
                     <tbody>
-                        ${data.departments.map(dep=>`<tr>
+                        ${data.departments.map(dep => `<tr>
                             <td>${dep.usEN}</td>
                             <td>${dep.count}</td>
                             <td>${dep.subtotal.toFixed(2)}</td>
@@ -97,9 +97,11 @@ const session = function (data) {
             </section>
         ` : "";
 
+        const delivery = data.delivery > 0 ? `<p><span class="type">Delivery</span><span class="value">${data.delivery.toFixed(2)}</span></p>` : "";
         const summary = `
             <section class="type">\
                 <h4>Total Dine In Guest Served: ${data.guest}</h4>\
+                <p><span class="type">Ticket Count</span><span class="value">${data.count}</span></p>\
                 <p><span class="type">Subtotal</span><span class="value">${data.subtotal.toFixed(2)}</span></p>\
                 <p><span class="type">Tax</span><span class="value">${data.tax.toFixed(2)}</span></p>\
                 <p><span class="type">Discount</span><span class="value">- ${data.discount.toFixed(2)}</span></p>\
@@ -108,11 +110,14 @@ const session = function (data) {
                 <br>
                 <p><span class="type">Tip</span><span class="value">${data.tip.toFixed(2)}</span></p>\
                 <p><span class="type">Gratuity</span><span class="value">${data.gratuity.toFixed(2)}</span></p>\
+                ${delivery}
                 <p><span class="type">Total w. Tip & Gratuity</span><span class="value">${data.grandTotal.toFixed(2)}</span></p>\
                 <br>
                 <p><span class="type">Settled ( ${data.settledCount} )</span><span class="value">${data.settled.toFixed(2)}</span></p>\
-                <p><span class="type indent">Cash</span><span class="value">( ${data.cash.toFixed(2)} )</span></p>\
+                ${Object.entries(data.paymentTypes).map(payment => `<p><span class="type indent">${payment[0]} ( ${payment[1].count} )</span><span class="value">( ${payment[1].amount.toFixed(2)} )</span></p>`).join("").toString()}
                 <p><span class="type">Unsettled ( ${data.unsettledCount} )</span><span class="value">${data.unsettled.toFixed(2)}</span></p>\
+                <br>
+                <p><span class="type">Expect To Collect: </span><span class="value">${(data.cash - data.tip).toFixed(2)}</span></p>\
             </section>`;
 
         return `<section class="header">\

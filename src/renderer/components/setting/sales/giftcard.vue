@@ -19,29 +19,32 @@
             <span class="value">{{summary.count}}</span>
           </p>
           <p>
-            <span class="f1">Giftcard Remain Balance</span>
+            <span class="f1">{{$t('report.giftcard.remain')}}</span>
             <span class="value">$ {{summary.remain | decimal}}</span>
           </p>
           <h3>{{$t('card.stats.giftcardSalesToday')}}</h3>
           <div class="group">
             <p>
-              <span class="f1">Activated</span>
+              <span class="f1">{{$t('report.giftcard.activation')}}</span>
               <span class="value">{{summary.activated}}</span>
             </p>
             <p>
-              <span class="f1">Bonus</span>
+              <span class="f1">{{$t('report.giftcard.bonus')}}</span>
               <span class="value">$ {{summary.bonusAmount | decimal}}</span>
             </p>            
             <p>
-              <span class="f1">Reload</span>
+              <span class="f1">{{$t('report.giftcard.reload')}}</span>
               <span class="value">$ {{summary.reloadAmount | decimal}}</span>
             </p>
             <p>
-              <span class="f1">Redeem</span>
+              <span class="f1">{{$t('report.giftcard.redeem')}}</span>
               <span class="value">$ {{summary.redeemAmount | decimal}}</span>
             </p>            
           </div>
-          <h3>{{$t('button.search')}}</h3>
+          <h3>{{$t('button.search')}} {{$t('card.giftCard')}}</h3>
+          <div class="group row boxCenter">
+            <i class="fa fa-search"></i><input v-model="cardNumber">
+          </div>
         </div>
       </section>
       </div>
@@ -58,6 +61,7 @@ export default {
     return {
       componentData: null,
       component: null,
+      cardNumber: "",
       today: today(),
       summary: {},
       cards: [],
@@ -94,5 +98,13 @@ export default {
   position: absolute;
   width: 611px;
   bottom: 15px;
+}
+
+input {
+  padding: 5px;
+  margin: 10px 0 10px 15px;
+  border: none;
+  outline: none;
+  width: 200px;
 }
 </style>

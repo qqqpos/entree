@@ -45,6 +45,7 @@ const mutations = {
             payment: {
                 subtotal: 0,
                 tax: 0,
+                plasticTax: 0,
                 total: 0,
                 due: 0,
                 balance: 0,
@@ -186,11 +187,17 @@ const mutations = {
 
         let { single } = item;
 
-        single = parseFloat(price)
-            || parseFloat(item.price[index])
-            || parseFloat(item.price[0]) + parseFloat(extra)
-            || parseFloat(item.price[0])
-            || 0;
+        if (side.template && !side.price && !side.extra) {
+            //skip
+
+        } else {
+            single = parseFloat(price)
+                || parseFloat(item.price[index])
+                || parseFloat(item.price[0]) + parseFloat(extra)
+                || parseFloat(item.price[0])
+                || 0;
+        }
+
 
         if (item.qty === 1) {
             if (index === item.sideIndex && !data.function) {
@@ -221,14 +228,13 @@ const mutations = {
 
                 // copy item
                 let newItem = JSON.parse(JSON.stringify(item));
-
                 Object.assign(newItem, {
                     qty: 1,
                     single,
                     sideIndex: index,
                     total: single.toFixed(2),
                     unique: String().random(),
-                    side: ignore ? {} : { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` },
+                    side: side.template && ignore ? item.side : ignore ? {} : { zhCN: `[${zhCN}]`, usEN: `[${usEN}]` },
                 });
 
                 //apply style

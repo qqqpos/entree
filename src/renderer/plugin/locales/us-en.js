@@ -968,15 +968,15 @@ export default {
     lowestSales: "Lowest Sales",
     averageSales: "Average Sales",
     rounding: "Penny Rounding",
-    averageDetail:
-      "There are {i} days above average and {i} days below average.",
+    averageDetail: "There are {i} days above average and {i} days below average.",
     giftcard: {
       activation: "Gift Card Activation",
       reload: "Gift Card Reload",
       redeem: "Gift Card Redeem",
       purchase: "Purchase Gift Card",
       bonus: "Reload Bonus",
-      reward: "Reward Bonus"
+      reward: "Reward Bonus",
+      remain: "Remain Balance"
     },
     reward: {
       generated: "Point Generated",
