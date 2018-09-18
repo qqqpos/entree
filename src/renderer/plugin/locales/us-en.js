@@ -715,7 +715,7 @@ export default {
     expirationDateIncorrect: "Credit card expiration date incorrect",
     ticketSettled: "All Split Ticket Are Settled",
     settleTicketConfirm: "Are you wish to mark this ticket as paid?",
-    insufficientAmount: "There is an insufficient amount of balance.",
+    insufficientAmount: "There is an insufficient funds on the card.",
     combineTicketsConfirm: "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
     somethingWrong: "Error Occurred",
     somethingWrongTip: "An unknown error occurred while saving this order.",

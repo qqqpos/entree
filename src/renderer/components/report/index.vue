@@ -3,7 +3,7 @@
     <div class="editor" v-show="!component">
       <header>
         <div>
-          <h5>{{reportRange.from | moment('YYYY-MM-DD HH:mm')}} ~ {{reportRange.to | moment('YYYY-MM-DD HH:mm')}}</h5>
+          <h5>{{reportRange.from | moment('YYYY-MM-DD hh:mm a')}} ~ {{reportRange.to | moment('YYYY-MM-DD hh:mm a')}}</h5>
           <h3>{{$t('title.report')}}</h3>
         </div>
       </header>
@@ -14,10 +14,16 @@
             <span>{{$t('report.range')}}</span>
           </div>
           <div class="rangeWrap">
+            <div v-for="(session,index) in hours" :key="index">
+              <input type="radio" name="range" v-model="range" :value="session.alias" :id="'session'+index" @click="getRange('session',session)">
+              <label :for="'session'+index">{{session.alias}}</label>
+            </div>
             <div>
               <input type="radio" name="range" v-model="range" value="today" id="today" @click="getRange('today')">
               <label for="today">{{$t('date.today')}}</label>
             </div>
+          </div>
+          <div class="rangeWrap">
             <div>
               <input type="radio" name="range" v-model="range" value="week" id="week" @click="getRange('week')">
               <label for="week">{{$t('date.currentWeek')}}</label>
@@ -69,7 +75,7 @@
       </div>
       <footer>
         <div class="opt">
-          <checkbox v-model="daily" title="report.dailyReport" v-show="range !== 'today'"></checkbox>
+          <checkbox v-model="daily" title="report.dailyReport" v-show="(range !== 'today' || range !== 'session')"></checkbox>
         </div>
         <button class="btn" @click="init.reject">{{$t('button.back')}}</button>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
@@ -89,10 +95,11 @@ export default {
   props: ["init"],
   components: { checkbox, radiobox, calendar, processor },
   computed: {
-    ...mapGetters(["language", "departments"])
+    ...mapGetters(["store", "language", "departments"])
   },
   data() {
     return {
+      hours: [],
       reportDetail: "simple",
       componentData: null,
       component: null,
@@ -114,6 +121,7 @@ export default {
   },
   created() {
     this.getRange(this.range);
+    this.getStoreOpenHour();
     this.getPreferences();
   },
   beforeDestroy() {
@@ -148,7 +156,13 @@ export default {
       };
       localStorage.setItem("reportPreferences", JSON.stringify(preferences));
     },
-    getRange(type) {
+    getStoreOpenHour() {
+      const { openingHours } = this.store;
+      const day = moment().format("d");
+
+      this.hours = openingHours.rules[day].hours;
+    },
+    getRange(type, session) {
       let from, to;
       switch (type) {
         case "today":
@@ -206,9 +220,13 @@ export default {
             .minutes(59)
             .seconds(59);
           break;
+        case "session":
+          from = +new Date(today() + " " + session.from);
+          to = +new Date(today() + " " + session.to);
+          
+          break;
       }
       this.reportRange = { from, to };
-      console.log(from, to);
     },
     openCalendar() {
       new Promise((resolve, reject) => {
@@ -335,13 +353,13 @@ export default {
         report.push({
           text: this.$t("report.fromDate"),
           style: "bold",
-          value: moment(range.from).format("YYYY-MM-DD HH:mm")
+          value: moment(range.from).format("YYYY-MM-DD hh:mm a")
         });
 
         report.push({
           text: this.$t("report.toDate"),
           style: "bold space",
-          value: moment(range.to).format("YYYY-MM-DD HH:mm")
+          value: moment(range.to).format("YYYY-MM-DD hh:mm a")
         });
       }
 

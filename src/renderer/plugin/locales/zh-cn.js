@@ -649,7 +649,7 @@ export default {
     expirationDateIncorrect: "信用卡日期格式不正确",
     ticketSettled: "此订单已结账",
     settleTicketConfirm: "您想要将此订单设置成已付吗？",
-    insufficientAmount: "所剩余额不足",
+    insufficientAmount: "此卡所剩的余额不足于支付整个订单",
     combineTicketsConfirm: "您确定要将 {i} 订单合并至 #{i}号 吗？",
     somethingWrong: "发生了一个错误",
     somethingWrongTip: "此订单在保存的过程中产生了一个错误，保存被取消",

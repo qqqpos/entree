@@ -41,15 +41,13 @@ export default {
       layout: "CLASSIC"
     };
   },
-  methods: {
-      
-  }
+  methods: {}
 };
 </script>
 
 <style scoped>
 .report {
-  width: 780px;
+  width: 820px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   text-align: center;

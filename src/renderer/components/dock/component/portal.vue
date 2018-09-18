@@ -3,7 +3,7 @@
         <div class="portal">
           <ul class="invoices">
             <story v-for="(invoice,index) in invoices" :invoice="invoice" :key="index" :focus="view === index"
-             @menu="toggle(index)" 
+             @menu="toggleStory(index)" 
              @preview="preview(invoice)"
              @copy="copy(invoice)"
              @reimburse="reimburse(invoice)"></story>
@@ -27,19 +27,12 @@
             </div>
           </div>
           <template v-if="cards.length">
-            <div class="card" v-for="(card,index) in cards" :key="index">
-              <h5>{{$t('card.giftCard')}}<i class="fas fa-ellipsis-h light more"></i></h5>
-              <div class="wrap">
-                <div class="column f1">
-                  <span class="value">{{card.number | card}}</span>
-                  <span class="text">{{$t('card.number')}}</span>
-                </div>
-                <div class="column">
-                  <span class="value">$ {{card.balance | decimal}}</span>
-                  <span class="text">{{$t('card.balance')}}</span>
-                </div>              
-              </div>
-            </div>
+            <gift-card :card="card" v-for="(card,index) in cards" :key="index" :focus="pick === index" 
+            @menu="toggleCard(index)"
+            @use="use(card)"
+            @reload="reload(card)"
+            @view="recall(card)"
+            ></gift-card>
           </template>
           <template v-else-if="profile">
             <div class="card" @click="activateGiftcard">
@@ -67,12 +60,13 @@ import { mapActions, mapGetters } from "vuex";
 
 import story from "./helper/story";
 import redeem from "./helper/redeem";
+import giftCard from "./helper/card";
 import ticket from "../../common/ticket";
 import dialogModule from "../../common/dialog";
 import giftcardModule from "../../giftcard/index";
 
 export default {
-  components: { story, ticket, redeem, dialogModule, giftcardModule },
+  components: { story, ticket, redeem, giftCard, dialogModule, giftcardModule },
   props: ["init"],
   data() {
     return {
@@ -91,7 +85,8 @@ export default {
         point: 0,
         value: 0
       },
-      view: null
+      view: null,
+      pick: null
     };
   },
   computed: {
@@ -104,9 +99,18 @@ export default {
     this.calculateRewardValue(this.init.rewardPoint);
   },
   methods: {
-    toggle(index) {
+    toggleStory(index) {
       this.view = this.view === index ? null : index;
     },
+    toggleCard(index) {
+      this.pick = this.pick === index ? null : index;
+    },
+    use(card) {
+      this.setOrder({ __giftCard__: card });
+      this.init.resolve();
+    },
+    reload() {},
+    recall() {},
     preview(ticket) {
       new Promise((resolve, reject) => {
         this.moduleData = { resolve, reject, ticket, exit: true };
@@ -351,49 +355,6 @@ export default {
   position: fixed;
   left: 37px;
   top: 0;
-}
-
-.card {
-  background: #fff;
-  margin: 5px 5px 0;
-  border-radius: 6px;
-  padding: 6px 12px;
-  position: relative;
-}
-
-.card h5 {
-  color: #3c3c3c;
-}
-
-.card h3 {
-  margin: 2px 0;
-}
-
-.card .wrap {
-  display: flex;
-  margin-top: 2px;
-}
-
-.card .wrap > div {
-  padding: 0 7px;
-}
-
-.card .value {
-  font-family: "Agency FB";
-  font-weight: bold;
-  font-size: 24px;
-  color: #333;
-}
-
-.card .text {
-  color: #3666d4;
-  font-size: 12px;
-}
-
-.card i.more {
-  cursor: pointer;
-  float: right;
-  padding-left: 15px;
 }
 
 .redeem {

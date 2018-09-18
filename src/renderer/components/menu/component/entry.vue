@@ -2,11 +2,11 @@
     <div class="popupMask dark" @click.self="init.reject">
       <section class="input">
         <div class="wrap">
-          <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty')">
+          <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty',false)">
           <div class="item">
-            <input type="text" v-model="keywords" class="item" ref="item" @click="focus('item')">
+            <input type="text" v-model="keywords" class="item" ref="item" @click="focus('item',true)">
           </div>
-          <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price')">
+          <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price',false)">
           <i class="fas fa-check fa-2x confirm" @click="confirm"></i>
         </div>
       </section>
@@ -33,7 +33,7 @@
                 </li>
             </ul>
         </section> -->
-        <keyboard :display="true" :alphabet="false" :length="keywords.length" @input="input" @backspace="backspace" @enter="confirm"></keyboard>
+        <keyboard :display="true" :alphabet.sync="alphabet" :length="keywords.length" @input="input" @backspace="backspace" @enter="confirm"></keyboard>
     </div>
 </template>
 
@@ -56,7 +56,8 @@ export default {
       reset: true,
       option: false,
       toggle: false,
-      anchor: "item"
+      anchor: "item",
+      alphabet: true
     };
   },
   created() {
@@ -70,8 +71,10 @@ export default {
     document.activeElement.classList.add("active");
   },
   methods: {
-    focus(field) {
+    focus(field, keyboardLayout) {
+      this.alphabet = keyboardLayout;
       this.anchor = field;
+
       document.querySelector("input.active").classList.remove("active");
 
       this.reset = true;
@@ -155,6 +158,11 @@ export default {
       target.dispatchEvent(new Event("input"));
     },
     confirm() {
+      if (!this.keywords && parseFloat(this.price) === 0) {
+        this.init.resolve();
+        return;
+      }
+
       const single = parseFloat(this.price) || 0;
 
       Object.assign(this.item, {

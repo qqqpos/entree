@@ -74,7 +74,7 @@
                 </section>
             </template>
             <section class="alphabetic">
-                <div class="fn" @mousedown.prevent="alphabet = !alphabet">{{alphabet ? '123' : 'abc'}}</div>
+                <div class="fn" @mousedown.prevent="toggle">{{alphabet ? '123' : 'abc'}}</div>
                 <div @mousedown.prevent="input(',')">,</div>
                 <div class="space" @mousedown.prevent="space"></div>
                 <div @mousedown.prevent="input('.')">.</div>
@@ -93,11 +93,14 @@ export default {
       type: String,
       default: "Enter"
     },
+    alphabet: {
+      type: Boolean,
+      default: true
+    },
     length: Number
   },
   data() {
     return {
-      alphabet: true,
       capLock: false,
       shift: true,
       layout: true
@@ -119,6 +122,9 @@ export default {
     space() {
       this.$emit("input", " ");
       this.shift = true;
+    },
+    toggle() {
+      this.$emit("update:alphabet", !this.alphabet);
     }
   },
   watch: {

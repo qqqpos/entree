@@ -111,8 +111,8 @@ export default {
       );
     },
     unlock() {
-      if(!this.select) return;
-      
+      if (!this.select) return;
+
       this.decrypt(this.select.cipher, "whoisyourdaddy")
         .then(card => {
           Object.assign(this.select, {
@@ -203,11 +203,7 @@ export default {
 
       if (unlock) {
         this.setOrder({
-          __creditPayment__: {
-            number,
-            cvc,
-            date: exp
-          },
+          __creditCard__: { number, cvc, date: exp },
           tradeMark
         });
       }

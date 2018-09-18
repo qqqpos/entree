@@ -287,7 +287,7 @@ export default {
 
       if (
         this.station.terminal &&
-        this.invoice.hasOwnProperty("__creditPayment__")
+        this.invoice.hasOwnProperty("__creditCard__")
       ) {
         //apply credit card info to payment module
       }
@@ -352,10 +352,15 @@ export default {
       if (newType !== "THIRD") this.externalPaymentType = null;
 
       if (newType === "GIFT") {
-        this.giftCard = "";
-        this.swipeGiftCard()
-          .then(this.checkGiftCard)
-          .catch(this.exitComponent);
+        if (this.order.hasOwnProperty("__giftCard__")) {
+          this.checkGiftCard(this.order.__giftCard__);
+        } else {
+          this.giftCard = "";
+
+          this.swipeGiftCard()
+            .then(this.checkGiftCard)
+            .catch(this.exitComponent);
+        }
       }
     },
     setAnchor(newAnchor) {
@@ -580,7 +585,7 @@ export default {
         });
       });
     },
-    queryGiftCard() {
+    queryGiftCard(number) {
       this.swipeGiftCard(this.giftCard.replace(/\D/g, ""))
         .then(this.checkGiftCard)
         .catch(this.exitComponent);
@@ -787,7 +792,7 @@ export default {
               )
             );
 
-            delete this.order.__creditPayment__;
+            delete this.order.__creditCard__;
 
             //save credit card
             if (this.defaults.autoSaveCard) {
@@ -837,6 +842,8 @@ export default {
               credential: data,
               lfd: this.giftCard.number.replace(/\D/g, "").slice(12, 16)
             });
+
+            delete this.order.__giftCard__;
             break;
         }
 

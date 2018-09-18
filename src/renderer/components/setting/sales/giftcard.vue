@@ -43,7 +43,7 @@
           </div>
           <h3>{{$t('button.search')}} {{$t('card.giftCard')}}</h3>
           <div class="group row boxCenter">
-            <i class="fa fa-search"></i><input v-model="cardNumber">
+            <i class="fa fa-search light"></i><input v-model="cardNumber">
           </div>
         </div>
       </section>
@@ -81,7 +81,6 @@ export default {
   methods: {
     fetchData() {
       this.$socket.emit("[GIFTCARD] LIST", this.page, cards => {
-        console.log(this.page, cards);
         this.cards = cards;
       });
     },

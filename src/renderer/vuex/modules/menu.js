@@ -277,6 +277,9 @@ const mutations = {
                     2
                 ).toFixed(2);
             }
+            // to trigger vue watch
+            state.order.content.splice();
+
         } else if (delChoiceSetFirst) {
             let set = state.item.choiceSet.last();
             set &&
@@ -309,6 +312,7 @@ const mutations = {
                 state.sides = sides;
             }
         }
+
         state.lastActionTime = +new Date();
     },
     [types.MORE_QTY](state) {
@@ -324,8 +328,8 @@ const mutations = {
                 ++state.item.qty * state.item.single,
                 2
             ).toFixed(2);
-            state.order.content.splice();
         }
+        state.order.content.splice();
     },
     [types.SET_CHOICE_SET](state, { subitem, matchItemQty }) {
         if (state.order.content.length === 0) return;
@@ -377,6 +381,8 @@ const mutations = {
         const qty = data.qty || 1;
         const price = toFixed(single * qty, 2).toFixed(2);
         Object.assign(state.choiceSetTarget, { qty, single, price });
+
+        state.order.content.splice()
     },
     [types.SET_CHOICE_SET_TARGET](state, target) {
         state.choiceSetTarget = target;

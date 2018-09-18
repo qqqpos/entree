@@ -19,11 +19,6 @@
 <script>
 export default {
   props: ["invoice", "focus"],
-  data() {
-    return {
-      isRepeatVisible: false
-    };
-  },
   filters: {
     time(value, boolean) {
       return boolean
@@ -59,9 +54,7 @@ export default {
       const total = invoice.payment.balance.toFixed(2);
       const text = this.$t("text.total");
 
-      return `<span class="danger-text">${name}</span>${items}<span class="danger-text">${type}</span>\
-                ${reason}
-              <p class="amount">${text} <i class="fas fa-dollar-sign"></i> ${total}</p>`;
+      return `<span class="danger-text">${name}</span>${items}<span class="danger-text">${type}</span>${reason}<p class="amount">${text} <i class="fas fa-dollar-sign"></i> ${total}</p>`;
     },
     getReason({ by, time, note, flag, join = "" }) {
       const reason = this.$t("reason." + note, join);
@@ -122,24 +115,6 @@ h5 {
 
 .time {
   color: #795548;
-}
-
-.mask {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.mask span {
-  background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
-  border-radius: 4px;
-  padding: 7px 10px;
-  margin: 5px;
-  box-shadow: 0 1px 3px #333;
 }
 </style>
 

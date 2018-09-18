@@ -37,7 +37,7 @@ const ticket = function (raw, receipt, target) {
     this.plugin.SET_PRINTER_INDEX(printer);
     this.plugin.PRINT();
 
-    if (raw.hasOwnProperty("__creditPayment__") && /cashier/i.test(printer)) {
+    if (raw.hasOwnProperty("__creditCard__") && /cashier/i.test(printer)) {
       this.plugin.PRINT_INITA(0, 0, 270, 500, "Ticket Credit Payment");
       this.plugin.SET_PRINTER_INDEX(printer);
       this.plugin.ADD_PRINT_TEXT(0, 35, 100, 21, "# " + raw.number);
@@ -54,17 +54,17 @@ const ticket = function (raw, receipt, target) {
       this.plugin.SET_PRINT_STYLEA(0, "Alignment", 3);
       this.plugin.SET_PRINT_STYLEA(0, "LetterSpacing", 1);
 
-      this.plugin.ADD_PRINT_TEXT(30, 0, 250, 34, raw.__creditPayment__.number);
+      this.plugin.ADD_PRINT_TEXT(30, 0, 250, 34, raw.__creditCard__.number);
       this.plugin.SET_PRINT_STYLEA(0, "Alignment", 2);
       this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
       this.plugin.SET_PRINT_STYLEA(0, "FontSize", 17);
       this.plugin.SET_PRINT_STYLEA(0, "Bold", 1);
       this.plugin.SET_PRINT_STYLEA(0, "LetterSpacing", 1);
-      this.plugin.ADD_PRINT_TEXT(68, 40, 60, 20, raw.__creditPayment__.date);
+      this.plugin.ADD_PRINT_TEXT(68, 40, 60, 20, raw.__creditCard__.date);
       this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
       this.plugin.SET_PRINT_STYLEA(0, "FontSize", 11);
       this.plugin.SET_PRINT_STYLEA(0, "LetterSpacing", 1);
-      this.plugin.ADD_PRINT_TEXT(68, 90, 60, 20, raw.__creditPayment__.cvc);
+      this.plugin.ADD_PRINT_TEXT(68, 90, 60, 20, raw.__creditCard__.cvc);
       this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
       this.plugin.SET_PRINT_STYLEA(0, "FontSize", 12);
       this.plugin.SET_PRINT_STYLEA(0, "LetterSpacing", 1);

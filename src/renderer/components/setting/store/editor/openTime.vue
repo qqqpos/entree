@@ -7,8 +7,8 @@
                 <div class="name">   
                     <input v-model="session.alias" maxlength="10">
                 </div>
-                <selector :opts="hours" v-model="session.from"></selector>
-                <selector :opts="hours" v-model="session.to"></selector>
+                <selector :opts="hours" v-model="session.from" class="time"></selector>
+                <selector :opts="hours" v-model="session.to" class="time"></selector>
                 <i class="fa fa-plus icon" @click="add" v-if="index === 0"></i>
                 <i class="fa fa-times icon" @click="remove(index)" v-else></i>
             </div>
@@ -141,5 +141,9 @@ input.name {
 
 .toggle {
   margin: 0 15px;
+}
+
+.time >>> .input{
+  width: 90px;
 }
 </style>
