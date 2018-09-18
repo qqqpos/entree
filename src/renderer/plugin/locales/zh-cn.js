@@ -1670,16 +1670,21 @@ export default {
     }
   },
   giftcard: {
+    activate: "激活礼物卡",
+    deactivate: "注销礼物卡",
+    search: "查找礼物卡",
     setting: {
       title: "礼物卡设置",
       enable: "启用礼物卡",
       manual: "允许手动输入卡号",
-      expire: "过期年限",
+      expire: "礼物卡过期",
       bonus: "充值奖励",
-      format: "卡号格式",
+      format: "刷卡读取格式",
       length: "{i}位数卡号"
     },
-    dialog: {},
+    dialog: {
+      swipeCard: "请刷礼物卡"
+    },
     tip: {},
   },
   online: {

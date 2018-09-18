@@ -1676,14 +1676,20 @@ export default {
     }
   },
   giftcard: {
+    activate: "Activate Gift Card",
+    deactivate: "Deactivate Gift Card",
+    search: "Search Gift Card",
     setting: {
       title: "Gift Card Setting",
       enable: "Enable Gift Card",
       expire: "Gift Card Expire",
       manual: "Allow Manually Input Number",
       bonus: "Reload Bonus",
-      format: "Card Format",
+      format: "Card Reader Parser Length",
       length: "{i} digits length"
+    },
+    dialog: {
+      swipeCard: "Please Swipe Gift Card"
     }
   },
   online: {

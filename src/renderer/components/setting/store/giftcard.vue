@@ -5,11 +5,12 @@
         <h3 class="title">{{$t('giftcard.setting.title')}}</h3>
       </header>
       <toggle title="giftcard.setting.enable" v-model="giftcard.enable"></toggle>
-      <toggle title="giftcard.setting.manual" v-model="giftcard.manual"></toggle>
-      <div class="slider">
+      <!-- <toggle title="giftcard.setting.manual" v-model="giftcard.manual"></toggle> -->
+      <!-- <div class="slider">
         <label>{{$t('giftcard.setting.expire')}}<span class="value">{{periods[giftcard.expire]}}</span></label>
         <slider v-model="giftcard.expire" :min="0" :max="5" :piecewise="true" tooltip="hover" :lazy="true"></slider>        
-      </div>
+      </div> -->
+      <toggle title="giftcard.setting.expire" v-model="giftcard.expire"></toggle> 
       <div class="slider">
         <label>{{$t('giftcard.setting.format')}}<span class="value">{{$t('giftcard.setting.length',giftcard.format)}}</span></label>
         <slider v-model="giftcard.format" :min="4" :max="16" :piecewise="true" tooltip="hover" :lazy="true"></slider>
@@ -39,14 +40,14 @@ export default {
     return {
       authorized: this.$store.getters.authorized,
       giftcard: this.$store.getters.store.giftcard,
-      periods: [
-        this.$t("card.lifetime"),
-        this.$t("card.periodYears", 1),
-        this.$t("card.periodYears", 2),
-        this.$t("card.periodYears", 3),
-        this.$t("card.periodYears", 4),
-        this.$t("card.periodYears", 5)
-      ]
+      // periods: [
+      //   this.$t("card.lifetime"),
+      //   this.$t("card.periodYears", 1),
+      //   this.$t("card.periodYears", 2),
+      //   this.$t("card.periodYears", 3),
+      //   this.$t("card.periodYears", 4),
+      //   this.$t("card.periodYears", 5)
+      // ]
     };
   },
   beforeDestroy() {

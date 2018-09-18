@@ -16,8 +16,9 @@
       <i class="fa fa-eye view" v-if="view === 'password'" @click="view = 'text'"></i>
       <i class="fa fa-eye-slash view" v-else @click="view = 'password'"></i>
     </text-input>
-    <text-input v-model="operator.name" title="text.name"></text-input>
-    <text-list v-model="operator.role" title="text.role" :opts="roles" v-show="authorized"></text-list>
+    <text-input v-model="operator.name" title="text.name">
+      <text-list v-model="operator.role" title="text.role" :opts="roles" v-show="authorized" :defaultStyle="false" class="f3 role"></text-list>
+    </text-input>
     <template v-if="operator.role !== 'Owner'">
       <text-input v-model.number="operator.wage" title="text.salary">
         <i class="fas fa-caret-right view"></i>
@@ -190,5 +191,10 @@ i.view {
   margin: 0 10px;
   width: 30px;
   text-align: center;
+}
+
+.role {
+  border: none;
+  padding: 0;
 }
 </style>

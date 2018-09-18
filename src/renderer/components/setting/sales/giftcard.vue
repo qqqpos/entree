@@ -15,7 +15,7 @@
         <div class="wrap relative">
           <h3>{{$t('nav.overview')}}</h3>
           <p>
-            <span class="f1">Total Giftcard Count</span>
+            <span class="f1">{{$t('report.giftcard.count')}}</span>
             <span class="value">{{summary.count}}</span>
           </p>
           <p>
@@ -41,10 +41,12 @@
               <span class="value">$ {{summary.redeemAmount | decimal}}</span>
             </p>            
           </div>
-          <h3>{{$t('button.search')}} {{$t('card.giftCard')}}</h3>
+          <h3>{{$t('giftcard.search')}}</h3>
           <div class="group row boxCenter">
-            <i class="fa fa-search light"></i><input v-model="cardNumber">
-          </div>
+            <input v-model="cardNumber" @keydown.enter="search">
+            <i class="fa fa-search light space" v-if="!cardNumber"></i>
+            <i class="fa fa-times light space" v-else @click="reset"></i>
+          </div>        
         </div>
       </section>
       </div>
@@ -87,6 +89,25 @@ export default {
     setPage(page) {
       this.page = page;
       this.fetchData();
+    },
+    reset() {
+      this.cardNumber = "";
+      this.fetchData();
+    },
+    search() {
+      this.cardNumber &&
+        this.$socket.emit(
+          "[GIFTCARD] SEARCH",
+          { number: this.cardNumber },
+          cards => {
+            this.cards = cards;
+          }
+        );
+    }
+  },
+  watch: {
+    cardNumber(n) {
+      !n && this.fetchData();
     }
   }
 };
@@ -101,7 +122,7 @@ export default {
 
 input {
   padding: 5px;
-  margin: 10px 0 10px 15px;
+  margin: 10px 15px;
   border: none;
   outline: none;
   width: 200px;
