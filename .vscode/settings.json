@@ -21,6 +21,7 @@
         "giftcard",
         "giftcards",
         "inputer",
+        "invoice",
         "keydown",
         "mastercard",
         "maxlength",
@@ -58,6 +59,7 @@
         "unregister",
         "unsave",
         "unshift",
+        "upsert",
         "vuex",
         "warning",
         "webskt"

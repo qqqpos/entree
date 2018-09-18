@@ -1679,6 +1679,8 @@ export default {
     activate: "Activate Gift Card",
     deactivate: "Deactivate Gift Card",
     search: "Search Gift Card",
+    issueCount: "Gift Card Issue",
+    remainBalance: "Remain Balance",
     setting: {
       title: "Gift Card Setting",
       enable: "Enable Gift Card",

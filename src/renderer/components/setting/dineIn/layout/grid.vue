@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="zone">
         <slick-list axis="xy" v-model="items" class="grid-table-setup" @input="update">
             <slick-item v-for="(item,index) in items" :key="index" :index="index" @contextmenu.native="edit(item,index)" class="table-seat">
                 <span :class="[item.shape]" class="icon"></span>

@@ -15,11 +15,11 @@
         <div class="wrap relative">
           <h3>{{$t('nav.overview')}}</h3>
           <p>
-            <span class="f1">{{$t('report.giftcard.count')}}</span>
+            <span class="f1">{{$t('giftcard.issueCount')}}</span>
             <span class="value">{{summary.count}}</span>
           </p>
           <p>
-            <span class="f1">{{$t('report.giftcard.remain')}}</span>
+            <span class="f1">{{$t('giftcard.remainBalance')}}</span>
             <span class="value">$ {{summary.remain | decimal}}</span>
           </p>
           <h3>{{$t('card.stats.giftcardSalesToday')}}</h3>
@@ -44,7 +44,7 @@
           <h3>{{$t('giftcard.search')}}</h3>
           <div class="group row boxCenter">
             <input v-model="cardNumber" @keydown.enter="search">
-            <i class="fa fa-search light space" v-if="!cardNumber"></i>
+            <i class="fa fa-search light space" v-if="!cardNumber" @click="search"></i>
             <i class="fa fa-times light space" v-else @click="reset"></i>
           </div>        
         </div>

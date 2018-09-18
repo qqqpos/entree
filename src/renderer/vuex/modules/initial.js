@@ -80,7 +80,7 @@ const mutations = {
         state.config = Object.assign({}, state.config, { station })
     },
     [types.SET_LAYOUTS](state, layouts) {
-        state.layouts = layouts//Object.assign({}, state.layouts, layouts);
+        state.layouts = Object.assign({}, state.layouts, layouts);
     },
     [types.SET_MENU](state, menu) {
         const { defaults = {} } = state.config;

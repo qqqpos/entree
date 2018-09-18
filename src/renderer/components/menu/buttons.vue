@@ -545,7 +545,9 @@ export default {
           this.resetAll();
           this.$router.push({ path: "/main/lock" });
         } else {
-          const ticket = this.order;
+          const ticket = this.order.hasOwnProperty("parent")
+            ? this.history.find(t => t._id === this.order.parent) || this.order
+            : this.order;
 
           this.resetOrder(true);
           this.setViewOrder(ticket);

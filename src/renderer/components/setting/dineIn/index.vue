@@ -48,6 +48,10 @@ export default {
         this.layout = layout;
         this.index = index;
         this.zone = zone;
+      } else {
+        this.sectionTables = [];
+        this.index = 0;
+        this.zone = "";
       }
     },
     edit(section, index) {
@@ -74,10 +78,8 @@ export default {
           edit ? tables.splice(index, 1, update) : tables.push(update);
 
           this.$socket.emit("[TABLE] SAVE_SECTION", tables);
-          console.log(tables);
-          this.$nextTick(() => {
-            this.initialData(this.index, tables);
-          });
+
+          this.$nextTick(() => this.initialData(this.index, tables));
           this.exitComponent();
         })
         .catch(removeSection => {
@@ -86,6 +88,9 @@ export default {
           if (removeSection) {
             this.sections.splice(index, 1);
             this.$socket.emit("[TABLE] REMOVE_SECTION", index);
+
+            // reset layout
+            this.initialData();
           }
         });
     }

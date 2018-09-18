@@ -1673,6 +1673,8 @@ export default {
     activate: "激活礼物卡",
     deactivate: "注销礼物卡",
     search: "查找礼物卡",
+    issueCount: "礼物卡发行",
+    remainBalance: "礼物卡余额",
     setting: {
       title: "礼物卡设置",
       enable: "启用礼物卡",
