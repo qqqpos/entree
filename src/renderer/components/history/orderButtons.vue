@@ -12,11 +12,11 @@
       <i class="fab fa-google-wallet"></i>
       <span class="text">{{$t('button.thirdParty')}}</span>
     </button>
-    <!-- <button class="btn" @click="openDiscountModule" :disabled="order.settled">
+    <button class="btn" @click="openDiscountModule" :disabled="order.settled" v-if="config.defaults.btn === 'DISCOUNT'">
       <i class="fa fa-tags"></i>
       <span class="text">{{$t('button.discount')}}</span>
-    </button> -->
-    <button class="btn" @click="openGratuityDialog" :disabled="order.settled">
+    </button>
+    <button class="btn" @click="openGratuityDialog" :disabled="order.settled" v-else>
       <i class="fas fa-comments-dollar"></i>
       <span class="text">{{$t('text.gratuity')}}</span> 
     </button>
@@ -93,7 +93,7 @@ export default {
       this.order.split
         ? this.$dialog(prompt)
             .then(this.split)
-            .reject(this.exitComponent)
+            .catch(this.exitComponent)
         : new Promise((resolve, reject) => {
             const config = {
               title: "title.evenSplit",

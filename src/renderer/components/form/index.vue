@@ -151,7 +151,7 @@ export default {
         value.substr(0, this.caret - 1) + value.substr(this.caret);
       this.caret = this.caret !== 0 ? this.caret - 1 : 0;
 
-      this.$nextTick(() => 
+      this.$nextTick(() =>
         document
           .querySelector(".wrap.active input")
           .setSelectionRange(this.caret, this.caret)
@@ -174,37 +174,40 @@ export default {
     },
     async search() {
       this.$bus.emit("GOOGLE_ADDRESS_QUERY", true);
-
-      const address = util.formatAddress(this.customer.address);
-      const city = this.customer.city || this.store.city;
-      const zipCode = this.customer.zipCode || this.store.zipCode;
-      const { enable, api, coordinate } = this.store.matrix;
-
-      if (!enable || !api || !address) {
-        this.$bus.emit("GOOGLE_ADDRESS_QUERY", false);
-        return;
-      }
+      const { enable, api, coordinate, fuzzy } = this.store.matrix;
 
       try {
-        await this.calculateDistance({ address, city, zipCode });
-        await this.getCoordinate({ address, city });
+        const address = fuzzy
+          ? this.customer.address
+          : util.formatAddress(this.customer.address);
+        const city = this.customer.city || this.store.city;
+        const zipCode = this.customer.zipCode || this.store.zipCode;
+
+        if (!enable || !api || !address) {
+          this.$bus.emit("GOOGLE_ADDRESS_QUERY", false);
+          return;
+        }
+        await this.calculateDistance({ address, city, zipCode }, fuzzy);
+        await this.getCoordinate({ address, city }, fuzzy);
         this.$bus.emit("GOOGLE_ADDRESS_QUERY", false);
       } catch (e) {
         console.log(e);
         this.$bus.emit("GOOGLE_ADDRESS_QUERY", false);
       }
     },
-    parseAddress({ address, city, zipCode }) {
-      address = util
-        .formatAddress(address)
-        .split(" ")
-        .join("+");
+    parseAddress({ address, city, zipCode }, fuzzySearch) {
+      address = fuzzySearch
+        ? address.split(" ").join("+")
+        : util
+            .formatAddress(address)
+            .split(" ")
+            .join("+");
       city = city.split(" ").join("+");
       zipCode = zipCode ? `+${zipCode}` : "";
 
       return `${address},${city}+${this.store.state}${zipCode}`;
     },
-    calculateDistance({ address, city, zipCode }) {
+    calculateDistance({ address, city, zipCode }, fuzzySearch) {
       return new Promise((next, stop) => {
         const origin = this.parseAddress({
           address: this.store.address,
@@ -212,7 +215,10 @@ export default {
           zipCode: this.store.zipCode
         });
 
-        const destination = this.parseAddress({ address, city, zipCode });
+        const destination = this.parseAddress(
+          { address, city, zipCode },
+          fuzzySearch
+        );
         const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${
           this.store.matrix.api
         }&language=en&units=imperial`;
@@ -303,9 +309,9 @@ export default {
       });
       note && this.setCustomer({ note });
     },
-    getCoordinate({ address, city }) {
+    getCoordinate({ address, city }, fuzzySearch) {
       return new Promise((next, stop) => {
-        const place = this.parseAddress({ address, city });
+        const place = this.parseAddress({ address, city }, fuzzySearch);
         const { api, coordinate } = this.store.matrix;
 
         if (!coordinate) {

@@ -10,7 +10,8 @@
       <toggle title="setting.googleMatrix" true-tooltip="tip.matrixService" false-tooltip="tip.disableMatrix" v-model="store.matrix.enable" :conditionalTooltip="true" @update="updateMatrix">
         <transition name="dropdown">
           <div v-if="store.matrix.enable" class="opt">
-            <switches title="text.autoCorrectAddress" v-model="store.matrix.autoCorrect" @update="updateAutoCorrect"></switches>
+            <switches title="setting.autoCorrectAddress" v-model="store.matrix.autoCorrect" @update="updateAutoCorrect"></switches>
+            <switches title="setting.fuzzySearch" v-model="store.matrix.fuzzy" @update="updateFuzzy"></switches>
             <inputer title="text.coordinate" v-model="store.matrix.coordinate" @update="updateStoreCoordinate"></inputer>
             <inputer title="text.api" v-model="store.matrix.api" @update="updateAPI" v-show="operator.role === 'Developer'"></inputer>
           </div>
@@ -101,6 +102,12 @@ export default {
     updateAutoCorrect(value) {
       this.update({
         key: "store.matrix.autoCorrect",
+        value
+      });
+    },
+    updateFuzzy(value) {
+      this.update({
+        key: "store.matrix.fuzzy",
         value
       });
     },

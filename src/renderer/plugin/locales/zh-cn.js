@@ -1228,7 +1228,6 @@ export default {
     callCount: "拨打次数",
     cancelCount: "取消订单",
     cancelAmount: "取消总额",
-    autoCorrectAddress: "自动格式化地址",
     noUse: "不使用",
     autoJump: "自动转跳",
     startAt: "(个)起",
@@ -1817,7 +1816,8 @@ export default {
       matchQty: "物品数量对齐",
       menuSort: "菜单物品排列方式",
       requestSort: "要求物品排列方式",
-      saveConfirm: "保存确认"
+      saveConfirm: "保存确认",
+      button: "按钮功能 (保留)"
     },
     taxBeforeDiscount: "折扣前征税",
     taxBeforeCredit: "积分前征税",
@@ -1909,6 +1909,8 @@ export default {
     plasticPenaltyTax: "塑料袋罚款税",
     autoSaveCreditCard: "自动保存信用卡信息",
     playDuration: "播放时长",
+    autoCorrectAddress: "自动格式化地址",
+    fuzzySearch: "模糊搜索",
     delivery: {
       config: "送餐设定",
       charge: "送餐费",

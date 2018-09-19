@@ -14,6 +14,7 @@
     <toggle title="setting.autoSaveCreditCard" v-model="defaults.autoSaveCard"></toggle>
     <toggle title="setting.default.printedWhenPaid" v-model="defaults.markPrintWhenSettled"></toggle>
     <toggle title="setting.default.allowNoPrint" v-model="defaults.allowNoPrint"></toggle>
+    <text-list title="setting.default.button" :opts="buttonOpts" v-model="defaults.btn"></text-list>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>
@@ -46,6 +47,18 @@ export default {
           tooltip: "",
           value: "THIRD"
         }
+      ],
+      buttonOpts: [
+        {
+          label: "text.discount",
+          tooltip: "",
+          value: "DISCOUNT"
+        },
+        {
+          label: "text.gratuity",
+          tooltip: "",
+          value: "GRATUITY"
+        }
       ]
     };
   },
@@ -57,8 +70,8 @@ export default {
       percentageTip: true,
       autoStackItem: false,
       matchItemQty: false,
-      printedWhenPaid:false,
-      allowNoPrint:false
+      printedWhenPaid: false,
+      allowNoPrint: false
     };
 
     this.defaults = this.$store.getters.config.defaults || defaults;

@@ -1229,7 +1229,6 @@ export default {
     callCount: "Call Count",
     cancelCount: "Cancel Count",
     cancelAmount: "Cancel Amount",
-    autoCorrectAddress: "Auto Correct Address",
     noUse: "No Use",
     autoJump: "Auto Jump",
     startAt: "Start At",
@@ -1821,7 +1820,8 @@ export default {
       matchQty: "Match Quantity",
       menuSort: "Menu Item Sort By",
       requestSort: "Request Item Sort By",
-      saveConfirm: "Save Confirm"
+      saveConfirm: "Save Confirm",
+      button: "Reserved Button Function"
     },
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Discount",
@@ -1911,6 +1911,8 @@ export default {
     plasticPenaltyTax: "Plastic Bag Penalty Tax",
     autoSaveCreditCard: "Auto save credit card",
     playDuration: "Duration",
+    autoCorrectAddress: "Auto Format Address",
+    fuzzySearch: "Fuzzy Search",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",
