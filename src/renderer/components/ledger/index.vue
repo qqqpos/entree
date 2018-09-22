@@ -26,14 +26,15 @@
 <script>
 import tab from "./helper/tab";
 import loader from "../common/loader";
+import radar from "./component/radar";
 import column from "./component/hourly";
-import radar from "./component/categorize";
 import checking from "./component/checking";
+import categorize from "./component/categorize";
 import department from "./component/department";
 
 export default {
   props: ["init"],
-  components: { tab, loader, column, radar, checking, department },
+  components: { tab, loader, column, radar, checking, categorize, department },
   data() {
     return {
       component: null,
@@ -82,6 +83,9 @@ export default {
           break;
         case "CHECKING":
           this.component = "checking";
+          break;
+        case "CATEGORIZE":
+          this.component = "categorize";
           break;
       }
     }

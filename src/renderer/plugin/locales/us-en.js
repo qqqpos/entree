@@ -1338,7 +1338,8 @@ export default {
     hourly: "Hourly",
     categorize: "Categorize",
     compare: "Compare",
-    reconciliation: "Reconc."
+    reconciliation: "Reconc.",
+    scatter: "Scatter"
   },
   booking: {
     date: "Book Date",

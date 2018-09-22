@@ -6,7 +6,11 @@
         </div>
         <div>
             <input type="radio" v-model="tab" value="RADAR" name="tab" id="RADAR">
-            <label for="RADAR">{{$t('nav.categorize')}}</label>
+            <label for="RADAR">{{$t('nav.scatter')}}</label>
+        </div>        
+        <div>
+            <input type="radio" v-model="tab" value="CATEGORIZE" name="tab" id="CATEGORIZE">
+            <label for="CATEGORIZE">{{$t('nav.categorize')}}</label>
         </div>
         <div>
             <input type="radio" v-model="tab" value="DEPARTMENT" name="tab" id="DEPARTMENT">

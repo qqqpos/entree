@@ -1338,7 +1338,8 @@ export default {
     categorize: "分类",
     hourly: "时段",
     compare: "对比",
-    reconciliation: "对账"
+    reconciliation: "对账",
+    scatter: "分布图"
   },
   booking: {
     date: "预约日期",

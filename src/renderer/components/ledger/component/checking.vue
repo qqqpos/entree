@@ -1,13 +1,13 @@
 <template>
-    <div class="analize">
-        <div class="status">
+    <div class="relative row">
+        <div class="f1">
             <p>Ticket Total: $ {{ticketAmount | decimal}}</p>
             <p>Verified Amount: $ {{verifyAmount | decimal}}</p>
             <p></p>
         </div>
-        <div class="results">
+        <div class="f2">
             <ul>
-                <li v-for="(ticket,index) in passed" :key="index" :class="{verified:ticket.status === 1}">
+                <li v-for="(ticket,index) in passed" :key="index" :class="{verified:ticket.status === 1}" class="row">
                     <span>#{{ticket.number}} ({{ticket.type}})</span>
                     <span> $ {{ticket.amount | decimal}}</span>
                     <span class="miss"> ( {{ticket.miss | decimal}} )</span>
@@ -108,11 +108,6 @@ export default {
 </script>
 
 <style scoped>
-.analize {
-  position: relative;
-  display: flex;
-}
-
 p.message {
   position: absolute;
   bottom: 10px;
@@ -123,18 +118,6 @@ p.message {
 ul {
   max-height: 450px;
   overflow: auto;
-}
-
-.status {
-  flex: 1;
-}
-
-.results {
-  flex: 2;
-}
-
-.results li {
-  display: flex;
 }
 
 .results li span {
