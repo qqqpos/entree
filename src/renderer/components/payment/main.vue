@@ -341,7 +341,7 @@ export default {
     },
     changePaymentType(newType) {
       //apply default payment type
-      newType = newType || this.defaults.paymentType;
+      newType = newType || this.defaults.paymentType || "CASH";
 
       this.anchor = "paid";
       this.paymentType = newType;

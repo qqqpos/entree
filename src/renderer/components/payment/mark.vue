@@ -84,8 +84,8 @@ export default {
           component: "thirdParty",
           operator: this.op.name,
           lock: this.order._id,
-          time: +new Date(),
-          exp: +new Date() + 1000 * 120
+          time: Date.now(),
+          exp: Date.now() + 1000 * 120
         };
 
         if (this.init.hasOwnProperty("callback")) {
@@ -162,7 +162,7 @@ export default {
       const transaction = {
         _id: ObjectId().toString(),
         date: today(),
-        time: +new Date(),
+        time: Date.now(),
         order: parent,
         split,
         ticket: {
@@ -184,12 +184,14 @@ export default {
         lfd: null
       };
 
-      this.order.cashier = this.op.name;
-      this.order.payment.type = this.type;
-      this.order.logs.push(transaction);
-      this.$socket.emit("[ORDER] UPDATE", this.order, false);
-      this.$socket.emit("[TRANSACTION] SAVE", transaction);
-      this.init.resolve();
+      this.$socket.emit("[TRANSACTION] SAVE", transaction, () => {
+        this.order.logs.push(transaction);
+        this.order.cashier = this.op.name;
+        this.order.settled = true;
+        
+        this.$socket.emit("[ORDER] UPDATE", this.order, false);
+        this.init.resolve();
+      });
     },
     exit() {
       this.init.resolve();

@@ -226,6 +226,7 @@ export default {
           
           break;
       }
+      console.log(from,to);
       this.reportRange = { from, to };
     },
     openCalendar() {
@@ -235,7 +236,6 @@ export default {
       })
         .then(date => {
           this.reportRange = date;
-          console.log(this.reportRange);
           this.exitComponent();
         })
         .catch(() => {
@@ -473,7 +473,7 @@ export default {
           style: "space",
           value: `${rounding.toFixed(2)}`
         });
-
+console.log(transactions);
       const payoutAmount = transactions
         .filter(t => t.for === "Payout")
         .reduce((a, c) => a + c.actual, 0);

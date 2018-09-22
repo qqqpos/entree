@@ -419,7 +419,6 @@ export default {
         if (
           useTable &&
           this.table &&
-          //this.app.newTicket &&
           this.isDineInTicket &&
           this.table.status === -1
         ) {

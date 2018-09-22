@@ -1821,7 +1821,8 @@ export default {
       menuSort: "Menu Item Sort By",
       requestSort: "Request Item Sort By",
       saveConfirm: "Save Confirm",
-      button: "Reserved Button Function"
+      button: "Reserved Button Function",
+      findPaymentByCreateTime: "Set Payment time as ticket created (*)"
     },
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Discount",

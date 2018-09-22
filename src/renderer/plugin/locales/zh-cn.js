@@ -1817,7 +1817,8 @@ export default {
       menuSort: "菜单物品排列方式",
       requestSort: "要求物品排列方式",
       saveConfirm: "保存确认",
-      button: "按钮功能 (保留)"
+      button: "按钮功能 (保留)",
+      findPaymentByCreateTime: "将付款时间设为订单创建时间 (*)"
     },
     taxBeforeDiscount: "折扣前征税",
     taxBeforeCredit: "积分前征税",

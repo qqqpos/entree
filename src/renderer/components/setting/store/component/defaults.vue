@@ -14,6 +14,7 @@
     <toggle title="setting.autoSaveCreditCard" v-model="defaults.autoSaveCard"></toggle>
     <toggle title="setting.default.printedWhenPaid" v-model="defaults.markPrintWhenSettled"></toggle>
     <toggle title="setting.default.allowNoPrint" v-model="defaults.allowNoPrint"></toggle>
+    <toggle title="setting.default.findPaymentByCreateTime" v-model="defaults.findPaymentByCreate"></toggle>
     <text-list title="setting.default.button" :opts="buttonOpts" v-model="defaults.btn"></text-list>
     </div>
     <div :is="component" :init="componentData"></div>

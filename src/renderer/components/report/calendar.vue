@@ -3,20 +3,20 @@
         <header class="title">{{$t('title.setDate')}}</header>
         <header class="tab">
             <div>
-                <input type="radio" v-model="tab" name="bar" id="calendar" value="calendar">
-                <label for="calendar">
-                    <i class="fa fa-2x fa-calendar"></i>
+                <input type="radio" v-model="tab" name="bar" id="date" value="date">
+                <label for="date">
+                    <i class="far fa-2x fa-calendar-alt"></i>
                 </label>
             </div>
             <div>
-                <input type="radio" v-model="tab" name="bar" id="timer" value="timer">
-                <label for="timer">
-                    <i class="fa fa-2x fa-clock-o"></i>
+                <input type="radio" v-model="tab" name="bar" id="time" value="time">
+                <label for="time">
+                    <i class="far fa-2x fa-clock"></i>
                 </label>
             </div>
         </header>
         <main>
-            <div v-if="tab ==='calendar'" class="calendar">
+            <div v-if="tab ==='date'" class="calendar">
                 <div class="selector">
                     <i class="fa fa-chevron-left" @click="prev"></i>
                     <span>{{calendarDay | moment('YYYY-MM-DD')}}</span>
@@ -70,9 +70,10 @@
                 </div>
             </div>
         </main>
-        <footer>
-            <div class="btn f1" @click="init.reject">{{$t('button.cancel')}}</div>
-            <div class="btn f1" @click="confirm">{{$t('button.confirm')}}</div>
+        <footer class="row">
+            <div class="f1"></div>
+            <div class="btn" @click="init.reject">{{$t('button.cancel')}}</div>
+            <div class="btn" @click="confirm">{{$t('button.confirm')}}</div>
         </footer>
         <div :is="component" :init="componentData"></div>
     </div>
@@ -95,7 +96,7 @@ export default {
       toPeriod: false,
       fromPeriod: true,
       allDay: true,
-      tab: "calendar",
+      tab: "date",
       today: +moment()
         .subtract(4, "hours")
         .startOf("day"),

@@ -102,9 +102,9 @@ const mutations = {
     },
     [types.ADD_TO_ORDER](state, { item, autoStack }) {
         //remove necessary params
-        delete item.clickable;
         delete item.like;
         delete item.disable;
+        delete item.clickable;
 
         Object.assign(item, {
             unique: String().random(),
