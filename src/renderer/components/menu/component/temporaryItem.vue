@@ -21,12 +21,12 @@
       </div>
       <footer>
         <div class="opt">
-          <switches title="text.osk" v-model="keyboard" :reverse="true"></switches>
+          <switches title="text.osk" v-model="enableKeyboard" :reverse="true"></switches>
         </div>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
       </footer>
     </div>
-    <keyboard :display="keyboard" :alphabet.sync="alphabet" v-model="entry" @input="input" @enter="confirm" @backspace="remove" :executeText="$t('button.done')"></keyboard>
+    <keyboard :display="displayKeyboard" :alphabet.sync="alphabet" v-model="entry" @input="input" @enter="confirm" @backspace="remove" :length="item.length" :executeText="$t('button.done')"></keyboard>
   </div>
 </template>
 
@@ -47,7 +47,8 @@ export default {
     return {
       item: "",
       single: "",
-      keyboard: false,
+      enableKeyboard: true,
+      displayKeyboard: true,
       alphabet: true,
       printers: [],
       printer: [],
@@ -66,10 +67,13 @@ export default {
     );
 
     this.printer = preset.length > 0 ? preset : this.printers.slice();
+
+    this.toggleKeyboard(true);
   },
   methods: {
     setInput(boolean) {
       this.alphabet = boolean;
+      this.toggleKeyboard(true);
     },
     input(string) {
       const { model } = document.activeElement.dataset;
@@ -83,9 +87,9 @@ export default {
 
         if (this[model][this.caret] === " ") this.caret++;
 
-        this.$nextTick(() => {
-          document.activeElement.setSelectionRange(this.caret, this.caret);
-        });
+        this.$nextTick(() =>
+          document.activeElement.setSelectionRange(this.caret, this.caret)
+        );
       }
     },
     remove() {
@@ -96,7 +100,8 @@ export default {
 
         this[model] =
           value.substr(0, this.caret - 1) + value.substr(this.caret);
-        this.caret--;
+
+        this.caret = this.caret > 0 ? this.caret - 1 : this.caret;
 
         this.$nextTick(() =>
           document.activeElement.setSelectionRange(this.caret, this.caret)
@@ -105,6 +110,17 @@ export default {
     },
     setCaret(value) {
       this.caret = value;
+    },
+    toggleKeyboard(display) {
+      if (display === "undefined") {
+        display = !this.displayKeyboard;
+      }
+
+      if (!this.enableKeyboard) {
+        display = false;
+      }
+
+      this.displayKeyboard = display;
     },
     confirm() {
       let item = JSON.parse(JSON.stringify(this.init.item));
@@ -159,7 +175,7 @@ export default {
       this.init.resolve();
     },
     exit() {
-      this.keyboard ? (this.keyboard = false) : this.init.reject();
+      this.displayKeyboard ? this.toggleKeyboard() : this.init.reject();
     },
     ...mapActions(["addToOrder", "setSides"])
   }

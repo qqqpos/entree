@@ -17,11 +17,11 @@
             <li>{{data.subtotal | decimal}}</li>
             <li><b>{{data.total | decimal}}</b></li>
             <li>
-                <div :data-tag="$t('report.plasticTax')" class="other" v-show="data.plasticTax > 0">{{data.plasticTax | decimal}}</div>                
-                <div :data-tag="$t('text.rounding')" class="other" v-show="data.rounding > 0">{{data.rounding | decimal}}</div>
-                <div :data-tag="$t('text.gratuity')" class="other" v-show="data.gratuity > 0">{{data.gratuity | decimal}}</div>
-                <div :data-tag="$t('text.delivery')" class="other" v-show="data.delivery > 0">{{data.delivery | decimal}}</div>
-                <div :data-tag="$t('text.discount')" class="other" v-show="data.discount > 0">{{data.discount | decimal}}</div>
+                <p class="row" v-show="data.plasticTax > 0"><span class="tag">{{$t('report.plasticTax')}}</span><span>{{data.plasticTax | decimal}}</span></p>             
+                <p class="row" v-show="data.rounding > 0"><span class="tag">{{$t('text.rounding')}}</span><span>{{data.rounding | decimal}}</span></p>
+                <p class="row" v-show="data.gratuity > 0"><span class="tag">{{$t('text.gratuity')}}</span><span>{{data.gratuity | decimal}}</span></p>
+                <p class="row" v-show="data.delivery > 0"><span class="tag">{{$t('text.delivery')}}</span><span>{{data.delivery | decimal}}</span></p>
+                <p class="row" v-show="data.discount > 0"><span class="tag">{{$t('text.discount')}}</span><span>{{data.discount | decimal}}</span></p>
             </li>
         </ul>
     </div>
@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style scoped>
-.row {
+div.row {
   border: 1px solid #ddd;
   border-radius: 4px;
   background: #fff;
@@ -138,11 +138,14 @@ li:last-child {
   border-bottom: none;
 }
 
-.other:before {
-  content: attr(data-tag);
-  margin-right: 5px;
-  color: #666;
-  font-size: 12px;
+p.row{
+  align-items: center;
+}
+
+.tag {
+    width: 75px;
+    font-size: 14px;
+    color: rgba(0,0,0,0.75);
 }
 </style>
 
