@@ -49,7 +49,7 @@ export default {
         "Visa",
         "Master",
         "Discover",
-        "AE"
+        "AmEx"
       ],
       type: "CASH",
       order: null,

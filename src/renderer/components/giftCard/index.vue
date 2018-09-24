@@ -35,7 +35,7 @@
               <inputer title="card.holder" v-model="giftcard.holder"></inputer>
             </div>
             <footer>
-              <button class="btn" @click="tab = 'reload'">{{$t('button.activation')}}</button>
+              <button class="btn" @click="tab = 'reload'">{{$t('button.activate')}}</button>
             </footer>
           </div>
         </template>
@@ -261,8 +261,9 @@ export default {
         "$1 $2 $3 $4"
       );
       const prompt = {
-        title: "dialog.cardActivation",
-        msg: ["dialog.cardActivationConfirm", number]
+        type: "question",
+        title: "giftcard.activate",
+        msg: ["giftcard.tip.activateCard", number]
       };
 
       this.$dialog(prompt)
@@ -324,13 +325,13 @@ export default {
     },
     confirmPrompt() {
       return new Promise((next, stop) => {
-        let prompt = {
+        const prompt = {
           title: "dialog.giftCardReload",
           msg: ["dialog.confirmReloadAmount", this.amount.toFixed(2)]
         };
 
         this.$dialog(prompt)
-          .then(() => next())
+          .then(next)
           .catch(this.exitComponent);
       });
     },

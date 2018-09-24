@@ -272,7 +272,7 @@ export default {
     printAll: "Print All",
     extend: "Delay",
     printDetail: "Detail Report",
-    activation: "Activation",
+    activate: "Activate",
     back: "Back",
     viewMore: "View More",
     booking: "Booking",
@@ -1691,7 +1691,12 @@ export default {
       length: "{i} digits length"
     },
     dialog: {
-      swipeCard: "Please Swipe Gift Card"
+      swipeCard: "Please Swipe Gift Card",
+      noFound: "Gift Card No Found"
+    },
+    tip: {
+      activateCard: "Are you wish to activate this giftcard? Number: {i}",
+      noResult: "There is no any result related to {i}"
     }
   },
   online: {

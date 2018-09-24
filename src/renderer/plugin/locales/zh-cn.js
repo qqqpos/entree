@@ -272,7 +272,7 @@ export default {
     printAll: "全部打印",
     extend: "延迟",
     printDetail: "详细打印",
-    activation: "激活",
+    activate: "激活",
     back: "返回",
     viewMore: "查看更多",
     booking: "预约",
@@ -1685,9 +1685,13 @@ export default {
       length: "{i}位数卡号"
     },
     dialog: {
-      swipeCard: "请刷礼物卡"
+      swipeCard: "请刷礼物卡",
+      noFound: "找不到礼物卡"
     },
-    tip: {},
+    tip: {
+      activateCard: "您想要激活此礼物卡吗? 卡号: {i} ",
+      noResult: "找不到任何关于 {i} 的礼物卡"
+    }
   },
   online: {
     about: "介绍",

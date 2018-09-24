@@ -1,6 +1,6 @@
 <template>
   <div class="history-grid">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" :discountTag.sync="discountTag" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" :type.sync="filter" :discountTag.sync="discountTag" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
       <side-buttons :date="calendarDate || today" @change="setCalendar" :splitMode="splits.length > 0"></side-buttons>
       <section class="invoices relative">
         <div class="wrap">
@@ -58,7 +58,7 @@ export default {
       today: today(),
       summary: {},
       splits: [],
-      filter: "",
+      filter: "ALL_INVOICES",
       view: "",
       page: 0
     };
@@ -144,10 +144,7 @@ export default {
 
       this.$socket.emit("[ORDER] HISTORY", date, invoices => {
         this.prevHistory = date !== today() ? invoices : null;
-        this.page = 0;
-        this.splits = [];
-
-        this.resetViewOrder();
+        this.resetFilter();
         this.exitComponent();
 
         this.$nextTick(() => {
@@ -192,9 +189,10 @@ export default {
     getSplits(invoice) {
       invoice.split &&
         this.$socket.emit("[SPLIT] GET", invoice._id, splits => {
-          console.log(splits);
           this.page = 0;
-          this.splits = splits.sort((a, b) => String(a.number).localeCompare(String(b.number)));
+          this.splits = splits.sort((a, b) =>
+            String(a.number).localeCompare(String(b.number))
+          );
           this.resetViewOrder();
         });
     },

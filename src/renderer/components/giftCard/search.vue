@@ -47,6 +47,7 @@
         </footer>
       </div>
     </template>
+    <div :is="component" :init="componentData"></div>
     <keyboard :display="keyboard" :alphabet.sync="alphabet" v-model="entry" @input="input" @enter="search" @backspace="remove" :executeText="$t('button.search')"></keyboard>
   </div>
 </template>
@@ -55,13 +56,16 @@
 import keyboard from "../common/keyboard";
 import inputer from "../setting/common/inputer";
 import switches from "../setting/common/switches";
+import dialogModule from "../common/dialog";
 
 export default {
   props: ["init"],
-  components: { inputer, switches, keyboard },
+  components: { inputer, switches, keyboard, dialogModule },
   data() {
     return {
-      keyboard: false,
+      component: null,
+      componentData: null,
+      keyboard: true,
       alphabet: false,
       results: [],
       card: null,
@@ -75,6 +79,7 @@ export default {
   methods: {
     setInput(boolean) {
       this.alphabet = boolean;
+      this.keyboard = true;
     },
     setCaret(value) {
       this.caret = value;
@@ -91,9 +96,9 @@ export default {
 
         if (this[model][this.caret] === " ") this.caret++;
 
-        this.$nextTick(() => {
-          document.activeElement.setSelectionRange(this.caret, this.caret);
-        });
+        this.$nextTick(() =>
+          document.activeElement.setSelectionRange(this.caret, this.caret)
+        );
       }
     },
     remove() {
@@ -104,7 +109,8 @@ export default {
 
         this[model] =
           value.substr(0, this.caret - 1) + value.substr(this.caret);
-        this.caret--;
+
+        this.caret = this.caret > 0 ? this.caret - 1 : this.caret;
 
         this.$nextTick(() =>
           document.activeElement.setSelectionRange(this.caret, this.caret)
@@ -112,6 +118,8 @@ export default {
       }
     },
     search() {
+      this.keyboard = false;
+      
       const query = {
         number: this.number.replace(/\D/g, ""),
         phone: this.phone.replace(/\D/g, ""),
@@ -122,7 +130,28 @@ export default {
         if (results.length) {
           this.keyboard = false;
           this.results = results;
+        } else if (query.number.length) {
+          // when no match results
+          // ask if needs activation
+          const prompt = {
+            title: "giftcard.dialog.noFound",
+            msg: ["giftcard.tip.activateCard", query.number],
+            buttons: [
+              { text: "button.cancel", fn: "reject" },
+              { text: "button.activate", fn: "resolve" }
+            ]
+          };
+          this.$dialog(prompt)
+            .then(() => this.init.reject(query.number))
+            .catch(this.exitComponent);
         } else {
+          const prompt = {
+            title: "giftcard.dialog.noFound",
+            msg: ["giftcard.tip.noResult", query.phone || query.name],
+            buttons: [{ text: "button.confirm", fn: "resolve" }]
+          };
+
+          this.$dialog(prompt).then(this.exitComponent);
         }
       });
     },
@@ -130,13 +159,18 @@ export default {
       this.card = card;
     },
     exit() {
-      this.keyboard ? (this.keyboard = false) : this.init.reject(false);
+      if (this.keyboard) this.keyboard = false;
+      else this.init.reject(false);
     }
   }
 };
 </script>
 
 <style scoped>
+.editor {
+  transform: translateY(-25%);
+}
+
 .wrap {
   overflow: scroll;
   max-height: 300px;

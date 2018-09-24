@@ -60,7 +60,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["target", "reset", "data", "date", "on", "discountTag"],
+  props: ["target", "type", "reset", "data", "date", "on", "discountTag"],
   data() {
     return {
       filters: [],
@@ -69,7 +69,7 @@ export default {
       displayBtn: false,
       showMore: false,
       showServer: false,
-      type: "ALL_INVOICES",
+      //type: "ALL_INVOICES",
       servers: []
     };
   },
@@ -101,20 +101,20 @@ export default {
         // if needed to reset don't drop down menu
         if (type !== this.type) {
           this.showMore = false;
-          this.type = type;
+          this.$emit("update:type", type);
         } else if (Array.isArray(this.filters[index].subTypes)) {
           this.showMore = !this.showMore;
         } else {
           this.showMore = false;
-          this.type = type;
+          this.$emit("update:type", type);
         }
       } else {
-        this.type = type;
+        this.$emit("update:type", type);
       }
     },
     resetFilter() {
       this.showMore = false;
-      this.type = "ALL_INVOICES";
+      this.$emit("update:type", "ALL_INVOICES");
       this.$emit("reset");
     },
     setSubFilter({ type }) {

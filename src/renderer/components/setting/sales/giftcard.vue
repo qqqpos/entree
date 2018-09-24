@@ -9,7 +9,7 @@
     <div class="summary-wrap">
       <section class="list relative">
           <gift-card v-for="(giftcard,index) in cards" :key="index" :card="giftcard"></gift-card>
-          <paginator :of="Array(summary.count).fill()" @page="setPage" :perPage="11" :maxPage="15" :static="true" v-if="summary.count > 11" class="bottom-page"></paginator>
+          <paginator :of="Array(summary.count).fill()" @page="setPage" :perPage="11" :maxPage="10" :static="true" v-if="summary.count > 11" class="bottom-page"></paginator>
       </section>
       <section class="overview">
         <div class="wrap relative">
