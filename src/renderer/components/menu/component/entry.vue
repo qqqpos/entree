@@ -3,8 +3,12 @@
       <section class="input">
         <div class="wrap">
           <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty',false)">
-          <div class="item">
+          <div class="row relative">
             <input type="text" v-model="keywords" class="item" ref="item" @click="focus('item',true)">
+            <i class="fa fa-times reset clickable" @click="resetKeyword" v-show="keywords.length"></i>
+            <ul class="predict row" v-show="items.length">
+              <li v-for="(item,index) in items" :key="index" @click="complete(item)">{{item[language]}}</li>
+            </ul>
           </div>
           <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price',false)">
           <i class="fas fa-check fa-2x confirm" @click="confirm"></i>
@@ -51,7 +55,7 @@ export default {
       keywords: "",
       printers: [],
       devices: [],
-      lists: [],
+      items: [],
       item: {},
       reset: true,
       option: false,
@@ -109,16 +113,17 @@ export default {
       target.setSelectionRange(++caret, caret);
       target.focus();
     },
-    fill(item) {
+    complete(item) {
       this.item = item;
       this.keywords = item[this.language];
       this.price = item.price.toFixed(2);
 
-      this.anchor = "price";
-      this.$refs.price.focus();
+      this.focus("price", false);
+      // this.anchor = "price";
+      // this.$refs.price.focus();
 
-      document.querySelector("input.active").classList.remove("active");
-      document.activeElement.classList.add("active");
+      // document.querySelector("input.active").classList.remove("active");
+      // document.activeElement.classList.add("active");
     },
     backspace() {
       let target = this.$refs[this.anchor];
@@ -148,6 +153,10 @@ export default {
 
       target.focus();
       target.dispatchEvent(new Event("input"));
+    },
+    resetKeyword() {
+      this.keywords = "";
+      this.items = [];
     },
     clear() {
       let target = this.$refs[this.anchor];
@@ -200,11 +209,11 @@ export default {
   watch: {
     keywords(n) {
       if (n) {
-        this.$socket.emit("[REQUEST] SEARCH", n, data => {
-          this.lists = data;
+        this.$socket.emit("[REQUEST] SEARCH", n, items => {
+          this.items = items;
         });
       } else {
-        this.lists = [];
+        this.items = [];
       }
     }
   }
@@ -265,7 +274,30 @@ i.confirm {
   border-left: 1px solid #eeeeee;
 }
 
-.item {
-  display: flex;
+i.reset {
+  position: absolute;
+  right: 0;
+  padding: 25px;
+}
+
+ul.predict {
+  position: absolute;
+  top: 65px;
+  width: 462px;
+  background: #fff;
+  z-index: 0;
+  padding: 5px 10px;
+  flex-wrap: wrap;
+  box-shadow: 0 6px 8px -4px;
+}
+
+.predict li {
+  border: 1px solid #e0e0e0;
+  padding: 12px 10px;
+  margin: 5px;
+  min-width: 81px;
+  text-align: center;
+  border-radius: 3px;
+  background: #f5f5f5;
 }
 </style>

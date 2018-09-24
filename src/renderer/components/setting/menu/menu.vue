@@ -29,7 +29,7 @@ import draggable from "vuedraggable";
 import itemTrend from "./component/itemTrend";
 import dialogModule from "../../common/dialog";
 import itemEditor from "./component/itemEditor";
-import categoryEditor from "./component/categoryEditor";
+import categoryEditor from "./editor/category";
 
 export default {
   components: {

@@ -30,7 +30,13 @@
           <inputer title="text.primary" v-model.trim="category.usEN"></inputer>
           <inputer title="text.secondary" v-model.trim="category.zhCN"></inputer>
           <inputer title="text.description" v-model.trim="category.description"></inputer>
-          <inputer title="text.contain" v-model="category.contain" v-if="manual"></inputer>
+          <div v-if="manual" class="row">
+            <label class="f1">{{$t('text.contain')}}</label>
+            <div class="inputWrap">
+              <span v-for="(category,index) in category.contain" :key="index">{{category}}<i class="fa fa-times" @click="remove(index)"></i></span>
+              <input type="text" v-model="entry" @keypress.enter="add" @keypress.space="add">
+            </div>
+          </div>
           <div class="checkboxes categories" v-else>
             <checkbox :title="name" v-model="category.contain" :val="name" v-for="(name,index) in categories" :key="index" :multiple="true" :translate="false" :class="{missing:check(name)}"></checkbox>
           </div>
@@ -77,15 +83,15 @@
 </template>
 
 <script>
-import limitor from "./limitor";
 import inputer from "../../common/inputer";
 import checkbox from "../../common/checkbox";
 import switches from "../../common/switches";
 import external from "../../common/external";
+import restrictor from "../component/restrictor";
 
 export default {
   props: ["init"],
-  components: { limitor, inputer, checkbox, switches, external },
+  components: { restrictor, inputer, checkbox, switches, external },
   data() {
     return {
       tab: "basic",
@@ -99,7 +105,8 @@ export default {
       allowExit: true,
       restrictions: {},
       rename: [],
-      print: []
+      print: [],
+      entry: ""
     };
   },
   created() {
@@ -193,18 +200,24 @@ export default {
           ]
         };
         this.componentData = { resolve, reject, restrict };
-        this.component = "limitor";
+        this.component = "restrictor";
       })
         .then(rule => {
           this.restrictions[group] = rule;
           this.exitComponent();
         })
-        .catch(del => {
-          if (del) {
-            this.restrictions[group] = null;
-          }
+        .catch(remove => {
           this.exitComponent();
+
+          if (remove) this.restrictions[group] = null;
         });
+    },
+    add() {
+      this.entry.trim().length && this.category.contain.push(this.entry.trim());
+      this.entry = "";
+    },
+    remove(index) {
+      this.category.contain.splice(index, 1);
     },
     apply() {
       this.allowExit = false;
@@ -227,5 +240,42 @@ header {
 .categories {
   max-height: 405px;
   overflow: auto;
+}
+
+.row {
+  margin-top: 5px;
+  align-items: center;
+}
+
+.inputWrap {
+  width: 324px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #eee;
+  background: #fff;
+  border-radius: 3px;
+  padding: 2px 2px 0;
+}
+
+.inputWrap span {
+  border: 1px solid #ddd;
+  padding: 2px 4px;
+  margin: 0 2px 2px 0;
+  background: #f3f3f3;
+  border-radius: 4px;
+}
+
+.inputWrap i {
+  padding-left: 5px;
+  color: #f44336;
+  cursor: pointer;
+}
+
+.inputWrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 2px;
+  min-width: 50px;
 }
 </style>

@@ -90,14 +90,6 @@
                 </div>
               </transition>
             </toggle>
-            <!-- <toggle title="text.commission" v-model="commission.enable" :defaultStyle="false">
-              <transition name="dropdown">
-                <div class="opt" v-if="commission.enable">
-                  <inputer title="text.amount" v-model="commission.value"></inputer>
-                  <switches title="text.percentage" v-model="commission.percentage"></switches>
-                </div>
-              </transition>
-            </toggle> -->
           </div>
           <div class="others">
             <switches title="text.openFood" v-model="item.temporary"></switches>
@@ -125,12 +117,12 @@
 </template>
 
 <script>
-import limitor from "./limitor";
 import prices from "./priceEditor";
 import editor from "./optionEditor";
 import draggable from "vuedraggable";
 import allergy from "./allergyEditor";
-import presetor from "./presetEditor";
+import preset from "./presetEditor";
+import restrictor from "./restrictor";
 import toggle from "../../common/toggle";
 import inputer from "../../common/inputer";
 import selector from "../../common/selector";
@@ -145,14 +137,14 @@ export default {
     editor,
     toggle,
     allergy,
-    limitor,
     external,
     switches,
     inputer,
     selector,
     checkbox,
-    presetor,
-    draggable
+    preset,
+    draggable,
+    restrictor
   },
   data() {
     return {
@@ -246,7 +238,7 @@ export default {
       new Promise((resolve, reject) => {
         const { preset = [] } = this.item;
         this.componentData = { resolve, reject, preset };
-        this.component = "presetor";
+        this.component = "preset";
       })
         .then(_preset => {
           Object.assign(this.item, { preset: _preset });
@@ -297,7 +289,7 @@ export default {
 
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, restrict };
-        this.component = "limitor";
+        this.component = "restrictor";
       })
         .then(update => {
           Object.assign(this.item, { restrict: update });
