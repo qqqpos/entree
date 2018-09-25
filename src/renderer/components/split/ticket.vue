@@ -1,5 +1,5 @@
 <template>
-  <div class="invoice" :class="{ban}">
+  <div class="invoice" :class="{ban}" :data-unique="unique">
     <ul @click.self="tap" @dblclick.self="pickAll" v-if="enable" :class="[unique]" :ref="unique" :style="scroll">
       <li v-for="(item,index) in order.content" :key="index" @click.prevent.stop="pick(item)" :data-unique="item.unique" v-show="!item.split">
         <div class="main">
@@ -151,9 +151,7 @@ export default {
               }
             });
 
-            setTimeout(() => {
-              dom.classList.remove("block");
-            }, 150);
+            setTimeout(() => dom.classList.remove("block"), 150);
             break;
           case "panup":
           case "pandown":
@@ -529,7 +527,7 @@ export default {
     },
     tap() {
       this.buffer = [];
-      this.$emit("acquire", { index: this.index, unique: this.unique });
+      this.$emit("acquire", { unique: this.unique });
       this.order.content.forEach(item => Object.assign(item, { lock: false }));
     },
     selectAll() {

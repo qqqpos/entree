@@ -15,13 +15,13 @@
             <ticket v-for="(order,index) in splits" :key="index" :index="index" :data="order" @acquire="transfer" @delete="remove" :master="false" @destroy="destroy"></ticket>
           </div>
         </div>
-        <div class="option" @click="create" v-if="!done">
+        <div class="option" @click="createSplit" v-if="!done">
           <div>
             <i class="fa fa-3x fa-plus"></i>
           </div>
         </div>
         <div class="option" v-else>
-          <div @click="create">
+          <div @click="createSplit">
             <i class="fa fa-3x fa fa-plus"></i>
           </div>
           <div @click="restore">
@@ -96,7 +96,7 @@ export default {
         }
       });
     },
-    create() {
+    createSplit() {
       const _id = ObjectId().toString();
       const order = JSON.parse(JSON.stringify(this.order));
 
@@ -113,7 +113,7 @@ export default {
         tip: 0,
         discount: 0,
         delivery: 0,
-        rouding: 0,
+        rounding: 0,
         surcharge: 0,
         remain: 0
       };
@@ -125,12 +125,22 @@ export default {
         payment,
         logs: []
       });
-      this.splits.push(split);
-      this.$bus.emit("remove");
 
-      content.length && content[0].__split__ && this.$bus.emit("release");
+      if (content.some(item => item.lock)) {
+        split.content = [];
+        this.splits.push(split);
+
+        this.$nextTick(() => {
+          let target = Array.from(this.$refs.tickets.children).last();
+          this.transfer({ unique: target.dataset.unique });
+        });
+      } else {
+        this.splits.push(split);
+        this.$bus.emit("remove");
+        content.length && content[0].__split__ && this.$bus.emit("release");
+      }
     },
-    transfer({ unique, index }) {
+    transfer({ unique }) {
       let buffer = [];
       this.$children.map(vm =>
         vm.buffer.forEach(item => buffer.push(JSON.parse(JSON.stringify(item))))
@@ -241,7 +251,7 @@ export default {
       this.order.split = false;
       this.order.payment.discount = 0;
       this.$calculatePayment(this.order);
-      this.order.content.forEach(item => (item.split = false));
+      this.order.content.forEach(item => Object.assign(item, { split: false }));
 
       this.setOrder(this.order);
       this.$socket.emit("[ORDER] UPDATE", this.order);

@@ -77,6 +77,7 @@ export default {
   align-items: center;
   min-height: 30px;
   padding: 5px 0;
+  border-radius: 4px;
 }
 
 p {
