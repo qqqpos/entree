@@ -698,11 +698,12 @@ export default {
           } else {
             //compare item's subitem
             const newSet = item.choiceSet
-              .filter(s => !s.type)
+              .filter(s => !s.type && !s.divider)
               .map(s => s.unique);
             const oldSet = oldItem.choiceSet
-              .filter(s => !s.type)
+              .filter(s => !s.type && !s.divider)
               .map(s => s.unique);
+
             const isSameSubitem = newSet.reduce(
               (a, b) => a && oldSet.includes(b),
               true

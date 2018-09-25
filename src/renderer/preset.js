@@ -143,9 +143,9 @@ var Preset = function () {
         customer: true,
         payment: true,
         languages: [{
-          ref: "zhCN",
+          ref: "usEN",
           enable: true,
-          fontFamily: "QingYuan",
+          fontFamily: "Roboto Condensed",
           fontSize: "21",
           lineHeight: 1,
           subFontSize: 0.8,
@@ -153,9 +153,9 @@ var Preset = function () {
           qty: true,
           id: false
         }, {
-          ref: "usEN",
+          ref: "zhCN",
           enable: true,
-          fontFamily: "Roboto Condensed",
+          fontFamily: "QingYuan",
           fontSize: "21",
           lineHeight: 1,
           subFontSize: 0.8,
@@ -225,7 +225,7 @@ var Preset = function () {
   };
   this.operator = function (name, role, pin, wage) {
     let access = [], modify = [], view = [], permission = [], cashCtrl = "disable";
-    switch (role) {     
+    switch (role) {
       case "Manager":
         access = ["setting", "cashdrawer", "report", "terminal", "history", "exit"];
         view = ["summary", "invoices", "tables"];

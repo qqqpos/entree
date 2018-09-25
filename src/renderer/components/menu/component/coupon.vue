@@ -121,7 +121,9 @@ export default {
         .map(coupon => coupon.reference)
         .reduce((a, b) => a.concat(b), []);
 
-      refs.forEach(item => this.addToOrder(item));
+      refs.forEach(item =>
+        this.addToOrder(Object.assign(item, { orderType: "FREE" }))
+      );
       this.setOrder({ coupons });
       this.init.resolve();
     },

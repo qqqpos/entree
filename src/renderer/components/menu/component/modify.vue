@@ -1,12 +1,15 @@
 <template>
   <div class="popupMask center dark" @click.self="init.reject">
-    <div class="window" v-show="!component">
+    <div class="editor" v-show="!component">
       <header class="title">
-        <span>{{$t("title.modify")}}</span>
-        <span class="name">{{item[language]}}</span>
-        <span class="price">${{total}}</span>
+        <h3 class="f1">
+          <span>{{$t("title.modify")}}</span>
+          <span class="name">{{item[language]}}</span>
+        </h3>
+        <span class="price agency">$ {{total}}</span>
       </header>
-      <section class="display">
+      <div class="banner"></div>
+      <section class="field">
         <div class="column target" @click="setPointer('single',$event)" ref="price">
           <h5>{{$t("text.single")}}</h5>
           <div>
@@ -20,8 +23,8 @@
             <span class="value">{{item.qty}}</span>
           </div>
         </div>
-        <div class="column discount" @click="setPointer('discount',$event)" ref="discount">
-          <div class="unit">
+        <div class="column relative" @click="setPointer('discount',$event)" ref="discount">
+          <div class="unit-wrap">
             <input type="radio" name="unit" v-model="unit" id="cash" :value="true" @click="switchUnit">
             <label for="cash">$</label>
             <span>/</span>
@@ -293,7 +296,7 @@ export default {
 </script>
 
 <style scoped>
-.window {
+.editor {
   width: 425px;
   transform: translateY(-41px);
 }
@@ -316,7 +319,7 @@ export default {
   padding: 0 2px 0 2px;
 }
 
-.display {
+.field {
   height: 90px;
   padding: 2px;
   display: flex;
@@ -324,23 +327,16 @@ export default {
 
 .price {
   color: #fff;
-  float: right;
-  background: #0069bd;
-  padding: 0 5px;
-  border-radius: 4px;
+  background: #2589da;
+  padding: 5px 10px;
+  border-radius: 3px;
   box-shadow: 0 1px 1px #005294;
-  font-family: "Agency FB";
-  font-weight: bold;
 }
 
 section.numpad {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  flex: 3;
   justify-content: center;
-  align-items: center;
-  text-align: center;
   padding-left: 2px;
 }
 
@@ -369,7 +365,7 @@ section.numpad div:last-child {
 
 .column h5 {
   padding: 10px 5px 15px;
-  font-size: 1.35em;
+  font-size: 18px;
   font-weight: lighter;
 }
 
@@ -395,25 +391,25 @@ section.numpad div:last-child {
   animation: flash 1.5s ease infinite;
 }
 
-.unit {
+.unit-wrap {
   display: none;
   text-shadow: none;
 }
 
-.unit span {
+.unit-wrap span {
   color: #7f90ea;
   text-shadow: none;
 }
 
-.target .unit {
+.target .unit-wrap {
   display: block;
 }
 
-.unit input {
+.unit-wrap input {
   display: none;
 }
 
-.column div.unit {
+.column div.unit-wrap {
   position: absolute;
   right: -5px;
   top: 13px;
@@ -421,16 +417,12 @@ section.numpad div:last-child {
   font-weight: lighter;
 }
 
-.discount {
-  position: relative;
-}
-
 .ban {
   pointer-events: none;
   opacity: 0.8;
 }
 
-.unit label {
+.unit-wrap label {
   color: #b6beea;
   padding: 5px 10px;
   font-weight: bold;

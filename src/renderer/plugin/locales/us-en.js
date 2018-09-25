@@ -35,6 +35,7 @@ export default {
     HIBACHI: "Hibachi",
     SALES: "Sales",
     TO_GO: "To Go",
+    FREE: "FREE",
     PRE_PAYMENT: "Pre Pay.",
     CREDIT_CARD: "Credit Card",
     RECEIPT: "Receipt",

@@ -35,6 +35,7 @@ export default {
     HIBACHI: "铁板",
     SALES: "销售",
     TO_GO: "带走",
+    FREE: "免费",
     PRE_PAYMENT: "预付款",
     CREDIT_CARD: "信用卡",
     RECEIPT: "收据",

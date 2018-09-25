@@ -319,16 +319,17 @@ export default {
     separator() {
       if (!this.item) return;
 
-      const content = {
+      const subItem = {
         zhCN: `----------`,
         usEN: `----------`,
         qty: 1,
         single: 0,
         price: "0.00",
-        key: String().random()
+        key: String().random(),
+        divider: true
       };
 
-      this.setChoiceSet(content);
+      this.setChoiceSet(subItem);
     },
     update(config) {
       this.setOrder(config);
@@ -562,7 +563,7 @@ header.info {
   padding: 16px 0;
   border-radius: 4px;
   border: none;
-  color:#3c3c3c;
+  color: #3c3c3c;
   font-family: fontAwesome;
   font-size: 18px;
   outline: none;
