@@ -59,7 +59,7 @@ export const pushToOrder = ({ commit }, item) => commit(types.PUSH_TO_ORDER, ite
 export const setPointer = ({ commit }, target) => commit(types.SET_POINTER, target);
 export const resetPointer = ({ commit }) => commit(types.RESET_POINTER);
 export const lessQty = ({ commit }, bool) => commit(types.LESS_QTY, bool);
-export const moreQty = ({ commit }) => commit(types.MORE_QTY);
+export const moreQty = ({ commit, getters }, requestState) => commit(types.MORE_QTY, { requestState, matchItemQty: getters.config.defaults.matchItemQty });
 export const alterItem = ({ commit }, item) => commit(types.ALTER_ITEM, item);
 export const splitItem = ({ commit }, item) => commit(types.SPLIT_ITEM, item);
 export const alertChoiceSet = ({ commit }, set) => commit(types.ALERT_CHOICE_SET, set);
@@ -93,7 +93,7 @@ export const alterItemOption = ({ commit, getters }, data) => {
 
 export const resetOrder = ({ commit }, resetArchive) => {
   resetArchive && commit(types.EMPTY_ARCHIVE_ORDER);
-  
+
   commit(types.RESET_ORDER);
   commit(types.SET_TICKET, { type: "" });
   commit(types.SET_APP, { newTicket: true });

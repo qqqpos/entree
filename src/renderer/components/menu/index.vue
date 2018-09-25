@@ -571,7 +571,12 @@ export default {
     open(component) {
       switch (component) {
         case "request":
-          this.component = this.component === "request" ? null : "request";
+          if (this.component === "request") {
+            this.resetChoiceSet();
+            this.component = null;
+          } else {
+            this.component = "request";
+          }
           break;
       }
     },
@@ -586,6 +591,7 @@ export default {
       "resetPointer",
       "setChoiceSet",
       "archiveOrder",
+      "resetChoiceSet",
       "alertChoiceSet",
       "alterItemOption",
       "emptyArchiveOrder",

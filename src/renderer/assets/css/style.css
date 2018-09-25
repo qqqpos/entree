@@ -104,8 +104,16 @@ i.space{
   margin-right:5px;
 }
 
+.ghost {
+  opacity: 0.5;
+}
+
 .light{
   opacity: 0.7;
+}
+
+.zero{
+  color: rgba(151, 151, 151,0.75);
 }
 
 .relative {
@@ -374,10 +382,6 @@ input[type="text"]:disabled {
 
 .datalist:nth-child(2n) {
   background: #f6f6f6;
-}
-
-.ghost {
-  opacity: 0.5;
 }
 
 .column {

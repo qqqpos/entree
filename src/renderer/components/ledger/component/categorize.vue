@@ -6,22 +6,23 @@
             <li>{{$t('text.tip')}}</li>
             <li>{{$t('text.tax')}}</li>
             <li>{{$t('text.subtotal')}}</li>
+            <li>{{$t('text.discount')}}</li>
             <li>{{$t('text.total')}}</li>
             <li>{{$t('type.other')}}</li>
         </ul>
         <ul v-for="(data,category,index) in summary" :key="index">
             <li>{{$t('type.'+category)}}</li>
             <li>{{data.count}}</li>
-            <li>{{data.tip | decimal}}</li>
-            <li>{{data.tax | decimal}}</li>
+            <li :class="{zero:data.tip === 0}">{{data.tip | decimal}}</li>
+            <li :class="{zero:data.tax === 0}">{{data.tax | decimal}}</li>
             <li>{{data.subtotal | decimal}}</li>
+            <li :class="{zero:data.discount === 0}">{{data.discount | decimal}}</li>
             <li><b>{{data.total | decimal}}</b></li>
-            <li>
-                <p class="row" v-show="data.plasticTax > 0"><span class="tag">{{$t('report.plasticTax')}}</span><span>{{data.plasticTax | decimal}}</span></p>             
-                <p class="row" v-show="data.rounding > 0"><span class="tag">{{$t('text.rounding')}}</span><span>{{data.rounding | decimal}}</span></p>
-                <p class="row" v-show="data.gratuity > 0"><span class="tag">{{$t('text.gratuity')}}</span><span>{{data.gratuity | decimal}}</span></p>
-                <p class="row" v-show="data.delivery > 0"><span class="tag">{{$t('text.delivery')}}</span><span>{{data.delivery | decimal}}</span></p>
-                <p class="row" v-show="data.discount > 0"><span class="tag">{{$t('text.discount')}}</span><span>{{data.discount | decimal}}</span></p>
+            <li class="row">
+                <p v-show="data.plasticTax > 0"><span class="value"><span class="tag">{{$t('report.plasticTax')}}</span>{{data.plasticTax | decimal}}</span></p>             
+                <p v-show="data.rounding > 0"><span class="value"><span class="tag">{{$t('report.rounding')}}</span>{{data.rounding | decimal}}</span></p>
+                <p v-show="data.gratuity > 0"><span class="value"><span class="tag">{{$t('text.gratuity')}}</span>{{data.gratuity | decimal}}</span></p>
+                <p v-show="data.delivery > 0"><span class="value"><span class="tag">{{$t('text.delivery')}}</span>{{data.delivery | decimal}}</span></p>
             </li>
         </ul>
     </div>
@@ -128,6 +129,7 @@ ul:last-child {
 
 li {
   padding: 7px 0;
+  min-height: 18px;
 }
 
 li:nth-child(even) {
@@ -136,16 +138,21 @@ li:nth-child(even) {
 
 li:last-child {
   border-bottom: none;
+  justify-content: center;
 }
 
-p.row{
-  align-items: center;
+.value {
+  width: 70px;
+  display: block;
+  position: relative;
 }
 
 .tag {
-    width: 75px;
-    font-size: 14px;
-    color: rgba(0,0,0,0.75);
+  position: absolute;
+  right: 80px;
+  top: 2px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.75);
 }
 </style>
 

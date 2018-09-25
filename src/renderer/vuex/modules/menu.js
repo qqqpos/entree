@@ -315,19 +315,25 @@ const mutations = {
 
         state.lastActionTime = +new Date();
     },
-    [types.MORE_QTY](state) {
+    [types.MORE_QTY](state, { requestState, matchItemQty }) {
         if (state.order.content.length === 0) return;
         if (state.item.split) return;
 
-        if (state.choiceSetTarget && state.choiceSetTarget.qty < 99) {
-            state.choiceSetTarget.price = (
-                ++state.choiceSetTarget.qty * state.choiceSetTarget.single
-            ).toFixed(2);
+        if (requestState || state.choiceSetTarget) {
+            const choiceSet = state.choiceSetTarget || state.item.choiceSet.last() || state.content.last().choiceSet.last();
+                
+            // no match exit
+            if (!choiceSet) return;
+
+            choiceSet.price = (++choiceSet.qty * choiceSet.single).toFixed(2);
         } else {
-            state.item.total = toFixed(
-                ++state.item.qty * state.item.single,
-                2
-            ).toFixed(2);
+            state.item.total = toFixed(++state.item.qty * state.item.single, 2).toFixed(2);
+
+            if (matchItemQty) {
+                state.item.choiceSet.forEach(subitem => {
+                    subitem.price = toFixed(++subitem.qty * subitem.single, 2)
+                })
+            }
         }
         state.order.content.splice();
     },

@@ -53,6 +53,8 @@ export default {
   },
   methods: {
     focus(field, keyboardLayout) {
+      if(field === this.anchor) return;
+
       this.alphabet = keyboardLayout;
       this.anchor = field;
 
@@ -64,8 +66,8 @@ export default {
       this.$refs[this.anchor].focus();
       document.activeElement.classList.add("active");
     },
-    input(s) {
-      if ((this.anchor === "price" || this.anchor === "qty") && !isNumber(s))
+    input(char) {
+      if ((this.anchor === "price" || this.anchor === "qty") && !isNumber(char))
         return;
 
       let target = this.$refs[this.anchor];
@@ -75,14 +77,14 @@ export default {
 
       if (this.anchor === "price") {
         if (this.reset) {
-          target.value = "0.0" + s;
+          target.value = "0.0" + char;
         } else {
           let value = toFixed(target.value * 100, 0);
-          target.value = toFixed((String(value) + s) / 100, 2).toFixed(2);
+          target.value = toFixed((String(value) + char) / 100, 2).toFixed(2);
         }
         caret = target.value.length;
       } else {
-        target.value = this.reset ? s : a + s + b;
+        target.value = this.reset ? char : a + char + b;
       }
 
       this.reset = false;

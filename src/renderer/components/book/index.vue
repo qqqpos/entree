@@ -315,8 +315,8 @@ export default {
         time: moment().format("HH:mm"),
         guest: [1, 0, 0],
         seat: null,
-        phone: null,
-        name: null,
+        phone: "",
+        name: "",
         request: [],
         note: "",
         status: 1

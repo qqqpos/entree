@@ -215,16 +215,19 @@ export default {
         let max = this.item.rules.maxSubItem || Infinity;
         let overCharge = this.item.rules.overCharge || 0;
         if (subItemCount >= max && overCharge === 0) {
-          this.$dialog({
+          const prompt = {
             title: "dialog.unableAdd",
             msg: ["dialog.maxSubItem", this.item[this.language], max],
             timeout: { duration: 5000, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(this.exitComponent);
+          };
+
+          this.$dialog(prompt).then(this.exitComponent);
           return true;
         }
       }
-      this.moreQty();
+
+      this.moreQty(!!document.querySelector("div.request"));
     },
     modify() {
       if (this.isEmptyTicket) return;

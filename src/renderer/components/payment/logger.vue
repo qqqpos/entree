@@ -38,8 +38,8 @@
               <span>{{$t('type.'+log.type)}}</span>
               <span>{{log.subType}}</span>
             </td>
-            <td class="amount" :title="tenderDetail(log)">$ {{log.actual | decimal}}</td>
-            <td class="amount" :class="{zero:log.tip === 0}">$ {{log.tip | decimal}}</td>
+            <td class="agency" :title="tenderDetail(log)">$ {{log.actual | decimal}}</td>
+            <td class="agency" :class="{zero:log.tip === 0}">$ {{log.tip | decimal}}</td>
             <td class="action">
               <button @click="removeConfirm(log,index)">{{$t("button.remove")}}</button>
               <span v-if="log.splitPayment" class="split">#{{log.splitPayment + 1}}</span>
@@ -272,12 +272,6 @@ h5 {
   margin-top: 3px;
 }
 
-.amount {
-  font-weight: bold;
-  font-family: "Agency FB";
-  color: #3c3c3c;
-}
-
 footer {
   display: flex;
   border-top: 1px solid #eee;
@@ -309,9 +303,5 @@ footer {
 
 .action {
   width: 120px;
-}
-
-.zero {
-  opacity: 0.15;
 }
 </style>

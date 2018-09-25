@@ -967,7 +967,7 @@ export default {
     highestSales: "Highest Sales",
     lowestSales: "Lowest Sales",
     averageSales: "Average Sales",
-    rounding: "Penny Rounding",
+    rounding: "Rounding",
     averageDetail: "There are {i} days above average and {i} days below average.",
     giftcard: {
       activation: "Gift Card Activation",

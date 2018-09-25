@@ -47,24 +47,24 @@
               <span class="main">{{$t('type.'+record.type)}}</span>
               <span class="sub">{{record.subType}}</span>
             </td>
-            <td class="amount adjustable" :class="{zero:record.tip === 0}" v-if="record.type ==='THIRD' && editable" @click="setTip(record)">$ {{record.tip | decimal}}</td>
-            <td class="amount" :class="{zero:record.tip === 0}" v-else>$ {{record.tip | decimal}}</td>
-            <td class="amount" v-if="!showPaid">$ {{record.actual | decimal}}</td>
-            <td class="amount" v-else>$ {{record.paid | decimal}}</td>
+            <td class="agency adjustable" :class="{zero:record.tip === 0}" v-if="record.type ==='THIRD' && editable" @click="setTip(record)">$ {{record.tip | decimal}}</td>
+            <td class="agency" :class="{zero:record.tip === 0}" v-else>$ {{record.tip | decimal}}</td>
+            <td class="agency" v-if="!showPaid">$ {{record.actual | decimal}}</td>
+            <td class="agency" v-else>$ {{record.paid | decimal}}</td>
             <td class="split" v-if="!isNaN(record.splitPayment)">#{{record.splitPayment + 1}}</td>
             <td class="split" v-else></td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td class="num">{{totalCount}}</td>
+            <td class="num agency">{{totalCount}}</td>
             <td class="type"></td>
             <td></td>
             <td></td>
             <td></td>
             <td class="settlement"></td>
-            <td class="amount">$ {{totalTip | decimal}}</td>
-            <td class="amount" :class="{invisible:!totalViewable}">$ {{totalAmount | decimal}}</td>
+            <td class="agency">$ {{totalTip | decimal}}</td>
+            <td class="agency" :class="{invisible:!totalViewable}">$ {{totalAmount | decimal}}</td>
             <td class="split"></td>
           </tr>
         </tfoot>
@@ -308,16 +308,6 @@ tbody tr {
 
 tbody tr:nth-child(even) {
   background: #eeeeee;
-}
-
-.amount,
-tfoot .num {
-  font-family: "Agency FB";
-  font-weight: bold;
-}
-
-.zero {
-  color: #979797;
 }
 
 footer {

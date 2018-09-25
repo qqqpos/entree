@@ -54,8 +54,8 @@
             <td class="auth">
               <span>{{record.host.auth}}</span>
             </td>
-            <td class="amount">$ {{record.amount.approve}}</td>
-            <td class="amount" :class="{zero:record.amount.tip === '0.00'}">$ {{record.amount.tip}}</td>
+            <td class="agency">$ {{record.amount.approve}}</td>
+            <td class="agency" :class="{zero:record.amount.tip === '0.00'}">$ {{record.amount.tip}}</td>
             <td v-if="!record.close" class="actions">
               <span class="action gray" @click="adjustTipDialog(record)">{{$t('button.adjust')}}</span>
               <span class="action gray" @click="print(record)">{{$t('button.print')}}</span>
@@ -72,15 +72,15 @@
             <td>
               <div class="value">
                 <span class="text">{{$t('text.subtotal')}}</span>
-                <span class="amount">$ {{baseAmount | decimal}}</span>
+                <span class="agency">$ {{baseAmount | decimal}}</span>
               </div>
               <div class="value">
                 <span class="text">{{$t('text.tip')}}</span>
-                <span class="amount">$ {{totalTip | decimal}}</span>
+                <span class="agency">$ {{totalTip | decimal}}</span>
               </div>
               <div class="value">
                 <span class="text">{{$t('text.total')}}</span>
-                <span class="amount">$ {{totalAmount | decimal}}</span>
+                <span class="agency">$ {{totalAmount | decimal}}</span>
               </div>
             </td>
           </tr>
@@ -681,6 +681,7 @@ td.card {
 
 tbody tr {
   background: #fafafa;
+  color: #3c3c3c;
 }
 
 tbody tr:nth-child(even) {
@@ -726,12 +727,6 @@ footer {
 
 .ticket .number {
   color: gray;
-}
-
-.amount {
-  font-weight: bold;
-  font-family: "Agency FB";
-  color: #3c3c3c;
 }
 
 .actions {

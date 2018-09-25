@@ -901,7 +901,7 @@ export default {
     lowestSales: "最低营业额",
     averageSales: "平均营业额",
     averageDetail: "其中有 {i}天 是高于平均值, {i}天 是低于平均值",
-    rounding: "分数湊整",
+    rounding: "湊整",
     giftcard: {
       activation: "礼物卡激活",
       reload: "礼物卡充值",
