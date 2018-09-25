@@ -102,15 +102,13 @@ export default {
   color: #656565;
   position: absolute;
   right: 7px;
-  top: 5px;
+  top: 4px;
 }
 
 input {
   flex: 1;
   padding: 5px;
   cursor: pointer;
-  outline: none;
-  border: none;
   width: calc(100% - 12px);
 }
 
@@ -118,7 +116,7 @@ span.input {
   display: flex;
   height: 15px;
   border-radius: 2px;
-  padding: 5px;
+  padding: 4px 5px 6px;
   cursor: pointer;
   flex: 1;
 }

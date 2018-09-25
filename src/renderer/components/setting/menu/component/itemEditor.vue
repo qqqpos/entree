@@ -67,11 +67,10 @@
       <template v-else-if="mode=== 'print'">
         <div class="wrap column print">
           <div class="config" v-for="(printer,name,index) in item.printer" v-show="isShowPrinter(name)" :key="index">
-            <h3>{{name}}</h3>
+            <checkbox :title="$t('tip.replaceItemName',name)" v-model="printer.replace"></checkbox>
             <div class="opt">
               <input :placeholder="$t('text.primary')" v-model="printer.usEN" :disabled="!printer.replace">
               <input :placeholder="$t('text.secondary')" v-model="printer.zhCN" :disabled="!printer.replace">
-              <checkbox title="tip.replaceItemName" v-model="printer.replace"></checkbox>
             </div>
           </div>
         </div>
@@ -534,7 +533,7 @@ p i {
 
 .config input {
   border: 1px solid #eee;
-  border-radius: 2px;
+  border-radius: 3px;
   padding: 5px;
   margin: 0 5px;
 }

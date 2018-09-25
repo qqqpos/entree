@@ -1532,7 +1532,7 @@ export default {
     enableCashdrawer: "Enable cash drawer",
     disableCashdrawer: "Disable cash drawer in this station",
     poleDisplayAnimation: "Display animation when POS idle",
-    replaceItemName: "Replace item name",
+    replaceItemName: "Replace item name when prints to {i}",
     subItemAsMain: "Print subitem as main",
     restrictPermission: "Directly deny access",
     temporaryPermission: "Allow temporary access",

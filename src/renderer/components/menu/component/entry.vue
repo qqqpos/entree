@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     focus(field, keyboardLayout) {
-      if(field === this.anchor) return;
+      if (field === this.anchor) return;
 
       this.alphabet = keyboardLayout;
       this.anchor = field;
@@ -209,16 +209,12 @@ section.input {
 }
 
 input {
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 40px;
   width: 100%;
-  font-family: "Yuanti-SC";
   color: #444;
   padding: 0 16px;
   background: #fff;
   opacity: 0.7;
+  font-size: 32px;
   transition: opacity, box-shadow 0.3s ease;
 }
 

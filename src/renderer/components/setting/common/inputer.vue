@@ -21,7 +21,7 @@ export default {
     },
     title: String,
     value: [String, Number, Array, Object],
-    length: [String,Number],
+    length: [String, Number],
     disabled: {
       type: Boolean,
       default: false
@@ -61,7 +61,8 @@ input {
   flex: 1;
   border: 1px solid #eee;
   border-radius: 2px;
-  padding: 5px;
+  padding: 3px 5px;
+  font-size: 16px;
 }
 
 label {

@@ -29,11 +29,10 @@
         <div class="wrap">
           <inputer title="text.primary" v-model.trim="category.usEN"></inputer>
           <inputer title="text.secondary" v-model.trim="category.zhCN"></inputer>
-          <inputer title="text.description" v-model.trim="category.description"></inputer>
           <div v-if="manual" class="row">
             <label class="f1">{{$t('text.contain')}}</label>
             <div class="inputWrap">
-              <span v-for="(category,index) in category.contain" :key="index">{{category}}<i class="fa fa-times" @click="remove(index)"></i></span>
+              <span v-for="(category,index) in category.contain" :key="index">{{category}}<span @click="remove(index)" class="icon">×</span></span>
               <input type="text" v-model="entry" @keypress.enter="add" @keypress.space="add">
             </div>
           </div>
@@ -257,7 +256,7 @@ header {
   padding: 2px 2px 0;
 }
 
-.inputWrap span {
+.inputWrap > span {
   border: 1px solid #ddd;
   padding: 2px 4px;
   margin: 0 2px 2px 0;
@@ -265,7 +264,7 @@ header {
   border-radius: 4px;
 }
 
-.inputWrap i {
+.inputWrap .icon {
   padding-left: 5px;
   color: #f44336;
   cursor: pointer;

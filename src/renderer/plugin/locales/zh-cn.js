@@ -1532,7 +1532,7 @@ export default {
     enableCashdrawer: "启用钱箱",
     disableCashdrawer: "禁止在此工作站使用钱箱",
     poleDisplayAnimation: "在空闲时候开启跑马灯动画效果",
-    replaceItemName: "替换物品名字",
+    replaceItemName: "在 {i}打印机 中替换物品名字",
     subItemAsMain: "不打印主菜名字",
     restrictPermission: "当权限不足时直接拒绝",
     temporaryPermission: "允许输入密码来临时提升权限",
