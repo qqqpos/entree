@@ -1048,6 +1048,7 @@ export default {
     city: "城市",
     state: "州",
     zipCode: "邮区",
+    website: "网址",
     contactInfo: "联系信息",
     storeType: "店面类型",
     enable: "启用",

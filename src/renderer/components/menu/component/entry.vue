@@ -14,29 +14,6 @@
           <i class="fas fa-check fa-2x confirm" @click="confirm"></i>
         </div>
       </section>
-        <!-- <section class="input">
-            <div class="wrap">
-                <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty')">
-                <div class="item">
-                    <input type="text" v-model="keywords" class="item" ref="item" @click="focus('item')">
-                    <i class="fa fa-angle-double-down fa-2x" @click="dropDown" v-if="!option"></i>
-                    <i class="fa fa-angle-double-up fa-2x" @click="closeDropDown" v-else></i>
-                    <transition name="fadeDown">
-                        <div v-show="option" class="dropDown">
-                            <checkbox v-model="devices" :val="printer" :multiple="true" :title="printer" class="printer" v-for="printer in printers" :key="printer" @input="check"></checkbox>
-                            <checkbox v-model="toggle" title="button.selectAll" @input="selectAll"></checkbox>
-                        </div>
-                    </transition>
-                </div>
-                <input type="text" v-model="price" class="price" placeholder="0.00" ref="price" @click="focus('price')">
-                <i class="fas fa-sign-in-alt fa-2x confirm" @click="confirm"></i>
-            </div>
-            <ul>
-                <li v-for="(list,index) in lists" :key="index" @click="fill(list)">
-                    <span>{{list[language]}}</span>
-                </li>
-            </ul>
-        </section> -->
         <keyboard :display="true" :alphabet.sync="alphabet" :length="keywords.length" @input="input" @backspace="backspace" @enter="confirm"></keyboard>
     </div>
 </template>
@@ -83,6 +60,7 @@ export default {
 
       this.reset = true;
       this.option = false;
+
       this.$refs[this.anchor].focus();
       document.activeElement.classList.add("active");
     },
@@ -117,13 +95,7 @@ export default {
       this.item = item;
       this.keywords = item[this.language];
       this.price = item.price.toFixed(2);
-
       this.focus("price", false);
-      // this.anchor = "price";
-      // this.$refs.price.focus();
-
-      // document.querySelector("input.active").classList.remove("active");
-      // document.activeElement.classList.add("active");
     },
     backspace() {
       let target = this.$refs[this.anchor];
@@ -204,7 +176,7 @@ export default {
     ...mapActions(["setChoiceSet"])
   },
   computed: {
-    ...mapGetters(["config", "language"])
+    ...mapGetters(["layouts", "config", "language"])
   },
   watch: {
     keywords(n) {

@@ -9,13 +9,12 @@
                 <span>{{$t('button.register')}}</span>
             </div>
         </text-input>
-        <text-input title="text.address" v-model="store.address" @update="updateAddress">
-          
-        </text-input>
+        <text-input title="text.address" v-model="store.address" @update="updateAddress"></text-input>
         <text-input title="text.city" v-model="store.city" @update="updateCity"></text-input>
         <text-input title="text.state" v-model="store.state" @update="updateState"></text-input>
         <text-input title="text.zipCode" v-model="store.zipCode" @update="updateZipCode"></text-input>
         <text-input title="text.contactInfo" v-model="store.contact" @update="updateContact"></text-input>
+        <text-input title="text.website" v-model="store.website" @update="updateWebsite"></text-input>
         <text-list title="text.timezone" v-model="store.timeZone" :opts="timeZones" @update="updateTimeZone"></text-list>
         <text-list title="text.storeType" v-model="store.type" :opts="types" @update="updateStoreType"></text-list>
         <external title="text.openHour" @open="$router.push({ name: 'Setting.store.openHour' })" :tooltip="getOpenHour()">
@@ -151,6 +150,12 @@ export default {
         value
       });
     },
+    updateWebsite(value) {
+      this.update({
+        key: "store.website",
+        value
+      });
+    },
     updateTimeZone(value) {
       this.update({
         key: "store.timeZone",
@@ -164,7 +169,7 @@ export default {
       });
     },
     getOpenHour() {
-      if(this.store.openingHours){
+      if (this.store.openingHours) {
         const { rules } = this.store.openingHours;
         const rule = rules[moment().format("d")];
 
@@ -172,12 +177,17 @@ export default {
           const hours = rule.hours.map(h => ({
             from: moment(new Date(moment().format("YYYY-MM-DD ") + h.from)),
             to: moment(new Date(moment().format("YYYY-MM-DD ") + h.to)),
-            alias:h.alias
+            alias: h.alias
           }));
 
           const open = hours.find(h => moment().isBetween(h.from, h.to));
           if (open) {
-            return this.$t("text.storeOpen", open.alias, open.from.format("HH:mm"), open.to.format("HH:mm"));
+            return this.$t(
+              "text.storeOpen",
+              open.alias,
+              open.from.format("HH:mm"),
+              open.to.format("HH:mm")
+            );
           } else {
             return "text.storeClose";
           }

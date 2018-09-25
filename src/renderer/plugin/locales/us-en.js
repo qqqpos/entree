@@ -1050,6 +1050,7 @@ export default {
     city: "City",
     state: "State",
     zipCode: "Zip Code",
+    website: "Website",
     contactInfo: "Contact Info",
     storeType: "Store Type",
     enable: "Enable",

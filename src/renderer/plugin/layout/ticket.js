@@ -151,6 +151,7 @@ function createHeader(store, setting, raw) {
                     <h5>${store.address}</h5>\
                     <h5>${store.city} ${store.state} ${store.zipCode}</h5>\
                     <h5>${store.contact}</h5>\
+                    <h5>${store.website || ""}</h5>
                 </div>\
                 <h1>${title}</h1>\
                 <div class="time">\

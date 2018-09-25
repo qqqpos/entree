@@ -64,19 +64,19 @@
                     <div class="content text-center">
                         <div class="input-wrap">
                             <i class="fas fa-phone light space"></i>
-                            <input type="text" v-model="book.phone" :placeholder="$t('text.phone')">
+                            <input type="text" v-model="book.phone" :placeholder="$t('text.phone')" @click="setInput('phone',false)" ref="phone">
                             <i class="fas fa-caret-right dialog"></i>
                         </div> 
                         <div class="input-wrap">
                             <i class="fas fa-user-friends light space"></i>
-                            <input type="text" v-model="book.name" :placeholder="$t('text.name')">
+                            <input type="text" v-model="book.name" :placeholder="$t('text.name')" @click="setInput('name',true)" ref="name">
                         </div>                      
                     </div>
                 </section>
                 <section>
                     <h5>{{$t('booking.request')}}</h5>
                     <div class="content text-center">
-                        <textarea v-model="book.note"></textarea>
+                        <textarea v-model="book.note"  @click="setInput('note',true)" ref="note"></textarea>
                     </div>
                 </section>
                 <section class="text-center">   
@@ -110,6 +110,7 @@
             </div>
         </div>
         <div :is="component" :init="componentData"></div>
+        <keyboard :display="showKeyboard" :alphabet.sync="alphabet" executeText="Exit" class="keyboard" @input="input" @enter="exitKeyboard" @backspace="backspace" :length="book[anchor].length"></keyboard>
     </div>
 </template>
 
@@ -117,6 +118,7 @@
 import { mapGetters } from "vuex";
 
 import viewer from "./component/view";
+import keyboard from "../common/keyboard";
 import dialogModule from "../common/dialog";
 import timePicker from "./helper/timePicker";
 import reservation from "./component/reservation";
@@ -129,6 +131,7 @@ export default {
     viewer,
     calendar,
     dropdown,
+    keyboard,
     timePicker,
     reservation,
     dialogModule
@@ -139,6 +142,9 @@ export default {
       bookingList: null,
       component: null,
       componentData: null,
+      showKeyboard: false,
+      anchor: "phone",
+      alphabet: true,
       calendarDate: moment().subtract(4, "h"),
       currentWaitTime: "N/A",
       book: {
@@ -147,8 +153,8 @@ export default {
         time: moment().format("HH:mm"),
         guest: [1, 0, 0],
         seat: null,
-        phone: null,
-        name: null,
+        phone: "",
+        name: "",
         request: [],
         note: "",
         status: 1
@@ -191,7 +197,9 @@ export default {
           return list;
         case "CANCELLED":
           const time = Date.now();
-          return list.filter(book => book.timestamp < time && book.status === 1);
+          return list.filter(
+            book => book.timestamp < time && book.status === 1
+          );
         case "NO-SHOWS":
           return list.filter(book => book.status === 0);
         default:
@@ -205,8 +213,8 @@ export default {
         time: moment().format("HH:mm"),
         guest: [1, 0, 0],
         seat: null,
-        phone: null,
-        name: null,
+        phone: "",
+        name: "",
         request: [],
         note: "",
         status: 1
@@ -260,6 +268,36 @@ export default {
           this.exitComponent();
         })
         .catch(this.exitComponent);
+    },
+    setInput(anchor, alphabet) {
+      this.anchor = anchor;
+      this.alphabet = alphabet;
+      this.showKeyboard = true;
+    },
+    input(char) {
+      let target = this.$refs[this.anchor];
+      let caret = target.selectionStart;
+      const a = target.value.substr(0, caret);
+      const b = target.value.substr(caret);
+
+      target.value = a + char + b;
+
+      target.dispatchEvent(new Event("input"));
+      target.setSelectionRange(++caret, caret);
+      target.focus();
+    },
+    backspace() {
+      let target = this.$refs[this.anchor];
+      let caret = target.selectionStart;
+      target.value =
+        target.value.substr(0, caret - 1) + target.value.substr(caret);
+      target.setSelectionRange(--caret, caret);
+
+      target.focus();
+      target.dispatchEvent(new Event("input"));
+    },
+    exitKeyboard() {
+      this.showKeyboard = false;
     },
     getBookingList(date) {
       date = date || this.calendarDate.format("YYYY-MM-DD");
@@ -373,8 +411,8 @@ export default {
       this.$open("viewer", { book });
     }
   },
-  sockets:{
-    REFRESH_BOOK(list){
+  sockets: {
+    REFRESH_BOOK(list) {
       this.bookingList = list;
     }
   }
@@ -500,6 +538,14 @@ i.dialog {
 .holiday {
   font-size: 12px;
   color: #ff5722;
+}
+
+.keyboard {
+  transform: scale(0.855) perspective(1px);
+  left: initial;
+  position: absolute;
+  bottom: 59px;
+  right: -32px;
 }
 </style>
 
