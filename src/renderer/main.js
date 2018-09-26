@@ -149,21 +149,28 @@ new Promise((resolve, reject) => {
 );
 
 
-function connectPrinter(ip) {
+const connectPrinter = ip => {
   return new Promise((resolve, reject) => {
     // failed when attempt 50 times
     let attemptCount = 0;
 
-    const loadScript = (remove) => {
+    const loadScript = remove => {
       remove && document.head.removeChild(document.getElementById("printScript"));
 
       const printScript = document.createElement("script");
       printScript.id = "printScript";
       printScript.type = "text/javascript";
 
-      printScript.onload = () => resolve();
+      printScript.onload = () => {
+        //console.log(CLODOP);
+        CLODOP.On_Broadcast = (strMessage) => {
+          strMessage.indexOf("PRINTER_CHANGED") !== -1 && connectPrinter(ip);
+        };
+        CLODOP.On_Broadcast_Remain = true;
+        resolve();
+      };
 
-      printScript.onerror = function () {
+      printScript.onerror = () => {
         attemptCount < 50 ? setTimeout(() => {
           attemptCount++;
           loadScript(true);

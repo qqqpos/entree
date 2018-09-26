@@ -219,17 +219,53 @@ export default {
 
         if (window.CLODOP) {
           window.Printer = new Print(CLODOP, config, station);
+          // reload when server printer changes
+          CLODOP.On_Broadcast = event => {
+            event.indexOf("PRINTER_CHANGED") !== -1 &&
+              this.reloadPrinterScript(CLODOP.strHostURI);
+          };
+          CLODOP.On_Broadcast_Remain = true;
           next();
         } else {
           interval = setInterval(() => {
             if (window.CLODOP) {
               window.Printer = new Print(CLODOP, config, station);
+              CLODOP.On_Broadcast = event => {
+                event.indexOf("PRINTER_CHANGED") !== -1 &&
+                  reloadPrinterScript(CLODOP.strHostURI);
+              };
+              CLODOP.On_Broadcast_Remain = true;
               clearInterval(interval);
               next();
             }
           }, 5000);
         }
       });
+    },
+    reloadPrinterScript(url) {
+      const { config, station } = this;
+
+      document.head.removeChild(document.getElementById("printScript"));
+
+      const printScript = document.createElement("script");
+      printScript.id = "printScript";
+      printScript.type = "text/javascript";
+
+      printScript.onload = () => {
+        CLODOP.On_Broadcast = event => {
+          event.indexOf("PRINTER_CHANGED") !== -1 &&
+            this.reloadPrinterScript(CLODOP.strHostURI);
+        };
+        CLODOP.On_Broadcast_Remain = true;
+
+        window.Printer = new Print(CLODOP, config, station);
+      };
+
+      printScript.onerror = () =>
+        setTimeout(() => this.reloadPrinterScript(url), 5000);
+
+      printScript.src = `${url}/CLodopfuncs.js?priority=1`;
+      document.getElementsByTagName("head")[0].appendChild(printScript);
     },
     progress(text) {
       this.$electron.ipcRenderer.send("Loading", this.$t(`initial.${text}`));
