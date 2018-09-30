@@ -33,7 +33,7 @@
             <label class="f1">{{$t('text.contain')}}</label>
             <div class="inputWrap">
               <span v-for="(category,index) in category.contain" :key="index">{{category}}<span @click="remove(index)" class="icon">×</span></span>
-              <input type="text" v-model="entry" @keypress.enter="add" @keypress.space="add">
+              <input type="text" v-model="entry" @keypress.enter="add">
             </div>
           </div>
           <div class="checkboxes categories" v-else>
@@ -212,7 +212,12 @@ export default {
         });
     },
     add() {
-      this.entry.trim().length && this.category.contain.push(this.entry.trim());
+      const category = this.entry.trim();
+      
+      category.length &&
+        !this.category.contain.includes(category) &&
+        this.category.contain.push(category);
+
       this.entry = "";
     },
     remove(index) {

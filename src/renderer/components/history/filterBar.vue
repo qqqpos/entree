@@ -39,6 +39,10 @@
                           <li @click.stop="toggleDiscountTag" v-else>
                             <div><span>{{$t('text.show')}}</span></div>
                             <div class="text">{{$t('text.discountTag')}}</div>
+                          </li>
+                          <li @click.stop="settleAll" v-show="ticketUnsettled">
+                            <div><span>{{$t('button.settle')}}</span></div>
+                            <div class="text">{{$t('type.ALL_INVOICES')}}</div>
                           </li>                                                  
                         </template>
                     </ul>
@@ -69,12 +73,18 @@ export default {
       displayBtn: false,
       showMore: false,
       showServer: false,
-      //type: "ALL_INVOICES",
       servers: []
     };
   },
   computed: {
-    ...mapGetters(["op"])
+    ticketUnsettled() {
+      const unsettled = this.filters["UNSETTLED"]
+        ? this.filters["UNSETTLED"].count !== 0
+        : true;
+
+      return unsettled && this.authorized;
+    },
+    ...mapGetters(["op", "authorized"])
   },
   created() {
     this.viewable = this.approval(this.op.view, "summary");
@@ -131,6 +141,10 @@ export default {
     },
     toggleDiscountTag() {
       this.$emit("update:discountTag", !this.discountTag);
+    },
+    settleAll() {
+      this.showMore = false;
+      this.$emit("settle", this.filters.last().count);
     },
     initialData() {
       const servers = new Set();

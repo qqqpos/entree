@@ -507,6 +507,7 @@ export default {
       removeOperator: "Remove Operator Confirm",
       switchServer: "Switch Server",
       createTogo: "Create A ToGo List",
+      settleAll: "Settle All Confirm"
     },
     card: {
       linkCustomer: "Link Customer"
@@ -522,7 +523,8 @@ export default {
       removeSpoolerConfirm: "Are you sure to remove this schedule?",
       addressRemoveConfirm: "Are you sure to remove {i} from the list?",
       deleteItemConfirm: "Are you sure to remove {i} from the menu item?",
-      cardLinkToCustomer: "This card did not link to any customer. Are you wish to link to current customer?"
+      cardLinkToCustomer: "This card did not link to any customer. Are you wish to link to current customer?",
+      settleAllByCash: "Are you sure to settle {i} unpaid tickets with CASH?"
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -1711,7 +1713,21 @@ export default {
     performance: "Perf.",
     history: "History",
     bill: "Bill",
-    plan: "Plan"
+    plan: "Plan",
+    setting: {
+      enable: "Enable Online Order",
+      connectionStrings: "Database Connection Strings",
+      database: "Database Name",
+      socket: "Socket Server",
+      notification: "Online Order Notification"
+    },
+    test: {
+      database: "Online database connection test",
+      socket: "Online socket server connection test",
+      ready: "Ready To Test",
+      passed: "Test Passed",
+      failed: "Test Failed"
+    }
   },
   date: {
     today: "Today",
@@ -1810,7 +1826,8 @@ export default {
       database: "About Database",
       menuImport: "Menu Import",
       cashflow: "Cash Flow Summary",
-      payoutRecord: "Payout Record"
+      payoutRecord: "Payout Record",
+      online: "Online Order Config"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",

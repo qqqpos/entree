@@ -8,6 +8,7 @@
       <text-input title="text.mac" v-model="station.mac" :disabled="true"></text-input>
       <text-input title="text.username" v-model="station.username" :disabled="true"></text-input>
       <toggle title="text.autoAwake" v-model="station.wol" @update="updateAwake"></toggle>
+      <toggle title="online.setting.notification" v-model="station.onlineNotification" @update="updateNotify"></toggle>
       <toggle title="setting.autoLock" tooltip="tip.autoLock" v-model="station.autoLock.enable" @update="updateAutoLock">
         <transition name="dropdown">
           <div v-if="station.autoLock.enable" class="opt">
@@ -57,19 +58,12 @@ export default {
         value
       });
     },
-    updateReceipt(value) {
+    updateNotify(value) {
       this.update({
-        key: "receipt",
+        key: "onlineNotification",
         value
       });
     },
-    updateTerminal(value) {
-      this.update({
-        key: "terminal",
-        value
-      });
-    },
-    editScale() {},
     updateAutoLock(value) {
       if (!value) {
         this.station.autoLock.timeout = 0;

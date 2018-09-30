@@ -237,7 +237,7 @@ export default {
         const single = parseFloat(item.single);
         const qty = item.qty || 1;
         const taxClass = this.tax.class[item.taxClass];
-        const orderType = item.orderType || type;
+        const orderType = item.orderType !== 'FREE' ? item.orderType || type : type;
         let amount = toFixed(single * qty, 2);
 
         item.choiceSet.forEach(set => {

@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     record() {
-      this.setApp({ lastActivity: new Date().getTime() });
+      this.setApp({ lastActivity: Date.now() });
     },
     online() {
       this.setDevice({ online: true });

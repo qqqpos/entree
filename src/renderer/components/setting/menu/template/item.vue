@@ -29,7 +29,7 @@
                 <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}">
                     <transition-group tag="div" class="items">
                         <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable" :class="{placeholder:item.placeholder}">{{item[language]}}</div>
-                        <div @click="create" :key="-1" v-show="template.contain[index].contain.length < 56">
+                        <div @click="create" :key="-1" v-show="template.contain[index].contain.length < 32">
                             <i class="fa fa-plus"></i>
                         </div>
                     </transition-group>
@@ -89,8 +89,8 @@ export default {
         this.componentData = { resolve, reject, item, printers: this.printers };
         this.component = "editor";
       })
-        .then(_item => {
-          this.template.contain[this.index].contain.push(_item);
+        .then(update => {
+          this.template.contain[this.index].contain.push(update);
           this.exitComponent();
         })
         .catch(this.exitComponent);
@@ -100,14 +100,13 @@ export default {
         this.componentData = { resolve, reject, item, printers: this.printers };
         this.component = "editor";
       })
-        .then(_item => {
-          this.template.contain[this.index].contain.splice(index, 1, _item);
+        .then(update => {
+          this.template.contain[this.index].contain.splice(index, 1, update);
           this.exitComponent();
         })
         .catch(remove => {
-          if (remove)
-            this.template.contain[this.index].contain.splice(index, 1);
           this.exitComponent();
+          remove && this.template.contain[this.index].contain.splice(index, 1);
         });
     },
     setOption() {

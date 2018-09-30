@@ -882,7 +882,7 @@ export default {
         departments
       };
 
-      Printer.printSessionReport(report);
+      //Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOperator"])
   }

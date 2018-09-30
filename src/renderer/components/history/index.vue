@@ -1,6 +1,6 @@
 <template>
   <div class="history-grid">
-    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" :type.sync="filter" :discountTag.sync="discountTag" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" :on="targetName"></filter-bar>
+    <filter-bar :data="targetInvoices" :date="calendarDate || today" :target="targetName" :reset="splits.length" :type.sync="filter" :discountTag.sync="discountTag" @filter="setFilter" @reset="resetFilter" @search="searchInvoice" @settle="settleAllDialog" :on="targetName"></filter-bar>
       <side-buttons :date="calendarDate || today" @change="setCalendar" :splitMode="splits.length > 0"></side-buttons>
       <section class="invoices relative">
         <div class="wrap">
@@ -253,6 +253,25 @@ export default {
       }
       return page;
     },
+    settleAllDialog(count) {
+      const prompt = {
+        type: "question",
+        title: "dialog.confirm.settleAll",
+        msg: ["dialog.tip.settleAllByCash", count],
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.settle", fn: "resolve" }
+        ]
+      };
+
+      this.$dialog(prompt)
+        .then(this.settleAll)
+        .catch(this.exitComponent);
+    },
+    settleAll() {
+      const date = this.calendarDate || this.today;
+      this.$socket.emit("[SETTLE] UNPAID", date, () => this.exitComponent());
+    },
     ...mapActions([
       "resetOrder",
       "setViewOrder",
@@ -264,7 +283,9 @@ export default {
     targetInvoices() {
       return this.splits.length
         ? this.splits
-        : Array.isArray(this.prevHistory) ? this.prevHistory : this.history;
+        : Array.isArray(this.prevHistory)
+          ? this.prevHistory
+          : this.history;
     },
     orders() {
       const { name } = this.op;

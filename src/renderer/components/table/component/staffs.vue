@@ -103,7 +103,7 @@ export default {
 <style scoped>
 .wrap {
   width: 496px;
-  padding: 15px 25px 3px;
+  padding: 10px 20px 5px;
 }
 
 .operators {

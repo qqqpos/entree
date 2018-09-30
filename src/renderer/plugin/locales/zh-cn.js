@@ -443,6 +443,7 @@ export default {
       removeOperator: "确定删除此用户",
       switchServer: "切换服务员",
       createTogo: "创建带走物品",
+      settleAll: "确认结账"
     },
     card: {
       linkCustomer: "关联卡号"
@@ -458,7 +459,8 @@ export default {
       removeSpoolerConfirm: "您确定要移除这个打印计划吗?",
       addressRemoveConfirm: "您确定要移除 {i} 地址吗?",
       deleteItemConfirm: "您确定要从菜单物品中删除 {i} 吗？",
-      cardLinkToCustomer: "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?"
+      cardLinkToCustomer: "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?",
+      settleAllByCash: "您确定要将未付款的 {i} 个订单一次性用 现金 结账吗?"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -671,7 +673,6 @@ export default {
     createFailed: "创建失败",
     duplicateProfile: "此电话号码的资料已经存在",
     duplicateAddress: "此街道信息已经存在",
-
     knowWhatYouDoing: "移除此类设定将会导致程序运行时出现故障, 请在技术支持的指引下进行操作",
     noDefaultWage: "没有默认时薪",
     timecardNoWage: "此员工 {i} 并没有设置时薪, 工资将会显示为 $ 0.00",
@@ -1705,7 +1706,21 @@ export default {
     performance: "表现",
     history: "历史",
     bill: "账单",
-    plan: "套餐"
+    plan: "套餐",
+    setting: {
+      enable: "使用网络点餐",
+      connectionStrings: "数据库连接指令",
+      database: "数据库名",
+      socket: "套接字服务器",
+      notification: "网络订单提示"
+    },
+    test: {
+      database: "测试数据库连接",
+      socket: "测试服务器连接",
+      ready: "准备测试",
+      passed: "测试通过",
+      failed: "连接失败"
+    }
   },
   date: {
     today: "今天",
@@ -1804,7 +1819,8 @@ export default {
       database: "关于数据库",
       menuImport: "菜单导入",
       cashflow: "现金流水记录",
-      payoutRecord: "支出记录"
+      payoutRecord: "支出记录",
+      online: "在线点餐设定"
     },
     receiptDialog: "打印收据",
     others: "其它设置",

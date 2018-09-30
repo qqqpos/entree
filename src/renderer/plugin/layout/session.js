@@ -37,7 +37,7 @@ const session = function (data) {
 
         const session = `
         <section class="type">\
-            <h4>Payment Summary</h4>\
+            <h4>Session Summary</h4>\
             <table>\
                 <thead>\
                     <tr>\
