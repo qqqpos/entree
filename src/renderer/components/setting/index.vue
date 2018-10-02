@@ -22,7 +22,7 @@
         <figcaption>{{$t('setting.dineIn')}}</figcaption>
         <p>{{$t('setting.dineInTip')}}</p>
       </router-link>
-      <router-link tag="figure" :to="{name:'Setting.online'}">
+      <router-link tag="figure" :to="{name:'Setting.online'}" class="disabled">
         <i class="fas fa-2x fa-globe-americas"></i>
         <figcaption>{{$t('setting.onlineOrder')}}</figcaption>
         <p>{{$t('setting.onlineOrderTip')}}</p>
@@ -135,5 +135,10 @@ figcaption {
 p {
   color: gray;
   text-align: center;
+}
+
+.disabled{
+  opacity: 0.5;
+  pointer-events: none;
 }
 </style>

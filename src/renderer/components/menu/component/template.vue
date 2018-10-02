@@ -15,11 +15,14 @@
             <i class="fa fa-caret-right"></i>
           </li>
         </ul>
-        <div class="items">
-          <div class="item" v-for="(item,index) in items" :key="index" @click="moreQty(item)" :class="{placeholder:item.placeholder}">
-            <span>{{item[language]}}</span>
-            <span class="qty" @click.stop="resetQty(item,index)" v-show="item.qty > 0">{{item.qty}}</span>
+        <div class="column">
+            <div class="items f1">
+              <div class="item" v-for="(item,index) in pageItem" :key="index" @click="moreQty(item)" :class="{placeholder:item.placeholder}">
+                <span>{{item[language]}}</span>
+                <span class="qty" @click.stop="resetQty(item,index)" v-show="item.qty > 0">{{item.qty}}</span>
+              </div>
           </div>
+          <paginator :of="items" @page="setPage" :perPage="32" :maxPage="8"></paginator>
         </div>
       </div>
       <footer>
@@ -33,11 +36,17 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import dialogModule from "../../common/dialog";
+import paginator from "../../common/paginator";
 
 export default {
   props: ["init"],
-  components: { dialogModule },
+  components: { dialogModule, paginator },
   computed: {
+    pageItem() {
+      const min = this.page * 32;
+      const max = min + 32;
+      return this.items.slice(min, max);
+    },
     ...mapGetters(["item", "templates", "language"])
   },
   data() {
@@ -47,6 +56,7 @@ export default {
       saved: [],
       items: [],
       index: 0,
+      page: 0,
       itemCount: [],
       insertMode: false,
       editMode: false,
@@ -79,6 +89,8 @@ export default {
       });
     },
     getTemplateItem(index = this.index) {
+      this.page = 0;
+      
       return new Promise(next => {
         const saved = this.saved[index];
         const {
@@ -286,7 +298,7 @@ export default {
           replace: false
         };
       });
-      
+
       Array.from(printer).length &&
         Object.assign(this.item, {
           defaultPrinter: this.item.hasOwnProperty("defaultPrinter")
@@ -294,6 +306,9 @@ export default {
             : JSON.parse(JSON.stringify(this.item.printer)),
           printer: printerSet
         });
+    },
+    setPage(page) {
+      this.page = page;
     },
     ...mapActions([
       "addChoiceSet",

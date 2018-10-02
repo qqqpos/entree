@@ -31,7 +31,11 @@ export default {
         { name: "EatStreet", img: "static/image/provider/eatstreet.png" },
         { name: "Postmates", img: "static/image/provider/postmates.png" },
         { name: "Groupon", img: "static/image/provider/groupon.png" },
-        { name: "QMenu", img: "static/image/provider/qMenu.png" }
+        { name: "QMenu", img: "static/image/provider/qMenu.png" },
+        {
+          name: "Takeout Waiter",
+          img: "static/image/provider/takeoutWaiter.png"
+        }
       ],
       service: null
     };

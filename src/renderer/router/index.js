@@ -218,12 +218,12 @@ export default new Router({
                 },
                 {
                   path: "template",
-                  component: require("../components/setting/menu/templateTab"),
+                  component: require("../components/setting/menu/template/index"),
                   children: [
                     {
                       path: "/",
                       name: "Setting.template",
-                      component: require("../components/setting/menu/template/index")
+                      component: require("../components/setting/menu/template/list")
                     },
                     {
                       path: "config",

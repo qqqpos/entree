@@ -213,7 +213,7 @@ export default {
     },
     add() {
       const category = this.entry.trim();
-      
+
       category.length &&
         !this.category.contain.includes(category) &&
         this.category.contain.push(category);
@@ -242,7 +242,7 @@ header {
 }
 
 .categories {
-  max-height: 405px;
+  max-height: 333px;
   overflow: auto;
 }
 
@@ -259,6 +259,7 @@ header {
   background: #fff;
   border-radius: 3px;
   padding: 2px 2px 0;
+  min-height: 26px;
 }
 
 .inputWrap > span {

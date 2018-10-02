@@ -1,10 +1,13 @@
 <template>
     <div class="template">
         <ul>
-            <div class="header">{{$t('text.template')}}</div>
+            <div class="header clickable" @click="$router.push({ name: 'Setting.template' })">
+              <i class="fa fa-chevron-left"></i>
+              <span>{{$t('button.back')}}</span>
+            </div>
             <draggable v-model="template.contain" :options="{animation: 300,group: 'page',ghostClass: 'ghost'}">
                 <transition-group>
-                    <li v-for="(page,i) in template.contain" :key="i" @click="index = i">
+                    <li v-for="(page,i) in template.contain" :key="i" @click="setIndex(i)">
                         <span>{{page.name}}</span>
                         <i class="fa fa-caret-right"></i>
                     </li>
@@ -23,15 +26,13 @@
                 </div>
                 <nav>
                     <span @click="setOption">{{$t('button.option')}}</span>
+                    <span @click="create">{{$t('button.create')}}</span>
                 </nav>
             </header>
-            <div>
-                <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}">
+            <div class="column">
+                <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}" class="f1">
                     <transition-group tag="div" class="items">
                         <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable" :class="{placeholder:item.placeholder}">{{item[language]}}</div>
-                        <div @click="create" :key="-1" v-show="template.contain[index].contain.length < 32">
-                            <i class="fa fa-plus"></i>
-                        </div>
                     </transition-group>
                 </draggable>
             </div>
@@ -56,6 +57,14 @@ export default {
       component: null,
       index: 0
     };
+  },
+  computed: {
+    items() {
+      const min = this.page * 32;
+      const max = min + 32;
+
+      return this.template.contain[this.index].contain.slice(min, max);
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.$socket.emit("[TEMPLATE] SAVE", this.template, () => next());
@@ -151,6 +160,9 @@ export default {
           this.exitComponent();
         })
         .catch(this.exitComponent);
+    },
+    setIndex(index) {
+      this.index = index;
     }
   }
 };
@@ -160,6 +172,7 @@ export default {
 .template {
   display: flex;
   width: 679px;
+  margin-top: 5px;
 }
 
 ul {
@@ -176,7 +189,7 @@ h5 {
 
 section {
   flex: 1;
-  height: 659px;
+  height: 730px;
   background: #f5f5f5;
 }
 
@@ -199,15 +212,20 @@ nav {
   display: flex;
 }
 
+nav span {
+  margin-left: 10px;
+}
+
 .items {
-  display: grid;
-  height: 600px;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  height: 670px;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .items div {
-  max-height: initial;
+  width: 126px;
+  height: 63px;
 }
 
 li {

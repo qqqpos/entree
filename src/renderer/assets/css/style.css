@@ -527,7 +527,7 @@ header.dock .text{
 
 .dock .trademark{
   display: flex;
-  width: 142px;
+  min-width: 142px;
   justify-content: center;
 }
 
