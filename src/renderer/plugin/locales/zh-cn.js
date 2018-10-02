@@ -242,6 +242,7 @@ export default {
     hold: "延迟",
     modify: "修改",
     exit: "退出",
+    test: "测试",
     language: "语言",
     confirm: "确定",
     cancel: "取消",
@@ -443,7 +444,9 @@ export default {
       removeOperator: "确定删除此用户",
       switchServer: "切换服务员",
       createTogo: "创建带走物品",
-      settleAll: "确认结账"
+      settleAll: "确认结账",
+      evenSplit: "均分订单",
+      evenPayment: "平摊付款"
     },
     card: {
       linkCustomer: "关联卡号"
@@ -460,7 +463,9 @@ export default {
       addressRemoveConfirm: "您确定要移除 {i} 地址吗?",
       deleteItemConfirm: "您确定要从菜单物品中删除 {i} 吗？",
       cardLinkToCustomer: "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?",
-      settleAllByCash: "您确定要将未付款的 {i} 个订单一次性用 现金 结账吗?"
+      settleAllByCash: "您确定要将未付款的 {i} 个订单一次性用 现金 结账吗?",
+      evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
+      evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -702,8 +707,6 @@ export default {
     releasePayroll: "工资结算",
     payrollPaymentConfirm: "您确定要支付 $ {i} 给 {i} 吗？",
     discountAmountNotAllow: "您输入的折扣信息无效，折扣不能大于订单本身价值",
-    evenSplit: "均分订单",
-    evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
     ticketAlreadySplit: "此订单已经被分单",
     allergyAlert: "食物过敏",
     foodAllergyFrom: "此物品含有 {i}, 会导致客户发生过敏反应",

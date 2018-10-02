@@ -64,7 +64,7 @@ export default {
 input {
   border: none;
   font-family: "Yuanti-SC";
-  font-size: 18px;
+  font-size: 16px;
   outline: none;
   margin-top: 2px;
   color: #656565;

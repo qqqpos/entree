@@ -242,6 +242,7 @@ export default {
     hold: "Hold",
     modify: "Modify",
     exit: "Exit",
+    test: "Test",
     language: "Language",
     confirm: "Confirm",
     cancel: "Cancel",
@@ -507,7 +508,9 @@ export default {
       removeOperator: "Remove Operator Confirm",
       switchServer: "Switch Server",
       createTogo: "Create A ToGo List",
-      settleAll: "Settle All Confirm"
+      settleAll: "Settle All Confirm",
+      evenSplit: "Ticket Even Split",
+      evenPayment: "Even Payment"
     },
     card: {
       linkCustomer: "Link Customer"
@@ -524,7 +527,9 @@ export default {
       addressRemoveConfirm: "Are you sure to remove {i} from the list?",
       deleteItemConfirm: "Are you sure to remove {i} from the menu item?",
       cardLinkToCustomer: "This card did not link to any customer. Are you wish to link to current customer?",
-      settleAllByCash: "Are you sure to settle {i} unpaid tickets with CASH?"
+      settleAllByCash: "Are you sure to settle {i} unpaid tickets with CASH?",
+      evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
+      evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times."
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -768,8 +773,6 @@ export default {
     releasePayroll: "Payment Confirm",
     payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?",
     discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal.",
-    evenSplit: "Ticket Even Split",
-    evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
     ticketAlreadySplit: "This ticket already split.",
     allergyAlert: "Food Allergy Alert",
     foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
@@ -1722,8 +1725,8 @@ export default {
       notification: "Online Order Notification"
     },
     test: {
-      database: "Online database connection test",
-      socket: "Online socket server connection test",
+      database: "Online database connection",
+      socket: "Online socket server connection",
       ready: "Ready To Test",
       passed: "Test Passed",
       failed: "Test Failed"

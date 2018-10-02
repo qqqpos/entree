@@ -20,6 +20,7 @@ import router from "./router";
 import i18n from "./plugin/dict";
 import util from "./plugin/util";
 import VueBus from "./plugin/bus";
+import io from "socket.io-client";
 
 
 Vue.use(VueTouch, { name: "v-touch" });
@@ -38,6 +39,7 @@ Vue.config.debug = process.env.NODE_ENV !== 'production';
 
 window.moment = moment;
 window.ObjectId = require("bson-objectid");
+window.io = io;
 
 //change moment default text
 moment.updateLocale("en", {

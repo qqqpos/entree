@@ -10,17 +10,17 @@
             <text-input title="online.setting.socket" v-model="online.socket" placeholder="https://"></text-input>
             <div class="test">
                 <div class="row">
-                    <span class="target">{{$t('online.test.database')}}</span>
-                    <span class="dots f1 text-center">................................................</span>
-                    <span class="result">{{status(test.database)}}</span>
+                    <b class="light">{{$t('online.test.database')}}</b>
+                    <span class="f1"></span>
+                    <span class="result light">{{status(test.database)}}</span>
                 </div>
                 <div class="row">
-                    <span class="target">{{$t('online.test.socket')}}</span>
-                    <span class="dots f1 text-center">................................................</span>
-                    <span class="result">{{status(test.socket)}}</span>
+                    <b class="light">{{$t('online.test.socket')}}</b>
+                    <span class="f1"></span>
+                    <span class="result light">{{status(test.socket)}}</span>
                 </div>   
-                <button @click="start">{{$t('button.test')}}</button>
-            </div> 
+                <div class="button"><i class="fas fa-bug space light"></i>{{$t('button.test')}}</div>
+            </div>
         </div>
     </div>
 </template>
@@ -51,7 +51,7 @@ export default {
     status(value) {
       switch (value) {
         case 0:
-          return this.$t("online.test.notReady");
+          return this.$t("online.test.ready");
         case 1:
           return this.$t("online.test.passed");
         case -1:
@@ -67,4 +67,21 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.test {
+  padding: 10px 35px;
+  text-align: center;
+}
+
+.test .row {
+  padding: 3px 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.button {
+  padding: 15px 0;
+  margin: 10px 0 0px;
+}
+</style>
 

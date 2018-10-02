@@ -40,7 +40,7 @@
                                 :source="invoice.source"
                                 :customer="invoice.customer._id"
                                 :giftCard="giftCard"
-                                @updateSplit="setSplit" @excSplit="splitTicketConfirm" 
+                                @updateSplit="setSplit" @excSplit="splitTicketDialog" 
                                 @changeAnchor="setAnchor" @delete="deleteInput" 
                                 @clear="clearInput" @charge="charge"
                                 @updateExternalType="setExternalType"
@@ -700,7 +700,9 @@ export default {
       const create = this.invoice.create;
       const date = this.invoice.date || today();
       const split = this.payWhole
-        ? this.order.hasOwnProperty("parent") ? this.order._id : null
+        ? this.order.hasOwnProperty("parent")
+          ? this.order._id
+          : null
         : this.splits[this.splitIndex]._id;
       const order = this.invoice.hasOwnProperty("parent")
         ? this.invoice.parent
@@ -1114,7 +1116,7 @@ export default {
         .then(({ amount, percentage }) => {
           this.paid = "0.00";
           this.tip = percentage
-            ? (this.order.payment.subtotal * amount / 100).toFixed(2)
+            ? ((this.order.payment.subtotal * amount) / 100).toFixed(2)
             : amount.toFixed(2);
 
           Object.assign(this.order.payment, { tip: parseFloat(this.tip) });
@@ -1149,7 +1151,7 @@ export default {
           : this.order.payment.total;
 
         const discount = percentage
-          ? toFixed(amount * ticketTotal / 100, 2)
+          ? toFixed((amount * ticketTotal) / 100, 2)
           : amount;
 
         if (discount > ticketTotal) {
@@ -1213,11 +1215,32 @@ export default {
     setSplit(number) {
       this.splitTarget = number;
     },
+    splitTicketDialog() {
+      this.order.parent ? this.paySplitAmount() : this.splitTicketConfirm();
+    },
+    paySplitAmount() {
+      const balance = this.order.payment.remain.toFixed(2);
+      const split = this.splitTarget;
+      const pay = toFixed(balance / split, 2);
+
+      const prompt = {
+        type: "question",
+        title: "dialog.confirm.evenSplit",
+        msg: ["dialog.tip.evenPaymentConfirm", balance, split, pay]
+      };
+
+      this.$dialog(prompt)
+        .then(() => {
+          this.paid = pay.toFixed(2);
+          this.exitComponent();
+        })
+        .catch(this.exitComponent);
+    },
     splitTicketConfirm() {
       const prompt = {
         type: "question",
-        title: "dialog.evenSplit",
-        msg: ["dialog.evenSplitConfirm", this.splitTarget]
+        title: "dialog.confirm.evenSplit",
+        msg: ["dialog.tip.evenSplitConfirm", this.splitTarget]
       };
 
       this.$dialog(prompt)
@@ -1233,7 +1256,13 @@ export default {
             this.setOrder(this.order);
             this.setApp({ newTicket: false });
           }
-          this.reloadPaymentModule({ splitPay: true, split: this.splitTarget });
+
+          this.exitComponent();
+
+          this.reloadPaymentModule({
+            splitPay: true,
+            split: this.splitTarget
+          });
         })
         .catch(this.exitComponent);
     },

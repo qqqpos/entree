@@ -208,6 +208,7 @@ export default {
       });
 
       this.template.dynamicPrint && this.setItemPrinter();
+      console.log(this.item);
       this.init.resolve();
     },
     itemHandler(items) {
@@ -273,22 +274,26 @@ export default {
 
       let printer = new Set();
       let printerSet = {};
-      this.item.choiceSet.forEach(
-        sub =>
-          Array.isArray(sub.print) &&
-          sub.print.forEach(name => printer.add(name))
-      );
+      this.item.choiceSet
+        .filter(sub => sub._ti === this.template._id)
+        .forEach(
+          sub =>
+            Array.isArray(sub.print) &&
+            sub.print.forEach(name => printer.add(name))
+        );
       Array.from(printer).forEach(name => {
         printerSet[name] = {
           replace: false
         };
       });
-      Object.assign(this.item, {
-        defaultPrinter: this.item.hasOwnProperty("defaultPrinter")
-          ? this.item.defaultPrinter
-          : JSON.parse(JSON.stringify(this.item.printer)),
-        printer: printerSet
-      });
+      
+      Array.from(printer).length &&
+        Object.assign(this.item, {
+          defaultPrinter: this.item.hasOwnProperty("defaultPrinter")
+            ? this.item.defaultPrinter
+            : JSON.parse(JSON.stringify(this.item.printer)),
+          printer: printerSet
+        });
     },
     ...mapActions([
       "addChoiceSet",
