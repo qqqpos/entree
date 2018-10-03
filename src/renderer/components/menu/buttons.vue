@@ -414,8 +414,12 @@ export default {
       return new Promise((resolve, reject) => {
         const { printOnDone = false, useTable = true } = this.dineInOpt;
         const printCount = this.app.newTicket
-          ? print ? 1 : 0
-          : print ? this.order.printCount + 1 : this.order.printCount;
+          ? print
+            ? 1
+            : 0
+          : print
+            ? this.order.printCount + 1
+            : this.order.printCount;
 
         // update table status
 
@@ -609,8 +613,10 @@ export default {
       this.setOrder({
         type: "TO_GO",
         print: false,
-        content: []
+        content: [],
+        togo: true
       });
+      this.setSides(Array(11).fill({ usEN: "", zhCN: "", disable: true }));
     },
     dineInQuit() {
       const prompt = {
@@ -778,6 +784,7 @@ export default {
       "setApp",
       "lessQty",
       "moreQty",
+      "setSides",
       "resetAll",
       "setOrder",
       "resetOrder",

@@ -12,7 +12,7 @@
             <div class="wrap">
                 <div class="schedule">
                     <div v-for="(items,time,index) in course" :key="index" class="course">
-                        <div class="time">{{time}} Minute</div>
+                        <div class="time">{{time}} {{$t('text.minute')}}</div>
                         <ul>
                             <li v-for="(item,idx) in items" :key="idx" @click="touch(item.unique)" :class="{active:isReturn(item.unique)}">
                                 <div class="main"><span class="qty">{{item.qty}}</span>{{item[language]}}<span class="side">{{item.side[language]}}</span></div>
@@ -79,6 +79,10 @@ export default {
           this.order.content.filter(item => !item.print && !item.pending)
         )
       );
+
+      this.ticket.type === "TO_GO" &&
+        this.items.forEach(item => Object.assign(item, { orderType: "TO_GO" }));
+
       this.course = {};
       this.queue = [];
       this.dequeue = [];
@@ -144,10 +148,10 @@ export default {
         if (this.ticket.type === "TO_GO") {
           let order = this.archivedOrder;
           let items = this.order.content.map(item =>
-            Object.assign({}, item, { print, orderType: "TO_GO" })
+            Object.assign(item, { orderType: "TO_GO" })
           );
-          order.content.push(...items);
 
+          order.content.push(...items);
           this.$calculatePayment(order);
           next(order);
         } else {
@@ -195,7 +199,8 @@ export default {
         Printer.setTarget("Order").print(
           Object.assign({}, order, {
             content: this.items,
-            print: false
+            print: false,
+            togo: this.ticket.type === "TO_GO"
           })
         );
       }
@@ -204,7 +209,8 @@ export default {
         const delay = +moment().add(time, "minutes");
         const ticket = Object.assign({}, order, {
           content: this.course[time],
-          schedule: delay
+          schedule: delay,
+          togo: this.ticket.type === "TO_GO"
         });
 
         const job = {
@@ -233,7 +239,7 @@ export default {
         const { _id } = this.order;
         const ticket = this.history.find(t => t._id === _id);
 
-        this.resetOrder();
+        this.resetOrder(true);
         this.setApp({ newTicket: true });
         ticket && this.setViewOrder(ticket);
         this.$router.push({ path: "/main/table" });
