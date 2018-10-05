@@ -983,8 +983,8 @@ export default {
             }
           : {
               type: "question",
-              title: "dialog.printReceipt",
-              msg: "dialog.printReceiptConfirm",
+              title: "dialog.confirm.printReceipt",
+              msg: "dialog.tip.printReceiptConfirm",
               buttons: [
                 { text: "button.noReceipt", fn: "reject" },
                 { text: "button.print", fn: "resolve" }

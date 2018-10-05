@@ -141,7 +141,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import creditVault from "../component/creditVault";
+import creditVault from "./component/creditVault";
 import groupItem from "./component/groupItem";
 import configModule from "./component/config";
 import dialogModule from "../common/dialog";

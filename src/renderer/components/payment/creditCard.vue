@@ -48,7 +48,9 @@ export default {
             stop({ error: "CONFIG_FILE_NO_FOUND" });
           } else {
             this.config = config;
-            this.terminal = this.getParser(config.model).default();
+            window.terminal = this.terminal = this.getParser(
+              config.model
+            ).default();
             next();
           }
         });
@@ -102,9 +104,29 @@ export default {
         if (result.code !== "000000") {
           stop({ error: "TRANSACTION_FAILED", data: result });
         } else {
-          this.init.resolve(result);
+          this.config.eSignature
+            ? this.getSignature(result)
+            : this.init.resolve(result);
         }
       });
+    },
+    async getSignature(result) {
+      const request = await this.terminal.doSignature();
+      const [multiple, , , status, msg] = request.data
+        .slice(1, request.data.indexOf(String.fromCharCode(3)))
+        .split(String.fromCharCode(28));
+
+      switch (status) {
+        case "000000":
+          // successful
+          const data = await this.terminal.getSignature();
+          break;
+        case "100001":
+        // timeout
+        case "100002":
+          // abort
+          break;
+      }
     },
     getParser(model) {
       switch (model) {

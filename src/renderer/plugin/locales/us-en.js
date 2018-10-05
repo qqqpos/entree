@@ -510,7 +510,8 @@ export default {
       createTogo: "Create A ToGo List",
       settleAll: "Settle All Confirm",
       evenSplit: "Ticket Even Split",
-      evenPayment: "Even Payment"
+      evenPayment: "Even Payment",
+      printReceipt: "Print Receipt",
     },
     card: {
       linkCustomer: "Link Customer"
@@ -529,7 +530,8 @@ export default {
       cardLinkToCustomer: "This card did not link to any customer. Are you wish to link to current customer?",
       settleAllByCash: "Are you sure to settle {i} unpaid tickets with CASH?",
       evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
-      evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times."
+      evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times.",
+      printReceiptConfirm: "Do you want to print a receipt to customer?",
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -614,8 +616,6 @@ export default {
     cashPaymentDetail: "Customer has paid ($ {i})",
     cashPaymentWithTipDetail: "Customer has paid total ($ {i}), including tip ($ {i})",
     cashChangeDetail: "Customer has paid ($ {i})",
-    printReceipt: "Print Receipt",
-    printReceiptConfirm: "Do you want to print a receipt to customer?",
     unableEdit: "Unable Edit",
     unableEditPrevsTicket: "You can not edit previous ticket.",
     unableEditVoidTicket: "You can not edit voided ticket ( Voided By: {i} )",
@@ -1162,6 +1162,7 @@ export default {
     delayTask: "{i} tasks delayed",
     sales: "Sales",
     printReceipt: "Print Receipt",
+    eSignature: "eSignature",
     count: "Count",
     content: "Content",
     coupon: "Coupon",

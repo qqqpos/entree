@@ -446,7 +446,8 @@ export default {
       createTogo: "创建带走物品",
       settleAll: "确认结账",
       evenSplit: "均分订单",
-      evenPayment: "平摊付款"
+      evenPayment: "平摊付款",
+      printReceipt: "打印收据",
     },
     card: {
       linkCustomer: "关联卡号"
@@ -465,7 +466,8 @@ export default {
       cardLinkToCustomer: "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?",
       settleAllByCash: "您确定要将未付款的 {i} 个订单一次性用 现金 结账吗?",
       evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
-      evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}"
+      evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}",
+      printReceiptConfirm: "是否需要打印收据给客人？",
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -548,8 +550,6 @@ export default {
     cashChange: "请找 $ {i}",
     cashPaymentDetail: "客人支付现金 ($ {i})",
     cashPaymentWithTipDetail: "客人总共支付现金 ($ {i}), 含小费($ {i})",
-    printReceipt: "打印收据",
-    printReceiptConfirm: "是否需要打印收据给客人？",
     unableEdit: "无法修改",
     unableEditPrevsTicket: "您无法修改过去的订单",
     unableEditVoidTicket: "您无法修改已经删除的订单。(此订单被 {i} 删除)",
@@ -618,7 +618,7 @@ export default {
     adjustTipFailedErrorMessage: "调整小费失败，错误代码 {i}",
     saveFailed: "保存失败",
     cashInRequired: "首次开启钱箱",
-    cashInRequiredTip: "您需要先执行 CASH IN 才可以使用钱箱",
+    cashInRequiredTip: "您需要先放入底钱后才能使用钱箱",
     extraPayment: "额外支付",
     setExtraAmountAsTip: "您是否需要将余出的款项 ( ${i} ) 设为小费？",
     ticketNotFound: "无法找到订单",
@@ -724,7 +724,6 @@ export default {
     templateMissing: "无法找到 {i} 的模版信息, 请检查一下菜单设定!",
     unableTraceRecord: "无法追溯",
     recordMissingOrDeleted: "此订单的历史记录丢失或者已经被删除",
-
     courseTimeConfirm: "所有未设定时间的餐会立刻打印出来",
     driverReport: "司机报表",
     driverReportDetail: "您确定要打印 {i} 司机的报表?",
@@ -1159,6 +1158,7 @@ export default {
     delayTask: "有 {i} 个打印任务",
     sales: "销售",
     printReceipt: "打印收据",
+    eSignature: "电子签名",
     count: "计数",
     content: "内容",
     coupon: "优惠",

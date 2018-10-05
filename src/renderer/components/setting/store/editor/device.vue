@@ -18,13 +18,13 @@
                     <inputer title="text.model" v-model="device.model"></inputer>
                     <inputer title="text.S/N" v-model.trim="device.sn"></inputer>
                     <switches title="text.printReceipt" v-model="device.print"></switches>
-                    <switches title="text.eSignature" v-model="device.eSignature" :disabled="true"></switches>
+                    <switches title="text.eSignature" v-model="device.eSignature" :disabled="device.model !== 'S300'"></switches>
                     <switches title="setting.tipSuggestion" v-model="device.tipSuggestion"></switches>
                 </div>
             </div>
             <footer>
                 <div class="opt">
-                    <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
+                    <span class="del" @click="init.reject(true)" v-show="init.edit && authorized">{{$t('button.delete')}}</span>
                 </div>
                 <button class="btn" @click="confirm" :disabled="invalid">{{$t('button.confirm')}}</button>
             </footer>
@@ -44,8 +44,9 @@ export default {
   components: { search, inputer, checkbox, switches },
   data() {
     return {
-      componentData: null,
       component: null,
+      componentData: null,
+      authorized: this.$store.getters.authorized,
       device: JSON.parse(JSON.stringify(this.init.device))
     };
   },

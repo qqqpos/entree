@@ -136,19 +136,19 @@ export default {
               const topDiff = top - parent.top;
               const botDiff = bottom - parent.bottom;
 
-              const actual = this.calHeight();
-              if (actual < 450) {
+              const actual = this.calcHeight();
+
+              //this.offset = 0;
+
+              if (actual < 450 || topDiff > 0) {
                 this.offset = 0;
-                this.lastDelta = 0;
-              } else if (topDiff > 0) {
-                this.offset = 0;
-                this.lastDelta = 0;
               } else if (botDiff > 0) {
-                this.lastDelta = topDiff;
-              } else {
-                this.offset = -actual + 450;
-                this.lastDelta = this.offset;
+                this.offset = topDiff;
+              } else if (bottom + parent.bottom - 31 < 0) {
+                this.offset -= bottom + parent.bottom - 34;
               }
+
+              this.lastDelta = this.offset;
             });
 
             setTimeout(() => dom.classList.remove("block"), 150);
@@ -256,7 +256,7 @@ export default {
       }
       items.length &&
         this.$nextTick(() => {
-          const height = this.calHeight();
+          const height = this.calcHeight();
           if (height - 450 > 0) {
             this.$refs[this.unique].classList.add("reverse");
             this.offset = 450 - height;
@@ -429,7 +429,7 @@ export default {
             : this.order.payment.total;
 
           const discount = percentage
-            ? toFixed(amount * ticketTotal / 100, 2)
+            ? toFixed((amount * ticketTotal) / 100, 2)
             : amount;
 
           const coupon = percentage
@@ -533,7 +533,7 @@ export default {
     selectAll() {
       this.order.content.filter(i => !i.split).forEach(item => this.pick(item));
     },
-    calHeight() {
+    calcHeight() {
       const doms = document.querySelectorAll(`ul.${this.unique} li`);
       let height = 0;
 
@@ -792,7 +792,7 @@ li.picked .sub {
   top: 0;
   left: 0;
   width: 250px;
-  height: 100%;
+  height: 500%;
   z-index: 2;
   display: block;
   position: absolute;

@@ -7,15 +7,15 @@ const Pax = function () {
   let terminal = null;
   const cardType = ['',
     'Visa',
-    'Master Card',
+    'Master',
     'AmEx',
     'Discover',
     'Diner Club',
     'enRoute',
     'JCB',
     'Revolution',
-    'VisaFleet',
-    'MasterCardFleet',
+    'Visa Fleet',
+    'MasterCard Fleet',
     'FleetOne',
     'Fleetwide',
     'Fuelman',
@@ -142,7 +142,7 @@ const Pax = function () {
           station,
           terminal,
           addition,
-          time: +new Date,
+          time: Date.now(),
           status: 1
         };
       case "100001":
@@ -330,13 +330,44 @@ const Pax = function () {
     //Encode(`A14_1.38`);
 
   }
+  this.command = function (command) {
+    return request.get(Encode(command))
+  }
+  
   this.retrieveTransactionDetail = function () {
     const command = Encode("R02_1.38_01____0__");
     return request.get(command);
   }
 
-  this.drawSignature = function (data) {
-    Draw(data);
+  this.doSignature = function () {
+    const command = Encode(`A20_1.38_0_0_01_200`);
+    return request.get(command)
+  }
+
+  this.getSignature = function () {
+    const command = Encode(`A08_1.38_0_`);
+    return request.get(command)
+  }
+
+  this.drawSignature = function (path) {
+    let canvas = document.createElement('canvas');
+    let context = canvas.getContext('2d');
+    let draws = path.slice(0, -1).split("0,65535");
+    context.moveTo(0, 0);
+    for (let i = 1; i < draws.length; i++) {
+      const coordinator = draws[i].split("^").slice(0, -1);
+      for (let x = 0; x < coordinator.length; x++) {
+        const pixel = coordinator[x].split(",");
+        context.lineTo(pixel[0], pixel[1]);
+        context.stroke();
+      }
+    }
+
+    const data = canvas.toDataURL();
+    // Free memory
+    canvas = null;
+
+    return data;
   }
   this.adjust = function (invoice, trans, value) {
     const command = Encode(`T00_1.38_06_${value}__${invoice}|||${trans}______`);
@@ -356,6 +387,12 @@ const Pax = function () {
   }
   this.batch = function () {
     const command = Encode('B00_1.38_');
+    return request.get(command)
+  }
+
+  // functional 
+  this.reboot = function () {
+    const command = Encode(`A26_1.38`);
     return request.get(command)
   }
 };
@@ -387,22 +424,6 @@ const lrc = function (s) {
     l ^= s.charCodeAt(i);
   }
   return String.fromCharCode(l);
-};
-const Draw = function (path) {
-  let canvas = document.getElementById('vector');
-  let context = canvas.getContext('2d');
-  let draws = path.slice(0, -1).split("0,65535");
-  context.moveTo(0, 0);
-  for (let i = 1; i < draws.length; i++) {
-    let coordinator = draws[i].split("^").slice(0, -1);
-    for (let x = 0; x < coordinator.length; x++) {
-      let pixel = coordinator[x].split(",");
-      context.lineTo(pixel[0], pixel[1]);
-      context.stroke();
-    }
-  }
-
-  return canvas.toDataURL()
 };
 
 export default function () {

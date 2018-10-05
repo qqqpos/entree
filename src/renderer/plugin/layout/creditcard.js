@@ -86,6 +86,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
                 <h5>${store.address}</h5>\
                 <h5>${store.city} ${store.state} ${store.zipCode}</h5>\
                 <h5>${store.contact}</h5>\
+                <h5>${store.website || ""}</h5>\
               </div>\
               <div class="type">\
                 <h3>${trans.transType}</h3>\

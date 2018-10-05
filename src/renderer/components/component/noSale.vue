@@ -93,7 +93,7 @@ export default {
           ? this.op.name
           : this.station.cashDrawer.name;
       const date = today();
-      const time = +new Date();
+      const time = Date.now();
 
       const activity = {
         type: "CASHFLOW",
@@ -143,7 +143,7 @@ export default {
             type: "OPEN",
             inflow: 0,
             outflow: 0,
-            time: +new Date(),
+            time: Date.now(),
             ticket: null,
             operator: this.op.name
           }
@@ -186,7 +186,7 @@ export default {
             this.$socket.emit(
               "[TERMINAL] CONFIG",
               this.station.terminal,
-              config => Printer.printCreditCard(content, {})
+              config => Printer.printCreditCard(content, config)
             )
           );
 
