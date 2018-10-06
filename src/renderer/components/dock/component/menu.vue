@@ -437,10 +437,12 @@ export default {
         .catch(this.exit);
     },
     askStaffCashIn() {
-      this.$dialog({
-        title: "dialog.initialStaffCash",
+      const prompt = {
+        title: "dialog.confirm.staffCashIn",
         msg: "dialog.selfCashInTip"
-      })
+      };
+
+      this.$dialog(prompt)
         .then(this.countSelfCash)
         .catch(this.exitComponent);
     },
@@ -457,12 +459,12 @@ export default {
         .catch(this.exit);
     },
     countSelfCash(amount) {
-      const prompt = {
-        title: "dialog.confirm.staffCashIn",
-        msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
-      };
-
       if (isNumber(amount)) {
+        const prompt = {
+          title: "dialog.confirm.staffCashIn",
+          msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
+        };
+        
         this.$dialog(prompt)
           .then(() => this.acceptCashIn(amount))
           .catch(this.countSelfCash);
@@ -836,7 +838,7 @@ export default {
               amount = toFixed(amount + t, 2);
             });
 
-            if (!taxFree && Tax.apply[type]) tax += Tax.rate / 100 * amount;
+            if (!taxFree && Tax.apply[type]) tax += (Tax.rate / 100) * amount;
 
             if (index === -1) {
               departments[depLength].count += qty;

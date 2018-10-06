@@ -196,12 +196,13 @@ export default {
     },
     print(order) {
       if (this.items.length) {
-        Printer.setTarget("Order").print(
+        Printer.print(
           Object.assign({}, order, {
             content: this.items,
             print: false,
             togo: this.ticket.type === "TO_GO"
-          })
+          }),
+          { target: "Order" }
         );
       }
 

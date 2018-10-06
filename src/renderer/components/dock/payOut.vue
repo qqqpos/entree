@@ -150,11 +150,13 @@ export default {
     saveSignature() {
       return new Promise(next => {
         const data = {
+          _id: ObjectId().toString(),
           for: "Payout",
           note: this.note,
-          signature: this.signaturePad.toDataURL()
+          image: this.signaturePad.toDataURL()
         };
-        this.$socket.emit("[SIGNATURE] SAVE", data, _id => next(_id));
+
+        this.$socket.emit("[SIGNATURE] SAVE", data, () => next(data._id));
       });
     },
     saveToDatabase(credential) {

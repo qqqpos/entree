@@ -25,7 +25,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
       .join("")
       .toString();
 
-    suggestions = `<section class="suggestion">\
+    suggestions = `<section class="suggestion center">\
                       <h5>Tips Suggestion</h5>\
                       <i>These tip amounts are provided for your convenience.</i>\
                       ${data}\
@@ -36,6 +36,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
   const style = createStyle();
   const duplicate = reprint ? '<p class="center">***Duplicate***</p>' : '';
 
+  let signature = trans.signature && trans.signature.image ? `<div class="signature center"><img src="${trans.signature.image}"></div>` : `<p class="sign">X</p>`;
   let footer = `${suggestions}
                 <footer>\
                   <div class="index">${trans.index || ""}</div>\
@@ -44,7 +45,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
                     <p>ACCORDING TO CARD ISSUER AGREEMENT</p>\
                     <p>(MERCHANT AGREEMENT IF CREDIT VOUCHER)</p>\
                   </div>\
-                  <p class="sign">X</p>\
+                  ${signature}
                   <p class="center">${trans.account.holder}</p>\
                   <p class="center">MERCHANT COPY</p>\
                   ${duplicate}
@@ -58,7 +59,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
   this.plugin.PRINT_INIT('Credit Card - Customer');
 
   footer = `<footer>\
-              <div class="agreement">\
+              <div class="agreement center">\
                 <p>I AGREE TO PAY ABOVE TOTAL AMOUNT</p>\
                 <p>ACCORDING TO CARD ISSUER AGREEMENT</p>\
                 <p>(MERCHANT AGREEMENT IF CREDIT VOUCHER)</p>\
@@ -80,7 +81,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
     const tipLine = parseFloat(trans.amount.tip) > 0 ?
       `<p class="bold"><span class="text">Tip:</span><span class="value ul">$ ${trans.amount.tip}</span></p><p class="bold"><span class="text">Extra Tip:</span><span class="value ul">$ </span></p>` :
       `<p class="bold"><span class="text">Tip:</span><span class="value ul">$ </span></p>`
-    return `<section class="header">\
+    return `<section class="header center">\
               <div class="store">\
                 <h3>${store.name}</h3>\
                 <h5>${store.address}</h5>\
@@ -112,9 +113,9 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
   function createStyle() {
     return `<style>\
               *{margin:0;padding:0;font-family:'Agency FB';}\
-              section.header{text-align:center;}\
               .header h3{font-size:1.25em;}\
               .header h5{font-size:16px;font-weight:lighter}\
+              .center{text-align:center;}\
               div.type{margin:10px;}\
               div.type h3{font-weight:lighter;font-size:1.3em;}\
               div.type h5{margin-top:-5px;font-size:1.25em;}\
@@ -125,11 +126,11 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
               .bold .text{width:120px;text-align:right;margin-right:10px;}\
               .bold .value{flex:1;text-align:left;}\
               .ul{border-bottom:1px solid #000;}\
-              .agreement{text-align:center;margin:15px 0;}\
+              .agreement{margin:15px 0;}\
               p.sign{border-bottom:1px solid #000;margin-top:20px;}\
-              p.center{text-align:center;}\
+              .signature {width: 265px;height: 100px;border-bottom: 1px solid #000;overflow: hidden;}
               footer{position:relative;}\
-              .suggestion{border:1px dashed #000;padding:5px;display:flex;flex-direction:column;text-align:center;}\
+              .suggestion{border:1px dashed #000;padding:5px;display:flex;flex-direction:column;}\
               .suggestion h5{font-size:22px;}\
               .suggestion i{font-style: italic;font-size:14px;}\
               .suggestion .tips{display:flex;justify-content: center;width:80%;margin:auto;}\

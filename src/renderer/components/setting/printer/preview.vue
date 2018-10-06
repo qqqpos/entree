@@ -46,7 +46,7 @@ export default {
         Object.assign(item, { print: false })
       );
 
-      Printer.setTarget(this.printer).print(this.ticket);
+      Printer.print(this.ticket, { printer: this.printer });
     }
   }
 };

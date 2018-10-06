@@ -49,7 +49,7 @@
             <td v-else class="ticket"></td>
             <td class="card">
               <i :class="ccType(record.account.type)"></i>
-              <span class="number" :title="record.addition.CARDBIN">...{{record.account.number}}</span>
+              <span class="number" :title="record.addition.CARDBIN + '....' + record.account.number">...{{record.account.number}}</span>
             </td>
             <td class="auth">
               <span>{{record.host.auth}}</span>

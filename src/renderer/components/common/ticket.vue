@@ -21,11 +21,11 @@ export default {
       this.init.exit && this.init.resolve();
     },
     print() {
-      Printer.setTarget("Receipt").print(this.init.ticket);
+      Printer.print(this.init.ticket, { target: "Receipt", receipt: true });
     }
   },
   watch: {
-    'init.ticket'(content) {
+    "init.ticket"(content) {
       const printer = this.init.printer || "cashier";
       this.ticket = Printer.preview(printer, content);
     }

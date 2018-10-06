@@ -261,11 +261,12 @@ export default {
       const pendings = order.content.filter(item => item.pending);
       const uniques = pendings.map(item => item.unique);
 
-      Printer.setTarget("Order").print(
+      Printer.print(
         Object.assign(order, {
           content: pendings,
           schedule: Date.now()
-        })
+        }),
+        { target: "Order" }
       );
 
       this.spooler = [];

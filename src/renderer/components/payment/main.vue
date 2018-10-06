@@ -786,11 +786,13 @@ export default {
               lfd: data.account.number
             });
 
-            this.$socket.emit("[TERMINAL] SAVE", data, content =>
+            this.$socket.emit("[TERMINAL] SAVE", data, payment =>
               this.$socket.emit(
                 "[TERMINAL] CONFIG",
                 this.station.terminal,
-                config => Printer.printCreditCard(content, config)
+                config => {
+                  Printer.printCreditCard(payment, config);
+                }
               )
             );
 
@@ -1022,11 +1024,14 @@ export default {
         case "All":
         case "Receipt":
           print = true;
-          Printer.setTarget(target).print(this.order, true);
+          Printer.print(this.order, {
+            receipt: true,
+            target
+          });
           break;
         case "Order":
           print = true;
-          Printer.setTarget(target).print(this.order);
+          Printer.print(this.order, { target });
           break;
         default:
       }

@@ -490,8 +490,8 @@ export default {
               });
 
               printOnDone
-                ? Printer.setTarget("All").print(ticket)
-                : Printer.setTarget("Order").print(ticket);
+                ? Printer.print(ticket)
+                : Printer.print(ticket, { target: "Order" });
             });
           } else {
             this.$socket.emit(
@@ -509,16 +509,16 @@ export default {
               const diffs = this.compare(order);
 
               if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
-                Printer.setTarget("All").print(diffs);
+                Printer.print(diffs);
               } else {
                 printOnDone
-                  ? Printer.setTarget("All").print(diffs)
-                  : Printer.setTarget("Order").print(diffs);
+                  ? Printer.print(diffs)
+                  : Printer.print(diffs, { target: "Order" });
               }
             }
             this.$socket.emit("[ORDER] UPDATE", order, print);
           } else {
-            print && Printer.setTarget("Order").print(this.order);
+            print && Printer.print(this.order, { target: "Order" });
           }
         }
 

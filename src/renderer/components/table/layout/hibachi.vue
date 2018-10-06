@@ -154,7 +154,7 @@ export default {
             .filter(item => !item.print)
             .forEach(item => items.push(item));
 
-          Printer.print(ticket, false, "Order");
+          Printer.print(ticket, { target: "Order" });
           tickets.push(ticket);
         }
       });

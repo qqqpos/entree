@@ -740,6 +740,8 @@ export default {
     initialFailed: "初始化 {i} 失败。 信息: {i}",
     ready: "请将信用卡插入 {i}",
     transacting: "正在发送卡号信息到 {i}...",
+    awaitSignature: "请让客人在 {i} 签名",
+    getSignature: "正在获取客人签名...",
     timeout: "终端机连接超时",
     timeoutTip: "请检查刷卡终端机的IP地址是否正确 (设定IP: {i})",
     paymentFailed: "无法支付信用卡",
@@ -788,6 +790,11 @@ export default {
       waiting: "等待中...",
       processing: "处理中...",
       closed: "过账完毕"
+    },
+    print: {
+      DISABLE: "不打印",
+      DETAIL: "独立收据",
+      EMBED: "简要收据"
     }
   },
   card: {

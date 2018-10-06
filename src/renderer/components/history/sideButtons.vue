@@ -123,7 +123,9 @@ export default {
 
         this.order.date === this.today
           ? next()
-          : this.approval("permission", "anydate") ? next() : stop(prompt);
+          : this.approval("permission", "anydate")
+            ? next()
+            : stop(prompt);
       });
     },
     checkStatus() {
@@ -459,8 +461,11 @@ export default {
       order.content.forEach(item => (item.diffs = "UNCHANGED"));
 
       receipt
-        ? Printer.setTarget("Receipt").print(order, true)
-        : Printer.setTarget("All").print(order);
+        ? Printer.print(order, {
+            target: "Receipt",
+            receipt: true
+          })
+        : Printer.print(order);
     },
     splitPrint(order, receipt) {
       order.printCount++;
@@ -471,8 +476,11 @@ export default {
       this.$socket.emit("[SPLIT] GET", order._id, splits => {
         splits.forEach(ticket => {
           receipt
-            ? Printer.print(ticket, true, "Receipt")
-            : Printer.setTarget("All").print(ticket);
+            ? Printer.print(ticket, {
+                target: "Receipt",
+                receipt: true
+              })
+            : Printer.print(ticket);
         });
       });
     },

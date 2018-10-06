@@ -497,10 +497,11 @@ export default {
       clockIn: "Clock In Confirm",
       clockOut: "Clock Out Confirm",
       initialCash: "Initial Cash Confirm",
+      initialStaffCash: "Initial Staff Cash Confirm",
       cashIn: "Cash In Confirm",
       cashOut: "Cash Out Confirm",
-      staffCashIn: "Staff Bank Cash In Confirm",
-      staffCashOut: "Staff Bank Cash Out Confirm",
+      staffCashIn: "Staff Cash In Confirm",
+      staffCashOut: "Staff Cash Out Confirm",
       tableSwitch: "Table Switch Confirm",
       bookingConfirm: "Booking Confirm",
       combineTickets: "Combine Tickets Confirm",
@@ -551,7 +552,7 @@ export default {
     clockInRequireTip: "Please Clock In first before all actions",
     clockOutTip: "You were lock in at {i}. Total work length: {i}",
     cashInTip: "Do you want to cash in right now?",
-    selfCashInTip: "System will record all transaction under staff bank mode",
+    selfCashInTip: "You are responsible for collect all the payment.",
     cashInConfirmTip: "Please Check if Cash Drawer has cash amount: $ {i}",
     selfCashInConfirmTip: "Please Confirm if You are having cash amount: $ {i}",
     staffBankMode: "Staff Bank Mode",
@@ -808,6 +809,8 @@ export default {
     initialFailed: "Initial {i} has failed. Error Code: {i}",
     ready: "Please insert credit card to {i}",
     transacting: "Sending card information to {i}...",
+    awaitSignature: "Please ask customer to sign on the {i}",
+    getSignature: "Getting customer signature...",
     timeout: "Terminal Connect Timeout",
     timeoutTip: "Please check terminal ECR configuration (Current Ip Setting: {i})",
     paymentFailed: "Payment Failed",
@@ -856,6 +859,11 @@ export default {
       waiting: "Waiting...",
       processing: "Processing...",
       closed: "Transaction Finalized"
+    },
+    print: {
+      DISABLE: "Disable",
+      DETAIL: "Individual Receipt",
+      EMBED: "Embed On Ticket"
     }
   },
   card: {

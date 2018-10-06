@@ -333,7 +333,7 @@ const Pax = function () {
   this.command = function (command) {
     return request.get(Encode(command))
   }
-  
+
   this.retrieveTransactionDetail = function () {
     const command = Encode("R02_1.38_01____0__");
     return request.get(command);
@@ -350,18 +350,25 @@ const Pax = function () {
   }
 
   this.drawSignature = function (path) {
+    console.log(path);
     let canvas = document.createElement('canvas');
+
+    // pax signature has default size 170 * 100
+    canvas.width = 170;
+    canvas.height = 100;
+
     let context = canvas.getContext('2d');
-    let draws = path.slice(0, -1).split("0,65535");
-    context.moveTo(0, 0);
-    for (let i = 1; i < draws.length; i++) {
-      const coordinator = draws[i].split("^").slice(0, -1);
-      for (let x = 0; x < coordinator.length; x++) {
-        const pixel = coordinator[x].split(",");
-        context.lineTo(pixel[0], pixel[1]);
+    let draws = path.split("0,65535").slice(1);
+
+    draws.forEach(draw => {
+      draw.split("^").slice(1, -1).forEach((coordinate, index) => {
+        if (!coordinate.includes(",")) return;
+
+        const [x, y] = coordinate.split(",");
+        index === 0 ? context.moveTo(x, y) : context.lineTo(x, y);
         context.stroke();
-      }
-    }
+      })
+    })
 
     const data = canvas.toDataURL();
     // Free memory

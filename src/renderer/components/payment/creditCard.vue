@@ -111,21 +111,43 @@ export default {
       });
     },
     async getSignature(result) {
-      const request = await this.terminal.doSignature();
-      const [multiple, , , status, msg] = request.data
-        .slice(1, request.data.indexOf(String.fromCharCode(3)))
-        .split(String.fromCharCode(28));
+      this.msg = this.$t(
+        "terminal.awaitSignature",
+        this.device.model || this.config.model
+      );
+      try {
+        const request = await this.terminal.doSignature();
 
-      switch (status) {
-        case "000000":
-          // successful
-          const data = await this.terminal.getSignature();
-          break;
-        case "100001":
-        // timeout
-        case "100002":
-          // abort
-          break;
+        this.msg = this.$t("terminal.getSignature");
+
+        const [multiple, , , status, msg] = request.data
+          .slice(1, request.data.indexOf(String.fromCharCode(3)))
+          .split(String.fromCharCode(28));
+
+        switch (status) {
+          case "000000":
+            // successful
+            const path = await this.terminal.getSignature();
+            const image = this.terminal.drawSignature(path.data);
+            const signature = {
+              _id: ObjectId().toString(),
+              date: today(),
+              time: Date.now(),
+              for: "eSignature",
+              image
+            };
+
+            this.init.resolve(Object.assign({}, result, { signature }));
+            break;
+          case "100001":
+            // timeout
+            break;
+          case "100002":
+            // abort
+            break;
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
     getParser(model) {
@@ -156,15 +178,11 @@ export default {
         case "TRANSACTION_FAILED":
           this.msg = this.$t(data.msg);
           this.tip = data.error ? data.error : "";
-          setTimeout(() => {
-            this.init.reject();
-          }, 2500);
+          setTimeout(() => this.init.reject(), 2500);
           break;
         case "NETWORK_ERROR":
           this.msg = this.$t("terminal.networkError", data);
-          setTimeout(() => {
-            this.init.reject();
-          }, 2500);
+          setTimeout(() => this.init.reject(), 2500);
           break;
       }
     },

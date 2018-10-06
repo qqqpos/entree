@@ -17,7 +17,7 @@
                     <inputer title="text.port" v-model="device.port"></inputer>
                     <inputer title="text.model" v-model="device.model"></inputer>
                     <inputer title="text.S/N" v-model.trim="device.sn"></inputer>
-                    <switches title="text.printReceipt" v-model="device.print"></switches>
+                    <selector title="text.printReceipt" v-model="device.print" :opts="opts"></selector>
                     <switches title="text.eSignature" v-model="device.eSignature" :disabled="device.model !== 'S300'"></switches>
                     <switches title="setting.tipSuggestion" v-model="device.tipSuggestion"></switches>
                 </div>
@@ -38,16 +38,22 @@ import inputer from "../../common/inputer";
 import search from "../../component/search";
 import checkbox from "../../common/checkbox";
 import switches from "../../common/switches";
+import selector from "../../common/selector";
 
 export default {
   props: ["init"],
-  components: { search, inputer, checkbox, switches },
+  components: { search, inputer, checkbox, switches, selector },
   data() {
     return {
       component: null,
       componentData: null,
       authorized: this.$store.getters.authorized,
-      device: JSON.parse(JSON.stringify(this.init.device))
+      device: JSON.parse(JSON.stringify(this.init.device)),
+      opts: ["DISABLE", "DETAIL", "EMBED"].map(value => ({
+        label: this.$t("terminal.print." + value),
+        tooltip: "",
+        value
+      }))
     };
   },
   computed: {

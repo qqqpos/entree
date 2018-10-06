@@ -223,10 +223,10 @@ export default {
         case "session":
           from = +new Date(today() + " " + session.from);
           to = +new Date(today() + " " + session.to);
-          
+
           break;
       }
-      console.log(from,to);
+      console.log(from, to);
       this.reportRange = { from, to };
     },
     openCalendar() {
@@ -473,7 +473,7 @@ export default {
           style: "space",
           value: `${rounding.toFixed(2)}`
         });
-console.log(transactions);
+      console.log(transactions);
       const payoutAmount = transactions
         .filter(t => t.for === "Payout")
         .reduce((a, c) => a + c.actual, 0);
@@ -1327,9 +1327,9 @@ console.log(transactions);
 
 .rangeWrap {
   display: flex;
-  border: 1px solid #ddd;
+  background: #e0e0e0;
   margin: 10px;
-  background: #fff;
+  color: #3c3c3c;
   border-radius: 4px;
 }
 
@@ -1342,7 +1342,7 @@ console.log(transactions);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #d5d5d5;
 }
 
 .rangeWrap > div:last-child {
@@ -1391,8 +1391,10 @@ h1 {
 }
 
 .rangeWrap input:checked + label {
-  background: #2196f3;
-  color: #fff;
+  background: linear-gradient(#fefefe, #cfd0d3);
+  box-shadow: 0 1px 3px #616161;
+  border-radius: 4px;
+  color: #000;
 }
 
 .for {

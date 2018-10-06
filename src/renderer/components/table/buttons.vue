@@ -220,8 +220,7 @@ export default {
               type: this.order.togo ? ticket.type : "PRE_PAYMENT",
               cashier: this.op.name
             }),
-            true,
-            "Receipt"
+            { target: "Receipt", receipt: true }
           )
         )
       );
@@ -236,9 +235,9 @@ export default {
 
       const order = clone(this.order);
 
-      Printer.setTarget("Receipt").print(
+      Printer.print(
         Object.assign(order, { cashier: this.op.name, type: "PRE_PAYMENT" }),
-        true
+        { target: "Receipt", receipt: true }
       );
 
       this.$socket.emit("[TABLE] STATUS", {

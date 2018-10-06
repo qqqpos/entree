@@ -225,10 +225,10 @@ export default {
         .catch(this.exitComponent);
     },
     print(order) {
-      Printer.setTarget("All").print(
-        Object.assign(order, { delay: +this.timer }),
-        true
-      );
+      Printer.print(Object.assign(order, { delay: +this.timer }), {
+        target: "All",
+        receipt: true
+      });
       this.resetAll();
       this.$router.push({ path: "/main" });
     },

@@ -291,8 +291,7 @@ export default {
         .forEach((ticket, index) =>
           Printer.print(
             Object.assign(ticket, { time, number: `${number}-${index + 1}` }),
-            true,
-            "Receipt"
+            { target: "Receipt", receipt: true }
           )
         );
 

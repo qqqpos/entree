@@ -82,7 +82,8 @@ export default {
 
       const { order, target } = this.spooler[i];
 
-      Printer.setTarget(target).print(Object.assign(order, { print: false }));
+      Printer.print(Object.assign(order, { print: false }), { target });
+
       this.setItemStatus(i, {
         pending: false,
         print: true

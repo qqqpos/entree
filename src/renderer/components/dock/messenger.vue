@@ -78,7 +78,7 @@ export default {
       const _id = this.spooler[i]._id;
 
       this.spooler[i].content.forEach(item => items.push(item.unique));
-      Printer.setTarget("All").print(this.spooler[0]);
+      Printer.print(this.spooler[0]);
       this.removeSpooler(i);
 
       const index = this.history.findIndex(order => order._id === _id);

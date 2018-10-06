@@ -1,16 +1,28 @@
 import { parseTwoDigitYear } from "moment";
 
-const ticket = function (raw, receipt, target) {
-  const printers = this.getPrinters(target);
+const ticket = function (raw, opt) {
+  const defaultOpt = {
+    printer: null,
+    target: "All",
+    receipt: false,
+    callback: null
+  };
+
+  const option = Object.assign(defaultOpt, opt);
+
+  const printers = option.printer
+    ? this.setPrinter(option.printer).getPrinters()
+    : this.getPrinters(option.target);
+
   console.log("target printers", printers);
-  const ticket = raw.type;
+  const title = raw.type;
 
   printers.forEach(printer => {
     const setting = this.setting[printer];
 
     if (!setting) return false;
 
-    if (!setting.print.includes(ticket) && !(receipt && /cashier/i.test(printer))) return false;
+    if (!setting.print.includes(title) && !(option.receipt && /cashier/i.test(printer))) return false;
 
     if (setting.type === "label") {
       this.printLabel(printer, raw);
@@ -53,7 +65,6 @@ const ticket = function (raw, receipt, target) {
       this.plugin.SET_PRINT_STYLEA(0, "FontSize", 18);
       this.plugin.SET_PRINT_STYLEA(0, "Alignment", 3);
       this.plugin.SET_PRINT_STYLEA(0, "LetterSpacing", 1);
-
       this.plugin.ADD_PRINT_TEXT(30, 0, 250, 34, raw.__creditCard__.number);
       this.plugin.SET_PRINT_STYLEA(0, "Alignment", 2);
       this.plugin.SET_PRINT_STYLEA(0, "FontName", "Agency FB");
@@ -77,7 +88,7 @@ const ticket = function (raw, receipt, target) {
       this.plugin.PRINT();
     }
 
-    if (Array.isArray(setting.reprint) && setting.reprint.includes(ticket)) {
+    if (Array.isArray(setting.reprint) && setting.reprint.includes(title)) {
       this.plugin.PRINT_INIT(`Reprint ticket ${raw.number}`);
       this.plugin.ADD_PRINT_HTM(0, 0, "100%", "100%", html);
       this.plugin.SET_PRINTER_INDEX(printer);

@@ -252,7 +252,7 @@ export default {
           item => !printedItem.includes(item.unique)
         );
 
-        Printer.setTarget(target).print(Object.assign(order, { print: false }));
+        Printer.print(Object.assign(order, { print: false }), { target });
         this.removeSpooler(i);
 
         // Update Order item status

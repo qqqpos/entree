@@ -394,7 +394,7 @@ export default {
       this.$dialog(prompt).then(this.exitComponent);
     },
     askSelfCashIn() {
-      this.$dialog({ title: "dialog.initialStaffCash", msg: "dialog.selfCashInTip" })
+      this.$dialog({ title: "dialog.confirm.initialStaffCash", msg: "dialog.selfCashInTip" })
         .then(this.countSelfCash)
         .catch(this.exitComponent);
     },

@@ -138,8 +138,6 @@ export default {
 
               const actual = this.calcHeight();
 
-              //this.offset = 0;
-
               if (actual < 450 || topDiff > 0) {
                 this.offset = 0;
               } else if (botDiff > 0) {

@@ -136,7 +136,7 @@ export default {
         });
     },
     print() {
-      Printer.setTarget("Receipt").print(this.order);
+      Printer.print(this.order, { target: "Receipt", receipt: true });
 
       this.$socket.emit("[ORDER] UPDATE", order, true);
     },
