@@ -11,8 +11,9 @@
       <section class="list" v-if="data.length">
         <daily v-for="(sale,index) in data" :key="index" :sales="sale"></daily>
       </section>
-      <section class="empty" v-else>
-        Database Has No Index 
+      <section class="empty placeholder" v-else>
+        <i class="fas fa-database"></i>
+        <p>Database Has No Index </p>
       </section>
       <section class="overview">
          <div class="wrap relative">
@@ -48,6 +49,10 @@
               <span class="f1">Gratuity</span>
               <span class="value">$ {{summary.gratuity | decimal}}</span>
             </p>
+            <p>
+              <span class="f1">Delivery Fee</span>
+              <span class="value">$ {{summary.delivery | decimal}}</span>
+            </p>            
           </div>
           <div class="group">
             <p>
@@ -119,6 +124,7 @@ export default {
       let discount = 0;
       let rounding = 0;
       let gratuity = 0;
+      let delivery = 0;
       let total = 0;
 
       this.data.forEach(date => {
@@ -127,10 +133,20 @@ export default {
         discount += date.summary.sales.discount;
         rounding += date.summary.sales.rounding;
         gratuity += date.summary.sales.gratuity;
+        delivery += date.summary.sales.delivery;
         total += date.summary.sales.total;
       });
 
-      return { days, subtotal, tax, discount, rounding, gratuity, total };
+      return {
+        days,
+        subtotal,
+        tax,
+        discount,
+        rounding,
+        gratuity,
+        delivery,
+        total
+      };
     }
   }
 };

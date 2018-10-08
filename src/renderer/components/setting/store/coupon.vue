@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(coupon,index) in coupons" :key="index">
-                            <td><switches v-model="coupon.enable" class="boxCenter" @update="save(coupon)"></switches></td>
+                            <td><switches v-model="coupon.enable" class="flex-center" @update="save(coupon)"></switches></td>
                             <td class="text-center">{{$t('type.'+coupon.type)}}</td>
                             <td class="text-center" :title="coupon.description">{{coupon.alias}}</td>
                             <td class="text-center">{{getDate(coupon.expireDate)}}</td>

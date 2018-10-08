@@ -121,16 +121,24 @@ export default {
     setTarget(type) {
       switch (type) {
         case "ALL":
-          this.invoices.forEach(i => Object.assign(i, { select: true }));
+          this.filteredInvoices.forEach(i =>
+            Object.assign(i, { select: true })
+          );
           break;
         case "REVERSE":
-          this.invoices.forEach(i => Object.assign(i, { select: !i.select }));
+          this.filteredInvoices.forEach(i =>
+            Object.assign(i, { select: !i.select })
+          );
           break;
         case "ASSIGNED":
-          this.invoices.forEach(i => Object.assign(i, { select: !!i.driver }));
+          this.filteredInvoices.forEach(i =>
+            Object.assign(i, { select: !!i.driver })
+          );
           break;
         case "UNASSIGNED":
-          this.invoices.forEach(i => Object.assign(i, { select: !i.driver }));
+          this.filteredInvoices.forEach(i =>
+            Object.assign(i, { select: !i.driver })
+          );
           break;
         case "SELECTED":
           this.selected = this.filteredInvoices

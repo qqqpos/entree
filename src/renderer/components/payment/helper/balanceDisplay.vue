@@ -6,15 +6,15 @@
             <div class="due">
                 <span class="balance agency">{{remain + tip - paid | decimal}}</span>
             </div>
-            <div class="column boxCenter" v-show="discount > 0">
+            <div class="column flex-center" v-show="discount > 0">
                 <span class="text">{{$t('text.discount')}}</span>
                 <span>({{discount | decimal}})</span>
               </div>
-            <div class="column boxCenter" v-show="Math.max(0,tip - paid) > 0">
+            <div class="column flex-center" v-show="Math.max(0,tip - paid) > 0">
                 <span class="text">{{$t('text.tip')}}</span>
                 <span>({{Math.max(0,tip - paid) | decimal}})</span>
             </div>
-            <div class="column boxCenter" v-show="gratuity > 0">
+            <div class="column flex-center" v-show="gratuity > 0">
                 <span class="text">{{$t('text.gratuity')}}</span>
                 <span>({{gratuity | decimal}})</span>
             </div>

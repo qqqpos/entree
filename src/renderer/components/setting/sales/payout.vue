@@ -9,7 +9,15 @@
     </header>
     <div class="summary-wrap">
       <section class="list">
-        <payout v-for="(record,index) in records" :key="index" :record="record"></payout>
+        <template v-if="records.length">
+          <payout v-for="(record,index) in records" :key="index" :record="record"></payout>
+        </template>
+        <template v-else>
+          <div class="placeholder">
+            <i class="far fa-money-bill-alt"></i>
+            <p>No Payout Records</p>
+          </div>
+        </template>
       </section>
       <section class="overview">
 
@@ -39,7 +47,6 @@ export default {
       this.to = to.format("YYYY-MM-DD");
 
       this.$socket.emit("[PAYOUT] LIST", { from: +from, to: +to }, records => {
-        console.log(records);
         this.records = records;
       });
     }

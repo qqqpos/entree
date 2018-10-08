@@ -38,7 +38,7 @@
             <div class="card" @click="activateGiftcard">
               <h5 class="text-center">{{$t('card.customerNoGiftcard')}}</h5>
               <h3 class="text-center">{{$t('card.activation')}}</h3>
-              <p class="ads boxCenter"><i class="fas fa-ad space"></i><span>{{$t('reward.marketing')}}</span></p>
+              <p class="ads flex-center"><i class="fas fa-ad space"></i><span>{{$t('reward.marketing')}}</span></p>
             </div>
           </template>
           <template v-else>

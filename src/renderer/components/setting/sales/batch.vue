@@ -8,8 +8,14 @@
       <date-picker @update="fetchData" init="currentMonth"></date-picker>
     </header>
     <div class="summary-wrap">
-      <section class="list">
+      <section class="list" v-if="records.length">
         <record v-for="(record,index) in records" :key="index" :batch="record"></record>
+      </section>
+      <section class="list" v-else>
+        <div class="placeholder">
+          <i class="fab fa-cc-visa"></i>
+          <p>No Batch Record</p>
+        </div>
       </section>
       <section class="overview">
          <div class="wrap relative">

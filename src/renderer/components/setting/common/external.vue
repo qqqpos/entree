@@ -2,7 +2,7 @@
   <div class="external" :class="{style:defaultStyle,disabled}">
     <slot name="icon"></slot>
     <div class="column f1">
-      <div class="row">
+      <div class="flex-center">
         <span>{{translate ? $t(title) : title}}</span>
         <span class="tooltip">{{$t(tooltip)}}</span>
       </div>
@@ -63,6 +63,8 @@ export default {
   color: #9e9e9e;
   flex: 1;
   text-align: right;
+  line-height: 1;
+  font-size: 14px;
 }
 
 .value {

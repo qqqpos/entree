@@ -1,12 +1,12 @@
 <template>
     <div class="popupMask dark center" @click.self="init.resolve">
         <div class="report">
-            <header class="boxCenter column">
+            <header class="flex-center column">
                 <h3>Sales Report</h3>
                 <h5>Please select a report layout</h5>
             </header>
             <div class="wrap">
-                <ul class="row boxCenter">
+                <ul class="row flex-center">
                     <li class="column">
                         <input type="radio" name="type" value="CLASSIC" v-model="layout" id="CLASSIC">
                         <div class="sketch">

@@ -1474,8 +1474,8 @@ export default {
     selected: "已选 ({i})",
     all: "全选",
     reverse: "反选",
-    assigned: "已指定",
-    unassigned: "未指定"
+    assigned: "已指派",
+    unassigned: "未指派"
   },
   tip: {
     autoLogin: "自动尝试用当前的密码登录用户",

@@ -42,7 +42,7 @@
             </p>            
           </div>
           <h3>{{$t('giftcard.search')}}</h3>
-          <div class="group row boxCenter">
+          <div class="group row flex-center">
             <input v-model="cardNumber" @keydown.enter="search">
             <i class="fa fa-search light space" v-if="!cardNumber" @click="search"></i>
             <i class="fa fa-times light space" v-else @click="reset"></i>

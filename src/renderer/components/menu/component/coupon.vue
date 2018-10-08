@@ -1,5 +1,5 @@
 <template>
-  <dialog open class="boxCenter" @click.self="init.reject">
+  <dialog open class="flex-center" @click.self="init.reject">
     <div class="frame-common">
       <header>
         <h3>{{$t('title.coupon')}}</h3>

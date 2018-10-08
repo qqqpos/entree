@@ -1,7 +1,7 @@
 <template>
   <div class="selector">
     <span class="title">{{$t(title)}}</span>
-    <div class="inputWrap row boxCenter">
+    <div class="inputWrap row flex-center">
       <slot name="items"></slot>
       <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOpts">
       <template v-else>

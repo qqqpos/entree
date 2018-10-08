@@ -2,7 +2,7 @@
     <div class="toggle" :class="{style:defaultStyle}">
       <div class="inner">
         <label class="label">
-            <span class="title">{{$t(title)}}</span>
+            <span>{{$t(title)}}</span>
             <span class="tooltip" v-if="tooltip">{{$t(tooltip)}}</span>
             <span class="tooltip" v-else-if="conditionalTooltip">{{$t(dynamicTooltip)}}</span>
         </label>

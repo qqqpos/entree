@@ -7,7 +7,7 @@
             <i class="fas fa-angle-down"></i>
         </div>
         <div v-if="display" class="credential column">
-            <img :src="credential.signature">
+            <img :src="credential.image">
             <div class="info">
                 <div class="row">
                     <div class="f2">
