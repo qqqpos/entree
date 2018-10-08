@@ -319,14 +319,25 @@ export default {
         })
         .catch(this.exitComponent);
     },
-    reportTip() {
+    getPayments(name) {
+      return new Promise(resolve =>
+        this.$socket.emit("[PAYMENT] FETCH_BY", name, payments =>
+          resolve(payments)
+        )
+      );
+    },
+    async reportTip() {
+      const { name } = this.op;
+      const payments = await this.getPayments(name);
+      const amount = payments.reduce((a, c) => a + c.tip, 0).toFixed(2);
+
       new Promise((resolve, reject) => {
         const config = {
           title: "title.reportTips",
           type: "decimal",
           percentage: false,
           allowPercentage: false,
-          amount: "0.00"
+          amount
         };
         this.componentData = Object.assign({ resolve, reject }, config);
         this.component = "inputModule";
@@ -334,8 +345,8 @@ export default {
         .then(({ amount }) => {
           const prompt = {
             type: "question",
-            title: "dialog.tipConfirm",
-            msg: ["dialog.tipReportConfirm", amount.toFixed(2)],
+            title: "dialog.confirm.tipReport",
+            msg: ["dialog.tip.tipReportConfirm", amount.toFixed(2)],
             buttons: [
               { text: "button.reenter", fn: "reject" },
               { text: "button.confirm", fn: "resolve" }
@@ -374,8 +385,8 @@ export default {
         doneJob
           ? next()
           : this.$dialog(prompt)
-              .then(() => next())
-              .catch(() => stop());
+              .then(next)
+              .catch(stop);
       });
     },
     startBreakTime() {
@@ -464,7 +475,7 @@ export default {
           title: "dialog.confirm.staffCashIn",
           msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
         };
-        
+
         this.$dialog(prompt)
           .then(() => this.acceptCashIn(amount))
           .catch(this.countSelfCash);
@@ -884,7 +895,7 @@ export default {
         departments
       };
 
-      //Printer.printSessionReport(report);
+      Printer.printSessionReport(report);
     },
     ...mapActions(["setApp", "setOperator"])
   }
@@ -901,7 +912,7 @@ ul.panel {
   width: 260px;
   position: absolute;
   top: 10px;
-  right: 70px;
+  right: 75px;
   padding: 4px 4px 0;
   border-radius: 4px;
   background: linear-gradient(
@@ -910,6 +921,17 @@ ul.panel {
   );
   color: #263238;
   box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.6);
+}
+
+ul.panel:before {
+  content: "\f0d8";
+  font-family: "fontAwesome";
+  font-weight: bold;
+  position: absolute;
+  font-size: 22px;
+  top: -16px;
+  left: 105px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 li {

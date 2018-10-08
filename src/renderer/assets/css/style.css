@@ -31,8 +31,8 @@ div {
     0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
-input{
-  border:none;
+input {
+  border: none;
   outline: none;
   font-family: "Yuanti-SC";
 }
@@ -52,15 +52,15 @@ table {
   flex: 2;
 }
 
-.f3{
-  flex:3;
+.f3 {
+  flex: 3;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
 
-.invisible{
+.invisible {
   visibility: hidden;
 }
 
@@ -106,20 +106,20 @@ i.loader:after {
   animation: rotate 1.5s linear 0s infinite normal;
 }
 
-i.space{
-  margin-right:5px;
+i.space {
+  margin-right: 5px;
 }
 
 .ghost {
   opacity: 0.5;
 }
 
-.light{
+.light {
   opacity: 0.7;
 }
 
-.zero{
-  color: rgba(151, 151, 151,0.75);
+.zero {
+  color: rgba(151, 151, 151, 0.75);
 }
 
 .relative {
@@ -130,9 +130,17 @@ input[type="radio"] {
   display: none;
 }
 
-.agency{
+.normal{
+  font-weight: normal;
+}
+
+.agency {
   font-family: "Agency FB";
   font-weight: bold;
+}
+
+.agency.space {
+  margin-left: 5px;
 }
 
 .flex-center {
@@ -195,7 +203,7 @@ input[type="radio"] {
   margin-right: 4px;
 }
 
-.button{
+.button {
   border: none;
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -205,8 +213,8 @@ input[type="radio"] {
   outline: none;
 }
 
-.button:active{
-  filter:brightness(0.9);
+.button:active {
+  filter: brightness(0.9);
 }
 
 .btn {
@@ -230,8 +238,8 @@ input[type="radio"] {
 }
 
 .btn i {
-  margin-bottom:5px;
-  color:#3c3c3c;
+  margin-bottom: 5px;
+  color: #3c3c3c;
 }
 
 footer .btn {
@@ -407,14 +415,15 @@ dialog {
   width: 100%;
   height: 100%;
   border: none;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .frame-common {
   background: #f6f6f6;
   border-radius: 3px;
   transform: translateY(-15px);
-  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);;
+  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
+  ;
 }
 
 .frame-common header {
@@ -425,7 +434,7 @@ dialog {
   border-bottom: 1px solid #eee;
 }
 
-.frame-common header h5{
+.frame-common header h5 {
   font-weight: normal;
   color: #757575;
 }
@@ -452,7 +461,7 @@ dialog {
   border-top-right-radius: 4px;
 }
 
-.title > i {
+.title>i {
   font-style: normal;
   cursor: pointer;
   position: absolute;
@@ -504,20 +513,20 @@ header.dock {
   color: #333;
 }
 
-header.dock .text{
+header.dock .text {
   font-family: "Agency FB";
   font-weight: bold;
   text-shadow: 0 1px 1px #fff;
 }
 
-.dock .ticket-number{
+.dock .ticket-number {
   min-width: 50px;
   letter-spacing: 1px;
   text-align: center;
   font-size: 22px;
 }
 
-.dock .ticket-type{
+.dock .ticket-type {
   min-width: 92px;
   text-shadow: 0 1px 1px #fff;
   font-weight: bold;
@@ -525,13 +534,13 @@ header.dock .text{
   font-size: 20px;
 }
 
-.dock .trademark{
+.dock .trademark {
   display: flex;
   min-width: 142px;
   justify-content: center;
 }
 
-.dock .trademark span{
+.dock .trademark span {
   background: linear-gradient(to bottom, #455a64 20%, #263238 100%);
   color: #fff;
   text-shadow: 0 1px 1px #90a4ae;
@@ -542,10 +551,10 @@ header.dock .text{
   box-shadow: 0 1px 1px #eceff1;
 }
 
-.dock .center-wrap{
+.dock .center-wrap {
   height: 30px;
   display: flex;
-  flex:1;
+  flex: 1;
 }
 
 .dock .client {
@@ -555,10 +564,10 @@ header.dock .text{
   flex: 1;
 }
 
-.dock .client span{
+.dock .client span {
   text-align: center;
   font-size: 20px;
-  margin:0 5px;
+  margin: 0 5px;
 }
 
 .dock .profile {
@@ -569,7 +578,7 @@ header.dock .text{
   overflow: hidden;
 }
 
-.dock .operator{
+.dock .operator {
   min-width: 90px;
   font-size: 18px;
 }
@@ -628,16 +637,14 @@ label.input-toggle {
   text-align: right;
 }
 
-label.input-toggle > span {
+label.input-toggle>span {
   display: inline-block;
   position: relative;
-  background-image: linear-gradient(
-    to right,
+  background-image: linear-gradient(to right,
     #848484 0%,
     #848484 50%,
     #7cbcbf 50%,
-    #7cbcbf 100%
-  );
+    #7cbcbf 100%);
   background-size: 64px 14px;
   background-position: 0%;
   border-radius: 32px;
@@ -646,10 +653,12 @@ label.input-toggle > span {
   cursor: pointer;
   transition: background-position 0.2s ease-in;
 }
-label.input-toggle > input:checked + span {
+
+label.input-toggle>input:checked+span {
   background-position: -100%;
 }
-label.input-toggle > span:after {
+
+label.input-toggle>span:after {
   content: "";
   display: block;
   position: absolute;
@@ -665,61 +674,75 @@ label.input-toggle > span:after {
   transition: left 0.2s ease-in, background-color 0.2s ease-in,
     transform 0.3s ease;
 }
-label.input-toggle > input:checked + span:after {
+
+label.input-toggle>input:checked+span:after {
   left: calc(100% - 18px);
   background-color: #1d8b90;
 }
-label.input-toggle > span:active:after {
+
+label.input-toggle>span:active:after {
   transform: translateY(-50%) scale3d(1.15, 0.85, 1);
 }
-label.input-toggle > input:disabled + span:active:after {
+
+label.input-toggle>input:disabled+span:active:after {
   transform: translateY(-50%);
 }
-label.input-toggle > input:disabled + span {
+
+label.input-toggle>input:disabled+span {
   cursor: default;
 }
-label.input-toggle > input:disabled + span {
+
+label.input-toggle>input:disabled+span {
   background: #d5d5d5;
 }
-label.input-toggle > input:disabled + span:after {
+
+label.input-toggle>input:disabled+span:after {
   background: #bdbdbd;
 }
-label.input-toggle > input {
+
+label.input-toggle>input {
   display: block;
   position: absolute;
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 /*Define input form*/
 .inputter .inner {
   padding: 0 2px 0 4px;
   width: 417px;
 }
+
 .inputter .display {
   height: 160px;
   text-align: center;
 }
+
 .inputter .wrap {
   display: flex;
   width: 417px;
 }
+
 .inputter section.numpad {
   flex: 3;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 .inputter h5 {
   padding: 20px 0 0;
   font-size: 16px;
   color: #545050;
 }
+
 .inputter .symbol {
   color: #009688;
   font-size: 28px;
   margin-right: 3px;
 }
+
 .inputter .due {
   font-size: 38px;
   font-weight: bold;
@@ -727,6 +750,7 @@ label.input-toggle > input {
   font-family: "Agency FB";
   position: relative;
 }
+
 .inputter i.tooltip {
   color: #ff5722;
   font-size: 18px;
@@ -735,9 +759,11 @@ label.input-toggle > input {
   top: 15px;
   cursor: help;
 }
+
 .inputter i.tooltip:hover .content {
   opacity: 1;
 }
+
 .inputter span.content {
   position: absolute;
   opacity: 0;
@@ -754,6 +780,7 @@ label.input-toggle > input {
   transform: translate(-50%, 0);
   transition: opacity 250ms ease-out;
 }
+
 .inputter .entry {
   display: flex;
   justify-content: center;
@@ -765,6 +792,7 @@ label.input-toggle > input {
   border-radius: 4px;
   box-shadow: 0 1px 1px #b5aaaa;
 }
+
 .entry input {
   border: none;
   outline: none;
@@ -777,6 +805,7 @@ label.input-toggle > input {
   color: #3c3c3c;
   text-align: right;
 }
+
 .entry .unit {
   padding: 8px 3px;
   min-width: 55px;
@@ -792,7 +821,7 @@ label.input-toggle > input {
 
 .category div,
 .items div,
-.sides div{
+.sides div {
   display: flex;
   text-align: center;
   align-items: center;
@@ -825,9 +854,11 @@ label.input-toggle > input {
   border: 1px solid #78909c;
   max-height: 63.08px;
 }
+
 .sub.items div {
   border: 1px solid #ff9800;
 }
+
 .items div:before {
   right: 0;
   bottom: 0;
@@ -837,9 +868,11 @@ label.input-toggle > input {
   color: #f5f5f5;
   min-width: 25px;
 }
+
 .items .like {
   position: relative;
 }
+
 .like:after {
   content: "\f004";
   font-family: fontAwesome;
@@ -848,13 +881,16 @@ label.input-toggle > input {
   position: absolute;
   color: #f44336;
 }
+
 div.pageButton {
   background: blanchedalmond;
 }
+
 .items div:hover,
 .sides div:hover {
   transition: background 0.22s linear;
 }
+
 .items div:active {
   background: rgba(166, 195, 201, 0.55);
 }
@@ -865,6 +901,7 @@ div.pageButton {
   max-width: 110px;
   margin: 1px 0;
 }
+
 .sides div:active {
   background: rgba(241, 239, 239, 0.52);
 }
@@ -872,6 +909,7 @@ div.pageButton {
 .function {
   padding: 2px 0 0 4px;
 }
+
 /* keyboard layout */
 .keyboard {
   position: fixed;
@@ -885,11 +923,13 @@ div.pageButton {
   max-width: 1024px;
   margin: auto;
 }
+
 .keyboard .alphabetic,
 .keyboard .numeric {
   display: flex;
   vertical-align: top;
 }
+
 .keyboard .alphabetic div,
 .keyboard .alphabetic i,
 .keyboard .numeric div,
@@ -907,16 +947,19 @@ div.pageButton {
   border-top: 1px solid rgba(255, 255, 255, 0.45);
   background: linear-gradient(#fefefe, #cfd0d3);
 }
+
 .keyboard .alphabetic div:active,
 .keyboard .numeric div:active {
   background: linear-gradient(#e2e3e4, #aaadb4);
 }
+
 .keyboard .alphabetic i {
   color: white;
   background: linear-gradient(#939ba6, #687180);
   border-top: 1px solid rgba(255, 255, 255, 0.45);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
 }
+
 .keyboard .alphabetic i:active,
 .keyboard .numeric i:active {
   color: #3a3d42;
@@ -924,26 +967,31 @@ div.pageButton {
   background: linear-gradient(#f8f8f9, #dddfe1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
 }
+
 .keyboard div.space {
-  flex:1;
+  flex: 1;
 }
 
 .keyboard div.double,
 .keyboard i.double {
   width: 149.4px;
 }
+
 .keyboard div.created {
   background: linear-gradient(to bottom, #51b2ff 0%, #245094 100%);
   text-shadow: 0 2px 1px #0d47a1;
   border-top: 1px solid #3f7eb1;
   color: #fff;
 }
+
 .keyboard div.created:active {
   background: linear-gradient(to bottom, #51b2ff 0%, #245094 100%);
 }
+
 .keyboard .keyboard .next {
   background: linear-gradient(#c3e4ff, #6b8fb7);
 }
+
 /* Pin input */
 .accessor {
   width: 310px;
@@ -953,6 +1001,7 @@ div.pageButton {
   text-align: center;
   padding: 10px 9px 4px;
 }
+
 .accessor .input {
   height: 40px;
   display: flex;
@@ -968,6 +1017,7 @@ div.pageButton {
   background: rgba(96, 125, 139, 0.6);
   box-shadow: inset 0 1px 6px -1px rgba(0, 0, 0, 0.4);
 }
+
 .accessor .input span {
   width: 30px;
   height: 30px;
@@ -976,32 +1026,39 @@ div.pageButton {
   box-shadow: 0px 1px 6px -1px rgba(0, 0, 0, 0.7);
   margin: 5px;
 }
+
 .accessor h2 {
   padding: 0 10px 10px 10px;
 }
+
 .accessor h5 {
   font-weight: normal;
   padding-top: 5px;
   color: rgba(0, 0, 0, 0.75);
 }
+
 .accessor section {
   margin-top: 8px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 .accessor section div:nth-child(3n + 3) {
   margin-right: 0;
 }
+
 .field-entry {
   display: inline-flex;
   flex-direction: column;
   position: relative;
   padding: 5px;
 }
-.field-entry > h4 {
+
+.field-entry>h4 {
   margin-bottom: 2px;
 }
+
 .field-entry .wrap {
   display: flex;
   flex-direction: row-reverse;
@@ -1009,6 +1066,7 @@ div.pageButton {
   border: 2px solid #e0e0e0;
   background: #fff;
 }
+
 .field-entry .wrap i {
   color: #607d8b;
   font-size: 22px;
@@ -1016,6 +1074,7 @@ div.pageButton {
   text-align: center;
   border-left: 1px solid #eee;
 }
+
 .field-entry input {
   border: none;
   background: transparent;
@@ -1026,15 +1085,19 @@ div.pageButton {
   text-indent: 7px;
   padding: 2px 0;
 }
+
 .field-entry .wrap.active {
   border: 2px solid #2196f3;
 }
+
 #address input {
   width: 386px;
 }
+
 #note input {
   width: 602px;
 }
+
 ul.preset {
   position: absolute;
   background: #fff;
@@ -1042,6 +1105,7 @@ ul.preset {
   box-shadow: var(--shadow);
   z-index: 1;
 }
+
 ul.preset li {
   padding: 5px;
   height: 40px;
@@ -1051,13 +1115,16 @@ ul.preset li {
   cursor: pointer;
   position: relative;
 }
+
 ul.preset li:nth-child(even),
 ul.autoComplete li:nth-child(even) {
   background: #f5f5f5;
 }
+
 ul.preset li h4 {
   color: #3c3c3c;
 }
+
 ul.autoComplete {
   position: absolute;
   z-index: 2;
@@ -1066,10 +1133,12 @@ ul.autoComplete {
   width: 423px;
   box-shadow: var(--shadow);
 }
+
 ul.autoComplete li {
   padding: 10px;
   cursor: pointer;
 }
+
 .data-status {
   padding: 6px 25px 4px;
   height: 40px;
@@ -1078,11 +1147,13 @@ ul.autoComplete li {
   justify-content: center;
   border-bottom: 1px solid #eee;
 }
+
 .data-status h3 {
   font-size: 18px;
   margin-bottom: 3px;
   color: #3c3c3c;
 }
+
 .data-status h5 {
   font-weight: normal;
   color: #656565;
@@ -1096,7 +1167,7 @@ thead.title td {
   font-weight: bold;
 }
 
-.calendar-date-box{
+.calendar-date-box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1137,7 +1208,7 @@ thead.title td {
   background-image: linear-gradient(#54a3ff, #006eed);
 }
 
-.time-picker{
+.time-picker {
   display: flex;
   justify-content: center;
 }
@@ -1221,7 +1292,7 @@ thead.title td {
 /* style overwrite */
 .timeSession .title,
 .timeSession label {
-  min-width: 0!important;
+  min-width: 0 !important;
 }
 
 .timeSession .inner {
@@ -1229,16 +1300,16 @@ thead.title td {
   margin-left: 10px;
 }
 
-.missing{
+.missing {
   color: #F44336
 }
 
-.danger-text{
+.danger-text {
   font-weight: bold;
   color: #FF5722;
 }
 
-.table-seat{
+.table-seat {
   height: 81px;
   width: 83px;
   align-self: center;
@@ -1250,11 +1321,9 @@ thead.title td {
   flex-direction: column;
   border-radius: 6px;
   border-top: 1px solid #f3f3f3;
-  background: linear-gradient(
-    135deg,
+  background: linear-gradient(135deg,
     rgb(245, 247, 250) 0%,
-    rgb(195, 207, 226) 110%
-  );
+    rgb(195, 207, 226) 110%);
   margin: 4px;
   text-shadow: 0 1px 1px #fff;
   box-shadow: 0 1px 3px #607d8b;
@@ -1277,7 +1346,7 @@ thead.title td {
 }
 
 /* hibachi style */
-.hibachi-seat > span {
+.hibachi-seat>span {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1285,6 +1354,7 @@ thead.title td {
   border-radius: 4px;
   position: relative;
 }
+
 .hibachi-seat .table-name {
   font-weight: bold;
   color: #fff;
@@ -1338,12 +1408,12 @@ thead.title td {
 }
 
 .twelve.left .table-name,
-.twelve.right .table-name{
-  grid-column:2/4;
-  grid-row:2/4;
+.twelve.right .table-name {
+  grid-column: 2/4;
+  grid-row: 2/4;
 }
 
-.actions span.action{
+.actions span.action {
   padding: 4px 6px;
   margin: 0 2px;
   color: #fff;
@@ -1352,15 +1422,15 @@ thead.title td {
   box-shadow: 0 1px 1px #b5afaf;
 }
 
-span.action.red{
+span.action.red {
   background: #f44336;
 }
 
-span.action.gray{
+span.action.gray {
   background: #607d8b;
 }
 
-span.action.yellow{
+span.action.yellow {
   background: #ff9800;
 }
 
@@ -1416,7 +1486,7 @@ span.action.yellow{
   margin-top: 2px;
 }
 
-.portal .card .wrap > div {
+.portal .card .wrap>div {
   padding: 0 7px;
 }
 
@@ -1457,4 +1527,12 @@ span.action.yellow{
   padding: 7px 10px;
   margin: 5px;
   box-shadow: 0 1px 3px #333;
+}
+
+h1.tender {
+  font-size: 36px;
+  color: #222;
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: center;
 }

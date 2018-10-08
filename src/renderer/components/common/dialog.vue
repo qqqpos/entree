@@ -3,8 +3,13 @@
     <div class="dialog" :class="[init.type,loader]">
       <header class="progress" :style="bar"></header>
       <i class="fa"></i>
-      <h3>{{translate(init.title)}}</h3>
-      <h5>{{translate(init.msg)}}</h5>
+      <template v-if="init.html">
+        <div v-html="init.content"></div>
+      </template>
+      <template v-else>
+        <h3>{{translate(init.title)}}</h3>
+        <h5>{{translate(init.msg)}}</h5>
+      </template>
       <footer>
         <div class="btn" v-for="(button,index) in init.buttons" @click="trigger(button,$event)" :key="index">{{translate(button.text)}}</div>
       </footer>
@@ -57,7 +62,7 @@ export default {
     ...mapGetters(["time"])
   },
   watch: {
-    "init.title": "$forceUpdate",
+    init: "$forceUpdate",
     time(n) {
       if (this.init.timeout && this.pct > 0) {
         this.pct = this.pct - this.step;

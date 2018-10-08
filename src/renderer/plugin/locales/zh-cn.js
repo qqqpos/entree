@@ -448,6 +448,8 @@ export default {
       evenSplit: "均分订单",
       evenPayment: "平摊付款",
       printReceipt: "打印收据",
+      cashTender: "请找",
+      tipReport: "确定小费",
     },
     card: {
       linkCustomer: "关联卡号"
@@ -468,6 +470,7 @@ export default {
       evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
       evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}",
       printReceiptConfirm: "是否需要打印收据给客人？",
+      tipReportConfirm: "请再次确定您本次上报的小费为 $ {i} ?",
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -547,7 +550,6 @@ export default {
     batchCloseConfirm: "请您确认已经输入完所有订单上的小费",
     batchFailed: "过账失败",
     batchFailErrorCode: "过账错误代码: {i}",
-    cashChange: "请找 $ {i}",
     cashPaymentDetail: "客人支付现金 ($ {i})",
     cashPaymentWithTipDetail: "客人总共支付现金 ($ {i}), 含小费($ {i})",
     unableEdit: "无法修改",
@@ -691,8 +693,6 @@ export default {
     switchServerConfirm: "您确定要将服务员由 {i} 换成 {i} 吗？",
     NoTip: "没有小费",
     transactionHasNoTip: "即将过账的交易中没有输入任何小费, 您确定要继续?",
-    tipConfirm: "确定小费",
-    tipReportConfirm: "请再次确定您本次上报的小费为 {i} ?",
     ticketUnsettleAlert: "您还有订单尚未结账，请先处理订单",
     printReport: "打印报表",
     printSessionReport: "您需要打印一份从开始到当前时段的{i}报表吗？",

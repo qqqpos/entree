@@ -3,8 +3,8 @@
     <div class="editor">
       <header>
         <div class="f1">
-          <h5>{{$t('title.payout')}}</h5>
-          <h3>{{$t('title.payoutRecord')}}</h3>
+          <h5>{{$t('title.create')}}</h5>
+          <h3>{{$t('title.payout')}}</h3>
         </div>
         <i class="fas fa-times" @click="init.reject"></i>
       </header>
@@ -12,7 +12,7 @@
       <div class="wrap">
         <div class="textWrap">
           <textarea v-model="note"></textarea>
-          <span class="placeholder" v-show="!note">{{$t('tip.payout')}}</span>
+          <span class="hint" v-show="!note">{{$t('tip.payout')}}</span>
         </div>
         <div class="detail">
           <div>
@@ -31,14 +31,14 @@
         </div>
       </div>
       <footer>
-        <div>
+        <div class="row f1">
           <p>
-            <span class="text">{{$t('text.cashier')}}:</span>
-            <span class="value">{{op.name}}</span>
+            <b>{{$t('text.cashier')}}:</b>
+            <span class="ghost">{{op.name}}</span>
           </p>
           <p>
-            <span class="text">{{$t('text.cashDrawer')}}:</span>
-            <span class="value">{{station.cashDrawer.name}}</span>
+            <b>{{$t('text.cashDrawer')}}:</b>
+            <span class="ghost">{{station.cashDrawer.name}}</span>
           </p>
         </div>
         <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
@@ -217,7 +217,7 @@ export default {
 
 header i {
   padding: 18px 25px;
-  float: right;
+  cursor: pointer;
 }
 
 .wrap {
@@ -241,7 +241,7 @@ textarea {
   font-size: 18px;
 }
 
-.placeholder {
+.hint {
   position: absolute;
   font-style: italic;
   color: lightgray;
@@ -253,21 +253,8 @@ footer {
   padding: 0 0 0 25px;
 }
 
-footer div {
-  display: flex;
-  flex: 1;
-}
-
 p {
   margin-right: 25px;
-}
-
-p .text {
-  font-weight: bold;
-}
-
-p .value {
-  color: #9e9e9e;
 }
 
 .detail {
@@ -295,7 +282,7 @@ p .value {
   background: transparent;
   outline: none;
   font-size: 24px;
-  text-indent: 35px;
+  text-indent: 30px;
 }
 
 label {

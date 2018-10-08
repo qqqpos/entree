@@ -42,6 +42,8 @@ export default {
       return new Promise((resolve, reject) => {
         this.componentData = {
           type: args.type || "alert",
+          html:args.html,
+          content:args.content,
           title: args.title,
           msg: args.msg,
           timeout: args.hasOwnProperty("timeout")

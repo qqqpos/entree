@@ -602,12 +602,12 @@ export default {
     },
     checkGiftCard(card) {
       this.exitComponent();
-      return new Promise((resolve, reject) => {
+      return new Promise((next, stop) => {
         if (typeof card === "object") {
           this.giftCard = card;
           this.setAnchor("paid");
           this.$forceUpdate();
-          resolve();
+          next();
         } else {
           const prompt = {
             type: "error",
@@ -616,7 +616,7 @@ export default {
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
 
-          this.$dialog(prompt).then(() => reject());
+          this.$dialog(prompt).then(stop);
         }
       });
     },
@@ -926,8 +926,13 @@ export default {
         };
 
         const tenderWithDialog = {
-          title: ["dialog.cashChange", tender],
-          msg: ["dialog.cashPaymentDetail", paid],
+          html: true,
+          content: `<h1 class="tender">${this.$t(
+            "dialog.confirm.cashTender"
+          )}<span class="agency space"> $ ${tender}</span></h1><h5 class="normal light">${this.$t(
+            "dialog.cashPaymentDetail",
+            paid
+          )}</h5>`,
           buttons: [
             { text: "button.noReceipt", fn: "reject" },
             { text: "button.print", fn: "resolve" }
