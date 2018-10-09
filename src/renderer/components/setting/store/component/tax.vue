@@ -5,7 +5,7 @@
         <div class="back" @click="$router.push({ name: 'Setting.payment' })">
           <i class="fa fa-chevron-left"></i>
         </div>
-        <div class="title">{{$t('title.taxList')}}</div>
+        <h3 class="title">{{$t('title.tax')}}</h3>
         <nav>
           <span @click="create">{{$t('button.new')}}</span>
         </nav>
@@ -22,24 +22,24 @@
       <table class="setting">
         <thead>
           <tr>
-            <th>{{$t('thead.default')}}</th>
             <th>{{$t('thead.name')}}</th>
             <th>{{$t('text.taxRate')}}</th>
+            <th>{{$t('thead.default')}}</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(tax,index) in tax.class" :key="index">
+            <td>{{tax.alias}}</td>
+            <td class="amount">{{tax.rate}} %</td>
             <td v-if="tax.default">
               <i class="fa fa-check-circle"></i>
             </td>
             <td v-else class="clickable" @click="setDefault(tax)">
               <i class="fa fa-check-o"></i>
             </td>
-            <td>{{tax.alias}}</td>
-            <td class="amount">{{tax.rate}} %</td>
             <td class="opt" @click="edit(tax,index,true)">
-              <i class="fa fa-ellipsis-v light"></i>
+              <i class="fa fa-cog light"></i>
             </td>
           </tr>
         </tbody>

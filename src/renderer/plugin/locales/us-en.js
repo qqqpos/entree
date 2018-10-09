@@ -535,6 +535,7 @@ export default {
       evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times.",
       printReceiptConfirm: "Do you want to print a receipt to customer?",
       tipReportConfirm: "Are you sure to report $ {i} as tips?",
+      settleByHouseAccount: "Are you sure to settle ticket with House Account by {i} ?"
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -802,7 +803,8 @@ export default {
     itemImported: "Successfully imported {i} items from CSV file.",
     cashPaymentNotAllow: "You are not allow to pay with cash.",
     printHibachi: "Print Hibachi Tickets",
-    printHibachiConfirm: "Are you sure to print all ticket on hibachi table {i}?"
+    printHibachiConfirm: "Are you sure to print all ticket on hibachi table {i}?",
+    ticketOnHouse: "Ticket On the House"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -2001,6 +2003,7 @@ export default {
       timecard: "Allow Modify Employee Time Card",
       giftcard: "Allow Create / Modify Gift Card",
       coupon: "Allow Create / Modify Coupon",
+      houseAccount: "Allow to use House Account",
       anydate: "Allow To Modify / Pay Ticket Without Date Limit"
     }
   }

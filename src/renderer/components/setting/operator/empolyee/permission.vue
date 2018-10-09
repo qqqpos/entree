@@ -17,6 +17,7 @@
         <checkbox title="setting.privilege.timecard" v-model="operator.permission" val="timecard" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.giftcard" v-model="operator.permission" val="giftcard" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.coupon" v-model="operator.permission" val="coupon" :multiple="true" class="list"></checkbox>
+        <checkbox title="setting.privilege.houseAccount" v-model="operator.permission" val="houseAccount" :multiple="true" class="list"></checkbox>
         <checkbox title="setting.privilege.anydate" v-model="operator.permission" val="anydate" :multiple="true" class="list"></checkbox>
     </div>
 </template>

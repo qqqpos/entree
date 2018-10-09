@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn" @click="isSettled" :disabled="order.settled">
+    <button class="btn" @click="isSettled" v-press="housePaymentDialog" :disabled="order.settled || order.status === 0">
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
@@ -126,6 +126,24 @@ export default {
         this.exitComponent();
       }
     },
+    housePaymentDialog() {
+      const prompt = {
+        type: "question",
+        title: "dialog.ticketOnHouse",
+        msg: "dialog.tip.settleByHouseAccount"
+      };
+
+      this.$checkPermission("permission", "houseAccount")
+        .then(() => {
+          this.$dialog(prompt)
+            .then(this.houseAccountSettle)
+            .catch(this.exitComponent);
+        })
+        .catch(this.isSettled);
+    },
+    houseAccountSettle() {
+      this.exitComponent();
+    },
     isSettled() {
       if (this.isEmptyTicket) return;
 
@@ -230,7 +248,7 @@ export default {
           : this.order.payment.total;
 
         const discount = percentage
-          ? toFixed(amount * ticketTotal / 100, 2)
+          ? toFixed((amount * ticketTotal) / 100, 2)
           : amount;
 
         if (discount > ticketTotal) {

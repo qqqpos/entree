@@ -5,25 +5,6 @@ const Pax = function () {
   let station = null;
   let request = null;
   let terminal = null;
-  const cardType = ['',
-    'Visa',
-    'Master',
-    'AmEx',
-    'Discover',
-    'Diner Club',
-    'enRoute',
-    'JCB',
-    'Revolution',
-    'Visa Fleet',
-    'MasterCard Fleet',
-    'FleetOne',
-    'Fleetwide',
-    'Fuelman',
-    'Gascard',
-    'Voyager',
-    'Wright Exp'
-  ];
-
 
   this.initial = function (ip, port, sn, stationAlias, terminalAlias) {
     if (!ip || !port) throw new Error("CONFIG_FILE_ERROR");
@@ -85,66 +66,74 @@ const Pax = function () {
     return request.get(command)
   };
   this.explainTransaction = function (raw) {
-    const data = raw.split(String.fromCharCode(28));
-    const code = data[3];
+    // Remove STX ETX LRC from T01 response
+    const [multiple, command, version, code, resMsg, hostInfo, type, amountInfo, accountInfo, traceInfo, avsInfo, commInfo, eCommInfo, additional] = raw.slice(1, -2).split(String.fromCharCode(28));
+
     switch (code) {
       case "000000":
-        const host = data[5].split(String.fromCharCode(31));
-        const amount = data[7].split(String.fromCharCode(31));
-        const account = data[8].split(String.fromCharCode(31));
-        const trace = data[9].split(String.fromCharCode(31));
-        const extra = data[13].split(String.fromCharCode(0x03))[0].split(String.fromCharCode(31));
-        const mode = ['Manual', 'Swipe', 'Contactless', 'Scanner', 'Chip', 'Chip Fall Back Swipe'];
-        const transType = ['MENU', 'SALE', 'RETURN', 'AUTH', 'POSTAUTH', 'FORCED', 'ADJUST', 'WITHDRAWAL', 'ACTIVATE', 'ISSUE', 'ADD', 'CASHOUT', 'DEACTIVATE', 'REPLACE', 'MERGE', 'REPORTLOST', 'VOID', 'VOID/SALE', 'VOID/RTRN', 'VOID/AUTH', 'VOID/POST', 'VOID/FORCE', 'VOID/WITHDRAW', 'BALANCE', 'VERIFY', 'REACTIVATE', 'FORCED ISSUE', 'FORCE ADD', 'UNLOAD', 'RENEW', 'GET CONVT DETAIL', 'CONVERT', 'TOKENIZE', 'INCREMENTAL AUTH', 'BALANCE w.LOCK', 'REDEMPTION w.UNLOCK']
-        let addition = {};
+        const [hostResCode, hostResMsg, authCode, hostRefNum, traceNum, batchNum] = hostInfo.split(String.fromCharCode(31));
+        const [transNum, refNum, timestamp] = traceInfo.split(String.fromCharCode(31));
 
-        extra.forEach(data => {
+        // balance 1 is cash benefits balance
+        // balance 2 is food stamp balance
+        const [approve, due, tip, cashBack, merchantFee, tax, balance, available] = amountInfo.split(String.fromCharCode(31));
+        const [cardNum, entry, exp, , , , cardType, cardHolder, , , present] = accountInfo.split(String.fromCharCode(31));
+        //const [avsApprovalCode, avsMsg] = avsInfo.split(String.fromCharCode(31));
+        //const [poNum, customerCode, taxExempt, taxExemptID, merchantTaxID, destinationZipCode, productDescription] = commInfo.split(String.fromCharCode(31));
+
+        const transTypes = ['MENU', 'SALE', 'RETURN', 'AUTH', 'POSTAUTH', 'FORCED', 'ADJUST', 'WITHDRAWAL', 'ACTIVATE', 'ISSUE', 'ADD', 'CASHOUT', 'DEACTIVATE', 'REPLACE', 'MERGE', 'REPORTLOST', 'VOID', 'VOID/SALE', 'VOID/RTRN', 'VOID/AUTH', 'VOID/POST', 'VOID/FORCE', 'VOID/WITHDRAW', 'BALANCE', 'VERIFY', 'REACTIVATE', 'FORCED ISSUE', 'FORCE ADD', 'UNLOAD', 'RENEW', 'GET CONVT DETAIL', 'CONVERT', 'TOKENIZE', 'INCREMENTAL AUTH', 'BALANCE w.LOCK', 'REDEMPTION w.UNLOCK'];
+        const cardTypes = ['', 'Visa', 'Master', 'AmEx', 'Discover', 'Diner Club', 'enRoute', 'JCB', 'Revolution', 'Visa Fleet', 'MasterCard Fleet', 'FleetOne', 'Fleetwide', 'Fuelman', 'Gascard', 'Voyager', 'Wright Exp']
+        const modes = ['Manual', 'Swipe', 'Contactless', 'Scanner', 'Chip', 'Chip Fall Back Swipe'];
+
+        let extraInfo = {};
+        additional.split(String.fromCharCode(0x03))[0].split(String.fromCharCode(31)).forEach(data => {
           const key = data.split("=")[0];
           const value = data.split("=")[1];
-          addition[key] = value;
+          extraInfo[key] = value;
         });
 
         return {
           code,
-          resMsg: data[4],
+          resMsg,
           host: {
-            code: host[0],
-            msg: host[1],
-            auth: host[2],
-            ref: host[3],
-            trace: host[4],
-            batch: host[5]
+            code: hostResCode,
+            msg: hostResMsg,
+            auth: authCode,
+            ref: hostRefNum,
+            trace: traceNum,
+            batch: batchNum
           },
-          transType: transType[~~data[6]] || 'REVERSAL',
+          transType: transTypes[~~type] || 'REVERSAL',
           amount: {
-            approve: (amount[0] / 100).toFixed(2),
-            due: (amount[1] / 100).toFixed(2),
-            tip: (amount[2] / 100).toFixed(2),
-            cashBack: (amount[3] / 100).toFixed(2),
-            fee: (amount[4] / 100).toFixed(2),
-            tax: (amount[5] / 100).toFixed(2),
-            balance: (amount[6] / 100).toFixed(2)
+            approve: (approve / 100).toFixed(2),
+            due: (due / 100).toFixed(2),
+            tip: (tip / 100).toFixed(2),
+            cashBack: (cashBack / 100).toFixed(2),
+            fee: (merchantFee / 100).toFixed(2),
+            tax: (tax / 100).toFixed(2),
+            balance: (balance / 100).toFixed(2),
+            available: (available / 100).toFixed(2)
           },
           account: {
-            number: account[0],
-            entry: mode[account[1]],
-            exp: account[2],
-            type: cardType[~~account[6]] || 'Other',
-            holder: account[7],
-            present: account[10] ? 'Present' : 'Not Present'
+            number: cardNum,
+            entry: modes[entry],
+            exp,
+            type: cardTypes[~~cardType] || 'Other',
+            holder: cardHolder,
+            present: present ? 'Present' : 'Not Present'
           },
           trace: {
-            trans: trace[0],
-            ref: trace[1],
-            time: trace[2]
+            trans: transNum,
+            ref: refNum,
+            time: timestamp
           },
           device,
           station,
           terminal,
-          addition,
+          addition: extraInfo,
           time: Date.now(),
           status: 1
-        };
+        }
       case "100001":
         return {
           code,
@@ -210,23 +199,18 @@ const Pax = function () {
   }
 
   this.explainBatch = function (raw) {
-    const data = raw.split(String.fromCharCode(28));
-    const code = data[3];
+    // Remove STX ETX LRC from B01 response
+    const [multiple, command, version, code, message, host, totalCount, totalAmount, time, tid, mid, addition] = raw.slice(1, -2).split(String.fromCharCode(28));
+
     switch (code) {
       case "000000":
-        const response = data[5];
-        const host = response.split(String.fromCharCode(31));
-        const hostResponse = host[1];
-        const batch = host[5];
-        const count = data[6].split("=");
-        const amount = data[7].split("=");
-        const time = data[8];
-        const tid = data[9];
-        const mid = data[10].split(String.fromCharCode(0x03))[0];
+        const [hostResCode, hostResMsg, authCode, hostRefNum, traceNum, batchNum] = host.split(String.fromCharCode(31));
+        const [creditCount, debitCount, ebtCount] = totalCount.split("=");
+        const amount = totalAmount.split("=");
 
         return {
           code,
-          resMsg: data[4],
+          resMsg: hostResMsg,
           date: today(),
           time,
           tid,
@@ -235,19 +219,18 @@ const Pax = function () {
           station,
           terminal,
           count: {
-            credit: count[0],
-            debit: count[1],
-            ebt: count[2]
+            credit: creditCount,
+            debit: debitCount,
+            ebt: ebtCount
           },
           amount: {
             credit: (amount[0] / 100).toFixed(2),
             debit: (amount[1] / 100).toFixed(2),
             ebt: (amount[2] / 100).toFixed(2)
           },
-          result: host[0],
-          number: host[5],
-          status: hostResponse,
-          batch
+          result: hostResMsg,
+          batch: batchNum,
+          status: 1
         }
       case "000100":
         return {

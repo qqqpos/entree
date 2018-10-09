@@ -122,6 +122,11 @@ i.space {
   color: rgba(151, 151, 151, 0.75);
 }
 
+.initial {
+  padding: 0;
+  margin: 0;
+}
+
 .relative {
   position: relative;
 }
@@ -130,7 +135,7 @@ input[type="radio"] {
   display: none;
 }
 
-.normal{
+.normal {
   font-weight: normal;
 }
 

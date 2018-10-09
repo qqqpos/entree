@@ -1,11 +1,11 @@
 <template>
   <div class="popupMask center dark" @click.self="init.reject">
     <div class="editor" v-show="!component">
-      <header class="title">
-        <h3 class="f1">
-          <span>{{$t("title.modify")}}</span>
-          <span class="name">{{item[language]}}</span>
-        </h3>
+      <header class="row">
+        <div class="f1">
+          <h5>{{$t("title.modify")}}</h5>
+          <h3>{{item[language]}}</h3>
+        </div>
         <span class="price agency">$ {{total}}</span>
       </header>
       <div class="banner"></div>
@@ -299,19 +299,6 @@ export default {
 .editor {
   width: 425px;
   transform: translateY(-41px);
-}
-
-.title {
-  display: flex;
-  align-content: center;
-}
-
-.name {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin: 0 5px;
 }
 
 .inner {

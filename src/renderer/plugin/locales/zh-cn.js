@@ -471,6 +471,7 @@ export default {
       evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}",
       printReceiptConfirm: "是否需要打印收据给客人？",
       tipReportConfirm: "请再次确定您本次上报的小费为 $ {i} ?",
+      settleByHouseAccount: "您确定要用将此订单以 {i} 的名义记账吗?"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -733,7 +734,9 @@ export default {
     itemImported: "成功从CSV文件中导入 {i} 个物品",
     cashPaymentNotAllow: "您无权进行现金支付",
     printHibachi: "打印铁板订单",
-    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?"
+    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?",
+    ticketOnHouse: "店家买单",
+
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -1995,6 +1998,7 @@ export default {
       timecard: "允许修改员工打卡信息",
       giftcard: "允许 创建 / 修改 礼物卡",
       coupon: "允许 创建 / 修改 优惠券",
+      houseAccount: "允许使用店家买单",
       anydate: "允许操作任意时间的订单"
     }
   }

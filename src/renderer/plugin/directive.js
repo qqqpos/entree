@@ -51,7 +51,7 @@ const Mask = {
                     const [YY, MM] = moment().format("YY,MM").split(",");
                     const [mm, yy] = group;
 
-                    (YY + MM < yy + mm) ? el.classList.remove("invalid") : el.classList.add("invalid");
+                    (YY + MM < yy + mm) ? el.classList.remove("invalid"): el.classList.add("invalid");
                 } else {
                     el.classList.remove("invalid")
                 }
@@ -59,7 +59,11 @@ const Mask = {
         };
 
         const inputHandler = (event) => {
-            const { card, date, expression } = binding.modifiers;
+            const {
+                card,
+                date,
+                expression
+            } = binding.modifiers;
             const value = String(event.target.value);
 
             if (expression) {
@@ -75,7 +79,11 @@ const Mask = {
         el.$destroy = () => el.removeEventListener('input', inputHandler)
     },
     update(el, binding) {
-        const { card, date, expression } = binding.modifiers;
+        const {
+            card,
+            date,
+            expression
+        } = binding.modifiers;
         const value = String(el.value);
 
         if (expression) {
@@ -105,7 +113,9 @@ const OuterClick = {
             }
             console.warn(warn);
         }
-        const { bubble } = binding.modifiers;
+        const {
+            bubble
+        } = binding.modifiers;
         const handler = e => {
             if (bubble || (!el.contains(e.target) && el !== e.target)) {
                 binding.value(e);
@@ -124,9 +134,16 @@ const OuterClick = {
 const Press = {
     bind(el, binding, vNode) {
         const target = new Hammer(el);
-
+        // press event has 0.75 second before trigger event
+        target.get('press').set({
+            time: 750
+        });
         target.on("press", e => binding.value(e));
     }
 }
 
-export { Mask, OuterClick, Press }
+export {
+    Mask,
+    OuterClick,
+    Press
+}

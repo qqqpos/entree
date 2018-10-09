@@ -7,38 +7,40 @@
           <h3>{{$t('title.batch')}}</h3>
         </div>
       </header>
-      <table class="setting">
-        <thead>
-          <tr>
-            <th>{{$t('thead.terminal')}}</th>
-            <th>{{$t('thead.count')}}</th>
-            <th>{{$t('thead.total')}}</th>
-            <th>{{$t('thead.tip')}}</th>
-            <th>{{$t('thead.status')}}</th>
-            <th>{{$t('thead.action')}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(task,index) in tasks" :key="index">
-            <td>{{task.alias}}
-              <span class="location">({{task.location}})</span>
-            </td>
-            <td>{{$t('text.records',task.count)}}</td>
-            <td>{{task.total | decimal}}</td>
-            <td>({{task.tip | decimal}})</td>
-            <td class="status">{{status(task.status,index)}}</td>
-            <td v-if="task.status === 5" class="action">
-              <span class="print" @click="reprint(index)">{{$t('button.print')}}</span>
-            </td>
-            <td v-else-if="task.status === 0" class="action">
-              <span class="retry" @click="initialTerminal(index)">{{$t('button.retry')}}</span>
-            </td>
-            <td v-else class="action">
-              <span class="batch" @click="beforeBatch(task,index)">{{$t('button.batch')}}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="wrap">
+        <table class="setting">
+          <thead>
+            <tr>
+              <th>{{$t('thead.terminal')}}</th>
+              <th>{{$t('thead.count')}}</th>
+              <th>{{$t('thead.total')}}</th>
+              <th>{{$t('thead.tip')}}</th>
+              <th>{{$t('thead.status')}}</th>
+              <th>{{$t('thead.action')}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(task,index) in tasks" :key="index">
+              <td>{{task.alias}}
+                <span class="location">({{task.location}})</span>
+              </td>
+              <td>{{$t('text.records',task.count)}}</td>
+              <td>{{task.total | decimal}}</td>
+              <td>({{task.tip | decimal}})</td>
+              <td class="status">{{status(task.status,index)}}</td>
+              <td v-if="task.status === 5" class="action">
+                <span class="print" @click="reprint(index)">{{$t('button.print')}}</span>
+              </td>
+              <td v-else-if="task.status === 0" class="action">
+                <span class="retry" @click="initialTerminal(index)">{{$t('button.retry')}}</span>
+              </td>
+              <td v-else class="action">
+                <span class="batch" @click="beforeBatch(task,index)">{{$t('button.batch')}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <footer>
         <div class="opt">
           <checkbox title="report.tipsDetail" v-model="detail"></checkbox>
@@ -183,21 +185,27 @@ export default {
     startBatch(device, index) {
       this.exitComponent();
       if (device.status === 4) return;
-      this.batch(device).then(response => {
-        const result = device.terminal.explainBatch(response.data);
-        this.tasks[index].error = result.code;
+      this.batch(device)
+        .then(response => {
+          const result = device.terminal.explainBatch(response.data);
+          this.tasks[index].error = result.code;
 
-        if (result.code === "000000") {
-          device.status = 5;
-          this.tasks[index].report = result;
-          this.$socket.emit("[TERMINAL] CLOSED", result, () => {
-            this.print(result, device);
-            this.$emit("refresh");
-          });
-        } else {
+          if (result.code === "000000") {
+            device.status = 5;
+            this.tasks[index].report = result;
+            this.$socket.emit("[TERMINAL] CLOSED", result, () => {
+              this.print(result, device);
+              this.$emit("refresh");
+            });
+          } else {
+            device.status = -1;
+          }
+        })
+        .catch(error => {
           device.status = -1;
-        }
-      });
+          this.tasks[index].error = error;
+          console.log(e);
+        });
     },
     batch(device) {
       device.status = 4;
@@ -257,6 +265,11 @@ export default {
 <style scoped>
 .editor {
   width: 600px;
+}
+
+.wrap {
+  padding: initial;
+  height: 250px;
 }
 
 .action span {
