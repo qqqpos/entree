@@ -333,7 +333,6 @@ const Pax = function () {
   }
 
   this.drawSignature = function (path) {
-    console.log(path);
     let canvas = document.createElement('canvas');
 
     // pax signature has default size 170 * 100

@@ -13,65 +13,56 @@
       </section>
       <section class="empty placeholder" v-else>
         <i class="fas fa-database"></i>
-        <p>Database Has No Index </p>
+        <p>Database Has No Index</p>
       </section>
       <section class="overview">
          <div class="wrap relative">
           <h3>{{$t('nav.overview')}}</h3>
           <p>
-            <span class="f1">Days</span>
+            <span class="f1">{{$t('report.days')}}</span>
             <span class="value">{{summary.days}}</span>
           </p>
           <div class="group">
             <p>
-              <span class="f1">Item Sales</span>
+              <span class="f1">{{$t('report.itemSales')}}</span>
               <span class="value">$ {{summary.subtotal | decimal}}</span>
             </p>
             <p>
-              <span class="f1">Sales Tax</span>
+              <span class="f1">{{$t('report.salesTax')}}</span>
               <span class="value">$ {{summary.tax | decimal}}</span>
             </p>
             <p>
-              <span class="f1">Discount</span>
+              <span class="f1">{{$t('report.discount')}}</span>
               <span class="value">$ {{summary.discount | decimal}}</span>
             </p>
             <p>
-              <span class="f1">Sales Total</span>
+              <span class="f1">{{$t('report.salesTotal')}}</span>
               <span class="value">$ {{summary.total | decimal}}</span>
             </p>          
           </div>
           <div class="group">
             <p>
-              <span class="f1">Rounding</span>
+              <span class="f1">{{$t('report.rounding')}}</span>
               <span class="value">$ {{summary.rounding | decimal}}</span>
             </p>  
             <p>
-              <span class="f1">Gratuity</span>
+              <span class="f1">{{$t('report.gratuity')}}</span>
               <span class="value">$ {{summary.gratuity | decimal}}</span>
             </p>
             <p>
-              <span class="f1">Delivery Fee</span>
+              <span class="f1">{{$t('report.deliveryFee')}}</span>
               <span class="value">$ {{summary.delivery | decimal}}</span>
             </p>            
           </div>
           <div class="group">
-            <p>
-              <span class="f1"></span>
-              <span class="value"></span>
+            <p v-for="(data,type,index) in summary.types" :key="index" v-show="data.count > 0"> 
+              <span class="f1">
+                <span class="type">{{$t('type.' + type)}}</span>
+                <span class="light">({{data.count}})</span>
+              </span>
+              <span class="value">$ {{data.sales | decimal}}</span>
             </p>
-            <p>
-              <span class="f1"></span>
-              <span class="value"></span>
-            </p>
-          </div>   
-          <p>
-            <span class="f1"></span>
-            <span class="value"></span>
-          </p>   
-          <p>
-            <span class="f1"></span>
-            <span class="value"></span>
-          </p>                                   
+          </div>                                   
         </div>
       </section>
     </div>
@@ -133,8 +124,31 @@ export default {
         discount += date.summary.sales.discount;
         rounding += date.summary.sales.rounding;
         gratuity += date.summary.sales.gratuity;
-        delivery += date.summary.sales.delivery;
+        delivery += date.summary.sales.deliveryCharge;
         total += date.summary.sales.total;
+      });
+
+      let types = {};
+
+      [
+        "WALK_IN",
+        "PICK_UP",
+        "DELIVERY",
+        "DINE_IN",
+        "BAR",
+        "BUFFET",
+        "HIBACHI",
+        "SALES"
+      ].forEach(title => {
+        types[title] = {
+          count: 0,
+          sales: 0
+        };
+
+        this.data.forEach(date => {
+          types[title].count += date.summary.count[title];
+          types[title].sales += date.summary.sales[title];
+        });
       });
 
       return {
@@ -145,7 +159,8 @@ export default {
         rounding,
         gratuity,
         delivery,
-        total
+        total,
+        types
       };
     }
   }

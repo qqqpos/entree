@@ -43,11 +43,15 @@
               <span class="f1">Average Charge</span>
               <span class="value">$ {{summary.transactionAverage | decimal}}</span>
             </p>
+            <p>
+              <span class="f1">Average Tip</span>
+              <span class="value">$ </span>
+            </p>             
+            <p>
+              <span class="f1">Tip per Charge Ratio</span>
+              <span class="value">%</span>
+            </p>  
           </div>   
-          <p>
-            <span class="f1"></span>
-            <span class="value"></span>
-          </p>   
           <p>
             <span class="f1"></span>
             <span class="value"></span>

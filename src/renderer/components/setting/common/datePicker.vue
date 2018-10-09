@@ -1,5 +1,5 @@
 <template>
-    <div class="date-picker" v-outer-click="closeDialog">
+    <div class="row relative" v-outer-click="closeDialog">
         <div class="button" @click="toggleCalendar">
             <i class="far fa-calendar-alt"></i>
             <span class="text">{{$t('date.'+range)}}</span>
@@ -13,7 +13,7 @@
                     <i class="fa fa-chevron-right mini-btn" @click="next"></i>
                 </header>
                 <div class="wrap">
-                    <div class="title">
+                    <div class="title row">
                       <span>{{$t('date.monday')}}</span>
                       <span>{{$t('date.tuesday')}}</span>
                       <span>{{$t('date.wednesday')}}</span>
@@ -23,7 +23,7 @@
                       <span>{{$t('date.sunday')}}</span>
                     </div>
                     <div class="dates">
-                        <div class="week" v-for="(week,index) in calendar" :key="index">
+                        <div class="week row" v-for="(week,index) in calendar" :key="index">
                             <div class="day" v-for="(day,idx) in week.days" :key="idx" :class="{diff:isDiff(day),between:isBetween(day)}" @click="select(day)">{{day | moment('D')}}</div>
                         </div>
                     </div>
@@ -189,14 +189,25 @@ export default {
       this.initialCalendar();
     },
     setRange(value) {
+      // reset calendar display first
+      // then highlights selected days
       switch (value) {
         case "today":
+          this.date = moment();
+          this.initialCalendar();
+
           this.dates = [moment().startOf("day"), moment().endOf("day")];
           break;
         case "currentWeek":
+          this.date = moment();
+          this.initialCalendar();
+
           this.dates = [moment().startOf("week"), moment().endOf("week")];
           break;
         case "lastWeek":
+          this.date = moment();
+          this.initialCalendar();
+
           this.dates = [
             moment()
               .subtract(1, "w")
@@ -207,9 +218,16 @@ export default {
           ];
           break;
         case "currentMonth":
+          this.date = moment();
+          this.initialCalendar();
+
           this.dates = [moment().startOf("month"), moment().endOf("month")];
           break;
         case "lastMonth":
+          // update calendar month
+          this.date = moment().subtract(1, "month");
+          this.initialCalendar();
+
           this.dates = [
             moment()
               .subtract(1, "M")
@@ -294,11 +312,6 @@ export default {
 </script>
 
 <style scoped>
-.date-picker {
-  display: flex;
-  position: relative;
-}
-
 .button {
   padding: 10px;
 }
@@ -383,9 +396,17 @@ input:checked + label {
   border-radius: 4px;
 }
 
-.title,
-.calendar .week {
-  display: flex;
+.dates {
+  border: 1px solid #eee;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
+}
+
+.title {
+  border-bottom: 1px solid #00897b;
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
 }
 
 .title span {
@@ -415,7 +436,7 @@ input:checked + label {
 
 .day.diff {
   color: rgba(0, 0, 0, 0.4);
-  background: #fff;
+  background: #FAFAFA;
 }
 
 .day.between {

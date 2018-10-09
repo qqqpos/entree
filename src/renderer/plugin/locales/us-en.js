@@ -911,6 +911,19 @@ export default {
     }
   },
   report: {
+    days: "Days",
+    itemSales: "Item Sales",
+    salesTax: "Sales Tax",
+    plasticTax: "Plastic Tax",
+    discount: "Ticket Discount",
+    itemDiscount: "Item Discount",
+    salesTotal: "Sales Total",
+    rounding: "Rounding",
+    deliveryFee: "Delivery Fee",
+    surcharge: "Surcharge",
+    gratuity: "Gratuity",
+    
+
     configuration: "Report Setting",
     range: "Report Range",
     dailyReport: "Daily Report",
@@ -933,25 +946,20 @@ export default {
     viaEmail: "Send Report Via Email",
     grossSales: "Gross Sales",
     netSales: "Net Sales",
-    discount: "Discount",
-    itemDiscount: "Item Discount",
     cash: "Cash",
     creditCard: "Credit Card",
     debitCard: "Debit Card",
     giftCard: "Gift Card",
     creditCardTip: "Credit Card Tips",
     tax: "Tax",
-    plasticTax: "Plastic Tax",
-    deliveryFee: "Delivery Fee",
-    gratuity: "Gratuity",
+
     thirdParty: "Third Party",
     detailPayment: "Detail payment type",
     tipsSource: "Show tips from",
     from: "From {i}",
     fromDate: "From",
     toDate: "To",
-    itemSales: "Item Sales",
-    salesTotal: "Sales Total",
+
     cashTotal: "Cash Total",
     creditTotal: "Credit Card Total",
     thirdPartyTotal: "Third Party Total",
@@ -983,7 +991,7 @@ export default {
     highestSales: "Highest Sales",
     lowestSales: "Lowest Sales",
     averageSales: "Average Sales",
-    rounding: "Rounding",
+
     averageDetail: "There are {i} days above average and {i} days below average.",
     giftcard: {
       activation: "Gift Card Activation",

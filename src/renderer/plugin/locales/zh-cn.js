@@ -843,6 +843,20 @@ export default {
     }
   },
   report: {
+    days: "天数",
+    itemSales: "物品销售",
+    salesTax: "销售税",
+    plasticTax: "塑料袋税",
+    discount: "订单折扣",
+    itemDiscount: "物品折扣",
+    salesTotal: "销售额",
+    rounding: "湊整",
+    gratuity: "服务费",
+    deliveryFee: "送餐费",
+    surcharge: "附加费",
+
+
+    
     configuration: "报表格式",
     range: "报告范围",
     dailyReport: "按天打印",
@@ -863,26 +877,23 @@ export default {
     driverLiability: "司机报告",
     thirdPartySummary: "第三方概要",
     viaEmail: "发送报表至邮箱",
-    discount: "折扣",
-    itemDiscount: "折扣物品",
+
     cash: "现金",
     creditCard: "信用卡",
     debitCard: "借记卡",
     giftCard: "礼物卡",
     creditCardTip: "信用卡小费",
     tax: "税",
-    plasticTax: "塑料袋税",
-    itemSales: "物品销售",
-    gratuity: "服务费",
-    deliveryFee: "送餐费",
-    surcharge: "附加费",
+    
+
+
     thirdParty: "第三方",
     detailPayment: "细分款项",
     tipsSource: "显示小费来源",
     from: "来自 {i}",
     fromDate: "从",
     toDate: "至",
-    salesTotal: "销售额",
+
     cashTotal: "现金",
     creditTotal: "信用卡",
     thirdPartyTotal: "第三方",
@@ -915,7 +926,7 @@ export default {
     lowestSales: "最低营业额",
     averageSales: "平均营业额",
     averageDetail: "其中有 {i}天 是高于平均值, {i}天 是低于平均值",
-    rounding: "湊整",
+    
     giftcard: {
       activation: "礼物卡激活",
       reload: "礼物卡充值",

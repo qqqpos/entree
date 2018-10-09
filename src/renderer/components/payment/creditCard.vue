@@ -48,9 +48,7 @@ export default {
             stop({ error: "CONFIG_FILE_NO_FOUND" });
           } else {
             this.config = config;
-            window.terminal = this.terminal = this.getParser(
-              config.model
-            ).default();
+            this.terminal = this.getParser(config.model).default();
             next();
           }
         });
@@ -141,9 +139,9 @@ export default {
             break;
           case "100001":
             // timeout
-            break;
           case "100002":
             // abort
+            this.init.resolve(result);
             break;
         }
       } catch (e) {
