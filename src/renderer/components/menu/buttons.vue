@@ -73,13 +73,17 @@
       <i class="fas fa-hand-holding-usd"></i>
       <span class="text">{{$t('button.payment')}}</span>
     </button>
+    <div class="btn" @click="done(false)">
+      <i class="fa fa-save"></i>
+      <span class="text">{{$t('button.save')}}</span>
+    </div>
     <button class="btn split" @click="openSplit" :disabled="order.hasOwnProperty('parent')">
       <i class="fa fa-copy"></i>
       <span class="text">{{$t('button.split')}}</span>
     </button>
-    <div class="btn" @click="done(false)">
-      <i class="fa fa-save"></i>
-      <span class="text">{{$t('button.save')}}</span>
+    <div class="btn" @click="promotion">
+      <i class="fa fa-tags"></i>
+      <span class="text">{{$t('button.coupon')}}</span>
     </div>
     <div class="btn" @click="quit">
       <i class="fa fa-times"></i>
@@ -868,7 +872,6 @@ export default {
   grid-column-start: 3;
   grid-column-end: 3;
   grid-row-start: 2;
-  grid-row-end: 4;
-  height: 129px;
+  grid-row-end: 3;
 }
 </style>
