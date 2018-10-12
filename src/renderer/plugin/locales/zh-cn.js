@@ -856,7 +856,7 @@ export default {
     surcharge: "附加费",
 
 
-    
+
     configuration: "报表格式",
     range: "报告范围",
     dailyReport: "按天打印",
@@ -884,7 +884,7 @@ export default {
     giftCard: "礼物卡",
     creditCardTip: "信用卡小费",
     tax: "税",
-    
+
 
 
     thirdParty: "第三方",
@@ -926,7 +926,7 @@ export default {
     lowestSales: "最低营业额",
     averageSales: "平均营业额",
     averageDetail: "其中有 {i}天 是高于平均值, {i}天 是低于平均值",
-    
+
     giftcard: {
       activation: "礼物卡激活",
       reload: "礼物卡充值",
@@ -1366,7 +1366,8 @@ export default {
     hourly: "时段",
     compare: "对比",
     reconciliation: "对账",
-    scatter: "分布图"
+    scatter: "分布图",
+    inventory: "库存"
   },
   booking: {
     date: "预约日期",
@@ -1746,6 +1747,31 @@ export default {
       failed: "连接失败"
     }
   },
+  inventory: {
+    title: {
+      dashboard: "库存信息",
+      product: "物品管理",
+      order: "入库"
+    },
+    dialog: {
+      readyToScan: "扫描物品"
+    },
+    tip: {
+      scanProduct: "请扫描货物条形码"
+    },
+    vendor: "供货商",
+    handler: "负责人",
+    reference: "货单号",
+    memo: "备忘",
+    productList: "物品列表",
+    product: "物品",
+    order: "进货记录",
+    orderDetail: "进货明细",
+    upc: "产品代码",
+    cost: "进货价",
+    qty: "数量",
+    total: "成本"
+  },
   date: {
     today: "今天",
     tomorrow: "明天",
@@ -1819,7 +1845,8 @@ export default {
       tutorial: "教程",
       sales: "营业额",
       printers: "打印机",
-      reward: "积分"
+      reward: "积分",
+      plugin: "插件"
     },
     title: {
       store: "店面基本资料",
@@ -1844,7 +1871,8 @@ export default {
       menuImport: "菜单导入",
       cashflow: "现金流水记录",
       payoutRecord: "支出记录",
-      online: "在线点餐设定"
+      online: "在线点餐设定",
+      plugin: "插件列表"
     },
     receiptDialog: "打印收据",
     others: "其它设置",
@@ -1959,6 +1987,7 @@ export default {
     playDuration: "播放时长",
     autoCorrectAddress: "自动格式化地址",
     fuzzySearch: "模糊搜索",
+    inventoryControl: "库存管理",
     delivery: {
       config: "送餐设定",
       charge: "送餐费",

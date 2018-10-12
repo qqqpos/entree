@@ -922,7 +922,7 @@ export default {
     deliveryFee: "Delivery Fee",
     surcharge: "Surcharge",
     gratuity: "Gratuity",
-    
+
 
     configuration: "Report Setting",
     range: "Report Range",
@@ -1365,7 +1365,8 @@ export default {
     categorize: "Categorize",
     compare: "Compare",
     reconciliation: "Reconc.",
-    scatter: "Scatter"
+    scatter: "Scatter",
+    inventory: "Inventory"
   },
   booking: {
     date: "Book Date",
@@ -1751,6 +1752,33 @@ export default {
       failed: "Test Failed"
     }
   },
+
+  inventory: {
+    title: {
+      dashboard: "Dashboard",
+      product: "Product List",
+      order: "Inventory Order"
+    },
+    dialog: {
+      readyToScan: "Ready To Scan",
+
+    },
+    tip: {
+      scanProduct: "Please scan the product barcode."
+    },
+    vendor: "Vendor",
+    handler: "Handle by",
+    reference: "Reference",
+    memo: "Memo",
+    productList: "Product List",
+    product: "Product",
+    order: "Stock In Receipts",
+    orderDetail: "Stock In Details",
+    upc: "Product Code",
+    cost: "Cost",
+    qty: "Qty",
+    total: "Total"
+  },
   date: {
     today: "Today",
     tomorrow: "Tomorrow",
@@ -1824,7 +1852,8 @@ export default {
       tutorial: "Tutorial",
       sales: "Sales",
       printers: "Printers",
-      reward: "Reward"
+      reward: "Reward",
+      plugin: "Plugin"
     },
     title: {
       store: "Store Information",
@@ -1849,7 +1878,8 @@ export default {
       menuImport: "Menu Import",
       cashflow: "Cash Flow Summary",
       payoutRecord: "Payout Record",
-      online: "Online Order Config"
+      online: "Online Order Config",
+      plugin: "Plugin List"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",
@@ -1961,6 +1991,7 @@ export default {
     playDuration: "Duration",
     autoCorrectAddress: "Auto Format Address",
     fuzzySearch: "Fuzzy Search",
+    inventoryControl: "Inventory Control",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",

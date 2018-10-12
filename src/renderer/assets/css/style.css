@@ -106,10 +106,6 @@ i.loader:after {
   animation: rotate 1.5s linear 0s infinite normal;
 }
 
-i.space {
-  margin-right: 5px;
-}
-
 .ghost {
   opacity: 0.5;
 }
@@ -144,14 +140,34 @@ input[type="radio"] {
   font-weight: bold;
 }
 
+.space-right {
+  margin-right: 5px;
+}
+
+.space-left {
+  margin-left: 5px;
+}
+
+.space-both {
+  margin: 0 5px;
+}
+
 .agency.space {
   margin-left: 5px;
+}
+
+i.space {
+  margin-right: 5px;
 }
 
 .flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.borderless {
+  border: none !important;
 }
 
 .container {
@@ -1452,11 +1468,8 @@ span.action.yellow {
 }
 
 .input-wrap input {
-  border: none;
   background: transparent;
-  outline: none;
   text-indent: 5px;
-  font-family: "Yuanti-SC";
   color: #333;
   font-size: 18px;
 }

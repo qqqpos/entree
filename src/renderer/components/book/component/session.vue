@@ -10,8 +10,8 @@
                         <h5>{{book.name}}</h5>
                         <h5 class="phone">{{book.phone | phone}}</h5>
                         <p>
-                            <span><i class="far fa-clock space light"></i>{{book.time}}</span>
-                            <span><i class="fas fa-users space light"></i>{{book.guest | count}}</span>
+                            <span><i class="far fa-clock space-right light"></i>{{book.time}}</span>
+                            <span><i class="fas fa-users space-right light"></i>{{book.guest | count}}</span>
                         </p>
                     </div>
                 </div>

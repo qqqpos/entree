@@ -17,11 +17,11 @@
                     <h5>{{$t('booking.date')}}</h5>
                     <div class="content text-center">
                         <div class="input-wrap">
-                            <i class="far fa-calendar-alt light space"></i>
+                            <i class="far fa-calendar-alt light space-right"></i>
                             <input type="text" v-model="book.date" placeholder="YYYY-MM-DD">
                         </div> 
                         <div class="input-wrap">
-                            <i class="far fa-clock light space"></i>
+                            <i class="far fa-clock light space-right"></i>
                             <input type="text" v-model="book.time" placeholder="HH:mm (24 Hours)">
                         </div>                      
                     </div>
@@ -30,11 +30,11 @@
                     <h5>{{$t('booking.contact')}}</h5>
                     <div class="content text-center">
                         <div class="input-wrap">
-                            <i class="fas fa-phone light space"></i>
+                            <i class="fas fa-phone light space-right"></i>
                             <input type="text" v-model="book.phone" :placeholder="$t('text.phone')">
                         </div> 
                         <div class="input-wrap">
-                            <i class="fas fa-user-friends light space"></i>
+                            <i class="fas fa-user-friends light space-right"></i>
                             <input type="text" v-model="book.name" :placeholder="$t('text.name')">
                         </div>                      
                     </div>
@@ -78,7 +78,7 @@ export default {
     removeDialog() {
       const prompt = {
         title: "dialog.confirm.remove",
-        msg: ["dialog.removeBook",this.book.name || this.$t('nav.customer')],
+        msg: ["dialog.removeBook", this.book.name || this.$t("nav.customer")],
         buttons: [
           {
             text: "button.cancel",

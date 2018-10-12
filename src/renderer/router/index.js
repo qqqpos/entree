@@ -4,8 +4,7 @@ import Router from "vue-router";
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "Initialize",
       component: require("../components/bootstrap")
@@ -24,8 +23,7 @@ export default new Router({
     {
       path: "/main",
       component: require("../components/main"),
-      children: [
-        {
+      children: [{
           path: "/",
           name: "Dashboard",
           component: require("../components/dashboard")
@@ -33,8 +31,7 @@ export default new Router({
         {
           path: "customer",
           component: require("../components/form/index"),
-          children: [
-            {
+          children: [{
               path: "/",
               name: "Information",
               component: require("../components/form/info")
@@ -85,8 +82,7 @@ export default new Router({
         {
           path: "setting",
           component: require("../components/setting"),
-          children: [
-            {
+          children: [{
               path: "/",
               name: "Setting.index",
               component: require("../components/setting/index")
@@ -94,8 +90,7 @@ export default new Router({
             {
               path: "store",
               component: require("../components/setting/store/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.store",
                   component: require("../components/setting/store/store")
@@ -164,8 +159,7 @@ export default new Router({
             {
               path: "station",
               component: require("../components/setting/station/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.station",
                   component: require("../components/setting/station/index")
@@ -205,8 +199,7 @@ export default new Router({
             {
               path: "menu",
               component: require("../components/setting/menu/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.menu",
                   component: require("../components/setting/menu/menu")
@@ -219,8 +212,7 @@ export default new Router({
                 {
                   path: "template",
                   component: require("../components/setting/menu/template/index"),
-                  children: [
-                    {
+                  children: [{
                       path: "/",
                       name: "Setting.template",
                       component: require("../components/setting/menu/template/list")
@@ -243,6 +235,26 @@ export default new Router({
                   ]
                 },
                 {
+                  path: "inventory",
+                  component: require("../components/setting/menu/inventory/index"),
+                  children: [{
+                      path: "/",
+                      name: "Setting.inventory",
+                      component: require("../components/setting/menu/inventory/dashboard")
+                    },
+                    {
+                      path: "product",
+                      name: "Setting.inventory.product",
+                      component: require("../components/setting/menu/inventory/product")
+                    },
+                    {
+                      path: "order",
+                      name: "Setting.inventory.order",
+                      component: require("../components/setting/menu/inventory/order")
+                    }
+                  ]
+                },
+                {
                   path: "config",
                   name: "Setting.menu.config",
                   component: require("../components/setting/menu/config")
@@ -252,8 +264,7 @@ export default new Router({
             {
               path: "dineIn",
               component: require("../components/setting/dineIn/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.dineIn",
                   component: require("../components/setting/dineIn/index")
@@ -273,99 +284,92 @@ export default new Router({
             {
               path: "online",
               component: require("../components/setting/online/nav"),
-              children: [
-                {
+              children: [{
+                path: "/",
+                name: "Setting.online",
+                component: require("../components/setting/online/index")
+              }, {
+                path: "config",
+                name: "Setting.online.config",
+                component: require("../components/setting/online/config")
+              }, {
+                path: "history",
+                name: "Setting.online.history",
+                component: require("../components/setting/online/history")
+              }, {
+                path: "bill",
+                name: "Setting.online.bill",
+                component: require("../components/setting/online/bill")
+              }, {
+                path: "marketing",
+                name: "Setting.marketing",
+                component: require("../components/setting/online/marketing/index"),
+                children: [{
                   path: "/",
-                  name: "Setting.online",
-                  component: require("../components/setting/online/index")
+                  name: "Setting.marketing.feeds",
+                  component: require("../components/setting/online/marketing/feeds")
                 }, {
-                  path: "config",
-                  name: "Setting.online.config",
-                  component: require("../components/setting/online/config")
+                  path: "sharing",
+                  name: "Setting.marketing.sharing",
+                  component: require("../components/setting/online/marketing/socialSharing")
                 }, {
-                  path: "history",
-                  name: "Setting.online.history",
-                  component: require("../components/setting/online/history")
-                }, {
-                  path: "bill",
-                  name: "Setting.online.bill",
-                  component: require("../components/setting/online/bill")
-                }, {
-                  path: "marketing",
-                  name: "Setting.marketing",
-                  component: require("../components/setting/online/marketing/index"),
-                  children: [{
-                    path: "/",
-                    name: "Setting.marketing.feeds",
-                    component: require("../components/setting/online/marketing/feeds")
-                  }, {
-                    path: "sharing",
-                    name: "Setting.marketing.sharing",
-                    component: require("../components/setting/online/marketing/socialSharing")
-                  }, {
-                    path: "adWords",
-                    name: "Setting.marketing.adWords",
-                    component: require("../components/setting/online/marketing/adWords")
-                  }]
-                }
-              ]
+                  path: "adWords",
+                  name: "Setting.marketing.adWords",
+                  component: require("../components/setting/online/marketing/adWords")
+                }]
+              }]
             },
             {
               path: "printer",
               component: require("../components/setting/printer/nav"),
-              children: [
-                {
-                  path: "/",
-                  component: require("../components/setting/printer/tab"),
-                  children: [
-                    {
-                      path: "/",
-                      name: "Setting.printer",
-                      component: require("../components/setting/printer/device")
-                    },
-                    {
-                      path: "config/:printer",
-                      props: true,
-                      name: "Setting.printer.config",
-                      component: require("../components/setting/printer/config")
-                    },
-                    {
-                      path: "style/:printer",
-                      props: true,
-                      name: "Setting.printer.style",
-                      component: require("../components/setting/printer/style")
-                    },
-                    {
-                      path: "option/:printer",
-                      props: true,
-                      name: "Setting.printer.option",
-                      component: require("../components/setting/printer/option")
-                    },
-                    {
-                      path: "title/:printer",
-                      props: true,
-                      name: "Setting.printer.title",
-                      component: require("../components/setting/printer/title")
-                    },
-                    {
-                      path: "preview/:printer",
-                      props: true,
-                      name: "Setting.printer.preview",
-                      component: require("../components/setting/printer/preview")
-                    }
-                  ]
-                }
-              ]
+              children: [{
+                path: "/",
+                component: require("../components/setting/printer/tab"),
+                children: [{
+                    path: "/",
+                    name: "Setting.printer",
+                    component: require("../components/setting/printer/device")
+                  },
+                  {
+                    path: "config/:printer",
+                    props: true,
+                    name: "Setting.printer.config",
+                    component: require("../components/setting/printer/config")
+                  },
+                  {
+                    path: "style/:printer",
+                    props: true,
+                    name: "Setting.printer.style",
+                    component: require("../components/setting/printer/style")
+                  },
+                  {
+                    path: "option/:printer",
+                    props: true,
+                    name: "Setting.printer.option",
+                    component: require("../components/setting/printer/option")
+                  },
+                  {
+                    path: "title/:printer",
+                    props: true,
+                    name: "Setting.printer.title",
+                    component: require("../components/setting/printer/title")
+                  },
+                  {
+                    path: "preview/:printer",
+                    props: true,
+                    name: "Setting.printer.preview",
+                    component: require("../components/setting/printer/preview")
+                  }
+                ]
+              }]
             },
             {
               path: "operator",
               component: require("../components/setting/operator/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   component: require("../components/setting/operator/operator"),
-                  children: [
-                    {
+                  children: [{
                       path: "/",
                       name: "Setting.operator",
                       component: require("../components/setting/operator/empolyee/index")
@@ -429,12 +433,10 @@ export default new Router({
             {
               path: "database",
               component: require("../components/setting/database/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   component: require("../components/setting/database/tab"),
-                  children: [
-                    {
+                  children: [{
                       path: "/",
                       name: "Setting.database",
                       component: require("../components/setting/database/index")
@@ -449,8 +451,7 @@ export default new Router({
                 {
                   path: "customer",
                   component: require("../components/setting/database/customerTab"),
-                  children: [
-                    {
+                  children: [{
                       path: "/",
                       name: "Setting.database.customer",
                       component: require("../components/setting/database/customer/index")
@@ -471,8 +472,7 @@ export default new Router({
                 {
                   path: "address",
                   component: require("../components/setting/database/addressTab"),
-                  children: [
-                    {
+                  children: [{
                       path: "/",
                       name: "Setting.database.address",
                       component: require("../components/setting/database/address/address")
@@ -495,8 +495,7 @@ export default new Router({
             {
               path: "sales",
               component: require("../components/setting/sales/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.sales",
                   component: require("../components/setting/sales/sales")
@@ -526,8 +525,7 @@ export default new Router({
             {
               path: "chart",
               component: require("../components/setting/chart/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.chart",
                   component: require("../components/setting/chart/sales")
@@ -551,8 +549,7 @@ export default new Router({
             }, {
               path: 'debug',
               component: require("../components/setting/debug/nav"),
-              children: [
-                {
+              children: [{
                   path: "/",
                   name: "Setting.debug",
                   component: require("../components/setting/debug/index")
@@ -560,6 +557,11 @@ export default new Router({
                   path: "tutorial",
                   name: "Setting.tutorial",
                   component: require("../components/setting/debug/tutorial")
+                },
+                {
+                  path: "plugin",
+                  name: "Setting.plugin",
+                  component: require("../components/setting/debug/plugin")
                 }
               ]
             }
