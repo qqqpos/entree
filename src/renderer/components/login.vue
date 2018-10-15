@@ -146,7 +146,7 @@ export default {
       // reset operator information
       this.setOperator(null);
 
-      this.isHost = window.isServer === true;
+      this.isHost = window.isServer;
     },
     initialFailed({ reason, prompt }) {
       switch (reason) {

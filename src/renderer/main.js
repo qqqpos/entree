@@ -63,17 +63,11 @@ moment.updateLocale("en", {
   }
 });
 
-// const ip =
-//   require("ip").address()
-//     .split(".")
-//     .splice(0, 3)
-//     .join(".") + ".";
-
 const {
   ipcRenderer
 } = require("electron");
 
-new Promise((resolve, reject) => {
+new Promise((resolve) => {
   const args = require("electron").remote.process.argv.slice(1);
 
   if (process.env.NODE_ENV === "development") {
@@ -177,7 +171,6 @@ const connectPrinter = ip => {
       printScript.type = "text/javascript";
 
       printScript.onload = () => {
-        //console.log(CLODOP);
         CLODOP.On_Broadcast = (strMessage) => {
           strMessage.indexOf("PRINTER_CHANGED") !== -1 && connectPrinter(ip);
         };
