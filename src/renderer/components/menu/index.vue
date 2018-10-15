@@ -60,7 +60,14 @@ export default {
         const min = this.itemPage * 30;
         const max = min + 30;
 
-        return this.items.slice(min, max);
+        let items = this.items.slice(min, max);
+
+        if (items.length < 30)
+          Array(30 - items.length)
+            .fill()
+            .forEach(_ => items.push({ zhCN: "", usEN: "" }));
+
+        return items;
       }
       return this.items;
     },
@@ -153,7 +160,7 @@ export default {
       this.getItems(this.layouts.menu[0].contain);
       this.setSides(this.fillOption([]));
 
-      if (this.order.hasOwnProperty("seats")) {
+      if (Array.isArray(this.order.seats)) {
         this.seats = this.order.seats.map(name => name);
         this.seat = this.seats[0];
       }
@@ -253,12 +260,16 @@ export default {
         });
 
         let align =
-          index !== lastIndex ? 6 - items.length % 3 : 3 - items.length % 3;
+          index !== lastIndex ? 6 - (items.length % 3) : 3 - (items.length % 3);
 
         align =
           index !== lastIndex
-            ? align === 6 ? 3 : align
-            : align === 3 ? 0 : align;
+            ? align === 6
+              ? 3
+              : align
+            : align === 3
+              ? 0
+              : align;
 
         Array(align)
           .fill()
@@ -267,8 +278,8 @@ export default {
         menu.push(...items);
       });
 
-      while (33 - menu.length % 33 !== 33) {
-        const fill = 33 - menu.length % 33;
+      while (33 - (menu.length % 33) !== 33) {
+        const fill = 33 - (menu.length % 33);
 
         Array(fill)
           .fill()
@@ -327,7 +338,7 @@ export default {
             stop("typeRestricted");
           } else if (!days.includes(day)) {
             stop("dayRestricted");
-          } else if (holiday && momment().holiday()) {
+          } else if (holiday && moment().holiday()) {
             stop("holidayRestricted");
           } else {
             const time = moment(this.order.create);

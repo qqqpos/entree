@@ -86,10 +86,12 @@ export default {
 }
 
 h3 {
-  font-family: "Microsoft YaHei";
-  padding: 40px 0 30px;
+  padding: 44px 0 41px;
+  line-height: 1;
   font-size: 2em;
-  color: #666;
+  color: #3c3c3c;
+  text-shadow: 0 1px 1px #f5f5f5;
+  font-family: "Microsoft YaHei";
 }
 
 .options {
@@ -137,7 +139,7 @@ p {
   text-align: center;
 }
 
-.disabled{
+.disabled {
   opacity: 0.5;
   pointer-events: none;
 }

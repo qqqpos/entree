@@ -3,8 +3,8 @@
     <div class="dashboard-grid" v-if="station" :class="{enlarge:station.enlargeTitle}">
       <div class="card" v-for="(grid,index) in station.interface" @click="access(grid)" :class="{disable:!grid.enable}" :key="index">
         <i class="fa" :class="[grid.icon]"></i>
-        <h1>{{grid.head}}</h1>
-        <h4>{{grid.subhead}}</h4>
+        <h1 class="normal">{{grid.head}}</h1>
+        <h4 class="normal">{{grid.subhead}}</h4>
       </div>
     </div>
     <div class="clock">
@@ -171,7 +171,10 @@ export default {
     },
     askCashIn() {
       const amount = parseFloat(this.station.cashDrawer.initialAmount) || 0;
-      const prompt = { title: "dialog.confirm.initialCash", msg: "dialog.cashInTip" };
+      const prompt = {
+        title: "dialog.confirm.initialCash",
+        msg: "dialog.cashInTip"
+      };
 
       this.$dialog(prompt)
         .then(() => this.countInitialCash(amount))
@@ -281,7 +284,9 @@ export default {
 
           useTable
             ? this.$router.push({ path: "/main/table" })
-            : guestCount ? this.countGuestDialog() : this.createDineIn();
+            : guestCount
+              ? this.countGuestDialog()
+              : this.createDineIn();
           break;
         case "list":
           this.$router.push({ path: "/main/list" });
@@ -394,7 +399,10 @@ export default {
       this.$dialog(prompt).then(this.exitComponent);
     },
     askSelfCashIn() {
-      this.$dialog({ title: "dialog.confirm.initialStaffCash", msg: "dialog.selfCashInTip" })
+      this.$dialog({
+        title: "dialog.confirm.initialStaffCash",
+        msg: "dialog.selfCashInTip"
+      })
         .then(this.countSelfCash)
         .catch(this.exitComponent);
     },
@@ -539,12 +547,10 @@ export default {
 }
 
 h4 {
-  font-weight: normal;
   color: #757575;
 }
 
 h1 {
-  font-weight: normal;
   margin-top: 50px;
 }
 

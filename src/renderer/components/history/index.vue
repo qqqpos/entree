@@ -190,8 +190,11 @@ export default {
       invoice.split &&
         this.$socket.emit("[SPLIT] GET", invoice._id, splits => {
           this.page = 0;
-          this.splits = splits.sort((a, b) =>
-            String(a.number).localeCompare(String(b.number))
+          this.splits = splits.sort(
+            (a, b) =>
+              +a.number.replace(/\D/g, "") > +b.number.replace(/\D/g, "")
+                ? 1
+                : -1
           );
           this.resetViewOrder();
         });

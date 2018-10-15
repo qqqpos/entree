@@ -47,6 +47,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import splitSelector from "./component/splitSelector";
 import paymentModule from "../payment/main";
 import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
@@ -56,6 +57,7 @@ import staff from "./component/staffs";
 
 export default {
   components: {
+    splitSelector,
     dialogModule,
     unlockModule,
     paymentModule,
@@ -78,9 +80,23 @@ export default {
         .catch(this.editFailed);
     },
     edit() {
-      this.setApp({ newTicket: false });
-      this.setTicket({ type: "DINE_IN", number: this.order.number });
-      this.$router.push({ path: "/main/menu" });
+      if (this.order.split) {
+        this.$socket.emit("[SPLIT] GET", this.order._id, splits => {
+          this.$open("splitSelector", {
+            parent: clone(this.order),
+            splits: splits.sort(
+              (a, b) =>
+                +a.number.replace(/\D/g, "") > +b.number.replace(/\D/g, "")
+                  ? 1
+                  : -1
+            )
+          });
+        });
+      } else {
+        this.setApp({ newTicket: false });
+        this.setTicket({ type: "DINE_IN", number: this.order.number });
+        this.$router.push({ path: "/main/menu" });
+      }
     },
     checkStatus() {
       return new Promise((next, stop) => {

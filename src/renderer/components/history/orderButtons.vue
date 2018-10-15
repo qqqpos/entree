@@ -111,8 +111,8 @@ export default {
       if (amount > 1) {
         const prompt = {
           type: "question",
-          title: "dialog.evenSplit",
-          msg: ["dialog.evenSplitConfirm", amount],
+          title: "dialog.confirm.evenSplit",
+          msg: ["dialog.tip.evenSplitConfirm", amount],
           buttons: [
             { text: "button.cancel", fn: "reject" },
             { text: "button.confirm", fn: "resolve", load: true }

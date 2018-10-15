@@ -198,13 +198,11 @@ export default {
           });
       } else {
         const { _id, type, number, customer } = this.order;
-        const order = this.history.find(invoice => invoice._id === _id);
 
         this.setApp({ newTicket: false });
         this.setTicket({ type, number });
         this.setCustomer(customer);
-        this.setOrder(order);
-
+        
         this.$router.push({ path: "/main/menu" });
       }
     },

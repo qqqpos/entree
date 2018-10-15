@@ -1,5 +1,5 @@
 <template>
-    <div class="types">
+    <div class="row">
         <div v-for="(type,index) in types" :key="index">
             <input type="radio" v-model="method" name="type" :value="type" :id="type">
             <label :for="type">{{$t('type.'+ type)}}</label>            
@@ -37,16 +37,12 @@ export default {
 </script>
 
 <style scoped>
-.types {
-  display: flex;
-}
-
 label {
   display: block;
   width: 97px;
   margin: 0px 4px 4px 0;
   background: #fff;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #ccc;
   position: relative;
   text-align: center;
   line-height: 49px;

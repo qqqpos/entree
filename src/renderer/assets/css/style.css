@@ -429,6 +429,10 @@ input[type="text"]:disabled {
   flex-direction: row;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 /* Define window */
 
 dialog {

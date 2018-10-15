@@ -1516,7 +1516,7 @@ export default {
   display: flex;
   padding: initial;
   padding: 4px 0px 0px 4px;
-  background: url(../../assets/image/slid.jpg) #fcfcfc;
+  background: url(../../assets/image/fabric.png) #f6f6f6;
 }
 
 header .exit {

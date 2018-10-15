@@ -16,8 +16,8 @@
                         </li>
                         <template v-if="index === 0">
                           <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices" v-if="!target">
-                            <div class="text">{{$t('filter.server')}}</div>
                             <i class="fas fa-user-tie"></i>
+                            <div class="text">{{$t('filter.server')}}</div>
                             <transition name="slideFromLeft">
                               <ul v-if="showServer" class="server">
                                 <li v-for="(name,index) in servers" :key="index" @click.stop="filterByServer(name)">{{name}}</li>
@@ -25,12 +25,12 @@
                             </transition>
                           </li>
                           <li @click.stop="resetFilter" v-else>
-                            <div class="text">{{$t('filter.allServers')}}</div>
                             <i class="fas fa-users"></i>
+                            <div class="text">{{$t('filter.allServers')}}</div>
                           </li>
                           <li @click.stop="search">
-                            <div class="text">{{$t('text.searchTicket')}}</div>
                             <i class="fas fa-search"></i>
+                            <div class="text">{{$t('text.searchTicket')}}</div>
                           </li>
                           <li @click.stop="toggleDiscountTag" v-if="discountTag">
                             <div><span>{{$t('text.hide')}}</span></div>
@@ -78,9 +78,10 @@ export default {
   },
   computed: {
     ticketUnsettled() {
+      
       const unsettled = this.filters["UNSETTLED"]
         ? this.filters["UNSETTLED"].count !== 0
-        : true;
+        : false;
 
       return unsettled && this.authorized;
     },
@@ -510,6 +511,10 @@ li.extend:after {
   position: absolute;
   right: 10px;
   opacity: 0.5;
+}
+
+li i{
+  margin-bottom: 5px;
 }
 
 ul.server {

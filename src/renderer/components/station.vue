@@ -7,7 +7,7 @@
         <p class="intro">Thank you for choosing United POS.</p>
         <p class="intro">If you experiencing any difficult moment, please do not hesitate to contact us.</p>
         <input type="text" v-model="station.alias" maxlength="10" placeholder="Please Enter Station Name">
-        <p class="copyleft">2017-2018 United POS Inc.</p>
+        <p class="light">2017-2018 United POS Inc.</p>
       </div>
       <footer>
         <button class="btn" @click="confirm" :disabled="!station.alias">{{$t('button.done')}}</button>
@@ -48,7 +48,7 @@ export default {
     0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
 }
 .banner {
-  background: url("../assets/image/welcome.png");
+  background: url("../assets/image/welcome.jpg");
   background-size: cover;
   height: 150px;
   width: 550px;
@@ -78,9 +78,5 @@ footer {
   background: #fff;
   border-top: 1px solid #eee;
   text-align: right;
-}
-
-.copyleft {
-  color: rgba(0, 0, 0, 0.75);
 }
 </style>

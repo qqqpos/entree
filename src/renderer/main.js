@@ -1,10 +1,13 @@
 import Vue from "vue";
-import Net from "net";
 import moment from "moment";
 import VueTouch from "vue-touch";
 import Electron from "vue-electron";
 import VueSocketio from "vue-socket.io";
-import { Mask, OuterClick, Press } from "./plugin/directive"
+import {
+  Mask,
+  OuterClick,
+  Press
+} from "./plugin/directive"
 
 import AmCharts from 'amcharts3'
 import AmExport from "amcharts3/amcharts/plugins/export"
@@ -20,10 +23,10 @@ import router from "./router";
 import i18n from "./plugin/dict";
 import util from "./plugin/util";
 import VueBus from "./plugin/bus";
-import io from "socket.io-client";
 
-
-Vue.use(VueTouch, { name: "v-touch" });
+Vue.use(VueTouch, {
+  name: "v-touch"
+});
 Vue.use(Electron);
 Vue.use(VueBus);
 Vue.use(Trend);
@@ -39,7 +42,6 @@ Vue.config.debug = process.env.NODE_ENV !== 'production';
 
 window.moment = moment;
 window.ObjectId = require("bson-objectid");
-window.io = io;
 
 //change moment default text
 moment.updateLocale("en", {
@@ -61,13 +63,15 @@ moment.updateLocale("en", {
   }
 });
 
-const ip =
-  require("ip").address()
-    .split(".")
-    .splice(0, 3)
-    .join(".") + ".";
+// const ip =
+//   require("ip").address()
+//     .split(".")
+//     .splice(0, 3)
+//     .join(".") + ".";
 
-const { ipcRenderer } = require("electron");
+const {
+  ipcRenderer
+} = require("electron");
 
 new Promise((resolve, reject) => {
   const args = require("electron").remote.process.argv.slice(1);
@@ -81,21 +85,28 @@ new Promise((resolve, reject) => {
     resolve("127.0.0.1");
     return;
   }
-  let host = args.indexOf("host");
+
+  const host = args.indexOf("host");
 
   if (host !== -1) {
-    resolve(args[++host]);
+    resolve(args[host + 1]);
     return;
   }
 
   const client = require("dgram").createSocket("udp4");
   const secret = Buffer.from("Entree POS");
   client.bind(() => client.setBroadcast(true));
-  client.send(secret, 15666, '255.255.255.255', (error) => error && reject(error));
 
-  client.on('message', (msg, server) =>
-    msg.toString() === "Hello Entree POS" && resolve(server.address)
+  const retry = setInterval(
+    client.send(secret, 15666, '255.255.255.255'), 5000
   );
+
+  client.on('message', (msg, server) => {
+    if (msg.toString() === "Hello Entree POS") {
+      clearInterval(retry)
+      resolve(server.address)
+    }
+  });
 }).then(async (ip) => {
   ipcRenderer.send("Loading", `Connecting to server: ${ip}`);
   Vue.use(VueSocketio, `http://${ip}:8888`);
@@ -110,19 +121,19 @@ new Promise((resolve, reject) => {
   Vue.filter(
     "phone",
     number =>
-      number && number.length === 10
-        ? number.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "($1) $2-$3")
-        : number
+    number && number.length === 10 ?
+    number.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "($1) $2-$3") :
+    number
   );
   Vue.filter(
     "card",
     number =>
-      number
-        ? number.replace(
-          /^\D?(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})/,
-          "$1 $2 $3 $4"
-        )
-        : number
+    number ?
+    number.replace(
+      /^\D?(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})/,
+      "$1 $2 $3 $4"
+    ) :
+    number
   );
 
   Vue.filter("tel", phone => {
@@ -142,7 +153,9 @@ new Promise((resolve, reject) => {
   });
 
   new Vue({
-    components: { App },
+    components: {
+      App
+    },
     router,
     template: "<App/>"
   }).$mount("#app");
