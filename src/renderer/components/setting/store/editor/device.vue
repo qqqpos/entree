@@ -6,6 +6,7 @@
                   <h5>{{$t(init.edit ? 'title.edit': 'title.create')}}</h5>
                   <h3>{{$t('title.device')}}</h3>
                 </div>
+                <button class="mini-btn space-right remove" v-show="init.edit && authorized" @click="reboot">{{$t('terminal.restart')}}</button>
                 <button class="mini-btn" @click="search">{{$t('button.search')}}</button>
             </header>
             <div class="banner"></div>
@@ -17,14 +18,14 @@
                     <inputer title="text.port" v-model="device.port"></inputer>
                     <inputer title="text.model" v-model="device.model"></inputer>
                     <inputer title="text.S/N" v-model.trim="device.sn"></inputer>
-                    <selector title="text.printReceipt" v-model="device.print" :opts="opts"></selector>
+                    <selector title="button.receipt" v-model="device.print" :opts="opts"></selector>
                     <switches title="text.eSignature" v-model="device.eSignature" :disabled="device.model !== 'S300'"></switches>
                     <switches title="setting.tipSuggestion" v-model="device.tipSuggestion"></switches>
                 </div>
             </div>
             <footer>
                 <div class="opt">
-                    <span class="del" @click="init.reject(true)" v-show="init.edit && authorized">{{$t('button.delete')}}</span>
+                    <span class="del space-right" @click="init.reject(true)" v-show="init.edit && authorized">{{$t('button.delete')}}</span>
                 </div>
                 <button class="btn" @click="confirm" :disabled="invalid">{{$t('button.confirm')}}</button>
             </footer>
@@ -58,9 +59,10 @@ export default {
   },
   computed: {
     invalid() {
-      let names = this.init.devices
+      const names = this.init.devices
         .filter(d => d._id !== this.device._id)
         .map(d => d.alias);
+
       return !this.device.alias || names.includes(this.device.alias);
     }
   },
@@ -78,10 +80,13 @@ export default {
           this.exitComponent();
         })
         .catch(this.exitComponent);
+    },
+    reboot() {
+      const { ip, port, sn, model } = this.device;
+      const terminal = require("../../../payment/parser/pax.js").default();
+
+      terminal.initial(ip, port, sn).then(terminal.reboot());
     }
   }
 };
 </script>
-
-<style scoped>
-</style>

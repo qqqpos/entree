@@ -735,8 +735,7 @@ export default {
     cashPaymentNotAllow: "您无权进行现金支付",
     printHibachi: "打印铁板订单",
     printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?",
-    ticketOnHouse: "店家买单",
-
+    ticketOnHouse: "店家买单"
   },
   terminal: {
     initial: "正在初始化 {i}...",
@@ -760,6 +759,7 @@ export default {
     refundConfirm: "退款确认",
     refundMethod: "您确定要执行退款操作吗? 退款金额 $ {i}",
     networkError: "网络发生错误! 信息: {i}",
+    restart: "重启",
     creditCard: {
       timeout: "交易超时",
       aborted: "交易被取消",
@@ -1808,7 +1808,7 @@ export default {
   setting: {
     softwareSetting: "后台设置",
     store: "店面",
-    storeTip: "资料 · 税率 · 工作站 · 促销",
+    storeTip: "资料 · 税率 · 积分",
     station: "工作站",
     stationTip: "硬件设置",
     menu: "菜单",

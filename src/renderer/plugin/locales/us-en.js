@@ -828,6 +828,7 @@ export default {
     refundConfirm: "Refund Confirm",
     refundMethod: "Are you sure to refund this transaction? Refund total: ${i}",
     networkError: "Network Error! Error Message: {i}",
+    restart: "Restart",
     creditCard: {
       timeout: "Transaction Timeout",
       aborted: "Transaction Aborted",
@@ -1815,7 +1816,7 @@ export default {
   setting: {
     softwareSetting: "POS Setting",
     store: "Store",
-    storeTip: "Info · Payment · Promotion",
+    storeTip: "Info · Payment · Reward",
     station: "Station",
     stationTip: "Device Setting",
     menu: "Menu",

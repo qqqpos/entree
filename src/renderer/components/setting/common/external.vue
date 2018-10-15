@@ -60,11 +60,12 @@ export default {
 }
 
 .tooltip {
-  color: #9e9e9e;
   flex: 1;
+  color: #9e9e9e;
   text-align: right;
   line-height: 1;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: "Hiragino Sans GB", "PingFang SC", "Yuanti-SC";
 }
 
 .value {

@@ -5,7 +5,7 @@
       <span class="tooltip">{{$t(tooltip)}}</span>
     </header>
     <div class="wrap">
-      <div class="select" v-for="(option,index) in opts" :key="index">
+      <div class="row" v-for="(option,index) in opts" :key="index">
         <input type="radio" name="id" :id="id+index" :checked="option.value === value" :value="option.value" @change="$emit('input',$event.target.value),$emit('update',$event.target.value)">
         <label :for="id+index">
           <span class="label">{{$t(option.label)}}</span>
@@ -38,10 +38,6 @@ export default {
 </script>
 
 <style scoped>
-.select {
-  display: flex;
-}
-
 header {
   display: flex;
   flex-direction: column;
@@ -57,6 +53,7 @@ header {
 }
 
 .tooltip {
+  font-family: "Hiragino Sans GB", "PingFang SC", "Yuanti-SC";
   color: rgba(0, 0, 0, 0.5);
 }
 

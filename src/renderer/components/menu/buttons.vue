@@ -1,149 +1,50 @@
 <template>
   <div class="function" v-if="isDineInTicket">
     <div class="top">
-      <div class="btn" @click="less">
-        <i class="fa fa-minus-square"></i>
-        <span class="text">{{$t('button.less')}}</span>
-      </div>
-      <div class="btn" @click="more">
-        <i class="fa fa-plus-square"></i>
-        <span class="text">{{$t('button.more')}}</span>
-      </div>
-      <div class="btn" @click="$emit('open', 'request')">
-        <i class="fas fa-comment-dots"></i>
-        <span class="text">{{$t('button.request')}}</span>
-      </div>
+      <fn icon="fa-minus-square" text="button.less" @click="less"></fn>
+      <fn icon="fa-plus-square" text="button.more" @click="more"></fn>
+      <fn icon="fa-comment-dots" text="button.request" @click="$emit('open', 'request')"></fn>
     </div>
     <div class="bottomLeft">
-      <div class="btn" @click="switchGuest" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'">
-        <i class="fa fa-users"></i>
-        <span class="text">{{$t('button.switch')}}</span>
-      </div>
-      <button class="btn" @click="openSplit" :disabled="order.hasOwnProperty('parent')" v-else>
-        <i class="fa fa-columns"></i>
-        <span class="text">{{$t('button.split')}}</span>
-      </button>
-      <div class="btn" @click="courseTime">
-        <i class="fas fa-user-clock"></i>
-        <span class="text">{{$t('button.timer')}}</span>
-      </div>
-      <div class="btn" @click="promotion">
-        <i class="fa fa-tags"></i>
-        <span class="text">{{$t('button.coupon')}}</span>
-      </div>
-      <button class="btn" @click="done(false)">
-        <i class="fas fa-pause"></i>
-        <span class="text">{{$t('button.hold')}}</span>
-      </button>
-      <button class="btn" @click="modify">
-        <i class="fa fa-calculator"></i>
-        <span class="text">{{$t('button.modify')}}</span>
-      </button>
-      <div class="btn" @click="dineInQuit">
-        <i class="fa fa-times"></i>
-        <span class="text">{{$t('button.exit')}}</span>
-      </div>
+      <fn icon="fa-users" text="button.switch" @click="switchGuest" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'"></fn>
+      <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')" v-else></fn>
+      <fn icon="fa-user-clock" text="button.timer" @click="courseTime"></fn>
+      <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
+      <fn icon="fa-pause" text="button.hold" @click="done(false)"></fn>
+      <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
+      <fn icon="fa-times" text="button.exit" @click="dineInQuit"></fn>
     </div>
     <div class="bottomRight">
-      <button class="btn long" @click="done(true)">
-        <i class="fa fa-print"></i>
-        <span class="text">{{$t('button.done')}}</span>
-      </button>
-      <div class="btn" @click="switchLanguage">
-        <i class="fa fa-language"></i>
-        <span class="text">{{$t('button.language')}}</span>
-      </div>
+      <fn class="long" icon="fa-print" text="button.print" @click="done(true)"></fn>
+      <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>
     </div>
     <div :is="component" :init="componentData"></div>
   </div>
   <div class="grid" v-else-if="layout === 'BUFFET'">
-    <div class="btn" @click="less">
-      <i class="fa fa-minus-square"></i>
-      <span class="text">{{$t('button.less')}}</span>
-    </div>
-    <div class="btn" @click="more">
-      <i class="fa fa-plus-square"></i>
-      <span class="text">{{$t('button.more')}}</span>
-    </div>
-    <button class="btn" @click="modify">
-      <i class="fa fa-calculator"></i>
-      <span class="text">{{$t('button.modify')}}</span>
-    </button>
-    <button class="btn settle" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
-      <i class="fas fa-hand-holding-usd"></i>
-      <span class="text">{{$t('button.payment')}}</span>
-    </button>
-    <div class="btn" @click="done(false)">
-      <i class="fa fa-save"></i>
-      <span class="text">{{$t('button.save')}}</span>
-    </div>
-    <button class="btn split" @click="openSplit" :disabled="order.hasOwnProperty('parent')">
-      <i class="fa fa-copy"></i>
-      <span class="text">{{$t('button.split')}}</span>
-    </button>
-    <div class="btn" @click="promotion">
-      <i class="fa fa-tags"></i>
-      <span class="text">{{$t('button.coupon')}}</span>
-    </div>
-    <div class="btn" @click="quit">
-      <i class="fa fa-times"></i>
-      <span class="text">{{$t('button.exit')}}</span>
-    </div>
-    <div class="btn" @click="switchLanguage">
-      <i class="fa fa-language"></i>
-      <span class="text">{{$t('button.language')}}</span>
-    </div>
+    <fn icon="fa-minus-square" text="button.less" @click="less"></fn>
+    <fn icon="fa-plus-square" text="button.more" @click="more"></fn>
+    <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
+    <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
+    <fn icon="fa-save" @click="done(false)" text="button.save"></fn>
+    <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')"></fn>
+    <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
+    <fn icon="fa-times" text="button.exit" @click="quit"></fn>
+    <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>
     <div :is="component" :init="componentData"></div>
   </div>
   <div class="function" v-else>
-    <div class="btn" @click="less">
-      <i class="fa fa-minus-square"></i>
-      <span class="text">{{$t('button.less')}}</span>
-    </div>
-    <div class="btn" @click="more">
-      <i class="fa fa-plus-square"></i>
-      <span class="text">{{$t('button.more')}}</span>
-    </div>
-    <div class="btn" @click="$emit('open', 'request')">
-      <i class="fas fa-comment-dots"></i>
-      <span class="text">{{$t('button.request')}}</span>
-    </div>
-    <div class="btn" @click="promotion">
-      <i class="fa fa-tags"></i>
-      <span class="text">{{$t("button.coupon")}}</span>
-    </div>
-    <div class="btn" @click="openTimer">
-      <i class="fas fa-user-clock"></i>
-      <span class="text">{{$t('button.timer')}}</span>
-    </div>
-    <button class="btn" @click="done(true)">
-      <i class="fa fa-print"></i>
-      <span class="text">{{$t('button.print')}}</span>
-    </button>
-    <button class="btn" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket">
-      <i class="fas fa-hand-holding-usd"></i>
-      <span class="text">{{$t('button.payment')}}</span>
-    </button>
-    <button class="btn" @click="openSplit" :disabled="order.hasOwnProperty('parent')">
-      <i class="fa fa-copy"></i>
-      <span class="text">{{$t("button.split")}}</span>
-    </button>
-    <button class="btn" @click="done(false)">
-      <i class="fa fa-save"></i>
-      <span class="text">{{$t("button.save")}}</span>
-    </button>
-    <button class="btn" @click="modify">
-      <i class="fa fa-calculator"></i>
-      <span class="text">{{$t("button.modify")}}</span>
-    </button>
-    <div class="btn" @click="quit">
-      <i class="fa fa-times"></i>
-      <span class="text">{{$t("button.exit")}}</span>
-    </div>
-    <div class="btn" @click="switchLanguage">
-      <i class="fa fa-language"></i>
-      <span class="text">{{$t("button.language")}}</span>
-    </div>
+    <fn icon="fa-minus-square" text="button.less" @click="less"></fn>
+    <fn icon="fa-plus-square" text="button.more" @click="more"></fn>
+    <fn icon="fa-comment-dots" text="button.request" @click="$emit('open','request')"></fn>
+    <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
+    <fn icon="fa-user-clock" text="button.timer" @click="openTimer"></fn>
+    <fn icon="fa-print" text="button.print" @click="done(true)"></fn>
+    <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
+    <fn icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')"></fn>
+    <fn icon="fa-save" @click="done(false)" text="button.save"></fn>
+    <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
+    <fn icon="fa-times" text="button.exit" @click="quit"></fn>
+    <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>
@@ -159,6 +60,7 @@ import coupon from "./component/coupon";
 import course from "./component/course";
 import timer from "./component/timer";
 import payment from "../payment/main";
+import fn from "./helper/fn";
 
 export default {
   props: ["layout"],
@@ -170,7 +72,8 @@ export default {
     payment,
     coupon,
     timer,
-    course
+    course,
+    fn
   },
   data() {
     return {
@@ -207,7 +110,7 @@ export default {
       }
     },
     more() {
-      let focus = document.querySelector(".item.active");
+      const focus = document.querySelector(".item.active");
       let subItemCount = Array.isArray(this.item.choiceSet)
         ? this.item.choiceSet
             .filter(item => item.subItem)
@@ -216,8 +119,9 @@ export default {
         : 0;
 
       if (!focus && this.item.hasOwnProperty("rules")) {
-        let max = this.item.rules.maxSubItem || Infinity;
-        let overCharge = this.item.rules.overCharge || 0;
+        const max = this.item.rules.maxSubItem || Infinity;
+        const overCharge = this.item.rules.overCharge || 0;
+
         if (subItemCount >= max && overCharge === 0) {
           const prompt = {
             title: "dialog.unableAdd",
