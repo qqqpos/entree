@@ -67,7 +67,6 @@ ul.tabs li {
   cursor: pointer;
   text-align: center;
   border-bottom: 2px solid transparent;
-  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
 }
 
 li.tab.disable {
@@ -155,7 +154,6 @@ td.decimal {
 }
 
 label .tooltip {
-  font-family: "Hiragino Sans GB", "PingFang SC", "Yuanti-SC";
   color: rgba(0, 0, 0, 0.5);
 }
 

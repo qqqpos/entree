@@ -1,12 +1,12 @@
 <template>
-    <div class="popupMask dark center setting">
+    <div class="popupMask dark center setting" @click.self="exit">
         <div class="editor">
             <header>
                 <div class="f1">
                     <h5>{{$t('title.create')}}</h5>
                     <h3>{{$t('inventory.order')}}</h3>
                 </div>
-                <button class="remove" @click="init.reject(false)">{{$t('button.cancel')}}</button>
+                <button class="remove" @click="init.reject(false)" v-show="inventory.items.length">{{$t('button.cancel')}}</button>
             </header>
             <div class="banner"></div>
             <div class="wrap">
@@ -55,8 +55,8 @@
                                 </tr>
                                 <tr v-for="(item,index) in inventory.items" :key="index" class="text-center">
                                     <td>{{item.description}}</td>
-                                    <td>{{item.stock}}</td>
-                                    <td>{{item.cost}}</td>
+                                    <td><input v-model="item.stock"></td>
+                                    <td><input v-model="item.cost"></td>
                                 </tr>
                             </table>
                         </template>
@@ -82,8 +82,8 @@
                 </section>
             </div>
             <footer>
-                <button class="btn" @click="openScanDialog">{{$t('button.scan')}}</button>
-                <button class="btn">{{$t('button.done')}}</button>
+                <button class="btn" @click="scanItem">{{$t('button.scan')}}</button>
+                <button class="btn" :disabled="inventory.items.length === 0">{{$t('button.done')}}</button>
             </footer>
         </div>
         <div :is="component" :init="componentData"></div>
@@ -109,21 +109,55 @@ export default {
     };
   },
   methods: {
-    openScanDialog() {
-      new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject };
-        this.component = "scanner";
-      })
-        .then(upc => this.getProduct(upc))
-        .catch(this.exitComponent);
+    getBarcode() {
+      return this.$promise("scanner");
     },
     getProduct(upc) {
-      this.$socket.emit("[INVENTORY] SEARCH_PRODUCT", upc, item => {
-        this.exitComponent();
-        this.stockIn(item);
+      return new Promise(resolve => {
+        this.$socket.emit("[INVENTORY] SEARCH_PRODUCT", upc, item => {
+          if (item) delete item._id;
+
+          const product = Object.assign(
+            {
+              upc,
+              description: "",
+              unit: "",
+              size: "",
+              stock: 0,
+              sold: 0,
+              cost: "0.00",
+              msrp: "0.00",
+              weight: "",
+              category: "",
+              brand: ""
+            },
+            item,
+            {
+              stock: 1,
+              sold: 0
+            }
+          );
+
+          resolve(product);
+        });
       });
     },
-    stockIn(item) {}
+    replenishment() {},
+    async scanItem() {
+      try {
+        const upc = await this.getBarcode();
+        const product = await this.getProduct(upc);
+        const item = await this.replenishment(product);
+
+        this.inventory.items.push(product);
+        this.exitComponent();
+      } catch (e) {
+        this.exitComponent();
+      }
+    },
+    exit() {
+      this.inventory.items.length === 0 && this.init.reject(false);
+    }
   }
 };
 </script>
@@ -148,6 +182,14 @@ input {
   background: #fff;
   margin: 10px 2px;
   border-radius: 4px;
+}
+
+td input {
+  width: 50px;
+  text-align: center;
+  border: none;
+  background: #f6f6f6;
+  margin: 2px 0;
 }
 </style>
 

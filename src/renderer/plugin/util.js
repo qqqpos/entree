@@ -1,4 +1,6 @@
-import { configureRequestOptions } from "builder-util-runtime";
+import {
+  configureRequestOptions
+} from "builder-util-runtime";
 
 export default {
   install(Vue, options) {
@@ -16,9 +18,9 @@ export default {
 
       try {
         approve =
-          this.op.role === "Developer" || this.op.role === "Owner"
-            ? true
-            : credential.includes(permit);
+          this.op.role === "Developer" || this.op.role === "Owner" ?
+          true :
+          credential.includes(permit);
       } catch (error) {
         this.$log(`[${this.op.name}] does not have ${permit} setting. \nTo fix this issue, please add ${permit}:[] to profile.`);
       }
@@ -31,43 +33,63 @@ export default {
 
     Vue.prototype.$open = function (component, args) {
       return new Promise((resolve, reject) => {
-        this.componentData = Object.assign({}, { resolve, reject }, args);
-        this.component = component;
-      })
+          this.componentData = Object.assign({}, {
+            resolve,
+            reject
+          }, args);
+          this.component = component;
+        })
         .then(this.exitComponent)
         .catch(this.exitComponent);
     };
+
+    Vue.prototype.$promise = function (component, args) {
+      return new Promise((resolve, reject) => {
+        this.componentData = Object.assign({}, {
+          resolve,
+          reject
+        }, args);
+        this.component = component;
+      })
+    }
 
     Vue.prototype.$dialog = function (args) {
       return new Promise((resolve, reject) => {
         this.componentData = {
           type: args.type || "alert",
-          html:args.html,
-          content:args.content,
+          html: args.html,
+          content: args.content,
           title: args.title,
           msg: args.msg,
-          timeout: args.hasOwnProperty("timeout")
-            ? {
+          timeout: args.hasOwnProperty("timeout") ?
+            {
               duration: args.timeout.duration || 15000,
               fn: args.timeout.fn === "resolve" ? resolve : reject
-            }
-            : null,
+            } :
+            null,
           buttons: [],
           resolve,
           reject
         };
-        args.hasOwnProperty("buttons")
-          ? args.buttons.forEach(button => {
+        args.hasOwnProperty("buttons") ?
+          args.buttons.forEach(button => {
             const fn = button.fn === "resolve" ? resolve : button.fn === "reject" ? reject : button.fn;
             this.componentData.buttons.push({
               fn,
               text: button.text,
               load: button.load
             });
-          })
-          : (this.componentData.buttons = [
-            { text: "button.cancel", fn: reject, load: false },
-            { text: "button.confirm", fn: resolve, load: false }
+          }) :
+          (this.componentData.buttons = [{
+              text: "button.cancel",
+              fn: reject,
+              load: false
+            },
+            {
+              text: "button.confirm",
+              fn: resolve,
+              load: false
+            }
           ]);
         this.component = "dialogModule";
       });
@@ -76,13 +98,17 @@ export default {
     Vue.prototype.$checkPermission = function (credential, permit) {
       let approve = false;
 
-      const { name, role, restrict } = this.op;
+      const {
+        name,
+        role,
+        restrict
+      } = this.op;
       const permission = this.op[credential];
 
       approve =
-        role === "Developer" || role === "Owner"
-          ? true
-          : permission.includes(permit);
+        role === "Developer" || role === "Owner" ?
+        true :
+        permission.includes(permit);
 
       return new Promise((authorized, unauthorized) => {
         if (approve) {
@@ -92,17 +118,21 @@ export default {
           unauthorized();
         } else {
           new Promise((resolve, reject) => {
-            this.componentData = { resolve, reject, grant: true };
-            this.component = "unlockModule";
-          })
+              this.componentData = {
+                resolve,
+                reject,
+                grant: true
+              };
+              this.component = "unlockModule";
+            })
             .then(operator => {
               let approved = false;
               const permissions = operator[credential];
 
               approved =
-                operator.role === "Developer" || operator.role === "Owner"
-                  ? true
-                  : permissions.includes(permit);
+                operator.role === "Developer" || operator.role === "Owner" ?
+                true :
+                permissions.includes(permit);
 
               if (approved) {
                 this.$log(`[${name}] has inherited [${permit}] permission from ${operator.name}`);
@@ -127,8 +157,14 @@ export default {
         type: "warning",
         title: "dialog.permissionDenied",
         msg: "dialog.permissionDeniedContactManager",
-        timeout: { duration: 10000, fn: "reject" },
-        buttons: [{ text: "button.confirm", fn: "reject" }]
+        timeout: {
+          duration: 10000,
+          fn: "reject"
+        },
+        buttons: [{
+          text: "button.confirm",
+          fn: "reject"
+        }]
       };
 
       this.$dialog(prompt).catch(this.exitComponent);
@@ -146,20 +182,21 @@ export default {
       distance,
       direction,
       coordinate,
-      zipCode }) => ({
-        _id,
-        phone,
-        extension,
-        address,
-        city,
-        name,
-        note,
-        duration,
-        distance,
-        direction,
-        coordinate,
-        zipCode
-      });
+      zipCode
+    }) => ({
+      _id,
+      phone,
+      extension,
+      address,
+      city,
+      name,
+      note,
+      duration,
+      distance,
+      direction,
+      coordinate,
+      zipCode
+    });
 
     // Vue.prototype.syncChange = function (object, onChange) {
     //     const handler = {
@@ -185,7 +222,12 @@ export default {
     Vue.prototype.$calculatePayment = function (order, params = {}) {
       // private methods
       const getDeliveryCharge = () => {
-        const { charge, baseFee, surcharge, rules } = this.store.deliver;
+        const {
+          charge,
+          baseFee,
+          surcharge,
+          rules
+        } = this.store.deliver;
         let delivery = charge ? parseFloat(baseFee) : 0;
 
         if (surcharge) {
@@ -207,7 +249,7 @@ export default {
 
       const {
         selfAssign = true,
-        callback = false
+          callback = false
       } = params;
 
       const {
@@ -220,11 +262,17 @@ export default {
         plasticBag = 1
       } = order;
 
-      const { surcharge: dinInSurcharge = {} } = this.dineInOpt;
-      const { enable = false, rules } = dinInSurcharge;
+      const {
+        surcharge: dinInSurcharge = {}
+      } = this.dineInOpt;
+      const {
+        enable = false, rules
+      } = dinInSurcharge;
 
       let delivery = type === 'DELIVERY' && !deliveryFree ? getDeliveryCharge() : 0;
-      let { tip = 0, gratuity = 0, paid = 0 } = order.payment;
+      let {
+        tip = 0, gratuity = 0, paid = 0
+      } = order.payment;
       let discount = 0;
       let subtotal = 0;
       let tax = 0;
@@ -274,9 +322,9 @@ export default {
       let plasticTax = 0;
       if (this.tax.plasticPenalty) {
         //calculate plastic bag penalty
-        const fine = isNumber(this.tax.plasticCharge)
-          ? parseFloat(this.tax.plasticCharge)
-          : 0.5;
+        const fine = isNumber(this.tax.plasticCharge) ?
+          parseFloat(this.tax.plasticCharge) :
+          0.5;
 
         plasticTax = toFixed(plasticBag * fine, 2);
       }
@@ -285,11 +333,14 @@ export default {
         if (enable) {
           //find rule
           try {
-            const { fee, percentage } = rules
+            const {
+              fee,
+              percentage
+            } = rules
               .sort((a, b) => a.guest < b.guest)
               .find(r => guest >= r.guest);
             gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
-          } catch (e) { }
+          } catch (e) {}
         }
 
         if (order.hasOwnProperty("gratuityPercentage")) {
@@ -304,7 +355,9 @@ export default {
       if (coupons && coupons.length > 0) {
         let offer = 0;
         coupons.forEach(coupon => {
-          const { reference } = coupon;
+          const {
+            reference
+          } = coupon;
 
           switch (coupon.type) {
             // 'rebate':        '满减券',
@@ -364,7 +417,9 @@ export default {
       // The order will have reward params
       if (order.hasOwnProperty('reward')) {
         // calculate current earn reward point
-        const { reward } = this.store;
+        const {
+          reward
+        } = this.store;
         let point = 0;
 
         switch (reward.unit) {
@@ -375,14 +430,14 @@ export default {
             point = reward.beforeTax ? parseInt(subtotal) : parseInt(balance);
             break;
           case "CUSTOM":
-            point = reward.beforeTax
-              ? toFixed(subtotal / reward.custom * reward.toPoint, 0)
-              : toFixed(balance / reward.custom * reward.toPoint, 0);
+            point = reward.beforeTax ?
+              toFixed(subtotal / reward.custom * reward.toPoint, 0) :
+              toFixed(balance / reward.custom * reward.toPoint, 0);
             break;
           case "PERCENTAGE":
-            point = reward.beforeTax
-              ? toFixed(subtotal * reward.percentage / 100 * reward.toPoint, 0)
-              : toFixed(balance * reward.percentage / 100 * reward.toPoint, 0);
+            point = reward.beforeTax ?
+              toFixed(subtotal * reward.percentage / 100 * reward.toPoint, 0) :
+              toFixed(balance * reward.percentage / 100 * reward.toPoint, 0);
             break;
           default:
             point = reward.beforeTax ? toFixed(subtotal * 100, 0) : toFixed(balance * 100, 0);
@@ -406,7 +461,9 @@ export default {
         remain,
       }
 
-      selfAssign && Object.assign(order, { payment });
+      selfAssign && Object.assign(order, {
+        payment
+      });
       if (callback) return payment;
     };
 
@@ -429,9 +486,9 @@ export default {
         case "auto":
           if (value % 5 < 3) {
             rounding =
-              value % 5 === 0
-                ? 0
-                : -toFixed((value - Math.floor(value / 5) * 5) / 100, 2);
+              value % 5 === 0 ?
+              0 :
+              -toFixed((value - Math.floor(value / 5) * 5) / 100, 2);
           } else {
             rounding = toFixed((Math.ceil(value / 5) * 5 - value) / 100, 2);
           }
@@ -444,19 +501,21 @@ export default {
     };
 
     Vue.prototype.$calculateRewardPoint = function (value, reverse) {
-      const { reward = {
-        perPoint: 1,
-        asValue: 0
-      } } = this.store || this.$store.getters.store;
+      const {
+        reward = {
+          perPoint: 1,
+          asValue: 0
+        }
+      } = this.store || this.$store.getters.store;
 
       if (!reward) return 0;
 
       const each =
         isNumber(reward.perPoint) && reward.perPoint > 0 ? reward.perPoint : 1;
 
-      return reverse
-        ? Math.trunc(value / reward.asValue * reward.perPoint)
-        : Math.trunc(value / each * reward.asValue * 100) / 100;
+      return reverse ?
+        Math.trunc(value / reward.asValue * reward.perPoint) :
+        Math.trunc(value / each * reward.asValue * 100) / 100;
     }
 
     Vue.prototype.$splitEvenly = function (target) {
@@ -466,7 +525,10 @@ export default {
           type: "error",
           title: "dialog.cantExecute",
           msg: "dialog.exceedAllowLimit",
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
+          buttons: [{
+            text: "button.confirm",
+            fn: "resolve"
+          }]
         };
 
         this.$dialog(prompt).then(this.exitComponent);
@@ -510,15 +572,24 @@ export default {
           const _id = ObjectId().toString();
           const number = ticketNumber + "-" + i;
 
-          splits.push(Object.assign({}, child, { _id, number, payment }));
+          splits.push(Object.assign({}, child, {
+            _id,
+            number,
+            payment
+          }));
         }
 
-        this.$socket.emit("[SPLIT] SAVE", { splits, parent }, () => {
+        this.$socket.emit("[SPLIT] SAVE", {
+          splits,
+          parent
+        }, () => {
           //recalculate parent ticket
           console.time("split time")
           let payments = {};
 
-          splits.forEach(({ payment }) => {
+          splits.forEach(({
+            payment
+          }) => {
             Object.keys(payment).forEach(key => {
               if (payments[key]) {
                 payments[key] += payment[key];
@@ -624,9 +695,9 @@ export default {
         for (let i = 0; i < length; i++) {
           let value = array[i];
 
-          Array.isArray(value)
-            ? util.flatten(value, result)
-            : result.push(value);
+          Array.isArray(value) ?
+            util.flatten(value, result) :
+            result.push(value);
         }
         return result;
       },
@@ -636,7 +707,13 @@ export default {
 
         return match ? match[0] : false;
       },
-      ease({ start = 1, end = 0, duration = 300, progress, done }) {
+      ease({
+        start = 1,
+        end = 0,
+        duration = 300,
+        progress,
+        done
+      }) {
         const reverse = start < end;
         const count = duration / 16;
         const stepSize = Math.abs(start - end) / count;
@@ -657,8 +734,18 @@ export default {
         step();
       },
       isCollide(x, y, tolerate = 1) {
-        const { top: xTop, left: xLeft, height: xHeight, width: xWidth } = x.getBoundingClientRect();
-        const { top: yTop, left: yLeft, height: yHeight, width: yWidth } = y.getBoundingClientRect();
+        const {
+          top: xTop,
+          left: xLeft,
+          height: xHeight,
+          width: xWidth
+        } = x.getBoundingClientRect();
+        const {
+          top: yTop,
+          left: yLeft,
+          height: yHeight,
+          width: yWidth
+        } = y.getBoundingClientRect();
 
         return !(
           xTop + xHeight < (yTop / tolerate) ||
@@ -669,7 +756,7 @@ export default {
       },
       isHoliday(date) {
         const holidays = {
-          'M': {//Month, Day
+          'M': { //Month, Day
             '01/01': "New Year's Day",
             '02/14': "Valentine's Day",
             '04/01': "April Fool's Day",
@@ -680,7 +767,7 @@ export default {
             '12/25': "Christmas Day",
             '12/31': "New Year's Eve"
           },
-          'W': {//Month, Week of Month, Day of Week
+          'W': { //Month, Week of Month, Day of Week
             '1/3/1': "Martin Luther King Jr. Day",
             '2/3/1': "Washington's Birthday",
             '5/5/1': "Memorial Day",
@@ -723,9 +810,9 @@ export default {
           return (" ".repeat(i) + data + " ".repeat(i + 10)).slice(0, 20);
         } else {
           const string = data[0];
-          const amount = isNumber(data[1])
-            ? data[1] > 0 ? "$ " + data[1] : "-$ " + data[1]
-            : data[1];
+          const amount = isNumber(data[1]) ?
+            data[1] > 0 ? "$ " + data[1] : "-$ " + data[1] :
+            data[1];
 
           let i = 20 - (string + amount).length;
           i < 0 && (i = 0);
@@ -737,9 +824,9 @@ export default {
     window.toggleClass = function (target, className) {
       let dom =
         target instanceof HTMLElement ? target : document.querySelector(target);
-      dom.className.includes(className)
-        ? dom.classList.remove(className)
-        : dom.classList.add(className);
+      dom.className.includes(className) ?
+        dom.classList.remove(className) :
+        dom.classList.add(className);
     };
   }
 };

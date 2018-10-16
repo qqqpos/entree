@@ -15,7 +15,8 @@
       <fn icon="fa-times" text="button.exit" @click="dineInQuit"></fn>
     </div>
     <div class="bottomRight">
-      <fn class="long" icon="fa-print" text="button.print" @click="done(true)"></fn>
+      <fn :class="{long:dineInOpt.useTable}" icon="fa-print" text="button.print" @click="done(true)"></fn>
+      <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket" v-if="!dineInOpt.useTable"></fn>
       <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>
     </div>
     <div :is="component" :init="componentData"></div>
@@ -24,7 +25,7 @@
     <fn icon="fa-minus-square" text="button.less" @click="less"></fn>
     <fn icon="fa-plus-square" text="button.more" @click="more"></fn>
     <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
-    <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
+    <fn class="settle" icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
     <fn icon="fa-save" @click="done(false)" text="button.save"></fn>
     <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')"></fn>
     <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
@@ -204,8 +205,8 @@ export default {
     saveConfirmDialog() {
       return new Promise((next, stop) => {
         const prompt = {
-          title: "dialog.saveConfirm",
-          msg: "dialog.unprintItemWarning"
+          title: "dialog.confirm.save",
+          msg: "dialog.tip.unprintItemWarning"
         };
 
         this.$dialog(prompt)
@@ -219,8 +220,8 @@ export default {
       return new Promise((next, stop) => {
         if (defaults.saveConfirm && !print) {
           const prompt = {
-            title: "dialog.saveConfirm",
-            msg: "dialog.unprintItemWarning"
+            title: "dialog.confirm.save",
+            msg: "dialog.tip.unprintItemWarning"
           };
 
           this.$dialog(prompt)

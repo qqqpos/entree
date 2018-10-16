@@ -53,7 +53,6 @@ header {
 }
 
 .tooltip {
-  font-family: "Hiragino Sans GB", "PingFang SC", "Yuanti-SC";
   color: rgba(0, 0, 0, 0.5);
 }
 

@@ -2,17 +2,17 @@
     <div class="column">
         <nav class="row flex-center">
             <h3 class="f1 normal">{{$t('inventory.productList')}}</h3>
-            <button class="mini-btn" @click="addProduct"><i class="fa fa-plus space light"></i>{{$t('button.new')}}</button>
+            <button class="mini-btn" @click="registerItem"><i class="fa fa-plus space light"></i>{{$t('button.new')}}</button>
         </nav>
         <table>
             <thead>
                 <tr>
-                    <th>Brand</th>
-                    <th class="clickable">Item <i class="fa fa-sort ghost"></i></th>
-                    <th>Category</th>
-                    <th>Size</th>
-                    <th class="clickable">Stock <i class="fa fa-sort ghost"></i></th>
-                    <th>Value</th>
+                    <th>{{$t('inventory.brand')}}</th>
+                    <th class="clickable">{{$t('inventory.item')}} <i class="fa fa-sort ghost"></i></th>
+                    <th>{{$t('inventory.category')}}</th>
+                    <th>{{$t('inventory.size')}}</th>
+                    <th class="clickable">{{$t('inventory.stock')}} <i class="fa fa-sort ghost"></i></th>
+                    <th>{{$t('inventory.value')}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,11 +29,16 @@
 
             </tfoot>
         </table>
+        <div :is="component" :init="componentData"></div>
     </div>
 </template>
 
 <script>
+import scan from "./helper/scan";
+import register from "../editor/product";
+
 export default {
+  components: { scan, register },
   beforeRouteEnter: (from, to, next) => {
     appSocket.emit("[INVENTORY] PRODUCT_LIST", items =>
       next(vm => {
@@ -43,11 +48,70 @@ export default {
   },
   data() {
     return {
+      componentData: null,
+      component: null,
       items: []
     };
   },
   methods: {
-    addProduct() {}
+    scanItem() {
+      return this.$promise("scan");
+    },
+    searchProduct(upc) {
+      return new Promise(resolve => {
+        this.$socket.emit("[INVENTORY] SEARCH_PRODUCT", upc, item => {
+          if (item) delete item._id;
+
+          resolve(
+            Object.assign(
+              {
+                upc,
+                description: "",
+                unit: "",
+                size: "",
+                stock: 0,
+                sold: 0,
+                cost: "0.00",
+                msrp: "0.00",
+                weight: "",
+                category: "",
+                brand: ""
+              },
+              item,
+              {
+                stock: 0,
+                sold: 0
+              }
+            )
+          );
+        });
+      });
+    },
+    dialog(product) {
+      return this.$promise("register", { product });
+    },
+    async registerItem() {
+      try {
+        const upc = await this.scanItem();
+        const product = await this.searchProduct(upc);
+        const detail = await this.dialog(product);
+        
+        this.$socket.emit(
+          "[INVENTORY] REGISTER_PRODUCT",
+          detail,
+          this.refreshData
+        );
+      } catch (e) {
+        console.log(e);
+        this.exitComponent();
+      }
+    },
+    refreshData() {
+      this.$socket.emit("[INVENTORY] PRODUCT_LIST", items => {
+        this.exitComponent();
+        this.items = Object.freeze(items);
+      });
+    }
   }
 };
 </script>

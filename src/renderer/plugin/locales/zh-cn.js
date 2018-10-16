@@ -457,6 +457,7 @@ export default {
     tip: {
       unsavedOrderWarning: "未保存的订单将会被删除",
       unsavedPaymentWarning: "未保存的付款设置将会被还原",
+      unprintItemWarning: "订单中的物品将不会被打印",
       createTogoList: "您确定需要创建一个带走物品列表吗?",
       removeCreditCardConfirm: "您确定要移除这个信用卡信息吗?",
       removeCustomerConfirm: "您确定要移除这个客户的资料吗?",
@@ -479,7 +480,7 @@ export default {
     attemptReconnect: "正在尝试与主机通信中...",
     attemptFailed: "无法与主机通信，请立即拨打技术部门热线",
     supportHotLine: "(888)299-0524",
-    unprintItemWarning: "订单中的物品将不会被打印",
+
     systemProcessing: "系统处理中...",
     switchOrderType: "更改订单类别",
     orderTypeSwitchFrom: "订单类别将从 {i} 变成 {i}",
@@ -1770,7 +1771,15 @@ export default {
     upc: "产品代码",
     cost: "进货价",
     qty: "数量",
-    total: "成本"
+    total: "成本",
+    brand: "品牌",
+    item: "物品",
+    category: "类别",
+    msrp: "推荐价格",
+    unit: "单位",
+    size: "规格",
+    stock: "库存量",
+    value: "价值"
   },
   date: {
     today: "今天",

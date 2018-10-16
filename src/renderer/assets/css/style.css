@@ -993,8 +993,11 @@ div.pageButton {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
-.keyboard div.space {
-  flex: 1;
+.keyboard div.create {
+  text-shadow: 0 0px 2px #203f79;
+  background-image: -webkit-linear-gradient(#4085f4, #1950dc);
+  box-shadow: 0 3px 3px -1px rgba(0, 0, 0, 1), 0 6px 6px rgba(0, 0, 0, .5);
+  color: #fff;
 }
 
 .keyboard div.double,
@@ -1007,10 +1010,6 @@ div.pageButton {
   text-shadow: 0 2px 1px #0d47a1;
   border-top: 1px solid #3f7eb1;
   color: #fff;
-}
-
-.keyboard div.created:active {
-  background: linear-gradient(to bottom, #51b2ff 0%, #245094 100%);
 }
 
 .keyboard .keyboard .next {

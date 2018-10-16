@@ -45,8 +45,7 @@ const ticket = function (raw, opt) {
     this.plugin.PRINT_INIT("Ticket Receipt");
     this.plugin.ADD_PRINT_HTM(0, 0, "100%", "100%", html);
     this.plugin.SET_PRINTER_INDEX(printer);
-    //this.plugin.PRINT();
-    this.plugin.PREVIEW();
+    this.plugin.PRINT();
 
     if (raw.hasOwnProperty("__creditCard__") && /cashier/i.test(printer)) {
       this.plugin.PRINT_INITA(0, 0, 270, 500, "Ticket Credit Payment");

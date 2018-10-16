@@ -521,6 +521,7 @@ export default {
     tip: {
       unsavedOrderWarning: "Unsaved order will be removed.",
       unsavedPaymentWarning: "Unsaved payment will be restored",
+      unprintItemWarning: "The items from the list will not be printed.",
       createTogoList: "Are you wish to create a new list for togo items?",
       removeCreditCardConfirm: "Are you sure to remove this credit card information?",
       removeCustomerConfirm: "Are you sure to remove this customer profile?",
@@ -543,7 +544,7 @@ export default {
     attemptReconnect: "Reconnecting to the server...",
     attemptFailed: "Couldn't reconnect to the server. Please call Support for troubleshooting.",
     supportHotLine: "(888)299-0524",
-    unprintItemWarning: "The items from the list will not be printed.",
+
     systemProcessing: "System Processing...",
     switchOrderType: "Change Order Type",
     orderTypeSwitchFrom: "Order Type {i} will change to {i}",
@@ -1753,7 +1754,6 @@ export default {
       failed: "Test Failed"
     }
   },
-
   inventory: {
     title: {
       dashboard: "Dashboard",
@@ -1762,7 +1762,6 @@ export default {
     },
     dialog: {
       readyToScan: "Ready To Scan",
-
     },
     tip: {
       scanProduct: "Please scan the product barcode."
@@ -1778,7 +1777,15 @@ export default {
     upc: "Product Code",
     cost: "Cost",
     qty: "Qty",
-    total: "Total"
+    total: "Total",
+    brand: "Brand",
+    item: "Item",
+    category: "Category",
+    msrp: "Suggest Retail Price",
+    unit: "Unit",
+    size: "Size",
+    stock: "Stock",
+    value: "Value"
   },
   date: {
     today: "Today",

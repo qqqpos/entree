@@ -15,7 +15,7 @@
         </div>
       </div>
       <footer>
-        <button class="btn" @click="confirm" :disabled="!selected">{{$t('button.confirm')}}</button>
+        <button class="btn" @click="confirm" :disabled="!selected">{{$t('button.edit')}}</button>
       </footer>
     </div>
   </dialog>

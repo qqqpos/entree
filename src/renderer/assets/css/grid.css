@@ -1,9 +1,9 @@
 /* dashboard grid */
-.dashboard-grid{
+.dashboard-grid {
     display: grid;
     background: #fff;
     grid-template-rows: 1fr 1fr;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -15,22 +15,22 @@
     height: calc(100vh - 30px);
     grid-template-columns: 285px 1fr 113px 285px;
     background: url(../image/grid.png) #f4f4f4;
-  }
+}
 
-.menu-grid > .category {
+.menu-grid>.category {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(11,1fr);
+    grid-template-rows: repeat(11, 1fr);
 }
 
 .menu-grid .items {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(11,1fr);
-  }
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(11, 1fr);
+}
 
 .menu-grid .sides {
-    grid-template-rows: repeat(11,1fr);
+    grid-template-rows: repeat(11, 1fr);
     flex-direction: column;
     margin-left: 1px;
     overflow: hidden;
@@ -43,7 +43,7 @@
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-areas: "header header header" "side order ticket";
+    grid-template-areas: "header header header""side order ticket";
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 99px 1fr 285px;
     background: url(../../assets/image/grid.png) #f4f4f4;
@@ -54,8 +54,8 @@
     display: grid;
     padding-top: 4px;
     grid-template-rows: 1fr 56px;
-  }
-  
+}
+
 .history-grid .invoices .wrap {
     display: grid;
     grid-gap: 8px;
@@ -76,13 +76,13 @@
     grid-template-columns: 105px 1fr;
 }
 
-.grid-table-setup{
+.grid-table-setup {
     display: grid;
     height: 100%;
     margin-left: 5px;
     width: calc(100% - 207px);
-    grid-template-columns: repeat(7,1fr);
-    grid-template-rows: repeat(8,1fr);
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(8, 1fr);
 }
 
 /* hibachi setting page  */
@@ -96,28 +96,28 @@
 
 /* setting summary style */
 
-.summary-wrap{
+.summary-wrap {
     display: grid;
     height: calc(100% - 50px);
     grid-template-columns: 1fr 305px;
 }
 
-.summary-wrap section.list{
+.summary-wrap section.list {
     flex: 1;
     padding: 15px;
     overflow: auto;
-    background: #eceff1;
+    background: rgba(236, 239, 241, 0.2);
 }
 
-.summary-wrap section.empty{
+.summary-wrap section.empty {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.summary-wrap section.overview{
+.summary-wrap section.overview {
     position: fixed;
-    right:0;
+    right: 0;
     background: #fff;
     width: 276px;
     padding: 0px 15px;
@@ -125,13 +125,13 @@
     height: calc(100vh - 50px);
 }
 
-.summary-wrap .overview h3{
+.summary-wrap .overview h3 {
     padding: 15px 5px 5px;
 }
 
 .summary-wrap .overview p {
-  padding: 5px 10px;
-  display: flex;
+    padding: 5px 10px;
+    display: flex;
 }
 
 .summary-wrap .group {
@@ -139,7 +139,7 @@
     background: #eceff1;
     border-radius: 6px;
 }
-  
+
 .summary-wrap .group h4 {
     padding: 6px 0 2px;
 }
@@ -148,4 +148,4 @@
     font-family: "Agency FB";
     font-weight: bold;
     color: #4b5086;
-  }
+}
