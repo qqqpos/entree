@@ -78,9 +78,16 @@
       <template v-else-if="mode ==='advance'">
         <div class="wrap info">
           <div class="item">
+            <inputer title="inventory.upc" v-model="item.upc"></inputer>
             <inputer title="text.priority" v-model.number="item.priority"></inputer>
             <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
             <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
+          </div>
+          <div class="others">
+            <switches title="text.openFood" v-model="item.temporary"></switches>
+            <switches title="text.marketPrice" v-model="item.marketPrice"></switches>
+            <switches title="text.spicy" v-model="item.spicy"></switches>
+            <switches title="text.disable" v-model="item.disable"></switches>
             <toggle title="text.weightScale" v-model="item.weightItem.enable" :defaultStyle="false">
               <transition name="dropdown">
                 <div class="opt" v-if="item.weightItem.enable">
@@ -89,12 +96,6 @@
                 </div>
               </transition>
             </toggle>
-          </div>
-          <div class="others">
-            <switches title="text.openFood" v-model="item.temporary"></switches>
-            <switches title="text.marketPrice" v-model="item.marketPrice"></switches>
-            <switches title="text.spicy" v-model="item.spicy"></switches>
-            <switches title="text.disable" v-model="item.disable"></switches>
           </div>
           <div class="advance">
             <external title="text.presetItem" @open="setPreset" :defaultStyle="false"></external>

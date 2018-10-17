@@ -1757,14 +1757,17 @@ export default {
   inventory: {
     title: {
       dashboard: "Dashboard",
-      product: "Product List",
+      catalog: "Catalog",
       order: "Inventory Order"
     },
     dialog: {
       readyToScan: "Ready To Scan",
+      removeProduct: "Remove Product"
     },
     tip: {
-      scanProduct: "Please scan the product barcode."
+      scanProduct: "Please scan the product barcode.",
+      emptyList: "List item is empty",
+      removeProduct: "Are you sure to remove {i} from catalog?"
     },
     vendor: "Vendor",
     handler: "Handle by",
@@ -1785,7 +1788,8 @@ export default {
     unit: "Unit",
     size: "Size",
     stock: "Stock",
-    value: "Value"
+    value: "Value",
+    minStockAlert: "Minimum Stock Alert"
   },
   date: {
     today: "Today",

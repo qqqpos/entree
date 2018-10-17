@@ -243,9 +243,9 @@ export default new Router({
                       component: require("../components/setting/menu/inventory/dashboard")
                     },
                     {
-                      path: "product",
-                      name: "Setting.inventory.product",
-                      component: require("../components/setting/menu/inventory/product")
+                      path: "catalog",
+                      name: "Setting.inventory.catalog",
+                      component: require("../components/setting/menu/inventory/catalog")
                     },
                     {
                       path: "order",

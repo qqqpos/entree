@@ -1,8 +1,8 @@
 <template>
   <div class="dropdown">
     <div class="wrap" @click.stop="display">
-      <div class="text">
-        <span class="placeholder" v-if="!selected">{{$t(label)}}</span>
+      <div class="f1">
+        <span class="ghost" v-if="!selected">{{$t(label)}}</span>
         <span class="value" v-else>{{selected.text}}</span>
       </div>
       <i class="fa fa-times" @click.stop="resetFilter" v-show="selected"></i>
@@ -89,16 +89,8 @@ export default {
   border-radius: 4px;
 }
 
-.wrap .text {
-  flex: 1;
-}
-
 .wrap .value {
   white-space: nowrap;
-}
-
-.placeholder {
-  color: #b9b9b9;
 }
 
 ul {

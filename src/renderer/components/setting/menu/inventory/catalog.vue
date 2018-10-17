@@ -13,6 +13,7 @@
                     <th>{{$t('inventory.size')}}</th>
                     <th class="clickable">{{$t('inventory.stock')}} <i class="fa fa-sort ghost"></i></th>
                     <th>{{$t('inventory.value')}}</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -21,8 +22,9 @@
                     <td>{{item.description}}</td>
                     <td>{{item.category}}</td>
                     <td>{{item.size}}</td>
-                    <td>{{item.stock}}</td>
-                    <td class="agency light">$ {{item.stock * item.msrp | decimal}}</td>
+                    <td>{{item.stock - item.sold}}</td>
+                    <td class="agency light">$ {{(item.stock - item.sold) * item.msrp | decimal}}</td>
+                    <td class="fas fa-pen-square ghost clickable" @click="edit(item)"></td>
                 </tr>
             </tbody>
             <tfoot>
@@ -35,12 +37,12 @@
 
 <script>
 import scan from "./helper/scan";
-import register from "../editor/product";
+import catalog from "../editor/catalog";
 
 export default {
-  components: { scan, register },
+  components: { scan, catalog },
   beforeRouteEnter: (from, to, next) => {
-    appSocket.emit("[INVENTORY] PRODUCT_LIST", items =>
+    appSocket.emit("[INVENTORY] CATALOG", items =>
       next(vm => {
         vm.items = Object.freeze(items);
       })
@@ -54,14 +56,12 @@ export default {
     };
   },
   methods: {
-    scanItem() {
+    scan() {
       return this.$promise("scan");
     },
-    searchProduct(upc) {
+    search(upc) {
       return new Promise(resolve => {
-        this.$socket.emit("[INVENTORY] SEARCH_PRODUCT", upc, item => {
-          if (item) delete item._id;
-
+        this.$socket.emit("[INVENTORY] SEARCH_UPC", upc, item => {
           resolve(
             Object.assign(
               {
@@ -69,45 +69,44 @@ export default {
                 description: "",
                 unit: "",
                 size: "",
-                stock: 0,
-                sold: 0,
-                cost: "0.00",
                 msrp: "0.00",
                 weight: "",
                 category: "",
-                brand: ""
+                brand: "",
+                minStock: 0
               },
-              item,
-              {
-                stock: 0,
-                sold: 0
-              }
+              item
             )
           );
         });
       });
     },
-    dialog(product) {
-      return this.$promise("register", { product });
+    register(product) {
+      return this.$promise("catalog", { product });
     },
     async registerItem() {
       try {
-        const upc = await this.scanItem();
-        const product = await this.searchProduct(upc);
-        const detail = await this.dialog(product);
-        
-        this.$socket.emit(
-          "[INVENTORY] REGISTER_PRODUCT",
-          detail,
-          this.refreshData
-        );
+        const upc = await this.scan();
+        const product = await this.search(upc);
+        const detail = await this.register(product, false);
+
+        this.refreshData();
       } catch (e) {
         console.log(e);
         this.exitComponent();
       }
     },
+    async edit(product) {
+      try {
+        await this.register(product);
+
+        this.refreshData();
+      } catch (exception) {
+        this.exitComponent();
+      }
+    },
     refreshData() {
-      this.$socket.emit("[INVENTORY] PRODUCT_LIST", items => {
+      this.$socket.emit("[INVENTORY] CATALOG", items => {
         this.exitComponent();
         this.items = Object.freeze(items);
       });

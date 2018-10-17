@@ -517,35 +517,42 @@ export default {
           amount = isNumber(amount) ? Math.round(amount * 100) : 0;
 
           this.$open("processor", { timeout: 30000 });
-          this.initialParser(record.terminal).then(() => {
-            const invoice = record.order.number;
-            const transaction = record.trace.trans;
+          this.initialParser(record.terminal)
+            .then(() => {
+              const invoice = record.order.number | "0";
+              const transaction = record.trace.trans;
 
-            this.terminal
-              .adjust(invoice, transaction, amount)
-              .then(response => {
-                this.exitComponent();
-                const result = this.terminal.explainTransaction(response.data);
-                if (result.code === "000000") {
-                  Object.assign(record, {
-                    amount: result.amount,
-                    status: 2
-                  });
-                  this.$socket.emit("[TERMINAL] ADJUST", record);
-                } else {
-                  const prompt = {
-                    type: "error",
-                    title: "dialog.adjustTipFailed",
-                    msg: ["dialog.adjustTipFailedErrorMessage", result.code],
-                    buttons: [{ text: "button.confirm", fn: "resolve" }]
-                  };
-
-                  this.$dialog(prompt).then(this.exitComponent);
-                }
-              });
-          });
+              this.terminal
+                .adjust(invoice, transaction, amount)
+                .then(response => {
+                  this.exitComponent();
+                  const result = this.terminal.explainTransaction(
+                    response.data
+                  );
+                  if (result.code === "000000") {
+                    Object.assign(record, {
+                      amount: result.amount,
+                      status: 2
+                    });
+                    this.$socket.emit("[TERMINAL] ADJUST", record);
+                  } else {
+                    this.popupErrorDialog(result.code);
+                  }
+                });
+            })
+            .catch(e => this.popupErrorDialog(e));
         })
         .catch(this.exitComponent);
+    },
+    popupErrorDialog(code) {
+      const prompt = {
+        type: "error",
+        title: "dialog.adjustTipFailed",
+        msg: ["dialog.adjustTipFailedErrorMessage", code],
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+
+      this.$dialog(prompt).then(this.exitComponent);
     },
     accessAdjuster() {
       this.$checkPermission("modify", "transaction")
@@ -598,6 +605,7 @@ export default {
       this.date = moment(this.date, "YYYY-MM-DD")
         .add(1, "days")
         .format("YYYY-MM-DD");
+        
       this.$socket.emit("[TERMINAL] DATE", this.date, data =>
         this.initial(data)
       );

@@ -1751,14 +1751,17 @@ export default {
   inventory: {
     title: {
       dashboard: "库存信息",
-      product: "物品管理",
-      order: "入库"
+      catalog: "物品目录",
+      order: "入库记录"
     },
     dialog: {
-      readyToScan: "扫描物品"
+      readyToScan: "扫描商品",
+      removeProduct: "移除商品"
     },
     tip: {
-      scanProduct: "请扫描货物条形码"
+      scanProduct: "请扫描商品条形码",
+      emptyList: "尚未添加商品",
+      removeProduct: "您确定要从目录中移除 {i} 吗?"
     },
     vendor: "供货商",
     handler: "负责人",
@@ -1779,7 +1782,8 @@ export default {
     unit: "单位",
     size: "规格",
     stock: "库存量",
-    value: "价值"
+    value: "价值",
+    minStockAlert: "最低库存警告"
   },
   date: {
     today: "今天",

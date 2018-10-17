@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav class="row flex-center">
-            <h3 class="f1 normal">{{$t('inventory.order')}} <span>{{orders.length}}</span></h3>
+            <h3 class="f1 normal">{{$t('inventory.order')}}</h3>
             <button class="mini-btn" @click="stockIn"><i class="fa fa-plus space light"></i>{{$t('button.new')}}</button>
         </nav>
         <div class="row">
@@ -12,7 +12,6 @@
                       <input type="text" v-model="search" :placeholder="$t('title.search')+'...'" @keypress.enter="searchOrder">
                   </div>
                 </div>
-
                 <ul class="order">
                     <li v-for="(order,index) in orders" :key="index" class="row pointer" @click="view(order)">
                         <div>

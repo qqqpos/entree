@@ -68,7 +68,7 @@ const Pax = function () {
   this.explainTransaction = function (raw) {
     // Remove STX ETX LRC from T01 response
     const [multiple, command, version, code, resMsg, hostInfo, type, amountInfo, accountInfo, traceInfo, avsInfo, commInfo, eCommInfo, additional] = raw.slice(1, -2).split(String.fromCharCode(28));
-
+    console.log(raw.slice(1, -2).split(String.fromCharCode(28)))
     switch (code) {
       case "000000":
         const [hostResCode, hostResMsg, authCode, hostRefNum, traceNum, batchNum] = hostInfo.split(String.fromCharCode(31));
@@ -145,11 +145,10 @@ const Pax = function () {
           msg: 'terminal.creditCard.aborted'
         }
       case "100003":
-        const error = data[4].split(String.fromCharCode(3))[0];
         return {
           code,
           msg: 'terminal.creditCard.errorCode',
-          error,
+          error: resMsg,
         }
       case "100004":
         return {

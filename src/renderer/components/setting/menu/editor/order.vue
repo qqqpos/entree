@@ -37,32 +37,26 @@
                 <section>
                     <div class="inventory-item">
                         <template v-if="inventory.items.length">
-                            <!-- <div class="row">
-                                <span class="f1">{{$t('inventory.product')}}</span>
-                                <span>{{$t('inventory.qty')}}</span>
-                                <span>{{$t('inventory.cost')}}</span>
+                            <div class="row header">
+                                <span class="f1 text-center">{{$t('inventory.product')}}</span>
+                                <span class="info">{{$t('inventory.qty')}}</span>
+                                <span class="info">{{$t('inventory.cost')}}</span>
                             </div>
-                            <div v-for="(item,index) in inventory.items" :key="index" class="row">
-                                <span class="f1">{{item.description}}</span>
-                                <span>{{item.qty}}</span>
-                                <span>{{item.cost}}</span>
-                            </div> -->
-                            <table>
-                                <tr>
-                                    <th>{{$t('inventory.product')}}</th>
-                                    <th>{{$t('inventory.qty')}}</th>
-                                    <th>{{$t('inventory.cost')}}</th>
-                                </tr>
-                                <tr v-for="(item,index) in inventory.items" :key="index" class="text-center">
-                                    <td>{{item.description}}</td>
-                                    <td><input v-model="item.stock"></td>
-                                    <td><input v-model="item.cost"></td>
-                                </tr>
-                            </table>
+                            <ul>
+                                <li v-for="(item,index) in inventory.items" :key="index" class="row flex-center item">
+                                    <span class="f1 text-center">{{item.description}}</span>
+                                    <span class="row flex-center info">
+                                        <i class="fas fa-minus-circle space-right light clickable" @click="lessQty(item,index)"></i>
+                                        <input v-model="item.stock">
+                                        <i class="fas fa-plus-circle space-left light clickable" @click="moreQty(item)"></i>
+                                    </span>
+                                    <span class="info"><input v-model="item.cost"></span>
+                                </li>
+                            </ul>
                         </template>
                         <div class="placeholder" v-else>
                             <i class="fas fa-search-dollar"></i>
-                            <p>List is Empty</p>
+                            <p>{{$t('inventory.tip.emptyList')}}</p>
                         </div>
                     </div>
                     <div class="row flex-center">
@@ -72,7 +66,7 @@
                         </div>
                         <div class="column space-right">
                             <h5 class="space-left">{{$t('inventory.qty')}}</h5>
-                            <input type="text" v-model.number="item.qty">
+                            <input type="text" v-model.number="item.stock">
                         </div>
                         <div class="column space-right">
                             <h5 class="space-left">{{$t('inventory.cost')}}</h5>
@@ -103,8 +97,8 @@ export default {
       inventory: this.init.inventory,
       item: {
         upc: "",
-        qty: 1,
-        cost: 0.0
+        stock: 1,
+        cost: "0.00"
       }
     };
   },
@@ -114,7 +108,7 @@ export default {
     },
     getProduct(upc) {
       return new Promise(resolve => {
-        this.$socket.emit("[INVENTORY] SEARCH_PRODUCT", upc, item => {
+        this.$socket.emit("[INVENTORY] SEARCH_UPC", upc, item => {
           if (item) delete item._id;
 
           const product = Object.assign(
@@ -155,6 +149,12 @@ export default {
         this.exitComponent();
       }
     },
+    lessQty(item, index) {
+      item.stock > 1 ? item.stock-- : this.inventory.items.splice(index, 1);
+    },
+    moreQty(item) {
+      item.stock++;
+    },
     exit() {
       this.inventory.items.length === 0 && this.init.reject(false);
     }
@@ -178,18 +178,41 @@ input {
 }
 
 .inventory-item {
-  height: 350px;
+  height: 347px;
   background: #fff;
   margin: 10px 2px;
   border-radius: 4px;
 }
 
-td input {
-  width: 50px;
+.item input {
+  width: 45px;
   text-align: center;
   border: none;
   background: #f6f6f6;
   margin: 2px 0;
+}
+
+.header {
+  padding: 5px 7px 5px 0;
+  background: #cfd8dc;
+  border-radius: 4px 4px 0 0;
+  font-weight: bold;
+  color: #404a4e;
+}
+
+.info {
+  width: 110px;
+  text-align: center;
+}
+
+ul {
+  height: 320px;
+  overflow: auto;
+}
+
+.item {
+  border-bottom: 1px solid #f5f5f5;
+  padding: 2px 0;
 }
 </style>
 

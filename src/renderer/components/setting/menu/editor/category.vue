@@ -32,7 +32,7 @@
           <div v-if="manual" class="row">
             <label class="f1">{{$t('text.contain')}}</label>
             <div class="inputWrap">
-              <span v-for="(category,index) in category.contain" :key="index">{{category}}<span @click="remove(index)" class="icon">×</span></span>
+              <span v-for="(category,index) in category.contain" :key="index">{{category}}<span @click="remove(index)" class="icon space-left">×</span></span>
               <input type="text" v-model="entry" @keypress.enter="add">
             </div>
           </div>
@@ -271,7 +271,6 @@ header {
 }
 
 .inputWrap .icon {
-  padding-left: 5px;
   color: #f44336;
   cursor: pointer;
 }
