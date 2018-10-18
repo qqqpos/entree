@@ -39,10 +39,10 @@
     <fn icon="fa-comment-dots" text="button.request" @click="$emit('open','request')"></fn>
     <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
     <fn icon="fa-user-clock" text="button.timer" @click="$open('timer')" :disabled="isEmptyTicket || order.hasOwnProperty('parent')"></fn>
-    <fn icon="fa-print" text="button.print" @click="done(true)"></fn>
+    <fn icon="fa-print" text="button.print" @click="done(true)" :disabled="isEmptyTicket"></fn>
     <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
-    <fn icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')"></fn>
-    <fn icon="fa-save" @click="done(false)" text="button.save"></fn>
+    <fn icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent') || isEmptyTicket"></fn>
+    <fn icon="fa-save" @click="done(false)" text="button.save" :disabled="isEmptyTicket"></fn>
     <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
     <fn icon="fa-times" text="button.exit" @click="quit"></fn>
     <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>

@@ -1,7 +1,7 @@
 import locales from './locales'
 
 const dict = {
-    install(Vue, ) {
+    install(Vue) {
         Vue.language = 'us-en';
         Vue.locales = locales[Vue.language];
         Vue.mixin({

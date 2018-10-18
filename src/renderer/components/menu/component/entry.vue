@@ -5,6 +5,7 @@
           <input type="text" v-model="qty" class="qty" ref="qty" @click="focus('qty',false)">
           <div class="row relative">
             <input type="text" v-model="keywords" class="item" ref="item" @click="focus('item',true)">
+            <span class="prefix" v-show="isPrefix" @click="togglePrefix" :class="{ghost:disablePrefix}">{{$t('text.prefix')}}</span>
             <i class="fa fa-times reset clickable" @click="resetKeyword" v-show="keywords.length"></i>
             <ul class="predict row" v-show="items.length">
               <li v-for="(item,index) in items" :key="index" @click="complete(item)">{{item[language]}}</li>
@@ -20,6 +21,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 import checkbox from "../../setting/common/checkbox";
 import keyboard from "../../common/keyboard";
 export default {
@@ -38,7 +40,9 @@ export default {
       option: false,
       toggle: false,
       anchor: "item",
-      alphabet: true
+      alphabet: true,
+      prefix: undefined,
+      disablePrefix: false
     };
   },
   created() {
@@ -94,9 +98,36 @@ export default {
       target.focus();
     },
     complete(item) {
-      this.item = item;
-      this.keywords = item[this.language];
-      this.price = item.price.toFixed(2);
+      if (!this.disablePrefix && this.prefix) {
+        // if prefix is enter apply with prefix
+        const action = this.prefix;
+        const reg = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+        const primarySpace = item.usEN.match(reg) ? "" : " ";
+        const secondarySpace = item.zhCN.match(reg) ? "" : " ";
+
+        if (action.prefix) {
+          item.zhCN = action.zhCN + secondarySpace + item.zhCN;
+          item.usEN = action.usEN + primarySpace + item.usEN;
+        } else {
+          item.zhCN = item.zhCN + secondarySpace + action.zhCN;
+          item.usEN = item.usEN + primarySpace + action.usEN;
+        }
+
+        this.item = item;
+        this.keywords = item[this.language];
+        //if has condition multiplier
+        if (action.multiplier) {
+          this.price = toFixed(
+            price * (isNumber(action.multiply) ? action.multiply : 0),
+            2
+          );
+        }
+      } else {
+        this.item = item;
+        this.keywords = item[this.language];
+        this.price = item.price.toFixed(2);
+      }
+
       this.focus("price", false);
     },
     backspace() {
@@ -175,17 +206,45 @@ export default {
     check() {
       this.toggle = this.devices.length === this.printers.length;
     },
+    togglePrefix() {
+      this.disablePrefix = !this.disablePrefix;
+      this.search(this.keywords);
+    },
+    search(keyword) {
+      if (!this.disablePrefix && this.isPrefix) {
+        const text = keyword
+          .split(" ")
+          .slice(1)
+          .join(" ");
+
+        this.$socket.emit("[REQUEST] SEARCH", text, items => {
+          this.items = items;
+        });
+      } else {
+        this.$socket.emit("[REQUEST] SEARCH", keyword, items => {
+          this.items = items;
+        });
+      }
+    },
     ...mapActions(["setChoiceSet"])
   },
   computed: {
+    isPrefix() {
+      const text = this.keywords.split(" ")[0];
+      const actions = this.layouts.action.filter(prefix => prefix.usEN);
+
+      this.prefix = text
+        ? actions.find(p => p.usEN.toLowerCase() === text.toLowerCase())
+        : undefined;
+
+      return typeof this.prefix === "object";
+    },
     ...mapGetters(["layouts", "config", "language"])
   },
   watch: {
-    keywords(n) {
-      if (n) {
-        this.$socket.emit("[REQUEST] SEARCH", n, items => {
-          this.items = items;
-        });
+    keywords(text) {
+      if (text) {
+        this.search(text);
       } else {
         this.items = [];
       }
@@ -248,6 +307,19 @@ i.reset {
   position: absolute;
   right: 0;
   padding: 25px;
+}
+
+.prefix {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #4caf50;
+  color: #2e7d32;
+  position: absolute;
+  top: 23px;
+  right: 65px;
 }
 
 ul.predict {

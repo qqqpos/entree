@@ -1123,7 +1123,7 @@ export default {
     addSide: "添加副菜",
     printItemName: "改变物品名字",
     invalidValue: "{i} 的格式不正确",
-    prefix: "词缀前置",
+    prefix: "前置词缀",
     street: "街道",
     phone: "电话号码",
     role: "职位",
