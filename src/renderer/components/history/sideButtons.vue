@@ -1,49 +1,16 @@
 <template>
   <aside>
-    <button class="btn" @click="editOrder" :disabled="order.split">
-      <i class="fas fa-edit"></i>
-      <span class="text">{{$t('button.edit')}}</span>
-    </button>
-    <button class="btn" @click="recoverTicketDialog" v-if="order && order.status !== 1">
-      <i class="fas fa-redo-alt"></i>
-      <span class="text">{{$t('button.recover')}}</span>
-    </button>
-    <button class="btn" @click="voidOrder" v-else :disabled="splitMode">
-      <i class="fab fa-creative-commons-nc"></i>
-      <span class="text">{{$t('button.void')}}</span>
-    </button>
-    <button class="btn" @click="receipt">
-      <i class="fas fa-file-invoice"></i>
-      <span class="text">{{$t('button.receipt')}}</span>
-    </button>
-    <button class="btn" @click="$open('listModule')">
-      <i class="fas fa-list-ol"></i>
-      <span class="text">{{$t('button.list')}}</span>
-    </button>
-    <button class="btn" @click="print">
-      <i class="fa fa-print"></i>
-      <span class="text">{{$t('button.print')}}</span>
-    </button>
-    <button class="btn" @click="calendar">
-      <i class="fas fa-calendar-alt"></i>
-      <span class="text">{{$t('button.calendar')}}</span>
-    </button>
-    <button class="btn" @click="terminal">
-      <i class="fas fa-credit-card"></i>
-      <span class="text">{{$t('button.terminal')}}</span>
-    </button>
-    <button class="btn" @click="report">
-      <i class="fas fa-clipboard-check"></i>
-      <span class="text">{{$t('button.report')}}</span>
-    </button>
-    <button class="btn" @click="getTransaction" :disabled="!reportable">
-      <i class="fas fa-list-ol"></i>
-      <span class="text">{{$t('button.stats')}}</span>
-    </button>
-    <button class="btn" @click="getLedger">
-      <i class="fas fa-check-double"></i>
-      <span class="text">{{$t('button.ledger')}}</span>
-    </button>
+    <fn icon="fa-edit" text="button.edit" @click="editOrder" :disabled="order.split"></fn>
+    <fn icon="fa-redo-alt" text="button.recover" @click="recoverTicketDialog" v-if="order && order.status === 0"></fn>
+    <fn icon="fa-creative-commons-nc" text="button.void" @click="voidOrder" :disabled="splitMode" v-else></fn>
+    <fn icon="fa-file-invoice" text="button.receipt" @click="receipt"></fn>
+    <fn icon="fa-list-ol" text="button.list" @click="$open('listModule')"></fn>
+    <fn icon="fa-print" text="button.print" @click="print"></fn>
+    <fn icon="fa-calendar-alt" text="button.calendar" @click="calendar"></fn>
+    <fn icon="fa-credit-card" text="button.terminal" @click="terminal"></fn>
+    <fn icon="fa-clipboard-check" text="button.report" @click="getReport"></fn>
+    <fn icon="fa-list-ol" text="button.stats" @click="getTransaction" :disabled="!reportable"></fn>
+    <fn icon="fa-check-double" text="button.ledger" @click="getLedger"></fn>
     <div :is="component" :init="componentData"></div>
   </aside>
 </template>
@@ -61,6 +28,7 @@ import terminalModule from "./terminal";
 import transaction from "./transaction";
 import Reason from "./component/reason";
 import logger from "../payment/logger";
+import fn from "../shared/fn";
 
 export default {
   props: ["date", "splitMode"],
@@ -74,7 +42,8 @@ export default {
     transaction,
     listModule,
     Reason,
-    logger
+    logger,
+    fn
   },
   data() {
     return {
@@ -202,7 +171,7 @@ export default {
         this.setApp({ newTicket: false });
         this.setTicket({ type, number });
         this.setCustomer(customer);
-        
+
         this.$router.push({ path: "/main/menu" });
       }
     },
@@ -491,7 +460,7 @@ export default {
         )
         .catch(() => this.accessFailedLog("terminal"));
     },
-    report() {
+    getReport() {
       this.$checkPermission("access", "report")
         .then(() => this.$open("reportModule"))
         .catch(() => this.accessFailedLog("report"));

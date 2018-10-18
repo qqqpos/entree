@@ -6,9 +6,9 @@
       <fn icon="fa-comment-dots" text="button.request" @click="$emit('open', 'request')"></fn>
     </div>
     <div class="bottomLeft">
-      <fn icon="fa-users" text="button.switch" @click="switchGuest" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'"></fn>
+      <fn icon="fa-users" text="button.switch" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'"></fn>
       <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')" v-else></fn>
-      <fn icon="fa-user-clock" text="button.timer" @click="courseTime"></fn>
+      <fn icon="fa-user-clock" text="button.timer" @click="$open('course')" :disabled="isEmptyTicket"></fn>
       <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
       <fn icon="fa-pause" text="button.hold" @click="done(false)"></fn>
       <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
@@ -38,7 +38,7 @@
     <fn icon="fa-plus-square" text="button.more" @click="more"></fn>
     <fn icon="fa-comment-dots" text="button.request" @click="$emit('open','request')"></fn>
     <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
-    <fn icon="fa-user-clock" text="button.timer" @click="openTimer"></fn>
+    <fn icon="fa-user-clock" text="button.timer" @click="$open('timer')" :disabled="isEmptyTicket || order.hasOwnProperty('parent')"></fn>
     <fn icon="fa-print" text="button.print" @click="done(true)"></fn>
     <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
     <fn icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')"></fn>
@@ -61,7 +61,7 @@ import coupon from "./component/coupon";
 import course from "./component/course";
 import timer from "./component/timer";
 import payment from "../payment/main";
-import fn from "./helper/fn";
+import fn from "../shared/fn";
 
 export default {
   props: ["layout"],
@@ -90,12 +90,9 @@ export default {
     this.$bus.off("FOOD_TOGO", this.createTogo);
   },
   methods: {
-    callComponent(name) {
-      this.$emit("open", name);
-    },
     less() {
       if (this.isEmptyTicket) return;
-      let boolean =
+      const boolean =
         !document.querySelector(".item.active") &&
         (!!document.querySelector("div.request") ||
           !!this.item.choiceSet.length);
@@ -106,13 +103,17 @@ export default {
         this.$checkPermission("modify", "item")
           .then(() => this.lessQty(boolean))
           .catch(() =>
-            this.$log(`Delete item is prohibit to operator [${this.op.name}]`)
+            this.$log(
+              `Operator [${this.op.name}] unable to delete item [${
+                this.item[this.language]
+              }]. Reason: Permission Denied.`
+            )
           );
       }
     },
     more() {
       const focus = document.querySelector(".item.active");
-      let subItemCount = Array.isArray(this.item.choiceSet)
+      const subItemCount = Array.isArray(this.item.choiceSet)
         ? this.item.choiceSet
             .filter(item => item.subItem)
             .map(item => item.qty)
@@ -140,129 +141,124 @@ export default {
     },
     modify() {
       if (this.isEmptyTicket) return;
-      let target = !!document.querySelector(".sub.target");
+
+      const type = "choiceSet";
+      const target = !!document.querySelector(".sub.target");
+      const item = {
+        qty: this.choiceSet ? this.choiceSet.qty : 1,
+        single: this.choiceSet ? this.choiceSet.single : 0,
+        discount: 0
+      };
+
       target
-        ? this.$open("modify", {
-            item: {
-              qty: this.choiceSet ? this.choiceSet.qty : 1,
-              single: this.choiceSet ? this.choiceSet.single : 0,
-              discount: 0
-            },
-            type: "choiceSet"
-          })
+        ? this.$open("modify", { item, type })
         : this.$open("modify", { item: this.item });
     },
-    courseTime() {
-      if (this.isEmptyTicket) return;
-      this.$open("course");
-    },
     openPaymentModule(params) {
-      new Promise((resolve, reject) => {
-        this.componentData = Object.assign({}, { resolve, reject }, params);
-        this.component = "payment";
-      })
+      this.$promise("payment", params)
         .then(this.exitComponent)
         .catch(exitParams => {
           this.exitComponent();
 
-          if (exitParams && exitParams.reload === true) {
+          exitParams &&
+            exitParams.reload &&
             this.$splitEvenly(exitParams.split).then(() =>
               this.openPaymentModule(Object.assign({}, params, exitParams))
             );
-          }
         });
     },
     promotion() {
-      this.$socket.emit("[COUPON] LIST", coupons => {
-        this.$open("coupon", {
-          coupons: coupons
-            .filter(coupon => coupon.enable)
-            .map(coupon => Object.assign({}, coupon, { redeem: false }))
-        });
+      this.$socket.emit("[COUPON] LIST", list => {
+        // filter coupons
+        const coupons = list
+          .filter(coupon => coupon.enable)
+          .map(coupon => Object.assign({}, coupon, { redeem: false }));
+
+        this.$open("coupon", { coupons });
       });
-    },
-    openTimer() {
-      if (this.isEmptyTicket || this.order.hasOwnProperty("parent")) return;
-      this.$open("timer");
     },
     openSplit() {
       if (this.isEmptyTicket || this.order.hasOwnProperty("parent")) return;
+
       this.$open("splitModule");
     },
-    switchGuest() {
-      this.callComponent("guest");
-    },
-    done(print) {
+    async done(print) {
       if (this.isEmptyTicket) return;
 
-      this.promptConfirm(print)
-        .then(this.checkPendingItem)
-        .then(this.initialPrint)
-        .then(this.save.bind(null, print))
-        .then(this.exit)
-        .catch(this.placeFailed);
-    },
-    saveConfirmDialog() {
-      return new Promise((next, stop) => {
-        const prompt = {
-          title: "dialog.confirm.save",
-          msg: "dialog.tip.unprintItemWarning"
-        };
+      const printCount = this.app.newTicket
+        ? print
+          ? 1
+          : 0
+        : print
+          ? this.order.printCount + 1
+          : this.order.printCount;
 
-        this.$dialog(prompt)
-          .then(next)
-          .catch(stop);
+      Object.assign(this.order, {
+        customer: this.$minifyCustomer(this.customer),
+        printCount
       });
+
+      // handle table status update logic
+
+      this.isDineInTicket &&
+        this.dineInOpt.useTable &&
+        this.table.status === -1 &&
+        this.updateDineInTable(2);
+
+      this.table &&
+        Array.isArray(this.table.seats) &&
+        this.order.type === "HIBACHI" &&
+        this.updateHibachiTable();
+      // end of
+
+      try {
+        // popup save confirm
+        await this.promptConfirm(print);
+        await this.checkPendingItem(print);
+        await this.initialPrint(print);
+        await this.saveTicket(print);
+
+        this.exit();
+        // close save confirm dialog
+        this.exitComponent();
+      } catch (exception) {
+        switch (exception) {
+          case undefined:
+            this.exitComponent();
+            break;
+          case "EXIT":
+            this.exit();
+            break;
+          default:
+            this.exceptionHandler(exception);
+        }
+      }
     },
     promptConfirm(print) {
+      // backward compatibility for older version
       const { defaults = {} } = this.config;
 
       return new Promise((next, stop) => {
-        if (defaults.saveConfirm && !print) {
+        if (!print && defaults.saveConfirm) {
           const prompt = {
             title: "dialog.confirm.save",
             msg: "dialog.tip.unprintItemWarning"
           };
 
           this.$dialog(prompt)
-            .then(() => {
-              this.exitComponent();
-              next(print);
-            })
-            .catch(() => {
-              this.exitComponent();
-              stop();
-            });
+            .then(next)
+            .catch(stop);
         } else {
-          next(print);
+          // continue if no need to popup dialog
+          next();
         }
       });
-    },
-    placeFailed(error) {
-      error && console.error(error);
-      if (error) {
-        this.$log(
-          `An error occurred when save the order #${
-            this.order.number
-          }. \nError Message:\n${error}`,
-          "fatal"
-        );
-
-        const prompt = {
-          type: "error",
-          title: "dialog.somethingWrong",
-          msg: "dialog.somethingWrongTip",
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
-        };
-
-        this.$dialog(prompt).then(this.exitComponent);
-      }
     },
     checkPendingItem(print) {
       return new Promise((next, stop) => {
         const pendingItems = this.order.content.filter(item => item.pending);
 
-        if (!this.app.newTicket && print && pendingItems.length > 0) {
+        if (!this.app.newTicket && pendingItems.length > 0 && print) {
           const prompt = {
             title: "dialog.printScheduleItems",
             msg: "dialog.schedulePrintTaskOngoing",
@@ -273,20 +269,33 @@ export default {
           };
 
           this.$dialog(prompt)
-            .then(() => {
-              this.removeItemsFromSpooler(pendingItems);
-              next(print);
-            })
-            .catch(() => {
-              this.exitComponent();
-              stop();
-            });
+            .then(() => this.removeItemsFromSpooler(pendingItems, next))
+            .catch(stop);
         } else {
-          next(print);
+          next();
         }
       });
     },
-    removeItemsFromSpooler(items) {
+    exceptionHandler(error) {
+      console.error(error);
+
+      this.$log(
+        `An error occurred when save the order [#${
+          this.order.number
+        }.] \nError Message:\n${error}`,
+        "fatal"
+      );
+
+      const prompt = {
+        type: "error",
+        title: "dialog.somethingWrong",
+        msg: "dialog.somethingWrongTip",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+
+      this.$dialog(prompt).then(this.exitComponent);
+    },
+    removeItemsFromSpooler(items, callback) {
       const uniques = items.map(i => i.unique);
 
       this.spooler.forEach(task => {
@@ -295,144 +304,161 @@ export default {
         );
       });
 
-      this.order.content.forEach(item =>
-        Object.assign(item, { pending: false })
-      );
+      this.order.content.forEach(item => {
+        item.pending = false;
+      });
+
+      callback();
     },
     initialPrint(print) {
-      return new Promise(next => {
-        if (this.ticket.type === "TO_GO") {
-          let order = this.archivedOrder;
-          this.emptyArchiveOrder();
+      return new Promise((skip, done) => {
+        const todo = this.order.content.filter(item => item.todo).length > 0;
 
-          let items = this.order.content.map(item =>
-            Object.assign({}, item, { print, orderType: "TO_GO" })
-          );
-          order.content.push(...items);
+        // if operator save the ticket we should remove item params to prevent selected item print
+        if (!print && todo)
+          this.order.content.forEach(item => {
+            delete item.todo;
+          });
 
-          this.$calculatePayment(order);
-          this.$socket.emit("[ORDER] UPDATE", order, false);
-
-          next();
-        } else {
-          next();
+        switch (this.ticket.type) {
+          case "TO_GO":
+            this.togoTicketHandler(print, done);
+            break;
+          case "HIBACHI":
+            this.hibachiTicketHandler(print, done);
+            break;
+          default:
+            todo ? this.todoItemHandler(print, done) : skip();
         }
       });
     },
-    save(print) {
-      return new Promise((resolve, reject) => {
-        const { printOnDone = false, useTable = true } = this.dineInOpt;
-        const printCount = this.app.newTicket
-          ? print
-            ? 1
-            : 0
-          : print
-            ? this.order.printCount + 1
-            : this.order.printCount;
+    togoTicketHandler(print, done) {
+      // get original item from archived
+      const order = this.archivedOrder;
+      this.emptyArchiveOrder();
 
-        // update table status
+      // mark current item
+      const items = this.order.content.map(item =>
+        Object.assign({}, item, { print, orderType: "TO_GO" })
+      );
 
-        if (
-          useTable &&
-          this.table &&
-          this.isDineInTicket &&
-          this.table.status === -1
-        ) {
-          Object.assign(this.table, {
-            invoice: [this.order._id],
+      // combine current to original item list
+      order.content.push(...items);
+      this.$calculatePayment(order);
+      this.$socket.emit("[ORDER] UPDATE", order, false);
+
+      // print out to go items
+      print && Printer.print(order, { target: "Order" });
+
+      // exit order state
+      done("EXIT");
+    },
+    todoItemHandler(print, done) {
+      const order = clone(this.order);
+      const items = order.content.filter(item => item.todo);
+      const executeString = this.app.newTicket
+        ? "[ORDER] SAVE"
+        : "[ORDER] UPDATE";
+
+      this.$socket.emit(executeString, this.order, false, ({ number }) => {
+        order.number = number;
+        const todo = Object.assign({}, order, { content: items });
+
+        if (this.isDineInTicket) {
+          this.dineInOpt.printOnDone
+            ? Printer.print(todo)
+            : Printer.print(todo, { target: "Order" });
+        } else if (print) {
+          Printer.print(order, { target: "Receipt" });
+          Printer.print(todo, { target: "Order" });
+        }
+
+        done("EXIT");
+      });
+    },
+    hibachiTicketHandler(print, done) {
+      const hibachiPrinters = [];
+      Object.keys(this.config.printers).forEach(name => {
+        this.config.printers[name].type === "hibachi" &&
+          hibachiPrinters.push(name);
+      });
+
+      let items = [];
+
+      if (print) {
+        this.order.content.forEach(item => {
+          if (
+            Object.keys(item.printer).every(
+              name => !hibachiPrinters.includes(name)
+            )
+          ) {
+            // get non-hibachi items for print
+            // shallow copy item
+            items.push(clone(item));
+            item.print = true;
+          }
+        });
+      }
+
+      const executeString = this.app.newTicket
+        ? "[ORDER] SAVE"
+        : "[ORDER] UPDATE";
+
+      console.log(this.order.content.every(item => item.print));
+      this.$socket.emit(executeString, this.order, false, order => {
+        console.log(order.print);
+        Object.assign(order, { content: items });
+
+        this.dineInOpt.printOnDone
+          ? Printer.print(order)
+          : Printer.print(order, { target: "Order" });
+      });
+
+      done("EXIT");
+    },
+    saveTicket(print) {
+      const { printOnDone = false, useTable = true } = this.dineInOpt;
+
+      const items = this.app.newTicket
+        ? this.order.content.map(item => item)
+        : this.compare(this.order);
+
+      const executeString = this.app.newTicket
+        ? "[ORDER] SAVE"
+        : "[ORDER] UPDATE";
+
+      return new Promise(done => {
+        this.$socket.emit(executeString, this.order, print, order => {
+          Object.assign(order, { content: items });
+
+          if (this.isDineInTicket && print) {
+            printOnDone
+              ? Printer.print(order)
+              : Printer.print(order, { target: "Order" });
+          } else {
+            print && Printer.print(order);
+          }
+        });
+
+        done();
+      });
+    },
+    updateDineInTable(status) {
+      Object.assign(this.table, { invoice: [this.order._id], status });
+      this.$socket.emit("[TABLE] UPDATE", this.table);
+    },
+    updateHibachiTable() {
+      this.table.seats.forEach(seat => {
+        this.order.seats.includes(seat.name) &&
+          Object.assign(seat, {
+            invoice: this.order._id,
+            session: this.order.session,
+            number: this.order.number,
             status: 2
           });
-
-          this.$socket.emit("[TABLE] UPDATE", this.table);
-        }
-
-        if (
-          this.table &&
-          this.order.type === "HIBACHI" &&
-          Array.isArray(this.table.seats)
-        ) {
-          this.table.seats.forEach(seat => {
-            this.order.seats.includes(seat.name) &&
-              Object.assign(seat, {
-                invoice: this.order._id,
-                session: this.order.session,
-                number: this.order.number,
-                status: 2
-              });
-          });
-
-          // update hibachi table seats
-          this.$socket.emit("[TABLE] UPDATE", this.table);
-
-          // set print status to false
-          // hibachi order must send at once
-
-          print = false;
-        }
-
-        let order = this.combineOrderInfo({ printCount });
-        let todo = !!document.querySelector(".item.todo");
-
-        if (todo && !print) {
-          todo = false;
-        }
-
-        if (this.app.newTicket) {
-          const items =
-            todo && print
-              ? this.todoPrintHandler(order)
-              : print
-                ? order.content.map(item => {
-                    const _item = clone(item);
-                    Object.assign(item, { print: true });
-                    return _item;
-                  })
-                : [];
-
-          if (this.isDineInTicket) {
-            this.$socket.emit("[ORDER] SAVE", order, false, ({ number }) => {
-              if (items.length === 0) return;
-
-              const ticket = Object.assign({}, order, {
-                number,
-                content: items
-              });
-
-              printOnDone
-                ? Printer.print(ticket)
-                : Printer.print(ticket, { target: "Order" });
-            });
-          } else {
-            this.$socket.emit(
-              "[ORDER] SAVE",
-              order,
-              print,
-              ticket =>
-                print &&
-                Printer.print(Object.assign(ticket, { content: items }))
-            );
-          }
-        } else {
-          if (this.ticket.type !== "TO_GO") {
-            if (print) {
-              const diffs = this.compare(order);
-
-              if (this.order.type !== "DINE_IN" && this.order.type !== "BAR") {
-                Printer.print(diffs);
-              } else {
-                printOnDone
-                  ? Printer.print(diffs)
-                  : Printer.print(diffs, { target: "Order" });
-              }
-            }
-            this.$socket.emit("[ORDER] UPDATE", order, print);
-          } else {
-            print && Printer.print(this.order, { target: "Order" });
-          }
-        }
-
-        resolve(false);
       });
+
+      this.$socket.emit("[TABLE] UPDATE", this.table);
     },
     todoPrintHandler(order) {
       let items = [];
@@ -446,7 +472,7 @@ export default {
 
       return items;
     },
-    exit(quit) {
+    exit() {
       const { done } = this.station.autoLock;
       const { lockOnDone, useTable } = this.dineInOpt;
 
@@ -491,30 +517,10 @@ export default {
       };
 
       this.isEmptyTicket
-        ? this.abandon()
+        ? this.dismissTicket()
         : this.$dialog(prompt)
-            .then(this.abandon)
+            .then(this.dismissTicket)
             .catch(this.exitComponent);
-    },
-    combineOrderInfo(extra) {
-      const customer = this.$minifyCustomer(this.customer);
-      let order = Object.assign({}, this.order);
-
-      if (this.app.newTicket) {
-        delete customer.favorite;
-        Object.assign(order, {
-          time: Date.now(),
-          date: today(),
-          customer
-        });
-      } else {
-        Object.assign(order, {
-          lastEdit: Date.now(),
-          editor: this.op.name,
-          customer
-        });
-      }
-      return Object.assign({}, order, extra);
     },
     createTogo() {
       this.archiveOrder(this.order);
@@ -554,12 +560,12 @@ export default {
           });
         }
       }
-      this.abandon();
+      this.dismissTicket();
     },
-    abandon() {
+    dismissTicket() {
       this.resetAll();
       this.$router.push({ path: "/main" });
-      this.$log(`#${this.ticket.number} Invoice was abandoned.`);
+      this.$log(`#${this.ticket.number} Invoice was dismissed.`);
     },
     switchLanguage() {
       const language = this.app.language === "usEN" ? "zhCN" : "usEN";
@@ -687,7 +693,7 @@ export default {
 
       removedItems.length > 0 && items.unshift(...removedItems);
 
-      return Object.assign(current, { content: items });
+      return items;
     },
     ...mapActions([
       "setApp",
@@ -705,11 +711,13 @@ export default {
   },
   computed: {
     isDineInTicket() {
+      const { type } = this.order;
+
       return (
-        this.order.type === "DINE_IN" ||
-        this.order.type === "HIBACHI" ||
-        this.order.type === "BAR" ||
-        this.order.type === "TO_GO"
+        type === "DINE_IN" ||
+        type === "HIBACHI" ||
+        type === "BAR" ||
+        type === "TO_GO"
       );
     },
     ...mapGetters([

@@ -44,7 +44,7 @@ export default {
 
       let index = value.indexOf(e.target.value);
       index === -1 ? value.push(e.target.value) : value.splice(index, 1);
-      
+
       this.$emit("input", value);
     }
   },
@@ -125,6 +125,7 @@ input:checked + label:after {
 }
 
 input:disabled ~ label {
-  opacity: 0.7;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

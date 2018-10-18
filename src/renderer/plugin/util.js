@@ -786,8 +786,7 @@ export default {
       }
     };
 
-    window.clone = target =>
-      Object.assign(Object.create(Object.getPrototypeOf(target)), target);
+    window.clone = target => Object.assign(Object.create(Object.getPrototypeOf(target)), target);
     window.toFixed = (number, fractionSize) => +(Math.round(+(number.toString() + "e" + fractionSize)).toString() + "e" + -fractionSize);
     // window.round = (number, precision = 2) => {
     //   const factor = Math.pow(10, precision);

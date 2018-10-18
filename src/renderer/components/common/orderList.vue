@@ -2,13 +2,12 @@
   <div>
     <header v-if="layout === 'order'" class="simple">
       <span class="itemQty">{{$t('text.qty')}}</span>
-      <span class="item">{{$t('text.item')}}</span>
+      <span class="f1">{{$t('text.item')}}</span>
       <span class="price">{{$t('text.price')}}</span>
     </header>
     <header v-else class="info">
       <div class="content">
-        <template v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
-          <div class="detail">
+          <div class="detail" v-if="order.type === 'DINE_IN' || order.type === 'HIBACHI' || order.type === 'BAR'">
             <p>
                 <i class="fas fa-user-tie light"></i>
                 <span class="filed">{{order.server}}</span>
@@ -27,29 +26,24 @@
                 <span v-else class="status">{{$t('text.doneTicket')}}</span>
               </p>
           </div>
-        </template>
-        <template v-else>
-          <template v-if="order.customer">
-            <div class="detail">
-              <p>
-                <i class="fas fa-user-tie light"></i>
-                <span class="filed">{{order.server}}</span>
-                <i class="fas fa-clock light"></i>
-                <span>{{order.time | moment('MMM,DD HH:mm',time)}}</span>
-              </p>
-              <p>
-                <i class="fa fa-phone light"></i>
-                <span class="filed">{{order.customer.phone | phone}}</span>
-                <i class="fas fa-id-badge light"></i>
-                <span class="name">{{order.customer.name}}</span>
-              </p>
-              <p>
-                <i class="fas fa-map-marker-alt light"></i>
-                <span>{{order.customer.address}}</span>
-              </p>
-            </div>
-          </template>
-        </template>
+          <div class="detail" v-else-if="order.customer">
+            <p>
+              <i class="fas fa-user-tie light"></i>
+              <span class="filed">{{order.server}}</span>
+              <i class="fas fa-clock light"></i>
+              <span>{{order.time | moment('MMM,DD HH:mm',time)}}</span>
+            </p>
+            <p>
+              <i class="fa fa-phone light"></i>
+              <span class="filed">{{order.customer.phone | phone}}</span>
+              <i class="fas fa-id-badge light"></i>
+              <span class="name">{{order.customer.name}}</span>
+            </p>
+            <p>
+              <i class="fas fa-map-marker-alt light"></i>
+              <span>{{order.customer.address}}</span>
+            </p>
+          </div>
       </div>
       <div class="bar">
         <template v-if="!isEmptyTicket">
@@ -77,11 +71,11 @@
       </v-touch>
     </div>
     <div class="middle">
-      <div class="fnWrap">
+      <div class="btn-wrap">
         <button class="fn fas fa-credit-card" @click="openVault" :disabled="!customer._id"></button>
         <button class="fn fas fa-ellipsis-h" @click="separator" :disabled="$route.name !== 'Menu'"></button>
         <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'" :disabled="spooler.length === 0"></button>
-        <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="disableTodo"></button>
+        <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="order.type === 'HIBACHI'"></button>
         <button class="fn far fa-keyboard" @click="$open('entry')" :disabled="$route.name !== 'Menu'"></button>
       </div>
       <div class="settle" @click="openConfig">
@@ -394,12 +388,6 @@ export default {
 
       return this.prevsItems.filter(({ _id }) => !items.includes(_id));
     },
-    disableTodo() {
-      return (
-        this.order.type === "HIBACHI" ||
-        this.undoneItems !== this.order.content.length
-      );
-    },
     ...mapGetters([
       "app",
       "tax",
@@ -506,10 +494,6 @@ header.info {
   text-align: center;
 }
 
-.simple .item {
-  flex: 1;
-}
-
 .simple .price {
   width: 45px;
   text-align: center;
@@ -549,12 +533,12 @@ header.info {
   margin-top: 1px;
 }
 
-.fnWrap {
+.btn-wrap {
   width: 127px;
   padding-left: 3px;
 }
 
-.fn {
+.btn-wrap button{
   background: linear-gradient(#fefefe, #cfd0d3);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   text-shadow: 0 1px 1px #fff;
@@ -570,17 +554,18 @@ header.info {
   outline: none;
 }
 
-.fn:nth-child(n + 3) {
+.btn-wrap button:nth-child(n + 3) {
   margin-top: 4px;
 }
 
-.fn:active {
+.btn-wrap button:active {
   background: linear-gradient(#e2e3e4, #aaadb4);
   color: #333;
 }
 
 .settle {
   width: 155px;
+  text-align: right;
 }
 
 .settle p {
@@ -600,11 +585,6 @@ header.info {
   overflow: hidden;
   vertical-align: text-top;
   text-overflow: ellipsis;
-}
-
-.settle .text,
-.settle .value {
-  text-align: right;
 }
 
 .settle p:last-child {

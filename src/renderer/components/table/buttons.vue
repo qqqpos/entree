@@ -1,45 +1,15 @@
 <template>
   <div>
-    <button class="btn" @click="editOrder" :disabled="(!table || order.content.length === 0)">
-      <i class="fa fa-edit"></i>
-      <span class="text">{{$t('button.edit')}}</span>
-    </button>
-    <button class="btn" @click="$emit('update:transfer',false)" v-if="transfer">
-      <i class="fas fa-ban"></i>
-      <span class="text">{{$t("button.cancel")}}</span>
-    </button>
-    <button class="btn" @click="invoke('switchTableDialog')" v-else :disabled="!table || order.type === 'HIBACHI'">
-      <i class="fas fa-exchange-alt"></i>
-      <span class="text">{{$t('button.switchTable')}}</span>
-    </button>
-    <button class="btn" @click="$open('listModule')">
-      <i class="fas fa-list-ol"></i>
-      <span class="text">{{$t('button.list')}}</span>
-    </button>
-    <button class="btn" @click="invoke('settle')" :disabled="!table">
-      <i class="fas fa-hand-holding-usd"></i>
-      <span class="text">{{$t('button.payment')}}</span>
-    </button>   
-    <button class="btn" @click="invoke('split')">
-      <i class="fa fa-clone"></i>
-      <span class="text">{{$t('button.split')}}</span>
-    </button> 
-    <button class="btn" @click="invoke('prePayment')">
-      <i class="fas fa-file-invoice-dollar"></i>
-      <span class="text">{{$t('button.receipt')}}</span>
-    </button>
-    <button class="btn" @click="switchStaff">
-      <i class="fa fa-user-times"></i>
-      <span class="text">{{$t('button.switch')}}</span>
-    </button>
-    <button class="btn" @click="exit">
-      <i class="fa fa-times"></i>
-      <span class="text">{{$t('button.exit')}}</span>
-    </button>
-    <button class="btn" @click="clearTable">
-      <i class="fa fa-recycle"></i>
-      <span class="text">{{$t('button.clearTable')}}</span>
-    </button>
+    <fn icon="fa-edit" text="button.edit" @click="editOrder" :disabled="(!table || order.content.length === 0)"></fn>
+    <fn icon="fa-ban" text="button.cancel" @click="$emit('update:transfer',false)" v-if="transfer"></fn>
+    <fn icon="fa-exchange-alt" text="button.switchTable" :disabled="!table || order.type === 'HIBACHI'" v-else></fn>
+    <fn icon="fa-list-ol" text="button.list" @click="$open('listModule')"></fn>
+    <fn icon="fa-hand-holding-usd" text="button.payment" @click="invoke('settle')" :disabled="!table"></fn>
+    <fn icon="fa-clone" text="button.split" @click="invoke('split')"></fn>
+    <fn icon="fa-file-invoice-dollar" text="button.receipt" @click="invoke('prePayment')"></fn>
+    <fn icon="fa-user-times" text="button.switch" @click="switchStaff"></fn>
+    <fn icon="fa-times" text="button.exit" @click="exit"></fn>
+    <fn icon="fa-recycle" text="button.clearTable" @click="clearTable"></fn>
     <div :is="component" :init="componentData"></div>
   </div>
 </template>
@@ -54,6 +24,7 @@ import dialogModule from "../common/dialog";
 import listModule from "./component/list";
 import splitModule from "../split/index";
 import staff from "./component/staffs";
+import fn from "../shared/fn";
 
 export default {
   components: {
@@ -63,7 +34,8 @@ export default {
     paymentModule,
     splitModule,
     listModule,
-    staff
+    staff,
+    fn
   },
   props: ["transfer"],
   data() {
@@ -81,15 +53,13 @@ export default {
     },
     edit() {
       if (this.order.split) {
+        const byNumber = (a, b) =>
+          +a.number.replace(/\D/g, "") > +b.number.replace(/\D/g, "") ? 1 : -1;
+
         this.$socket.emit("[SPLIT] GET", this.order._id, splits => {
           this.$open("splitSelector", {
             parent: clone(this.order),
-            splits: splits.sort(
-              (a, b) =>
-                +a.number.replace(/\D/g, "") > +b.number.replace(/\D/g, "")
-                  ? 1
-                  : -1
-            )
+            splits: splits.sort(byNumber)
           });
         });
       } else {

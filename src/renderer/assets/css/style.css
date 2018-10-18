@@ -1552,8 +1552,15 @@ span.action.yellow {
 
 h1.tender {
   font-size: 36px;
-  color: #222;
+  color: #333;
   display: flex;
   margin-bottom: 5px;
   justify-content: center;
+}
+
+h1.tender .agency:before{
+  content: "$";
+  color: #009688;
+  font-size: 24px;
+  margin: 0 5px 0 10px;
 }

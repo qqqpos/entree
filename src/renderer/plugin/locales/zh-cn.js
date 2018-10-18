@@ -735,7 +735,7 @@ export default {
     itemImported: "成功从CSV文件中导入 {i} 个物品",
     cashPaymentNotAllow: "您无权进行现金支付",
     printHibachi: "打印铁板订单",
-    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有订单吗?",
+    printHibachiConfirm: "您确定要打印 {i}铁板座位 的所有铁板餐吗?",
     ticketOnHouse: "店家买单"
   },
   terminal: {

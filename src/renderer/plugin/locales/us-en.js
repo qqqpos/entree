@@ -804,7 +804,7 @@ export default {
     itemImported: "Successfully imported {i} items from CSV file.",
     cashPaymentNotAllow: "You are not allow to pay with cash.",
     printHibachi: "Print Hibachi Tickets",
-    printHibachiConfirm: "Are you sure to print all ticket on hibachi table {i}?",
+    printHibachiConfirm: "Are you sure to print all hibachi items for table {i}?",
     ticketOnHouse: "Ticket On the House"
   },
   terminal: {

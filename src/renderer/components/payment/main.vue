@@ -929,7 +929,7 @@ export default {
           html: true,
           content: `<h1 class="tender">${this.$t(
             "dialog.confirm.cashTender"
-          )}<span class="agency space"> $ ${tender}</span></h1><h5 class="normal light">${this.$t(
+          )}<span class="agency">${tender}</span></h1><h5 class="normal light">${this.$t(
             "dialog.cashPaymentDetail",
             paid
           )}</h5>`,
