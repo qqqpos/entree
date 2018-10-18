@@ -347,7 +347,7 @@ export default {
     chargeRemain: "Charge Remain Balance",
     copy: "Copy",
     reimburse: "Reimburse",
-    additional: "Additional Order",
+    addItem: "Add Item",
     received: "Received ({i})",
     import: "Import",
     export: "Export"
@@ -1525,6 +1525,8 @@ export default {
     databaseBackupPath: "Database Backup Path",
     estimateWaitTime: "Estimate wait time: {i} Minutes",
     temporaryDriver: "Name a temporary driver",
+    selectSplitOrder: "Please select a split ticket to continue",
+    selectCoupon:"Please select a coupon",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",

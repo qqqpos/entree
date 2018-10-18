@@ -1,6 +1,6 @@
 <template>
-  <aside>
-    <fn icon="fa-edit" text="button.edit" @click="editOrder" :disabled="order.split"></fn>
+  <aside class="column">
+    <fn icon="fa-edit" text="button.edit" @click="editOrder" :disabled="isEmptyTicket"></fn>
     <fn icon="fa-redo-alt" text="button.recover" @click="recoverTicketDialog" v-if="order && order.status === 0"></fn>
     <fn icon="fa-creative-commons-nc" text="button.void" @click="voidOrder" :disabled="splitMode" v-else></fn>
     <fn icon="fa-file-invoice" text="button.receipt" @click="receipt"></fn>
@@ -18,6 +18,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import splitSelector from "../shared/splitSelector";
 import calendarModule from "./component/calendar";
 import dialogModule from "../common/dialog";
 import unlockModule from "../common/unlock";
@@ -35,6 +36,7 @@ export default {
   components: {
     calendarModule,
     terminalModule,
+    splitSelector,
     dialogModule,
     reportModule,
     unlockModule,
@@ -57,18 +59,55 @@ export default {
     this.reportable = this.approval(this.op.access, "report");
   },
   methods: {
-    editOrder() {
-      if (this.isEmptyTicket) return;
+    async editOrder() {
+      try {
+        if (this.order.status === 0)
+          throw {
+            title: "dialog.unableEdit",
+            msg: ["dialog.unableEditVoidTicket", this.order.void.by],
+            buttons: [{ text: "button.confirm", fn: "reject" }]
+          };
 
-      this.$checkPermission("modify", "order")
-        .then(() => {
-          this.checkDate()
-            .then(this.checkStatus)
-            .then(this.checkSettlement)
-            .then(this.edit)
-            .catch(this.editFailed);
-        })
-        .catch(() => {});
+        await this.$checkPermission("modify", "order");
+        await this.checkSettlement();
+        this.edit();
+      } catch (error) {
+        error ? this.editFailed(error) : this.exitComponent();
+      }
+    },
+    edit() {
+      this.exitComponent();
+      const { _id, type, number, customer, split } = this.order;
+
+      if (split) {
+        this.selectSplitDialog();
+      } else {
+        this.setApp({ newTicket: false });
+        this.setTicket({ type, number });
+        this.setCustomer(customer);
+
+        this.$router.push({ path: "/main/menu" });
+      }
+    },
+    selectSplitDialog() {
+      const byNumber = (a, b) =>
+        +a.number.replace(/\D/g, "") > +b.number.replace(/\D/g, "") ? 1 : -1;
+
+      this.$socket.emit("[SPLIT] GET", this.order._id, splits => {
+        this.$open("splitSelector", {
+          parent: clone(this.order),
+          splits: splits.sort(byNumber)
+        });
+      });
+    },
+    editFailed(reason) {
+      reason.hasOwnProperty("title")
+        ? this.$dialog(reason)
+            .then(this.removePaymentRecord)
+            .catch(edit => {
+              edit ? this.edit() : this.exitComponent();
+            })
+        : this.edit();
     },
     voidOrder() {
       if (this.isEmptyTicket) return;
@@ -97,40 +136,27 @@ export default {
             : stop(prompt);
       });
     },
-    checkStatus() {
-      return new Promise((next, stop) => {
-        this.order.status === 1
-          ? next()
-          : stop({
-              title: "dialog.unableEdit",
-              msg: ["dialog.unableEditVoidTicket", this.order.void.by],
-              buttons: [{ text: "button.confirm", fn: "reject" }]
-            });
-      });
-    },
     checkSettlement() {
       return new Promise((next, stop) => {
-        const ticketSettled = {
-          type: "question",
+        const buttons = [
+          { text: "button.removePayment", fn: "resolve" },
+          { text: "button.addItem", fn: "edit" },
+          { text: "button.cancel", fn: "reject" }
+        ];
+
+        const ticketSettledError = {
           title: "dialog.ticketClosed",
           msg: "dialog.removePaymentRecordFirst",
-          buttons: [
-            { text: "button.removePayment", fn: "resolve" },
-            { text: "button.cancel", fn: "reject" }
-          ]
+          buttons
         };
+
         const paymentFoundError = {
-          type: "question",
           title: "dialog.paymentFound",
           msg: "dialog.removePaymentRecordFirst",
-          buttons: [
-            { text: "button.removePayment", fn: "resolve" },
-            { text: "button.cancel", fn: "reject" }
-          ]
+          buttons
         };
 
         const splitTicketAction = {
-          type: "question",
           title: "dialog.splitTicketPaymentFound",
           msg: "dialog.whatNext",
           buttons: [
@@ -139,7 +165,7 @@ export default {
           ]
         };
 
-        if (this.order.settled) throw ticketSettled;
+        if (this.order.settled) throw ticketSettledError;
 
         this.$socket.emit(
           "[PAYMENT] COUNT",
@@ -156,31 +182,6 @@ export default {
           }
         );
       });
-    },
-    edit(prompt) {
-      if (isObject(prompt)) {
-        this.$dialog(prompt)
-          .then(this.removePaymentRecord)
-          .catch(() => {
-            this.exitComponent();
-            this.edit();
-          });
-      } else {
-        const { _id, type, number, customer } = this.order;
-
-        this.setApp({ newTicket: false });
-        this.setTicket({ type, number });
-        this.setCustomer(customer);
-
-        this.$router.push({ path: "/main/menu" });
-      }
-    },
-    editFailed(reason) {
-      reason.hasOwnProperty("title")
-        ? this.$dialog(reason)
-            .then(this.removePaymentRecord)
-            .catch(this.exitComponent)
-        : this.edit();
     },
     voidTicket(p) {
       const prompt = {
@@ -520,8 +521,6 @@ export default {
 
 <style scoped>
 aside {
-  display: flex;
-  flex-direction: column;
   padding: 4px;
 }
 </style>

@@ -3,10 +3,10 @@
     <div class="frame-common">
       <header>
         <h3>{{$t('title.split')}}</h3>
-        <h5>Please select one ticket to edit</h5>
+        <h5>{{$t('tip.selectSplitOrder')}}</h5>
       </header>
       <div class="wrap">
-        <div class="row flex-center flex-wrap" v-if="splits.length">
+        <div class="row" v-if="splits.length">
           <ticket v-for="(invoice,index) in splits" :key="index" :invoice="invoice"></ticket>
         </div>
         <div class="placeholder" v-else>
@@ -23,7 +23,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import ticket from "../../history/component/ticket";
+import ticket from "../history/component/ticket";
 
 export default {
   props: ["init"],
@@ -36,24 +36,25 @@ export default {
   },
   methods: {
     confirm() {
+      const { type, number } = this.order;
+
       this.setApp({ newTicket: false });
-      this.setTicket({ type: "DINE_IN", number: this.order.number });
+      this.setTicket({ type, number });
       this.$router.push({ path: "/main/menu" });
     },
     update(number) {
       this.selected = true;
 
       this.$nextTick(() => {
-        let dom = document.querySelector(".ticket.active");
+        const dom = document.querySelector(".ticket.active");
         dom && dom.classList.remove("active");
-        dom = document.querySelectorAll(".ticket");
 
-        for (let i = 0; i < dom.length; i++) {
-          if (dom[i].dataset.number == number) {
-            dom[i] && dom[i].classList.add("active");
-            break;
+        Array.from(document.querySelectorAll(".ticket")).some(target => {
+          if (target.dataset.number == number) {
+            target.classList.add("active");
+            return true;
           }
-        }
+        });
       });
     },
     back() {
@@ -76,6 +77,12 @@ export default {
   width: 700px;
   height: 315px;
   padding: 15px;
+}
+
+.row {
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .row > div {

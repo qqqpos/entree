@@ -322,14 +322,14 @@ function createList(printer, setting, invoice, preview) {
 
     for (let i = 0; i < items.length; i++) {
       const {
-        seat
+        seat = "Not Assigned"
       } = items[i];
 
       sorted[seat] ? sorted[seat].push(items[i]) : (sorted[seat] = [items[i]]);
     }
 
     Object.keys(sorted).forEach(seat => {
-      const title = `<p class="title">Seat ${seat || ""}</p>`;
+      const title = `<p class="title">Seat ${seat}</p>`;
       const categorized = sorted[seat].map(item => mockup(item, renderQty)).join("").toString();
       content += `<div class="categorize">${title + categorized}</div>`
     })

@@ -113,7 +113,7 @@ export default {
       );
       this.groups = groups;
 
-      let dom = document.querySelector(".groups .active");
+      const dom = document.querySelector(".groups .active");
       dom && dom.classList.remove("active");
     },
     ...mapActions([

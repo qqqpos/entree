@@ -1,7 +1,7 @@
 import locales from './locales'
 
 const dict = {
-    install(Vue, options) {
+    install(Vue, ) {
         Vue.language = 'us-en';
         Vue.locales = locales[Vue.language];
         Vue.mixin({
@@ -9,7 +9,8 @@ const dict = {
                 $t(text, ...d) {
                     if (!text || !text.includes(".")) return text;
                     let i = 0;
-                    let string = text.split('.').reduce((p, c) => p && p[c] || c, Vue.locales);
+                    const dictionary = locales[Vue.language];
+                    const string = text.split('.').reduce((p, c) => p && p[c] || c, dictionary);
                     return d ? string.replace(/\{i\}/g, () => d[i++]) : string;
                 }
             }
@@ -28,7 +29,7 @@ const dict = {
                     Vue.language = 'zh-cn';
                     break;
             }
-            Vue.locales = locales[Vue.language]
+            Vue.set(Vue.locales, locales[Vue.language])
         }
     }
 }

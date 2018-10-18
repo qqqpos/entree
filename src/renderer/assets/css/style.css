@@ -446,6 +446,7 @@ dialog {
   width: 100%;
   height: 100%;
   border: none;
+  z-index: 2;
   background: rgba(0, 0, 0, 0.3);
 }
 
@@ -454,13 +455,12 @@ dialog {
   border-radius: 3px;
   transform: translateY(-15px);
   box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
-  ;
 }
 
 .frame-common header {
   text-align: center;
   background: #fff;
-  padding: 20px 0 15px;
+  padding: 18px 0 10px;
   border-radius: 4px 4px 0 0;
   border-bottom: 1px solid #eee;
 }
@@ -468,6 +468,7 @@ dialog {
 .frame-common header h5 {
   font-weight: normal;
   color: #757575;
+  margin-top: 3px;
 }
 
 .window {
@@ -492,7 +493,7 @@ dialog {
   border-top-right-radius: 4px;
 }
 
-.title>i {
+.title > i {
   font-style: normal;
   cursor: pointer;
   position: absolute;

@@ -57,6 +57,7 @@
     <div class="order" v-if="order.type === 'HIBACHI'" :key="1">
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd">
         <group-item :items="order.content" :seats="seats" @update="setSeat"></group-item>
+        <list-item v-for="(item,index) in order.content.filter(i=>!i.seat)" :data-category="item.category" :key="index" :item="item" :type="order.type"></list-item>
       </v-touch>
     </div>
     <div class="order" @click.self="resetHighlight" v-else-if="layout === 'order'" :key="2">

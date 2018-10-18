@@ -17,7 +17,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import splitSelector from "./component/splitSelector";
+import splitSelector from "../shared/splitSelector";
 import paymentModule from "../payment/main";
 import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
@@ -64,7 +64,7 @@ export default {
         });
       } else {
         const { type, number } = this.order;
-        
+
         this.setApp({ newTicket: false });
         this.setTicket({ type, number });
         this.$router.push({ path: "/main/menu" });
@@ -80,7 +80,7 @@ export default {
             buttons: [
               { text: "button.cancel", fn: "reject" },
               { text: "button.clearTable", fn: "clearTable" },
-              { text: "button.additional", fn: "resolve" }
+              { text: "button.addItem", fn: "resolve" }
             ]
           };
 

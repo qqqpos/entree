@@ -347,7 +347,7 @@ export default {
     chargeRemain: "支付余额",
     copy: "复制",
     reimburse: "偿还",
-    additional: "追加物品",
+    addItem: "追加物品",
     received: "已收 ({i})",
     import: "导入",
     export: "导出"
@@ -1519,6 +1519,8 @@ export default {
     databaseBackupPath: "数据库备份路径",
     estimateWaitTime: "预计等待时间为 {i} 分钟",
     temporaryDriver: "设定一个临时司机的名称",
+    selectSplitOrder: "请先选择一个分单再操作",
+    selectCoupon:"请选择一个优惠券",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",

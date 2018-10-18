@@ -15,7 +15,7 @@
       <fn icon="fa-times" text="button.exit" @click="dineInQuit"></fn>
     </div>
     <div class="bottomRight">
-      <fn :class="{long:dineInOpt.useTable}" icon="fa-print" text="button.print" @click="done(true)"></fn>
+      <fn :class="{long:dineInOpt.useTable}" icon="fa-print" text="button.done" @click="done(true)"></fn>
       <fn icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket" v-if="!dineInOpt.useTable"></fn>
       <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>
     </div>
@@ -199,8 +199,8 @@ export default {
       });
 
       // handle table status update logic
-
-      this.isDineInTicket &&
+      this.table &&
+        this.isDineInTicket &&
         this.dineInOpt.useTable &&
         this.table.status === -1 &&
         this.updateDineInTable(2);
@@ -215,12 +215,14 @@ export default {
         // popup save confirm
         await this.promptConfirm(print);
         await this.checkPendingItem(print);
+
+        // close save confirm dialog
+        this.exitComponent();
+
         await this.initialPrint(print);
         await this.saveTicket(print);
 
         this.exit();
-        // close save confirm dialog
-        this.exitComponent();
       } catch (exception) {
         switch (exception) {
           case undefined:
@@ -415,7 +417,7 @@ export default {
           ? Printer.print(order)
           : Printer.print(order, { target: "Order" });
 
-          done("EXIT");
+        done("EXIT");
       });
     },
     saveTicket(print) {
