@@ -480,7 +480,6 @@ export default {
     attemptReconnect: "正在尝试与主机通信中...",
     attemptFailed: "无法与主机通信，请立即拨打技术部门热线",
     supportHotLine: "(888)299-0524",
-
     systemProcessing: "系统处理中...",
     switchOrderType: "更改订单类别",
     orderTypeSwitchFrom: "订单类别将从 {i} 变成 {i}",
@@ -857,7 +856,6 @@ export default {
     surcharge: "附加费",
 
 
-
     configuration: "报表格式",
     range: "报告范围",
     dailyReport: "按天打印",
@@ -878,23 +876,18 @@ export default {
     driverLiability: "司机报告",
     thirdPartySummary: "第三方概要",
     viaEmail: "发送报表至邮箱",
-
     cash: "现金",
     creditCard: "信用卡",
     debitCard: "借记卡",
     giftCard: "礼物卡",
     creditCardTip: "信用卡小费",
     tax: "税",
-
-
-
     thirdParty: "第三方",
     detailPayment: "细分款项",
     tipsSource: "显示小费来源",
     from: "来自 {i}",
     fromDate: "从",
     toDate: "至",
-
     cashTotal: "现金",
     creditTotal: "信用卡",
     thirdPartyTotal: "第三方",
@@ -927,7 +920,6 @@ export default {
     lowestSales: "最低营业额",
     averageSales: "平均营业额",
     averageDetail: "其中有 {i}天 是高于平均值, {i}天 是低于平均值",
-
     giftcard: {
       activation: "礼物卡激活",
       reload: "礼物卡充值",
@@ -1369,6 +1361,11 @@ export default {
     reconciliation: "对账",
     scatter: "分布图",
     inventory: "库存"
+  },
+  hibachi: {
+    done: "已完成",
+    wait: "等待中",
+    miss: "无订单"
   },
   booking: {
     date: "预约日期",

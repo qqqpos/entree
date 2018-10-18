@@ -1368,6 +1368,11 @@ export default {
     scatter: "Scatter",
     inventory: "Inventory"
   },
+  hibachi: {
+    done: "Done",
+    wait: "Waiting",
+    miss: "Missing"
+  },
   booking: {
     date: "Book Date",
     type: "Source",

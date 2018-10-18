@@ -275,11 +275,11 @@ export default {
 
       const order = this.history.find(t => t._id === invoice);
 
-      if (order) {
-        return order.print ? "Cooked" : "Placed";
-      } else {
-        return "Missing";
-      }
+      return order
+        ? order.print
+          ? this.$t("hibachi.done")
+          : this.$t("hibachi.wait")
+        : this.$t("hibachi.miss");
     },
     ...mapActions([
       "setApp",

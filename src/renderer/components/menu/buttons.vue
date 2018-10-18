@@ -319,7 +319,7 @@ export default {
           this.order.content.forEach(item => {
             delete item.todo;
           });
-          
+
         switch (this.ticket.type) {
           case "TO_GO":
             this.togoTicketHandler(print, done);
@@ -377,7 +377,7 @@ export default {
       });
     },
     hibachiTicketHandler(print, done) {
-      console.log("trigger");
+      const { newTicket } = this.app;
       const hibachiPrinters = [];
       Object.keys(this.config.printers).forEach(name => {
         this.config.printers[name].type === "hibachi" &&
@@ -401,21 +401,22 @@ export default {
         });
       }
 
-      const executeString = this.app.newTicket
-        ? "[ORDER] SAVE"
-        : "[ORDER] UPDATE";
+      const executeString = newTicket ? "[ORDER] SAVE" : "[ORDER] UPDATE";
 
-      console.log(this.order.content.every(item => item.print));
       this.$socket.emit(executeString, this.order, false, order => {
-        console.log(order.print);
         Object.assign(order, { content: items });
+
+        if (!newTicket) {
+          // compare difference and overWrite
+          order.content = this.compare(order);
+        }
 
         this.dineInOpt.printOnDone
           ? Printer.print(order)
           : Printer.print(order, { target: "Order" });
-      });
 
-      done("EXIT");
+          done("EXIT");
+      });
     },
     saveTicket(print) {
       const { printOnDone = false, useTable = true } = this.dineInOpt;
