@@ -75,7 +75,7 @@ export default {
     },
     viewHibachi(invoice, seat) {
       this.setViewOrder(invoice);
-      invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat);
+      invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat,true);
     },
     selectAll(hibachi) {
       this.seats = [];

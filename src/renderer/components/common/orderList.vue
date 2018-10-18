@@ -56,7 +56,7 @@
     </header>
     <div class="order" v-if="order.type === 'HIBACHI'" :key="1">
       <v-touch class="inner" :style="scroll" @panup="move" @pandown="move" @panstart="panStart" @panend="panEnd">
-        <group-item :items="order.content" :seats="seats" @update="setSeat"></group-item>
+        <group-item :items="order.content" :seats="seats" @update="setSeat" :checkbox="todo"></group-item>
         <list-item v-for="(item,index) in order.content.filter(i=>!i.seat)" :data-category="item.category" :key="index" :item="item" :type="order.type"></list-item>
       </v-touch>
     </div>
@@ -76,7 +76,7 @@
         <button class="fn fas fa-credit-card" @click="openVault" :disabled="!customer._id"></button>
         <button class="fn fas fa-ellipsis-h" @click="separator" :disabled="$route.name !== 'Menu'"></button>
         <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'" :disabled="spooler.length === 0"></button>
-        <button class="fn far fa-check-square" v-else @click="toggleTodoList" :disabled="order.type === 'HIBACHI'"></button>
+        <button class="fn far fa-check-square" v-else @click="toggleTodoList"></button>
         <button class="fn far fa-keyboard" @click="$open('entry')" :disabled="$route.name !== 'Menu'"></button>
       </div>
       <div class="settle" @click="openConfig">

@@ -54,14 +54,14 @@ export default {
         item === this.$store.getters.item &&
         item !== this.$store.getters.order.content.last()
       ) {
-        let dom = document.querySelector("li.item.active");
+        const dom = document.querySelector("li.item.active");
         dom && dom.classList.remove("active");
         this.resetPointer();
       } else {
-        let dom = document.querySelector("li.item.active");
+        const dom = document.querySelector("li.item.active");
         dom && dom.classList.remove("active");
-        dom = document.querySelector(".choiceSet.target");
-        dom && dom.classList.remove("target");
+        const target = document.querySelector(".choiceSet.target");
+        target && target.classList.remove("target");
 
         this.resetChoiceSet();
         e.currentTarget.classList.add("active");
@@ -72,7 +72,7 @@ export default {
       if (this.ignore) return;
       if (this.$route.name !== "Menu") return;
 
-      let dom = document.querySelector(".sub.target");
+      const dom = document.querySelector(".sub.target");
       dom && dom.classList.remove("target");
 
       if (this.choiceSet === choice) {

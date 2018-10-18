@@ -116,11 +116,11 @@ export default {
         this.item = item;
         this.keywords = item[this.language];
         //if has condition multiplier
+        console.log(action.multiplier);
         if (action.multiplier) {
-          this.price = toFixed(
-            price * (isNumber(action.multiply) ? action.multiply : 0),
-            2
-          );
+          this.price = (
+            item.price * (parseFloat(action.multiply) || 0)
+          ).toFixed(2);
         }
       } else {
         this.item = item;

@@ -3,19 +3,24 @@
     <div class="group" v-for="(group,index) in groups" :key="index" @click="setSeat(places[index])">
       <div class="seat" :data-seat="'seat'+places[index]">{{places[index]}}</div>
       <div class="list">
-        <div v-for="(item,idx) in group" :key="idx" :class="{print:$route.name !== 'Menu' && !item.print}">
-          <div class="main" @click.stop="select(item,index,idx)">
-            <span class="qty">{{item.qty}}</span>
-            <span class="f1">
-              <span class="item">{{item[language]}}</span>
-              <span class="side">{{item.side[language]}}</span>
-            </span>
-            <span class="price">{{item.total}}</span>
-          </div>
-          <div class="sub" v-for="(set,i) in item.choiceSet" :key="i" @click.stop="adjustChoiceSet(set,$event)">
-            <span class="qty" :class="{hide:set.qty === 1}">{{set.qty}}</span>
-            <span class="item">{{set[language]}}</span>
-            <span class="price" :class="{hide:parseFloat(set.price) === 0}">({{set.price | decimal}})</span>
+        <div v-for="(item,idx) in group" :key="idx" :class="{print:$route.name !== 'Menu' && !item.print}" @click="select(item,index,idx)">
+          <template v-if="!checkbox">
+            <div class="main">
+              <span class="qty">{{item.qty}}</span>
+              <span class="f1">
+                <span class="item">{{item[language]}}</span>
+                <span class="side">{{item.side[language]}}</span>
+              </span>
+              <span class="price">{{item.total}}</span>
+            </div>
+            <div class="sub" v-for="(set,i) in item.choiceSet" :key="i" @click.stop="adjustChoiceSet(set,$event)">
+              <span class="qty" :class="{hide:set.qty === 1}">{{set.qty}}</span>
+              <span class="item">{{set[language]}}</span>
+              <span class="price" :class="{hide:parseFloat(set.price) === 0}">({{set.price | decimal}})</span>
+            </div>
+          </template>
+          <div class="main" v-else>
+            <checkbox v-model="item.todo" :title="item[language]" :disabled="item.print" :translate="false"></checkbox>
           </div>
         </div>
       </div>
@@ -25,8 +30,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import checkbox from "../../setting/common/checkbox";
+
 export default {
-  props: ["items", "seats"],
+  props: ["items", "seats", "checkbox"],
+  components: { checkbox },
   data() {
     return {
       places: [],
@@ -37,7 +45,7 @@ export default {
     this.$bus.on("SET_HIBACHI_SEAT", this.setSeat);
   },
   mounted() {
-    this.setSeat(this.places[0]);
+    this.setSeat(this.places[0], true);
   },
   beforeDestroy() {
     this.$bus.off("SET_HIBACHI_SEAT", this.setSeat);
@@ -67,6 +75,8 @@ export default {
         dom && dom.classList.remove("active");
 
         this.resetPointer();
+      } else if (this.checkbox) {
+        // do nothing
       } else {
         let dom = document.querySelector(".groups .active");
         dom && dom.classList.remove("active");
@@ -96,15 +106,27 @@ export default {
         this.setChoiceSetTarget(choice);
       }
     },
-    setSeat(seat) {
+    setSeat(seat, initial) {
       this.$emit("update", seat);
       let dom = document.querySelector(".seat.current");
-      dom && dom.classList.remove("current");
+      const target = document.querySelector(`[data-seat="seat${seat}"]`);
 
-      this.$nextTick(() => {
-        dom = document.querySelector(`[data-seat="seat${seat}"]`);
-        dom && dom.classList.add("current");
-      });
+      if (initial) {
+        dom && dom.classList.remove("current");
+
+        this.$nextTick(() => {
+          dom = document.querySelector(`[data-seat="seat${seat}"]`);
+          dom && dom.classList.add("current");
+        });
+      } else if (dom !== target) {
+        dom && dom.classList.remove("current");
+
+        target &&
+          this.$nextTick(() => {
+            console.log(target);
+            target.classList.add("current");
+          });
+      }
     },
     groupItem(items) {
       let groups = [];

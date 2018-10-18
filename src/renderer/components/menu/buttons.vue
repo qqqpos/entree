@@ -327,7 +327,9 @@ export default {
             this.togoTicketHandler(print, done);
             break;
           case "HIBACHI":
-            this.hibachiTicketHandler(print, done);
+            todo
+              ? this.todoItemHandler(print, done)
+              : this.hibachiTicketHandler(print, done);
             break;
           default:
             todo ? this.todoItemHandler(print, done) : skip();
