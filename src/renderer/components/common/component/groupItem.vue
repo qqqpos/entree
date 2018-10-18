@@ -3,7 +3,7 @@
     <div class="group" v-for="(group,index) in groups" :key="index" @click="setSeat(places[index])">
       <div class="seat" :data-seat="'seat'+places[index]">{{places[index]}}</div>
       <div class="list">
-        <div v-for="(item,idx) in group" :key="idx">
+        <div v-for="(item,idx) in group" :key="idx" :class="{print:$route.name !== 'Menu' && !item.print}">
           <div class="main" @click.stop="select(item,index,idx)">
             <span class="qty">{{item.qty}}</span>
             <span class="f1">
@@ -112,6 +112,9 @@ export default {
         groups.push(items.filter(item => item.seat === seat))
       );
       this.groups = groups;
+
+      let dom = document.querySelector(".groups .active");
+      dom && dom.classList.remove("active");
     },
     ...mapActions([
       "setPointer",
@@ -202,12 +205,22 @@ export default {
   color: darkgray;
 }
 
-.hide {
+.hide,
+.print .main .price {
   visibility: hidden;
 }
 
+.print:after {
+  content: "\F04C";
+  font-family: fontAwesome;
+  font-weight: 600;
+  position: absolute;
+  right: 10px;
+  color: #ff9800;
+}
+
 .group div.active {
-  background: #e0e0e0;
+  background: #b0bec5 !important;
 }
 
 .seat.current {

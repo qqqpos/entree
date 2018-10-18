@@ -8,7 +8,7 @@
     <div class="bottomLeft">
       <fn icon="fa-users" text="button.switch" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'"></fn>
       <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')" v-else></fn>
-      <fn icon="fa-user-clock" text="button.timer" @click="$open('course')" :disabled="isEmptyTicket"></fn>
+      <fn icon="fa-user-clock" text="button.timer" @click="$open('course')" :disabled="isEmptyTicket || order.type === 'HIBACHI'"></fn>
       <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
       <fn icon="fa-pause" text="button.hold" @click="done(false)"></fn>
       <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
@@ -319,7 +319,7 @@ export default {
           this.order.content.forEach(item => {
             delete item.todo;
           });
-
+          
         switch (this.ticket.type) {
           case "TO_GO":
             this.togoTicketHandler(print, done);
@@ -377,6 +377,7 @@ export default {
       });
     },
     hibachiTicketHandler(print, done) {
+      console.log("trigger");
       const hibachiPrinters = [];
       Object.keys(this.config.printers).forEach(name => {
         this.config.printers[name].type === "hibachi" &&

@@ -7,12 +7,12 @@
         <section class="filters" :class="{hide:!viewable}">
             <div class="filter relative" v-for="(filter,index) in filters" :key="index" v-show="filter.amount > 0" @click="setFilter(filter.type,index,$event)" :class="{active:type === filter.type,more:showMore}">
                 <div class="text">{{filter.title}}<span class="count">{{filter.count}}</span></div>
-                <div class="value">$ {{filter.amount | decimal}}</div>
+                <div class="agency value">$ {{filter.amount | decimal}}</div>
                 <transition name="dropdown">
                     <ul v-if="filter.subTypes && showMore" class="subTypes">
                         <li v-for="(sub,subIndex) in filter.subTypes" :key="subIndex" @click.stop="setSubFilter(sub)">
                             <div class="text">{{sub.title}}<span class="count">{{sub.count}}</span></div>
-                            <div class="value">$ {{sub.amount | decimal}}</div>
+                            <div class="agency value">$ {{sub.amount | decimal}}</div>
                         </li>
                         <template v-if="index === 0">
                           <li class="extend relative" @click.stop="toggleServers" v-show="viewAllInvoices" v-if="!target">
@@ -50,7 +50,7 @@
             </div>
         </section>
         <transition name="fadeDown" appear>
-            <div class="date relative" id="calendar">
+            <div class="date row flex-center relative" id="calendar">
             <i class="fa fa-angle-left" @click="prev" v-show="displayBtn"></i>
             <p class="dateInfo">{{date | week}}<span class="holiday">{{date | event}}</span></p>
             <span class="text" @click="displayBtn = !displayBtn">{{date}}</span>
@@ -417,8 +417,6 @@ span.sub {
 }
 
 .value {
-  font-family: "Agency FB";
-  font-weight: bold;
   font-size: 28px;
   white-space: nowrap;
 }
@@ -450,12 +448,9 @@ ul.subTypes {
 }
 
 .date {
+  color: #fff;
   min-width: 225px;
   text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
   text-shadow: 1px 1px 1px rgb(25, 25, 25);
 }
 
@@ -488,7 +483,6 @@ ul.subTypes {
 }
 
 .holiday {
-  font-weight: lighter;
   margin-right: 10px;
   font-weight: lighter;
   flex: 1;

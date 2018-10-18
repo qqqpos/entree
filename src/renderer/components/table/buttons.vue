@@ -63,8 +63,10 @@ export default {
           });
         });
       } else {
+        const { type, number } = this.order;
+        
         this.setApp({ newTicket: false });
-        this.setTicket({ type: "DINE_IN", number: this.order.number });
+        this.setTicket({ type, number });
         this.$router.push({ path: "/main/menu" });
       }
     },

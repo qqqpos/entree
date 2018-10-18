@@ -140,6 +140,16 @@ input[type="radio"] {
   font-weight: bold;
 }
 
+.agency.prefix:before {
+  content: "$";
+  margin-right: 3px;
+  font-size: 0.8em;
+}
+
+.agency.space {
+  margin-left: 5px;
+}
+
 .space-right {
   margin-right: 5px;
 }
@@ -150,10 +160,6 @@ input[type="radio"] {
 
 .space-both {
   margin: 0 5px;
-}
-
-.agency.space {
-  margin-left: 5px;
 }
 
 i.space {
