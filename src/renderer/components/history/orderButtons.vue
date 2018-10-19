@@ -111,7 +111,7 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.ticketOnHouse",
-        msg: "dialog.tip.settleByHouseAccount"
+        msg: ["dialog.tip.settleByHouseAccount",this.op.name]
       };
 
       this.$checkPermission("permission", "houseAccount")

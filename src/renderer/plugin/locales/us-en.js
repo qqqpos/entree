@@ -536,7 +536,7 @@ export default {
       evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times.",
       printReceiptConfirm: "Do you want to print a receipt to customer?",
       tipReportConfirm: "Are you sure to report $ {i} as tips?",
-      settleByHouseAccount: "Are you sure to settle ticket with House Account by {i} ?"
+      settleByHouseAccount: "Are you sure to settle ticket with House Account under {i} ?"
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -803,7 +803,7 @@ export default {
     cashPaymentNotAllow: "You are not allow to pay with cash.",
     printHibachi: "Print Hibachi Tickets",
     printHibachiConfirm: "Are you sure to print all hibachi items for table {i}?",
-    ticketOnHouse: "Ticket On the House"
+    ticketOnHouse: "Ticket On The House"
   },
   terminal: {
     initial: "Initializing terminal {i}...",
@@ -1527,6 +1527,7 @@ export default {
     temporaryDriver: "Name a temporary driver",
     selectSplitOrder: "Please select a split ticket to continue",
     selectCoupon:"Please select a coupon",
+    creditOnHouseAccount:"Allow credit on house account",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",
@@ -1908,6 +1909,7 @@ export default {
       discount: "Discount",
       tip: "Tip",
       instantPay: "Instant Pay",
+      houseAccount:"House Account",
       printedWhenPaid: "Set ticket print after settlement",
       allowNoPrint: "Allow 'Do Not Print' on each payment",
       autoStack: "Auto Stack",
@@ -1916,7 +1918,7 @@ export default {
       requestSort: "Request Item Sort By",
       saveConfirm: "Save Confirm",
       button: "Reserved Button Function",
-      findPaymentByCreateTime: "Set Payment time as ticket created (*)"
+      findPaymentByCreateTime: "Set payment time as ticket created (*)"
     },
     tax: "Tax",
     taxBeforeDiscount: "Tax Before Discount",

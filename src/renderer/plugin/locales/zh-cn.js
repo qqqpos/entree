@@ -1520,7 +1520,8 @@ export default {
     estimateWaitTime: "预计等待时间为 {i} 分钟",
     temporaryDriver: "设定一个临时司机的名称",
     selectSplitOrder: "请先选择一个分单再操作",
-    selectCoupon:"请选择一个优惠券",
+    selectCoupon: "请选择一个优惠券",
+    creditOnHouseAccount: "允许使用店主账户进行赊账",
     delivery: {
       setting: "设置送餐相关",
       free: "不收取送餐费",
@@ -1897,6 +1898,7 @@ export default {
       discount: "按百分比折扣",
       tip: "按百分比小费",
       instantPay: "快速付款",
+      houseAccount: "允许赊账",
       printedWhenPaid: "结账后将所有物品设为已打印",
       allowNoPrint: "允许付款后不打印订单",
       autoStack: "自动叠加",

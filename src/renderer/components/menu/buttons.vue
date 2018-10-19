@@ -26,8 +26,8 @@
     <fn icon="fa-plus-square" text="button.more" @click="more"></fn>
     <fn icon="fa-calculator" text="button.modify" @click="modify"></fn>
     <fn class="settle" icon="fa-hand-holding-usd" text="button.payment" @click="openPaymentModule" :disabled="op.cashCtrl === 'disable' || isEmptyTicket"></fn>
-    <fn icon="fa-save" @click="done(false)" text="button.save"></fn>
-    <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')"></fn>
+    <fn icon="fa-save" @click="done(false)" text="button.save" :disabled="isEmptyTicket"></fn>
+    <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="isEmptyTicket || order.hasOwnProperty('parent')"></fn>
     <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>
     <fn icon="fa-times" text="button.exit" @click="quit"></fn>
     <fn icon="fa-language" text="button.language" @click="switchLanguage"></fn>

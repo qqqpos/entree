@@ -11,6 +11,7 @@
     <toggle title="setting.default.discount" v-model="defaults.percentageDiscount" trueTooltip="tip.default.percentageDiscount" falseTooltip="tip.default.dollarDiscount" :conditionalTooltip="true"></toggle>
     <toggle title="setting.default.tip" v-model="defaults.percentageTip" trueTooltip="tip.default.percentageTip" falseTooltip="tip.default.dollarTip" :conditionalTooltip="true"></toggle>
     <toggle title="setting.default.instantPay" v-model="defaults.instantPay" trueTooltip="tip.default.instantProcess" falseTooltip="tip.default.defaultProcess" :conditionalTooltip="true"></toggle>
+    <toggle title="setting.houseAccount" tooltip="tip.creditOnHouseAccount" v-model="defaults.houseAccount" :disabled="true"></toggle>
     <toggle title="setting.autoSaveCreditCard" v-model="defaults.autoSaveCard"></toggle>
     <toggle title="setting.default.printedWhenPaid" v-model="defaults.markPrintWhenSettled"></toggle>
     <toggle title="setting.default.allowNoPrint" v-model="defaults.allowNoPrint"></toggle>
@@ -72,7 +73,8 @@ export default {
       autoStackItem: false,
       matchItemQty: false,
       printedWhenPaid: false,
-      allowNoPrint: false
+      allowNoPrint: false,
+      houseAccount:false
     };
 
     this.defaults = this.$store.getters.config.defaults || defaults;

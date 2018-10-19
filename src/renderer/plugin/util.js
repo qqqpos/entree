@@ -19,8 +19,8 @@ export default {
       try {
         approve =
           this.op.role === "Developer" || this.op.role === "Owner" ?
-          true :
-          credential.includes(permit);
+            true :
+            credential.includes(permit);
       } catch (error) {
         this.$log(`[${this.op.name}] does not have ${permit} setting. \nTo fix this issue, please add ${permit}:[] to profile.`);
       }
@@ -29,18 +29,6 @@ export default {
 
     Vue.prototype.$log = function (event) {
       this.$socket.emit("[SYS] LOG", event);
-    };
-
-    Vue.prototype.$open = function (component, args) {
-      return new Promise((resolve, reject) => {
-          this.componentData = Object.assign({}, {
-            resolve,
-            reject
-          }, args);
-          this.component = component;
-        })
-        .then(this.exitComponent)
-        .catch(this.exitComponent);
     };
 
     Vue.prototype.$promise = function (component, args) {
@@ -52,6 +40,18 @@ export default {
         this.component = component;
       })
     }
+
+    Vue.prototype.$asyncSocket = function (event, ...args) {
+      return new Promise((resolve) => {
+        this.$socket.emit(event, ...args =>
+          resolve(callback)
+        )
+      })
+    }
+
+    Vue.prototype.$open = function (component, args) {
+      return this.$promise(component, args).then(this.exitComponent).catch(this.exitComponent)
+    };
 
     Vue.prototype.$dialog = function (args) {
       return new Promise((resolve, reject) => {
@@ -81,15 +81,15 @@ export default {
             });
           }) :
           (this.componentData.buttons = [{
-              text: "button.cancel",
-              fn: reject,
-              load: false
-            },
-            {
-              text: "button.confirm",
-              fn: resolve,
-              load: false
-            }
+            text: "button.cancel",
+            fn: reject,
+            load: false
+          },
+          {
+            text: "button.confirm",
+            fn: resolve,
+            load: false
+          }
           ]);
         this.component = "dialogModule";
       });
@@ -107,8 +107,8 @@ export default {
 
       approve =
         role === "Developer" || role === "Owner" ?
-        true :
-        permission.includes(permit);
+          true :
+          permission.includes(permit);
 
       return new Promise((authorized, unauthorized) => {
         if (approve) {
@@ -118,21 +118,21 @@ export default {
           unauthorized();
         } else {
           new Promise((resolve, reject) => {
-              this.componentData = {
-                resolve,
-                reject,
-                grant: true
-              };
-              this.component = "unlockModule";
-            })
+            this.componentData = {
+              resolve,
+              reject,
+              grant: true
+            };
+            this.component = "unlockModule";
+          })
             .then(operator => {
               let approved = false;
               const permissions = operator[credential];
 
               approved =
                 operator.role === "Developer" || operator.role === "Owner" ?
-                true :
-                permissions.includes(permit);
+                  true :
+                  permissions.includes(permit);
 
               if (approved) {
                 this.$log(`[${name}] has inherited [${permit}] permission from ${operator.name}`);
@@ -249,7 +249,7 @@ export default {
 
       const {
         selfAssign = true,
-          callback = false
+        callback = false
       } = params;
 
       const {
@@ -340,7 +340,7 @@ export default {
               .sort((a, b) => a.guest < b.guest)
               .find(r => guest >= r.guest);
             gratuity = percentage ? toFixed(subtotal * fee / 100, 2) : fee;
-          } catch (e) {}
+          } catch (e) { }
         }
 
         if (order.hasOwnProperty("gratuityPercentage")) {
@@ -487,8 +487,8 @@ export default {
           if (value % 5 < 3) {
             rounding =
               value % 5 === 0 ?
-              0 :
-              -toFixed((value - Math.floor(value / 5) * 5) / 100, 2);
+                0 :
+                -toFixed((value - Math.floor(value / 5) * 5) / 100, 2);
           } else {
             rounding = toFixed((Math.ceil(value / 5) * 5 - value) / 100, 2);
           }
