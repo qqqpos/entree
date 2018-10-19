@@ -76,7 +76,6 @@ export default {
       }
     },
     edit() {
-      this.exitComponent();
       const { _id, type, number, customer, split } = this.order;
 
       if (split) {

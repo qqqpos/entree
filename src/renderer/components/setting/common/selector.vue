@@ -6,7 +6,9 @@
       <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOpts">
       <template v-else>
         <span class="input" @click.stop="isDisplay = !isDisplay">{{label}}</span>
-        <i class="fa fa-sort" v-show="!isDisplay"></i>
+        <transition name="fadeIn">
+          <i class="fa fa-sort" v-show="!isDisplay"></i>
+        </transition>
       </template>
       <transition name="menu">
         <ul v-if="isDisplay" v-outer-click="close" :style="collision">

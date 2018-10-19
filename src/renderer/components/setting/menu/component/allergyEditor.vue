@@ -39,16 +39,13 @@ export default {
         "SOY",
         "SHELLFISH",
         "FISH",
-        "SESAME SEED",
+        "SESAME",
         "AVOCADO",
         "GARLIC",
         "CELERY"
       ],
-      selected: []
+      selected: this.init.allergy || []
     };
-  },
-  created() {
-    this.selected = this.init.allergy || [];
   }
 };
 </script>

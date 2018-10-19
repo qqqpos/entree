@@ -1782,7 +1782,7 @@ export default {
     product: "Product",
     order: "Stock In Receipts",
     orderDetail: "Stock In Details",
-    upc: "Product Code",
+    upc: "Barcode",
     cost: "Cost",
     qty: "Qty",
     total: "Total",
