@@ -5,7 +5,7 @@
         </div>
         <ul v-if="items.length" key="1">
             <li v-for="(item,index) in items" :key="index" class="item">
-                <span class="index text-center">{{index+1}}</span>
+                <span class="index text-center">{{index + 1}}</span>
                 <span class="f1">{{item[language]}}</span>
             </li>
         </ul>
@@ -33,16 +33,18 @@ export default {
 }
 
 .text {
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
   background: #404040;
   border-radius: 3px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
   color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 100px;
-  height: 40px;
+  max-width: 190px;
+  overflow: hidden;
   font-size: 18px;
+  padding: 10px;
 }
 
 ul {

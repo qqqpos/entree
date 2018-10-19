@@ -583,14 +583,14 @@ function createFooter(config, setting, printer, ticket) {
 
   if ((enable && type === "PRE_PAYMENT") || tipSuggestion) {
     const {
-      balance
+      subtotal
     } = payment;
     const data = percentages
       .split(",")
       .map(pct => ({
         pct,
-        val: (balance * pct / 100).toFixed(2),
-        tip: (balance * (1 + pct / 100)).toFixed(2)
+        val: (subtotal * pct / 100).toFixed(2),
+        tip: (subtotal * (1 + pct / 100)).toFixed(2)
       }))
       .map(
         tip =>

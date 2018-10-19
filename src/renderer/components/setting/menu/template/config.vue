@@ -14,11 +14,17 @@
         </header>
         <text-input title="text.alias" v-model="template.name" :disabled="disabled"></text-input>
         <text-input title="text.note" v-model="template.note"></text-input>
-        <external title="title.item" @open="$router.push({name:'Setting.template.item'})"></external>
-        <external title="title.sideOption" @open="$router.push({name:'Setting.template.side'})"></external>           
-        <toggle title="text.insert" tooltip="tip.insertTemplateItem" v-model="template.insert"></toggle>
-        <toggle title="text.dynamicPrint" tooltip="tip.dynamicPrint" v-model="template.dynamicPrint"></toggle>
-        <toggle title="text.autoJump" tooltip="tip.autoJumpNext" v-model="template.autoJump"></toggle>     
+        <toggle title="template.itemize" tooltip="template.tip.itemize" v-model="template.itemize" @update="toggle"></toggle>    
+        <toggle title="template.replace" tooltip="template.tip.replace" v-model="template.replace" :disabled="!template.itemize"></toggle>      
+        <toggle title="template.insert" tooltip="template.tip.insert" v-model="template.insert" :disabled="template.itemize"></toggle>
+        <toggle title="template.dynamicPrint" tooltip="template.tip.dynamicPrint" v-model="template.dynamicPrint"></toggle>
+        <toggle title="template.autoJump" tooltip="template.tip.autoJump" v-model="template.autoJump"></toggle>     
+        <external title="title.item" @open="$router.push({name:'Setting.template.item'})">
+          <i class="fas fa-grip-vertical icon" slot="icon"></i>
+        </external>
+        <external title="title.sideOption" @open="$router.push({name:'Setting.template.side'})">
+          <i class="fas fa-fill-drip icon" slot="icon"></i>
+        </external> 
         <div :is="component" :init="componentData"></div>
     </div>
 </template>
@@ -43,14 +49,30 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.removed
       ? next()
-      : this.$socket.emit("[TEMPLATE] SAVE", this.template, () => next());
+      : this.$socket.emit("[TEMPLATE] SAVE", this.template, next);
   },
   methods: {
+    toggle() {
+      if (this.template.itemize) {
+        this.template.insert = false;
+        // add id to all items
+        this.patch();
+      } else {
+        this.template.replace = false;
+      }
+    },
+    patch() {
+      this.template.contain.forEach(page => {
+        page.contain.forEach(item => {
+          if (!item._id) item._id = ObjectId().toString();
+        });
+      });
+    },
     remove() {
       const prompt = {
         type: "question",
-        title: "dialog.removeTemplate",
-        msg: "dialog.removeTemplateConfirm",
+        title: "dialog.confirm.remove",
+        msg: "dialog.tip.removeTemplateConfirm",
         buttons: [
           { text: "button.cancel", fn: "reject" },
           { text: "button.remove", fn: "resolve" }

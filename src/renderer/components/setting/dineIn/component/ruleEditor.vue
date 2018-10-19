@@ -7,16 +7,19 @@
                   <h3>{{$t('setting.surcharge')}}</h3>
                 </div>
             </header>
+            <div class="banner"></div>
             <div class="wrap opt">
                 <inputer title="text.guest" v-model.number="rule.guest"></inputer>
-                <inputer title="text.amount" v-model.number="rule.fee"></inputer>
-                <switches title="text.percentage" v-model="rule.percentage"></switches>
+                <inputer title="text.amount" v-model.number="rule.fee" :placeholder="rule.percentage ? '0':'0.00'">
+                  <i class="fas fa-percentage" v-if="rule.percentage" @click="rule.percentage = false"></i>
+                  <i class="fas fa-dollar-sign" v-else @click="rule.percentage = true"></i>
+                </inputer>
             </div>
             <footer>
               <div class="opt">
                 <span class="del" @click="init.reject(true)" v-show="init.edit">{{$t('button.delete')}}</span>
               </div>
-                <button class="btn" @click="confirm" :disabled="invalid">{{$t('button.done')}}</button>
+                <button class="btn" @click="init.resolve(rule)" :disabled="invalid">{{$t('button.done')}}</button>
             </footer>
         </div>
     </div>
@@ -36,11 +39,6 @@ export default {
   computed: {
     invalid() {
       return !isNumber(this.rule.guest) || !isNumber(this.rule.fee);
-    }
-  },
-  methods: {
-    confirm() {
-      this.init.resolve(this.rule);
     }
   }
 };

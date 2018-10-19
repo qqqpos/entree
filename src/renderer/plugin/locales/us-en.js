@@ -536,7 +536,8 @@ export default {
       evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times.",
       printReceiptConfirm: "Do you want to print a receipt to customer?",
       tipReportConfirm: "Are you sure to report $ {i} as tips?",
-      settleByHouseAccount: "Are you sure to settle ticket with House Account under {i} ?"
+      settleByHouseAccount: "Are you sure to settle ticket with House Account under {i} ?",
+      removeTemplateConfirm: "Are you sure to remove this template?",
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -692,8 +693,6 @@ export default {
     setExtraAmountAsTip: "Are you going to set the Extra ( ${i} ) as Tip?",
     ticketNotFound: "Invoice Not Found",
     actionProcess: "How do you want to proceed?",
-    removeTemplate: "Remove Template",
-    removeTemplateConfirm: "Are you sure to remove this template?",
     unableAdd: "Unable to Add",
     maxSubItem: "{i} can only has {i} maximum subitems",
     timeout: "Time Out",
@@ -1153,7 +1152,6 @@ export default {
     report: "Report",
     sessionReport: "Session Report",
     order: "Order",
-    insert: "Insert",
     items: "{i} Items",
     cashInCount: "Cash In Count",
     recordDetail: "Record Detail",
@@ -1256,7 +1254,6 @@ export default {
     cancelCount: "Cancel Count",
     cancelAmount: "Cancel Amount",
     noUse: "No Use",
-    autoJump: "Auto Jump",
     startAt: "Start At",
     copy: "Copy",
     requireAccessPin: "Access Pin Required",
@@ -1496,12 +1493,23 @@ export default {
     assigned: "Assigned",
     unassigned: "Unassigned"
   },
+  template: {
+    itemize: "Itemize",
+    replace: "Replace Main Item",
+    insert: "Insert Item",
+    dynamicPrint: "Dynamic Print",
+    autoJump: "Auto Jump Next",
+    tip: {
+      itemize: "Itemize selected item",
+      replace:"Replace main item with selected items",
+      insert: "Always insert selected item to main item",
+      dynamicPrint: "Select item target printer base on selected subitems",
+      autoJump: "Auto jump to next page after select item"
+    }
+  },
   tip: {
     autoLogin: "Operator auto login when pin is entered",
     itemRestrictionRules: "Item select restriction rules",
-    insertTemplateItem: "Always insert selected item to main item",
-    dynamicPrint: "Dynamic select printer base on selected subitem",
-    autoJumpNext: "Auto jump to next page when condition met",
     reportBeforeBatch: "Print each credit card transaction before batch report",
     lockWhenCompleteOrder: "Lock screen when complete order",
     doNotAskReceiptAfterSettle: 'Do not prompt "Print Receipt" dialog',

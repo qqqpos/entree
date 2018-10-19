@@ -285,7 +285,7 @@ export default {
       this.offset = this.lastDelta + e.deltaY;
     },
     panStart(e) {
-      let dom = document.querySelector(".order .scrollable");
+      const dom = document.querySelector(".order .scrollable");
       dom && dom.classList.remove("scrollable");
 
       document.querySelector("div.order").classList.add("block");
@@ -296,6 +296,7 @@ export default {
 
       let { top, bottom, height } = dom.getBoundingClientRect();
       let offset = this.$route.name === "Menu" ? 55 : 179;
+
       top -= offset;
       bottom -= offset;
       if (top > 0) {
@@ -424,7 +425,7 @@ export default {
     payment() {
       this.$nextTick(() => {
         const dom = document.querySelector(".order .inner");
-        const target = document.querySelector(".item.active");
+        const target = document.querySelector(".item.active") || document.querySelector("div.group .seat.current");
         const { height } = dom.getBoundingClientRect();
 
         height > 329 && dom.classList.add("scrollable");

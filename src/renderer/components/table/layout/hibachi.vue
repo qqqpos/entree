@@ -75,7 +75,7 @@ export default {
     },
     viewHibachi(invoice, seat) {
       this.setViewOrder(invoice);
-      invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat,true);
+      invoice && this.$bus.emit("SET_HIBACHI_SEAT", seat, true);
     },
     selectAll(hibachi) {
       this.seats = [];
@@ -150,9 +150,7 @@ export default {
         const ticket = this.history.find(ticket => ticket._id === id);
 
         if (ticket) {
-          ticket.content
-            .filter(item => !item.print)
-            .forEach(item => items.push(item));
+          ticket.content.forEach(item => !item.print && items.push(item));
 
           Printer.print(ticket, { target: "Order" });
           tickets.push(ticket);
@@ -179,7 +177,7 @@ export default {
             ? current.push(item)
             : Object.keys(item.printer).includes(printer) && next.push(item);
         });
-
+        console.log(order.content.map(i=>i.usEN),current.map(i=>i.usEN));
         current.length && Printer.printHibachi(printer, order, current);
         next.length && print(next, printer);
       };
@@ -187,14 +185,17 @@ export default {
       Object.entries(this.config.printers)
         .filter(printer => printer[1].type === "hibachi")
         .map(printer => printer[0])
-        .forEach(printer =>
-          print(
-            items.filter(
-              i => !i.print && Object.keys(i.printer).includes(printer)
-            ),
-            printer
-          )
+        .forEach(
+          printer =>
+            this.station.printers.includes(printer) &&
+            print(
+              items.filter(
+                i => !i.print && Object.keys(i.printer).includes(printer)
+              ),
+              printer
+            )
         );
+
 
       // mark all tickets printed
       tickets.forEach(ticket =>
@@ -291,7 +292,15 @@ export default {
     ])
   },
   computed: {
-    ...mapGetters(["op", "config", "table", "order", "history", "dineInOpt"])
+    ...mapGetters([
+      "op",
+      "config",
+      "table",
+      "order",
+      "history",
+      "station",
+      "dineInOpt"
+    ])
   },
   watch: {
     tables: "cancel"

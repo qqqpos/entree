@@ -8,13 +8,13 @@
             <draggable v-model="template.contain" :options="{animation: 300,group: 'page',ghostClass: 'ghost'}">
                 <transition-group>
                     <li v-for="(page,i) in template.contain" :key="i" @click="setIndex(i)">
-                        <span>{{page.name}}</span>
+                        <span class="f1">{{page.name}}</span>
                         <i class="fa fa-caret-right"></i>
                     </li>
                 </transition-group>
             </draggable>
             <li @click="newPage">
-                <span>{{$t('button.new')}}</span>
+                <span class="f1">{{$t('button.new')}}</span>
                 <i class="fa fa-plus"></i>
             </li>
         </ul>
@@ -171,7 +171,7 @@ export default {
 <style scoped>
 .template {
   display: flex;
-  width: 679px;
+  width: 673px;
   margin-top: 5px;
 }
 
@@ -217,10 +217,10 @@ nav span {
 }
 
 .items {
-  height: 670px;
   overflow: auto;
   display: flex;
   flex-wrap: wrap;
+  padding: 1px;
 }
 
 .items div {
@@ -234,10 +234,6 @@ li {
   cursor: pointer;
   background: #fff;
   border-bottom: 1px solid #eee;
-}
-
-li span {
-  flex: 1;
 }
 
 .placeholder {

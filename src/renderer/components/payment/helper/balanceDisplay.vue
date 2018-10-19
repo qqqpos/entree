@@ -2,8 +2,7 @@
     <fieldset>
         <legend>{{$t('text.balanceDue')}}</legend>
         <div class="values">
-            <div class="f1"></div>
-            <div class="due">
+            <div class="f1 due agency">
                 <span class="balance agency">{{remain + tip - paid | decimal}}</span>
             </div>
             <div class="column flex-center" v-show="discount > 0">
@@ -72,14 +71,14 @@ legend {
 
 .values {
   margin-top: -8px;
-  padding: 0 5px;
+  padding-right:5px; 
   display: flex;
 }
 
 .due {
-  font-family: "Agency FB";
-  font-weight: bold;
   font-size: 36px;
+  text-align: right;
+  padding-right: 5px;
 }
 
 .balance {

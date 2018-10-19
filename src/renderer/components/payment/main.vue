@@ -621,38 +621,39 @@ export default {
       });
     },
     checkGiftCardBalance() {
-      return new Promise((resolve, reject) => {
-        const noBalanceError = {
-          type: "error",
-          title: "dialog.paymentFailed",
-          msg: "dialog.insufficientAmount",
-          buttons: [{ text: "button.confirm", fn: "resolve" }]
-        };
-        const insufficientError = {
-          type: "warning",
-          title: "dialog.paymentFailed",
-          msg: "dialog.insufficientAmount",
-          buttons: [
-            { text: "button.cancel", fn: "reject" },
-            { text: "button.chargeRemain", fn: "resolve" }
-          ]
-        };
+      const { balance } = this.giftCard;
+      const noBalanceError = {
+        type: "error",
+        title: "dialog.paymentFailed",
+        msg: "dialog.insufficientAmount",
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
 
-        if (toFixed(this.giftCard.balance.toFixed(2), 2) <= 0)
-          throw noBalanceError;
-        if (this.giftCard.balance < this.paid) {
-          this.$dialog(insufficientError)
-            .then(() => {
-              this.exitComponent();
-              this.paid = this.giftCard.balance.toFixed(2);
-              resolve();
-            })
-            .catch(() => {
-              this.exitComponent();
-              reject();
-            });
+      const insufficientError = {
+        type: "warning",
+        title: "dialog.paymentFailed",
+        msg: "dialog.insufficientAmount",
+        buttons: [
+          { text: "button.cancel", fn: "reject" },
+          { text: "button.chargeRemain", fn: "resolve" }
+        ]
+      };
+
+      return new Promise(async (charge, decline) => {
+        if (parseFloat(balance.toFixed(2)) <= 0) throw noBalanceError;
+
+        if (balance < this.paid) {
+          try {
+            await this.$dialog(insufficientError);
+            this.paid = balance.toFixed(2);
+            charge();
+          } catch (e) {
+            decline();
+          } finally {
+            this.exitComponent();
+          }
         } else {
-          resolve();
+          charge();
         }
       });
     },
@@ -951,10 +952,9 @@ export default {
               this.printTicket("All", next);
               break;
             case "never":
-              this.$dialog(tenderWithoutDialog).then(() => {
-                this.printTicket("Order", next);
-                this.exitComponent();
-              });
+              this.$dialog(tenderWithoutDialog).then(() =>
+                this.printTicket("Order", next)
+              );
               break;
             default:
               this.$dialog(tenderWithDialog)
@@ -966,7 +966,7 @@ export default {
                 });
           }
         } else {
-          this.askReceipt(tender, paid, tip).then(() => next());
+          this.askReceipt(tender, paid, tip).then(next);
         }
       });
     },
@@ -1109,10 +1109,9 @@ export default {
             .catch(this.exitComponent)
         : this.openTipComponent();
     },
-    openDiscountComponent() {
-      this.$checkPermission("modify", "discount")
-        .then(this.setDiscount)
-        .catch(() => {});
+    async openDiscountComponent() {
+      await this.$checkPermission("modify", "discount");
+      this.setDiscount();
     },
     setTip() {
       new Promise((resolve, reject) => {
@@ -1341,7 +1340,7 @@ export default {
         )
       );
     },
-    initialFailed({ error, param }) {
+    async initialFailed({ error, param }) {
       let prompt;
       switch (error) {
         case "ALL_SPLIT_PAID":
@@ -1353,17 +1352,19 @@ export default {
               { text: "button.markAsPaid", fn: "resolve" }
             ]
           };
-          this.$dialog(prompt)
-            .then(() =>
-              this.$socket.emit(
-                "[ORDER] UPDATE",
-                Object.assign(this.invoice, { settled: true }),
-                false,
-                () => this.exitPaymentModule()
-              )
-            )
-            .catch(this.exitPaymentModule);
-          break;
+          try {
+            await this.$dialog(prompt);
+            this.$socket.emit(
+              "[ORDER] UPDATE",
+              Object.assign(this.invoice, { settled: true }),
+              false,
+              this.exitPaymentModule
+            );
+          } catch (e) {
+            this.exitPaymentModule();
+          }
+
+          return;
         case "SPLIT_TICKET_NOT_FUND":
           prompt = {
             type: "error",
@@ -1371,7 +1372,6 @@ export default {
             msg: "dialog.splitTicketNotFound",
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
-          this.$dialog(prompt).then(this.exitPaymentModule);
           break;
         case "ITEM_NOT_SPLIT":
           prompt = {
@@ -1380,7 +1380,6 @@ export default {
             msg: ["dialog.splitTicketItemRemain", param],
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
-          this.$dialog(prompt).then(this.exitPaymentModule);
           break;
         case "TICKET_PAID":
           break;
@@ -1395,7 +1394,6 @@ export default {
           };
 
           this.releaseComponentLock = false;
-          this.$dialog(prompt).then(this.exitPaymentModule);
           break;
         case "PERMISSION_DENIED":
           prompt = {
@@ -1405,10 +1403,11 @@ export default {
             timeout: { duration: 10000, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
           };
-
-          this.$dialog(prompt).then(this.exitPaymentModule);
           break;
       }
+
+      await this.$dialog(prompt);
+      this.exitPaymentModule();
     },
     payFailed(prompt) {
       isObject(prompt)

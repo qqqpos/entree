@@ -349,17 +349,6 @@ export default {
       return !/cashier/i.test(name);
     },
     patchItem() {
-      //update commission
-      // if (!this.item.commission) {
-      //   Object.assign(this.item, {
-      //     commission: {
-      //       enable: false,
-      //       percentage: false,
-      //       value: 0
-      //     }
-      //   });
-      // }
-
       //update weight
       if (!this.item.weightItem) {
         Object.assign(this.item, {
@@ -550,8 +539,8 @@ p i {
 }
 
 i.tip1 {
-  right: 5px;
-  top: 122px;
+  right: 4px;
+  top: 119px;
 }
 
 i.tip2 {

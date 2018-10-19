@@ -24,11 +24,8 @@ export default {
   components: { toggle, external },
   data() {
     return {
-      dineInOpt: null
+      dineInOpt: this.$store.getters.dineInOpt
     };
-  },
-  created() {
-    this.dineInOpt = Object.assign({}, this.$store.getters.dineInOpt);
   },
   beforeDestroy() {
     this.$socket.emit("[CONFIG] UPDATE", {

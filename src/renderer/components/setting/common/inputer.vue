@@ -84,9 +84,11 @@ textarea.center {
 
 i {
   position: absolute;
-  right: 0;
-  padding: 5px 10px;
+  right: 2px;
+  padding: 3px 10px;
   color: #424242;
   cursor: pointer;
+  background: #eeeeee;
+  border-radius: 3px;
 }
 </style>

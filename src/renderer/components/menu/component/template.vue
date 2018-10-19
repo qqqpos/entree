@@ -67,7 +67,6 @@ export default {
   created() {
     this.initialTemplate()
       .then(this.getTemplateItem)
-      .then(this.retrieveItem)
       .catch(this.templateFailed);
   },
   methods: {
@@ -90,7 +89,7 @@ export default {
     },
     getTemplateItem(index = this.index) {
       this.page = 0;
-      
+
       return new Promise(next => {
         const saved = this.saved[index];
         const {
@@ -118,14 +117,6 @@ export default {
 
         next();
       });
-    },
-    retrieveItem() {
-      if (!this.insertMode) {
-        const { choiceSet } = this.item;
-        let saved = Array.from({ length: this.template.contain.length }).map(
-          _ => []
-        );
-      }
     },
     templateFailed() {
       const prompt = {
@@ -177,9 +168,53 @@ export default {
     },
     confirm() {
       this.saveItems(this.index);
-      !this.insertMode && this.emptyChoiceSet({ _ti: this.template._id });
+      this.template.itemize ? this.itemizeHandler() : this.regularHandler();
+    },
+    itemizeHandler() {
+      const target = this.item;
+      // check if item is selected
+      [].concat.apply([], this.saved).length &&
+        this.template.replace &&
+        this.lessQty(false);
 
-      const { skip, ignore } = this.init.side;
+      this.saved.forEach((items, i) => {
+        items.forEach(select => {
+          const { _id, zhCN, usEN, print, qty, price } = select;
+
+          let printer = {};
+          print.forEach(name => {
+            printer[name] = {
+              replace: false,
+              zhCN: "",
+              usEN: ""
+            };
+          });
+
+          let item = Object.assign({}, target, {
+            choiceSet: [],
+            option: [],
+            side: {},
+            printer,
+            usEN,
+            zhCN,
+            qty,
+            _id,
+            unique: String().random(),
+            single: parseFloat(price),
+            price: [parseFloat(price)],
+            total: (price * qty).toFixed(2),
+            pending: false,
+            print: false
+          });
+
+          this.addToOrder(item);
+        });
+      });
+
+      this.init.resolve();
+    },
+    regularHandler() {
+      !this.insertMode && this.emptyChoiceSet({ _ti: this.template._id });
 
       this.alterItemOption({
         side: this.init.side,
@@ -220,7 +255,6 @@ export default {
       });
 
       this.template.dynamicPrint && this.setItemPrinter();
-      console.log(this.item);
       this.init.resolve();
     },
     itemHandler(items) {
@@ -311,6 +345,8 @@ export default {
       this.page = page;
     },
     ...mapActions([
+      "lessQty",
+      "addToOrder",
       "addChoiceSet",
       "setChoiceSet",
       "emptyChoiceSet",

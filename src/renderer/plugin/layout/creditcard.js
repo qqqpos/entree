@@ -25,11 +25,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
       .join("")
       .toString();
 
-    suggestions = `<section class="suggestion center">\
-                      <h5>Tips Suggestion</h5>\
-                      <i>These tip amounts are provided for your convenience.</i>\
-                      ${data}\
-                  </section>`;
+    suggestions = `<section class="suggestion center"><h5>Tips Suggestion</h5><i>These tip amounts are provided for your convenience.</i>${data}</section>`;
   }
 
   let html = createHtml();
@@ -89,8 +85,7 @@ const creditcard = function (trans, { print = true, tipSuggestion = false }, rep
                 <h5>${store.contact}</h5>\
                 <h5>${store.website || ""}</h5>\
               </div>\
-              <div class="type">\
-                <h3>${trans.transType}</h3>\
+              <div class="type"><h3>${trans.transType}</h3>
               </div>\
             </section>\
             <article>\

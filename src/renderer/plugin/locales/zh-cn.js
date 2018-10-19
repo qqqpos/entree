@@ -472,7 +472,8 @@ export default {
       evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}",
       printReceiptConfirm: "是否需要打印收据给客人？",
       tipReportConfirm: "请再次确定您本次上报的小费为 $ {i} ?",
-      settleByHouseAccount: "您确定要用将此订单以 {i} 的名义记账吗?"
+      settleByHouseAccount: "您确定要用将此订单以 {i} 的名义记账吗?",
+      removeTemplateConfirm: "您确定要移除这个模版吗?",
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -626,8 +627,6 @@ export default {
     setExtraAmountAsTip: "您是否需要将余出的款项 ( ${i} ) 设为小费？",
     ticketNotFound: "无法找到订单",
     actionProcess: "您要如何处理这个情况?",
-    removeTemplate: "移除模版",
-    removeTemplateConfirm: "您确定要移除这个模版吗?",
     unableAdd: "无法添加",
     maxSubItem: "{i} 无法添加多于 {i} 个子菜项",
     timeout: "操作超时",
@@ -854,7 +853,6 @@ export default {
     gratuity: "服务费",
     deliveryFee: "送餐费",
     surcharge: "附加费",
-
 
     configuration: "报表格式",
     range: "报告范围",
@@ -1145,7 +1143,6 @@ export default {
     report: "报表",
     sessionReport: "时段报表",
     order: "订单",
-    insert: "插入",
     items: "{i} 个物品",
     cashInCount: "起始现金",
     recordDetail: "详细记录",
@@ -1249,7 +1246,6 @@ export default {
     cancelCount: "取消订单",
     cancelAmount: "取消总额",
     noUse: "不使用",
-    autoJump: "自动转跳",
     startAt: "(个)起",
     copy: "复制",
     requireAccessPin: "需要登陆密码",
@@ -1490,12 +1486,23 @@ export default {
     assigned: "已指派",
     unassigned: "未指派"
   },
+  template: {
+    itemize: "物品模式",
+    replace: "替换主物品",
+    insert: "插入物品",
+    dynamicPrint: "动态打印",
+    autoJump: "自动转跳",
+    tip: {
+      itemize: "将所选的按常规物品处理",
+      replace:"将主物品替换成选中的物品",
+      insert: "在物品子菜单中追加选中的物品",
+      dynamicPrint: "根据所选的子物品的打印配置的集合打印",
+      autoJump: "选择完毕后自动转跳到下一页"
+    }
+  },
   tip: {
     autoLogin: "自动尝试用当前的密码登录用户",
     itemRestrictionRules: "允许物品选择条件",
-    insertTemplateItem: "永远添加选中的物品",
-    dynamicPrint: "根据所选的子物品的打印配置的集合打印",
-    autoJumpNext: "满足条件时自动转跳到下一页",
     reportBeforeBatch: "过账前是否详细的打印每笔交易信息",
     lockWhenCompleteOrder: "完成订单之后锁定界面",
     doNotAskReceiptAfterSettle: "结账之后不弹出收据打印确认框",

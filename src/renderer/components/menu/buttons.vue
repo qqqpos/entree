@@ -6,7 +6,7 @@
       <fn icon="fa-comment-dots" text="button.request" @click="$emit('open', 'request')"></fn>
     </div>
     <div class="bottomLeft">
-      <fn icon="fa-users" text="button.switch" v-if="dineInOpt.seatOrder || order.type === 'HIBACHI'"></fn>
+      <fn icon="fa-users" text="button.switch" v-if="order.type === 'HIBACHI'" :disabled="true"></fn>
       <fn class="split" icon="fa-copy" @click="openSplit" text="button.split" :disabled="order.hasOwnProperty('parent')" v-else></fn>
       <fn icon="fa-user-clock" text="button.timer" @click="$open('course')" :disabled="isEmptyTicket || order.type === 'HIBACHI'"></fn>
       <fn icon="fa-tags" text="button.coupon" @click="promotion"></fn>

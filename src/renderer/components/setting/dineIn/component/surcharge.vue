@@ -27,9 +27,7 @@
                   <td class="guest">{{$t('text.chargeAbove',rule.guest)}}</td>
                   <td class="amount" v-if="rule.percentage">{{rule.fee}} %</td>
                   <td class="amount" v-else>$ {{rule.fee}}</td>
-                  <td @click="edit(rule,index)" class="opt" colspan="2">
-                    <i class="fa fa-pencil-square"></i>
-                  </td>
+                  <td @click="edit(rule,index)" class="fas fa-cog ghost clickable" colspan="2"></td>
                 </tr>
               </tbody>
             </table>
@@ -65,28 +63,25 @@ export default {
       !this.surcharge.hasOwnProperty("rules") &&
         Object.assign(this.surcharge, { rules: [] });
 
-      this.edit(rule);
+      this.edit(rule, false);
     },
-    edit(rule, index) {
-      new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, rule, edit: !isNumber(index) };
-        this.component = "editor";
-      })
-        .then(_rule => {
-          !isNumber(index)
-            ? this.surcharge.rules.push(_rule)
-            : this.surcharge.rules.splice(index, 1, _rule);
-          this.exitComponent();
-        })
-        .catch(del => {
-          del && this.surcharge.rules.splice(index, 1);
-          this.exitComponent();
-        });
+    async edit(rule, index) {
+      const edit = isNumber(index);
+
+      try {
+        const update = await this.$promise("editor", { rule, edit });
+        edit
+          ? this.surcharge.rules.push(update)
+          : this.surcharge.rules.splice(index, 1, update);
+      } catch (remove) {
+        remove && this.surcharge.rules.splice(index, 1);
+      } finally {
+        this.exitComponent();
+      }
     },
     save() {
-      this.$socket.emit("[CONFIG] UPDATE", {
-        key: "dinein.surcharge",
-        value: this.surcharge
+      Object.assign(this.$store.getters.dineInOpt, {
+        surcharge: this.surcharge
       });
       this.$router.push({ name: "Setting.dineIn.config" });
     }
