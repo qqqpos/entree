@@ -138,6 +138,7 @@ const Press = {
         target.get('press').set({
             time: 750
         });
+        
         target.on("press", e => binding.value(e));
     }
 }

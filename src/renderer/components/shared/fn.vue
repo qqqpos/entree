@@ -1,5 +1,5 @@
 <template>
-    <button class="btn" :disabled="disabled" @click="$emit('click')">
+    <button class="btn" :disabled="disabled" @click="$emit('click')" v-press="press">
         <i class="fa" :class="icon"></i>
         <span class="text">{{$t(text,language)}}</span>
     </button>
@@ -17,8 +17,13 @@ export default {
       default: false
     }
   },
-  computed:{
-    ...mapGetters(['language'])
+  methods: {
+    press() {
+      this.$emit("press");
+    }
+  },
+  computed: {
+    ...mapGetters(["language"])
   }
 };
 </script>

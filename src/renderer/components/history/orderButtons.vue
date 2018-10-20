@@ -1,7 +1,7 @@
 <template>
   <div>
-    <fn icon="fa-hand-holding-usd" text="button.payment" @click="isSettled" v-press="housePaymentDialog" :disabled="order.settled || order.status === 0"></fn>
-    <fn icon="fa-copy" text="button.split" v-press="evenSplit" @click="split" :disabled="disableSplit"></fn>
+    <fn icon="fa-hand-holding-usd" text="button.payment" @click="isSettled" @press="housePaymentDialog" :disabled="order.settled || order.status === 0"></fn>
+    <fn icon="fa-copy" text="button.split" @click="split" @press="evenSplit" :disabled="disableSplit"></fn>
     <fn icon="fa-google-wallet" text="button.thirdParty" @click="thirdParty" :disabled="disable || order.split"></fn>
     <fn icon="fa-tags" text="button.discount" @click="openDiscountModule" :disabled="order.settled" v-if="config.defaults.btn === 'DISCOUNT'"></fn>
     <fn icon="fa-comments-dollar" text="text.gratuity" @click="openGratuityDialog" :disabled="order.settled" v-else></fn>

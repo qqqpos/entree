@@ -1,7 +1,3 @@
-import {
-  configureRequestOptions
-} from "builder-util-runtime";
-
 export default {
   install(Vue, options) {
     Vue.mixin({
@@ -17,10 +13,11 @@ export default {
       let approve = false;
 
       try {
-        approve =
-          this.op.role === "Developer" || this.op.role === "Owner" ?
-            true :
-            credential.includes(permit);
+        const admin = this.op.role === "Developer" || this.op.role === "Owner";
+        
+        approve = admin
+          ? true
+          : credential.includes(permit);
       } catch (error) {
         this.$log(`[${this.op.name}] does not have ${permit} setting. \nTo fix this issue, please add ${permit}:[] to profile.`);
       }

@@ -20,6 +20,7 @@ import App from "./App";
 import Bars from "vuebars";
 import Trend from "vuetrend";
 import router from "./router";
+//import tap from "./plugin/tap";
 import i18n from "./plugin/dict";
 import util from "./plugin/util";
 import VueBus from "./plugin/bus";
@@ -115,19 +116,19 @@ new Promise((resolve) => {
   Vue.filter(
     "phone",
     number =>
-    number && number.length === 10 ?
-    number.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "($1) $2-$3") :
-    number
+      number && number.length === 10 ?
+        number.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "($1) $2-$3") :
+        number
   );
   Vue.filter(
     "card",
     number =>
-    number ?
-    number.replace(
-      /^\D?(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})/,
-      "$1 $2 $3 $4"
-    ) :
-    number
+      number ?
+        number.replace(
+          /^\D?(\d{4})\D?(\d{4})\D?(\d{4})\D?(\d{4})/,
+          "$1 $2 $3 $4"
+        ) :
+        number
   );
 
   Vue.filter("tel", phone => {
