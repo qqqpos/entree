@@ -36,7 +36,7 @@ export default {
       componentData: null,
       component: null,
       name: "",
-      role: "Worker",
+      role: "Waitstaff",
       pin: "",
       wage: "",
       roles: [
@@ -122,6 +122,7 @@ export default {
         title: "dialog.addFailed",
         buttons: [{ text: "button.confirm", fn: "resolve" }]
       };
+
       switch (error) {
         case "name":
           content.msg = "dialog.operatorNameDuplicate";

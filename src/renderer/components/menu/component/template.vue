@@ -241,7 +241,7 @@ export default {
         if (startAt > 0 && count - startAt > 0) {
           const qty = count - startAt;
 
-          this.setChoiceSet({
+          this.pushChoiceSet({
             qty,
             key: String().random(),
             zhCN: "Extra Charge",
@@ -262,7 +262,7 @@ export default {
       items.forEach(({ zhCN, usEN, qty = 1, price, print, key }) => {
         price = parseFloat(price) || 0;
 
-        this.setChoiceSet({
+        const subItem = {
           qty,
           key,
           zhCN,
@@ -271,8 +271,9 @@ export default {
           single: price,
           price: (price * qty).toFixed(2),
           _ti: this.template._id
-        });
+        };
 
+        this.pushChoiceSet(subItem);
         count += qty;
       });
 
@@ -296,7 +297,7 @@ export default {
         count++;
       });
 
-      this.setChoiceSet({
+      this.pushChoiceSet({
         qty: 1,
         key: keys,
         zhCN: secondary.join(separator),
@@ -347,8 +348,7 @@ export default {
     ...mapActions([
       "lessQty",
       "addToOrder",
-      "addChoiceSet",
-      "setChoiceSet",
+      "pushChoiceSet",
       "emptyChoiceSet",
       "alterItemOption"
     ])
