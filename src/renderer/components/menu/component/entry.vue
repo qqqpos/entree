@@ -257,8 +257,8 @@ export default {
 section.input {
   width: 808px;
   margin: auto;
-  transform: translateY(100px);
   background: #fff;
+  transform: translateY(100px);
 }
 
 .input .wrap {
@@ -270,10 +270,10 @@ section.input {
 input {
   width: 100%;
   color: #444;
-  padding: 0 16px;
-  background: #fff;
   opacity: 0.7;
   font-size: 32px;
+  padding: 0 16px;
+  background: #fff;
   transition: opacity, box-shadow 0.3s ease;
 }
 
@@ -304,9 +304,9 @@ i.confirm {
 }
 
 i.reset {
-  position: absolute;
   right: 0;
   padding: 25px;
+  position: absolute;
 }
 
 .prefix {
@@ -331,6 +331,7 @@ ul.predict {
   padding: 5px 10px;
   flex-wrap: wrap;
   box-shadow: 0 6px 8px -4px;
+  border-top: 1px solid #f6f6f6;
 }
 
 .predict li {

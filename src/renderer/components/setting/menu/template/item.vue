@@ -29,13 +29,11 @@
                     <span @click="create">{{$t('button.create')}}</span>
                 </nav>
             </header>
-            <div class="column">
-                <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}" class="f1">
-                    <transition-group tag="div" class="items">
-                        <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable" :class="{placeholder:item.placeholder}">{{item[language]}}</div>
-                    </transition-group>
-                </draggable>
-            </div>
+            <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}" class="column">
+                <transition-group tag="div" class="items">
+                    <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable" :class="{placeholder:item.placeholder}">{{item[language]}}</div>
+                </transition-group>
+            </draggable>
         </section>
         <div :is="component" :init="componentData"></div>
     </div>
@@ -171,15 +169,15 @@ export default {
 <style scoped>
 .template {
   display: flex;
-  width: 673px;
+  width: 680px;
   margin-top: 5px;
 }
 
 ul {
   width: 150px;
-  border-right: 1px solid #e0e0e0;
   position: relative;
   background: #eaeaea;
+  border-right: 1px solid #e0e0e0;
 }
 
 h5 {
@@ -201,9 +199,9 @@ section {
 
 header {
   display: flex;
+  align-items: center;
   padding: 10px 15px 10px 25px;
   border-bottom: 1px solid #eee;
-  align-items: center;
 }
 
 nav {
@@ -216,16 +214,23 @@ nav span {
   margin-left: 10px;
 }
 
+.column {
+  align-items: center;
+  height: 672px;
+}
+
 .items {
   overflow: auto;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 1px;
+  height: 669px;
+  width: 528px;
+  overflow-y: scroll;
+  padding: 1px 0 1px 1px;
 }
 
 .items div {
   width: 126px;
   height: 63px;
+  display: inline-flex;
 }
 
 li {

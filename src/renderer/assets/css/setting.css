@@ -466,10 +466,6 @@ tr.banner th {
   border-bottom: 1px solid #eeeeee;
 }
 
-.clickable {
-  cursor: pointer;
-}
-
 .multiple .checkbox {
   flex: 1;
   margin: 2px 30px !important;
@@ -633,15 +629,15 @@ table.event tbody tr:nth-child(odd) {
 .placeholder {
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
+  justify-content: center;
   transform: translateY(-25px);
 }
 
 .placeholder i {
-  font-size: 5em;
   opacity: 0.5;
+  font-size: 5em;
   text-shadow: 0 1px 1px #fff;
 }
 
@@ -653,18 +649,20 @@ table.event tbody tr:nth-child(odd) {
 
 .placeholder p:before {
   font-family: fontAwesome;
-  content: "\f10d";
+  content: "\F10D";
   font-weight: bold;
   position: absolute;
-  left: -22px;
-  top: -5px;
+  font-size: 12px;
+  left: -20px;
+  top: -4px;
 }
 
 .placeholder p:after {
   font-family: fontAwesome;
-  content: "\f10e";
+  content: "\F10E";
   font-weight: bold;
   position: absolute;
-  right: -22px;
-  top: -5px;
+  font-size: 12px;
+  right: -20px;
+  top: -4px;
 }
