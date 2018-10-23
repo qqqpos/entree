@@ -201,7 +201,7 @@ export default {
     entry(e) {
       const disable = document.querySelector("div.popupMask");
       if (disable) return;
-      
+
       switch (e.key) {
         case "Escape":
           this.buffer = "";
@@ -226,10 +226,10 @@ export default {
         case "+":
           if (this.buffer) {
             this.buffer += e.key;
-          }else{
+          } else {
             this.moreQty();
-          };
-          
+          }
+
           break;
         case "-":
           if (this.buffer) {
@@ -492,8 +492,30 @@ export default {
         const type = this.order.type || this.ticket.type;
 
         if (item.hasOwnProperty("prices")) {
-          if (this.order.source !== "POS" && item.prices.THIRD) {
-            Object.assign(item, { price: item.prices.THIRD.split(",") });
+          if (this.order.source !== "POS") {
+            let prices = [];
+            switch (this.order.source) {
+              case "GrubHub":
+                prices = item.prices.GrubHub
+                  ? item.prices.GrubHub.split(",")
+                  : item.prices.THIRD
+                    ? item.prices.THIRD.split(",")
+                    : item.price;
+                break;
+              case "Uber Eats":
+                prices = item.prices["Uber Eats"]
+                  ? item.prices["Uber Eats"].split(",")
+                  : item.prices.THIRD
+                    ? item.prices.THIRD.split(",")
+                    : item.price;
+                break;
+              default:
+                prices = item.prices.THIRD
+                  ? item.prices.THIRD.split(",")
+                  : item.price;
+            }
+
+            prices.length && Object.assign(item, { price: prices });
           } else if (item.prices.hasOwnProperty(type)) {
             Object.assign(item, { price: item.prices[type].split(",") });
           }

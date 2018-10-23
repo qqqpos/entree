@@ -8,14 +8,20 @@
         </div>
       </header>
       <div class="banner"></div>
-      <div class="wrap">
-        <inputer title="type.WALK_IN" v-model="prices.WALK_IN" :placeholder="placeholder"></inputer>
-        <inputer title="type.PICK_UP" v-model="prices.PICK_UP" :placeholder="placeholder"></inputer>
-        <inputer title="type.DELIVERY" v-model="prices.DELIVERY" :placeholder="placeholder"></inputer>
-        <inputer title="type.DINE_IN" v-model="prices.DINE_IN" :placeholder="placeholder"></inputer>
-        <inputer title="type.HIBACHI" v-model="prices.HIBACHI" :placeholder="placeholder"></inputer>
-        <inputer title="type.SALES" v-model="prices.SALES" :placeholder="placeholder"></inputer>
-        <inputer title="type.THIRD" v-model="prices.THIRD" :placeholder="placeholder"></inputer>
+      <div class="wrap row">
+        <div class="space-right">
+          <inputer title="type.WALK_IN" v-model="prices.WALK_IN" :placeholder="placeholder"></inputer>
+          <inputer title="type.PICK_UP" v-model="prices.PICK_UP" :placeholder="placeholder"></inputer>
+          <inputer title="type.DELIVERY" v-model="prices.DELIVERY" :placeholder="placeholder"></inputer>
+          <inputer title="type.DINE_IN" v-model="prices.DINE_IN" :placeholder="placeholder"></inputer>
+          <inputer title="type.HIBACHI" v-model="prices.HIBACHI" :placeholder="placeholder"></inputer>
+          <inputer title="type.SALES" v-model="prices.SALES" :placeholder="placeholder"></inputer>
+        </div>
+        <div class="space-left">
+          <inputer title="type.THIRD" v-model="prices.THIRD" :placeholder="placeholder"></inputer>
+          <inputer title="GrubHub" v-model="prices['GrubHub']" :placeholder="placeholder"></inputer>
+          <inputer title="Uber Eats" v-model="prices['Uber Eats']" :placeholder="placeholder"></inputer>
+        </div>
       </div>
       <footer>
         <div class="opt">
@@ -44,7 +50,9 @@ export default {
         HIBACHI: "",
         BUFFET: "",
         SALES: "",
-        THIRD: ""
+        THIRD: "",
+        GrubHub: "",
+        "Uber Eats": ""
       },
       placeholder: ""
     };
@@ -73,7 +81,7 @@ export default {
       let prices = {};
 
       Object.keys(this.prices).forEach(type => {
-        if (!this.prices[type] || type === 'DEFAULT') return;
+        if (!this.prices[type] || type === "DEFAULT") return;
 
         const priceArray = this.prices[type].split(",");
 
