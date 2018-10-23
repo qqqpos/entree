@@ -1,4 +1,4 @@
-const ticket = function (raw, opt) {
+const ticket = function(raw, opt) {
   const defaultOpt = {
     printer: null,
     target: "All",
@@ -8,9 +8,9 @@ const ticket = function (raw, opt) {
 
   const option = Object.assign(defaultOpt, opt);
 
-  const printers = option.printer ?
-    this.setPrinter(option.printer).getPrinters() :
-    this.getPrinters(option.target);
+  const printers = option.printer
+    ? this.setPrinter(option.printer).getPrinters()
+    : this.getPrinters(option.target);
 
   console.log("target printers", printers);
   const title = raw.type;
@@ -20,7 +20,11 @@ const ticket = function (raw, opt) {
 
     if (!setting) return false;
 
-    if (!setting.print.includes(title) && !(option.receipt && /cashier/i.test(printer))) return false;
+    if (
+      !setting.print.includes(title) &&
+      !(option.receipt && /cashier/i.test(printer))
+    )
+      return false;
 
     if (setting.type === "label") {
       this.printLabel(printer, raw);
@@ -96,7 +100,7 @@ const ticket = function (raw, opt) {
   this.reset();
 };
 
-const preview = function (printer, ticket) {
+const preview = function(printer, ticket) {
   printer = printer || "cashier";
 
   const setting = this.setting[printer];
@@ -110,18 +114,10 @@ const preview = function (printer, ticket) {
 };
 
 function createHeader(store, setting, raw) {
-  const {
-    type,
-    time,
-    number,
-    server,
-    station,
-    table,
-    customer
-  } = raw;
-  const phone = customer.phone ?
-    customer.phone.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "$1.$2.$3") :
-    "";
+  const { type, time, number, server, station, table, customer } = raw;
+  const phone = customer.phone
+    ? customer.phone.replace(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})/, "$1.$2.$3")
+    : "";
   const title = setting.title[type] || type.replace("_", " ").toCapitalCase();
   const date = moment(Number(time)).format("MM-DD-YYYY");
   const placeTime = moment(Number(time))
@@ -136,35 +132,29 @@ function createHeader(store, setting, raw) {
                     </div>\
                   </p>`;
 
-  const {
-    address,
-    city,
-    name,
-    note
-  } = customer;
+  const { address, city, name, code, note } = customer;
 
   let information = "";
 
-  information += phone ?
-    `<p>\
+  information += phone
+    ? `<p>\
         <span class="value tel">${phone}</span>\
         <span class="ext">${customer.extension}</span>\
-       </p>` :
-    "";
+       </p>`
+    : "";
 
   if (raw.type === "DELIVERY") {
-    information += address ?
-      `<p>\
-            <span class="value addr">${address}</span>\
-        </p>` :
-      "";
+    information += address
+      ? `<p><span class="value addr">${address}</span></p>`
+      : "";
     information +=
-      city && store.city.toUpperCase() !== city.toUpperCase() ?
-      `<p><span class="value pt">${city}</span></p>` :
-      "";
+      city && store.city.toUpperCase() !== city.toUpperCase()
+        ? `<p><span class="value pt">${city}</span></p>`
+        : "";
   }
 
   information += name ? `<p><span class="value pt">${name}</span></p>` : "";
+  information += code ? `<p><span class="value pt">Verification Code: ${code}</span></p>` : "";
   information += note ? `<p><span class="value pt">${note}</span></p>` : "";
 
   return `<section class="header">\
@@ -189,14 +179,8 @@ function createHeader(store, setting, raw) {
 
 function createList(printer, setting, invoice, preview) {
   const list = JSON.parse(JSON.stringify(invoice.content));
-  const {
-    languages
-  } = setting.layout;
-  let {
-    categorize,
-    prioritize,
-    mode
-  } = setting.control;
+  const { languages } = setting.layout;
+  let { categorize, prioritize, mode } = setting.control;
 
   const primary = languages.find(t => t.ref === "usEN");
   const secondary = languages.find(t => t.ref === "zhCN");
@@ -208,46 +192,63 @@ function createList(printer, setting, invoice, preview) {
 
   switch (mode) {
     case "normal":
-      items = !invoice.print ?
-        list.filter(item => item.printer[printer]) :
-        list.filter(item => item.printer[printer] && item.diffs !== "REMOVED" && item.diffs !== "MODIFIED");
+      items = !invoice.print
+        ? list.filter(item => item.printer[printer])
+        : list.filter(
+            item =>
+              item.printer[printer] &&
+              item.diffs !== "REMOVED" &&
+              item.diffs !== "MODIFIED"
+          );
       break;
     case "difference":
       if (!invoice.print) {
         items = list.filter(item => item.printer[printer] && !item.print);
       } else {
-        items = list.filter(
-          item =>
-          item.printer[printer] && !item.print && item.diffs !== "UNCHANGED" && item.diffs !== "MODIFIED"
-        ).map(item => {
-          if (item.diffs === "NEW") {
-            item.zhCN = "★" + item.zhCN;
-            item.usEN = "★" + item.usEN;
-          }
-          return item;
-        });
+        items = list
+          .filter(
+            item =>
+              item.printer[printer] &&
+              !item.print &&
+              item.diffs !== "UNCHANGED" &&
+              item.diffs !== "MODIFIED"
+          )
+          .map(item => {
+            if (item.diffs === "NEW") {
+              item.zhCN = "★" + item.zhCN;
+              item.usEN = "★" + item.usEN;
+            }
+            return item;
+          });
       }
       break;
     case "new":
       if (!invoice.print) {
         items = list.filter(item => item.printer[printer] && !item.print);
       } else {
-        items = list.filter(
-          item =>
-          item.printer[printer] && !item.print &&
-          (item.diffs === 'NEW' || (item.diffs === "DIFFERENT" && item.hasOwnProperty('originQty') && item.qty > item.originQty) || item.diffs === "MODIFIED")
-        ).map(item => {
-          if (item.diffs === "DIFFERENT" && item.qty > item.originQty) {
-            item.qty = item.qty - item.originQty;
-          } else if (item.diffs === "MODIFIED") {
-            item.choiceSet = item.choiceSet.map(sub => {
-              sub.zhCN = "★" + sub.zhCN;
-              sub.usEN = "★" + sub.usEN;
-              return sub
-            })
-          }
-          return item;
-        });
+        items = list
+          .filter(
+            item =>
+              item.printer[printer] &&
+              !item.print &&
+              (item.diffs === "NEW" ||
+                (item.diffs === "DIFFERENT" &&
+                  item.hasOwnProperty("originQty") &&
+                  item.qty > item.originQty) ||
+                item.diffs === "MODIFIED")
+          )
+          .map(item => {
+            if (item.diffs === "DIFFERENT" && item.qty > item.originQty) {
+              item.qty = item.qty - item.originQty;
+            } else if (item.diffs === "MODIFIED") {
+              item.choiceSet = item.choiceSet.map(sub => {
+                sub.zhCN = "★" + sub.zhCN;
+                sub.usEN = "★" + sub.usEN;
+                return sub;
+              });
+            }
+            return item;
+          });
       }
       break;
     case "todo":
@@ -260,8 +261,11 @@ function createList(printer, setting, invoice, preview) {
         items = list
           .filter(
             item =>
-            item.printer[printer] &&
-            (item.diffs === "UNCHANGED" || item.diffs === "NEW" || item.diffs === "DIFFERENT" || item.diffs === "REMOVED")
+              item.printer[printer] &&
+              (item.diffs === "UNCHANGED" ||
+                item.diffs === "NEW" ||
+                item.diffs === "DIFFERENT" ||
+                item.diffs === "REMOVED")
           )
           .map(item => {
             switch (item.diffs) {
@@ -299,95 +303,122 @@ function createList(printer, setting, invoice, preview) {
       }
       break;
     default:
-      items = !invoice.print ?
-        list.filter(item => item.printer[printer]) :
-        list.filter(item => item.printer[printer] && item.diffs !== "REMOVED");
+      items = !invoice.print
+        ? list.filter(item => item.printer[printer])
+        : list.filter(
+            item => item.printer[printer] && item.diffs !== "REMOVED"
+          );
   }
 
   if (items.length === 0) return [];
 
   const renderQty = items.filter(i => i.qty > 1 || !isNumber(i.qty)).length > 0;
 
-  prioritize && items.sort((p, n) => (p.priority || 0) < (n.priority || 0) ? 1 : -1);
+  prioritize &&
+    items.sort((p, n) => ((p.priority || 0) < (n.priority || 0) ? 1 : -1));
 
-  //if togo ticket 
+  //if togo ticket
   let togoItems;
   if (invoice.togo) {
-    togoItems = items.filter(i => i.orderType === 'TO_GO').map(item => mockup(item, renderQty)).join("").toString();
-    items = items.filter(i => i.orderType !== 'TO_GO');
+    togoItems = items
+      .filter(i => i.orderType === "TO_GO")
+      .map(item => mockup(item, renderQty))
+      .join("")
+      .toString();
+    items = items.filter(i => i.orderType !== "TO_GO");
   }
 
   if (invoice.type === "HIBACHI") {
     let sorted = [];
 
     for (let i = 0; i < items.length; i++) {
-      const {
-        seat = "Not Assigned"
-      } = items[i];
+      const { seat = "Not Assigned" } = items[i];
 
       sorted[seat] ? sorted[seat].push(items[i]) : (sorted[seat] = [items[i]]);
     }
 
     Object.keys(sorted).forEach(seat => {
       const title = `<p class="title">Seat ${seat}</p>`;
-      const categorized = sorted[seat].map(item => mockup(item, renderQty)).join("").toString();
-      content += `<div class="categorize">${title + categorized}</div>`
-    })
+      const categorized = sorted[seat]
+        .map(item => mockup(item, renderQty))
+        .join("")
+        .toString();
+      content += `<div class="categorize">${title + categorized}</div>`;
+    });
   } else if (categorize) {
     let sorted = [];
 
     for (let i = 0; i < items.length; i++) {
-      const {
-        category
-      } = items[i];
+      const { category } = items[i];
 
-      sorted[category] ? sorted[category].push(items[i]) : (sorted[category] = [items[i]]);
+      sorted[category]
+        ? sorted[category].push(items[i])
+        : (sorted[category] = [items[i]]);
     }
 
     Object.keys(sorted).forEach(category => {
       const title = `<p class="title">${category}</p>`;
-      const categorized = sorted[category].map(item => mockup(item, renderQty)).join("").toString();
-      content += `<div class="categorize">${title + categorized}</div>`
-    })
+      const categorized = sorted[category]
+        .map(item => mockup(item, renderQty))
+        .join("")
+        .toString();
+      content += `<div class="categorize">${title + categorized}</div>`;
+    });
   } else {
     content = items
       .map(item => mockup(item, renderQty))
       .join("")
       .toString();
   }
-  const delay = invoice.delay ? `<h1 class="delay">${moment(invoice.delay).locale("en").format('MM-DD hh:mm A')}</h1>` : '';
-  const togo = invoice.togo && togoItems.length ?
-    `<div class="categorize"><p class="title">${setting.title['TO_GO']}</p>${togoItems}</div>` :
-    '';
+  const delay = invoice.delay
+    ? `<h1 class="delay">${moment(invoice.delay)
+        .locale("en")
+        .format("MM-DD hh:mm A")}</h1>`
+    : "";
+  const togo =
+    invoice.togo && togoItems.length
+      ? `<div class="categorize"><p class="title">${
+          setting.title["TO_GO"]
+        }</p>${togoItems}</div>`
+      : "";
 
   // generate list
   if (invoice.togo) {
-    content = content ? `<div class="categorize"><p class="title">${setting.title['DINE_IN']}</p>${content}</div>` : "";
-    return `<section class="receipt">${delay + content + togo}</section>`
+    content = content
+      ? `<div class="categorize"><p class="title">${
+          setting.title["DINE_IN"]
+        }</p>${content}</div>`
+      : "";
+    return `<section class="receipt">${delay + content + togo}</section>`;
   } else {
-    return `<section class="receipt">${delay + content}</section>`
+    return `<section class="receipt">${delay + content}</section>`;
   }
 
   function mockup(item, renderQty) {
-    const {
-      replace = false, zhCN, usEN, note
-    } = item.printer[printer];
+    const { replace = false, zhCN, usEN, note } = item.printer[printer];
     const idCN = secondary.id ? item.menuID + " " : "";
     const idEN = primary.id ? item.menuID + " " : "";
     const nameCN = replace ? idCN + zhCN : idCN + (item.zhCN || "");
     const nameEN = replace ? idEN + usEN : idEN + (item.usEN || "");
-    const singleLanguage = item.zhCN === item.usEN && languages[0].enable && languages[1].enable;
+    const singleLanguage =
+      item.zhCN === item.usEN && languages[0].enable && languages[1].enable;
     const sideCN = item.side.zhCN || "";
     const sideEN = item.side.usEN || "";
-    const cnPrice = secondary.price ? `<span class="price">${item.total}</span>` : '';
-    const enPrice = primary.price ? `<span class="price">${item.total}</span>` : '';
+    const cnPrice = secondary.price
+      ? `<span class="price">${item.total}</span>`
+      : "";
+    const enPrice = primary.price
+      ? `<span class="price">${item.total}</span>`
+      : "";
     const enableChinese = secondary.enable;
     const enableEnglish = primary.enable;
-    const qty = renderQty ?
-      `<span class="qty">${item.qty === 1 ? "" : item.qty}</span>` :
-      "";
-    const printPrimaryQty = primary.hasOwnProperty('qty') ? primary.qty : true;
-    const printSecondaryQty = secondary.hasOwnProperty('qty') ? secondary.qty : true;
+    const qty = renderQty
+      ? `<span class="qty">${item.qty === 1 ? "" : item.qty}</span>`
+      : "";
+    const printPrimaryQty = primary.hasOwnProperty("qty") ? primary.qty : true;
+    const printSecondaryQty = secondary.hasOwnProperty("qty")
+      ? secondary.qty
+      : true;
     const diffs = item.diffs || "";
 
     let chineseItem = "";
@@ -396,29 +427,43 @@ function createList(printer, setting, invoice, preview) {
     let englishSub = "";
 
     item.choiceSet.forEach(set => {
-      if (Array.isArray(set.print) && set.print.length > 0 && !set.print.includes(printer)) return;
+      if (
+        Array.isArray(set.print) &&
+        set.print.length > 0 &&
+        !set.print.includes(printer)
+      )
+        return;
       const qty = set.qty !== 1 ? set.qty + " x " : "";
-      const price = Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
+      const price =
+        Math.abs(set.price) > 0 ? `( ${set.price.toFixed(2)} )` : "";
 
       if (diffs === "REMOVED") {
-        chineseSub += enableChinese ?
-          `<p><del></del><span>${qty}</span><span>${set.zhCN}</span><span>${price}</span></p>` :
-          "";
-        englishSub += enableEnglish ?
-          `<p><del></del><span>${qty}</span><span>${set.usEN}</span><span>${price}</span></p>` :
-          "";
+        chineseSub += enableChinese
+          ? `<p><del></del><span>${qty}</span><span>${
+              set.zhCN
+            }</span><span>${price}</span></p>`
+          : "";
+        englishSub += enableEnglish
+          ? `<p><del></del><span>${qty}</span><span>${
+              set.usEN
+            }</span><span>${price}</span></p>`
+          : "";
       } else {
-        chineseSub += enableChinese ?
-          `<p><span>${qty}</span><span>${set.zhCN}</span><span>${price}</span></p>` :
-          "";
-        englishSub += enableEnglish ?
-          `<p><span>${qty}</span><span>${set.usEN}</span><span>${price}</span></p>` :
-          "";
+        chineseSub += enableChinese
+          ? `<p><span>${qty}</span><span>${
+              set.zhCN
+            }</span><span>${price}</span></p>`
+          : "";
+        englishSub += enableEnglish
+          ? `<p><span>${qty}</span><span>${
+              set.usEN
+            }</span><span>${price}</span></p>`
+          : "";
       }
     });
     if (diffs === "REMOVED") {
-      chineseItem = enableChinese ?
-        `<div class="zhCN">\
+      chineseItem = enableChinese
+        ? `<div class="zhCN">\
                 <div class="main">\
                     <del></del>\
                     ${printSecondaryQty ? qty : ""}
@@ -429,10 +474,10 @@ function createList(printer, setting, invoice, preview) {
                     ${cnPrice}
                 </div>\
                 <div class="sub">${chineseSub}</div>\
-            </div>` :
-        "";
-      englishItem = enableEnglish ?
-        `<div class="usEN">\
+            </div>`
+        : "";
+      englishItem = enableEnglish
+        ? `<div class="usEN">\
                 <div class="main">\
                     <del></del>\
                     ${printPrimaryQty ? qty : ""}
@@ -443,11 +488,11 @@ function createList(printer, setting, invoice, preview) {
                     ${enPrice}
                 </div>\
                 <div class="sub">${englishSub}</div>\
-            </div>` :
-        "";
+            </div>`
+        : "";
     } else {
-      chineseItem = enableChinese ?
-        `<div class="zhCN">\
+      chineseItem = enableChinese
+        ? `<div class="zhCN">\
                 <div class="main">\
                     ${printSecondaryQty ? qty : ""}
                     <div class="wrap">\
@@ -457,10 +502,10 @@ function createList(printer, setting, invoice, preview) {
                     ${cnPrice}
                 </div>\
                 <div class="sub">${chineseSub}</div>\
-            </div>` :
-        "";
-      englishItem = enableEnglish ?
-        `<div class="usEN">\
+            </div>`
+        : "";
+      englishItem = enableEnglish
+        ? `<div class="usEN">\
                 <div class="main">\
                     ${printPrimaryQty ? qty : ""}
                     <div class="wrap">\
@@ -470,30 +515,37 @@ function createList(printer, setting, invoice, preview) {
                     ${enPrice}
                 </div>\
                 <div class="sub">${englishSub}</div>\
-            </div>` :
-        "";
+            </div>`
+        : "";
     }
-    return languages[0].ref === "zhCN" ?
-      (singleLanguage ? chineseItem : chineseItem + englishItem) :
-      (singleLanguage ? englishItem : englishItem + chineseItem);
+    return languages[0].ref === "zhCN"
+      ? singleLanguage
+        ? chineseItem
+        : chineseItem + englishItem
+      : singleLanguage
+        ? englishItem
+        : englishItem + chineseItem;
   }
 }
 
 function createStyle(setting) {
-  const {
-    contact,
-    title,
-    customer,
-    payment,
-    languages
-  } = setting.layout;
+  const { contact, title, customer, payment, languages } = setting.layout;
   const primary = languages.find(t => t.ref === "usEN");
   const secondary = languages.find(t => t.ref === "zhCN");
-  const defaultFont = navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
-  const zhCN = `.zhCN{font-family:'${secondary.fontFamily}';font-size:${secondary.fontSize}px;line-height:${secondary.lineHeight}}`;
-  const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${primary.fontSize}px;line-height:${primary.lineHeight}}`;
-  const zhCN_sub = secondary.subFontSize ? `.zhCN .sub{padding-left:20px;font-size:${secondary.subFontSize}em;}` : `.zhCN .sub{padding-left:20px;font-size:0.8em;}`;
-  const usEN_sub = primary.subFontSize ? `.usEN .sub{padding-left:20px;font-size:${primary.subFontSize}em;}` : `.usEN .sub{padding-left:20px;font-size:0.8em;}`;
+  const defaultFont =
+    navigator.language === "zh-CN" ? "微软雅黑" : "Microsoft YaHei";
+  const zhCN = `.zhCN{font-family:'${secondary.fontFamily}';font-size:${
+    secondary.fontSize
+  }px;line-height:${secondary.lineHeight}}`;
+  const usEN = `.usEN{font-family:'${primary.fontFamily}';font-size:${
+    primary.fontSize
+  }px;line-height:${primary.lineHeight}}`;
+  const zhCN_sub = secondary.subFontSize
+    ? `.zhCN .sub{padding-left:20px;font-size:${secondary.subFontSize}em;}`
+    : `.zhCN .sub{padding-left:20px;font-size:0.8em;}`;
+  const usEN_sub = primary.subFontSize
+    ? `.usEN .sub{padding-left:20px;font-size:${primary.subFontSize}em;}`
+    : `.usEN .sub{padding-left:20px;font-size:0.8em;}`;
 
   return `<style>\
               *{margin:0;padding:0}\
@@ -501,7 +553,9 @@ function createStyle(setting) {
               div.store{margin-bottom:10px;${contact ? "" : "display:none;"}}\
               .store h3{font-size:1.25em;}\
               .store h5{font-size:16px;font-weight:lighter}\
-              h1{${title ? "" : "display:none;"}font-size:1.5em;font-family:"${defaultFont}";}\
+              h1{${
+                title ? "" : "display:none;"
+              }font-size:1.5em;font-family:"${defaultFont}";}\
               .delay{border:1px dashed #000;margin:10px 0;text-align:center;}
               .ticketNumber,.tableName{position:absolute;bottom:12px;font-size:2em;font-weight:bold;}\
               footer .ticketNumber,footer .tableName{top: 5px;bottom: initial;}.ticketNumber{right:0px;}\
@@ -509,7 +563,9 @@ function createStyle(setting) {
               div.time{border-bottom:1px solid #000;position:relative;margin-top:10px;}\
               .server{border-bottom:1px solid #000;text-align:left;}\
               .server .wrap{display:flex;padding:0 10px;}.server .text{flex:2;}.server .value{flex:3;}\
-              .customer {${customer ? "" : "display:none;"}font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
+              .customer {${
+                customer ? "" : "display:none;"
+              }font-size:1.2em;font-family:'Tensentype RuiHeiJ-W2';text-align:left;}\
               .customer p:last-child{border-bottom:1px solid #000;}\
               .tel{letter-spacing:2px;}.ext{margin-left:10px;}.pt{font-size:0.8em;}
               section.receipt{width:100%;margin:5px 0;}\
@@ -523,7 +579,11 @@ function createStyle(setting) {
               .qty{min-width:15px;margin-right:5px;}\     
               footer{font-family:'Agency FB';}\
               section.flex{display:flex;}\
-              .payment{min-width:150px;${payment ? "display:flex;flex-direction:column;" : "display:none;"}}\
+              .payment{min-width:150px;${
+                payment
+                  ? "display:flex;flex-direction:column;"
+                  : "display:none;"
+              }}\
               .payment p{display:flex;font-family:'Tensentype RuiHeiJ-W2';width:200px;}\
               .payment .text{flex:1;text-align:right;}\
               .payment .value{min-width:40%;text-align:right;}\
@@ -555,19 +615,8 @@ function createStyle(setting) {
 function createFooter(config, setting, printer, ticket) {
   if (!ticket.hasOwnProperty("payment")) return "";
 
-  const {
-    enable,
-    percentages
-  } = config.tipSuggestion;
-  const {
-    type,
-    payment,
-    logs,
-    coupons,
-    number,
-    table,
-    customer
-  } = ticket;
+  const { enable, percentages } = config.tipSuggestion;
+  const { type, payment, logs, coupons, number, table, customer } = ticket;
   const {
     tipSuggestion,
     ticketNumber,
@@ -582,19 +631,17 @@ function createFooter(config, setting, printer, ticket) {
   let suggestions = "";
 
   if ((enable && type === "PRE_PAYMENT") || tipSuggestion) {
-    const {
-      subtotal
-    } = payment;
+    const { subtotal } = payment;
     const data = percentages
       .split(",")
       .map(pct => ({
         pct,
-        val: (subtotal * pct / 100).toFixed(2),
+        val: ((subtotal * pct) / 100).toFixed(2),
         tip: (subtotal * (1 + pct / 100)).toFixed(2)
       }))
       .map(
         tip =>
-        `<div class="tips">\
+          `<div class="tips">\
             <span class="pct">${tip.pct} %</span>\
             <span class="val">$ ${tip.val}</span>\
             <span class="tip">( $ ${tip.tip} )</span>\
@@ -613,13 +660,17 @@ function createFooter(config, setting, printer, ticket) {
   // if ticket has reward params
   if (ticket.reward) {
     const message = config.reward.message || "Total Point <b>{point}</b>";
-    const template = message.replace(/{(.*?)}/g, (m, c) => ({
-      "value": `$ ${ticket.reward.value.toFixed(2)}`,
-      "point": ticket.reward.point + ticket.reward.earn,
-      "earn": ticket.reward.earn,
-      "pending": ticket.reward.pending,
-      "date": ticket.date
-    })[c.trim().toLowerCase()]);
+    const template = message.replace(
+      /{(.*?)}/g,
+      (m, c) =>
+        ({
+          value: `$ ${ticket.reward.value.toFixed(2)}`,
+          point: ticket.reward.point + ticket.reward.earn,
+          earn: ticket.reward.earn,
+          pending: ticket.reward.pending,
+          date: ticket.date
+        }[c.trim().toLowerCase()])
+    );
 
     reward = `<section class="dashed-wrap"><h3>Reward Point</h3><pre>${template}</pre></section>`;
   }
@@ -631,36 +682,48 @@ function createFooter(config, setting, printer, ticket) {
 
   let settle = [];
 
-  coupons.forEach(coupon => settle.push(`<section class="dashed-wrap"><h3>${coupon.alias}</h3><p>${coupon.slogan || ''}</p></section>`));
+  coupons.forEach(coupon =>
+    settle.push(
+      `<section class="dashed-wrap"><h3>${
+        coupon.alias
+      }</h3><p>${coupon.slogan || ""}</p></section>`
+    )
+  );
 
   (logs || payment.log || []).forEach(log => {
-    const {
-      type,
-      subType,
-      lfd,
-      paid,
-      tip,
-      change
-    } = log;
-    const tipText = tip > 0 ? `<p><span class="text">Tip:</span><span class="value">$ ${tip.toFixed(2)}</span></p>` : "";
+    const { type, subType, lfd, paid, tip, change } = log;
+    const tipText =
+      tip > 0
+        ? `<p><span class="text">Tip:</span><span class="value">$ ${tip.toFixed(
+            2
+          )}</span></p>`
+        : "";
     switch (type) {
       case "CASH":
         settle.push(`<section class="dashed-wrap">\
                         <h3>Paid by Cash - Thank You</h3>\
-                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>\
-                        <p><span class="text">Change:</span><span class="value">$ ${change.toFixed(2)}</span></p>\
+                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(
+                          2
+                        )}</span></p>\
+                        <p><span class="text">Change:</span><span class="value">$ ${change.toFixed(
+                          2
+                        )}</span></p>\
                     </section>`);
         break;
       case "CREDIT":
         settle.push(`<section class="dashed-wrap">\
                         <h3>CREDIT CARD - ${subType} ( ${lfd} )</h3>\
-                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>${tipText}
+                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(
+                          2
+                        )}</span></p>${tipText}
                     </section>`);
         break;
       case "GIFT":
         settle.push(`<section class="dashed-wrap">\
                         <h3>Paid by GIFT Card - Thank You</h3>\
-                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(2)}</span></p>
+                        <p><span class="text">Paid:</span><span class="value">$ ${paid.toFixed(
+                          2
+                        )}</span></p>
                     </section>`);
         break;
       default:
@@ -677,10 +740,16 @@ function createFooter(config, setting, printer, ticket) {
   });
 
   if (payment.paid > 0 && payment.remain > 0)
-    settle.push(`<section class="dashed-wrap"><h3>Balance Due: $ ${payment.remain.toFixed(2)}</h3></section>`);
+    settle.push(
+      `<section class="dashed-wrap"><h3>Balance Due: $ ${payment.remain.toFixed(
+        2
+      )}</h3></section>`
+    );
 
   if (ticket.status === 0) {
-    const voidNote = `Void by: ${ticket.void.by} @ ${moment(ticket.void.time).format("HH:mm:ss")}`;
+    const voidNote = `Void by: ${ticket.void.by} @ ${moment(
+      ticket.void.time
+    ).format("HH:mm:ss")}`;
 
     settle.push(`<section class="dashed-wrap">\
                     <h3>*** Ticket Voided ***</h3>\
@@ -725,41 +794,50 @@ function createFooter(config, setting, printer, ticket) {
           break;
       }
 
-      detail.push(`<p class="${style}"><span class="text">${text}:</span><span class="value">${value}</span></p>`);
+      detail.push(
+        `<p class="${style}"><span class="text">${text}:</span><span class="value">${value}</span></p>`
+      );
     }
   });
 
   const waterMark =
-    tradeMark && ticket.tradeMark ?
-    `<p class="tm"><span class="tradeMark">${ticket.tradeMark}</span></p>` :
-    "";
-  const printStatus = ticket.printCount > 1 && /cashier/i.test(printer) ?
-    `<p class="printTime">**** ${printer} reprint ${ticket.printCount - 1} @ ${moment().format("hh:mm:ss")} ****</p>` :
-    `<p class="printTime">${printer} print @ ${moment().format("hh:mm:ss")}</p>`;
+    tradeMark && ticket.tradeMark
+      ? `<p class="tm"><span class="tradeMark">${ticket.tradeMark}</span></p>`
+      : "";
+  const printStatus =
+    ticket.printCount > 1 && /cashier/i.test(printer)
+      ? `<p class="printTime">**** ${printer} reprint ${ticket.printCount -
+          1} @ ${moment().format("hh:mm:ss")} ****</p>`
+      : `<p class="printTime">${printer} print @ ${moment().format(
+          "hh:mm:ss"
+        )}</p>`;
 
   const _time = jobTime ? printStatus : "";
-  const _number = ticketNumber ?
-    `<div class="ticketNumber">${number}</div>` :
-    "";
+  const _number = ticketNumber
+    ? `<div class="ticketNumber">${number}</div>`
+    : "";
   const _table = tableName ? `<div class="tableName">${table || ""}</div>` : "";
   const extraInfo = waterMark + _time + _number + _table;
-  const _geo = geo && type === 'DELIVERY' ?
-    `<div class="geo">\
+  const _geo =
+    geo && type === "DELIVERY"
+      ? `<div class="geo">\
             <p>${customer.duration || ""}</p>\
             <p>${customer.distance || ""}</p>\
             <h1>${customer.direction || ""}</h1>
-        </div>` :
-    "";
+        </div>`
+      : "";
 
   return `<footer>\
             <section class="flex">\
-              <div class="empty">${_geo}</div><div class="payment">${detail.join("").toString()}</div>
+              <div class="empty">${_geo}</div><div class="payment">${detail
+    .join("")
+    .toString()}</div>
             </section>\
-            <div class="ticket-settle">${reward + suggestions + settle.join("").toString()}</div>\
+            <div class="ticket-settle">${reward +
+              suggestions +
+              settle.join("").toString()}</div>\
             <div class="slogan">${slogan + extraInfo}</div>\
         </footer>`;
 }
 
-export {
-  ticket as Ticket, preview as Preview
-};
+export { ticket as Ticket, preview as Preview };

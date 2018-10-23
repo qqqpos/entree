@@ -48,6 +48,8 @@ export default {
   methods: {
     confirm() {
       if (!this.item.zhCN) this.item.zhCN = this.item.usEN;
+      if (!this.item._id) this.item._id = ObjectId().toString();
+
       let printers = new Set();
       this.init.printers
         .filter(name => /cashier/i.test(name))

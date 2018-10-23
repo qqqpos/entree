@@ -20,7 +20,7 @@
     </section>
     <section class="cart">
       <order-list layout="order" :seats="seats" @update="setSeat"></order-list>
-      <query-bar :query="buffer" :items="queriedItems"></query-bar>
+      <query-bar :query="buffer" :items="queriedItems" :language="language"></query-bar>
       <buttons :layout="ticket.type" @open="open"></buttons>
     </section>
     <div :is="component" :init="componentData"></div>
@@ -201,7 +201,7 @@ export default {
     entry(e) {
       const disable = document.querySelector("div.popupMask");
       if (disable) return;
-
+      
       switch (e.key) {
         case "Escape":
           this.buffer = "";
@@ -224,12 +224,19 @@ export default {
           this.buffer = this.buffer.slice(0, -1);
           break;
         case "+":
-          if (this.buffer) return;
-          this.moreQty();
+          if (this.buffer) {
+            this.buffer += e.key;
+          }else{
+            this.moreQty();
+          };
+          
           break;
         case "-":
-          if (this.buffer) return;
-          this.lessQty();
+          if (this.buffer) {
+            this.buffer += e.key;
+          } else {
+            this.lessQty();
+          }
           break;
         default:
           if (this.queriedItems.length > 1) {

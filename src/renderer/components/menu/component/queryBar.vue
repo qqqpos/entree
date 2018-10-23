@@ -1,7 +1,7 @@
 <template>
     <transition-group name="fadeUp" mode="out-in">
-        <div v-if="query.length !== 0" class="bar" key="0">
-            <span class="text text-center">{{query}}</span>
+        <div v-if="query.length !== 0 && items.length == 0" class="bar" key="0">
+            <span class="row flex-center">{{query}}</span>
         </div>
         <ul v-if="items.length" key="1">
             <li v-for="(item,index) in items" :key="index" class="item">
@@ -13,12 +13,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
-  props: ["query", "items"],
-  computed: {
-    ...mapGetters(["language"])
-  }
+  props: ["query", "items", "language"]
 };
 </script>
 
@@ -32,14 +28,11 @@ export default {
   justify-content: center;
 }
 
-.text {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+.row {
+  box-shadow: var(--shadow);
   background: #404040;
   border-radius: 3px;
   color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-width: 100px;
   max-width: 190px;
   overflow: hidden;
@@ -49,13 +42,13 @@ export default {
 
 ul {
   position: absolute;
-  bottom: 420px;
-  left: 10px;
+  bottom: 387px;
+  right: 10px;
   width: 265px;
   padding: 4px 0;
-  background: rgb(64, 64, 64);
   border-radius: 3px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 2px, rgba(0, 0, 0, 0.24) 0px 2px 4px;
+  background: rgb(64, 64, 64);
+  box-shadow: var(--shadow);
 }
 
 li {
@@ -66,6 +59,7 @@ li {
 
 .index {
   width: 20px;
+  text-align: center;
   padding: 0 5px 0 3px;
 }
 </style>

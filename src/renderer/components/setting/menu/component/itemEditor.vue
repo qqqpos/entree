@@ -80,8 +80,7 @@
           <div class="item">
             <inputer title="inventory.upc" v-model="item.upc"></inputer>
             <inputer title="text.priority" v-model.number="item.priority"></inputer>
-            <inputer title="text.inventory" v-model.number="item.inventory"></inputer>
-            <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer>
+            <!-- <inputer title="text.rewardPoint" v-model.number="item.rewardPoint"></inputer> -->
           </div>
           <div class="others">
             <switches title="text.openFood" v-model="item.temporary"></switches>

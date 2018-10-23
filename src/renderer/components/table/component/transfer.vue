@@ -1,11 +1,11 @@
 <template>
     <div class="popupMask dark center" @click.self="init.reject(false)">
-        <div class="transfer">
+        <div class="row">
             <ticket :order="invoices[0]" :buffer.sync="transfer[0]" side="l"></ticket>
                 <div class="director">
                     <div>
-                        <i class="fas fa-chevron-left mini-btn" :class="{enable:transfer[1].length}" @click="transferTo(1,0)"></i>
-                        <i class="fas fa-chevron-right mini-btn" :class="{enable:transfer[0].length}" @click="transferTo(0,1)"></i>
+                        <i class="fas fa-chevron-left mini-btn" :class="{enable:transfer[1].length && transfer[1].length < invoices[1].content.length}" @click="transferTo(1,0)"></i>
+                        <i class="fas fa-chevron-right mini-btn" :class="{enable:transfer[0].length && transfer[0].length < invoices[0].content.length}" @click="transferTo(0,1)"></i>
                     </div>
                     <div>
                         <button class="btn" @click="init.reject(false)">{{$t('button.cancel')}}</button>
@@ -58,10 +58,6 @@ export default {
 </script>
 
 <style scoped>
-.transfer {
-  display: flex;
-}
-
 .director {
   margin: 0 35px;
 }
@@ -78,9 +74,11 @@ export default {
   margin: 15px 0;
   padding: 15px 35px;
   opacity: 0.7;
+  pointer-events: none;
 }
 
 i.enable {
   opacity: 1;
+  pointer-events: initial;
 }
 </style>

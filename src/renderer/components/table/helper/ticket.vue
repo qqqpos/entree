@@ -1,9 +1,11 @@
 <template>
     <div class="ticket">
         <header>
-            <span>#{{order.number}}</span>
-            <span class="type">{{$t('type.'+order.type)}}</span>
-            <span class="balance">$ {{order.payment.balance | decimal}}</span>
+            <span class="agency">#{{order.number}}</span>
+            <span class="space-left">{{$t('type.'+order.type)}}</span>
+            <span class="ghost space-left">{{order.table}}</span>
+            <span class="f1"></span>
+            <span class="agency">$ {{order.payment.balance | decimal}}</span>
         </header>
         <ul :class="unique">
             <li v-for="(item,index) in order.content" :key="index" @click="add(item)" :data-unique="item.unique">
@@ -62,24 +64,16 @@ export default {
 .ticket {
   display: inline-flex;
   flex-direction: column;
+  box-shadow: var(--shadow);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 header {
-  background: #607d8b;
+  background: #03a9f4;
   color: #fff;
-  padding: 15px;
+  padding: 10px 15px;
   display: flex;
-}
-
-.type {
-  margin-left: 10px;
-}
-
-.balance {
-  flex: 1;
-  text-align: right;
-  font-family: "Agency FB";
-  font-weight: bold;
 }
 
 ul {

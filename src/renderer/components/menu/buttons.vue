@@ -444,9 +444,9 @@ export default {
           } else {
             print && Printer.print(order);
           }
-        });
 
-        done();
+          done();
+        });
       });
     },
     updateDineInTable(status) {

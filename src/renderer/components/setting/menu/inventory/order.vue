@@ -15,7 +15,7 @@
                 <ul class="order">
                     <li v-for="(order,index) in orders" :key="index" class="row pointer" @click="view(order)">
                         <div>
-                            <h5><span class="date normal">{{order.time | moment('ddd DD')}}</span>{{order.title}}</h5>
+                            <h5><span class="date normal">{{order.date}}</span>{{order.reference}}</h5>
                             <p>{{order.memo}}</p>
                         </div>
                     </li>
@@ -70,7 +70,7 @@
                     <tbody>
                       <tr v-for="(item,index) in receipt.items" :key="index">
                         <td>{{item.description}}</td>
-                        <td>{{item.cost}}</td>
+                        <td>{{item.cost | decimal}}</td>
                         <td>{{item.stock}}</td>
                         <td>{{item.cost * item.stock | decimal}}</td>
                       </tr>
@@ -134,14 +134,7 @@ export default {
         paid: 0
       };
 
-      new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, inventory };
-        this.component = "editor";
-      })
-        .then(update => {
-          this.exitComponent();
-        })
-        .catch(this.exitComponent);
+      this.$open("editor", { inventory });
     },
     openScanDialog() {
       return new Promise((resolve, reject) => {

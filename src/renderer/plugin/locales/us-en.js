@@ -97,35 +97,35 @@ export default {
     unassigned: "Unassigned"
   },
   CHANGE: {
-    UNCHANGED: 'No changes',
+    UNCHANGED: "No changes",
     CHANGES: "Ticket has {i} changes",
-    CREATE_ORDER: 'Create order',
-    ORDER_TYPE: 'Ticket type changed from|{i}|to|{i}',
-    SERVER: 'Server changed from|{i}|to|{i}',
-    TABLE: 'Table changed from|{i}|to|{i}',
-    GUEST: 'Guest count changed from|{i}|to|{i}',
-    PHONE: 'Phone number changed from|{i}|to|{i}',
-    ADDRESS: 'Address changed from|{i}|to|{i}',
-    CITY: 'City changed from|{i}|to|{i}',
-    NAME: 'Customer name changed from|{i}|to|{i}',
-    EXTENSION: 'Extension changed from|{i}|to|{i}',
-    TAX_FREE: 'Ticket has been set to tax free',
-    TAXABLE: 'Ticket tax free was removed',
-    ORDER_VOID: 'Ticket voided',
-    ORDER_RESTORED: 'Ticket Restored',
-    ITEM_QTY_LESS: 'Item|{i}|quantity is reduced from|{i}|to|{i}',
-    ITEM_QTY_MORE: 'Item|{i}|quantity is increased from|{i}|to|{i}',
-    ITEM_SIDE: 'Item|{i}|side order has changed from|{i}|to|{i}',
-    ITEM_PRICE: 'Item|{i}|price has been modified from|$ {i}|to|$ {i}',
-    ITEM_CHOICE_SET: 'The subitem of|{i}|is modified',
-    ITEM_ADD: 'Add|{i}|of item|{i}',
-    ITEM_REMOVE: 'Remove|{i}|of item|{i}',
-    ITEM_PRINT: 'Print|{i}|of Item',
-    COUPON_APPLY: 'Coupon applied. Balance due changed from|$ {i}|to|$ {i}',
-    COUPON_REMOVE: 'Coupon Removed. Balance due changed from|$ {i}|to|$ {i}',
-    DISCOUNT: 'Ticket discount has changed from|$ {i}|to|$ {i}',
-    DELIVERY_CHARGE: 'Delivery charge has changed from|$ {i}|to|$ {i}',
-    GRATUITY: 'Gratuity fees has changed from|$ {i}|to|$ {i}'
+    CREATE_ORDER: "Create order",
+    ORDER_TYPE: "Ticket type changed from|{i}|to|{i}",
+    SERVER: "Server changed from|{i}|to|{i}",
+    TABLE: "Table changed from|{i}|to|{i}",
+    GUEST: "Guest count changed from|{i}|to|{i}",
+    PHONE: "Phone number changed from|{i}|to|{i}",
+    ADDRESS: "Address changed from|{i}|to|{i}",
+    CITY: "City changed from|{i}|to|{i}",
+    NAME: "Customer name changed from|{i}|to|{i}",
+    EXTENSION: "Extension changed from|{i}|to|{i}",
+    TAX_FREE: "Ticket has been set to tax free",
+    TAXABLE: "Ticket tax free was removed",
+    ORDER_VOID: "Ticket voided",
+    ORDER_RESTORED: "Ticket Restored",
+    ITEM_QTY_LESS: "Item|{i}|quantity is reduced from|{i}|to|{i}",
+    ITEM_QTY_MORE: "Item|{i}|quantity is increased from|{i}|to|{i}",
+    ITEM_SIDE: "Item|{i}|side order has changed from|{i}|to|{i}",
+    ITEM_PRICE: "Item|{i}|price has been modified from|$ {i}|to|$ {i}",
+    ITEM_CHOICE_SET: "The subitem of|{i}|is modified",
+    ITEM_ADD: "Add|{i}|of item|{i}",
+    ITEM_REMOVE: "Remove|{i}|of item|{i}",
+    ITEM_PRINT: "Print|{i}|of Item",
+    COUPON_APPLY: "Coupon applied. Balance due changed from|$ {i}|to|$ {i}",
+    COUPON_REMOVE: "Coupon Removed. Balance due changed from|$ {i}|to|$ {i}",
+    DISCOUNT: "Ticket discount has changed from|$ {i}|to|$ {i}",
+    DELIVERY_CHARGE: "Delivery charge has changed from|$ {i}|to|$ {i}",
+    GRATUITY: "Gratuity fees has changed from|$ {i}|to|$ {i}"
   },
   allergy: {
     MILK: "Milk",
@@ -513,7 +513,7 @@ export default {
       evenPayment: "Even Payment",
       printReceipt: "Print Receipt",
       cashTender: "Change",
-      tipReport: "Tips Report",
+      tipReport: "Tips Report"
     },
     card: {
       linkCustomer: "Link Customer"
@@ -523,27 +523,32 @@ export default {
       unsavedPaymentWarning: "Unsaved payment will be restored",
       unprintItemWarning: "The items from the list will not be printed.",
       createTogoList: "Are you wish to create a new list for togo items?",
-      removeCreditCardConfirm: "Are you sure to remove this credit card information?",
+      removeCreditCardConfirm:
+        "Are you sure to remove this credit card information?",
       removeCustomerConfirm: "Are you sure to remove this customer profile?",
       removeAddressConfirm: "Are you sure to remove this address?",
       removePrinterConfirm: "Are you sure to remove this printer?",
       removeSpoolerConfirm: "Are you sure to remove this schedule?",
       addressRemoveConfirm: "Are you sure to remove {i} from the list?",
       deleteItemConfirm: "Are you sure to remove {i} from the menu item?",
-      cardLinkToCustomer: "This card did not link to any customer. Are you wish to link to current customer?",
+      cardLinkToCustomer:
+        "This card did not link to any customer. Are you wish to link to current customer?",
       settleAllByCash: "Are you sure to settle {i} unpaid tickets with CASH?",
       evenSplitConfirm: "Are you sure to even split ticket into {i} ?",
-      evenPaymentConfirm: "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times.",
+      evenPaymentConfirm:
+        "Ticket remain balance $ {i}. Need to pay at least $ {i} if pay {i} times.",
       printReceiptConfirm: "Do you want to print a receipt to customer?",
       tipReportConfirm: "Are you sure to report $ {i} as tips?",
-      settleByHouseAccount: "Are you sure to settle ticket with House Account under {i} ?",
-      removeTemplateConfirm: "Are you sure to remove this template?",
+      settleByHouseAccount:
+        "Are you sure to settle ticket with House Account under {i} ?",
+      removeTemplateConfirm: "Are you sure to remove this template?"
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
     criticalError: "System Has Encountered A Critical Problem",
     attemptReconnect: "Reconnecting to the server...",
-    attemptFailed: "Couldn't reconnect to the server. Please call Support for troubleshooting.",
+    attemptFailed:
+      "Couldn't reconnect to the server. Please call Support for troubleshooting.",
     supportHotLine: "(888)299-0524",
 
     systemProcessing: "System Processing...",
@@ -551,7 +556,8 @@ export default {
     orderTypeSwitchFrom: "Order Type {i} will change to {i}",
     timeoutAutoLock: "POS will lock the screen due to no action in {i} seconds",
     printConfirm: "Print Confirm",
-    printSpoolerConfirm: "Are you sure to print it right now? It was scheduled to print at {i} ({i} later)",
+    printSpoolerConfirm:
+      "Are you sure to print it right now? It was scheduled to print at {i} ({i} later)",
     clockInTime: "You were clock in at {i}",
     clockInRequire: "Clock In Required",
     clockInRequireTip: "Please Clock In first before all actions",
@@ -561,30 +567,35 @@ export default {
     cashInConfirmTip: "Please Check if Cash Drawer has cash amount: $ {i}",
     selfCashInConfirmTip: "Please Confirm if You are having cash amount: $ {i}",
     staffBankMode: "Staff Bank Mode",
-    underStaffBankMode: "You are under staff bank mode. You do not have right to operate this cash drawer",
+    underStaffBankMode:
+      "You are under staff bank mode. You do not have right to operate this cash drawer",
     cashOutTip: "Are you sure to cash out (Cash drawer:{i})",
     cashOutSettle: "Cash Out Total: $ {i}",
     cashOutSettleTip: "(Deposit $ {i} + Collected $ {i} = Total $ {i})",
     staffCashOut: "Self Cash Out",
     staffCashOutTip: "Are you sure to settle?",
     cashDrawerUnavailable: "Cash Drawer Not Available",
-    stationCashDrawerRequired: "You have to set up a cash drawer for current station",
+    stationCashDrawerRequired:
+      "You have to set up a cash drawer for current station",
     accessDenied: "Access Denied",
     accessPinNotMatch: "The pin does not match to your account",
     permissionDenied: "Permission Denied",
-    permissionDeniedContactManager: "You do not have such permission to do so. Please contact the store manager",
+    permissionDeniedContactManager:
+      "You do not have such permission to do so. Please contact the store manager",
     unableViewOtherTable: "You are not allow to view other tables",
     lessAmountProhibit: "You are not allow to lower item's price",
     addFailed: "Unable To Add",
     saveOperatorFailed: "Unable To Save",
     operatorNameDuplicate: "This name is occupied. Please enter a new name",
-    operatorPinDuplicate: "This access pin is duplicated. Please assign a new pin",
+    operatorPinDuplicate:
+      "This access pin is duplicated. Please assign a new pin",
     operatorNoPin: "Pin can not be empty",
     deleteOperatorConfirm: "Are you sure to delete {i} ?",
     deleteOperatorFailed: "Cannot Delete",
     atLeastOneOperatorRequired: "POS needs at least one operator account",
     forceClearTable: "Force Clear",
-    forceClearTableConfirm: "{i} is operating table: {i}. Are you still want to process?",
+    forceClearTableConfirm:
+      "{i} is operating table: {i}. Are you still want to process?",
     resetTableConfirm: "Are you sure to reset this table status?",
     ticketClosed: "Ticket Is Closed",
     paymentFound: "Payment Record",
@@ -593,7 +604,8 @@ export default {
     whatNext: "What are you going to do?",
     removePayment: "{i} Payment Removal",
     removePaymentConfirm: "Are you sure you want to remove the payment $ {i} ?",
-    removePaymentAndTipConfirm: "Are you sure you want to remove the payment $ {i} ? (Tip $ {i} will also be removed)",
+    removePaymentAndTipConfirm:
+      "Are you sure you want to remove the payment $ {i} ? (Tip $ {i} will also be removed)",
     paymentRemoved: "Payment Removed",
     paymentRemovedTip: "#{i} invoice 's payment record has been removed.",
     switchTable: "Switch {i} Table",
@@ -602,9 +614,11 @@ export default {
     tableSwitchFailed: "Cannot Switch",
     targetTableMustBeEmpty: "Target Table must be empty",
     printPrePayment: "Print Pre·Payment",
-    printPrePaymentConfirm: "Are you sure to print pre-payment ticket for table {i}?",
+    printPrePaymentConfirm:
+      "Are you sure to print pre-payment ticket for table {i}?",
     unablePrintPrePayment: "Cannot Print",
-    itemRemainUnprint: "You need to print all items before you can print pre payment ticket.",
+    itemRemainUnprint:
+      "You need to print all items before you can print pre payment ticket.",
     tableReset: "Clear Table",
     tableStatusClearConfirm: "Are you sure to clear Table {i} ?",
     tableResetFailed: "Cannot Clear",
@@ -615,11 +629,13 @@ export default {
     tipAdjustment: "Tip Adjustment",
     tipAdjustmentTip: "Tip adjusted to ${i}, Total: ${i}",
     batchClose: "Batch Close",
-    batchCloseConfirm: "Please Check if you have entered tips for all Invoices.",
+    batchCloseConfirm:
+      "Please Check if you have entered tips for all Invoices.",
     batchFailed: "Batch Failed",
     batchFailErrorCode: "Fail Code: {i}",
     cashPaymentDetail: "Customer has paid ($ {i})",
-    cashPaymentWithTipDetail: "Customer has paid total ($ {i}), including tip ($ {i})",
+    cashPaymentWithTipDetail:
+      "Customer has paid total ($ {i}), including tip ($ {i})",
     unableEdit: "Unable Edit",
     unableEditPrevsTicket: "You can not edit previous ticket.",
     unableEditVoidTicket: "You can not edit voided ticket ( Voided By: {i} )",
@@ -627,7 +643,8 @@ export default {
     orderHasBeenSettled: "This ticket has been closed.",
     voidOrderConfirm: "Void Ticket #{i} {i}?",
     voidOrderConfirmTip: "You will not be able to edit after void this ticket.",
-    reopenSettledOrderTip: "You have to remove {i} payment first before you can edit this ticket.",
+    reopenSettledOrderTip:
+      "You have to remove {i} payment first before you can edit this ticket.",
     recoverTicket: "Do you want to restore {i} ticket?",
     recoverTicketConfirm: "This ticket is voided by {i}. ( Reason: {i} )",
     ticketCombined: "This ticket has been combined to #{i}",
@@ -638,11 +655,14 @@ export default {
     unableAccess: "Unable Access",
     missTerminalConfig: "There is no terminal configuration.",
     splitPayment: "Split Payment",
-    splitTicketPaymentMethod: "How does customer wish to pay this split ticket?",
+    splitTicketPaymentMethod:
+      "How does customer wish to pay this split ticket?",
     cashingOutConfirm: "Cashing Out Confirm",
-    cashingOutConfirmDetail: "Please make sure customer wants to cashing all cash out ( Total: ${i} )",
+    cashingOutConfirmDetail:
+      "Please make sure customer wants to cashing all cash out ( Total: ${i} )",
     withdraw: "Cash ${i}",
-    withdrawAmount: "Please take out cash amount above from cash drawer to customer.",
+    withdrawAmount:
+      "Please take out cash amount above from cash drawer to customer.",
     orderVoided: "Ticket Voided",
     settleVoidedOrder: "You can not settle a voided ticket.",
     dateTimeIncorrect: "Schedule Time Error",
@@ -653,10 +673,13 @@ export default {
     noTerminal: "No Terminal",
     bookingTimeDetail: "Please confirm customer booking for {i}",
     cancelBooking: "Cancel Reservation",
-    cancelBookingConfirm: "Are you sure you are going to cancel {i}'s reservation?",
-    removeClientConfirm: "Are you sure you are going to delete {i} information?",
+    cancelBookingConfirm:
+      "Are you sure you are going to cancel {i}'s reservation?",
+    removeClientConfirm:
+      "Are you sure you are going to delete {i} information?",
     printScheduleItems: "Print Scheduled Item",
-    schedulePrintTaskOngoing: "Some items is in schedule print, Are you sure to print it now?",
+    schedulePrintTaskOngoing:
+      "Some items is in schedule print, Are you sure to print it now?",
     unableSent: "Unable Sent",
     errorCode: "Error Code {i}",
     remainPrintItem: "Remain {i} items unprint",
@@ -664,13 +687,17 @@ export default {
     itemSent: "Item Print From Ticket #{i}",
     printResult: "Ticket has {i} items. {i}",
     tableRemoveConfirm: "Are you sure to remove table {i} ?",
-    tableSectionRemoveConfirm: "Are you sure to remove this table section? All tables under this section will be deleted",
+    tableSectionRemoveConfirm:
+      "Are you sure to remove this table section? All tables under this section will be deleted",
     tableInuse: "Table {i} is hold by other ticket.",
-    tablesInuse: "There are {i} tables in use. Please reset table status before remove table section",
+    tablesInuse:
+      "There are {i} tables in use. Please reset table status before remove table section",
     thirdPartyInvoice: "Third Party Invoice",
-    thirdPartyInvoiceTip: "How will you handle this third party invoice payment?",
+    thirdPartyInvoiceTip:
+      "How will you handle this third party invoice payment?",
     shutdownStations: "Shutdown All Stations",
-    shutdownStationsConfirm: "Are you sure you are going to shutdown all stations at once?",
+    shutdownStationsConfirm:
+      "Are you sure you are going to shutdown all stations at once?",
     printSplitTicket: "Print Ticket",
     printSplitTicketTip: "How would you like to print this split ticket",
     cannotModify: "Modify Denied",
@@ -688,7 +715,8 @@ export default {
     adjustTipFailedErrorMessage: "Tip adjust failed. Error code {i}",
     saveFailed: "Save Failed",
     cashInRequired: "Cash In Required",
-    cashInRequiredTip: "You need to Cash-In First before you can use the cash drawer",
+    cashInRequiredTip:
+      "You need to Cash-In First before you can use the cash drawer",
     extraPayment: "Extra Amount",
     setExtraAmountAsTip: "Are you going to set the Extra ( ${i} ) as Tip?",
     ticketNotFound: "Invoice Not Found",
@@ -705,7 +733,8 @@ export default {
     cardDataRemoved: "This gift card related data has been removed.",
     giftCardNotActivated: "This gift card is not activated.",
     giftCardReload: "Gift Card Reload",
-    confirmReloadAmount: "Please make sure you want to reload $ {i} dollar to this gift card.",
+    confirmReloadAmount:
+      "Please make sure you want to reload $ {i} dollar to this gift card.",
     entryInvalid: "Entry Invalid",
     entryMustBeNumber: "Entry must be number",
     itemRestricted: "{i} Restricted",
@@ -726,13 +755,16 @@ export default {
     ticketSettled: "All Split Ticket Are Settled",
     settleTicketConfirm: "Are you wish to mark this ticket as paid?",
     insufficientAmount: "There is an insufficient funds on the card.",
-    combineTicketsConfirm: "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
+    combineTicketsConfirm:
+      "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
     somethingWrong: "Error Occurred",
     somethingWrongTip: "An unknown error occurred while saving this order.",
     appUpdateNeeded: "Software Update Needed",
-    appVersionRequirement: "Application required version is {i}, but current version is {i}.",
+    appVersionRequirement:
+      "Application required version is {i}, but current version is {i}.",
     serverUpdateNeeded: "Server Update Needed",
-    serverVersionRequirement: "Server requires version is {i}, but current version is {i}.",
+    serverVersionRequirement:
+      "Server requires version is {i}, but current version is {i}.",
     startBreakTime: "Start Break Time",
     startBreakTimeConfirm: "Are you wish to take a break?",
     endBreakTime: "End Break Time",
@@ -746,36 +778,45 @@ export default {
     createFailed: "Create Failed",
     duplicateProfile: "This phone number profile already exist.",
     duplicateAddress: "This street info already exist.",
-    knowWhatYouDoing: "Remove this setting will cause runtime error. Please consult with support team.",
+    knowWhatYouDoing:
+      "Remove this setting will cause runtime error. Please consult with support team.",
     noDefaultWage: "Default Wage Not Assign",
-    timecardNoWage: "The employee {i} does not have default wage. In result the salary will display $ 0.00",
+    timecardNoWage:
+      "The employee {i} does not have default wage. In result the salary will display $ 0.00",
     tableReserved: "This table has been reserved.",
     cantExecute: "Can Not Execute",
     errorOccurred: "Something is wrong! Previous action aborted.",
     duplicateNotAllow: "Name duplicated! Please consider other name.",
-    splitTicketItemRemain: "This ticket has {i} items not split. Please split them first and try again.",
+    splitTicketItemRemain:
+      "This ticket has {i} items not split. Please split them first and try again.",
     temporaryTable: "Temporary Table",
     createTemporaryTable: "Are you sure to create a temporary table?",
     switchServerConfirm: "Are you sure to switch server from {i} to {i}?",
     NoTip: "No Tip Entered",
-    transactionHasNoTip: "There is no tips on any transactions. Are you wish to continue?",
-    ticketUnsettleAlert: "You still have ticket unsettled. Please close them first.",
+    transactionHasNoTip:
+      "There is no tips on any transactions. Are you wish to continue?",
+    ticketUnsettleAlert:
+      "You still have ticket unsettled. Please close them first.",
     printReport: "Print Report",
     printSessionReport: "Would you like to print a {i} session report? ",
     driverSettle: "Driver Settle",
-    driverSettledConfirm: "Please make sure that you have received correct amount from driver {i}.",
+    driverSettledConfirm:
+      "Please make sure that you have received correct amount from driver {i}.",
     splitItemRemove: "Item Remove Confirm",
-    splitItemRemoveConfirm: "Are you sure to remove selected {i} items from split ticket?",
+    splitItemRemoveConfirm:
+      "Are you sure to remove selected {i} items from split ticket?",
     printTimecardRecord: "Are you sure to print out {i}'s timecard record?",
     printAllTimecardRecords: "Are you sure to print all timecard records?",
     removeTimecard: "Remove Timecard Record",
     removeTimecardConfirm: "Are you sure to remove timecard record on {i}?",
     releasePayroll: "Payment Confirm",
     payrollPaymentConfirm: "Are you sure to pay $ {i} to {i} ?",
-    discountAmountNotAllow: "Your discount entry was incorrect. The Amount must less than subtotal.",
+    discountAmountNotAllow:
+      "Your discount entry was incorrect. The Amount must less than subtotal.",
     ticketAlreadySplit: "This ticket already split.",
     allergyAlert: "Food Allergy Alert",
-    foodAllergyFrom: "This item contains {i} may cause customer allergic reaction.",
+    foodAllergyFrom:
+      "This item contains {i} may cause customer allergic reaction.",
     exceedAllowLimit: "Value exceeding allowed limit",
     handlePastDuePayment: "How would you like to handle this past due payment?",
     apiKeyRequired: "Please provide a valid API key.",
@@ -788,20 +829,24 @@ export default {
     copyOrderContent: "Repeat Order Confirm",
     copyOrderContentConfirm: "Are you sure to copy items from the record?",
     addToOrderContent: "Additional Item",
-    addToOrderContentConfirm: "Are you sure to copy item to the current list form the record?",
-    templateMissing: "Template {i} configuration is missing. Please check the menu setting.",
+    addToOrderContentConfirm:
+      "Are you sure to copy item to the current list form the record?",
+    templateMissing:
+      "Template {i} configuration is missing. Please check the menu setting.",
     unableTraceRecord: "Unable To Trace",
     recordMissingOrDeleted: "The change log is missing or deleted.",
     courseTimeConfirm: "All items not set with time will print immediately.",
     driverReport: "Driver Report",
-    driverReportDetail: "Are you sure to print out driver {i}'s summary report?",
+    driverReportDetail:
+      "Are you sure to print out driver {i}'s summary report?",
     removeBook: "Are you sure to remove {i}'s reservation?",
     setGratuityAsTip: "Are you sure to set gratuity ($ {i}) as tip?",
     importedSuccessful: "Item Imported",
     itemImported: "Successfully imported {i} items from CSV file.",
     cashPaymentNotAllow: "You are not allow to pay with cash.",
     printHibachi: "Print Hibachi Tickets",
-    printHibachiConfirm: "Are you sure to print all hibachi items for table {i}?",
+    printHibachiConfirm:
+      "Are you sure to print all hibachi items for table {i}?",
     ticketOnHouse: "Ticket On The House"
   },
   terminal: {
@@ -812,7 +857,8 @@ export default {
     awaitSignature: "Please ask customer to sign on the {i}",
     getSignature: "Getting customer signature...",
     timeout: "Terminal Connect Timeout",
-    timeoutTip: "Please check terminal ECR configuration (Current Ip Setting: {i})",
+    timeoutTip:
+      "Please check terminal ECR configuration (Current Ip Setting: {i})",
     paymentFailed: "Payment Failed",
     paymentFailedTip: "There is no terminal device attach to current station",
     configInvalid: "Terminal config invalid",
@@ -901,7 +947,8 @@ export default {
     removeEmployeeCard: "Remove Employee Card",
     removeEmployeeCardConfirm: "Are you sure to remove this employee card?",
     employeeCardRegisterFailed: "Employee Card Register Failed",
-    employeeCardRegistered: "This employee card already assign to another employee",
+    employeeCardRegistered:
+      "This employee card already assign to another employee",
     stats: {
       giftcardCount: "Gift Card Count",
       giftcardTotal: "Gift Card Remain Balance",
@@ -921,7 +968,6 @@ export default {
     deliveryFee: "Delivery Fee",
     surcharge: "Surcharge",
     gratuity: "Gratuity",
-
 
     configuration: "Report Setting",
     range: "Report Range",
@@ -991,7 +1037,8 @@ export default {
     lowestSales: "Lowest Sales",
     averageSales: "Average Sales",
 
-    averageDetail: "There are {i} days above average and {i} days below average.",
+    averageDetail:
+      "There are {i} days above average and {i} days below average.",
     giftcard: {
       activation: "Gift Card Activation",
       reload: "Gift Card Reload",
@@ -1311,7 +1358,8 @@ export default {
     checkIn: "Check In",
     loading: "Loading",
     separator: "Separator",
-    description: "Description"
+    description: "Description",
+    uberCode: "Uber Code"
   },
   nav: {
     store: "Store",
@@ -1501,7 +1549,7 @@ export default {
     autoJump: "Auto Jump Next",
     tip: {
       itemize: "Itemize selected item",
-      replace:"Replace main item with selected items",
+      replace: "Replace main item with selected items",
       insert: "Always insert selected item to main item",
       dynamicPrint: "Select item target printer base on selected subitems",
       autoJump: "Auto jump to next page after select item"
@@ -1519,11 +1567,13 @@ export default {
     foundRecords: "Found {i} records",
     forGiftCard: "Gift Card ( {i} )",
     payout: "Detail note on purchasing",
-    receiptDefaultAction: "Default action for receipt dialog after each settlement",
+    receiptDefaultAction:
+      "Default action for receipt dialog after each settlement",
     alwaysAskReceipt: "Always prompt dialog",
     doNotPrintReceipt: "Never print receipt",
     alwaysPrintReceipt: "Always print receipt",
-    sameItemName: "Will only print primary text when both primary & secondary text are the same.",
+    sameItemName:
+      "Will only print primary text when both primary & secondary text are the same.",
     foodAllergy: "Set food allergen",
     marketPriceInUse: "Item use market price",
     payrolls: "Time card payroll list",
@@ -1534,8 +1584,8 @@ export default {
     estimateWaitTime: "Estimate wait time: {i} Minutes",
     temporaryDriver: "Name a temporary driver",
     selectSplitOrder: "Please select a split ticket to continue",
-    selectCoupon:"Please select a coupon",
-    creditOnHouseAccount:"Allow credit on house account",
+    selectCoupon: "Please select a coupon",
+    creditOnHouseAccount: "Allow credit on house account",
     delivery: {
       setting: "Delivery relate config",
       free: "Free Delivery Charge",
@@ -1675,7 +1725,7 @@ export default {
       unit: "Point Unit",
       redeem: "Allow Redeem Reward Point",
       ratio: "Conversion Ratio",
-      message: "Marketing Message",
+      message: "Marketing Message"
     },
     tip: {
       pennyEachPoint: "Each penny earn 1 point",
@@ -1685,8 +1735,10 @@ export default {
     },
     dialog: {
       redeemReward: "Redeem Reward Point Confirm",
-      redeemRewardToTicket: "Are you sure to redeem $ {i} to pay ticket from reward point?",
-      redeemRewardToGiftcard: "Are you sure to redeem $ {i} to gift card from reward point?"
+      redeemRewardToTicket:
+        "Are you sure to redeem $ {i} to pay ticket from reward point?",
+      redeemRewardToGiftcard:
+        "Are you sure to redeem $ {i} to gift card from reward point?"
     }
   },
   coupon: {
@@ -1744,7 +1796,7 @@ export default {
   },
   online: {
     about: "About",
-    marketing: 'Ads.',
+    marketing: "Ads.",
     feeds: "Feeds",
     socialSharing: "Social Sharing",
     adWords: "Google AdWords",
@@ -1781,7 +1833,8 @@ export default {
     tip: {
       scanProduct: "Please scan the product barcode.",
       emptyList: "List item is empty",
-      removeProduct: "Are you sure to remove {i} from catalog?"
+      removeProduct: "Are you sure to remove {i} from catalog?",
+      stockRequire: "Stock below minimum {i}"
     },
     vendor: "Vendor",
     handler: "Handle by",
@@ -1803,6 +1856,7 @@ export default {
     size: "Size",
     stock: "Stock",
     value: "Value",
+    totalCost: "Total Cost",
     minStockAlert: "Minimum Stock Alert"
   },
   date: {
@@ -1879,7 +1933,8 @@ export default {
       sales: "Sales",
       printers: "Printers",
       reward: "Reward",
-      plugin: "Plugin"
+      plugin: "Plugin",
+      provider: "Provider"
     },
     title: {
       store: "Store Information",
@@ -1905,7 +1960,8 @@ export default {
       cashflow: "Cash Flow Summary",
       payoutRecord: "Payout Record",
       online: "Online Order Config",
-      plugin: "Plugin List"
+      plugin: "Plugin List",
+      thirdParty: "Third Party Order Provider"
     },
     receiptDialog: "Receipt Dialog",
     others: "Others",
@@ -1917,7 +1973,7 @@ export default {
       discount: "Discount",
       tip: "Tip",
       instantPay: "Instant Pay",
-      houseAccount:"House Account",
+      houseAccount: "House Account",
       printedWhenPaid: "Set ticket print after settlement",
       allowNoPrint: "Allow 'Do Not Print' on each payment",
       autoStack: "Auto Stack",

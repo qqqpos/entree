@@ -168,6 +168,7 @@ export default {
           zhCN: "",
           price: [0],
           num: this.items[group].filter(i => i._id).length,
+          upc:"",
           prices: {}
         });
       } else {

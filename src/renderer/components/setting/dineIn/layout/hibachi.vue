@@ -5,7 +5,7 @@
             <span v-for="(seat,idx) in item.seats" :key="idx" :index="idx" class="seat" tag="span" @click="swap($event,item.name,seat,idx)">{{seat.name}}</span>
         </div>
         <div class="add-hibachi" v-show="items.length !== 4" @click="edit()">
-            <i class="fa fa-3x fa-plus"></i>
+            <i class="fa fa-3x fa-plus ghost"></i>
         </div>
         <div :is="component" :init="componentData"></div>
     </div>

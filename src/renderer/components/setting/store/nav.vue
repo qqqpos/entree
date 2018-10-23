@@ -29,7 +29,11 @@
                 <router-link tag="li" :to="{name:'Setting.reward'}">
                     <i class="fas fa-award"></i>
                     <span class="text">{{$t('setting.nav.reward')}}</span>
-                </router-link>                
+                </router-link>           
+                <router-link tag="li" :to="{name:'Setting.provider'}">
+                    <i class="fab fa-internet-explorer"></i>
+                    <span class="text">{{$t('setting.nav.provider')}}</span>
+                </router-link>            
                 <router-link tag="li" class="tab" :to="{name:'Setting.store.others'}">
                     <i class="fas fa-sliders-h"></i>
                     <span class="text">{{$t('setting.nav.other')}}</span>

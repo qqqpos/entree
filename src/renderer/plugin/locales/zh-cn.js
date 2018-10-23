@@ -97,35 +97,35 @@ export default {
     unassigned: "未分配"
   },
   CHANGE: {
-    UNCHANGED: '无改动',
+    UNCHANGED: "无改动",
     CHANGES: "订单有 {i} 处改动",
-    CREATE_ORDER: '创建订单',
-    ORDER_TYPE: '订单类别从|{i}|改成|{i}',
-    SERVER: '服务员从|{i}|改成|{i}',
-    TABLE: '桌位从|{i}|换至|{i}',
-    GUEST: '客人数量从|{i}|改成|{i}',
-    PHONE: '更改客人信息. 电话号码从|{i}|改成|{i}',
-    ADDRESS: '更改客人信息. 地址从|{i}|改成|{i}',
-    CITY: '更改客人信息. 地址城市从|{i}|改成|{i}',
-    NAME: '更改客人信息. 客人名字从|{i}|改成|{i}',
-    EXTENSION: '更改客人信息. 分机号码从|{i}|改成|{i}',
-    TAX_FREE: '订单被设置成免税',
-    TAXABLE: '订单免税被移除',
-    ORDER_VOID: '订单被作废',
-    ORDER_RESTORED: '订单被还原',
-    ITEM_QTY_LESS: '减少|{i}|的数量, 从|{i} 个|减少至|{i} 个',
-    ITEM_QTY_MORE: '增加|{i}|的数量, 从|{i} 个|增加至|{i} 个',
-    ITEM_SIDE: '改动物品|{i}|的配菜, 从|{i}|改成|{i}',
-    ITEM_PRICE: '修改物品|{i}|的价格, 从|$ {i}|改成|$ {i}',
-    ITEM_CHOICE_SET: '修改物品|{i}|的子菜品',
-    ITEM_ADD: '新增|{i} 个|物品|{i}',
-    ITEM_REMOVE: '移除|{i} 个|物品|{i}',
-    ITEM_PRINT: '打印|{i} 个|物品',
-    COUPON_APPLY: '新增订单折扣, 订单价格从|$ {i}|变成|$ {i}',
-    COUPON_REMOVE: '移除订单折扣, 订单价格从|$ {i}|变成|$ {i}',
-    DISCOUNT: '订单折扣变动, 折扣金额从|$ {i}|变成|$ {i}',
-    DELIVERY_CHARGE: '送餐费变动, 收取的费用从|$ {i}|变成|$ {i}',
-    GRATUITY: '服务费变动, 收取的服务费从|$ {i}|变成|$ {i}'
+    CREATE_ORDER: "创建订单",
+    ORDER_TYPE: "订单类别从|{i}|改成|{i}",
+    SERVER: "服务员从|{i}|改成|{i}",
+    TABLE: "桌位从|{i}|换至|{i}",
+    GUEST: "客人数量从|{i}|改成|{i}",
+    PHONE: "更改客人信息. 电话号码从|{i}|改成|{i}",
+    ADDRESS: "更改客人信息. 地址从|{i}|改成|{i}",
+    CITY: "更改客人信息. 地址城市从|{i}|改成|{i}",
+    NAME: "更改客人信息. 客人名字从|{i}|改成|{i}",
+    EXTENSION: "更改客人信息. 分机号码从|{i}|改成|{i}",
+    TAX_FREE: "订单被设置成免税",
+    TAXABLE: "订单免税被移除",
+    ORDER_VOID: "订单被作废",
+    ORDER_RESTORED: "订单被还原",
+    ITEM_QTY_LESS: "减少|{i}|的数量, 从|{i} 个|减少至|{i} 个",
+    ITEM_QTY_MORE: "增加|{i}|的数量, 从|{i} 个|增加至|{i} 个",
+    ITEM_SIDE: "改动物品|{i}|的配菜, 从|{i}|改成|{i}",
+    ITEM_PRICE: "修改物品|{i}|的价格, 从|$ {i}|改成|$ {i}",
+    ITEM_CHOICE_SET: "修改物品|{i}|的子菜品",
+    ITEM_ADD: "新增|{i} 个|物品|{i}",
+    ITEM_REMOVE: "移除|{i} 个|物品|{i}",
+    ITEM_PRINT: "打印|{i} 个|物品",
+    COUPON_APPLY: "新增订单折扣, 订单价格从|$ {i}|变成|$ {i}",
+    COUPON_REMOVE: "移除订单折扣, 订单价格从|$ {i}|变成|$ {i}",
+    DISCOUNT: "订单折扣变动, 折扣金额从|$ {i}|变成|$ {i}",
+    DELIVERY_CHARGE: "送餐费变动, 收取的费用从|$ {i}|变成|$ {i}",
+    GRATUITY: "服务费变动, 收取的服务费从|$ {i}|变成|$ {i}"
   },
   allergy: {
     MILK: "牛奶",
@@ -449,7 +449,7 @@ export default {
       evenPayment: "平摊付款",
       printReceipt: "打印收据",
       cashTender: "请找",
-      tipReport: "确定小费",
+      tipReport: "确定小费"
     },
     card: {
       linkCustomer: "关联卡号"
@@ -466,14 +466,16 @@ export default {
       removeSpoolerConfirm: "您确定要移除这个打印计划吗?",
       addressRemoveConfirm: "您确定要移除 {i} 地址吗?",
       deleteItemConfirm: "您确定要从菜单物品中删除 {i} 吗？",
-      cardLinkToCustomer: "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?",
+      cardLinkToCustomer:
+        "此卡没有关联的客户, 您确定要将卡与当前客户关联起来吗?",
       settleAllByCash: "您确定要将未付款的 {i} 个订单一次性用 现金 结账吗?",
       evenSplitConfirm: "您确定要将订单平均分成 {i} 份吗？",
-      evenPaymentConfirm: "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}",
+      evenPaymentConfirm:
+        "此订单的余额 $ {i}. 按{i}次付款, 每笔至少需要支付 $ {i}",
       printReceiptConfirm: "是否需要打印收据给客人？",
       tipReportConfirm: "请再次确定您本次上报的小费为 $ {i} ?",
       settleByHouseAccount: "您确定要用将此订单以 {i} 的名义记账吗?",
-      removeTemplateConfirm: "您确定要移除这个模版吗?",
+      removeTemplateConfirm: "您确定要移除这个模版吗?"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -527,7 +529,8 @@ export default {
     whatNext: "您想要执行什么动作？",
     removePayment: "移除{i}付款记录",
     removePaymentConfirm: "您确定要移除这笔 $ {i} 的付款记录吗？",
-    removePaymentAndTipConfirm: "您确定要移除这笔 $ {i} 的付款记录吗？ (同时也会抹去小费 $ {i})",
+    removePaymentAndTipConfirm:
+      "您确定要移除这笔 $ {i} 的付款记录吗？ (同时也会抹去小费 $ {i})",
     paymentRemoved: "付款记录已移除",
     paymentRemovedTip: "#{i} 订单的付款记录已经移除",
     switchTable: "{i} 换座位",
@@ -590,7 +593,8 @@ export default {
     cancelBookingConfirm: "您确定要取消 {i} 的预约吗？",
     removeClientConfirm: "您确定要删除 {i} 的所有资料吗？",
     printScheduleItems: "打印已定时的物品",
-    schedulePrintTaskOngoing: "列表中的某些物品处于定时打印, 您确定要将这些物品打印出来吗?",
+    schedulePrintTaskOngoing:
+      "列表中的某些物品处于定时打印, 您确定要将这些物品打印出来吗?",
     unableSent: "无法发送",
     errorCode: "错误代码 {i}",
     remainPrintItem: "剩余 {i} 个物品未打印",
@@ -666,7 +670,8 @@ export default {
     appUpdateNeeded: "软件需要更新",
     serverUpdateNeeded: "伺服器需要更新",
     appVersionRequirement: "当前软件要求最低版本为 {i}, 您当前使用的版本是 {i}",
-    serverVersionRequirement: "当前伺服器要求最低版本为 {i}, 您当前使用的版本是 {i}",
+    serverVersionRequirement:
+      "当前伺服器要求最低版本为 {i}, 您当前使用的版本是 {i}",
     startBreakTime: "开始休息",
     startBreakTimeConfirm: "您确定要开始休息时间吗？",
     endBreakTime: "结束休息",
@@ -680,14 +685,16 @@ export default {
     createFailed: "创建失败",
     duplicateProfile: "此电话号码的资料已经存在",
     duplicateAddress: "此街道信息已经存在",
-    knowWhatYouDoing: "移除此类设定将会导致程序运行时出现故障, 请在技术支持的指引下进行操作",
+    knowWhatYouDoing:
+      "移除此类设定将会导致程序运行时出现故障, 请在技术支持的指引下进行操作",
     noDefaultWage: "没有默认时薪",
     timecardNoWage: "此员工 {i} 并没有设置时薪, 工资将会显示为 $ 0.00",
     tableReserved: "此座位已经被预定",
     cantExecute: "无法执行",
     errorOccurred: "执行这个命令的过程发送一个错误, 命令被中止!",
     duplicateNotAllow: "已经有相同名称，请重新命名",
-    splitTicketItemRemain: "此订单中还有 {i} 个物品尚未被分配, 请分单后再进行付款操作",
+    splitTicketItemRemain:
+      "此订单中还有 {i} 个物品尚未被分配, 请分单后再进行付款操作",
     temporaryTable: "临时座位",
     createTemporaryTable: "您需要创建一个临时的座位吗？",
     switchServerConfirm: "您确定要将服务员由 {i} 换成 {i} 吗？",
@@ -1303,7 +1310,8 @@ export default {
     checkIn: "签到",
     loading: "加载中",
     separator: "分隔符",
-    description: "描述"
+    description: "描述",
+    uberCode: "优食确认码"
   },
   nav: {
     store: "店面",
@@ -1494,7 +1502,7 @@ export default {
     autoJump: "自动转跳",
     tip: {
       itemize: "将所选的按常规物品处理",
-      replace:"将主物品替换成选中的物品",
+      replace: "将主物品替换成选中的物品",
       insert: "在物品子菜单中追加选中的物品",
       dynamicPrint: "根据所选的子物品的打印配置的集合打印",
       autoJump: "选择完毕后自动转跳到下一页"
@@ -1731,7 +1739,7 @@ export default {
   },
   online: {
     about: "介绍",
-    marketing: '推广',
+    marketing: "推广",
     feeds: "信息流",
     socialSharing: "社交推广",
     adWords: "谷歌关键词",
@@ -1768,7 +1776,8 @@ export default {
     tip: {
       scanProduct: "请扫描商品条形码",
       emptyList: "尚未添加商品",
-      removeProduct: "您确定要从目录中移除 {i} 吗?"
+      removeProduct: "您确定要从目录中移除 {i} 吗?",
+      stockRequire: "低于最低库存要求 {i} "
     },
     vendor: "供货商",
     handler: "负责人",
@@ -1790,6 +1799,7 @@ export default {
     size: "规格",
     stock: "库存量",
     value: "价值",
+    totalCost: "总成本",
     minStockAlert: "最低库存警告"
   },
   date: {
@@ -1866,7 +1876,8 @@ export default {
       sales: "营业额",
       printers: "打印机",
       reward: "积分",
-      plugin: "插件"
+      plugin: "插件",
+      provider: "提供商"
     },
     title: {
       store: "店面基本资料",
@@ -1892,7 +1903,8 @@ export default {
       cashflow: "现金流水记录",
       payoutRecord: "支出记录",
       online: "在线点餐设定",
-      plugin: "插件列表"
+      plugin: "插件列表",
+      thirdParty: "第三方订单提供商"
     },
     receiptDialog: "打印收据",
     others: "其它设置",

@@ -90,7 +90,8 @@ export default {
         usEN: "",
         price: 0,
         print: this.printers.slice(),
-        key: String().random(4)
+        key: String().random(4),
+        _id: ObjectId().toString()
       };
       new Promise((resolve, reject) => {
         this.componentData = { resolve, reject, item, printers: this.printers };

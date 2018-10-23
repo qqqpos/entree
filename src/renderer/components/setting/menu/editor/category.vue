@@ -30,8 +30,8 @@
           <inputer title="text.primary" v-model.trim="category.usEN"></inputer>
           <inputer title="text.secondary" v-model.trim="category.zhCN"></inputer>
           <div v-if="manual" class="row">
-            <label class="f1">{{$t('text.contain')}}</label>
-            <div class="inputWrap">
+            <label class="title">{{$t('text.contain')}}</label>
+            <div class="inputWrap f1">
               <span v-for="(category,index) in category.contain" :key="index">{{category}}<span @click="remove(index)" class="icon space-left">×</span></span>
               <input type="text" v-model="entry" @keypress.enter="add">
             </div>
@@ -249,6 +249,10 @@ header {
 .row {
   margin-top: 5px;
   align-items: center;
+}
+
+label.title {
+  width: 85px;
 }
 
 .inputWrap {

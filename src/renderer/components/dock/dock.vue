@@ -11,6 +11,7 @@
             <div class="client" v-show="isMenuPage">
               <span v-show="customer.phone">{{customer.phone | phone}}</span>
               <span v-show="customer.address">{{customer.address}}</span>
+              <span v-show="customer.code"><i class="fab fa-uber space-right"></i>{{customer.code}}</span>
             </div>
           </div>
           <div class="profile" v-show="isMenuPage" @click="openPortal">

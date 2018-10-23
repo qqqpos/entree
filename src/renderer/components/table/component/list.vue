@@ -6,7 +6,7 @@
                     <h3>{{$t('title.orderList')}}</h3>
                     <h5>{{$t('tip.foundRecords',tickets.length)}}</h5>
                 </div>
-                <button class="remove" @click="reset" v-show="queue.length >0">{{$t('button.reset')}}</button>
+                <button class="mini-btn" @click="reset" v-show="queue.length >0"><i class="fas fa-redo-alt space-right light"></i>{{$t('button.reset')}}</button>
             </header>
             <div class="wrap">
               <table class="text-center">

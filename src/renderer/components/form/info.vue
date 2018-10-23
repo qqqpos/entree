@@ -1,16 +1,17 @@
 <template>
   <div class="outer">
-    <section>
+    <section class="row">
       <phone v-model="customer.phone" @focus="setFocus"></phone>
-      <extension v-model="customer.extension" @focus="setFocus"></extension>
-      <name v-model="customer.name" @focus="setFocus"></name>
+      <input-field text="text.uberCode" icon="fas fa-clipboard-check" field="code" v-model="customer.code" @focus="setFocus" v-if="order.source === 'Uber Eats'"></input-field>
+      <input-field text="text.extension" icon="fa fa-fax" field="extension" v-model="customer.extension" @focus="setFocus" v-else></input-field>
+      <input-field text="text.name" icon="far fa-id-badge" field="name" v-model="customer.name" @focus="setFocus"></input-field>
     </section>
-    <section>
+    <section class="row">
       <street v-model="customer.address" :direction="customer.direction" :distance="customer.distance" :duration="customer.duration" :profile="customer.profiles ? customer.profiles.length : 0" @focus="setFocus" @query="$emit('query')"></street>
       <city v-model="customer.city" @focus="setFocus"></city>
     </section>
-    <section>
-      <note v-model="customer.note" @focus="setFocus"></note>
+    <section class="row">
+      <input-field text="text.note" icon="far fa-comment-alt" field="note" v-model="customer.note" @focus="setFocus"></input-field>
     </section>
   </div>
 </template>
@@ -19,21 +20,23 @@
 import { mapGetters } from "vuex";
 
 import phone from "./helper/phone";
-import name from "./helper/name";
 import city from "./helper/city";
-import note from "./helper/note";
 import street from "./helper/street";
-import extension from "./helper/extension";
+import inputField from "./helper/inputField";
 
 export default {
-  components: { phone, street, extension, name, city, note },
+  components: { phone, street, city, inputField },
   computed: {
-    ...mapGetters(["customer"])
+    ...mapGetters(["order", "customer"])
   },
   mounted() {
-    this.customer.phone.length === 10
-      ? this.setFocus("address")
-      : this.setFocus("phone");
+    if (this.order.source === "Uber Eats") {
+      this.setFocus("code")
+    } else {
+      this.customer.phone.length === 10
+        ? this.setFocus("address")
+        : this.setFocus("phone");
+    }
   },
   methods: {
     setFocus(target) {
@@ -55,9 +58,5 @@ export default {
 .outer {
   padding: 5px 10px;
   background: #fafafa;
-}
-
-section {
-  display: flex;
 }
 </style>

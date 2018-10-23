@@ -363,23 +363,23 @@ section.card {
 }
 
 .card .input {
-  border-bottom: 1px solid #ccc;
   display: flex;
   font-size: 1.05em;
+  border-bottom: 1px solid #ccc;
 }
 
 .card header .tip {
+  margin-left: 5px;
+  color: #78909c;  
   font-size: 16px;
   font-weight: lighter;
-  margin-left: 5px;
-  color: #78909c;
 }
 
 .listHeader {
   padding: 10px 0;
-  background: #4d6d83;
   color: #fff;
   display: flex;
+  background: #4d6d83;
   border-bottom: 1px solid #455a64;
 }
 
@@ -418,10 +418,10 @@ input[type="text"]:disabled {
 }
 
 .card .datalist {
-  border-bottom: 1px solid #e0e0e0;
   display: flex;
   color: #455a64;
   padding: 7px 0 3px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .datalist:nth-child(2n) {
@@ -474,7 +474,7 @@ dialog {
   margin-top: 3px;
 }
 
-.window {
+/* .window {
   background: #f5f5f5;
   border-top: 1px solid #94bfe2;
   box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
@@ -494,7 +494,7 @@ dialog {
   position: relative;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-}
+} */
 
 .title > i {
   font-style: normal;
@@ -878,6 +878,7 @@ label.input-toggle>input {
 
 .items .disable {
   background: rgba(207, 216, 220, 0.5);
+  border-color: #c4cdd2;
 }
 
 .items div {

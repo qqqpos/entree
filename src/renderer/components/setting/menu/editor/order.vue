@@ -38,19 +38,19 @@
                     <div class="inventory-item">
                         <template v-if="inventory.items.length">
                             <div class="row header">
-                                <span class="f1 text-center">{{$t('inventory.product')}}</span>
+                                <span class="f1 text-center">{{$t('inventory.product')}}<span v-show="inventory.items.length" class="space-left ghost">( {{inventory.items.length}} )</span></span>
                                 <span class="info">{{$t('inventory.qty')}}</span>
                                 <span class="info">{{$t('inventory.cost')}}</span>
                             </div>
-                            <ul>
+                            <ul ref="items">
                                 <li v-for="(item,index) in inventory.items" :key="index" class="row flex-center item">
                                     <span class="f1 text-center">{{item.description}}</span>
                                     <span class="row flex-center info">
                                         <i class="fas fa-minus-circle space-right light clickable" @click="lessQty(item,index)"></i>
-                                        <input v-model="item.stock">
+                                        <input v-model.number="item.stock">
                                         <i class="fas fa-plus-circle space-left light clickable" @click="moreQty(item)"></i>
                                     </span>
-                                    <span class="info"><input v-model="item.cost"></span>
+                                    <span class="info"><input v-model.number="item.cost"></span>
                                 </li>
                             </ul>
                         </template>
@@ -61,23 +61,27 @@
                     </div>
                     <div class="row flex-center">
                         <div class="column space-right">
-                            <h5 class="space-left">{{$t('inventory.upc')}}</h5>
-                            <input type="text" v-model="item.upc">
+                            <h5 class="space-left">{{$t('text.subtotal')}}</h5>
+                            <input type="text" v-model="inventory.subtotal">
                         </div>
                         <div class="column space-right">
-                            <h5 class="space-left">{{$t('inventory.qty')}}</h5>
-                            <input type="text" v-model.number="item.stock">
+                            <h5 class="space-left">{{$t('text.tax')}}</h5>
+                            <input type="text" v-model.number="inventory.tax" @input="calculate">
                         </div>
                         <div class="column space-right">
-                            <h5 class="space-left">{{$t('inventory.cost')}}</h5>
-                            <input type="text" v-model.number="item.cost">
+                            <h5 class="space-left">{{$t('text.shipping')}}</h5>
+                            <input type="text" v-model.number="inventory.shipping" @input="calculate">
+                        </div>  
+                        <div class="column space-right">
+                            <h5 class="space-left">{{$t('inventory.totalCost')}}</h5>
+                            <input type="text" v-model.number="inventory.total">
                         </div>  
                     </div>
                 </section>
             </div>
             <footer>
                 <button class="btn" @click="scanItem">{{$t('button.scan')}}</button>
-                <button class="btn" :disabled="inventory.items.length === 0">{{$t('button.done')}}</button>
+                <button class="btn" :disabled="inventory.items.length === 0" @click="confirm">{{$t('button.done')}}</button>
             </footer>
         </div>
         <div :is="component" :init="componentData"></div>
@@ -94,13 +98,14 @@ export default {
     return {
       component: null,
       componentData: null,
-      inventory: this.init.inventory,
-      item: {
-        upc: "",
-        stock: 1,
-        cost: "0.00"
-      }
+      inventory: this.init.inventory
     };
+  },
+  watch: {
+    "inventory.items": {
+      handler: "calculate",
+      deep: true
+    }
   },
   methods: {
     getBarcode() {
@@ -128,7 +133,8 @@ export default {
             item,
             {
               stock: 1,
-              sold: 0
+              sold: 0,
+              orders: []
             }
           );
 
@@ -144,6 +150,9 @@ export default {
         const item = await this.replenishment(product);
 
         this.inventory.items.push(product);
+
+        await this.$nextTick();
+        this.$refs.items.scrollTop = this.$refs.items.scrollHeight;
         this.exitComponent();
       } catch (e) {
         this.exitComponent();
@@ -154,6 +163,25 @@ export default {
     },
     moreQty(item) {
       item.stock++;
+    },
+    confirm() {
+      this.$socket.emit("[INVENTORY] SAVE", this.inventory, this.init.resolve);
+    },
+    calculate() {
+      const { items, tax, shipping } = this.inventory;
+
+      const subtotal = items.reduce(
+        (a, c) => a + (parseFloat(c.cost) || 0) * c.stock,
+        0
+      );
+
+      const total =
+        parseFloat(subtotal) +
+        (parseFloat(tax) || 0) +
+        (parseFloat(shipping) || 0);
+
+      this.inventory.subtotal = toFixed(subtotal, 2);
+      this.inventory.total = toFixed(total, 2);
     },
     exit() {
       this.inventory.items.length === 0 && this.init.reject(false);

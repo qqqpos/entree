@@ -8,10 +8,10 @@
             <thead>
                 <tr>
                     <th>{{$t('inventory.brand')}}</th>
-                    <th class="clickable">{{$t('inventory.item')}} <i class="fa fa-sort ghost"></i></th>
+                    <th class="name clickable" @click="toggleUPC">{{$t('inventory.item')}}</th>
                     <th>{{$t('inventory.category')}}</th>
                     <th>{{$t('inventory.size')}}</th>
-                    <th class="clickable">{{$t('inventory.stock')}} <i class="fa fa-sort ghost"></i></th>
+                    <th class="clickable" @click="sortByStock">{{$t('inventory.stock')}} <i class="fa fa-sort ghost"></i></th>
                     <th>{{$t('inventory.value')}}</th>
                     <th></th>
                 </tr>
@@ -19,11 +19,12 @@
             <tbody>
                 <tr v-for="(item,index) in items" :key="index">
                     <td>{{item.brand}}</td>
-                    <td>{{item.description}}</td>
+                    <td class="name" v-if="viewUPC">{{item.upc}}</td>
+                    <td class="name" v-else>{{item.description}}</td>
                     <td>{{item.category}}</td>
                     <td>{{item.size}}</td>
-                    <td>{{item.stock - item.sold}}</td>
-                    <td class="agency light">$ {{(item.stock - item.sold) * item.msrp | decimal}}</td>
+                    <td><span class="relative">{{item.inStock}}<i class="fas fa-exclamation low" v-if="item.inStock < item.minStock" :title="$t('inventory.tip.stockRequire',item.minStock)"></i></span></td>
+                    <td class="agency light">$ {{item.inStock * item.msrp | decimal}}</td>
                     <td class="fas fa-pen-square ghost clickable" @click="edit(item)"></td>
                 </tr>
             </tbody>
@@ -44,7 +45,9 @@ export default {
   beforeRouteEnter: (from, to, next) => {
     appSocket.emit("[INVENTORY] CATALOG", items =>
       next(vm => {
-        vm.items = Object.freeze(items);
+        vm.items = items.map(item =>
+          Object.assign(item, { inStock: item.stock - item.sold })
+        );
       })
     );
   },
@@ -52,6 +55,8 @@ export default {
     return {
       componentData: null,
       component: null,
+      lastSort: null,
+      viewUPC: false,
       items: []
     };
   },
@@ -105,10 +110,21 @@ export default {
         this.exitComponent();
       }
     },
+    sortByStock() {
+      this.lastSort === "STOCK"
+        ? this.items.reverse()
+        : this.items.sort((a, b) => (a.inStock > b.inStock ? 1 : -1));
+      this.lastSort = "STOCK";
+    },
+    toggleUPC() {
+      this.viewUPC = !this.viewUPC;
+    },
     refreshData() {
       this.$socket.emit("[INVENTORY] CATALOG", items => {
         this.exitComponent();
-        this.items = Object.freeze(items);
+        this.items = items.map(item =>
+          Object.assign(item, { inStock: item.stock - item.sold })
+        );
       });
     }
   }
@@ -123,7 +139,7 @@ nav {
 }
 
 tr td {
-  padding: 7px;
+  padding: 7px 4px;
   text-align: center;
 }
 
@@ -132,6 +148,17 @@ tr th {
   border-bottom: 1px solid #eceff1;
   background: #f5f5f5;
   color: #505865;
+}
+
+.low {
+  position: absolute;
+  right: -15px;
+  font-size: 10px;
+  color: #ff5722;
+}
+
+.name{
+  min-width: 130px;
 }
 </style>
 

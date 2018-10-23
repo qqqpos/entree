@@ -1,5 +1,5 @@
-var Preset = function () {
-  this.station = function (mac, username) {
+var Preset = function() {
+  this.station = function(mac, username) {
     return {
       mac,
       username,
@@ -22,7 +22,7 @@ var Preset = function () {
       },
       scale: {
         enable: false,
-        port: 'COM1'
+        port: "COM1"
       },
       callerID: {
         enable: false,
@@ -44,82 +44,101 @@ var Preset = function () {
         done: false
       },
       receiveOnlineOrder: false,
-      interface: [{
-        "icon": "fa-user",
-        "head": "外等",
-        "subhead": "Walk In",
-        "route": "order",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-phone",
-        "head": "来取",
-        "subhead": "Pick Up",
-        "route": "pickup",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-car",
-        "head": "送餐",
-        "subhead": "Delivery",
-        "route": "delivery",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-utensils",
-        "head": "堂吃",
-        "subhead": "Dine In",
-        "route": "table",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-list",
-        "head": "历史",
-        "subhead": "History",
-        "route": "history",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-inbox",
-        "head": "钱机",
-        "subhead": "Cash Drawer",
-        "route": "cashDrawer",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-cog",
-        "head": "设置",
-        "subhead": "Setting",
-        "route": "setting",
-        "password": false,
-        "enable": true
-      }, {
-        "icon": "fa-lock",
-        "head": "锁定",
-        "subhead": "Lock",
-        "route": "lock",
-        "password": false,
-        "enable": true
-      }]
-    }
+      interface: [
+        {
+          icon: "fa-user",
+          head: "外等",
+          subhead: "Walk In",
+          route: "order",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-phone",
+          head: "来取",
+          subhead: "Pick Up",
+          route: "pickup",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-car",
+          head: "送餐",
+          subhead: "Delivery",
+          route: "delivery",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-utensils",
+          head: "堂吃",
+          subhead: "Dine In",
+          route: "table",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-list",
+          head: "历史",
+          subhead: "History",
+          route: "history",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-inbox",
+          head: "钱机",
+          subhead: "Cash Drawer",
+          route: "cashDrawer",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-cog",
+          head: "设置",
+          subhead: "Setting",
+          route: "setting",
+          password: false,
+          enable: true
+        },
+        {
+          icon: "fa-lock",
+          head: "锁定",
+          subhead: "Lock",
+          route: "lock",
+          password: false,
+          enable: true
+        }
+      ]
+    };
   };
-  this.printer = function (type) {
+  this.printer = function(type) {
     return {
-      type: type || 'regular',
-      print: ["WALK_IN", "PICK_UP", "DELIVERY", "DINE_IN", "BAR", "BUFFET", "HIBACHI", "SALES", "TO_GO"],
+      type: type || "regular",
+      print: [
+        "WALK_IN",
+        "PICK_UP",
+        "DELIVERY",
+        "DINE_IN",
+        "BAR",
+        "BUFFET",
+        "HIBACHI",
+        "SALES",
+        "TO_GO"
+      ],
       reprint: [],
       title: {
-        "PICK_UP": "PICK UP",
-        "WALK_IN": "WALK IN",
-        "DELIVERY": "DELIVERY",
-        "PRE_PAYMENT": "PRE PAYMENT",
-        "RECEIPT": "RECEIPT",
-        "DINE_IN": "DINE IN",
-        "HIBACHI": "HIBACHI",
-        "BUFFET": "BUFFET",
-        "SALES": "SALES",
-        "TO_GO": "TO GO",
-        "BAR": "BAR"
+        PICK_UP: "PICK UP",
+        WALK_IN: "WALK IN",
+        DELIVERY: "DELIVERY",
+        PRE_PAYMENT: "PRE PAYMENT",
+        RECEIPT: "RECEIPT",
+        DINE_IN: "DINE IN",
+        HIBACHI: "HIBACHI",
+        BUFFET: "BUFFET",
+        SALES: "SALES",
+        TO_GO: "TO GO",
+        BAR: "BAR"
       },
       control: {
         buzzer: false,
@@ -132,9 +151,7 @@ var Preset = function () {
           jobTime: false,
           tradeMark: false,
           geo: false,
-          content: [
-            "Thank You Very Much"
-          ]
+          content: ["Thank You Very Much"]
         }
       },
       layout: {
@@ -142,31 +159,34 @@ var Preset = function () {
         title: true,
         customer: true,
         payment: true,
-        languages: [{
-          ref: "usEN",
-          enable: true,
-          fontFamily: "Roboto Condensed",
-          fontSize: "21",
-          lineHeight: 1,
-          subFontSize: 0.8,
-          price: true,
-          qty: true,
-          id: false
-        }, {
-          ref: "zhCN",
-          enable: true,
-          fontFamily: "QingYuan",
-          fontSize: "21",
-          lineHeight: 1,
-          subFontSize: 0.8,
-          price: true,
-          qty: true,
-          id: false
-        }]
+        languages: [
+          {
+            ref: "usEN",
+            enable: true,
+            fontFamily: "Roboto Condensed",
+            fontSize: "21",
+            lineHeight: 1,
+            subFontSize: 0.8,
+            price: true,
+            qty: true,
+            id: false
+          },
+          {
+            ref: "zhCN",
+            enable: true,
+            fontFamily: "QingYuan",
+            fontSize: "21",
+            lineHeight: 1,
+            subFontSize: 0.8,
+            price: true,
+            qty: true,
+            id: false
+          }
+        ]
       }
-    }
+    };
   };
-  this.item = function () {
+  this.item = function() {
     return {
       _id: undefined,
       zhCN: "",
@@ -192,9 +212,9 @@ var Preset = function () {
       },
       preset: [],
       printer: {}
-    }
+    };
   };
-  this.customer = function () {
+  this.customer = function() {
     return {
       phone: "",
       extension: "",
@@ -202,6 +222,7 @@ var Preset = function () {
       city: "",
       name: "",
       note: "",
+      code: "",
       duration: "",
       distance: "",
       direction: "",
@@ -221,29 +242,76 @@ var Preset = function () {
       tags: [],
       profiles: [],
       creditCard: []
-    }
+    };
   };
-  this.operator = function (name, role, pin, wage) {
-    let access = [], modify = [], view = [], permission = [], cashCtrl = "disable";
+  this.operator = function(name, role, pin, wage) {
+    let access = [],
+      modify = [],
+      view = [],
+      permission = [],
+      cashCtrl = "disable";
     switch (role) {
       case "Manager":
-        access = ["setting", "cashdrawer", "report", "terminal", "history", "exit"];
+        access = [
+          "setting",
+          "cashdrawer",
+          "report",
+          "terminal",
+          "history",
+          "exit"
+        ];
         view = ["summary", "invoices", "tables"];
-        modify = ["price", "item", "order", "table", "driver", "discount", "tip", "void", "transaction"];
-        permission = ["giftcard", "payout", "timecard", "batch", "reprint", "ledger"];
+        modify = [
+          "price",
+          "item",
+          "order",
+          "table",
+          "driver",
+          "discount",
+          "tip",
+          "void",
+          "transaction"
+        ];
+        permission = [
+          "giftcard",
+          "payout",
+          "timecard",
+          "batch",
+          "reprint",
+          "ledger"
+        ];
         cashCtrl = "enable";
         break;
       case "Cashier":
         access = ["cashdrawer", "terminal", "history", "exit"];
         view = ["summary", "invoices", "tables"];
-        modify = ["price", "item", "order", "table", "driver", "discount", "tip", "void", "transaction"];
+        modify = [
+          "price",
+          "item",
+          "order",
+          "table",
+          "driver",
+          "discount",
+          "tip",
+          "void",
+          "transaction"
+        ];
         permission = ["payout", "batch", "payout"];
         cashCtrl = "enable";
         break;
       case "Waitstaff":
         access = ["setting", "cashdrawer", "history"];
         view = ["summary", "invoices", "tables"];
-        modify = ["price", "item", "order", "table", "driver", "discount", "tip", "transaction"];
+        modify = [
+          "price",
+          "item",
+          "order",
+          "table",
+          "driver",
+          "discount",
+          "tip",
+          "transaction"
+        ];
         cashCtrl = "enable";
         break;
       case "Bartender":
@@ -259,16 +327,16 @@ var Preset = function () {
       role,
       pin,
       wage,
-      language: 'usEN',
+      language: "usEN",
       timecard: false,
       cashCtrl,
       access,
       modify,
       view,
       permission
-    }
+    };
   };
-  this.giftCard = function (number, seller, amount, bonus) {
+  this.giftCard = function(number, seller, amount, bonus) {
     return {
       _id: ObjectId().toString(),
       number,
@@ -276,17 +344,19 @@ var Preset = function () {
       customer: "",
       balance: amount,
       activation: Date.now(),
-      activity: [{
-        date: today(),
-        time: Date.now(),
-        amount: amount,
-        balance: amount,
-        bonus: bonus || 0,
-        type: 'ACTIVATION',
-        op: seller
-      }]
-    }
+      activity: [
+        {
+          date: today(),
+          time: Date.now(),
+          amount: amount,
+          balance: amount,
+          bonus: bonus || 0,
+          type: "ACTIVATION",
+          op: seller
+        }
+      ]
+    };
   };
-}
+};
 
 module.exports = new Preset();

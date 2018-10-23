@@ -4,7 +4,7 @@
     <header>
       <i class="fa fa-user-circle avatar"></i>
       <div>
-        <span>{{$t(order.source === 'POS' ? 'title.customerProfile' : 'title.ticketProfile')}}</span>
+        <span>{{title}}</span>
       </div>
       <div class="f1">
         <div class="flags" v-if="flags.length">
@@ -41,6 +41,11 @@ import pageTab from "./component/pageTab";
 export default {
   components: { switchType, keyboard, dialogModule, unlockModule, pageTab },
   computed: {
+    title() {
+      return this.order.source === "POS"
+        ? this.$t("title.customerProfile")
+        : this.$t("title.ticketProfile") + " - " + this.order.source;
+    },
     ...mapGetters([
       "op",
       "app",
