@@ -56,8 +56,9 @@ export default {
   width: 873px;
   margin: 10px auto;
   padding: 5px;
-  background: #f4f4f4;
-  box-shadow: var(--shadow);
+  background: #f1f3f5;
+  box-shadow: 0 6px 8px rgba(102, 119, 136, 0.03),
+    0 1px 2px rgba(102, 119, 136, 0.3);
   grid-template-columns: repeat(4, 1fr);
 }
 

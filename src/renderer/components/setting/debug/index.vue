@@ -1,5 +1,6 @@
 <template>
     <div>
+      <div class="wrap">
         <button class="command" @click="open('Network Diagnostics')"><i class="fas fa-signal"></i>Network Diagnostics</button>
         <button class="command" @click="open('Add Printer')"><i class="fas fa-print"></i>Add Printer</button>
         <button class="command" @click="open('Task Scheduler')"><i class="fas fa-tasks"></i>Task Scheduler</button>        
@@ -8,6 +9,7 @@
         <button class="command" @click="open('Network Connections')"><i class="fas fa-bezier-curve"></i>Network Connections</button>          
         <button class="command" @click="open('Battery')"><i class="fas fa-battery-three-quarters"></i>Battery</button>         
         <button class="command" @click="open('Screen Saver')"><i class="fas fa-desktop"></i>Screen Saver</button> 
+      </div>
     </div>
 </template>
 
@@ -61,24 +63,27 @@ export default {
 </script>
 
 <style scoped>
-div {
+.wrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-  flex-wrap: wrap;
 }
 .command {
   padding: 15px 20px;
-  width: 200px;
+  width: 190px;
   margin: 10px 5px;
   border-radius: 4px;
-  background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   border: none;
-  box-shadow: 0 1px 3px #333;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6px 8px rgba(102, 119, 136, 0.03),
+    0 1px 2px rgba(33, 34, 35, 0.3);
+  background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
 }
 
 i {
-  display: block;
   margin-bottom: 10px;
 }
 </style>

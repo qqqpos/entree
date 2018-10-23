@@ -1,6 +1,9 @@
 <template>
-    <div class="window">
-        <header class="title">{{$t('title.setDate')}}</header>
+    <div class="editor">
+        <header class="title">
+          <b>{{$t('title.setDate')}}</b>
+        </header>
+        <div class="banner"></div>
         <header class="tab">
             <div>
                 <input type="radio" v-model="tab" name="bar" id="date" value="date">
@@ -236,7 +239,7 @@ export default {
 </script>
 
 <style scoped>
-.window {
+.editor {
   width: 500px;
   background: #fff;
   display: flex;
@@ -265,17 +268,11 @@ main {
 .tab label {
   width: 100%;
   display: flex;
-  justify-content: center;
   padding: 10px 0;
   color: #e0e0e0;
-  border-bottom: 2px solid #fafafa;
   cursor: pointer;
+  justify-content: center;
   transition: all 0.3s ease;
-}
-
-.tab input:checked + label {
-  border-bottom: 2px solid #2196f3;
-  background: #fff;
 }
 
 .tab input:checked + label i {

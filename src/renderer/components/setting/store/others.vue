@@ -31,6 +31,7 @@
       </toggle>
       <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
       <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>
+      <toggle title="setting.inventoryControl" v-model="store.inventoryControl" @update="updateInventoryCtrl"></toggle>
     </div>
   </div>
 </template>
@@ -114,6 +115,12 @@ export default {
     updateOnlineOrder(value) {
       this.update({
         key: "store.onlineOrder",
+        value
+      });
+    },
+    updateInventoryCtrl(value) {
+      this.update({
+        key: "store.inventoryControl",
         value
       });
     },

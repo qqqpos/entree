@@ -14,7 +14,7 @@
                     <i class="far fa-list-alt"></i>
                     <span class="text">{{$t('nav.template')}}</span>
                 </router-link>
-                <router-link tag="li" :to="{name:'Setting.inventory'}" v-show="plugin.inventoryControl">
+                <router-link tag="li" :to="{name:'Setting.inventory'}" v-show="store.inventoryControl">
                     <i class="fas fa-sitemap"></i>
                     <span class="text">{{$t('nav.inventory')}}</span>
                 </router-link>                
@@ -38,7 +38,7 @@
 export default {
   data() {
     return {
-      plugin: this.$store.getters.config.plugin || {}
+      store: this.$store.getters.store
     };
   }
 };

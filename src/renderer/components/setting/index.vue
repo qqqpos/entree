@@ -117,8 +117,8 @@ figure {
 }
 
 figure:active {
+  color: #678;
   background: #f6f6f6;
-  color: #666;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 

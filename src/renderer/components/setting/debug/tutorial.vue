@@ -24,7 +24,7 @@
             <li><i class="fas fa-info-circle"></i>About your warranty</li> -->
         </ul>
         <div class="popupMask dark center setting" v-if="url" @click="close">
-            <iframe width="560" height="315" :src="url" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+            <iframe width="600" height="450" :src="url" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 </template>
@@ -49,8 +49,12 @@ export default {
 
 <style scoped>
 .tutorial {
-  background: #fafafa;
+  background: #f1f3f5;
   padding: 25px;
+}
+
+h2 {
+  color: #345;
 }
 
 ul {
@@ -59,7 +63,7 @@ ul {
 
 li {
   margin-bottom: 5px;
-  color: #3c3c3c;
   cursor: pointer;
+  color: #678;
 }
 </style>

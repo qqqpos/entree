@@ -1,13 +1,13 @@
 <template>
   <div>
-    <header>
+    <header class="column">
       <span class="label">{{$t(title)}}</span>
       <span class="tooltip">{{$t(tooltip)}}</span>
     </header>
-    <div class="wrap">
+    <div class="wrap column">
       <div class="row" v-for="(option,index) in opts" :key="index">
         <input type="radio" name="id" :id="id+index" :checked="option.value === value" :value="option.value" @change="$emit('input',$event.target.value),$emit('update',$event.target.value)">
-        <label :for="id+index">
+        <label :for="id+index" class="clickable">
           <span class="label">{{$t(option.label)}}</span>
           <span class="tooltip">{{$t(option.tooltip)}}</span>
         </label>
@@ -39,17 +39,13 @@ export default {
 
 <style scoped>
 header {
-  display: flex;
-  flex-direction: column;
   padding: 5px 20px;
 }
 
 .wrap {
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
   padding: 0 0 5px;
-  background: #eee;
+  background: #f1f3f5;
+  align-items: flex-end;
 }
 
 .tooltip {
@@ -66,7 +62,8 @@ label {
   flex-direction: column;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 2px rgba(181, 156, 156, 0.5);
+  box-shadow: 0 6px 8px rgba(102, 119, 136, 0.03),
+    0 1px 2px rgba(102, 119, 136, 0.3);
 }
 
 label:before {

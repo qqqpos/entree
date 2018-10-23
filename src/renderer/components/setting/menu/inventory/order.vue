@@ -179,13 +179,14 @@ ul.order li {
 }
 
 main {
-  background: #efefef;
+  background: #f1f3f5;
 }
 
 main .detail {
   margin: 15px;
   background: #fff;
-  border: 1px solid #ddd;
+  box-shadow: 0 6px 8px rgba(102, 119, 136, 0.03),
+    0 1px 2px rgba(102, 119, 136, 0.3);
   border-radius: 4px;
   height: 620px;
 }
@@ -224,6 +225,11 @@ tr td {
 
 tr:last-child td {
   border-bottom: 1px solid #eee;
+}
+
+tr th:last-child,
+tr td:last-child {
+  border-right: none;
 }
 </style>
 

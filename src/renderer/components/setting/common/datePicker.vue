@@ -1,9 +1,9 @@
 <template>
     <div class="row relative" v-outer-click="closeDialog">
         <div class="button" @click="toggleCalendar">
-            <i class="far fa-calendar-alt"></i>
+            <i class="far fa-calendar-alt light"></i>
             <span class="text">{{$t('date.'+range)}}</span>
-            <i class="fa fa-sort"></i>
+            <i class="fa fa-sort ghost"></i>
         </div>
         <div class="dialog" v-show="calendarVisible">
             <div class="calendar">
@@ -319,10 +319,6 @@ export default {
 .button .text {
   display: inline-block;
   min-width: 120px;
-}
-
-.fa-sort {
-  color: rgba(0, 0, 0, 0.5);
 }
 
 .dialog {

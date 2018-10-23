@@ -159,7 +159,8 @@ export default {
   height: 50px;
   background: #fff;
   padding: 5px 10px;
-  box-shadow: 0 1px 1px #333;
+  box-shadow: 0 6px 8px rgba(102, 119, 136, 0.03),
+    0 1px 2px rgba(102, 119, 136, 0.3);
 }
 
 .fa-bars {

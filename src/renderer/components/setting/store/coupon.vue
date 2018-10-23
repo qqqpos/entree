@@ -132,13 +132,13 @@ export default {
 <style scoped>
 .nav {
   background: #fff;
-  color: #3c3c3c;
+  color: #345;
 }
 
 .tableWrap {
   padding: 15px;
   height: 639px;
-  background: #f1f1f1;
+  background: #f1f3f5;
 }
 
 .tableWrap table {
