@@ -31,7 +31,7 @@
             </header>
             <draggable v-model="template.contain[index].contain" :options="{animation: 300,group: 'item',ghostClass: 'ghost',draggable:'.draggable'}" class="column">
                 <transition-group tag="div" class="items">
-                    <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable" :class="{placeholder:item.placeholder}">{{item[language]}}</div>
+                    <div v-for="(item,i) in template.contain[index].contain" :key="i" @contextmenu="edit(item,i)" class="draggable" :class="{block:item.placeholder}">{{item[language]}}</div>
                 </transition-group>
             </draggable>
         </section>
@@ -242,7 +242,7 @@ li {
   border-bottom: 1px solid #eee;
 }
 
-.placeholder {
+.block {
   opacity: 0.25;
   border: 1px dashed #333;
 }

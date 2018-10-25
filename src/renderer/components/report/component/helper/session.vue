@@ -34,11 +34,11 @@ export default {
 
       left = x1 - x2 + diff * 50;
 
-      width = width + left > 750 ? 750 - left : width;
+      width = width + left > 750 ? 750 - left : width - 10;
     } else {
       this.display = false;
     }
-
+    
     this.style = {
       top: top + "px",
       width: width + "px",

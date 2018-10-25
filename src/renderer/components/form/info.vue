@@ -12,7 +12,7 @@
     </section>
     <section class="row" v-if="store.enhanceProfile">
       <input-field text="text.email" icon="fas fa-at" field="email" v-model="customer.email" @focus="setFocus"></input-field>
-      <input-field text="text.dob" icon="fas fa-birthday-cake" field="dob" v-model="customer.dob" @focus="setFocus"></input-field>
+      <input-field text="text.dob" icon="fas fa-birthday-cake" field="dob" placeholder="MM/DD" v-model="customer.dob" @focus="setFocus"></input-field>
     </section>
     <section class="row">
       <input-field text="text.note" icon="far fa-comment-alt" field="note" v-model="customer.note" @focus="setFocus"></input-field>

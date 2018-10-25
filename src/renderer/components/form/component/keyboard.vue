@@ -39,7 +39,7 @@
             </section>
             <section class="alphabetic">
                 <i class="fas fa-route" @mousedown.prevent="$emit('search')"></i>
-                <div @mousedown.prevent="input('|')">|</div>
+                <div @mousedown.prevent="input('@')">@</div>
                 <div class="f1" @mousedown.prevent="input(' ')"></div>
                 <i class="far fa-keyboard" @mousedown.prevent="$emit('hide')"></i>
                 <div class="" @mousedown.prevent="$emit('cancel')">{{$t('button.cancel')}}</div>

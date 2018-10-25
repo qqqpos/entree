@@ -8,7 +8,7 @@
                     <span class="agency">58 %</span>
                 </div>
                 <div class="progress">
-                    <div class="bar"></div>
+                    <div class="bar" :style="{width:'58%'}"></div>
                 </div>
                 <p>Lorem ipsum dolor sit amet. Some more super groovy information about this stat.</p>
             </div>
@@ -38,7 +38,7 @@
                         </div>
                     </div>                                     
                 </div>
-                <p>All valid Tickets are count. Might be floating issue.</p>
+                <p>Toggle next icon to see payment types.</p>
             </div>
             <div class="drop">
                 <p>Print Sales Report</p>
@@ -51,12 +51,12 @@
                 <h2>Sales Details</h2>
                 <p>Highest hourly sales</p>
                 <div class="percentage">
-                    <span class="agency">$ 2,300</span>
+                    <span class="agency">$ {{peakAmount | decimal}}</span>
                 </div>
                 <div class="progress">
-                    <div class="bar"></div>
+                    <div class="bar" :style="{width:peakRatio}"></div>
                 </div>
-                <p>Lorem ipsum dolor sit amet. Some more super groovy information about this stat.</p>                
+                <p>This Highest sales volume happened at {{rushHour}}. It caps {{peakRatio}} of today total sales.</p>                
             </div>
             <div class="drop">
                 <p>Print Report</p>
@@ -67,7 +67,33 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      rushHour: null,
+      peakAmount: 0,
+      overall: 0
+    };
+  },
+  created() {
+    console.log("trigger");
+    this.$bus.on("HIGHEST_HOURLY_SALES", this.applyData);
+  },
+  beforeDestroy() {
+    this.$bus.off("HIGHEST_HOURLY_SALES", this.applyData);
+  },
+  methods: {
+    applyData(obj) {
+      Object.assign(this, obj);
+    }
+  },
+  computed: {
+    peakRatio() {
+      const ratio = parseFloat((this.peakAmount / this.overall) * 100) || 0;
+      return ratio.toFixed(2) + "%";
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -100,7 +126,7 @@ export default {};
   position: absolute;
   right: 0;
   top: 0;
-  padding: 10px 15px;
+  padding: 15px 20px;
 }
 
 h2 {
@@ -135,10 +161,11 @@ p {
 .progress .bar {
   height: 6px;
   float: left;
-  width: 58%;
+  width: 0%;
   background: #4fa584;
   border-radius: 4px;
-  animation: bar 2s;
+  transition: width 2s ease-in-out;
+  /* animation: bar 2s; */
 }
 
 .graph {
@@ -251,14 +278,14 @@ ul {
   transform: rotate(765deg);
 }
 
-@keyframes bar {
+/* @keyframes bar {
   from {
     width: 0px;
   }
   to {
     width: 58%;
   }
-}
+} */
 
 @keyframes graph1 {
   from {

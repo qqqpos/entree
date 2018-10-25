@@ -13,6 +13,7 @@
 import { mapGetters } from "vuex";
 import bar from "./helper/bar";
 import timeSession from "./helper/session";
+import { setTimeout } from "timers";
 
 export default {
   props: ["data"],
@@ -21,13 +22,17 @@ export default {
     return {
       session: [],
       hours: {},
-      max: 1,
-      min: 0
+      max: 1
     };
   },
   mounted() {
     const { rules = [] } = this.store.openingHours;
-    this.session = rules[moment().format("d")].hours;
+    this.session =
+      rules[
+        moment()
+          .subtract(3, "h")
+          .format("d")
+      ].hours;
   },
   computed: {
     salesLevel() {
@@ -47,13 +52,14 @@ export default {
   methods: {
     calcHours(invoices) {
       let hours = {};
+      let overall = 0;
       let max = 0;
 
       invoices.forEach(invoice => {
         if (invoice.status === 0) return;
 
         const { create, time, payment, logs, settled } = invoice;
-        const hour = parseInt(moment(create || time).format("H"));
+        const hour = moment(create || time).format("HH");
 
         let cash = 0;
         let credit = 0;
@@ -73,9 +79,26 @@ export default {
         }
 
         max = Math.max(max, hours[hour].amount);
+        overall += payment.balance;
       });
 
       setTimeout(this.calcHeight, 300);
+
+      const highest = Object.entries(hours).reduce(
+        (a, c) =>
+          c[1].amount > a.peakAmount
+            ? { rushHour: `${c[0]}:00`, peakAmount: c[1].amount }
+            : a,
+        { rushHour: 0, peakAmount: 0 }
+      );
+
+      this.$nextTick(() =>
+        this.$bus.emit(
+          "HIGHEST_HOURLY_SALES",
+          Object.assign(highest, { overall })
+        )
+      );
+
       this.hours = hours;
       this.max = max;
     },
