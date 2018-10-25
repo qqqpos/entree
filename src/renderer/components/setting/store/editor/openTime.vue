@@ -1,5 +1,5 @@
 <template>
-    <div class="time">
+    <div class="days">
         <div class="day">{{day}}</div>
         <switches v-model="rule.open" class="toggle"></switches>
         <div>
@@ -7,10 +7,10 @@
                 <div class="name">   
                     <input v-model="session.alias" maxlength="10">
                 </div>
-                <selector :opts="hours" v-model="session.from" class="time"></selector>
+                <selector :opts="hours" v-model="session.from" class="time space-right"></selector>
                 <selector :opts="hours" v-model="session.to" class="time"></selector>
-                <i class="fa fa-plus icon" @click="add" v-if="index === 0"></i>
-                <i class="fa fa-times icon" @click="remove(index)" v-else></i>
+                <i class="fas fa-plus-square space-left ghost clickable" @click="add" v-if="index === 0"></i>
+                <i class="fas fa-times-circle space-left ghost clickable" @click="remove(index)" v-else></i>
             </div>
         </div>
     </div>
@@ -82,30 +82,30 @@ export default {
     };
   },
   methods: {
-    add(){
+    add() {
       this.rule.hours.push({
-        from:this.rule.hours[0].to,
-        to:"11:00 PM",
-        alias:"",
-      })
+        from: this.rule.hours[0].to,
+        to: "11:00 PM",
+        alias: ""
+      });
     },
-    remove(index){
-      this.rule.hours.splice(index,1)
-    },
+    remove(index) {
+      this.rule.hours.splice(index, 1);
+    }
   }
 };
 </script>
 
 <style scoped>
-.time {
+.days {
   display: flex;
   align-items: center;
   padding: 5px 0 5px 10px;
   border-bottom: 1px solid #eee;
 }
 
-.day{
-  width: 32px;
+.day {
+  width: 55px;
 }
 
 .timeSession {
@@ -113,12 +113,6 @@ export default {
   position: relative;
   align-items: center;
   flex: 1;
-}
-
-.timeSession .icon{
-  padding: 5px;
-  cursor: pointer;
-  color:rgba(0,0,0,0.5);
 }
 
 input.name {
@@ -136,14 +130,15 @@ input.name {
   border: 1px solid #eee;
   padding: 5px;
   border-radius: 2px;
-  width: 88px;
+  width: 80px;
+  margin-right: 5px;
 }
 
 .toggle {
-  margin: 0 15px;
+  margin: 0 15px 0 0;
 }
 
-.time >>> .input{
+.time >>> .input {
   width: 90px;
 }
 </style>

@@ -2021,6 +2021,7 @@ export default {
     autoCorrectAddress: "自动格式化地址",
     fuzzySearch: "模糊搜索",
     inventoryControl: "库存管理",
+    enhanceCustomerProfile: "增强用户信息",
     delivery: {
       config: "送餐设定",
       charge: "送餐费",

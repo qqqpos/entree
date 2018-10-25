@@ -5,14 +5,14 @@
       <slot name="items"></slot>
       <input :type="type" :value="value" @input="$emit('input',$event.target.value)" v-if="editable" v-outer-click="resetOpts">
       <template v-else>
-        <span class="input" @click.stop="isDisplay = !isDisplay">{{label}}</span>
+        <span class="input" @click.stop="toggleDisplay">{{label}}</span>
         <transition name="fadeIn">
           <i class="fa fa-sort" v-show="!isDisplay"></i>
         </transition>
       </template>
       <transition name="menu">
-        <ul v-if="isDisplay" v-outer-click="close" :style="collision">
-          <li v-for="(option,index) in opts" :key="index" class="row">
+        <ul v-if="isDisplay" v-outer-click="close" :style="collision" ref="list">
+          <li v-for="(option,index) in opts" :key="index" class="row" :value="option.value" :class="{active:option.value === value}">
             <input type="radio" :value="option.value" :id="id+index">
             <label :for="id+index" @click="pick(option.value)" v-if="option.plainText">
               <span class="label">{{option.label}}</span>
@@ -84,6 +84,18 @@ export default {
     resetOpts() {
       this.isDisplay = false;
       Object.assign(this.opts, []);
+    },
+    toggleDisplay() {
+      this.isDisplay = !this.isDisplay;
+
+      if (this.isDisplay) {
+        const offset = this.opts.findIndex(opt => opt.value === this.value);
+        const scrollTop = offset * 38 + offset;
+
+        this.$nextTick(() => {
+          this.$refs.list.scrollTop = scrollTop;
+        });
+      }
     },
     close() {
       this.isDisplay = false;
@@ -166,5 +178,10 @@ li:nth-child(even) {
   background: #fafafa;
   border-top: 1px solid #f6f6f6;
   border-bottom: 1px solid #f6f6f6;
+}
+
+li.active {
+  color: #0288d1;
+  background: #eceff1;
 }
 </style>

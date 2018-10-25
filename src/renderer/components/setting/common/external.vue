@@ -65,7 +65,6 @@ export default {
   text-align: right;
   line-height: 1;
   font-size: 16px;
-  font-family: "Hiragino Sans GB", "PingFang SC", "Yuanti-SC";
 }
 
 .value {

@@ -29,9 +29,7 @@
             </router-link>
         </ul>
         <section class="content">
-            <transition name="switch" mode="out-in">
-                <router-view class="page"></router-view>
-            </transition>
+            <router-view class="page"></router-view>
         </section>
     </section>
 </template>

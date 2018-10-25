@@ -25,6 +25,7 @@
         "field",
         "figcaption",
         "get",
+        "getboundingclient",
         "giftcard",
         "giftcards",
         "groupable",

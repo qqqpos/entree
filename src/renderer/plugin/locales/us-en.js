@@ -2075,6 +2075,7 @@ export default {
     autoCorrectAddress: "Auto Format Address",
     fuzzySearch: "Fuzzy Search",
     inventoryControl: "Inventory Control",
+    enhanceCustomerProfile: "Enhance Customer Profile",
     delivery: {
       config: "Delivery Config",
       charge: "Delivery Fee",

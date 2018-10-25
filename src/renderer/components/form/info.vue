@@ -10,6 +10,10 @@
       <street v-model="customer.address" :direction="customer.direction" :distance="customer.distance" :duration="customer.duration" :profile="customer.profiles ? customer.profiles.length : 0" @focus="setFocus" @query="$emit('query')"></street>
       <city v-model="customer.city" @focus="setFocus"></city>
     </section>
+    <section class="row" v-if="store.enhanceProfile">
+      <input-field text="text.email" icon="fas fa-at" field="email" v-model="customer.email" @focus="setFocus"></input-field>
+      <input-field text="text.dob" icon="fas fa-birthday-cake" field="dob" v-model="customer.dob" @focus="setFocus"></input-field>
+    </section>
     <section class="row">
       <input-field text="text.note" icon="far fa-comment-alt" field="note" v-model="customer.note" @focus="setFocus"></input-field>
     </section>
@@ -27,11 +31,11 @@ import inputField from "./helper/inputField";
 export default {
   components: { phone, street, city, inputField },
   computed: {
-    ...mapGetters(["order", "customer"])
+    ...mapGetters(["store", "order", "customer"])
   },
   mounted() {
     if (this.order.source === "Uber Eats") {
-      this.setFocus("code")
+      this.setFocus("code");
     } else {
       this.customer.phone.length === 10
         ? this.setFocus("address")

@@ -1,20 +1,10 @@
 export default {
-    methods: {
+  methods: {
+    summarizeHourlySales() {},
+    summarizeOperator() {},
 
-        summarizeOperator() {
-
-        },
-        summarizeHourlySales() {
-
-        },
-        summarizeCategorySales() {
-
-        },
-        summarizeDepartment() {
-
-        },
-        summarizeTypes(){
-
-        },
-    }
-}
+    summarizeCategorySales() {},
+    summarizeDepartment() {},
+    summarizeTypes() {}
+  }
+};

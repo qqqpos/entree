@@ -259,12 +259,14 @@ section.input {
   margin: auto;
   background: #fff;
   transform: translateY(100px);
+  border-radius: 6px;
 }
 
 .input .wrap {
   height: 65px;
   display: flex;
   justify-content: center;
+  box-shadow: var(--shadow);
 }
 
 input {
@@ -273,7 +275,6 @@ input {
   opacity: 0.7;
   font-size: 32px;
   padding: 0 16px;
-  background: #fff;
   transition: opacity, box-shadow 0.3s ease;
 }
 
@@ -285,6 +286,7 @@ input.active {
 input.qty {
   width: 50px;
   text-align: center;
+  border-radius: 6px 0 0 6px;
 }
 
 input.price {
@@ -332,6 +334,7 @@ ul.predict {
   flex-wrap: wrap;
   box-shadow: 0 6px 8px -4px;
   border-top: 1px solid #f6f6f6;
+  border-radius: 0 0 3px 3px;
 }
 
 .predict li {

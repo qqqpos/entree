@@ -26,7 +26,7 @@
             <td>{{device.location}}</td>
             <td>{{device.ip}}</td>
             <td class="opt" @click="edit(device,index)">
-              <i class="fas fa-cog"></i>
+              <i class="fas fa-cog light"></i>
             </td>
           </tr>
         </tbody>

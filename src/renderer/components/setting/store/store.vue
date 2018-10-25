@@ -170,7 +170,7 @@ export default {
     },
     getOpenHour() {
       if (this.store.openingHours) {
-        const { rules } = this.store.openingHours;
+        const { rules = [] } = this.store.openingHours;
         const rule = rules[moment().format("d")];
 
         if (rule.open) {

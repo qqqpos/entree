@@ -3,7 +3,7 @@
         <h4>{{$t(text)}}</h4>
         <div class="wrap" :id="field">
             <i :class="icon"></i>
-            <input :value="value" @click="$emit('focus',field)" @input="$emit('input',$event.target.value)">
+            <input :value="value" @click="$emit('focus',field)" @input="$emit('input',$event.target.value)" class="f1">
         </div>
     </div>
 </template>

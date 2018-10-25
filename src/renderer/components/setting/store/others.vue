@@ -32,6 +32,7 @@
       <toggle title="text.autoLogin" v-model="store.autoLogin" @update="updateAutoLogin" tooltip="tip.autoLogin"></toggle>
       <toggle title="setting.onlineOrder" v-model="store.onlineOrder" @update="updateOnlineOrder" :disabled="operator.role !== 'Developer'"></toggle>
       <toggle title="setting.inventoryControl" v-model="store.inventoryControl" @update="updateInventoryCtrl"></toggle>
+      <toggle title="setting.enhanceCustomerProfile" v-model="store.enhanceProfile" @update="updateProfile"></toggle>
     </div>
   </div>
 </template>
@@ -121,6 +122,12 @@ export default {
     updateInventoryCtrl(value) {
       this.update({
         key: "store.inventoryControl",
+        value
+      });
+    },
+    updateProfile(value) {
+      this.update({
+        key: "store.enhanceProfile",
         value
       });
     },
