@@ -1,7 +1,7 @@
 {
   "name": "unitedpos",
-  "version": "0.9.85",
-  "require": "0.9.74",
+  "version": "0.9.86",
+  "require": "0.9.80",
   "stage": "Beta",
   "description": "UnitedPOS point of sale system",
   "author": "United POS <huangxuewu@gmail.com>",

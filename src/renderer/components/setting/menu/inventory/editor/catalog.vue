@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import dialogModule from "../../../common/dialog";
+import dialogModule from "../../../../common/dialog";
 
 export default {
   props: ["init"],

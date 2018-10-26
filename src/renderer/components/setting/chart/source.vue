@@ -1,49 +1,61 @@
 <template>
   <div>
-    <range-tab @update="fetchData" initial="currentMonth"></range-tab>
-    <div ref="chart" style="width: 100%; height: 697px;"></div>
+    <header class="date-picker">
+      <div class="f1">
+          <h3>{{$t('title.ticketType')}}</h3>
+          <p>Ticket Type Pie Chart Summary</p>
+      </div>
+      <date-picker @update="fetchData" init="today"></date-picker>
+    </header>
+    <div class="relative">
+        <div ref="chart" style="width: 100%; height: 688px;"></div>   
+        <loader :display="isLoading"></loader>
+    </div>
   </div>
 </template>
 
 <script>
-import rangeTab from "../common/rangeTab";
+import loader from "../../common/loader";
+import datePicker from "../common/datePicker";
 
 export default {
-  components: { rangeTab },
-  created() {
-    this.fetchData();
-  },
+  components: { datePicker, loader },
   data() {
     return {
+      isLoading: false,
       range: {}
     };
   },
+  created() {
+    this.fetchData();
+  },
   methods: {
     fetchData(range) {
-      if (!range) {
-        const from = +moment()
-          .startOf("M")
-          .hours(4);
-        const to = +moment()
-          .endOf("M")
-          .add(4, "h");
+      this.isLoading = true;
 
-        range = { from, to };
+      if (!range) {
+        const from = +moment(today(), "YYYY-MM-DD", true)
+          .startOf("day")
+          .hour(4);
+        const to = +moment(today(), "YYYY-MM-DD", true)
+          .startOf("day")
+          .add(1, "days")
+          .hour(4);
 
         this.$socket.emit("[CHART] SOURCE", { from, to }, result =>
-          this.initialChartData(result)
+          this.process(result)
         );
       } else {
-        const { from, to } = range;
+        const [from, to] = range;
 
-        this.$socket.emit("[CHART] SOURCE", { from, to }, result =>
-          this.initialChartData(result)
+        this.$socket.emit("[CHART] SOURCE", { from: +from, to: +to }, result =>
+          this.process(result)
         );
       }
-
-      this.range = range;
     },
-    initialChartData(data) {
+    process(data) {
+      this.isLoading = false;
+
       const types = data.map((each, i) => ({
         type: this.$t("type." + each._id),
         percent: each.count,
@@ -125,7 +137,7 @@ export default {
                 event.dataItem.dataContext.id != undefined
                   ? event.dataItem.dataContext.id
                   : undefined;
-                  
+
               chart.dataProvider = generateChartData();
               chart.validateData();
             }

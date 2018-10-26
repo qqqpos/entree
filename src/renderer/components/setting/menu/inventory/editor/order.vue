@@ -89,7 +89,7 @@
  </template>
 
 <script>
-import scanner from "../inventory/helper/scan";
+import scanner from "../helper/scan";
 
 export default {
   props: ["init"],

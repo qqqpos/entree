@@ -1,23 +1,34 @@
 <template>
-    <div>
-        <range-tab @update="fetchData" initial="currentMonth"></range-tab>
-        <div ref="chart" style="width: 100%; height: 697px;"></div>
-        <div id="toggle" v-show="departments.length">
+  <div>
+    <header class="date-picker">
+      <div class="f1">
+          <h3>{{$t('title.items')}}</h3>
+          <p>Item sales Pie Chart</p>
+      </div>
+      <date-picker @update="fetchData" init="currentMonth"></date-picker>
+    </header>
+    <div class="relative">
+        <div ref="chart" style="width: 100%; height: 688px;"></div>   
+          <div id="toggle" v-show="departments.length">
           <switches title="text.groupByDepartments" v-model="department" @input="toggleGroup"></switches>
         </div>
+        <loader :display="isLoading"></loader>
     </div>
+  </div>
 </template>
 
 <script>
-import rangeTab from "../common/rangeTab";
-import switches from "../common/switches";
 import randomColor from "randomcolor";
+import loader from "../../common/loader";
+import switches from "../common/switches";
+import datePicker from "../common/datePicker";
 
 export default {
-  components: { rangeTab, switches },
+  components: { switches, datePicker, loader },
   data() {
     return {
       range: {},
+      isLoading: false,
       department: false,
       departments: []
     };
@@ -28,6 +39,8 @@ export default {
   },
   methods: {
     fetchData(range) {
+      this.isLoading = true;
+
       if (!range) {
         const from = +moment()
           .startOf("M")
@@ -47,11 +60,11 @@ export default {
               : this.groupByCategory(result)
         );
       } else {
-        const { from, to } = range;
+        const [from, to] = range;
 
         this.$socket.emit(
           "[CHART] ITEMS",
-          { from, to },
+          { from: +from, to: +to },
           result =>
             this.department
               ? this.groupByDepartment(result)
@@ -125,6 +138,8 @@ export default {
       );
     },
     initialChartData(dataProvider) {
+      this.isLoading = false;
+
       dataProvider.sort((a, b) => (a.total > b.total ? -1 : 1));
 
       const chart = AmCharts.makeChart(this.$refs.chart, {
@@ -229,8 +244,8 @@ export default {
 #toggle {
   position: absolute;
   width: 250px;
-  top: 73px;
-  left: 78px;
+  top: 0;
+  left: 0;
   padding: 0 15px;
 }
 </style>

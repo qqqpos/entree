@@ -69,10 +69,10 @@
                     </thead>
                     <tbody>
                       <tr v-for="(item,index) in receipt.items" :key="index">
-                        <td>{{item.description}}</td>
+                        <td class="name">{{item.description}}</td>
                         <td>{{item.cost | decimal}}</td>
                         <td>{{item.stock}}</td>
-                        <td>{{item.cost * item.stock | decimal}}</td>
+                        <td class="price">{{item.cost * item.stock | decimal}}</td>
                       </tr>
                     </tbody>
                     <tfoot></tfoot>
@@ -88,7 +88,7 @@
 <script>
 import chrono from "chrono-node";
 import scanner from "./helper/scan";
-import editor from "../editor/order";
+import editor from "./editor/order";
 
 export default {
   components: { scanner, editor },
@@ -230,6 +230,14 @@ tr:last-child td {
 tr th:last-child,
 tr td:last-child {
   border-right: none;
+}
+
+.name{
+  width: 300px;
+}
+
+.price{
+  width:156px;
 }
 </style>
 

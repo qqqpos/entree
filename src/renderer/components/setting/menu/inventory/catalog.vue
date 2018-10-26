@@ -38,10 +38,10 @@
 
 <script>
 import scan from "./helper/scan";
-import catalog from "../editor/catalog";
+import editor from "./editor/catalog";
 
 export default {
-  components: { scan, catalog },
+  components: { scan, editor },
   beforeRouteEnter: (from, to, next) => {
     appSocket.emit("[INVENTORY] CATALOG", items =>
       next(vm => {
@@ -87,7 +87,7 @@ export default {
       });
     },
     register(product) {
-      return this.$promise("catalog", { product });
+      return this.$promise("editor", { product });
     },
     async registerItem() {
       try {
@@ -157,7 +157,7 @@ tr th {
   color: #ff5722;
 }
 
-.name{
+.name {
   min-width: 130px;
 }
 </style>
