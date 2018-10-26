@@ -5,7 +5,7 @@
         <span class="ghost" v-if="!selected">{{$t(label)}}</span>
         <span class="value" v-else>{{selected.text}}</span>
       </div>
-      <i class="fa fa-times" @click.stop="resetFilter" v-show="selected"></i>
+      <i class="fa fa-times clickable" @click.stop="resetFilter" v-show="selected"></i>
     </div>
     <template v-if="reverse">
       <transition name="popup">
@@ -114,17 +114,17 @@ ul.up {
   box-shadow: 0 0px 6px -2px rgba(0, 0, 0, 0.4);
 }
 
-.dropdown li {
+li {
   padding: 10px;
   border-left: 4px solid transparent;
 }
 
-.dropdown li:nth-child(even) {
+li:nth-child(even) {
   background: #fafafa;
 }
 
-li.active {
-  color: #009688;
-  border-left-color: #009688;
+.dropdown li.active {
+  color: #2196f3;
+  background: #e1f5fe;
 }
 </style>

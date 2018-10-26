@@ -17,15 +17,15 @@ export default {
     const doms = document.querySelectorAll("i[line]");
     const top = (150 / doms.length) * this.index + 10;
 
-    const from = moment(this.time.from, "hh:mm A");
-    const to = moment(this.time.to, "hh:mm A");
+    const from = moment(new Date(today() + " " + this.time.from));
+    const to = moment(new Date(today() + " " + this.time.to));
     const base = document.querySelector("div.hour");
 
     let width = Math.round(Math.abs(to.diff(from, "hours")) * 50);
     let left = `15`;
 
     if (base) {
-      const baseHour = moment(base.dataset.hour, "h");
+      const baseHour = moment(today()).hour(base.dataset.hour);
       const diff = baseHour.diff(from, "hours") * -1;
       const { left: x1 } = base.getBoundingClientRect();
       const { left: x2 } = document
@@ -38,7 +38,7 @@ export default {
     } else {
       this.display = false;
     }
-    
+
     this.style = {
       top: top + "px",
       width: width + "px",
@@ -48,7 +48,9 @@ export default {
   },
   updated() {
     setTimeout(
-      () => this.$refs.line.style.removeProperty("transition-delay"),
+      () =>
+        this.$refs.line &&
+        this.$refs.line.style.removeProperty("transition-delay"),
       100
     );
   }

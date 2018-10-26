@@ -503,7 +503,7 @@ export default {
       staffCashOut: "Staff Cash Out Confirm",
       tableSwitch: "Table Switch Confirm",
       bookingConfirm: "Booking Confirm",
-      combineTickets: "Combine Tickets Confirm",
+      combineTickets: "Will Combine {i} Tickets",
       courseTime: "Course Time Confirm",
       removeOperator: "Remove Operator Confirm",
       switchServer: "Switch Server",
@@ -541,7 +541,9 @@ export default {
       tipReportConfirm: "Are you sure to report $ {i} as tips?",
       settleByHouseAccount:
         "Are you sure to settle ticket with House Account under {i} ?",
-      removeTemplateConfirm: "Are you sure to remove this template?"
+      removeTemplateConfirm: "Are you sure to remove this template?",
+      combineTicketsConfirm:
+      "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -755,8 +757,7 @@ export default {
     ticketSettled: "All Split Ticket Are Settled",
     settleTicketConfirm: "Are you wish to mark this ticket as paid?",
     insufficientAmount: "There is an insufficient funds on the card.",
-    combineTicketsConfirm:
-      "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
+
     somethingWrong: "Error Occurred",
     somethingWrongTip: "An unknown error occurred while saving this order.",
     appUpdateNeeded: "Software Update Needed",
@@ -957,6 +958,10 @@ export default {
     }
   },
   report: {
+    tip: {
+      mostSaleType:
+        "Current most ticket type is {i}. Total {i} tickets, amount $ {i}. Account for {i} % of total sales."
+    },
     days: "Days",
     itemSales: "Item Sales",
     salesTax: "Sales Tax",

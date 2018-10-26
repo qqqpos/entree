@@ -12,11 +12,11 @@
 
 <script>
 import { SlickList, SlickItem } from "vue-slicksort";
-import tableEditor from "../component/tableEditor";
+import editor from "../editor/table";
 
 export default {
   props: ["zone", "tables"],
-  components: { SlickList, SlickItem, tableEditor },
+  components: { SlickList, SlickItem, editor },
   data() {
     return {
       componentData: null,
@@ -53,22 +53,18 @@ export default {
       this.items = seats;
       this.applySort();
     },
-    edit(table, index) {
-      new Promise((resolve, reject) => {
-        const edit = !!table._id;
-        this.componentData = { resolve, reject, table, edit };
-        this.component = "tableEditor";
-      })
-        .then(update => {
-          this.items.splice(index, 1, update);
-          this.$socket.emit("[TABLE] SAVE", update);
-          this.exitComponent();
-        })
-        .catch(removeTable => {
-          this.exitComponent();
+    async edit(table, index) {
+      const edit = !!table._id;
 
-          if (removeTable) this.$socket.emit("[TABLE] REMOVE", table);
-        });
+      try {
+        const update = await this.$promise("editor", { table, edit });
+        this.items.splice(index, 1, update);
+        this.$socket.emit("[TABLE] SAVE", update);
+      } catch (removeTable) {
+        removeTable && this.$socket.emit("[TABLE] REMOVE", table);
+      } finally {
+        this.exitComponent();
+      }
     },
     applySort() {
       if (Array.isArray(this.updatedSort)) {

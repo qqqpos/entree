@@ -139,10 +139,9 @@ export default {
       const splits = this.history.filter(t => queues.includes(t._id));
 
       const prompt = {
-        type: "question",
-        title: "dialog.confirm.combineTickets",
+        title: ["dialog.confirm.combineTickets", splits.length + 1],
         msg: [
-          "dialog.combineTicketsConfirm",
+          "dialog.tip.combineTicketsConfirm",
           splits.map(i => `#${i.number}`),
           parent.number
         ],
@@ -244,6 +243,7 @@ td.icon {
 
 .active .check {
   display: initial;
+  color: var(--green);
 }
 
 .active .gray {

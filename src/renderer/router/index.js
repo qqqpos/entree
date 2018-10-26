@@ -282,7 +282,7 @@ export default new Router({
                 {
                   path: "surcharge",
                   name: "Setting.dineIn.surcharge",
-                  component: require("../components/setting/dineIn/component/surcharge")
+                  component: require("../components/setting/dineIn/editor/surcharge")
                 }
               ]
             },

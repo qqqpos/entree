@@ -24,21 +24,20 @@
                 <p>Summarize by ticket type</p>
                 <div class="row">
                     <ul class="f1">
-                        <li>Pick Up</li>
-                        <li>Walk In</li>
-                        <li>Delivery</li>
-                        <li>Dine In</li>
+                        <li v-for="(data,type,index) in types" class="row" :key="index">
+                          <span class="f1">{{$t('type.'+type)}}</span>
+                          <span class="light"><i class="fas fa-dollar-sign space-right"></i>{{data.amount | decimal}}</span>
+                        </li>
                     </ul>   
                     <div class="f1 flex-center row">
-                        <div class="graph">
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
+                        <div class="graph row">
+                            <div class="bar" v-for="(data,type,index) in types" :key="index" :style="{height:data.amount / overall * 60 + 'px'}"></div>
                         </div>
                     </div>                                     
                 </div>
-                <p>Toggle next icon to see payment types.</p>
+                <div class="hint">
+                  <p>{{mostSaleType}}</p>
+                </div>
             </div>
             <div class="drop">
                 <p>Print Sales Report</p>
@@ -72,18 +71,29 @@ export default {
     return {
       rushHour: null,
       peakAmount: 0,
-      overall: 0
+      overall: 0,
+      types: {
+        WALK_IN: {
+          amount: 0
+        },
+        PICK_UP: {
+          amount: 0
+        },
+        DINE_IN: {
+          amount: 0
+        }
+      }
     };
   },
   created() {
-    console.log("trigger");
-    this.$bus.on("HIGHEST_HOURLY_SALES", this.applyData);
+    this.$bus.on("REPORT_SUMMARY", this.applyData);
   },
   beforeDestroy() {
-    this.$bus.off("HIGHEST_HOURLY_SALES", this.applyData);
+    this.$bus.off("REPORT_SUMMARY", this.applyData);
   },
   methods: {
     applyData(obj) {
+      console.log(obj);
       Object.assign(this, obj);
     }
   },
@@ -91,6 +101,25 @@ export default {
     peakRatio() {
       const ratio = parseFloat((this.peakAmount / this.overall) * 100) || 0;
       return ratio.toFixed(2) + "%";
+    },
+    mostSaleType() {
+      const { amount, count, type } = Object.entries(this.types).reduce(
+        (a, c) =>
+          c[1].amount > a.amount
+            ? { amount: c[1].amount, count: c[1].count, type: c[0] }
+            : a,
+        { amount: 0, count: 0, type: "" }
+      );
+
+      const ptg = ((amount / this.overall) * 100).toFixed(2);
+
+      return this.$t(
+        "report.tip.mostSaleType",
+        this.$t("type." + type),
+        count,
+        amount.toFixed(2),
+        ptg
+      );
     }
   }
 };
@@ -122,7 +151,7 @@ export default {
   padding: 30px 30px 13px;
 }
 
-.option i {
+.option > i {
   position: absolute;
   right: 0;
   top: 0;
@@ -137,7 +166,7 @@ h2 {
 
 p {
   font-size: 13px;
-  color: #b6b6b6;
+  color: rgba(255, 255, 255, 0.5);
   clear: left;
   font-weight: 300;
   width: 180px;
@@ -169,46 +198,25 @@ p {
 }
 
 .graph {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   width: 85px;
-  text-align: center;
-  position: relative;
-  padding-left: 20px;
+  height: 50px;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  margin-left: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .graph .bar {
-  float: left;
   width: 10px;
-  margin-right: 10px;
+  height: 0;
   position: relative;
   border-radius: 3px 3px 0 0;
   background: #4fa584;
-}
-
-.graph .bar:nth-child(1) {
-  height: 20px;
-  bottom: -10px;
-  animation: graph1 1s;
-}
-.graph .bar:nth-child(2) {
-  animation: graph2 1s;
-  height: 30px;
-}
-
-.graph .bar:nth-child(3) {
-  height: 24px;
-  animation: graph3 1s;
-  bottom: -6px;
-}
-
-.graph .bar:nth-child(4) {
-  height: 14px;
-  animation: graph4 1s;
-  bottom: -16px;
+  transition: height 1s ease;
 }
 
 ul {
-  margin: 0px 30px 10px 0px;
+  margin: 0px 5px 10px 0px;
   padding: 0;
   list-style-type: none;
   font-size: 11px;
@@ -278,49 +286,13 @@ ul {
   transform: rotate(765deg);
 }
 
-/* @keyframes bar {
-  from {
-    width: 0px;
-  }
-  to {
-    width: 58%;
-  }
-} */
-
-@keyframes graph1 {
-  from {
-    height: 0px;
-  }
-  to {
-    height: 20px;
-  }
+.hint {
+  margin-top: 10px;
 }
 
-@keyframes graph2 {
-  from {
-    height: 0px;
-  }
-  to {
-    height: 30px;
-  }
-}
-
-@keyframes graph3 {
-  from {
-    height: 0px;
-  }
-  to {
-    height: 24px;
-  }
-}
-
-@keyframes graph4 {
-  from {
-    height: 0px;
-  }
-  to {
-    height: 13px;
-  }
+.hint p {
+  width: unset;
+  margin: unset;
 }
 </style>
 

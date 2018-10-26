@@ -49,7 +49,7 @@
             <td v-else class="ticket"></td>
             <td class="card">
               <i :class="ccType(record.account.type)"></i>
-              <span class="number" :title="record.addition.CARDBIN + '....' + record.account.number">...{{record.account.number}}</span>
+              <span class="agency number" :title="record.addition.CARDBIN + '....' + record.account.number">{{record.account.number}}</span>
             </td>
             <td class="auth">
               <span>{{record.host.auth}}</span>
@@ -269,18 +269,19 @@ export default {
           return require("../payment/parser/pax.js");
       }
     },
-    ccType(card) {
-      switch (card) {
+    ccType(brand) {
+      switch (brand) {
         case "Visa":
-          return "fab fa-cc-visa";
+          return "visa-card";
         case "MasterCard":
         case "Master Card":
-          return "fab fa-cc-mastercard";
+        case "Master":
+          return "master-card";
         case "American Express":
         case "AmEx":
-          return "fab fa-cc-amex";
+          return "amex-card";
         case "Discover":
-          return "fab fa-cc-discover";
+          return "discover-card";
         default:
           return "fas fa-credit-card";
       }
@@ -605,7 +606,7 @@ export default {
       this.date = moment(this.date, "YYYY-MM-DD")
         .add(1, "days")
         .format("YYYY-MM-DD");
-        
+
       this.$socket.emit("[TERMINAL] DATE", this.date, data =>
         this.initial(data)
       );
@@ -638,8 +639,8 @@ export default {
 
 <style scoped>
 .terminal {
+  width: 980px;
   background: #fff;
-  width: 950px;
   border-radius: 4px 4px 0 0;
   box-shadow: var(--shadow);
 }
@@ -683,8 +684,22 @@ tbody td {
 }
 
 td.card {
-  text-align: left;
-  padding: 10px 0 10px 5px;
+  width: 95px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+td.card .number {
+  display: inline-block;
+  color: #345;
+  width: 35px;
+}
+
+td.card i {
+  opacity: 0.8;
+  width: 45px;
+  margin-right: 5px;
 }
 
 tbody tr {
@@ -713,16 +728,26 @@ footer {
   border-top: 1px solid #e0e0e0;
 }
 
-.fa-cc-visa {
-  color: #5050e2;
+.visa-card {
+  height: 20px;
+  background: url("../../assets/image/visa.png") center center;
 }
 
-.fa-cc-mastercard {
-  color: #ff2b1c;
+.master-card {
+  height: 35px;
+  background: url("../../assets/image/master.png") no-repeat center center;
+  background-size: contain;
 }
 
-.fa-cc-discover {
-  color: #ff9800;
+.discover-card {
+  height: 28px;
+  border-radius: 4px;
+  background: url("../../assets/image/discover.png") center center;
+}
+
+.amex-card{
+  height: 28px;
+  background: url("../../assets/image/amex.png") no-repeat center center;
 }
 
 .fa-cc-amex {

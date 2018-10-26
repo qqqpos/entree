@@ -37,7 +37,7 @@ export default {
   background: #fff;
   position: relative;
   color: #3c3c3c;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
 }
 
 .ticket:before {
@@ -51,7 +51,7 @@ export default {
   text-align: center;
   line-height: 32px;
   background: #03a9f4;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   font-family: "Agency FB";
   font-size: 30px;
   border-radius: 4px;
@@ -60,7 +60,7 @@ export default {
 .type {
   padding: 4px 0;
   font-size: 1.5vw;
-  margin-left: 34px;  
+  margin-left: 34px;
 }
 
 .info {
@@ -163,13 +163,18 @@ b {
 }
 
 .modified {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 6px 10px;
+}
+
+.modified:after {
+  content: " ";
+  display: block;
   width: 12px;
   height: 12px;
-  bottom: 0px;
-  left: 0px;
-  margin: 7px;
   border-radius: 50%;
-  position: absolute;
   background-clip: padding-box;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.39);
   background: linear-gradient(#ffcc80, #f57c00);

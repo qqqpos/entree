@@ -28,6 +28,7 @@
 <script>
 import inputer from "../../common/inputer";
 import switches from "../../common/switches";
+
 export default {
   props: ["init"],
   components: { inputer, switches },

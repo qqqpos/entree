@@ -39,5 +39,6 @@ div figure {
 
 figure.active {
   opacity: 1;
+  box-shadow: 0 1px 3px #666;
 }
 </style>

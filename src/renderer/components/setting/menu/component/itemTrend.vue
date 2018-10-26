@@ -3,7 +3,7 @@
     <ul v-show="trend.length > 0">
         <li class="head">
             <h3 class="f1">{{$t('text.itemTrend')}}</h3>
-            <i class="fa fa-sort" @click="reverse"></i>
+            <i class="fa fa-sort light" @click="reverse"></i>
         </li>
         <li class="stats" v-for="(item,index) in items" :key="index" @click="getTrend(item)">
             <h5 class="name">{{item[language] || item.usEN}}</h5>
@@ -15,8 +15,8 @@
         <li class="footer">
             <span class="total">{{$t('text.items',trend.length)}}</span>
             <div class="wrap">
-                <i class="fa fa-angle-left page" @click="prev"></i>
-                <i class="fa fa-angle-right page" @click="next"></i>
+                <i class="fa fa-angle-left light page" @click="prev"></i>
+                <i class="fa fa-angle-right light page" @click="next"></i>
             </div>
         </li>
     </ul>
@@ -48,16 +48,11 @@ export default {
     fetchData() {
       const date = {
         from: +moment()
-          .subtract(4, "hours")
-          .startOf("month")
-          .hours(4),
+          .subtract(1, "month")
+          .startOf("month"),
         to: +moment()
-          .subtract(4, "hours")
+          .subtract(1, "month")
           .endOf("month")
-          .add(1, "days")
-          .hours(3)
-          .minutes(59)
-          .seconds(59)
       };
 
       this.$socket.emit("[TREND] ITEM", date, results => {

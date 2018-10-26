@@ -439,7 +439,7 @@ export default {
       staffCashOut: "结算企台钱箱",
       tableSwitch: "确认换桌",
       booking: "确定预约",
-      combineTickets: "确认合并订单",
+      combineTickets: "确认合并 {i}个 订单",
       courseTime: "确认定时出餐",
       removeOperator: "确定删除此用户",
       switchServer: "切换服务员",
@@ -475,7 +475,8 @@ export default {
       printReceiptConfirm: "是否需要打印收据给客人？",
       tipReportConfirm: "请再次确定您本次上报的小费为 $ {i} ?",
       settleByHouseAccount: "您确定要用将此订单以 {i} 的名义记账吗?",
-      removeTemplateConfirm: "您确定要移除这个模版吗?"
+      removeTemplateConfirm: "您确定要移除这个模版吗?",
+      combineTicketsConfirm: "您确定要将 {i} 订单合并至 #{i}号 吗？",
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -664,7 +665,6 @@ export default {
     ticketSettled: "此订单已结账",
     settleTicketConfirm: "您想要将此订单设置成已付吗？",
     insufficientAmount: "此卡所剩的余额不足于支付整个订单",
-    combineTicketsConfirm: "您确定要将 {i} 订单合并至 #{i}号 吗？",
     somethingWrong: "发生了一个错误",
     somethingWrongTip: "此订单在保存的过程中产生了一个错误，保存被取消",
     appUpdateNeeded: "软件需要更新",
@@ -849,6 +849,10 @@ export default {
     }
   },
   report: {
+    tip: {
+      mostSaleType:
+        "当前最佳是 {i}订单。 共 {i}份， 总数 $ {i}。 占总目前营业额的 {i}%"
+    },
     days: "天数",
     itemSales: "物品销售",
     salesTax: "销售税",
@@ -860,7 +864,6 @@ export default {
     gratuity: "服务费",
     deliveryFee: "送餐费",
     surcharge: "附加费",
-
     configuration: "报表格式",
     range: "报告范围",
     dailyReport: "按天打印",

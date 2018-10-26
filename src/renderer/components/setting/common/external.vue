@@ -61,10 +61,8 @@ export default {
 
 .tooltip {
   flex: 1;
-  color: #9e9e9e;
+  color: rgba(0, 0, 0, 0.5);
   text-align: right;
-  line-height: 1;
-  font-size: 16px;
 }
 
 .value {

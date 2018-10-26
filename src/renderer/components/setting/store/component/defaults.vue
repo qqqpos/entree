@@ -5,7 +5,7 @@
       <div class="back" @click="$router.push({ name: 'Setting.payment' })">
         <i class="fa fa-chevron-left"></i>
       </div>
-      <div class="title">{{$t('setting.default.setValue')}}</div>
+      <h3 class="title">{{$t('setting.default.setValue')}}</h3>
     </header>
     <text-list title="setting.default.paymentType" :opts="paymentTypes" v-model="defaults.paymentType"></text-list>
     <toggle title="setting.default.discount" v-model="defaults.percentageDiscount" trueTooltip="tip.default.percentageDiscount" falseTooltip="tip.default.dollarDiscount" :conditionalTooltip="true"></toggle>

@@ -53,9 +53,11 @@ export default {
         multiplier: false,
         multiply: 1
       });
+
+      this.confirm()
     },
     confirm() {
-      !this.action.hasOwnProperty("key") &&
+      !this.action.key &&
         Object.assign(this.action, { key: String().random() });
 
       this.$socket.emit(
@@ -64,7 +66,7 @@ export default {
           action: this.action,
           index: this.init.index
         },
-        () => this.init.resolve()
+        this.init.resolve
       );
     }
   }

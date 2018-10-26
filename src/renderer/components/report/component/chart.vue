@@ -45,20 +45,21 @@ export default {
   },
   watch: {
     data: {
-      handler: "calcHours",
+      handler: "process",
       immediate: true
     }
   },
   methods: {
-    calcHours(invoices) {
+    process(invoices) {
       let hours = {};
+      let types = {};
       let overall = 0;
       let max = 0;
 
       invoices.forEach(invoice => {
         if (invoice.status === 0) return;
 
-        const { create, time, payment, logs, settled } = invoice;
+        const { create, time, type, payment, logs, settled } = invoice;
         const hour = moment(create || time).format("HH");
 
         let cash = 0;
@@ -67,6 +68,18 @@ export default {
         if (settled) {
         }
 
+        // process type sales
+        if (types[type]) {
+          types[type].count++;
+          types[type].amount += payment.balance;
+        } else {
+          types[type] = {
+            count: 1,
+            amount: payment.balance
+          };
+        }
+
+        // process hourly sales
         if (hours.hasOwnProperty(hour)) {
           hours[hour].count++;
           hours[hour].amount += payment.balance;
@@ -94,8 +107,8 @@ export default {
 
       this.$nextTick(() =>
         this.$bus.emit(
-          "HIGHEST_HOURLY_SALES",
-          Object.assign(highest, { overall })
+          "REPORT_SUMMARY",
+          Object.assign(highest, { overall, types })
         )
       );
 
@@ -150,6 +163,7 @@ export default {
   margin-left: 10px;
   position: relative;
 }
+
 .hour:after {
   content: attr(data-hour) ":00";
   position: absolute;
@@ -159,6 +173,15 @@ export default {
   text-align: center;
   font-size: 12px;
   color: gray;
+}
+
+.hour:hover span {
+  background: hsla(186, 100%, 55%, 0.85);
+  box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.1), 0 -1px 1px #b1e2f9;
+}
+
+.hour:hover:after {
+  color: #333;
 }
 </style>
 

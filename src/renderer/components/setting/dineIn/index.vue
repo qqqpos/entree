@@ -15,7 +15,7 @@ import { mapGetters } from "vuex";
 import grid from "./layout/grid";
 import flow from "./layout/flow";
 import hibachi from "./layout/hibachi";
-import editor from "./component/sectionEditor";
+import editor from "./editor/section";
 
 export default {
   components: { grid, flow, hibachi, editor },

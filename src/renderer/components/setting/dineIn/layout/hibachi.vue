@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import editor from "../component/hibachiEditor";
+import editor from "../editor/hibachi";
 
 export default {
   props: ["zone", "tables"],
@@ -71,6 +71,7 @@ export default {
     },
     edit(table, index) {
       let edit = false;
+      
       if (table) {
         edit = true;
       } else {
@@ -105,11 +106,7 @@ export default {
         this.component = "editor";
       })
         .then(update => {
-          if (edit) {
-            this.items.splice(index, 1, update);
-          } else {
-            this.items.push(update);
-          }
+          edit ? this.items.splice(index, 1, update) : this.items.push(update);
 
           this.$socket.emit("[TABLE] SAVE", update);
 

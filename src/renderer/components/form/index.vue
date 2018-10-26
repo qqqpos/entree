@@ -9,7 +9,7 @@
       <div class="f1">
         <div class="flags" v-if="flags.length">
           <span class="alert">{{$t('text.beAdvised')}}</span>
-        <ul>
+        <ul class="row">
           <li v-for="(flag,index) in flags" :key="index" :title="stringify(flag.logs)">
             <span>{{$t('reason.'+flag.text)}} {{$t('text.times',flag.count)}}</span>
           </li>
@@ -434,10 +434,11 @@ i.avatar {
   font-size: 4em;
   background: #fff;
   border-radius: 50%;
-  border: 3px solid #fff;
+  padding: 0 1px;
+  border: 3px solid #f5f5f5;
   color: #2196f3;
-  text-shadow: 0 1px 1px #3c3c3c;
-  box-shadow: 0 1px 1px #788e98;
+  text-shadow: 0 1px 1px #0d47a1;
+  box-shadow: 0 1px 1px #455a64;
   top: -34px;
   left: 10px;
 }
@@ -472,10 +473,6 @@ i.avatar {
   padding: 0 7px;
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(51, 51, 51, 0.64);
-}
-
-ul {
-  display: flex;
 }
 
 li {

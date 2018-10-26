@@ -47,7 +47,7 @@
                   </tbody>
               </table>
             </div>
-            <paginator :of="invoices" @page="setPage" :perPage="10" :maxPage="12"></paginator>
+            <paginator :of="invoices" @page="setPage" :perPage="12" :maxPage="10"></paginator>
         </div>
         <div class="popupMask dark center" v-if="component" @click.self="exitComponent">
           <div :is="component" :init="componentData" class="component"></div>
@@ -106,10 +106,9 @@ export default {
       const splits = this.history.filter(t => queues.includes(t._id));
 
       const prompt = {
-        type: "question",
-        title: "dialog.confirm.combineTickets",
+        title: ["dialog.confirm.combineTickets",splits.length + 1],
         msg: [
-          "dialog.combineTicketsConfirm",
+          "dialog.tip.combineTicketsConfirm",
           splits.map(i => `#${i.number}`),
           parent.number
         ],
@@ -211,6 +210,7 @@ td.icon {
 
 .active .check {
   display: initial;
+  color: var(--green);
 }
 
 .active .gray {

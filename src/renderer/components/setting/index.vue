@@ -63,17 +63,17 @@
         <p>{{$t('setting.exitTip')}}</p>
       </router-link>
     </section>
-    <system-information></system-information>
+    <system-info></system-info>
     <about></about>
   </div>
 </template>
 
 <script>
 import about from "./component/about";
-import systemInformation from "./component/systemInformation";
+import systemInfo from "./component/systemInformation";
 
 export default {
-  components: { about, systemInformation }
+  components: { about, systemInfo }
 };
 </script>
 
@@ -103,7 +103,7 @@ h3 {
 }
 
 figure {
-  background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
+  background: linear-gradient(to bottom, #fff 0%, #f1f3f5 100%);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -123,20 +123,19 @@ figure:active {
 }
 
 i {
-  color: #1e88e5;
+  color: var(--deepBlue);
 }
 
 figcaption {
   font-family: "Microsoft YaHei";
   font-weight: bold;
   margin: 7px 0 3px;
-  color: #3c3c3c;
+  color: #345;
   font-size: 1.25em;
 }
 
 p {
-  color: gray;
-  text-align: center;
+  color: #678;
 }
 
 .disabled {

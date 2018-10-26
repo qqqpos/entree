@@ -24,7 +24,7 @@
                 </div>
                 <div class="calendar">
                     <div class="week" v-for="(week,index) in calendar" :key="index">
-                        <div class="day" v-for="(day,idx) in week.days" :key="idx" :class="{diff:isDiff(day),today:isToday(day)}" @click="select(day)">
+                        <div class="day column flex-center agency" v-for="(day,idx) in week.days" :key="idx" :class="{diff:isDiff(day),today:isToday(day)}" @click="select(day)">
                           {{day | moment('D')}}
                           <p>{{day | isHoliday}}</p>
                         </div>
@@ -160,16 +160,11 @@ nav i {
 .week .day {
   flex: 1;
   height: 75px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   cursor: pointer;
   background: #eceff1;
   position: relative;
   z-index: 1;
   border: 1px solid #fff;
-  font-family: "Agency FB";
-  font-weight: bold;
   font-size: 32px;
   opacity: 0.75;
   border-radius: 4px;
@@ -183,7 +178,7 @@ nav i {
   left: 0;
   font-family: "Yuanti-SC";
   color: #ff5722;
-  line-height: 0.9;
+  line-height: 1;
   font-weight: normal;
   width: 100%;
 }
