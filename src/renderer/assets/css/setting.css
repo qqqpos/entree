@@ -57,13 +57,12 @@ ul.nav .router-link-active {
 ul.tabs {
   display: flex;
   background: #ffffff;
-  border-bottom: 1px solid #bdbdbd;
 }
 
 ul.tabs li {
   min-width: 90px;
   padding: 10px 20px;
-  color: #666;
+  color: rgba(0,0,0,0.35);
   cursor: pointer;
   text-align: center;
   border-bottom: 2px solid transparent;
@@ -79,7 +78,6 @@ ul.tabs li.router-link-exact-active {
   color: #333;
   font-weight: bold;
   border-bottom: 2px solid #ff5722;
-  background: rgba(236, 239, 241, 0.5);
 }
 
 .tab-content {
