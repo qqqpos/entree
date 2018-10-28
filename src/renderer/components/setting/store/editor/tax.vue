@@ -22,6 +22,7 @@
                         <checkbox v-model="tax.apply.DINE_IN" title="type.DINE_IN"></checkbox>
                         <checkbox v-model="tax.apply.HIBACHI" title="type.HIBACHI"></checkbox>
                         <checkbox v-model="tax.apply.BUFFET" title="type.BUFFET"></checkbox>
+                        <checkbox v-model="tax.apply.DRIVE_THRU" title="type.DRIVE_THRU"></checkbox>
                         <checkbox v-model="tax.apply.TO_GO" title="type.TO_GO"></checkbox>
                         <checkbox v-model="tax.apply.BAR" title="type.BAR"></checkbox>
                         <checkbox v-model="tax.apply.SALES" title="type.SALES"></checkbox>

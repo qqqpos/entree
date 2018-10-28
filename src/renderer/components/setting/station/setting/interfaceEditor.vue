@@ -30,6 +30,7 @@ import inputer from "../../common/inputer";
 import selector from "../../common/selector";
 import switches from "../../common/switches";
 import checkbox from "../../common/checkbox";
+
 export default {
   props: ["init"],
   components: { inputer, selector, switches, checkbox },
@@ -73,7 +74,7 @@ export default {
           value: "driveThrough"
         },
         {
-          label: this.$t("button.thirdParty"),
+          label: this.$t("text.thirdParty"),
           tooltip: "",
           value: "thirdParty"
         },

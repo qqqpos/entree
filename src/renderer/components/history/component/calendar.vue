@@ -16,7 +16,7 @@
                 <div class="title">
                     <span>{{$t('date.monday')}}</span>
                     <span>{{$t('date.tuesday')}}</span>
-                    <span>{{$t('date.wednesdays')}}</span>
+                    <span>{{$t('date.wednesday')}}</span>
                     <span>{{$t('date.thursday')}}</span>
                     <span>{{$t('date.friday')}}</span>
                     <span>{{$t('date.saturday')}}</span>

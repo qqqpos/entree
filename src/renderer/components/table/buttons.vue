@@ -5,7 +5,7 @@
     <fn icon="fa-exchange-alt" text="button.switchTable" :disabled="!table || order.type === 'HIBACHI'" v-else></fn>
     <fn icon="fa-list-ol" text="button.list" @click="$open('listModule')"></fn>
     <fn icon="fa-hand-holding-usd" text="button.payment" @click="invoke('settle')" :disabled="!table"></fn>
-    <fn icon="fa-clone" text="button.split" @click="invoke('split')"></fn>
+    <fn icon="fa-clone" text="button.split" @click="invoke('split')" @press="invoke('evenSplit')"></fn>
     <fn icon="fa-file-invoice-dollar" text="button.receipt" @click="invoke('prePayment')"></fn>
     <fn icon="fa-user-times" text="button.switch" @click="switchStaff"></fn>
     <fn icon="fa-times" text="button.exit" @click="exit"></fn>
@@ -18,6 +18,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 import splitSelector from "../shared/splitSelector";
+import inputModule from "../component/inputer";
 import paymentModule from "../payment/main";
 import unlockModule from "../common/unlock";
 import dialogModule from "../common/dialog";
@@ -33,6 +34,7 @@ export default {
     unlockModule,
     paymentModule,
     splitModule,
+    inputModule,
     listModule,
     staff,
     fn
@@ -151,6 +153,47 @@ export default {
     },
     split() {
       this.$open("splitModule");
+    },
+    evenSplit() {
+      const prompt = {
+        title: "dialog.cantExecute",
+        msg: "dialog.ticketAlreadySplit",
+        buttons: [
+          { text: "button.confirm", fn: "reject" },
+          { text: "button.view", fn: "resolve" }
+        ]
+      };
+
+      this.order.split
+        ? this.$dialog(prompt)
+            .then(this.split)
+            .catch(this.exitComponent)
+        : this.$promise("inputModule", {
+            title: "title.evenSplit",
+            type: "number",
+            amount: 1
+          })
+            .then(this.confirmEvenSplit)
+            .catch(this.exitComponent);
+    },
+    confirmEvenSplit({ amount }) {
+      if (amount > 1) {
+        const prompt = {
+          type: "question",
+          title: "dialog.confirm.evenSplit",
+          msg: ["dialog.tip.evenSplitConfirm", amount],
+          buttons: [
+            { text: "button.cancel", fn: "reject" },
+            { text: "button.confirm", fn: "resolve", load: true }
+          ]
+        };
+
+        this.$dialog(prompt)
+          .then(() => this.$splitEvenly(amount))
+          .catch(this.exitComponent);
+      } else {
+        this.exitComponent();
+      }
     },
     prePayment() {
       const remain = this.order.content.filter(item => !item.print).length;

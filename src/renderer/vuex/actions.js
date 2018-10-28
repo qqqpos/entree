@@ -121,19 +121,22 @@ export const setChoiceSet = ({ commit, getters }, subitem) =>
 
 export const pushChoiceSet = ({ commit }, subitem) =>
   commit(types.SET_CHOICE_SET, { subitem, matchItemQty: false });
+
 export const alterItemOption = ({ commit, getters }, data) => {
-  let subitem = {
+  const { side } = data;
+
+  const subitem = {
     qty: 1,
-    single: parseFloat(data.side.price) || 0,
-    price: parseFloat(data.side.price) || 0,
-    usEN: data.side.usEN,
-    zhCN: data.side.zhCN
+    single: parseFloat(side.price) || 0,
+    price: parseFloat(side.price) || 0,
+    usEN: side.usEN,
+    zhCN: side.zhCN
   };
 
   // if this is template sub item
   data._ti && Object.assign(subitem, { _ti: data._ti });
 
-  data.side.sub
+  side.sub
     ? commit(types.SET_CHOICE_SET, {
         subitem,
         matchItemQty: getters.config.defaults.matchItemQty

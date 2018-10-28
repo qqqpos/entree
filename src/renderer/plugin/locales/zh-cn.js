@@ -854,8 +854,8 @@ export default {
   },
   report: {
     tip: {
-      mostSaleType:
-        "当前最佳是 {i}订单。 共 {i}份， 总数 $ {i}。 占总目前营业额的 {i}%"
+      noData: "没有相关数据",
+      mostSaleType: "{i}订单占有总营业的 {i}%. 订单统计 {i} 份, 总数 $ {i}"
     },
     days: "天数",
     itemSales: "物品销售",

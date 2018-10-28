@@ -220,7 +220,7 @@ export default {
         side: this.init.side,
         index: this.init.index,
         _ti: this.template._id,
-        function: true
+        isTemplateOpt:true
       });
 
       this.saved.forEach((items, i) => {

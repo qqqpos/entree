@@ -598,12 +598,12 @@ export default {
 
       side.template && this.specialItemHandler(null, "template", index);
 
-      (!skip || !ignore) &&
-      (side.template && !side.sub) &&
+      !(skip || ignore) &&
+        !(side.template && side.sub) &&
         this.alterItemOption({
           side,
           index,
-          function: !!side.template
+          isTemplateOpt: !!side.template
         });
     },
     setSeat(seat) {

@@ -84,6 +84,7 @@ export default {
           HIBACHI: true,
           TO_GO: true,
           SALES: true,
+          DRIVE_THRU:true,
           BAR: true,
           BUFFET: true
         }

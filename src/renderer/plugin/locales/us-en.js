@@ -35,7 +35,7 @@ export default {
     HIBACHI: "Hibachi",
     SALES: "Sales",
     TO_GO: "To Go",
-    DRIVE_THRU: "Drive-Thru",
+    DRIVE_THRU: "Drive Thru",
     FREE: "FREE",
     PRE_PAYMENT: "Pre Pay.",
     CREDIT_CARD: "Credit Card",
@@ -760,7 +760,6 @@ export default {
     ticketSettled: "All Split Ticket Are Settled",
     settleTicketConfirm: "Are you wish to mark this ticket as paid?",
     insufficientAmount: "There is an insufficient funds on the card.",
-
     somethingWrong: "Error Occurred",
     somethingWrongTip: "An unknown error occurred while saving this order.",
     appUpdateNeeded: "Software Update Needed",
@@ -962,8 +961,9 @@ export default {
   },
   report: {
     tip: {
+      noData: "No data present.",
       mostSaleType:
-        "Current most ticket type is {i}. Total {i} tickets, amount $ {i}. Account for {i} % of total sales."
+        "{i} Ticket accounts for {i} % of total sales. Having {i} tickets for amount of $ {i}."
     },
     days: "Days",
     itemSales: "Item Sales",

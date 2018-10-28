@@ -1,25 +1,30 @@
 <template>
-    <div class="chart" :data-hours="salesLevel">
+    <div class="chart" :data-hours="salesLevel" ref="chart">
         <div class="hour" :data-hour="hour" v-for="(data,hour,index) in hours" :key="'h'+index">
-            <bar :height="data.height" :delay="index * 0.1 +'s'"></bar>
+            <bar :height="data.height" :delay="index * 0.1 +'s'" @mouseover.native="showHourStats(hour,$event)" @mouseout.native="hide"></bar>
         </div>
         <transition-group name="scale">
             <time-session :time="time" :index="index" v-for="(time,index) in session" :key="index"></time-session>
         </transition-group>
+        <tooltip v-show="showTooltip" :data="tooltipData" :position="tooltipStyle"></tooltip>
     </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
 import bar from "./helper/bar";
+import tooltip from "./helper/tooltip";
 import timeSession from "./helper/session";
-import { setTimeout } from "timers";
 
 export default {
   props: ["data"],
-  components: { bar, timeSession },
+  components: { bar, tooltip, timeSession },
   data() {
     return {
+      showTooltip: false,
+      tooltipStyle: {},
+      tooltipData: {},
       session: [],
       hours: {},
       max: 1
@@ -113,6 +118,7 @@ export default {
       );
 
       this.hours = hours;
+      this.types = types;
       this.max = max;
     },
     calcHeight() {
@@ -124,6 +130,45 @@ export default {
           });
         });
       });
+    },
+    showHourStats(hour, e) {
+      let types = {};
+      let amount = 0;
+      let count = 0;
+
+      this.data
+        .filter(
+          i =>
+            moment(i.create || i.time).format("HH") === hour && i.status !== 0
+        )
+        .forEach(({ type, status, payment }) => {
+          count++;
+          amount += payment.balance;
+
+          if (types[type]) {
+            types[type].count++;
+            types[type].amount += payment.balance;
+          } else {
+            types[type] = {
+              count: 1,
+              amount: payment.balance
+            };
+          }
+        });
+
+      const { top: x1, left, height } = e.target.getBoundingClientRect();
+      const { top: x2 } = this.$refs.chart.getBoundingClientRect();
+
+      this.tooltipData = { types, amount, count };
+      this.tooltipStyle = {
+        bottom: x1 - x2 + height - 35 + "px",
+        left: left - 117 + "px"
+      };
+
+      this.showTooltip = true;
+    },
+    hide() {
+      this.showTooltip = false;
     }
   }
 };

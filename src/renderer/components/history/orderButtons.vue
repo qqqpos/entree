@@ -75,15 +75,10 @@ export default {
         ? this.$dialog(prompt)
             .then(this.split)
             .catch(this.exitComponent)
-        : new Promise((resolve, reject) => {
-            const config = {
-              title: "title.evenSplit",
-              type: "number",
-              amount: 1
-            };
-
-            this.componentData = Object.assign({ resolve, reject }, config);
-            this.component = "inputModule";
+        : this.$promise("inputModule", {
+            title: "title.evenSplit",
+            type: "number",
+            amount: 1
           })
             .then(this.confirmEvenSplit)
             .catch(this.exitComponent);
@@ -111,7 +106,7 @@ export default {
       const prompt = {
         type: "question",
         title: "dialog.ticketOnHouse",
-        msg: ["dialog.tip.settleByHouseAccount",this.op.name]
+        msg: ["dialog.tip.settleByHouseAccount", this.op.name]
       };
 
       this.$checkPermission("permission", "houseAccount")

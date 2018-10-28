@@ -209,7 +209,7 @@ const mutations = {
     }
 
     if (item.qty === 1) {
-      if (index === item.sideIndex && !data.function) {
+      if (index === item.sideIndex && !data.isTemplateOpt) {
         // stack item qty if same side
         item.total = (++item.qty * item.single).toFixed(2);
       } else {
@@ -229,7 +229,7 @@ const mutations = {
       item.sideIndex = index;
     } else {
       if (index === item.sideIndex) {
-        item.total = data.function
+        item.total = data.isTemplateOpt
           ? (item.qty * item.single).toFixed(2)
           : (++item.qty * item.single).toFixed(2);
       } else {

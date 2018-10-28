@@ -909,20 +909,21 @@ export default {
       return new Promise(next => {
         const paid = this.paid.toFixed(2);
         const tip = this.tip.toFixed(2);
+        const total = (parseFloat(paid) + parseFloat(tip)).toFixed(2);
         const tender = this.currentTender.toFixed(2);
 
         this.poleDisplay(["Paid CASH", paid], ["Change Due", tender]);
 
         const tenderWithoutDialog = {
-          title: ["dialog.confirm.cashTender", tender],
-          msg:
+          html: true,
+          content: `<h1 class="tender">${this.$t(
+            "dialog.confirm.cashTender"
+          )}<span class="agency">${tender}</span></h1>
+          <h5 class="normal light">${
             tip > 0
-              ? [
-                  "dialog.cashPaymentWithTipDetail",
-                  (parseFloat(paid) + parseFloat(tip)).toFixed(2),
-                  tip
-                ]
-              : ["dialog.cashPaymentDetail", paid],
+              ? this.$t("dialog.cashPaymentWithTipDetail", total, tip)
+              : this.$t("dialog.cashPaymentDetail", paid)
+          }</h5>`,
           buttons: [{ text: "button.confirm", fn: "resolve" }]
         };
 

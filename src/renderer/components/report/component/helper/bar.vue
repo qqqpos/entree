@@ -1,5 +1,5 @@
 <template>
-    <span class="bar" :style="{height,'transition-delay':delay}" ></span>
+    <span class="bar" :style="{height,'transition-delay':delay}"></span>
 </template>
 
 <script>
