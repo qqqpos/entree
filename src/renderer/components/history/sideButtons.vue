@@ -267,7 +267,7 @@ export default {
         msg: [
           "dialog.recoverTicketConfirm",
           this.order.void.by,
-          this.$t("reason." + this.order.void.note)
+          this.$t("reason." + this.order.void.note, this.order.void.join)
         ]
       };
 

@@ -25,8 +25,8 @@
                 <div class="detail">
                     <header class="row flex-center">
                         <h3 class="f1">{{$t('inventory.orderDetail')}}</h3>
-                        <button class="mini-btn space-right"><i class="fa fa-print space"></i>{{$t('button.print')}}</button>
-                        <button class="mini-btn"><i class="fa fa-edit space"></i>{{$t('button.edit')}}</button>
+                        <button class="mini-btn space-right"><i class="fa fa-print light space-right"></i>{{$t('button.print')}}</button>
+                        <button class="mini-btn" @click="editDialog"><i class="fa fa-edit light space-right"></i>{{$t('button.edit')}}</button>
                     </header>
                     <div class="brief row">
                         <div class="row flex-center f1">
@@ -87,17 +87,16 @@
 
 <script>
 import chrono from "chrono-node";
-import scanner from "./helper/scan";
 import editor from "./editor/order";
 
 export default {
-  components: { scanner, editor },
+  components: { editor },
   beforeRouteEnter: (from, to, next) => {
     appSocket.emit("[INVENTORY] ORDER_LIST", orders =>
       next(vm => {
         vm.orders = Object.freeze(orders);
 
-        if (vm.orders.length) vm.receipt = vm.orders[0];
+        if (orders.length) vm.receipt = vm.orders[0];
       })
     );
   },
@@ -118,10 +117,11 @@ export default {
       const parse = chrono.parse(this.search);
       console.log(parse);
     },
-    stockIn() {
+    async stockIn() {
       const inventory = {
         vendor: "",
         date: today(),
+        create: moment().format("HH:mm"),
         handler: this.$store.getters.op.name,
         reference: "",
         memo: "",
@@ -134,12 +134,21 @@ export default {
         paid: 0
       };
 
-      this.$open("editor", { inventory });
+      try {
+        await this.$promise("editor", { inventory });
+        this.refreshData();
+      } catch (e) {
+      } finally {
+        this.exitComponent();
+      }
     },
-    openScanDialog() {
-      return new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject };
-        this.component = "scanner";
+    editDialog() {
+      this.$open("editor", { inventory: this.receipt });
+    },
+    refreshData() {
+      this.$socket.emit("[INVENTORY] ORDER_LIST", orders => {
+        this.orders = orders;
+        orders.length && this.view(orders[0]);
       });
     }
   }
@@ -232,12 +241,12 @@ tr td:last-child {
   border-right: none;
 }
 
-.name{
+.name {
   width: 300px;
 }
 
-.price{
-  width:156px;
+.price {
+  width: 156px;
 }
 </style>
 

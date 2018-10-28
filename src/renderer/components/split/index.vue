@@ -6,7 +6,8 @@
           <h5>{{$t(order.split ? 'title.edit' : 'title.create')}}</h5>
           <h3>{{$t('title.split')}}</h3>
         </div>
-        <button class="remove" v-show="order.split" @click="rollback">{{$t('button.restore')}}</button>
+        <button class="remove" v-if="order.split && !order.link" @click="rollback">{{$t('button.restore')}}</button>
+        <button class="remove" v-else-if="order.link" @click="unlinkTicket">{{$t('button.unlink')}}</button>
       </header>
       <div class="banner"></div>
       <div class="wrap">
@@ -246,16 +247,23 @@ export default {
     },
     rollback() {
       this.$socket.emit("[SPLIT] SAVE", { splits: [], parent: this.order._id });
+      delete this.order.split;
+      delete this.order.link;
+
       this.order.coupons = [];
       this.order.children = [];
-      this.order.split = false;
       this.order.payment.discount = 0;
       this.$calculatePayment(this.order);
-      this.order.content.forEach(item => Object.assign(item, { split: false }));
+      this.order.content.forEach(item => {
+        item.split = false;
+      });
 
       this.setOrder(this.order);
       this.$socket.emit("[ORDER] UPDATE", this.order);
       this.init.resolve();
+    },
+    unlinkTicket(){
+
     },
     call(fn, print) {
       if (this.app.newTicket && this.$route.name === "Menu") {

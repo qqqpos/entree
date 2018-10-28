@@ -63,6 +63,10 @@ export default {
         {
           label: "type.SALES",
           value: "SALES"
+        },
+        {
+          label: "type.DRIVE_THRU",
+          value: "DRIVE_THRU"
         }
       ],
       print: []

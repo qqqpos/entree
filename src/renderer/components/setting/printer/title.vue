@@ -19,6 +19,7 @@
     <text-input v-model="title.HIBACHI" title="type.HIBACHI"></text-input>
     <text-input v-model="title.BAR" title="type.BAR"></text-input>
     <text-input v-model="title.SALES" title="type.SALES"></text-input>
+    <text-input v-model="title.DRIVE_THRU" title="type.DRIVE_THRU"></text-input>
     <text-input v-model="title.TO_GO" title="type.TO_GO"></text-input>
     <text-input v-model="title.PRE_PAYMENT" title="type.PRE_PAYMENT"></text-input>
   </div>
@@ -42,6 +43,7 @@ export default {
         HIBACHI: "HIBACHI",
         BUFFET: "BUFFET",
         SALES: "SALES",
+        DRIVE_THRU: "DRIVE THRU",
         TO_GO: "TO GO",
         BAR: "BAR"
       },

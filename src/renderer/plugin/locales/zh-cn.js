@@ -35,6 +35,7 @@ export default {
     HIBACHI: "铁板",
     SALES: "销售",
     TO_GO: "带走",
+    DRIVE_THRU: "得来速",
     FREE: "免费",
     PRE_PAYMENT: "预付款",
     CREDIT_CARD: "信用卡",
@@ -416,6 +417,7 @@ export default {
     changeLog: "改动日志",
     book: "预约",
     setGuest: "设定人数",
+    unlinkTicket: "拆分订单",
     summary: {
       sales: "从 {i} 到 {i} 的销售记录",
       batch: "从 {i} 到 {i} 的过账记录",
@@ -477,6 +479,8 @@ export default {
       settleByHouseAccount: "您确定要用将此订单以 {i} 的名义记账吗?",
       removeTemplateConfirm: "您确定要移除这个模版吗?",
       combineTicketsConfirm: "您确定要将 {i} 订单合并至 #{i}号 吗？",
+      removeInventoryConfirm:
+        "您确定要移除这个进货记录吗? 此操作将会移除进货记录中的物品库存!"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",
@@ -654,7 +658,7 @@ export default {
     addressMismatch: "地址不一致",
     replaceAddressConfirm: "是否要将地址 {i} 替换成 {i} ?",
     invalidDate: "日期错误",
-    selectedDateInvalid: "选定的预约日期无效",
+    checkDateFormat: "请检查一下日期以及时间的格式",
     paymentFailed: "付款失败",
     mustPayGraterThanZero: "支付数额必须大于 $ 0.00 ",
     cantPayPastDueTicket: "您无法支付逾期的订单",

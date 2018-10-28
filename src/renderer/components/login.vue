@@ -50,6 +50,7 @@
       </div>
       <div id="drag" v-if="$route.name ==='Login'"></div>
       <div :is="component" :init="componentData"></div>
+      <screen-saver v-if="$route.name === 'Lock' && saver"></screen-saver>
     </div>
   </transition>
 </template>
@@ -59,14 +60,17 @@ import { mapActions, mapGetters } from "vuex";
 
 import _debounce from "lodash.debounce";
 import dialogModule from "./common/dialog";
+import screenSaver from "./component/screenSaver";
+import { setTimeout } from "timers";
 
 export default {
-  components: { dialogModule },
+  components: { dialogModule, screenSaver },
   data() {
     return {
       pin: [],
-      isHost: false,
+      saver: false,
       reset: false,
+      isHost: false,
       component: null,
       toggleMenu: false,
       componentData: null,
@@ -147,6 +151,9 @@ export default {
       this.setOperator(null);
 
       this.isHost = window.isServer;
+      setTimeout(() => {
+        this.saver = true;
+      }, 60000);
     },
     initialFailed({ reason, prompt }) {
       switch (reason) {

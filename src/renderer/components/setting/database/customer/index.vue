@@ -1,8 +1,10 @@
 <template>
   <div>
     <header class="nav">
+      <div>
+        <span class="mini-btn" @click="exportData">{{$t('button.export')}}</span>
+      </div>
       <div class="title">
-        <h5></h5>
         <h3>{{$t("title.customerList")}}</h3>
       </div>
       <nav>
@@ -41,8 +43,10 @@
 </template>
 
 <script>
+import fileSaver from "file-saver";
 import Preset from "../../../../preset";
 import editor from "../component/customerEditor";
+
 export default {
   props: ["total", "customers"],
   components: { editor },
@@ -66,13 +70,34 @@ export default {
         this.componentData = { resolve, reject, customer };
         this.component = "editor";
       })
-        .then(_customer => {
-          this.$socket.emit("[CUSTOMER] UPDATE", _customer, callback => {
+        .then(update => {
+          this.$socket.emit("[CUSTOMER] UPDATE", update, callback => {
             this.$emit("create");
             this.exitComponent();
           });
         })
         .catch(this.exitComponent);
+    },
+    exportData() {
+      let excel = [
+        ["Phone Number", "Name", "Address", "E-mail", "last Activity"]
+      ];
+
+      this.customers.forEach(customer => {
+        const { phone, name, address, email, lastDate } = customer;
+        excel.push([phone, name, address, email, moment(lastDate).fromNow()]);
+      });
+
+      let csvRows = [];
+
+      for (let i = 0; i < excel.length; i++) {
+        csvRows.push(excel[i].join(","));
+      }
+
+      let csvFile = csvRows.join("\n");
+      let blob = new Blob([csvFile], { type: "text/plain;charset=utf-8" });
+
+      fileSaver.saveAs(blob, `Customer Data.csv`);
     },
     prev() {
       if (this.page === 0) return;

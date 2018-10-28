@@ -3,30 +3,40 @@
         <div class="editor">
             <header>
                 <div>
-                    <h3>{{$t('title.unlink')}}</h3>
+                    <h3>{{$t('title.unlinkTicket')}}</h3>
                 </div>
             </header>
             <div class="wrap">
-            <ul>
-                <li class="header">
-                    <span>{{$t('thead.ticket')}}</span>
-                    <span>{{$t('thead.orderType')}}</span>
-                    <span>{{$t('thead.amount')}}</span>
-                    <span class="actions">{{$t('thead.action')}}</span>
-                </li>
-                <li v-for="(order,index) in ticket.link" :key="index" class="list">
-                    <span>{{order.number}}</span>
-                    <span>{{$t('type.'+order.type)}}</span>
-                    <span><i class="fas fa-dollar-sign light space"></i>{{order.amount | decimal}}</span>
-                    <div class="actions">
-                        <span @click="view(order._id)" class="action yellow">{{$t('button.view')}}</span>
-                        <span @click="removeDialog(order,index)" v-show="index !== 0" class="action red">{{$t("button.unlink")}}</span>
-                    </div>                    
-                </li>
-            </ul>
+              <table class="event">
+                <thead>
+                  <tr>
+                    <th class="status"></th>
+                    <th>{{$t('thead.ticket')}}</th>
+                    <th>{{$t('thead.orderType')}}</th>
+                    <th>{{$t('thead.amount')}}</th>
+                    <th>{{$t('thead.view')}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(order,index) in ticket.link" :key="index" @click="toggleUnlink(order._id,index)" class="clickable" :class="{unlink:unlinks.includes(order._id)}">
+                    <td class="status" v-if="index">
+                      <i class="fas fa-unlink light" v-if="unlinks.includes(order._id)"></i>
+                      <i class="fas fa-link light" v-else></i>
+                    </td>
+                    <td class="status" v-else></td>
+                    <td class="agency light"># {{order.number}}</td>
+                    <td>{{$t('type.'+order.type)}}</td>
+                    <td><i class="fas fa-dollar-sign light space-right"></i>{{order.amount | decimal}}</td>
+                    <td @click.stop="view(order._id)" class="actions">
+                      <span class="action yellow">{{$t('button.view')}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <footer>
-                <button class="btn" @click="confirm">{{$t('button.confirm')}}</button>
+                <button class="btn" @click="unlink" v-if="unlinks.length">{{$t('button.unlink')}}</button>
+                <button class="btn" @click="init.resolve" v-else>{{$t('button.confirm')}}</button>
             </footer>
         </div>
         <div class="popupMask dark center" v-if="component" @click.self="exitComponent">
@@ -44,15 +54,19 @@ export default {
   components: { ticket, dialogModule },
   data() {
     return {
-      ticket: JSON.parse(JSON.stringify(this.init.ticket)),
-      tickets: [],
+      ticket: this.init.ticket,
       componentData: null,
-      component: null
+      component: null,
+      tickets: [],
+      unlinks: []
     };
   },
   created() {
     this.$socket.emit("[SPLIT] GET", this.ticket._id, tickets => {
-      this.tickets = tickets;
+      this.tickets = tickets.sort(
+        (a, b) =>
+          +a.number.replace(/\D/g, "") > +b.number.replace(/\D/g, "") ? 1 : -1
+      );
     });
   },
   methods: {
@@ -61,31 +75,42 @@ export default {
 
       this.$open("ticket", { ticket, exit: true });
     },
-    removeDialog(order, index) {
+    toggleUnlink(_id, i) {
+      if (i === 0) return;
+
+      const index = this.unlinks.findIndex(id => id === _id);
+
+      index === -1 ? this.unlinks.push(_id) : this.unlinks.splice(index, 1);
+    },
+    async unlink() {
+      const numbers = this.tickets
+        .reduce(
+          (a, c) => (this.unlinks.includes(c._id) ? [...a, c.number] : a),
+          []
+        )
+        .join(", ");
+
       const prompt = {
         type: "question",
         title: "dialog.unlinkTicket",
-        msg: ["dialog.unlinkTicketConfirm", order.number]
+        msg: ["dialog.unlinkTicketConfirm", numbers]
       };
 
-      this.$dialog(prompt)
-        .then(() => {
-          this.ticket.link.splice(index, 1);
-          this.exitComponent();
-        })
-        .catch(this.exitComponent);
-    },
-    confirm() {
-      let unlinked = [];
-      let links = this.ticket.link.map(link => link._id);
+      try {
+        await this.$dialog(prompt);
 
-      this.init.ticket.link
-        .map(link => link._id)
-        .forEach(_id => !links.includes(_id) && unlinked.push(_id));
-
-      this.$socket.emit("[ORDER] UNLINK", this.ticket._id, unlinked, () =>
-        this.init.resolve()
-      );
+        delete this.init.ticket.link;
+        
+        const unlinked = this.unlinks;
+        this.$socket.emit(
+          "[ORDER] UNLINK",
+          this.ticket._id,
+          unlinked,
+          this.init.resolve
+        );
+      } catch (e) {
+        this.exitComponent();
+      }
     }
   }
 };
@@ -99,35 +124,16 @@ export default {
   background: #fafafa;
 }
 
-li.header {
-  background: #009688;
-  padding: 5px 0;
-  color: #fff;
-  text-shadow: 0 1px 1px #333;
-}
-
-li.list {
+table.event tbody td {
   padding: 10px 0;
 }
 
-li.list:nth-child(even) {
-  background: #eee;
-  border-bottom: 1px solid #eceff1;
+.status {
+  width: 40px;
+  text-align: right;
 }
 
-li {
-  display: flex;
-}
-
-li span:not(:last-child) {
-  text-align: center;
-  width: 105px;
-}
-
-.actions {
-  width: 150px;
-  text-align: center;
+.unlink {
+  color: #f44336;
 }
 </style>
-
-

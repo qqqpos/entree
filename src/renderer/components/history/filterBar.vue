@@ -161,6 +161,7 @@ export default {
         "WALK_IN",
         "PICK_UP",
         "DELIVERY",
+        "DRIVE_THRU",
         "DINE_IN",
         "BUFFET",
         "UNSETTLED"

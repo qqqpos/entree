@@ -952,17 +952,18 @@ li:active {
 li > i {
   width: 50px;
   margin: 0 10px 0 0;
-  color: #4a4a4a;
+  color: var(--deepBlue);
   text-align: center;
 }
 
 h3 {
   font-weight: normal;
+  color: #345;
 }
 
 h5 {
   font-weight: normal;
-  color: #757575;
+  color: #777;
   font-size: 14px;
   line-height: 12px;
   display: flex;

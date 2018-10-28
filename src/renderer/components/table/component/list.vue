@@ -152,14 +152,19 @@ export default {
       };
 
       this.$dialog(prompt)
-        .then(() =>
-          this.$socket.emit("[ORDER] COMBINE", { splits, parent }, () => {
-            this.queue = [];
-            this.exitComponent();
-            this.$nextTick(this.initialData);
-          })
-        )
+        .then(() => {
+          this.$socket.emit(
+            "[ORDER] COMBINE",
+            { splits, parent },
+            this.resetQueue
+          );
+        })
         .catch(this.exitComponent);
+    },
+    resetQueue() {
+      this.queue = [];
+      this.exitComponent();
+      this.$nextTick(this.initialData);
     }
   },
   computed: {

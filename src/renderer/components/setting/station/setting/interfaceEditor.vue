@@ -68,6 +68,11 @@ export default {
           value: "buffet"
         },
         {
+          label: this.$t("type.DRIVE_THRU"),
+          tooltip: "",
+          value: "driveThrough"
+        },
+        {
           label: this.$t("button.thirdParty"),
           tooltip: "",
           value: "thirdParty"

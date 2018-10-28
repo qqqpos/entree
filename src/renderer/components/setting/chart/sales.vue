@@ -49,6 +49,8 @@ export default {
       const average = parseInt(
         dataProvider.reduce((a, c) => a + c.value, 0) / dataProvider.length
       );
+      const label = this.$t("report.averageSales") + ` $ ${average.toFixed(2)}`;
+
       const chart = AmCharts.makeChart(this.$refs.chart, {
         path:
           process.env.NODE_ENV === "development"
@@ -72,14 +74,15 @@ export default {
             position: "left",
             guides: [
               {
+                label,
                 dashLength: 5,
                 inside: true,
-                label:
-                  this.$t("report.averageSales") + ` $ ${average.toFixed(2)}`,
-                lineAlpha: 1,
+                lineAlpha: 0.75,
                 fontSize: "18",
+                color: "#d1655d",
                 value: average,
-                lineColor: "#FF5722"
+                lineColor: "#FF5722",
+                lineThickness: 2
               }
             ],
             position: "left"
@@ -93,16 +96,16 @@ export default {
             bulletBorderAlpha: 1,
             bulletColor: "#FFFFFF",
             hideBulletsCount: 50,
-            bulletSize: 5,
+            bulletSize: 8,
             title: "red line",
             valueField: "value",
-            lineThickness: 1,
+            lineThickness: 3,
             lineColor: "#20acd4",
-            fillAlphas: 0.5,
-            fillColors: ["#cbeaf7", "#fff"],
+            // fillAlphas: 0.5,
+            // fillColors: ["#208dbb", "#cbeaf7", "#f1f3f5"],
             type: "smoothedLine",
             useLineColorForBulletBorder: true,
-            dashLength: 5,
+            // dashLength: 5,
             balloon: {
               drop: true,
               shadowAlpha: 0,
@@ -111,9 +114,20 @@ export default {
           }
         ],
         chartScrollbar: {
-          autoGridCount: true,
           graph: "g1",
-          scrollbarHeight: 40
+          gridAlpha: 0,
+          color: "#888888",
+          scrollbarHeight: 50,
+          backgroundAlpha: 0,
+          selectedBackgroundAlpha: 0.1,
+          selectedBackgroundColor: "#888888",
+          graphFillAlpha: 0,
+          autoGridCount: true,
+          selectedGraphFillAlpha: 0,
+          graphLineAlpha: 0.2,
+          graphLineColor: "#c2c2c2",
+          selectedGraphLineColor: "#888888",
+          selectedGraphLineAlpha: 1
         },
         chartCursor: {
           limitToGraph: "g1"

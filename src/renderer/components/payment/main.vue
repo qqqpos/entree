@@ -914,7 +914,7 @@ export default {
         this.poleDisplay(["Paid CASH", paid], ["Change Due", tender]);
 
         const tenderWithoutDialog = {
-          title: ["dialog.cashChange", tender],
+          title: ["dialog.confirm.cashTender", tender],
           msg:
             tip > 0
               ? [

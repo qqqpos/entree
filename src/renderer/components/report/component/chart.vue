@@ -176,7 +176,7 @@ export default {
 }
 
 .hour:hover span {
-  background: hsla(186, 100%, 55%, 0.85);
+  filter: brightness(0.9);
   box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.1), 0 -1px 1px #b1e2f9;
 }
 

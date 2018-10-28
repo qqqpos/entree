@@ -16,6 +16,7 @@
           <inputer title="type.DINE_IN" v-model="prices.DINE_IN" :placeholder="placeholder"></inputer>
           <inputer title="type.HIBACHI" v-model="prices.HIBACHI" :placeholder="placeholder"></inputer>
           <inputer title="type.SALES" v-model="prices.SALES" :placeholder="placeholder"></inputer>
+          <inputer title="type.DRIVE_THRU" v-model="prices.DRIVE_THRU" :placeholder="placeholder"></inputer>
         </div>
         <div class="space-left">
           <inputer title="type.THIRD" v-model="prices.THIRD" :placeholder="placeholder"></inputer>
@@ -50,6 +51,7 @@ export default {
         HIBACHI: "",
         BUFFET: "",
         SALES: "",
+        DRIVE_THRU: "",
         THIRD: "",
         GrubHub: "",
         "Uber Eats": ""
@@ -74,7 +76,10 @@ export default {
         HIBACHI: "",
         BUFFET: "",
         SALES: "",
-        THIRD: ""
+        DRIVE_THRU: "",
+        THIRD: "",
+        GrubHub: "",
+        "Uber Eats": ""
       };
     },
     confirm() {

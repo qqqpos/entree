@@ -193,12 +193,9 @@ export default {
         Printer.openCashDrawer();
         this.$dialog(prompt)
           .then(() => this.acceptCashIn(amount))
-          .catch(() => this.countInitialCash());
+          .catch(this.countInitialCash);
       } else {
-        new Promise((resolve, reject) => {
-          this.componentData = { resolve, reject };
-          this.component = "collector";
-        })
+        this.$promise("collector")
           .then(this.countInitialCash)
           .catch(this.exitComponent);
       }
@@ -228,12 +225,9 @@ export default {
     access({ route, password }) {
       new Promise((next, stop) => {
         if (password) {
-          new Promise((resolve, reject) => {
-            this.componentData = { resolve, reject };
-            this.component = "unlockModule";
-          })
+          this.$promise("unlockModule")
             .then(op => (op._id === this.op._id ? next() : stop()))
-            .catch(() => stop());
+            .catch(stop);
         } else {
           next();
         }
@@ -262,12 +256,16 @@ export default {
         case "sale":
           this.emptyCustomerInfo();
           this.setTicket({ type: "SALES" });
-          this.$router.push({ path: "/main/menu" });
+          this.store.enhanceProfile
+            ? this.$router.push({ path: "/main/customer" })
+            : this.$router.push({ path: "/main/menu" });
           break;
         case "order":
           this.emptyCustomerInfo();
           this.setTicket({ type: "WALK_IN" });
-          this.$router.push({ path: "/main/menu" });
+          this.store.enhanceProfile
+            ? this.$router.push({ path: "/main/customer" })
+            : this.$router.push({ path: "/main/menu" });
           break;
         case "pickup":
           this.setTicket({ type: "PICK_UP" });
@@ -278,6 +276,11 @@ export default {
           this.setTicket({ type: "DELIVERY" });
           this.ring && this.setCustomer(this.callLog[0]);
           this.$router.push({ path: "/main/customer" });
+          break;
+        case "driveThrough":
+          this.emptyCustomerInfo();
+          this.setTicket({ type: "DRIVE_THRU" });
+          this.$router.push({ path: "/main/menu" });
           break;
         case "table":
           const { useTable = true, guestCount } = this.dineInOpt;
@@ -292,10 +295,7 @@ export default {
           this.$router.push({ path: "/main/list" });
           break;
         case "thirdParty":
-          new Promise((resolve, reject) => {
-            this.componentData = { resolve, reject };
-            this.component = "provider";
-          })
+          this.$promise("provider")
             .then(source => {
               this.setTicket({ type: "DELIVERY" });
               this.setOrder({ source, tradeMark: source });
@@ -334,18 +334,15 @@ export default {
       }
     },
     countGuestDialog() {
-      new Promise((resolve, reject) => {
-        const config = {
-          title: "title.setGuest",
-          type: "number",
-          percentage: false,
-          allowPercentage: false,
-          amount: 1
-        };
+      const config = {
+        title: "title.setGuest",
+        type: "number",
+        percentage: false,
+        allowPercentage: false,
+        amount: 1
+      };
 
-        this.componentData = Object.assign({ resolve, reject }, config);
-        this.component = "inputModule";
-      })
+      this.$promise("inputModule", config)
         .then(({ amount }) => this.createDineIn(amount))
         .catch(this.exitComponent);
     },
@@ -399,10 +396,12 @@ export default {
       this.$dialog(prompt).then(this.exitComponent);
     },
     askSelfCashIn() {
-      this.$dialog({
+      const prompt = {
         title: "dialog.confirm.initialStaffCash",
         msg: "dialog.selfCashInTip"
-      })
+      };
+
+      this.$dialog(prompt)
         .then(this.countSelfCash)
         .catch(this.exitComponent);
     },
@@ -413,12 +412,9 @@ export default {
           msg: ["dialog.selfCashInConfirmTip", amount.toFixed(2)]
         })
           .then(() => this.acceptCashIn(amount))
-          .catch(() => this.countSelfCash());
+          .catch(this.countSelfCash);
       } else {
-        new Promise((resolve, reject) => {
-          this.componentData = { resolve, reject };
-          this.component = "collector";
-        })
+        this.$promise("collector")
           .then(this.countSelfCash)
           .catch(this.exitComponent);
       }
@@ -442,8 +438,8 @@ export default {
             type: "START",
             inflow: parseFloat(amount),
             outflow: 0,
-            time: Date.now(),
             ticket: null,
+            time: Date.now(),
             operator: this.op.name
           }
         ]
@@ -461,8 +457,8 @@ export default {
           type: "OPEN",
           inflow: 0,
           outflow: 0,
-          time: Date.now(),
           ticket: null,
+          time: Date.now(),
           operator: this.op.name
         };
         this.$socket.emit("[CASHFLOW] ACTIVITY", { cashDrawer, activity });

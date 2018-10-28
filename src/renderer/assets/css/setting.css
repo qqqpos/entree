@@ -107,7 +107,7 @@ ul.tabs li.router-link-exact-active {
 .chart.page {
   width: 100%;
   margin: initial;
-  background: #fcfcfc;
+  background: #f8f9fa;
 }
 
 table.data tbody tr td {

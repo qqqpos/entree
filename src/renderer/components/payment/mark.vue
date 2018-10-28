@@ -9,7 +9,7 @@
       </header>
       <div class="banner"></div>
       <div class="inner">
-        <div v-for="(option,index) in options" :key="index">
+        <div v-for="(option,index) in options" :key="index" class="row">
           <input type="radio" name="type" v-model="type" :value="option" :id="'type'+index">
           <label class="type" :for="'type'+index">{{option}}</label>
         </div>
@@ -39,8 +39,8 @@ export default {
         "Delivery",
         "Uber Eats",
         "Postmates",
-        "EatStreet",
-        "BeyondMenu",
+        "Eat Street",
+        "Beyond Menu",
         "Simpon",
         "UnionPay",
         "Online Order",
@@ -80,7 +80,7 @@ export default {
   methods: {
     checkComponentUsage() {
       return new Promise((next, stop) => {
-        let data = {
+        const data = {
           component: "thirdParty",
           operator: this.op.name,
           lock: this.order._id,
@@ -106,31 +106,34 @@ export default {
       });
     },
     initialFailed({ error, data }) {
+      let prompt;
       switch (error) {
         case "paymentPending":
-          const current = +new Date();
+          const current = Date.now();
           const exp = data.exp;
           const duration = exp - current;
 
           this.releaseComponentLock = false;
 
-          this.$dialog({
+          prompt = {
             title: "dialog.pending",
             msg: "dialog.paymentInPending",
             timeout: { duration, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => this.exit());
+          };
           break;
         case "accessDenied":
-          this.$dialog({
+          prompt = {
             type: "warning",
             title: "dialog.accessDenied",
             msg: "dialog.accessDeniedTip",
             timeout: { duration: 10000, fn: "resolve" },
             buttons: [{ text: "button.confirm", fn: "resolve" }]
-          }).then(() => this.exit());
+          };
           break;
       }
+
+      this.$dialog(prompt).then(this.init.resolve);
     },
     confirm() {
       this.init.hasOwnProperty("callback")
@@ -152,7 +155,7 @@ export default {
           ? this.op.name
           : this.station.cashDrawer.name;
 
-      let { remain } = this.order.payment;
+      const { remain } = this.order.payment;
 
       const parent = this.order.hasOwnProperty("parent")
         ? this.order.parent
@@ -169,7 +172,7 @@ export default {
           number: this.order.number || this.ticket.number,
           type: this.order.type || this.ticket.type
         },
-        paid: this.order.payment.remain,
+        paid: remain,
         change: 0,
         actual: remain,
         tip,
@@ -188,13 +191,10 @@ export default {
         this.order.logs.push(transaction);
         this.order.cashier = this.op.name;
         this.order.settled = true;
-        
+
         this.$socket.emit("[ORDER] UPDATE", this.order, false);
         this.init.resolve();
       });
-    },
-    exit() {
-      this.init.resolve();
     }
   },
   computed: {
@@ -212,17 +212,13 @@ export default {
   background: #fafafa;
 }
 
-.inner > div {
-  display: flex;
-}
-
 input {
   display: none;
 }
 
 label {
-  width: 90px;
-  padding: 20px 15px;
+  width: 100px;
+  padding: 20px 10px;
   margin: 5px;
   background: #fff;
   border: 2px solid #e0e0e0;

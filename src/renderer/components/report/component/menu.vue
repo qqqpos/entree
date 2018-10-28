@@ -113,13 +113,15 @@ export default {
 
       const ptg = ((amount / this.overall) * 100).toFixed(2);
 
-      return this.$t(
-        "report.tip.mostSaleType",
-        this.$t("type." + type),
-        count,
-        amount.toFixed(2),
-        ptg
-      );
+      return this.overall > 0
+        ? this.$t(
+            "report.tip.mostSaleType",
+            this.$t("type." + type),
+            count,
+            amount.toFixed(2),
+            ptg
+          )
+        : this.$t("report.tip.noData");
     }
   }
 };

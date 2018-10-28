@@ -34,16 +34,14 @@ export default {
     });
   },
   methods: {
-    edit(grid, index) {
-      new Promise((resolve, reject) => {
-        this.componentData = { resolve, reject, grid };
-        this.component = "editor";
-      })
-        .then(update => {
-          this.station.interface.splice(index, 1, update);
-          this.exitComponent();
-        })
-        .catch(this.exitComponent);
+    async edit(grid, index) {
+      try {
+        const update = await this.$promise("editor", { grid });
+        this.station.interface.splice(index, 1, update);
+      } catch (e) {
+      } finally {
+        this.exitComponent();
+      }
     }
   }
 };
@@ -86,10 +84,7 @@ i.icon {
   color: gray;
 }
 
-.disable {
-  color: #f5f5f5;
-}
-
+.disable,
 .disable h4 {
   color: #f5f5f5;
 }

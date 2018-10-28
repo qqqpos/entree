@@ -3,15 +3,15 @@
     <div class="profiles">
       <div class="profile" v-for="(profile,index) in init.customer.profiles" :key="index" @click="select(profile)">
         <i class="fas fa-user-edit" @click.stop="edit(index)"></i>
-        <div>
-          <h3 class="name">{{profile.name}}<span class="extension">{{profile.extension}}</span></h3>
-          <h5 class="address">{{profile.address}}</h5>
+        <div class="f1">
+          <h3 class="name" v-show="profile.name">{{profile.name}}<span class="extension">{{profile.extension}}</span></h3>
+          <h4 class="address">{{profile.address}}</h4>
         </div>
         <i class="fa fa-trash" @click.stop="remove(index)"></i>
       </div>
       <div class="profile new" @click="create">
         <i class="fas fa-user-plus"></i>
-        <span>{{$t('button.new')}}</span>
+        <h3>{{$t('button.new')}}</h3>
       </div>
     </div>
   </div>
@@ -71,10 +71,10 @@ export default {
 <style scoped>
 .profiles {
   font-size: initial;
-  width: 265px;
   position: absolute;
   top: 32px;
   left: 350px;
+  width: 265px;
   padding: 4px 4px 0;
   border-radius: 4px;
   background: linear-gradient(
@@ -103,23 +103,23 @@ export default {
 }
 
 .profile i {
-  padding: 20px 15px;
+  font-size: 22px;
   cursor: pointer;
-  color: #666;
+  padding: 20px 15px;
+  color: var(--deepBlue);
 }
 
 .extension{
   margin-left: 10px;
 }
 
-h5 {
+h4 {
   font-weight: normal;
-  color: #666;
+  color: #345;
 }
 
 h3 {
   color: #3c3c3c;
-  font-size: 16px;
 }
 
 .new {

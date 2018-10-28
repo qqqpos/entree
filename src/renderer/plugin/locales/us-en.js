@@ -35,6 +35,7 @@ export default {
     HIBACHI: "Hibachi",
     SALES: "Sales",
     TO_GO: "To Go",
+    DRIVE_THRU: "Drive-Thru",
     FREE: "FREE",
     PRE_PAYMENT: "Pre Pay.",
     CREDIT_CARD: "Credit Card",
@@ -480,6 +481,7 @@ export default {
     changeLog: "Change Log",
     book: "Reservation",
     setGuest: "Set Guest",
+    unlinkTicket: "Unlink Ticket",
     summary: {
       sales: "Daily sales record from {i} to {i}",
       batch: "Terminals batch record from {i} to {i}",
@@ -544,6 +546,7 @@ export default {
       removeTemplateConfirm: "Are you sure to remove this template?",
       combineTicketsConfirm:
       "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
+      removeInventoryConfirm:"Are you sure to remove this inventory record? It will effect item's stock count."
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",
@@ -746,7 +749,7 @@ export default {
     addressMismatch: "Address Mismatch",
     replaceAddressConfirm: "Are you wish to replace address {i} with {i} ?",
     invalidDate: "Invalid Date",
-    reserveDateInvalid: "Reserve Date is passed!",
+    checkDateFormat: "Please check the date & time format",
     paymentFailed: "Payment Failed",
     mustPayGraterThanZero: "Paid amount must grater than $ 0.00",
     cantPayPastDueTicket: "You can not pay a previous ticket",
@@ -1847,8 +1850,8 @@ export default {
     memo: "Memo",
     productList: "Product List",
     product: "Product",
-    order: "Stock In Receipts",
-    orderDetail: "Stock In Details",
+    order: "Stock In Receipt",
+    orderDetail: "Stock In Detail",
     upc: "Barcode",
     cost: "Cost",
     qty: "Qty",

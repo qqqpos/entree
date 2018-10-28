@@ -608,10 +608,10 @@ header.dock .text {
 }
 
 .dock .profile {
-  font-size: 16px;
+  width: 130px;
+  font-size: 18px;
   font-weight: bold;
   text-shadow: 0 1px 1px #fff;
-  width: 130px;
   overflow: hidden;
 }
 
@@ -695,7 +695,6 @@ label.input-toggle > span {
 label.input-toggle > input:checked + span {
   background-position: -100%;
 }
-
 label.input-toggle > span:after {
   content: "";
   display: block;
@@ -719,23 +718,18 @@ label.input-toggle > input:checked + span:after {
 label.input-toggle > span:active:after {
   transform: translateY(-50%) scale3d(1.15, 0.85, 1);
 }
-
 label.input-toggle > input:disabled + span:active:after {
   transform: translateY(-50%);
 }
-
 label.input-toggle > input:disabled + span {
   cursor: default;
 }
-
 label.input-toggle > input:disabled + span {
   background: #d5d5d5;
 }
-
 label.input-toggle > input:disabled + span:after {
   background: #bdbdbd;
 }
-
 label.input-toggle > input {
   display: block;
   position: absolute;
@@ -790,7 +784,6 @@ label.input-toggle > input {
 .inputter i.tooltip:hover .content {
   opacity: 1;
 }
-
 .inputter span.content {
   position: absolute;
   opacity: 0;
@@ -877,7 +870,6 @@ label.input-toggle > input {
 .sub.items div {
   border: 1px solid #ff9800;
 }
-
 .items div:before {
   right: 0;
   bottom: 0;
@@ -890,7 +882,6 @@ label.input-toggle > input {
 .items .like {
   position: relative;
 }
-
 .like:after {
   content: "\f004";
   font-family: fontAwesome;
@@ -902,7 +893,6 @@ label.input-toggle > input {
 div.pageButton {
   background: blanchedalmond;
 }
-
 .items div:hover,
 .sides div:hover {
   transition: background 0.22s linear;
@@ -910,7 +900,6 @@ div.pageButton {
 .items div:active {
   background: rgba(166, 195, 201, 0.55);
 }
-
 .sides div {
   background: rgba(206, 206, 206, 0.66);
   border: 1px solid #9e9e9e;
@@ -920,11 +909,9 @@ div.pageButton {
 .sides div:active {
   background: rgba(241, 239, 239, 0.52);
 }
-
 .function {
   padding: 2px 0 0 4px;
 }
-
 /* keyboard layout */
 .keyboard {
   position: fixed;
@@ -996,7 +983,6 @@ div.pageButton {
 .keyboard .keyboard .next {
   background: linear-gradient(#c3e4ff, #6b8fb7);
 }
-
 /* Pin input */
 .accessor {
   width: 310px;
@@ -1005,6 +991,7 @@ div.pageButton {
   color: rgba(0, 0, 0, 0.87);
   text-align: center;
   padding: 10px 9px 4px;
+  z-index: 2;
 }
 .accessor .input {
   height: 40px;
@@ -1032,12 +1019,12 @@ div.pageButton {
 .accessor h2 {
   padding: 0 10px 10px 10px;
 }
-
 .accessor h5 {
   font-weight: normal;
   padding-top: 5px;
   color: rgba(0, 0, 0, 0.75);
 }
+
 .accessor section {
   margin-top: 8px;
   display: flex;
@@ -1047,17 +1034,16 @@ div.pageButton {
 .accessor section div:nth-child(3n + 3) {
   margin-right: 0;
 }
-
 .field-entry {
   display: inline-flex;
   flex-direction: column;
   position: relative;
+
   padding: 5px;
 }
 .field-entry > h4 {
   margin-bottom: 2px;
 }
-
 .field-entry .wrap {
   display: flex;
   flex-direction: row-reverse;
@@ -1085,15 +1071,12 @@ div.pageButton {
 .field-entry .wrap.active {
   border: 2px solid #2196f3;
 }
-
 #address input {
   width: 386px;
 }
-
 #note input {
   width: 602px;
 }
-
 ul.preset {
   z-index: 1;
   width: 100%;
@@ -1118,10 +1101,8 @@ ul.autoComplete li:nth-child(even) {
 ul.preset li h4 {
   color: #3c3c3c;
 }
-
 ul.autoComplete {
   position: absolute;
-
   z-index: 2;
   background: #fff;
   top: 60px;
@@ -1170,19 +1151,18 @@ thead.title td {
 .calendar-date-box .date {
   width: 85px;
 }
-
 .calendar-date-box i {
   padding: 10px 20px;
   cursor: pointer;
 }
 .notify {
   position: absolute;
-
   top: -3px;
   right: -5px;
   width: 20px;
   height: 20px;
   line-height: 22px;
+
   background-clip: padding-box;
   font-size: 14px;
   font-weight: lighter;
@@ -1194,7 +1174,6 @@ thead.title td {
 .notify.blue {
   background-image: linear-gradient(#54a3ff, #006eed);
 }
-
 .time-picker {
   display: flex;
   justify-content: center;
@@ -1222,14 +1201,11 @@ thead.title td {
 .time-picker .outer i:active {
   background: linear-gradient(#e2e3e4, #aaadb4);
 }
-
 .time-picker .time.extend {
   width: 65px;
 }
-
 .time-picker .annot {
   font-size: 14px;
-
   font-weight: normal;
   font-family: "Yuanti-SC";
   color: #bdbdbd;
@@ -1265,7 +1241,6 @@ thead.title td {
 }
 .details .decimal {
   margin-right: 15px;
-
   font-family: "Agency FB";
   font-weight: bold;
 }
@@ -1281,12 +1256,11 @@ thead.title td {
 .missing {
   color: #f44336;
 }
-
 .danger-text {
   font-weight: bold;
-
   color: #ff5722;
 }
+
 .table-seat {
   height: 81px;
   width: 83px;
@@ -1355,17 +1329,14 @@ thead.title td {
 }
 .six.right .table-name {
   grid-column: 1 / 2;
-
   grid-row: 2 / 4;
 }
 .eight.right .table-name {
   grid-column: 1 / 3;
-
   grid-row: 2/4;
 }
 .eight.left .table-name {
   grid-column: 2/4;
-
   grid-row: 2/4;
 }
 .ten.left .table-name {
@@ -1383,7 +1354,6 @@ thead.title td {
 }
 .actions span.action {
   padding: 4px 6px;
-
   margin: 0 2px;
   color: #fff;
   cursor: pointer;
@@ -1393,19 +1363,17 @@ thead.title td {
 span.action.red {
   background: #f44336;
 }
-
 span.action.gray {
   background: #607d8b;
 }
-
 span.action.yellow {
   background: #ff9800;
 }
-
 .input-wrap {
   position: relative;
   display: flex;
   border: 2px solid #eee;
+
   width: 220px;
   background: #fff;
   border-radius: 4px;
@@ -1436,11 +1404,9 @@ span.action.yellow {
 .portal .card h5 {
   color: #3c3c3c;
 }
-
 .portal .card h3 {
   margin: 2px 0;
 }
-
 .portal .card .wrap {
   display: flex;
   margin-top: 2px;
@@ -1448,7 +1414,6 @@ span.action.yellow {
 .portal .card .wrap > div {
   padding: 0 7px;
 }
-
 .portal .card .value {
   font-family: "Agency FB";
   font-weight: bold;
@@ -1457,7 +1422,6 @@ span.action.yellow {
 }
 .portal .card .text {
   color: #3666d4;
-
   font-size: 12px;
 }
 .portal .card i.more {

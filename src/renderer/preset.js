@@ -123,6 +123,7 @@ var Preset = function() {
         "BAR",
         "BUFFET",
         "HIBACHI",
+        "DRIVE_THRU",
         "SALES",
         "TO_GO"
       ],
@@ -136,6 +137,7 @@ var Preset = function() {
         DINE_IN: "DINE IN",
         HIBACHI: "HIBACHI",
         BUFFET: "BUFFET",
+        DRIVE_THRU: "DRIVE THRU",
         SALES: "SALES",
         TO_GO: "TO GO",
         BAR: "BAR"

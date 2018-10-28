@@ -219,6 +219,7 @@ export default {
       this.alterItemOption({
         side: this.init.side,
         index: this.init.index,
+        _ti: this.template._id,
         function: true
       });
 
