@@ -17,7 +17,7 @@
           <div class="profile" v-show="isMenuPage" @click="openPortal">
             <i class="fa fa-address-book"></i>
             <span v-if="customer.name" class="text">{{customer.name}}</span>
-            <span v-else>{{$t('text.viewRecords')}}</span>
+            <span v-else>{{$t('text.viewRecord')}}</span>
           </div>
           <div class="operator text" @click="initialPanel" v-press="switchServer">
             <i class="fas fa-user-tie"></i>

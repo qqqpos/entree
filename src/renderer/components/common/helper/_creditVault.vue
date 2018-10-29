@@ -79,7 +79,7 @@ export default {
     return {
       componentData: null,
       component: null,
-      opts: this.init.opts.map(opt => ({
+      opts: this.init.cards.map(opt => ({
         number: opt.card[0].replace(/(.{4})/g, "$1 ").trim(),
         exp: opt.card[1],
         cvc: opt.card[2],

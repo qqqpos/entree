@@ -157,14 +157,12 @@ export default {
         });
 
       const { top: x1, left, height } = e.target.getBoundingClientRect();
-      const { top: x2 } = this.$refs.chart.getBoundingClientRect();
 
       this.tooltipData = { types, amount, count };
       this.tooltipStyle = {
-        bottom: x1 - x2 + height - 35 + "px",
+        bottom: height - 15 + "px",
         left: left - 117 + "px"
       };
-
       this.showTooltip = true;
     },
     hide() {

@@ -94,7 +94,7 @@
         <button class="btn" @click="exit">{{$t('button.exit')}}</button>
       </footer>
     </div>
-    <div :is="component" :init="componentData" @refresh="refetchData"></div>
+    <div :is="component" :init="componentData" @refresh="refreshData"></div>
   </div>
 </template>
 
@@ -218,7 +218,7 @@ export default {
         });
       });
     },
-    refetchData() {
+    refreshData() {
       this.$socket.emit("[TERMINAL] TODAY", data => this.initial(data));
     },
     initialFailed(content) {
@@ -726,32 +726,6 @@ footer {
   align-items: center;
   background: #f5f5f5;
   border-top: 1px solid #e0e0e0;
-}
-
-.visa-card {
-  height: 20px;
-  background: url("../../assets/image/visa.png") center center;
-}
-
-.master-card {
-  height: 35px;
-  background: url("../../assets/image/master.png") no-repeat center center;
-  background-size: contain;
-}
-
-.discover-card {
-  height: 28px;
-  border-radius: 4px;
-  background: url("../../assets/image/discover.png") center center;
-}
-
-.amex-card{
-  height: 28px;
-  background: url("../../assets/image/amex.png") no-repeat center center;
-}
-
-.fa-cc-amex {
-  color: var(--deepBlue);
 }
 
 .ticket {

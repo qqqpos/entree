@@ -136,18 +136,18 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import creditVault from "./component/creditVault";
-import groupItem from "./component/groupItem";
-import configModule from "./component/config";
+import creditVault from "./creditVault";
+import listItem from "./helper/listItem";
+import shortcut from "./helper/shortcut";
+import groupItem from "./helper/groupItem";
+import ticketConfig from "./helper/config";
 import dialogModule from "../common/dialog";
-import listItem from "./component/listItem";
 import entry from "../menu/component/entry";
-import shortcut from "./component/shortcut";
 
 export default {
   components: {
     dialogModule,
-    configModule,
+    ticketConfig,
     creditVault,
     groupItem,
     shortcut,
@@ -195,7 +195,7 @@ export default {
       this.resetPointer();
     },
     openConfig() {
-      if (this.component === "configModule" || this.$route.name !== "Menu")
+      if (this.component === "ticketConfig" || this.$route.name !== "Menu")
         return;
 
       const taxFree =
@@ -207,7 +207,7 @@ export default {
       } = this.order;
       const { menuID = false } = this.config.defaults;
 
-      this.$open("configModule", {
+      this.$open("ticketConfig", {
         menuID,
         taxFree,
         plasticBag,
@@ -333,8 +333,10 @@ export default {
       this.calculate();
     },
     openVault() {
-      this.$socket.emit("[CUSTOMER] GET_CREDIT_CARD", this.customer._id, opts =>
-        this.$open("creditVault", { opts })
+      this.$socket.emit(
+        "[CUSTOMER] GET_CREDIT_CARD",
+        this.customer._id,
+        cards => this.$open("creditVault", { cards })
       );
     },
     toggleTodoList() {
@@ -425,7 +427,9 @@ export default {
     payment() {
       this.$nextTick(() => {
         const dom = document.querySelector(".order .inner");
-        const target = document.querySelector(".item.active") || document.querySelector("div.group .seat.current");
+        const target =
+          document.querySelector(".item.active") ||
+          document.querySelector("div.group .seat.current");
         const { height } = dom.getBoundingClientRect();
 
         height > 329 && dom.classList.add("scrollable");
@@ -540,7 +544,7 @@ header.info {
   padding-left: 3px;
 }
 
-.btn-wrap button{
+.btn-wrap button {
   background: linear-gradient(#fefefe, #cfd0d3);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   text-shadow: 0 1px 1px #fff;

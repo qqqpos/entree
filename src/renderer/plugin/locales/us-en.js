@@ -1300,7 +1300,7 @@ export default {
     bit: "{i} Bit",
     viewTag: "View Tags",
     viewFavoriteItem: "View Favorite Items",
-    viewRecords: "View Records",
+    viewRecord: "View Record",
     firstDate: "First Date",
     lastDate: "Last Date",
     viewCustomer: "View Address Customer",

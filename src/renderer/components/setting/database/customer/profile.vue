@@ -21,7 +21,7 @@
             <text-input title="text.email" v-model="profile.email"></text-input>
             <external title="text.viewTag"></external>
             <external title="text.viewFavoriteItem"></external>
-            <external title="text.viewRecords"></external>
+            <external title="text.viewRecord"></external>
             <div class="statistic">
                 <h3>{{$t('text.date')}}</h3>
                 <h5>

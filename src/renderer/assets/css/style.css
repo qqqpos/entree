@@ -1461,3 +1461,25 @@ h1.tender .agency:before {
   font-size: 24px;
   margin: 0 5px 0 10px;
 }
+
+.visa-card {
+  height: 20px;
+  background: url("../image/visa.png") center center;
+}
+
+.master-card {
+  height: 35px;
+  background: url("../image/master.png") no-repeat center center;
+  background-size: contain;
+}
+
+.discover-card {
+  height: 28px;
+  border-radius: 4px;
+  background: url("../image/discover.png") center center;
+}
+
+.amex-card{
+  height: 28px;
+  background: url("../image/amex.png") no-repeat center center;
+}
