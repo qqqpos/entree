@@ -236,6 +236,15 @@ export default {
         guest
       });
 
+      // seat order
+      if (this.dineInOpt.seatOrder) {
+        const seats = Array(guest)
+          .fill()
+          .map((_, i) => i + 1);
+
+        this.setOrder({seats})
+      }
+
       this.setViewTable(
         Object.assign(this.table, {
           server: this.op.name,

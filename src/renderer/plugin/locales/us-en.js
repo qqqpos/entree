@@ -515,7 +515,8 @@ export default {
       evenPayment: "Even Payment",
       printReceipt: "Print Receipt",
       cashTender: "Change",
-      tipReport: "Tips Report"
+      tipReport: "Tips Report",
+      splitBySeat: "Split By Seat"
     },
     card: {
       linkCustomer: "Link Customer"
@@ -545,8 +546,10 @@ export default {
         "Are you sure to settle ticket with House Account under {i} ?",
       removeTemplateConfirm: "Are you sure to remove this template?",
       combineTicketsConfirm:
-      "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
-      removeInventoryConfirm:"Are you sure to remove this inventory record? It will effect item's stock count."
+        "Are you sure to combine {i} ticket(s) to MAIN ticket #{i}?",
+      removeInventoryConfirm:
+        "Are you sure to remove this inventory record? It will effect item's stock count.",
+      splitTicketBySeat: "Are you wish to split them by seat into {i} tickets?"
     },
     maintenance: "Maintenance",
     debugOngoing: "Men At Work...",

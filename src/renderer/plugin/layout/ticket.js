@@ -328,7 +328,7 @@ function createList(printer, setting, invoice, preview) {
     items = items.filter(i => i.orderType !== "TO_GO");
   }
 
-  if (invoice.type === "HIBACHI") {
+  if (invoice.type === "HIBACHI" || Array.isArray(invoice.seats)) {
     let sorted = [];
 
     for (let i = 0; i < items.length; i++) {

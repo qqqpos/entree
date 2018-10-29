@@ -451,7 +451,8 @@ export default {
       evenPayment: "平摊付款",
       printReceipt: "打印收据",
       cashTender: "请找",
-      tipReport: "确定小费"
+      tipReport: "确定小费",
+      splitBySeat: "按座位分单"
     },
     card: {
       linkCustomer: "关联卡号"
@@ -480,7 +481,8 @@ export default {
       removeTemplateConfirm: "您确定要移除这个模版吗?",
       combineTicketsConfirm: "您确定要将 {i} 订单合并至 #{i}号 吗？",
       removeInventoryConfirm:
-        "您确定要移除这个进货记录吗? 此操作将会移除进货记录中的物品库存!"
+        "您确定要移除这个进货记录吗? 此操作将会移除进货记录中的物品库存!",
+      splitTicketBySeat: "您想要将订单按座位来分成 {i}单 吗?"
     },
     maintenance: "维护",
     debugOngoing: "系统正在维护中...",

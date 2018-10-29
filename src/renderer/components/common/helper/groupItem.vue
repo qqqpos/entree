@@ -121,11 +121,7 @@ export default {
       } else if (dom !== target) {
         dom && dom.classList.remove("current");
 
-        target &&
-          this.$nextTick(() => {
-            console.log(target);
-            target.classList.add("current");
-          });
+        target && this.$nextTick(() => target.classList.add("current"));
       }
     },
     groupItem(items) {

@@ -1,6 +1,6 @@
 <template>
   <div class="popupMask dark center">
-    <div class="editor">
+    <div class="editor" v-show="display">
       <header>
         <div class="f1">
           <h5>{{$t(order.split ? 'title.edit' : 'title.create')}}</h5>
@@ -71,18 +71,62 @@ export default {
       order: JSON.parse(JSON.stringify(this.$store.getters.order)),
       hammer: null,
       done: false,
+      display: true,
       splits: [],
       horizontal: 0,
       lastHorizontalDelta: 0
     };
   },
   created() {
-    this.order.split && this.getSplitOrder();
+    this.order.split
+      ? this.getSplitOrder()
+      : Array.isArray(this.order.seats) && this.splitBySeatDialog();
+
+    this.$bus.on("__THREAD__CLOSE", this.handleThreadResult);
   },
   mounted() {
     this.registerSwipeEvent();
   },
+  beforeDestroy() {
+    this.$bus.off("__THREAD__CLOSE", this.handleThreadResult);
+  },
   methods: {
+    splitBySeatDialog() {
+      const prompt = {
+        type: "question",
+        title: "dialog.confirm.splitBySeat",
+        msg: ["dialog.tip.splitTicketBySeat", this.order.seats.length]
+      };
+
+      this.display = false;
+      this.$bus.emit("__THREAD__OPEN", {
+        threadID: "MAIN",
+        component: "dialog",
+        args: prompt
+      });
+    },
+    handleThreadResult({ threadID, result }) {
+      if (threadID !== "MAIN") return;
+
+      result && this.splitBySeat();
+      this.display = true;
+    },
+    splitBySeat() {
+      const order = JSON.parse(JSON.stringify(this.order));
+      const splits = order.seats.map(seat => {
+        return Object.assign({}, order, {
+          _id: ObjectId().toString(),
+          content: order.content.filter(item => item.seat === seat)
+        });
+      });
+
+      this.order.content.forEach(item => Object.assign(item, { split: true }));
+      this.order.content.splice();
+
+      this.splits = splits;
+      this.done = true;
+      this.display = true;
+    },
     getSplitOrder() {
       this.$socket.emit("[SPLIT] GET", this.order._id, splits => {
         const orders = splits.sort((a, b) => a.number.localeCompare(b.number));
@@ -132,7 +176,7 @@ export default {
         this.splits.push(split);
 
         this.$nextTick(() => {
-          let target = Array.from(this.$refs.tickets.children).last();
+          const target = Array.from(this.$refs.tickets.children).last();
           this.transfer({ unique: target.dataset.unique });
         });
       } else {
@@ -262,9 +306,7 @@ export default {
       this.$socket.emit("[ORDER] UPDATE", this.order);
       this.init.resolve();
     },
-    unlinkTicket(){
-
-    },
+    unlinkTicket() {},
     call(fn, print) {
       if (this.app.newTicket && this.$route.name === "Menu") {
         this.$socket.emit("[ORDER] SAVE", this.order, print, order => {

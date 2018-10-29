@@ -6,7 +6,7 @@
       </header>
       <toggle title="setting.table" true-tooltip="tip.dinein.useTableLayout" false-tooltip="tip.dinein.noTableLayout" v-model="dineInOpt.useTable" :conditionalTooltip="true"></toggle>
       <toggle title="setting.passwordRequire" tooltip="tip.dinein.passwordRequire" v-model="dineInOpt.passwordRequire"></toggle>
-      <toggle title="setting.guestCount" v-model="dineInOpt.guestCount"></toggle>
+      <toggle title="setting.guestCount" v-model="dineInOpt.guestCount" @update="updateCount"></toggle>
       <toggle title="setting.seatOrder" v-model="dineInOpt.seatOrder" :disabled="!dineInOpt.guestCount"></toggle>
       <toggle title="setting.printOnDone" true-tooltip="tip.dinein.printReceipt" false-tooltip="tip.dinein.noReceipt" v-model="dineInOpt.printOnDone" :conditionalTooltip="true"></toggle>
       <toggle title="setting.lockOnDone" tooltip="tip.dinein.lock" v-model="dineInOpt.lockOnDone"></toggle>
@@ -32,6 +32,13 @@ export default {
       key: "dinein",
       value: this.dineInOpt
     });
+  },
+  methods: {
+    updateCount(value) {
+      if (!value) {
+        this.dineInOpt.seatOrder = false;
+      }
+    }
   }
 };
 </script>
