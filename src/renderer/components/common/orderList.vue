@@ -73,7 +73,7 @@
     </div>
     <div class="middle">
       <div class="btn-wrap">
-        <button class="fn fas fa-credit-card" @click="openVault" :disabled="!customer._id"></button>
+        <button class="fn fas fa-credit-card relative" @click="openVault" :disabled="!customer._id" :class="{applied:order.__creditCard__}"></button>
         <button class="fn fas fa-ellipsis-h" @click="separator" :disabled="$route.name !== 'Menu'"></button>
         <button class="fn fa fa-print" @click="directPrint" v-if="$route.name !=='Menu'" :disabled="spooler.length === 0"></button>
         <button class="fn far fa-check-square" v-else @click="toggleTodoList"></button>
@@ -740,5 +740,17 @@ header.info {
 
 .inner.search h3 {
   margin-top: 15px;
+}
+
+.applied:after {
+  content: "\f00c";
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 12px;
+  color: #03a9f4;
+  text-shadow: 0 1px 0px #607d8b;
 }
 </style>

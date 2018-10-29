@@ -37,10 +37,10 @@ import fileSaver from "file-saver";
 import toggle from "../common/toggle";
 import textList from "../common/textList";
 import external from "../common/external";
-import importer from "./component/importer";
+import dialogModule from "../../common/dialog";
 
 export default {
-  components: { toggle, textList, external, importer },
+  components: { toggle, textList, external, dialogModule },
   data() {
     return {
       types: ["DEFAULT", "ALPHABETICAL", "PINYIN", "PRICE", "ID"].map(type => ({
@@ -125,7 +125,48 @@ export default {
         }
       });
 
-      this.$open("importer", { menu });
+      this.processImport(menu);
+    },
+    processImport(menu) {
+      const { tax } = this.$store.getters;
+      const codes = Object.keys(tax.class);
+      const taxNames = Object.entries(tax.class).map(t => t[1].alias);
+      const defaultTax = Object.entries(tax.class).findIndex(t => t[1].default);
+
+      menu.forEach((item, index) => {
+        if (!item.zhCN) item.zhCN = item.usEN;
+
+        let printer = {};
+        const taxIndex = taxNames.findIndex(name => name === item.taxClass);
+        const taxClass = taxIndex !== -1 ? codes[taxIndex] : codes[defaultTax];
+
+        item.printer
+          .split(",")
+          .forEach(
+            name => (printer[name] = { replace: false, zhCN: "", usEN: "" })
+          );
+
+        Object.assign(item, {
+          printer,
+          taxClass,
+          num: index,
+          priority: 0,
+          option: [],
+          price: item.price.split(","),
+          spicy: !!item.spicy,
+          manual: !!item.manual
+        });
+
+        this.$socket.emit("[ITEM] UPDATE", item);
+      });
+
+      const prompt = {
+        title: "dialog.importedSuccessful",
+        msg: ["dialog.itemImported", menu.length],
+        buttons: [{ text: "button.confirm", fn: "resolve" }]
+      };
+
+      this.$dialog(prompt).then(this.exitComponent);
     },
     exportDialog() {
       let excel = [

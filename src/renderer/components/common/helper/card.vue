@@ -6,7 +6,6 @@
             <span>{{data.card[1]}}</span>
             <span>{{data.card[2]}}</span>
         </div>
-        <i class="fas fa-pen-square fn" @click.stop="$emit('edit',index)"></i>
         <i class="fas fa-trash-alt fn" @click.stop="$emit('remove',index)"></i>
     </li>
 </template>
@@ -20,11 +19,6 @@ export default {
         ? String(number).replace(/^\D?(\d{4})\D?(\d{4})/, "$1 $2") +
             " **** ****"
         : number;
-    }
-  },
-  watch: {
-    data(n) {
-      console.log("trigger");
     }
   },
   computed: {

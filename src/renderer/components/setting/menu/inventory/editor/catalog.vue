@@ -15,13 +15,13 @@
                         <input type="text" v-model="product.upc" :disabled="product._id">
                     </div>
                     <div class="column space-right">
-                        <h5 class="space-left">{{$t('inventory.category')}}</h5>
-                        <input type="text" v-model="product.category">
-                    </div>  
-                    <div class="column">
                         <h5 class="space-left">{{$t('inventory.brand')}}</h5>
                         <input type="text" v-model="product.brand">
-                    </div>                                      
+                    </div>                      
+                    <div class="column">
+                        <h5 class="space-left">{{$t('inventory.category')}}</h5>
+                        <input type="text" v-model="product.category">
+                    </div>          
                 </section>
                 <section class="row">
                     <div class="column space-right f1">

@@ -4,7 +4,7 @@
             <h3 class="f1 normal">{{$t('inventory.productList')}}</h3>
             <button class="mini-btn" @click="registerItem"><i class="fa fa-plus space light"></i>{{$t('button.new')}}</button>
         </nav>
-        <table>
+        <table v-if="items.length">
             <thead>
                 <tr>
                     <th>{{$t('inventory.brand')}}</th>
@@ -32,6 +32,10 @@
 
             </tfoot>
         </table>
+        <div class="placeholder clickable" v-else @click="importDialog">
+          <i class="fas fa-boxes"></i>
+          <p>Click to Import Items</p>
+        </div>
         <div :is="component" :init="componentData"></div>
     </div>
 </template>
@@ -119,6 +123,54 @@ export default {
     toggleUPC() {
       this.viewUPC = !this.viewUPC;
     },
+    importDialog() {
+      const { remote } = this.$electron;
+      const fs = remote.require("fs");
+      const file = remote.dialog.showOpenDialog({
+        properties: ["openFile"],
+        filters: [{ name: "CSV", extensions: ["csv"] }]
+      });
+
+      if (!file) return;
+
+      const csvFile = fs.readFileSync(file[0], "utf8");
+      const splitCSV = row => {
+        let matches = row.match(/(\s*"[^"]+"\s*|\s*[^,]+|,)(?=,|$)/g) || [];
+        for (let n = 0; n < matches.length; ++n) {
+          matches[n] = matches[n].trim();
+          if (matches[n] == ",") matches[n] = "";
+        }
+        if (row[0] == ",") matches.unshift("");
+        return matches;
+      };
+
+      let product = [];
+      let title = [];
+
+      csvFile.split("\n").forEach((row, index) => {
+        const values = splitCSV(row);
+
+        // return if end of file
+        if (values.length == 0) return;
+
+        if (index === 0) {
+          // The first line is title
+          // use to define object keys
+          title = values;
+        } else {
+          const item = values.reduce(
+            (a, c, i) => Object.assign(a, { [title[i]]: c }),
+            {}
+          );
+          product.push(item);
+        }
+      });
+
+      this.processImport(product)
+    },
+    processImport(product){
+      
+    },
     refreshData() {
       this.$socket.emit("[INVENTORY] CATALOG", items => {
         this.exitComponent();
@@ -136,6 +188,10 @@ nav {
   padding: 5px 10px 5px 15px;
   background: #607d8b;
   color: #fff;
+}
+
+.placeholder {
+  height: 650px;
 }
 
 tr td {
